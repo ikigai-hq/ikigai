@@ -15,6 +15,10 @@ The architecture aim to achieve:
 use aj::async_trait::async_trait;
 use aj::Worker;
 use aj::{Executable, JobBuilder};
+use serde::{Serialize, Deserialize};
+use chrono::Utc;
+use cron::Schedule;
+use std::str::FromStr;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PrintJob {
@@ -36,9 +40,9 @@ fn run_job_instantly() {
 
 fn run_job_at() {
     // Now in seconds
-    let now = get_now_at_sec();
+    let now = Utc::now().timestamp();
     let job = JobBuilder::new(PrintJob { number: 2 })
-        .set_schedule_at(now + 30) // Run after now 30 secs
+        .set_schedule_at(now + 30)  // Run after now 30 secs
         .build();
     Worker::add_job(job);
 }
@@ -46,8 +50,10 @@ fn run_job_at() {
 fn run_cron_job() {
     // aj use `cron` crate.
     // Ref: https://docs.rs/cron/latest/cron/
+    let expression = "0   30   9,12,15     1,15       May-Aug  Mon,Wed,Fri  2018/2";
+    let schedule = Schedule::from_str(expression).unwrap();
     let job = JobBuilder::new(PrintJob { number: 3 })
-        .set_cron("0   30   9,12,15     1,15       May-Aug  Mon,Wed,Fri  2018/2")
+        .set_cron(schedule, aj::CronContext::default())
         .build();
     Worker::add_job(job);
 }

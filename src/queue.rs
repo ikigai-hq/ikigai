@@ -1,3 +1,4 @@
+use actix::fut::wrap_future;
 use actix::*;
 use redis::Direction;
 use serde::de::DeserializeOwned;
@@ -8,7 +9,7 @@ use std::time::Duration;
 
 use crate::db_backend::redis::Redis;
 use crate::job::{Job, JobStatus};
-use crate::Error;
+use crate::{Error, Executable};
 
 const IMPORT_JOBS_EACH_BATCH: usize = 5;
 // Time to declare period between 2 import processing jobs
@@ -19,7 +20,7 @@ const JOB_HANDLER_DURATION: Duration = Duration::from_millis(500);
 #[derive(Clone)]
 pub struct WorkQueue<M>
 where
-    M: Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
     M::Result: Send,
     Self: Actor<Context = Context<Self>> + Handler<M>,
 {
@@ -30,7 +31,7 @@ where
 
 impl<M> WorkQueue<M>
 where
-    M: Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
     M::Result: Send,
     Self: Actor<Context = Context<Self>> + Handler<M>,
 {
@@ -298,9 +299,7 @@ where
         }
 
         // Assume always success handle job
-        info!("Execute job {}", job.id);
-        let async_job = job.clone();
-        addr.do_send::<M>(async_job.message);
+        execute_job(addr, job.clone());
 
         // Handle next job
         if let Some(next_job) = job.next_tick() {
@@ -323,11 +322,11 @@ where
 
 #[derive(Message, Debug)]
 #[rtype(result = "()")]
-pub struct Enqueue<M: Message + Clone + Send + Sync + 'static>(pub Job<M>, pub bool);
+pub struct Enqueue<M: Executable + Message + Clone + Send + Sync + 'static>(pub Job<M>, pub bool);
 
 impl<M> Handler<Enqueue<M>> for WorkQueue<M>
 where
-    M: Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
     M::Result: Send,
     Self: Actor<Context = Context<Self>> + Handler<M>,
 {
@@ -347,7 +346,7 @@ where
 
 pub fn enqueue_job<M>(addr: Addr<WorkQueue<M>>, job: Job<M>, force_update: bool)
 where
-    M: Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
     M::Result: Send,
     WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
 {
@@ -362,7 +361,7 @@ pub struct CancelJob {
 
 impl<M> Handler<CancelJob> for WorkQueue<M>
 where
-    M: Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
     M::Result: Send,
     Self: Actor<Context = Context<Self>> + Handler<M>,
 {
@@ -378,9 +377,41 @@ where
 
 pub fn cancel_job<M>(addr: Addr<WorkQueue<M>>, job_id: String)
 where
-    M: Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
     M::Result: Send,
     WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
 {
     addr.do_send::<CancelJob>(CancelJob { job_id });
+}
+
+#[derive(Message, Debug)]
+#[rtype(result = "()")]
+pub struct Execute<M: Executable + Message + Clone + Send + Sync + 'static>(pub Job<M>);
+
+impl<M> Handler<Execute<M>> for WorkQueue<M>
+where
+    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+    M::Result: Send,
+    Self: Actor<Context = Context<Self>> + Handler<M>,
+{
+    type Result = ();
+
+    fn handle(&mut self, msg: Execute<M>, ctx: &mut Self::Context) -> Self::Result {
+        let task = async move {
+            info!("Start Execute job {}", msg.0.id);
+            msg.0.message.execute().await;
+            info!("End Execute job {}", msg.0.id);
+        };
+
+        wrap_future::<_, Self>(task).spawn(ctx);
+    }
+}
+
+pub fn execute_job<M>(addr: Addr<WorkQueue<M>>, job: Job<M>)
+where
+    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+    M::Result: Send,
+    WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
+{
+    addr.do_send::<Execute<M>>(Execute(job));
 }

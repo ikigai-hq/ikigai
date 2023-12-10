@@ -9,6 +9,7 @@ use std::sync::Mutex;
 use crate::job::Job;
 use crate::queue::{cancel_job, enqueue_job, WorkQueue};
 use crate::redis::Redis;
+use crate::Executable;
 
 lazy_static! {
     static ref QUEUE_REGISTRY: Mutex<Registry> = Mutex::new(Registry::default());
@@ -30,7 +31,7 @@ impl Actor for Worker {
 impl Worker {
     pub fn register<M>(queue_name: &str, backend: Redis)
     where
-        M: Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+        M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
         M::Result: Send,
         WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
     {
@@ -56,7 +57,7 @@ impl Worker {
 
     pub fn get_queue_address<M>() -> Option<Addr<WorkQueue<M>>>
     where
-        M: Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+        M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
         M::Result: Send,
         WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
     {
@@ -72,7 +73,7 @@ impl Worker {
 
     pub fn enqueue_job<M>(job: Job<M>, re_run: bool) -> bool
     where
-        M: Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+        M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
         M::Result: Send,
         WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
     {
@@ -87,7 +88,7 @@ impl Worker {
 
     pub fn cancel_job<M>(job_id: String) -> bool
     where
-        M: Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+        M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
         M::Result: Send,
         WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
     {
@@ -102,7 +103,7 @@ impl Worker {
 
     pub fn add_job<M>(job: Job<M>) -> bool
     where
-        M: Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+        M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
         M::Result: Send,
         WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
     {
@@ -111,7 +112,7 @@ impl Worker {
 
     pub fn add_job_and_rerun<M>(job: Job<M>) -> bool
     where
-        M: Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+        M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
         M::Result: Send,
         WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
     {

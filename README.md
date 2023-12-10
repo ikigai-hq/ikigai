@@ -3,14 +3,26 @@
 This repository contains a simple background job that supports a web server based on actix-web or other web/API frameworks in Rust.
 
 ## Features:
-- Persistent Job
-- Schedule Job
-- Cron Job
+
 - Update Job
 - Cancel job.
+- Persistent Job
+- Job Types:
+  - Normal Job (instant)
+  - Schedule Job
+  - Cron Job
 
+## Architecture
 
-### LICENSE
+AJ want to solve the background job done in the simple way.
+So, it should bea:
+- Minimal
+- Easy to understand
+- Easy to integrate
+
+[Architecture Doc](https://github.com/cptrodgers/aj/blob/master/ARCHITECTURE.md)
+
+## LICENSE
 
 <sup>
 Licensed under either of <a href="LICENSE-APACHE">Apache License, Version

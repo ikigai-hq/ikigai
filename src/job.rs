@@ -7,7 +7,7 @@ use uuid::Uuid;
 
 use crate::util::{get_datetime_as_secs, get_now, get_now_as_secs};
 
-#[async_trait]
+#[async_trait(?Send)]
 pub trait Executable {
     async fn execute(&self);
 }

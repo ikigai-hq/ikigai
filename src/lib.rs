@@ -10,6 +10,7 @@ pub mod queue;
 pub mod util;
 pub mod worker;
 
+pub use async_trait;
 pub use db_backend::*;
 pub use error::*;
 pub use job::*;

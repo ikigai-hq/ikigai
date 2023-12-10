@@ -2,6 +2,20 @@
 name = "aj"
 version = "0.1.0"
 edition = "2021"
+authors = ["cptrodgers <cptrodgers@gmail.com>"]
+description = "Simple Background Job based on Actix and Redis"
+readme = "README.md"
+repository = "https://github.com/cptrodgers/aj"
+license = "MIT OR Apache-2.0"
+keywords = ["background", "job", "actix", "redis"]
+include = [
+    "**/*.rs",
+    "Cargo.toml",
+]
+
+[lib]
+name = "aj"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

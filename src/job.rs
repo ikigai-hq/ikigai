@@ -1,4 +1,3 @@
-use actix::Message;
 use async_trait::async_trait;
 use cron::Schedule;
 use serde::Serialize;
@@ -7,7 +6,7 @@ use uuid::Uuid;
 
 use crate::util::{get_datetime_as_secs, get_now, get_now_as_secs};
 
-#[async_trait(?Send)]
+#[async_trait]
 pub trait Executable {
     async fn execute(&self);
 }
@@ -43,7 +42,7 @@ pub enum JobStatus {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Job<M: Executable + Message + Clone + Send + Sync + 'static> {
+pub struct Job<M: Executable + Clone + Send + Sync + 'static> {
     pub id: String,
     pub job_type: JobType,
     pub job_status: JobStatus,
@@ -55,7 +54,7 @@ pub struct Job<M: Executable + Message + Clone + Send + Sync + 'static> {
     pub created_at: i64,
 }
 
-impl<M: Executable + Message + Clone + Send + Sync + 'static> Job<M> {
+impl<M: Executable + Clone + Send + Sync + 'static> Job<M> {
     pub fn new(id: String, job_type: JobType, job_status: JobStatus, message: M) -> Self {
         Self {
             id,
@@ -173,13 +172,13 @@ impl<M: Executable + Message + Clone + Send + Sync + 'static> Job<M> {
 }
 
 #[derive(Debug, Clone, Default)]
-pub struct JobBuilder<M: Executable + Message + Clone + Send + Sync + 'static> {
+pub struct JobBuilder<M: Executable + Clone + Send + Sync + 'static> {
     pub id: Option<String>,
     pub job_type: Option<JobType>,
     pub message: M,
 }
 
-impl<M: Executable + Message + Clone + Send + Sync + 'static> JobBuilder<M> {
+impl<M: Executable + Clone + Send + Sync + 'static> JobBuilder<M> {
     pub fn new(message: M) -> Self {
         Self {
             id: None,

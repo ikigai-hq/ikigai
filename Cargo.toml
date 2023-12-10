@@ -1,6 +1,6 @@
 [package]
 name = "aj"
-version = "0.1.1"
+version = "0.1.3"
 edition = "2021"
 authors = ["cptrodgers <cptrodgers@gmail.com>"]
 description = "Simple Background Job based on Actix and Redis"

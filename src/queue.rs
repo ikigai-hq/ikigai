@@ -20,20 +20,25 @@ const JOB_HANDLER_DURATION: Duration = Duration::from_millis(500);
 #[derive(Clone)]
 pub struct WorkQueue<M>
 where
-    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-    M::Result: Send,
-    Self: Actor<Context = Context<Self>> + Handler<M>,
+    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+    Self: Actor<Context = Context<Self>>,
 {
     pub name: String,
     _type: PhantomData<M>,
     redis: Box<Redis>,
 }
 
+impl<M> Actor for WorkQueue<M>
+where
+    M: Executable + Unpin + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+{
+    type Context = Context<Self>;
+}
+
 impl<M> WorkQueue<M>
 where
-    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-    M::Result: Send,
-    Self: Actor<Context = Context<Self>> + Handler<M>,
+    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+    Self: Actor<Context = Context<Self>>,
 {
     pub fn new(name: String, backend: Redis) -> Self {
         Self {
@@ -322,13 +327,13 @@ where
 
 #[derive(Message, Debug)]
 #[rtype(result = "()")]
-pub struct Enqueue<M: Executable + Message + Clone + Send + Sync + 'static>(pub Job<M>, pub bool);
+pub struct Enqueue<M: Executable + Clone + Send + Sync + 'static>(pub Job<M>, pub bool);
 
 impl<M> Handler<Enqueue<M>> for WorkQueue<M>
 where
-    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-    M::Result: Send,
-    Self: Actor<Context = Context<Self>> + Handler<M>,
+    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+    Self: Actor<Context = Context<Self>>,
 {
     type Result = ();
 
@@ -346,9 +351,9 @@ where
 
 pub fn enqueue_job<M>(addr: Addr<WorkQueue<M>>, job: Job<M>, force_update: bool)
 where
-    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-    M::Result: Send,
-    WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
+    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+    WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
 {
     addr.do_send::<Enqueue<M>>(Enqueue(job, force_update));
 }
@@ -361,9 +366,9 @@ pub struct CancelJob {
 
 impl<M> Handler<CancelJob> for WorkQueue<M>
 where
-    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-    M::Result: Send,
-    Self: Actor<Context = Context<Self>> + Handler<M>,
+    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+    Self: Actor<Context = Context<Self>>,
 {
     type Result = ();
 
@@ -377,22 +382,22 @@ where
 
 pub fn cancel_job<M>(addr: Addr<WorkQueue<M>>, job_id: String)
 where
-    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-    M::Result: Send,
-    WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
+    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+    WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
 {
     addr.do_send::<CancelJob>(CancelJob { job_id });
 }
 
 #[derive(Message, Debug)]
 #[rtype(result = "()")]
-pub struct Execute<M: Executable + Message + Clone + Send + Sync + 'static>(pub Job<M>);
+pub struct Execute<M: Executable + Clone + Send + Sync + 'static>(pub Job<M>);
 
 impl<M> Handler<Execute<M>> for WorkQueue<M>
 where
-    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-    M::Result: Send,
-    Self: Actor<Context = Context<Self>> + Handler<M>,
+    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+    Self: Actor<Context = Context<Self>>,
 {
     type Result = ();
 
@@ -409,9 +414,9 @@ where
 
 pub fn execute_job<M>(addr: Addr<WorkQueue<M>>, job: Job<M>)
 where
-    M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-    M::Result: Send,
-    WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
+    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+    WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
 {
     addr.do_send::<Execute<M>>(Execute(job));
 }

@@ -31,9 +31,9 @@ impl Actor for Worker {
 impl Worker {
     pub fn register<M>(queue_name: &str, backend: Redis)
     where
-        M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-        M::Result: Send,
-        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
+        M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
     {
         let type_id = TypeId::of::<M>();
 
@@ -57,9 +57,9 @@ impl Worker {
 
     pub fn get_queue_address<M>() -> Option<Addr<WorkQueue<M>>>
     where
-        M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-        M::Result: Send,
-        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
+        M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
     {
         let type_id = TypeId::of::<M>();
         if let Some(queue_addr) = QUEUE_REGISTRY.lock().unwrap().registry.get(&type_id) {
@@ -73,9 +73,9 @@ impl Worker {
 
     pub fn enqueue_job<M>(job: Job<M>, re_run: bool) -> bool
     where
-        M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-        M::Result: Send,
-        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
+        M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
     {
         let addr: Option<Addr<WorkQueue<M>>> = Worker::get_queue_address();
         if let Some(queue_addr) = addr {
@@ -88,9 +88,9 @@ impl Worker {
 
     pub fn cancel_job<M>(job_id: String) -> bool
     where
-        M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-        M::Result: Send,
-        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
+        M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
     {
         let addr: Option<Addr<WorkQueue<M>>> = Worker::get_queue_address();
         if let Some(queue_addr) = addr {
@@ -103,18 +103,17 @@ impl Worker {
 
     pub fn add_job<M>(job: Job<M>) -> bool
     where
-        M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-        M::Result: Send,
-        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
+        M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
     {
         Self::enqueue_job(job, false)
     }
 
     pub fn add_job_and_rerun<M>(job: Job<M>) -> bool
     where
-        M: Executable + Message + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-        M::Result: Send,
-        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>> + Handler<M>,
+        M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
     {
         Self::enqueue_job(job, true)
     }

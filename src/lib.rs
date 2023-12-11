@@ -56,14 +56,6 @@
 //!         .build();
 //!     Worker::add_job(job);
 //! }
-//!
-//! fn main() {
-//!     let redis = aj::redis::Redis::new("redis://localhost/");
-//!     Worker::register::<PrintJob>("print_task", redis);
-//!     run_job_instantly();
-//!     run_job_at();
-//!     run_cron_job();
-//! }
 //! ```
 
 #[macro_use]

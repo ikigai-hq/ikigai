@@ -1,6 +1,6 @@
+use crate::backend::Backend;
+use crate::Error;
 use redis::{Client, Commands, Direction, IntoConnectionInfo, RedisResult};
-use serde::de::DeserializeOwned;
-use serde::Serialize;
 
 #[derive(Debug, Clone)]
 pub struct Redis {
@@ -8,7 +8,7 @@ pub struct Redis {
 }
 
 impl Redis {
-    /// Example: Redis::new("redis://localhost:6379/");
+    /// Redis::new("redis://localhost:6379/");
     pub fn new<T: IntoConnectionInfo>(connection_params: T) -> Self {
         let client = Client::open(connection_params).unwrap();
         Self { client }
@@ -18,23 +18,6 @@ impl Redis {
         let mut conn = self.client.get_connection()?;
         conn.lpush(queue_name, item)?;
         Ok(())
-    }
-
-    pub fn hash_upsert<T: Serialize>(&self, hash: &str, key: &str, value: T) -> RedisResult<()> {
-        let mut conn = self.client.get_connection()?;
-        let value = serde_json::to_string(&value).unwrap_or("".into());
-        conn.hset(hash, key, value)?;
-        Ok(())
-    }
-
-    pub fn hash_get<T: DeserializeOwned>(&self, hash: &str, key: &str) -> RedisResult<Option<T>> {
-        let mut conn = self.client.get_connection()?;
-        let res: RedisResult<Option<String>> = conn.hget(hash, key);
-        let value = match res {
-            Ok(Some(item)) => serde_json::from_str(&item).ok(),
-            _ => None,
-        };
-        Ok(value)
     }
 
     pub fn lmove(
@@ -72,6 +55,47 @@ impl Redis {
     pub fn llen(&self, queue: &str) -> RedisResult<usize> {
         let mut conn = self.client.get_connection()?;
         conn.llen(queue)
+    }
+}
+
+impl Backend for Redis {
+    fn queue_push(&self, queue_name: &str, item: &str) -> Result<(), Error> {
+        self.lpush(queue_name, item)?;
+        Ok(())
+    }
+
+    fn queue_move(
+        &self,
+        from_queue: &str,
+        to_queue: &str,
+        count: usize,
+        from_direction: Direction,
+        to_direction: Direction,
+    ) -> Result<Vec<String>, Error> {
+        let res = self.lmove(from_queue, to_queue, count, from_direction, to_direction)?;
+        Ok(res)
+    }
+
+    fn queue_get(&self, queue: &str, count: usize) -> Result<Vec<String>, Error> {
+        let res = self.lrange(queue, count)?;
+        Ok(res)
+    }
+
+    fn queue_count(&self, queue: &str) -> Result<usize, Error> {
+        let res = self.llen(queue)?;
+        Ok(res)
+    }
+
+    fn storage_upsert(&self, hash: &str, key: &str, value: String) -> Result<(), Error> {
+        let mut conn = self.client.get_connection()?;
+        conn.hset(hash, key, value)?;
+        Ok(())
+    }
+
+    fn storage_get(&self, hash: &str, key: &str) -> Result<Option<String>, Error> {
+        let mut conn = self.client.get_connection()?;
+        let res: Option<String> = conn.hget(hash, key)?;
+        Ok(res)
     }
 }
 

@@ -7,7 +7,7 @@ use std::fmt::Debug;
 use std::marker::PhantomData;
 use std::time::Duration;
 
-use crate::db_backend::redis::Redis;
+use crate::backend::{storage_get, storage_upsert, Backend};
 use crate::job::{Job, JobStatus};
 use crate::{Error, Executable};
 
@@ -17,7 +17,6 @@ const JOB_PICKER_DURATION: Duration = Duration::from_millis(500);
 // Time to declare period between 2 times to handling processing jobs
 const JOB_HANDLER_DURATION: Duration = Duration::from_millis(500);
 
-#[derive(Clone)]
 pub struct WorkQueue<M>
 where
     M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
@@ -25,7 +24,7 @@ where
 {
     pub name: String,
     _type: PhantomData<M>,
-    redis: Box<Redis>,
+    backend: Box<dyn Backend>,
 }
 
 impl<M> Actor for WorkQueue<M>
@@ -40,11 +39,11 @@ where
     M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
     Self: Actor<Context = Context<Self>>,
 {
-    pub fn new(name: String, backend: Redis) -> Self {
+    pub fn new(name: String, backend: impl Backend + 'static) -> Self {
         Self {
             name,
             _type: PhantomData,
-            redis: Box::new(backend),
+            backend: Box::new(backend),
         }
     }
 
@@ -60,7 +59,7 @@ where
         format!("{}:storage", self.name)
     }
 
-    pub fn start_with_name(name: String, backend: Redis) -> Addr<Self> {
+    pub fn start_with_name(name: String, backend: impl Backend + Send + 'static) -> Addr<Self> {
         let arbiter = Arbiter::new();
 
         <Self as Actor>::start_in_arbiter(&arbiter.handle(), |ctx| {
@@ -73,10 +72,12 @@ where
 
     pub fn enqueue_with_config(&self, job: Job<M>, re_run: bool) -> Result<(), Error> {
         let key = job.id.clone();
-        if let Some(existing_job) = self.redis.hash_get::<Job<M>>(&self.storage_name(), &key)? {
+        if let Some(existing_job) =
+            storage_get::<Job<M>>(&self.backend, &self.storage_name(), &key)?
+        {
             if !existing_job.is_done() {
                 info!("Update exising job with new information: {}", job.id);
-                self.redis.hash_upsert(&self.storage_name(), &key, &job)?;
+                storage_upsert(&self.backend, &self.storage_name(), &key, &job)?;
                 return Ok(());
             }
 
@@ -99,22 +100,21 @@ where
     pub fn enqueue(&self, mut job: Job<M>) -> Result<(), Error> {
         let key = job.id.clone();
         info!("Enqueue {}", key);
-        self.redis
-            .lpush(&self.format_queue_name(JobStatus::Queued), &key)?;
+        self.backend
+            .queue_push(&self.format_queue_name(JobStatus::Queued), &key)?;
         job.enqueue();
-        self.redis.hash_upsert(&self.storage_name(), &key, &job)?;
+        storage_upsert(&self.backend, &self.storage_name(), &key, &job)?;
         Ok(())
     }
 
     pub fn re_enqueue(&self, mut job: Job<M>) -> Result<(), Error> {
         debug!("Re Enqueue job {}", job.id);
         job.job_status = JobStatus::Queued;
-        self.redis
-            .hash_upsert(&self.storage_name(), &job.id, &job)?;
+        storage_upsert(&self.backend, &self.storage_name(), &job.id, &job)?;
 
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let queued_queue = self.format_queue_name(JobStatus::Queued);
-        if let Err(e) = self.redis.lmove(
+        if let Err(e) = self.backend.queue_move(
             &processing_queue,
             &queued_queue,
             1,
@@ -130,7 +130,7 @@ where
         info!("Cancel job {}", job.id);
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let cancelled_queue = self.format_queue_name(JobStatus::Canceled);
-        if let Err(e) = self.redis.lmove(
+        if let Err(e) = self.backend.queue_move(
             &processing_queue,
             &cancelled_queue,
             1,
@@ -144,12 +144,11 @@ where
     pub fn finish_current_job(&self, mut job: Job<M>) -> Result<(), Error> {
         info!("Finish job {}", job.id);
         job.finish();
-        self.redis
-            .hash_upsert(&self.storage_name(), &job.id, &job)?;
+        storage_upsert(&self.backend, &self.storage_name(), &job.id, &job)?;
 
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let finished_queue = self.format_queue_name(JobStatus::Finished);
-        if let Err(e) = self.redis.lmove(
+        if let Err(e) = self.backend.queue_move(
             &processing_queue,
             &finished_queue,
             1,
@@ -164,7 +163,7 @@ where
     pub fn move_current_job_to_failed(&self, job_id: &str) {
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let failed_queue = self.format_failed_queue_name();
-        if let Err(e) = self.redis.lmove(
+        if let Err(e) = self.backend.queue_move(
             &processing_queue,
             &failed_queue,
             1,
@@ -181,7 +180,7 @@ where
     pub fn import_processing_jobs(&self, count: usize) -> Result<Vec<String>, Error> {
         let idle_queue_name = self.format_queue_name(JobStatus::Queued);
         let processing_queue_name = self.format_queue_name(JobStatus::Processing);
-        let job_ids = self.redis.lmove(
+        let job_ids = self.backend.queue_move(
             &idle_queue_name,
             &processing_queue_name,
             count,
@@ -191,9 +190,10 @@ where
 
         let storage_name = self.storage_name();
         for job_id in &job_ids {
-            if let Ok(Some(mut item)) = self.redis.hash_get::<Job<M>>(&storage_name, job_id) {
+            if let Ok(Some(mut item)) = storage_get::<Job<M>>(&self.backend, &storage_name, job_id)
+            {
                 item.start_processing();
-                let _ = self.redis.hash_upsert(&storage_name, job_id, item);
+                let _ = storage_upsert(&self.backend, &storage_name, job_id, item);
             }
         }
 
@@ -202,7 +202,7 @@ where
 
     pub fn get_fist_processing_job_id(&self) -> Result<Option<String>, Error> {
         let processing_queue_name = self.format_queue_name(JobStatus::Processing);
-        let mut job_ids = self.redis.lrange(&processing_queue_name, 1)?;
+        let mut job_ids = self.backend.queue_get(&processing_queue_name, 1)?;
         if job_ids.is_empty() {
             return Ok(None);
         }
@@ -212,7 +212,8 @@ where
 
     pub fn read_job(&self, job_id: &str) -> Result<Option<Job<M>>, Error> {
         let storage_name = self.storage_name();
-        let item = self.redis.hash_get::<Job<M>>(&storage_name, job_id)?;
+
+        let item = storage_get(&self.backend, &storage_name, job_id)?;
         Ok(item)
     }
 
@@ -226,7 +227,7 @@ where
 
     pub fn _import_job(&self) {
         let processing_queue = self.format_queue_name(JobStatus::Processing);
-        let total_processing_jobs = self.redis.llen(&processing_queue).unwrap_or(0);
+        let total_processing_jobs = self.backend.queue_count(&processing_queue).unwrap_or(0);
         if total_processing_jobs > 0 {
             return;
         }
@@ -251,7 +252,7 @@ where
 
     pub fn _handle_processing_jobs(&mut self, addr: Addr<WorkQueue<M>>) {
         let processing_queue = self.format_queue_name(JobStatus::Processing);
-        let total_processing_jobs = self.redis.llen(&processing_queue).unwrap_or(0);
+        let total_processing_jobs = self.backend.queue_count(&processing_queue).unwrap_or(0);
         if total_processing_jobs == 0 {
             return;
         }
@@ -316,9 +317,9 @@ where
 
     pub fn cancel_job(&self, job_id: &str) -> Result<(), Error> {
         let storage_name = self.storage_name();
-        if let Some(mut job) = self.redis.hash_get::<Job<M>>(&storage_name, job_id)? {
+        if let Some(mut job) = storage_get::<Job<M>>(&self.backend, &storage_name, job_id)? {
             job.cancel();
-            self.redis.hash_upsert(&storage_name, job_id, job)?;
+            storage_upsert(&self.backend, &storage_name, job_id, job)?;
         }
 
         Ok(())

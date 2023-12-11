@@ -6,9 +6,9 @@ use std::any::{Any, TypeId};
 use std::collections::HashMap;
 use std::sync::Mutex;
 
+use crate::backend::Backend;
 use crate::job::Job;
 use crate::queue::{cancel_job, enqueue_job, WorkQueue};
-use crate::redis::Redis;
 use crate::Executable;
 
 lazy_static! {
@@ -29,7 +29,7 @@ impl Actor for Worker {
 }
 
 impl Worker {
-    pub fn register<M>(queue_name: &str, backend: Redis)
+    pub fn register<M>(queue_name: &str, backend: impl Backend + Send + 'static)
     where
         M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
 

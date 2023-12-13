@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use cron::Schedule;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 use uuid::Uuid;
 

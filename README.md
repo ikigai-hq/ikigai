@@ -4,19 +4,19 @@
 
 This repository contains a simple background job that supports a web server based on actix-web or other web/API frameworks in Rust.
 
-aj aims to one-stop for your 
+aj is a one-stop solution for your background (schedule, cron) job needs in Rust systems.
 
 - `Simple`: 
   - Easy to integrate into your application.
-  - Freedom to choose your backend (Redis by default). You just need to implement `Backend` trait to your storage and plug into Worker.
+  - Freedom to choose your backend (Redis by default). You just need to implement the `Backend` trait to your storage and plug it into the worker.
 - `Flexible`:
-  - Support rich features like `update`, `cancel`, `schedule`, `cron` that can fill all your needs. You don't need to find other crates for your system.
-  - Web interface (In roadmap).
-  - Control velocity/throughput of your worker/queue.
-  - Interface to control
+  - Supports rich features like `update`, `cancel`, `schedule`, `cron` that can fulfill all your needs. You don't need to find other crates for your system.
+  - Control velocity/throughput of your worker/queue. (In Roadmap)
+  - Web Interface to control (In roadmap)
 - `Reliable`:
   - Persistent by default (Redis by default).
-  - No unsafe code, 100% rust.
+  - No unsafe code, 100% Rust.
+
 
 [Architecture Doc](https://github.com/cptrodgers/aj/blob/master/ARCHITECTURE.md)
 

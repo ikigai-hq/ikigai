@@ -1,10 +1,18 @@
 //! # AJ (Background Job Based On Actix)
 //! This repository contains a simple background job that supports a web server based on actix-web or other web/API frameworks in Rust.
 //!
-//! aj wants to solve the background job done in the simple way by using Actor Model.
-//! The architecture aim to achieve:
-//! - Reliable: aj support `persistent job` by default and aj.
-//! - Flexible: aj also supports add, update, cancel to help you to control your background logics.
+//! aj is a one-stop solution for your background (schedule, cron) job needs in Rust systems.
+//!
+//! - `Simple`:
+//!   - Easy to integrate into your application.
+//!   - Freedom to choose your backend (Redis by default). You just need to implement the `Backend` trait to your storage and plug it into the worker.
+//! - `Flexible`:
+//!   - Supports rich features like `update`, `cancel`, `schedule`, `cron` that can fulfill all your needs. You don't need to find other crates for your system.
+//!   - Control velocity/throughput of your worker/queue. (In Roadmap)
+//!   - Web Interface to control (In roadmap)
+//! - `Reliable`:
+//!   - Persistent by default (Redis by default).
+//!   - No unsafe code, 100% Rust.
 //!
 //! [Architecture Doc](https://github.com/cptrodgers/aj/blob/master/ARCHITECTURE.md)
 //!
@@ -78,6 +86,6 @@ pub use worker::*;
 
 // External libs.
 pub use async_trait;
-pub use serde;
-pub use cron;
 pub use chrono;
+pub use cron;
+pub use serde;

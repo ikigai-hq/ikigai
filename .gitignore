@@ -2,5 +2,5 @@
 /Cargo.lock
 
 # IDE
-.idea
-.vscode
+.idea/
+.vscode/

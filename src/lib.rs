@@ -11,13 +11,14 @@
 //! ## Usage:
 //!
 //! ```rust
+//! use std::str::FromStr;
+//!
 //! use aj::async_trait::async_trait;
 //! use aj::Worker;
 //! use aj::{Executable, JobBuilder};
-//! use serde::{Serialize, Deserialize};
-//! use chrono::Utc;
-//! use cron::Schedule;
-//! use std::str::FromStr;
+//! use aj::serde::{Serialize, Deserialize};
+//! use aj::chrono::Utc;
+//! use aj::cron::Schedule;
 //!
 //! #[derive(Debug, Clone, Serialize, Deserialize)]
 //! pub struct PrintJob {
@@ -59,8 +60,6 @@
 //! ```
 
 #[macro_use]
-extern crate serde;
-#[macro_use]
 extern crate log;
 
 pub mod db_backend;
@@ -70,10 +69,15 @@ pub mod queue;
 pub mod util;
 pub mod worker;
 
-pub use async_trait;
 pub use db_backend::*;
 pub use error::*;
 pub use job::*;
 pub use queue::*;
 pub use util::*;
 pub use worker::*;
+
+// External libs.
+pub use async_trait;
+pub use serde;
+pub use cron;
+pub use chrono;

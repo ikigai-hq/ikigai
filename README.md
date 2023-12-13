@@ -1,24 +1,36 @@
 # aj (Actix Background Job)
 
+![ci status](https://github.com/cptrodgers/aj/actions/workflows/test-and-build.yml/badge.svg)
+
 This repository contains a simple background job that supports a web server based on actix-web or other web/API frameworks in Rust.
 
-aj wants to solve the background job done in the simple way by using Actor Model.
-The architecture aim to achieve:
-- Reliable: aj support `persistent job` by default and aj.
-- Flexible: aj also supports add, update, cancel to help you to control your background logics.
+aj aims to one-stop for your 
+
+- `Simple`: 
+  - Easy to integrate into your application.
+  - Freedom to choose your backend (Redis by default). You just need to implement `Backend` trait to your storage and plug into Worker.
+- `Flexible`:
+  - Support rich features like `update`, `cancel`, `schedule`, `cron` that can fill all your needs. You don't need to find other crates for your system.
+  - Web interface (In roadmap).
+  - Control velocity/throughput of your worker/queue.
+  - Interface to control
+- `Reliable`:
+  - Persistent by default (Redis by default).
+  - No unsafe code, 100% rust.
 
 [Architecture Doc](https://github.com/cptrodgers/aj/blob/master/ARCHITECTURE.md)
 
 ## Usage:
 
 ```rust
+use std::str::FromStr;
+
 use aj::async_trait::async_trait;
 use aj::Worker;
 use aj::{Executable, JobBuilder};
-use serde::{Serialize, Deserialize};
-use chrono::Utc;
-use cron::Schedule;
-use std::str::FromStr;
+use aj::serde::{Serialize, Deserialize};
+use aj::chrono::Utc;
+use aj::cron::Schedule;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PrintJob {

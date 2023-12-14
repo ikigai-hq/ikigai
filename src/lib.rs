@@ -54,7 +54,7 @@
 //!     //! Now in seconds
 //!     let now = Utc::now().timestamp();
 //!     let job = JobBuilder::new(PrintJob { number: 2 })
-//!         .set_schedule_at(now + 30)
+//!         .set_schedule_at(now + 3)
 //!         .build();
 //!     Worker::add_job(job);
 //! }
@@ -77,7 +77,7 @@
 //!     run_job_instantly();
 //!     run_job_at();
 //!     run_cron_job();
-//!     sleep(Duration::from_secs(10)).await;
+//!     sleep(Duration::from_secs(5)).await;
 //! }
 //! ```
 

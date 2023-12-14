@@ -73,7 +73,7 @@ impl Backend for InMemory {
         let mut items = vec![];
         if let Some(queue) = self.queues.lock().unwrap().get(queue) {
             for _ in 0..count {
-                if let Some(item) = queue.back() {
+                if let Some(item) = queue.front() {
                     items.push(item.to_string());
                 }
             }

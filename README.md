@@ -22,8 +22,12 @@ aj is a one-stop solution for your background (schedule, cron) job needs in Rust
 
 ## Usage:
 
+View [examples](https://github.com/cptrodgers/aj/tree/master/examples) directory to know usage of aj.
+
 ```rust
 use std::str::FromStr;
+use std::time::Duration;
+use actix_rt::time::sleep;
 
 use aj::async_trait::async_trait;
 use aj::Worker;
@@ -61,13 +65,11 @@ fn run_job_at() {
     Worker::add_job(job);
 }
 
-fn run_cron_job() {
-    // aj use `cron` crate.
-    // Ref: https://docs.rs/cron/latest/cron/
-    let expression = "0   30   9,12,15     1,15       May-Aug  Mon,Wed,Fri  2018/2";
+fn run_simple_cron_job() {
+    let expression = "* * * * * * *";
     let schedule = Schedule::from_str(expression).unwrap();
     let job = JobBuilder::new(PrintJob { number: 3 })
-        .set_cron(schedule, aj::CronContext::default())
+        .set_cron(schedule, CronContext::default())
         .build();
     Worker::add_job(job);
 }
@@ -78,11 +80,10 @@ async fn main() {
     Worker::register::<PrintJob>("print_job", mem);
     run_job_instantly();
     run_job_at();
-    run_cron_job()
+    run_simple_cron_job();
+    sleep(Duration::from_secs(10)).await;
 }
 ```
-
-More
 
 ## LICENSE
 

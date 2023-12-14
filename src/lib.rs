@@ -20,6 +20,8 @@
 //!
 //! ```rust
 //! use std::str::FromStr;
+//! use std::time::Duration;
+//! use actix_rt::time::sleep;
 //!
 //! use aj::async_trait::async_trait;
 //! use aj::Worker;
@@ -60,7 +62,7 @@
 //! fn run_cron_job() {
 //!     //! aj use `cron` crate.
 //!     //! Ref: https://docs.rs/cron/latest/cron/
-//!     let expression = "0   30   9,12,15     1,15       May-Aug  Mon,Wed,Fri  2018/2";
+//!     let expression = "* * * * * * *";
 //!     let schedule = Schedule::from_str(expression).unwrap();
 //!     let job = JobBuilder::new(PrintJob { number: 3 })
 //!         .set_cron(schedule, aj::CronContext::default())
@@ -69,13 +71,13 @@
 //! }
 //!
 //! #[rt]
-//!  async fn main() {
-//!     use std::time::Duration;
-//!     use actix_rt::time::sleep;
-//!
+//! async fn main() {
 //!     let mem = InMemory::default();
 //!     Worker::register::<PrintJob>("print_job", mem);
 //!     run_job_instantly();
+//!     run_job_at();
+//!     run_cron_job();
+//!     sleep(Duration::from_secs(10)).await;
 //! }
 //! ```
 
@@ -97,8 +99,8 @@ pub use util::*;
 pub use worker::*;
 
 // External libs.
+pub use actix_rt::main as rt;
 pub use async_trait;
 pub use chrono;
 pub use cron;
 pub use serde;
-pub use actix_rt::main as rt;

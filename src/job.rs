@@ -121,18 +121,18 @@ impl<M: Executable + Clone + Send + Sync + 'static> Job<M> {
                 }
 
                 if let Some(max_repeat) = context.max_repeat {
-                    if max_repeat > *total_repeat {
-                        return Some(job);
+                    if max_repeat < *total_repeat {
+                        return None;
                     }
                 }
 
                 if let Some(end_at) = context.end_at {
-                    if end_at > now {
-                        return Some(job);
+                    if end_at < now {
+                        return None;
                     }
                 }
 
-                None
+                Some(job)
             }
             _ => None,
         }

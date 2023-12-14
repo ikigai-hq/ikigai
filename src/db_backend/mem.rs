@@ -8,6 +8,7 @@ use std::sync::{Arc, Mutex};
 use crate::backend::Backend;
 use crate::Error;
 
+#[derive(Default)]
 pub struct InMemory {
     pub queues: Arc<Mutex<HashMap<String, VecDeque<String>>>>,
     pub storages: Arc<Mutex<HashMap<String, HashMap<String, String>>>>,

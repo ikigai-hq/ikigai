@@ -6,7 +6,7 @@ This repository contains a simple background job that supports a web server base
 
 aj is a one-stop solution for your background (schedule, cron) job needs in Rust systems.
 
-- `Simple`: 
+- `Simple`:
   - Easy to integrate into your application.
   - Freedom to choose your backend (Redis by default). You just need to implement the `Backend` trait to your storage and plug it into the worker.
 - `Flexible`:
@@ -31,6 +31,8 @@ use aj::{Executable, JobBuilder};
 use aj::serde::{Serialize, Deserialize};
 use aj::chrono::Utc;
 use aj::cron::Schedule;
+use aj::rt;
+use aj::mem::InMemory;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PrintJob {
@@ -70,12 +72,13 @@ fn run_cron_job() {
     Worker::add_job(job);
 }
 
-fn main() {
-    let redis = aj::redis::Redis::new("redis://localhost/");
-    Worker::register::<PrintJob>("print_task", redis);
+#[rt]
+async fn main() {
+    let mem = InMemory::default();
+    Worker::register::<PrintJob>("print_job", mem);
     run_job_instantly();
     run_job_at();
-    run_cron_job();
+    run_cron_job()
 }
 ```
 

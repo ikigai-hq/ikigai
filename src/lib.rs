@@ -27,6 +27,8 @@
 //! use aj::serde::{Serialize, Deserialize};
 //! use aj::chrono::Utc;
 //! use aj::cron::Schedule;
+//! use aj::mem::InMemory;
+//! use aj::rt;
 //!
 //! #[derive(Debug, Clone, Serialize, Deserialize)]
 //! pub struct PrintJob {
@@ -65,6 +67,16 @@
 //!         .build();
 //!     Worker::add_job(job);
 //! }
+//!
+//! #[rt]
+//!  async fn main() {
+//!     use std::time::Duration;
+//!     use actix_rt::time::sleep;
+//!
+//!     let mem = InMemory::default();
+//!     Worker::register::<PrintJob>("print_job", mem);
+//!     run_job_instantly();
+//! }
 //! ```
 
 #[macro_use]
@@ -89,3 +101,4 @@ pub use async_trait;
 pub use chrono;
 pub use cron;
 pub use serde;
+pub use actix_rt::main as rt;

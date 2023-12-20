@@ -109,6 +109,11 @@ where
 
     pub fn re_enqueue(&self, mut job: Job<M>) -> Result<(), Error> {
         debug!("Re Enqueue job {}", job.id);
+        if job.job_status == JobStatus::Canceled {
+            error!("[WorkQueue] Cannot re enqueue canceled job {}", job.id);
+            return Ok(());
+        }
+
         job.job_status = JobStatus::Queued;
         storage_upsert(&self.backend, &self.storage_name(), &job.id, &job)?;
 
@@ -192,8 +197,10 @@ where
         for job_id in &job_ids {
             if let Ok(Some(mut item)) = storage_get::<Job<M>>(&self.backend, &storage_name, job_id)
             {
-                item.start_processing();
-                let _ = storage_upsert(&self.backend, &storage_name, job_id, item);
+                if item.job_status != JobStatus::Canceled {
+                    item.start_processing();
+                    let _ = storage_upsert(&self.backend, &storage_name, job_id, item);
+                }
             }
         }
 

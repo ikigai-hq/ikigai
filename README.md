@@ -18,7 +18,7 @@ aj is a one-stop solution for your background (schedule, cron) job needs in Rust
   - No unsafe code, 100% Rust.
 
 
-[Architecture Doc](https://github.com/cptrodgers/aj/blob/master/ARCHITECTURE.md)
+[Docs](https://github.com/cptrodgers/aj/blob/master/docs)
 
 ## Usage:
 

@@ -2,9 +2,8 @@
 
 ![ci status](https://github.com/cptrodgers/aj/actions/workflows/test-and-build.yml/badge.svg)
 
-This repository contains a simple background job that supports a web server based on actix-web or other web/API frameworks in Rust.
-
-aj is a one-stop solution for your background (schedule, cron) job needs in Rust systems.
+aj is a one-stop solution for your background (includes schedule, cron) job needs in Rust system.
+Based on [Actor Model (Actix)](https://actix.rs).
 
 - `Simple`:
   - Easy to integrate into your application.

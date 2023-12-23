@@ -1,11 +1,10 @@
 //! WARNING: Mem is purposing for testing or quick using. It doesn't support Persistent Job.
 //! Don't use in production.
 //! If you want to improve, feel free to contribute
-use redis::Direction;
 use std::collections::{HashMap, VecDeque};
 use std::sync::{Arc, Mutex};
 
-use crate::backend::Backend;
+use crate::backend::{Backend, QueueDirection};
 use crate::Error;
 
 #[derive(Default)]
@@ -14,11 +13,15 @@ pub struct InMemory {
     pub storages: Arc<Mutex<HashMap<String, HashMap<String, String>>>>,
 }
 
-fn insert_item_to_queue(queue: &mut VecDeque<String>, items: Vec<String>, direction: Direction) {
+fn insert_item_to_queue(
+    queue: &mut VecDeque<String>,
+    items: Vec<String>,
+    direction: QueueDirection,
+) {
     for item in items {
         match direction {
-            Direction::Left => queue.push_front(item.clone()),
-            Direction::Right => queue.push_back(item.clone()),
+            QueueDirection::Front => queue.push_front(item.clone()),
+            QueueDirection::Back => queue.push_back(item.clone()),
         }
     }
 }
@@ -41,16 +44,16 @@ impl Backend for InMemory {
         from_queue: &str,
         to_queue: &str,
         count: usize,
-        from_direction: Direction,
-        to_direction: Direction,
+        from_direction: QueueDirection,
+        to_direction: QueueDirection,
     ) -> Result<Vec<String>, Error> {
         let mut queues = self.queues.lock().unwrap();
         let mut moving_items = vec![];
         if let Some(from_queue) = queues.get_mut(from_queue) {
             for _ in 0..count {
                 let item = match from_direction {
-                    Direction::Left => from_queue.pop_front(),
-                    Direction::Right => from_queue.pop_back(),
+                    QueueDirection::Front => from_queue.pop_front(),
+                    QueueDirection::Back => from_queue.pop_back(),
                 };
                 if let Some(item) = item {
                     moving_items.push(item);

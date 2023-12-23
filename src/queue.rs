@@ -1,6 +1,5 @@
 use actix::fut::wrap_future;
 use actix::*;
-use redis::Direction;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use std::fmt::Debug;
@@ -109,7 +108,7 @@ where
 
     pub fn re_enqueue(&self, mut job: Job<M>) -> Result<(), Error> {
         debug!("Re Enqueue job {}", job.id);
-        if job.job_status == JobStatus::Canceled {
+        if job.is_cancelled() {
             error!("[WorkQueue] Cannot re enqueue canceled job {}", job.id);
             return Ok(());
         }
@@ -119,13 +118,10 @@ where
 
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let queued_queue = self.format_queue_name(JobStatus::Queued);
-        if let Err(e) = self.backend.queue_move(
-            &processing_queue,
-            &queued_queue,
-            1,
-            Direction::Left,
-            Direction::Left,
-        ) {
+        if let Err(e) = self
+            .backend
+            .queue_move_front_to_front(&processing_queue, &queued_queue, 1)
+        {
             error!("[WorkQueue] Cannot re enqueue {}: {:?}", job.id, e);
         };
         Ok(())
@@ -135,13 +131,10 @@ where
         info!("Cancel job {}", job.id);
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let cancelled_queue = self.format_queue_name(JobStatus::Canceled);
-        if let Err(e) = self.backend.queue_move(
-            &processing_queue,
-            &cancelled_queue,
-            1,
-            Direction::Left,
-            Direction::Left,
-        ) {
+        if let Err(e) =
+            self.backend
+                .queue_move_front_to_front(&processing_queue, &cancelled_queue, 1)
+        {
             error!("[WorkQueue] Cannot re enqueue {}: {:?}", job.id, e);
         };
     }
@@ -153,13 +146,10 @@ where
 
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let finished_queue = self.format_queue_name(JobStatus::Finished);
-        if let Err(e) = self.backend.queue_move(
-            &processing_queue,
-            &finished_queue,
-            1,
-            Direction::Left,
-            Direction::Left,
-        ) {
+        if let Err(e) =
+            self.backend
+                .queue_move_front_to_front(&processing_queue, &finished_queue, 1)
+        {
             error!("[WorkQueue] Cannot finish {}: {:?}", job.id, e);
         };
         Ok(())
@@ -168,13 +158,10 @@ where
     pub fn move_current_job_to_failed(&self, job_id: &str) {
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let failed_queue = self.format_failed_queue_name();
-        if let Err(e) = self.backend.queue_move(
-            &processing_queue,
-            &failed_queue,
-            1,
-            Direction::Left,
-            Direction::Left,
-        ) {
+        if let Err(e) = self
+            .backend
+            .queue_move_front_to_front(&processing_queue, &failed_queue, 1)
+        {
             error!(
                 "[WorkQueue] Cannot move to failed queue {}: {:?}",
                 job_id, e
@@ -185,12 +172,10 @@ where
     pub fn import_processing_jobs(&self, count: usize) -> Result<Vec<String>, Error> {
         let idle_queue_name = self.format_queue_name(JobStatus::Queued);
         let processing_queue_name = self.format_queue_name(JobStatus::Processing);
-        let job_ids = self.backend.queue_move(
+        let job_ids = self.backend.queue_move_back_to_front(
             &idle_queue_name,
             &processing_queue_name,
             count,
-            Direction::Right,
-            Direction::Left,
         )?;
 
         let storage_name = self.storage_name();

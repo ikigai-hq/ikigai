@@ -1,5 +1,4 @@
 //! # AJ (Background Job Based On Actix)
-//! This repository contains a simple background job that supports a web server based on actix-web or other web/API frameworks in Rust.
 //!
 //! aj is a one-stop solution for your background (schedule, cron) job needs in Rust systems.
 //!

@@ -1,6 +1,7 @@
-use crate::backend::Backend;
-use crate::Error;
 use redis::{Client, Commands, Direction, IntoConnectionInfo, RedisResult};
+
+use crate::backend::{Backend, QueueDirection};
+use crate::Error;
 
 #[derive(Debug, Clone)]
 pub struct Redis {
@@ -69,9 +70,11 @@ impl Backend for Redis {
         from_queue: &str,
         to_queue: &str,
         count: usize,
-        from_direction: Direction,
-        to_direction: Direction,
+        from_position: QueueDirection,
+        to_position: QueueDirection,
     ) -> Result<Vec<String>, Error> {
+        let from_direction = from_position.into();
+        let to_direction = to_position.into();
         let res = self.lmove(from_queue, to_queue, count, from_direction, to_direction)?;
         Ok(res)
     }
@@ -96,6 +99,15 @@ impl Backend for Redis {
         let mut conn = self.client.get_connection()?;
         let res: Option<String> = conn.hget(hash, key)?;
         Ok(res)
+    }
+}
+
+impl From<QueueDirection> for Direction {
+    fn from(value: QueueDirection) -> Self {
+        match value {
+            QueueDirection::Front => Direction::Left,
+            QueueDirection::Back => Direction::Right,
+        }
     }
 }
 

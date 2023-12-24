@@ -5,7 +5,7 @@ use aj::async_trait::async_trait;
 use aj::mem::InMemory;
 use aj::rt;
 use aj::serde::{Deserialize, Serialize};
-use aj::{get_now_as_secs, Worker};
+use aj::{get_now_as_secs, AJ};
 use aj::{Executable, JobBuilder};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -29,14 +29,14 @@ fn run_schedule_job() {
     let job = JobBuilder::new(PrintJob { number: 1 })
         .set_schedule_at(get_now_as_secs() + 5)
         .build();
-    Worker::add_job(job);
+    AJ::add_job(job);
 }
 
 #[rt]
 async fn main() {
     let backend = InMemory::default();
-    Worker::register::<PrintJob>("print_job", backend);
+    AJ::register::<PrintJob>("print_job", backend);
     println!("Now is {}", get_now_as_secs());
     run_schedule_job();
-    sleep(Duration::from_secs(10)).await;
+    sleep(Duration::from_secs(6)).await;
 }

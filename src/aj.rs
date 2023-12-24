@@ -22,13 +22,13 @@ pub struct Registry {
 }
 
 #[derive(Default)]
-pub struct Worker;
+pub struct AJ;
 
-impl Actor for Worker {
+impl Actor for AJ {
     type Context = Context<Self>;
 }
 
-impl Worker {
+impl AJ {
     pub fn register<M>(queue_name: &str, backend: impl Backend + Send + 'static)
     where
         M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
@@ -77,7 +77,7 @@ impl Worker {
 
         WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
     {
-        let addr: Option<Addr<WorkQueue<M>>> = Worker::get_queue_address();
+        let addr: Option<Addr<WorkQueue<M>>> = AJ::get_queue_address();
         if let Some(queue_addr) = addr {
             enqueue_job(queue_addr, job, re_run);
             true
@@ -92,7 +92,7 @@ impl Worker {
 
         WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
     {
-        let addr: Option<Addr<WorkQueue<M>>> = Worker::get_queue_address();
+        let addr: Option<Addr<WorkQueue<M>>> = AJ::get_queue_address();
         if let Some(queue_addr) = addr {
             cancel_job(queue_addr, job_id);
             true

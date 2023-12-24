@@ -19,9 +19,7 @@ Based on [Actor Model (Actix)](https://actix.rs).
 
 [Docs](https://github.com/cptrodgers/aj/blob/master/docs)
 
-## Usage:
-
-View [examples](https://github.com/cptrodgers/aj/tree/master/examples) directory to know usage of aj.
+## Usage ([examples](https://github.com/cptrodgers/aj/tree/master/examples))
 
 ```rust
 use std::str::FromStr;

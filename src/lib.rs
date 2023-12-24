@@ -13,9 +13,8 @@
 //!   - Persistent by default (Redis by default).
 //!   - No unsafe code, 100% Rust.
 //!
-//! [Architecture Doc](https://github.com/cptrodgers/aj/blob/master/ARCHITECTURE.md)
-//!
 //! ## Usage:
+//! View [Examples](https://github.com/cptrodgers/aj/blob/master/examples).
 //!
 //! ```rust
 //! use std::str::FromStr;
@@ -23,7 +22,7 @@
 //! use actix_rt::time::sleep;
 //!
 //! use aj::async_trait::async_trait;
-//! use aj::Worker;
+//! use aj::AJ;
 //! use aj::{Executable, JobBuilder};
 //! use aj::serde::{Serialize, Deserialize};
 //! use aj::chrono::Utc;
@@ -46,7 +45,7 @@
 //!
 //! fn run_job_instantly() {
 //!     let job = JobBuilder::new(PrintJob { number: 1 }).build();
-//!     Worker::add_job(job);
+//!     AJ::add_job(job);
 //! }
 //!
 //! fn run_job_at() {
@@ -55,7 +54,7 @@
 //!     let job = JobBuilder::new(PrintJob { number: 2 })
 //!         .set_schedule_at(now + 3)
 //!         .build();
-//!     Worker::add_job(job);
+//!     AJ::add_job(job);
 //! }
 //!
 //! fn run_cron_job() {
@@ -66,13 +65,13 @@
 //!     let job = JobBuilder::new(PrintJob { number: 3 })
 //!         .set_cron(schedule, aj::CronContext::default())
 //!         .build();
-//!     Worker::add_job(job);
+//!     AJ::add_job(job);
 //! }
 //!
 //! #[rt]
 //! async fn main() {
 //!     let mem = InMemory::default();
-//!     Worker::register::<PrintJob>("print_job", mem);
+//!     AJ::register::<PrintJob>("print_job", mem);
 //!     run_job_instantly();
 //!     run_job_at();
 //!     run_cron_job();
@@ -83,19 +82,19 @@
 #[macro_use]
 extern crate log;
 
+pub mod aj;
 pub mod db_backend;
 pub mod error;
 pub mod job;
 pub mod queue;
 pub mod util;
-pub mod worker;
 
+pub use aj::*;
 pub use db_backend::*;
 pub use error::*;
 pub use job::*;
 pub use queue::*;
 pub use util::*;
-pub use worker::*;
 
 // External libs.
 pub use actix_rt::main as rt;

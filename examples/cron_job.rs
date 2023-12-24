@@ -7,7 +7,7 @@ use aj::cron::Schedule;
 use aj::mem::InMemory;
 use aj::rt;
 use aj::serde::{Deserialize, Serialize};
-use aj::{get_now_as_secs, CronContext, Worker};
+use aj::{get_now_as_secs, CronContext, AJ};
 use aj::{Executable, JobBuilder};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -33,7 +33,7 @@ fn run_simple_cron_job() {
     let job = JobBuilder::new(PrintJob { number: 1 })
         .set_cron(schedule, CronContext::default())
         .build();
-    Worker::add_job(job);
+    AJ::add_job(job);
 }
 
 fn run_cron_job_with_condition() {
@@ -46,13 +46,13 @@ fn run_cron_job_with_condition() {
     let job = JobBuilder::new(PrintJob { number: 2 })
         .set_cron(schedule, context)
         .build();
-    Worker::add_job(job);
+    AJ::add_job(job);
 }
 
 #[rt]
 async fn main() {
     let backend = InMemory::default();
-    Worker::register::<PrintJob>("print_job", backend);
+    AJ::register::<PrintJob>("print_job", backend);
     println!("Now is {}", get_now_as_secs());
     run_simple_cron_job();
     run_cron_job_with_condition();

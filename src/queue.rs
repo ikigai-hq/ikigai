@@ -10,11 +10,8 @@ use crate::backend::{storage_get, storage_upsert, Backend};
 use crate::job::{Job, JobStatus};
 use crate::{Error, Executable};
 
-const IMPORT_JOBS_EACH_BATCH: usize = 5;
-// Time to declare period between 2 import processing jobs
-const JOB_PICKER_DURATION: Duration = Duration::from_millis(500);
-// Time to declare period between 2 times to handling processing jobs
-const JOB_HANDLER_DURATION: Duration = Duration::from_millis(500);
+const TOTAL_IMPORTED_JOBS_EACH_TICK: usize = 5;
+const PROCESSING_TICK: Duration = Duration::from_millis(100);
 
 pub struct WorkQueue<M>
 where
@@ -64,7 +61,6 @@ where
         <Self as Actor>::start_in_arbiter(&arbiter.handle(), |ctx| {
             let mut q = WorkQueue::<M>::new(name, backend);
             q.run_job_picker(ctx);
-            q.run_job_handler(ctx);
             q
         })
     }
@@ -210,9 +206,10 @@ where
     }
 
     // This logic will pick job from queued jobs -> processing jobs
-    pub fn run_job_picker(&self, ctx: &mut Context<WorkQueue<M>>) {
+    pub fn run_job_picker(&mut self, ctx: &mut Context<WorkQueue<M>>) {
         self._import_job();
-        ctx.run_later(JOB_PICKER_DURATION, |work_queue, ctx| {
+        self._handle_processing_jobs(ctx.address());
+        ctx.run_later(PROCESSING_TICK, |work_queue, ctx| {
             work_queue.run_job_picker(ctx);
         });
     }
@@ -225,21 +222,12 @@ where
         }
 
         // No job in processing queue, should import queued jobs to processing
-        if let Err(err) = self.import_processing_jobs(IMPORT_JOBS_EACH_BATCH) {
+        if let Err(err) = self.import_processing_jobs(TOTAL_IMPORTED_JOBS_EACH_TICK) {
             error!(
                 "[WorkQueue]: Cannot import processing jobs of {} :{:?}",
                 processing_queue, err
             );
         }
-    }
-
-    // This job will pick job in processing queue
-    // Complete 1 batch and re run
-    pub fn run_job_handler(&mut self, ctx: &mut Context<WorkQueue<M>>) {
-        self._handle_processing_jobs(ctx.address());
-        ctx.run_later(JOB_HANDLER_DURATION, |work_queue, ctx| {
-            work_queue.run_job_handler(ctx);
-        });
     }
 
     pub fn _handle_processing_jobs(&mut self, addr: Addr<WorkQueue<M>>) {

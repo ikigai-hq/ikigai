@@ -11,7 +11,7 @@
 //!   - Web Interface to control (In roadmap)
 //! - `Reliable`:
 //!   - Persistent by default (Redis by default).
-//!   - No unsafe code, 100% Rust.
+//!   - No unsafe code.
 //!
 //! ## Usage:
 //! View [Examples](https://github.com/cptrodgers/aj/blob/master/examples).

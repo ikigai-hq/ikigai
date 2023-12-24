@@ -14,7 +14,7 @@ Based on [Actor Model (Actix)](https://actix.rs).
   - Web Interface to control (In roadmap)
 - `Reliable`:
   - Persistent by default (Redis by default).
-  - No unsafe code, 100% Rust.
+  - No unsafe code.
 
 
 [Docs](https://github.com/cptrodgers/aj/blob/master/docs)
@@ -27,7 +27,7 @@ use std::time::Duration;
 use actix_rt::time::sleep;
 
 use aj::async_trait::async_trait;
-use aj::Worker;
+use aj::AJ;
 use aj::{Executable, JobBuilder};
 use aj::serde::{Serialize, Deserialize};
 use aj::chrono::Utc;
@@ -50,7 +50,7 @@ impl Executable for PrintJob {
 
 fn run_job_instantly() {
     let job = JobBuilder::new(PrintJob { number: 1 }).build();
-    Worker::add_job(job);
+    AJ::add_job(job);
 }
 
 fn run_job_at() {
@@ -59,7 +59,7 @@ fn run_job_at() {
     let job = JobBuilder::new(PrintJob { number: 2 })
         .set_schedule_at(now + 30)  // Run after now 30 secs
         .build();
-    Worker::add_job(job);
+    AJ::add_job(job);
 }
 
 fn run_simple_cron_job() {
@@ -68,19 +68,23 @@ fn run_simple_cron_job() {
     let job = JobBuilder::new(PrintJob { number: 3 })
         .set_cron(schedule, CronContext::default())
         .build();
-    Worker::add_job(job);
+    AJ::add_job(job);
 }
 
 #[rt]
 async fn main() {
     let mem = InMemory::default();
-    Worker::register::<PrintJob>("print_job", mem);
+    AJ::register::<PrintJob>("print_job", mem);
     run_job_instantly();
     run_job_at();
     run_simple_cron_job();
     sleep(Duration::from_secs(10)).await;
 }
 ```
+
+## `aj` in Production
+
+- [ZenClass](https://zenclass.co): uses `aj` to build their reminder system (reminder at specific time or monthly, weekly, daily repeat reminder).
 
 ## LICENSE
 

@@ -13,12 +13,34 @@ use crate::{Error, Executable};
 const TOTAL_IMPORTED_JOBS_EACH_TICK: usize = 5;
 const PROCESSING_TICK: Duration = Duration::from_millis(100);
 
+#[derive(Debug, Clone)]
+pub struct WorkQueueConfig {
+    pub process_tick_duration: Duration,
+    pub job_per_ticks: usize,
+}
+
+impl WorkQueueConfig {
+    pub fn init() -> Self {
+        Self {
+            job_per_ticks: TOTAL_IMPORTED_JOBS_EACH_TICK,
+            process_tick_duration: PROCESSING_TICK,
+        }
+    }
+}
+
+impl Default for WorkQueueConfig {
+    fn default() -> Self {
+        Self::init()
+    }
+}
+
 pub struct WorkQueue<M>
 where
     M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
     Self: Actor<Context = Context<Self>>,
 {
-    pub name: String,
+    pub job_name: String,
+    config: WorkQueueConfig,
     _type: PhantomData<M>,
     backend: Box<dyn Backend>,
 }
@@ -35,24 +57,25 @@ where
     M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
     Self: Actor<Context = Context<Self>>,
 {
-    pub fn new(name: String, backend: impl Backend + 'static) -> Self {
+    pub fn new(job_name: String, backend: impl Backend + 'static) -> Self {
         Self {
-            name,
+            job_name,
+            config: WorkQueueConfig::default(),
             _type: PhantomData,
             backend: Box::new(backend),
         }
     }
 
     pub fn format_queue_name(&self, status: JobStatus) -> String {
-        format!("{}:queue:{:?}", self.name, status)
+        format!("{}:queue:{:?}", self.job_name, status)
     }
 
     pub fn format_failed_queue_name(&self) -> String {
-        format!("{}:queue:failed", self.name)
+        format!("{}:queue:failed", self.job_name)
     }
 
     pub fn storage_name(&self) -> String {
-        format!("{}:storage", self.name)
+        format!("{}:storage", self.job_name)
     }
 
     pub fn start_with_name(name: String, backend: impl Backend + Send + 'static) -> Addr<Self> {
@@ -209,7 +232,7 @@ where
     pub fn run_job_picker(&mut self, ctx: &mut Context<WorkQueue<M>>) {
         self._import_job();
         self._handle_processing_jobs(ctx.address());
-        ctx.run_later(PROCESSING_TICK, |work_queue, ctx| {
+        ctx.run_later(self.config.process_tick_duration, |work_queue, ctx| {
             work_queue.run_job_picker(ctx);
         });
     }
@@ -222,7 +245,7 @@ where
         }
 
         // No job in processing queue, should import queued jobs to processing
-        if let Err(err) = self.import_processing_jobs(TOTAL_IMPORTED_JOBS_EACH_TICK) {
+        if let Err(err) = self.import_processing_jobs(self.config.job_per_ticks) {
             error!(
                 "[WorkQueue]: Cannot import processing jobs of {} :{:?}",
                 processing_queue, err
@@ -322,7 +345,7 @@ where
         let error_text = format!(
             "Cannot insert new job {:?} to queue {}",
             serde_json::to_string(&msg.0),
-            self.name
+            self.job_name
         );
         if self.enqueue_with_config(msg.0, msg.1).is_err() {
             error!("{}", error_text)

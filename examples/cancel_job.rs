@@ -37,13 +37,14 @@ fn cancel_job(id: String) {
     AJ::cancel_job::<PrintJob>(id);
 }
 
-#[rt]
-async fn main() {
-    let backend = InMemory::default();
-    AJ::register::<PrintJob>("print_job", backend);
-    println!("Now is {}", get_now_as_secs());
-    let job_id: String = "1".into();
-    run_schedule_job(job_id.clone());
-    cancel_job(job_id);
-    sleep(Duration::from_secs(10)).await;
+fn main() {
+    aj::start(async {
+        let backend = InMemory::default();
+        AJ::register::<PrintJob>("print_job", backend);
+        println!("Now is {}", get_now_as_secs());
+        let job_id: String = "1".into();
+        run_schedule_job(job_id.clone());
+        cancel_job(job_id);
+        sleep(Duration::from_secs(10)).await;
+    });
 }

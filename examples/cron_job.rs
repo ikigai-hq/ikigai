@@ -5,7 +5,6 @@ use std::time::Duration;
 use aj::async_trait::async_trait;
 use aj::cron::Schedule;
 use aj::mem::InMemory;
-use aj::rt;
 use aj::serde::{Deserialize, Serialize};
 use aj::{get_now_as_secs, CronContext, AJ};
 use aj::{Executable, JobBuilder};
@@ -49,12 +48,13 @@ fn run_cron_job_with_condition() {
     AJ::add_job(job);
 }
 
-#[rt]
-async fn main() {
-    let backend = InMemory::default();
-    AJ::register::<PrintJob>("print_job", backend);
-    println!("Now is {}", get_now_as_secs());
-    run_simple_cron_job();
-    run_cron_job_with_condition();
-    sleep(Duration::from_secs(10)).await;
+fn main() {
+    aj::start(async {
+        let backend = InMemory::default();
+        AJ::register::<PrintJob>("print_job", backend);
+        println!("Now is {}", get_now_as_secs());
+        run_simple_cron_job();
+        run_cron_job_with_condition();
+        sleep(Duration::from_secs(10)).await;
+    });
 }

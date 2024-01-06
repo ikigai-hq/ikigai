@@ -68,19 +68,23 @@
 //!     AJ::add_job(job);
 //! }
 //!
-//! #[rt]
-//! async fn main() {
-//!     let mem = InMemory::default();
-//!     AJ::register::<PrintJob>("print_job", mem);
-//!     run_job_instantly();
-//!     run_job_at();
-//!     run_cron_job();
-//!     sleep(Duration::from_secs(5)).await;
+//! fn main() {
+//!     aj::start(async {
+//!         let mem = InMemory::default();
+//!         AJ::register::<PrintJob>("print_job", mem);
+//!         run_job_instantly();
+//!         run_job_at();
+//!         run_cron_job();
+//!         sleep(Duration::from_secs(5)).await;
+//!     });
 //! }
 //! ```
 
 #[macro_use]
 extern crate log;
+
+use actix_rt::System;
+use std::future::Future;
 
 pub mod aj;
 pub mod db_backend;
@@ -102,3 +106,13 @@ pub use async_trait;
 pub use chrono;
 pub use cron;
 pub use serde;
+
+pub fn start<F: Future + Send + 'static>(f: F) {
+    std::thread::spawn(move || {
+        let system = System::new();
+        let task = system.runtime().spawn(f);
+        let _ = system.block_on(task);
+    })
+    .join()
+    .expect("Cannot spawn thread to handle system");
+}

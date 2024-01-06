@@ -3,8 +3,8 @@ use std::time::Duration;
 
 use aj::async_trait::async_trait;
 use aj::mem::InMemory;
-use aj::rt;
 use aj::serde::{Deserialize, Serialize};
+use aj::start;
 use aj::{get_now_as_secs, AJ};
 use aj::{Executable, JobBuilder};
 
@@ -32,11 +32,12 @@ fn run_schedule_job() {
     AJ::add_job(job);
 }
 
-#[rt]
-async fn main() {
-    let backend = InMemory::default();
-    AJ::register::<PrintJob>("print_job", backend);
-    println!("Now is {}", get_now_as_secs());
-    run_schedule_job();
-    sleep(Duration::from_secs(6)).await;
+fn main() {
+    start(async {
+        let backend = InMemory::default();
+        AJ::register::<PrintJob>("print_job", backend);
+        println!("Now is {}", get_now_as_secs());
+        run_schedule_job();
+        sleep(Duration::from_secs(6)).await;
+    });
 }

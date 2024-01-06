@@ -29,13 +29,13 @@ impl Executable for PrintJob {
 }
 
 fn main() {
-	aj::start(async {
+    aj::start(async {
         let mem = InMemory::default();
         AJ::register::<PrintJob>("print_job", mem);
         let job = JobBuilder::new(PrintJob { number: 1 }).build();
         AJ::add_job(job);
         sleep(Duration::from_secs(1)).await;
-	});
+    });
 }
 ```
 

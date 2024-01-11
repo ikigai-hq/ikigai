@@ -33,14 +33,22 @@ fn run_schedule_job(id: String, number: i32) {
 }
 
 fn main() {
-    aj::start(async {
-        let backend = InMemory::default();
-        AJ::register::<PrintJob>("print_job", backend);
-        println!("Now is {}", get_now_as_secs());
-        let job_id: String = "1".into();
-        run_schedule_job(job_id.clone(), 1);
-        // It update data to 3, so the console will print 3 instead of 1
-        run_schedule_job(job_id, 3);
-        sleep(Duration::from_secs(10)).await;
-    });
+    aj::start_engine();
+
+    let backend = InMemory::default();
+    AJ::register::<PrintJob>("print_job", backend);
+    println!("Now is {}", get_now_as_secs());
+    let job_id: String = "1".into();
+    run_schedule_job(job_id.clone(), 1);
+    // It update data to 3, so the console will print 3 instead of 1
+    run_schedule_job(job_id, 3);
+
+    // Sleep
+    std::thread::spawn(|| {
+        actix_rt::System::new().block_on(async {
+            sleep(Duration::from_secs(6)).await;
+        })
+    })
+    .join()
+    .expect("Cannot spawn thread");
 }

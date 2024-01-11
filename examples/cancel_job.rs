@@ -3,7 +3,6 @@ use std::time::Duration;
 
 use aj::async_trait::async_trait;
 use aj::mem::InMemory;
-use aj::rt;
 use aj::serde::{Deserialize, Serialize};
 use aj::{get_now_as_secs, AJ};
 use aj::{Executable, JobBuilder};
@@ -38,13 +37,22 @@ fn cancel_job(id: String) {
 }
 
 fn main() {
-    aj::start(async {
-        let backend = InMemory::default();
-        AJ::register::<PrintJob>("print_job", backend);
-        println!("Now is {}", get_now_as_secs());
-        let job_id: String = "1".into();
-        run_schedule_job(job_id.clone());
-        cancel_job(job_id);
-        sleep(Duration::from_secs(10)).await;
-    });
+    // Start engine and register job
+    aj::start_engine();
+    let backend = InMemory::default();
+    AJ::register::<PrintJob>("print_job", backend);
+    println!("Now is {}", get_now_as_secs());
+
+    let job_id: String = "1".into();
+    run_schedule_job(job_id.clone());
+    cancel_job(job_id);
+
+    // Sleep
+    std::thread::spawn(|| {
+        actix_rt::System::new().block_on(async {
+            sleep(Duration::from_secs(10)).await;
+        })
+    })
+    .join()
+    .expect("Cannot spawn thread");
 }

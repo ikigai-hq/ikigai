@@ -49,12 +49,19 @@ fn run_cron_job_with_condition() {
 }
 
 fn main() {
-    aj::start(async {
-        let backend = InMemory::default();
-        AJ::register::<PrintJob>("print_job", backend);
-        println!("Now is {}", get_now_as_secs());
-        run_simple_cron_job();
-        run_cron_job_with_condition();
-        sleep(Duration::from_secs(10)).await;
-    });
+    aj::start_engine();
+    let backend = InMemory::default();
+    AJ::register::<PrintJob>("print_job", backend);
+    println!("Now is {}", get_now_as_secs());
+    run_simple_cron_job();
+    run_cron_job_with_condition();
+
+    // Sleep
+    std::thread::spawn(|| {
+        actix_rt::System::new().block_on(async {
+            sleep(Duration::from_secs(10)).await;
+        })
+    })
+    .join()
+    .expect("Cannot spawn thread");
 }

@@ -9,7 +9,7 @@ use std::sync::Mutex;
 use crate::backend::Backend;
 use crate::job::Job;
 use crate::queue::{cancel_job, enqueue_job, WorkQueue};
-use crate::Executable;
+use crate::{update_queue_config, Executable, WorkQueueConfig};
 
 lazy_static! {
     static ref QUEUE_REGISTRY: Mutex<Registry> = Mutex::new(Registry::default());
@@ -116,5 +116,16 @@ impl AJ {
         WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
     {
         Self::enqueue_job(job, true)
+    }
+
+    pub fn update_queue_config<M>(config: WorkQueueConfig)
+    where
+        M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
+    {
+        if let Some(queue_addr) = AJ::get_queue_address::<M>() {
+            update_queue_config(queue_addr, config);
+        }
     }
 }

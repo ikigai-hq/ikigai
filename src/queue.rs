@@ -421,3 +421,31 @@ where
 {
     addr.do_send::<Execute<M>>(Execute(job));
 }
+
+#[derive(Message, Debug)]
+#[rtype(result = "()")]
+pub struct UpdateConfig {
+    pub config: WorkQueueConfig,
+}
+
+impl<M> Handler<UpdateConfig> for WorkQueue<M>
+where
+    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+    Self: Actor<Context = Context<Self>>,
+{
+    type Result = ();
+
+    fn handle(&mut self, msg: UpdateConfig, _: &mut Self::Context) -> Self::Result {
+        self.config = msg.config;
+    }
+}
+pub fn update_queue_config<M>(addr: Addr<WorkQueue<M>>, config: WorkQueueConfig)
+where
+    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+
+    WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
+{
+    let update_config_mgs = UpdateConfig { config };
+    addr.do_send::<UpdateConfig>(update_config_mgs);
+}

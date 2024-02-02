@@ -61,7 +61,7 @@ pub trait Backend {
     fn storage_get(&self, hash: &str, key: &str) -> Result<Option<String>, Error>;
 }
 
-pub fn storage_upsert<T: Serialize>(
+pub fn upsert_to_storage<T: Serialize>(
     backend: &Box<dyn Backend>,
     hash: &str,
     key: &str,
@@ -71,7 +71,7 @@ pub fn storage_upsert<T: Serialize>(
     backend.storage_upsert(hash, key, value)
 }
 
-pub fn storage_get<T: DeserializeOwned>(
+pub fn get_from_storage<T: DeserializeOwned>(
     backend: &Box<dyn Backend>,
     hash: &str,
     key: &str,

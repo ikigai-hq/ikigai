@@ -1,8 +1,3 @@
-//! ## Usage:
-//!
-//! View [Examples](https://github.com/cptrodgers/aj/blob/master/examples).
-//!
-
 #[macro_use]
 extern crate log;
 

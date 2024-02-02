@@ -2,9 +2,11 @@
 
 aj is a one-stop solution for your background jobs (includes schedule, cron) based on actix engine (actor model).
 
-[Docs](https://github.com/cptrodgers/aj/blob/master/docs)
+This project is under development.
 
-## Usage ([examples](https://github.com/cptrodgers/aj/tree/master/examples))
+[Docs](https://github.com/zenclasshq/aj/blob/master/docs)
+
+## Usage ([examples](https://github.com/zenclasshq/aj/tree/master/examples))
 
 ```rust
 use actix_rt::time::sleep;
@@ -56,10 +58,6 @@ fn main() {
         .expect("Cannot spawn thread");
 }
 ```
-
-## `aj` in Production
-
-- [ZenClass](https://zenclass.co): uses `aj` to build their reminder system (reminder at specific time or monthly, weekly, daily repeat reminder).
 
 ## LICENSE
 

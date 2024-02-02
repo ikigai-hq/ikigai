@@ -6,7 +6,7 @@ use std::fmt::Debug;
 use std::marker::PhantomData;
 use std::time::Duration;
 
-use crate::backend::{storage_get, storage_upsert, Backend};
+use crate::backend::{get_from_storage, upsert_to_storage, Backend};
 use crate::job::{Job, JobStatus};
 use crate::{Error, Executable};
 
@@ -83,7 +83,7 @@ where
 
         <Self as Actor>::start_in_arbiter(&arbiter.handle(), |ctx| {
             let mut q = WorkQueue::<M>::new(name, backend);
-            q.run_job_picker(ctx);
+            q.process_jobs(ctx);
             q
         })
     }
@@ -91,11 +91,11 @@ where
     pub fn enqueue_with_config(&self, job: Job<M>, re_run: bool) -> Result<(), Error> {
         let key = job.id.clone();
         if let Some(existing_job) =
-            storage_get::<Job<M>>(&self.backend, &self.storage_name(), &key)?
+            get_from_storage::<Job<M>>(&self.backend, &self.storage_name(), &key)?
         {
             if !existing_job.is_done() {
                 info!("Update exising job with new information: {}", job.id);
-                storage_upsert(&self.backend, &self.storage_name(), &key, &job)?;
+                upsert_to_storage(&self.backend, &self.storage_name(), &key, &job)?;
                 return Ok(());
             }
 
@@ -121,7 +121,7 @@ where
         self.backend
             .queue_push(&self.format_queue_name(JobStatus::Queued), &key)?;
         job.enqueue();
-        storage_upsert(&self.backend, &self.storage_name(), &key, &job)?;
+        upsert_to_storage(&self.backend, &self.storage_name(), &key, &job)?;
         Ok(())
     }
 
@@ -133,7 +133,7 @@ where
         }
 
         job.job_status = JobStatus::Queued;
-        storage_upsert(&self.backend, &self.storage_name(), &job.id, &job)?;
+        upsert_to_storage(&self.backend, &self.storage_name(), &job.id, &job)?;
 
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let queued_queue = self.format_queue_name(JobStatus::Queued);
@@ -161,7 +161,7 @@ where
     pub fn finish_current_job(&self, mut job: Job<M>) -> Result<(), Error> {
         info!("Finish job {}", job.id);
         job.finish();
-        storage_upsert(&self.backend, &self.storage_name(), &job.id, &job)?;
+        upsert_to_storage(&self.backend, &self.storage_name(), &job.id, &job)?;
 
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let finished_queue = self.format_queue_name(JobStatus::Finished);
@@ -188,29 +188,6 @@ where
         };
     }
 
-    pub fn import_processing_jobs(&self, count: usize) -> Result<Vec<String>, Error> {
-        let idle_queue_name = self.format_queue_name(JobStatus::Queued);
-        let processing_queue_name = self.format_queue_name(JobStatus::Processing);
-        let job_ids = self.backend.queue_move_back_to_front(
-            &idle_queue_name,
-            &processing_queue_name,
-            count,
-        )?;
-
-        let storage_name = self.storage_name();
-        for job_id in &job_ids {
-            if let Ok(Some(mut item)) = storage_get::<Job<M>>(&self.backend, &storage_name, job_id)
-            {
-                if item.job_status != JobStatus::Canceled {
-                    item.start_processing();
-                    let _ = storage_upsert(&self.backend, &storage_name, job_id, item);
-                }
-            }
-        }
-
-        Ok(job_ids)
-    }
-
     pub fn get_fist_processing_job_id(&self) -> Result<Option<String>, Error> {
         let processing_queue_name = self.format_queue_name(JobStatus::Processing);
         let mut job_ids = self.backend.queue_get(&processing_queue_name, 1)?;
@@ -224,36 +201,61 @@ where
     pub fn read_job(&self, job_id: &str) -> Result<Option<Job<M>>, Error> {
         let storage_name = self.storage_name();
 
-        let item = storage_get(&self.backend, &storage_name, job_id)?;
+        let item = get_from_storage(&self.backend, &storage_name, job_id)?;
         Ok(item)
     }
 
     // This logic will pick job from queued jobs -> processing jobs
-    pub fn run_job_picker(&mut self, ctx: &mut Context<WorkQueue<M>>) {
-        self._import_job();
-        self._handle_processing_jobs(ctx.address());
+    pub fn process_jobs(&mut self, ctx: &mut Context<WorkQueue<M>>) {
+        self._pick_queued_job();
+        self._process_processing_jobs(ctx.address());
         ctx.run_later(self.config.process_tick_duration, |work_queue, ctx| {
-            work_queue.run_job_picker(ctx);
+            work_queue.process_jobs(ctx);
         });
     }
 
-    pub fn _import_job(&self) {
+    pub fn _pick_queued_job(&self) {
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let total_processing_jobs = self.backend.queue_count(&processing_queue).unwrap_or(0);
         if total_processing_jobs > 0 {
+            // There
             return;
         }
 
         // No job in processing queue, should import queued jobs to processing
-        if let Err(err) = self.import_processing_jobs(self.config.job_per_ticks) {
+        if let Err(err) = self.pick_queued_job(self.config.job_per_ticks) {
             error!(
-                "[WorkQueue]: Cannot import processing jobs of {} :{:?}",
+                "[WorkQueue]: Cannot pick queued jobs of {} :{:?}",
                 processing_queue, err
             );
         }
     }
 
-    pub fn _handle_processing_jobs(&mut self, addr: Addr<WorkQueue<M>>) {
+    pub fn pick_queued_job(&self, count: usize) -> Result<Vec<String>, Error> {
+        let idle_queue_name = self.format_queue_name(JobStatus::Queued);
+        let processing_queue_name = self.format_queue_name(JobStatus::Processing);
+        let job_ids = self.backend.queue_move_back_to_front(
+            &idle_queue_name,
+            &processing_queue_name,
+            count,
+        )?;
+
+        let storage_name = self.storage_name();
+        for job_id in &job_ids {
+            if let Ok(Some(mut item)) =
+                get_from_storage::<Job<M>>(&self.backend, &storage_name, job_id)
+            {
+                if item.job_status != JobStatus::Canceled {
+                    item.start_processing();
+                    let _ = upsert_to_storage(&self.backend, &storage_name, job_id, item);
+                }
+            }
+        }
+
+        Ok(job_ids)
+    }
+
+    pub fn _process_processing_jobs(&mut self, addr: Addr<WorkQueue<M>>) {
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let total_processing_jobs = self.backend.queue_count(&processing_queue).unwrap_or(0);
         if total_processing_jobs == 0 {
@@ -276,7 +278,7 @@ where
 
             match self.read_job(&job_id) {
                 Ok(Some(job)) => {
-                    if let Err(err) = self._handle_processing_job(job, addr.clone()) {
+                    if let Err(err) = self.execute_job(job, addr.clone()) {
                         error!("[WorkQueue] Handle job {} fail: {:?}", job_id, err);
                     }
                 }
@@ -291,11 +293,7 @@ where
         }
     }
 
-    pub fn _handle_processing_job(
-        &mut self,
-        job: Job<M>,
-        addr: Addr<WorkQueue<M>>,
-    ) -> Result<(), Error> {
+    pub fn execute_job(&mut self, job: Job<M>, addr: Addr<WorkQueue<M>>) -> Result<(), Error> {
         // If job is cancelled -> move to cancel queued
         if job.is_cancelled() {
             self.cancel_current_job(job);
@@ -307,10 +305,9 @@ where
             return self.re_enqueue(job);
         }
 
-        // Assume always success handle job
         execute_job(addr, job.clone());
 
-        // Handle next job
+        // If this is interval job (has next tick) -> re_enqueue it
         if let Some(next_job) = job.next_tick() {
             return self.re_enqueue(next_job);
         }
@@ -320,9 +317,9 @@ where
 
     pub fn cancel_job(&self, job_id: &str) -> Result<(), Error> {
         let storage_name = self.storage_name();
-        if let Some(mut job) = storage_get::<Job<M>>(&self.backend, &storage_name, job_id)? {
+        if let Some(mut job) = get_from_storage::<Job<M>>(&self.backend, &storage_name, job_id)? {
             job.cancel();
-            storage_upsert(&self.backend, &storage_name, job_id, job)?;
+            upsert_to_storage(&self.backend, &storage_name, job_id, job)?;
         }
 
         Ok(())

@@ -6,9 +6,9 @@ use std::any::{Any, TypeId};
 use std::collections::HashMap;
 use std::sync::Mutex;
 
-use crate::backend::Backend;
 use crate::job::Job;
 use crate::queue::{cancel_job, enqueue_job, WorkQueue};
+use crate::types::Backend;
 use crate::{update_queue_config, Executable, WorkQueueConfig};
 
 lazy_static! {

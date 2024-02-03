@@ -4,7 +4,7 @@
 use std::collections::{HashMap, VecDeque};
 use std::sync::{Arc, Mutex};
 
-use crate::backend::{Backend, QueueDirection};
+use crate::types::{Backend, QueueDirection};
 use crate::Error;
 
 #[derive(Default)]

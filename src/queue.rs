@@ -6,12 +6,12 @@ use std::fmt::Debug;
 use std::marker::PhantomData;
 use std::time::Duration;
 
-use crate::backend::{get_from_storage, upsert_to_storage, Backend};
 use crate::job::{Job, JobStatus};
+use crate::types::{get_from_storage, upsert_to_storage, Backend};
 use crate::{Error, Executable};
 
-const TOTAL_IMPORTED_JOBS_EACH_TICK: usize = 5;
-const PROCESSING_TICK: Duration = Duration::from_millis(100);
+const DEFAULT_TICK_DURATION: Duration = Duration::from_millis(10);
+const JOBS_PER_TICK: usize = 5;
 
 #[derive(Debug, Clone)]
 pub struct WorkQueueConfig {
@@ -22,8 +22,8 @@ pub struct WorkQueueConfig {
 impl WorkQueueConfig {
     pub fn init() -> Self {
         Self {
-            job_per_ticks: TOTAL_IMPORTED_JOBS_EACH_TICK,
-            process_tick_duration: PROCESSING_TICK,
+            job_per_ticks: JOBS_PER_TICK,
+            process_tick_duration: DEFAULT_TICK_DURATION,
         }
     }
 }
@@ -262,7 +262,6 @@ where
             return;
         }
 
-        // Processing job is not empty. Should pick and process
         for _ in 0..total_processing_jobs {
             let job_id = self.get_fist_processing_job_id();
             if let Err(err) = job_id {

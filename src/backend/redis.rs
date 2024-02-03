@@ -1,6 +1,6 @@
 use redis::{Client, Commands, Direction, IntoConnectionInfo, RedisResult};
 
-use crate::backend::{Backend, QueueDirection};
+use crate::types::{Backend, QueueDirection};
 use crate::Error;
 
 #[derive(Debug, Clone)]

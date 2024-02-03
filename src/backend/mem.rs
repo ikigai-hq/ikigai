@@ -93,6 +93,11 @@ impl Backend for InMemory {
         }
     }
 
+    fn queue_del(&self, queue: &str) -> Result<(), Error> {
+        self.queues.lock().unwrap().remove(queue);
+        Ok(())
+    }
+
     fn storage_upsert(&self, hash: &str, key: &str, value: String) -> Result<(), Error> {
         let mut storages = self.storages.lock().unwrap();
         if let Some(storage) = storages.get_mut(hash) {

@@ -39,6 +39,7 @@ pub enum JobStatus {
     Processing,
     Finished,
     Canceled,
+    Failed,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -168,6 +169,12 @@ impl<M: Executable + Clone + Send + Sync + 'static> Job<M> {
         debug!("[Job] Cancel {}", self.id);
         self.job_status = JobStatus::Canceled;
         self.cancel_at = Some(get_now_as_secs());
+    }
+
+    pub fn fail(&mut self) {
+        debug!("[Job] Cancel {}", self.id);
+        self.job_status = JobStatus::Failed;
+        self.complete_at = Some(get_now_as_secs());
     }
 }
 

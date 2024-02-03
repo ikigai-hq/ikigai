@@ -89,6 +89,12 @@ impl Backend for Redis {
         Ok(res)
     }
 
+    fn queue_del(&self, queue: &str) -> Result<(), Error> {
+        let mut conn = self.client.get_connection()?;
+        conn.del(queue)?;
+        Ok(())
+    }
+
     fn storage_upsert(&self, hash: &str, key: &str, value: String) -> Result<(), Error> {
         let mut conn = self.client.get_connection()?;
         conn.hset(hash, key, value)?;

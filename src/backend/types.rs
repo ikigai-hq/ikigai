@@ -1,3 +1,5 @@
+//! Backend is AJ support both storage (backend) and queue (broker)
+
 #![allow(clippy::borrowed_box)]
 use serde::de::DeserializeOwned;
 use serde::Serialize;
@@ -55,6 +57,8 @@ pub trait Backend {
     fn queue_get(&self, queue: &str, count: usize) -> Result<Vec<String>, Error>;
 
     fn queue_count(&self, queue: &str) -> Result<usize, Error>;
+
+    fn queue_del(&self, queue: &str) -> Result<(), Error>;
 
     fn storage_upsert(&self, hash: &str, key: &str, value: String) -> Result<(), Error>;
 

@@ -10,7 +10,7 @@ use crate::job::{Job, JobStatus};
 use crate::types::{get_from_storage, upsert_to_storage, Backend};
 use crate::{Error, Executable};
 
-const DEFAULT_TICK_DURATION: Duration = Duration::from_millis(10);
+const DEFAULT_TICK_DURATION: Duration = Duration::from_millis(100);
 const JOBS_PER_TICK: usize = 5;
 
 #[derive(Debug, Clone)]
@@ -106,7 +106,7 @@ where
             }
 
             warn!(
-                "Job {} is existing but not match any action, skip!",
+                "Job {} is existing but not match any situations, skip!",
                 existing_job.id
             );
             return Ok(());
@@ -135,52 +135,45 @@ where
         job.job_status = JobStatus::Queued;
         upsert_to_storage(&self.backend, &self.storage_name(), &job.id, &job)?;
 
-        let processing_queue = self.format_queue_name(JobStatus::Processing);
         let queued_queue = self.format_queue_name(JobStatus::Queued);
-        if let Err(e) = self
-            .backend
-            .queue_move_front_to_front(&processing_queue, &queued_queue, 1)
-        {
+        if let Err(e) = self.backend.queue_push(&queued_queue, job.id.as_str()) {
             error!("[WorkQueue] Cannot re enqueue {}: {:?}", job.id, e);
         };
         Ok(())
     }
 
-    pub fn cancel_current_job(&self, job: Job<M>) {
-        info!("Cancel job {}", job.id);
-        let processing_queue = self.format_queue_name(JobStatus::Processing);
+    pub fn mark_cancelled_job(&self, job_id: &str) {
+        info!("Cancel job {}", job_id);
         let cancelled_queue = self.format_queue_name(JobStatus::Canceled);
-        if let Err(e) =
-            self.backend
-                .queue_move_front_to_front(&processing_queue, &cancelled_queue, 1)
-        {
-            error!("[WorkQueue] Cannot re enqueue {}: {:?}", job.id, e);
+        if let Err(e) = self.backend.queue_push(&cancelled_queue, job_id) {
+            error!("[WorkQueue] Cannot re enqueue {}: {:?}", job_id, e);
         };
     }
 
-    pub fn finish_current_job(&self, mut job: Job<M>) -> Result<(), Error> {
+    pub fn mark_finished_job(&self, mut job: Job<M>) -> Result<(), Error> {
         info!("Finish job {}", job.id);
         job.finish();
         upsert_to_storage(&self.backend, &self.storage_name(), &job.id, &job)?;
 
-        let processing_queue = self.format_queue_name(JobStatus::Processing);
         let finished_queue = self.format_queue_name(JobStatus::Finished);
-        if let Err(e) =
-            self.backend
-                .queue_move_front_to_front(&processing_queue, &finished_queue, 1)
-        {
+        if let Err(e) = self.backend.queue_push(&finished_queue, job.id.as_str()) {
             error!("[WorkQueue] Cannot finish {}: {:?}", job.id, e);
         };
         Ok(())
     }
 
-    pub fn move_current_job_to_failed(&self, job_id: &str) {
-        let processing_queue = self.format_queue_name(JobStatus::Processing);
+    pub fn mark_failed_job(&self, mut job: Job<M>) -> Result<(), Error> {
+        info!("Failed job {}", job.id);
+        job.fail();
+        upsert_to_storage(&self.backend, &self.storage_name(), &job.id, &job)?;
+
+        self.push_failed_job(job.id.as_str());
+        Ok(())
+    }
+
+    pub fn push_failed_job(&self, job_id: &str) {
         let failed_queue = self.format_failed_queue_name();
-        if let Err(e) = self
-            .backend
-            .queue_move_front_to_front(&processing_queue, &failed_queue, 1)
-        {
+        if let Err(e) = self.backend.queue_push(&failed_queue, job_id) {
             error!(
                 "[WorkQueue] Cannot move to failed queue {}: {:?}",
                 job_id, e
@@ -188,14 +181,10 @@ where
         };
     }
 
-    pub fn get_fist_processing_job_id(&self) -> Result<Option<String>, Error> {
+    pub fn get_processing_job_ids(&self, count: usize) -> Result<Vec<String>, Error> {
         let processing_queue_name = self.format_queue_name(JobStatus::Processing);
-        let mut job_ids = self.backend.queue_get(&processing_queue_name, 1)?;
-        if job_ids.is_empty() {
-            return Ok(None);
-        }
-
-        Ok(Some(job_ids.remove(0)))
+        let job_ids = self.backend.queue_get(&processing_queue_name, count)?;
+        Ok(job_ids)
     }
 
     pub fn read_job(&self, job_id: &str) -> Result<Option<Job<M>>, Error> {
@@ -262,32 +251,37 @@ where
             return;
         }
 
-        for _ in 0..total_processing_jobs {
-            let job_id = self.get_fist_processing_job_id();
-            if let Err(err) = job_id {
-                error!("Cannot get first processing job {:?}", err);
-                continue;
-            }
-
-            let job_id = job_id.unwrap();
-            if job_id.is_none() {
-                continue;
-            };
-            let job_id = job_id.unwrap();
-
-            match self.read_job(&job_id) {
-                Ok(Some(job)) => {
-                    if let Err(err) = self.execute_job(job, addr.clone()) {
-                        error!("[WorkQueue] Handle job {} fail: {:?}", job_id, err);
-                    }
+        match self.get_processing_job_ids(total_processing_jobs) {
+            Ok(job_ids) => {
+                for job_id in job_ids {
+                    self.execute_job_by_id(addr.clone(), job_id);
                 }
-                _ => {
+
+                if let Err(reason) = self.backend.queue_del(processing_queue.as_str()) {
                     error!(
-                    "[WorkQueue] Cannot read processing job of {processing_queue}, job id: {job_id}"
+                        "[WorkQueue] Cannot delete processing queue {}: {:?}",
+                        processing_queue, reason,
                     );
-                    // Consider remove the job id
-                    self.move_current_job_to_failed(&job_id);
                 }
+            }
+            Err(reason) => {
+                error!("[WorkQueue] Cannot get processing job ids {:?}", reason);
+            }
+        }
+    }
+
+    pub fn execute_job_by_id(&mut self, addr: Addr<WorkQueue<M>>, job_id: String) {
+        let processing_queue = self.format_queue_name(JobStatus::Processing);
+        match self.read_job(&job_id) {
+            Ok(Some(job)) => {
+                if let Err(err) = self.execute_job(job.clone(), addr) {
+                    error!("[WorkQueue] Handle job {} fail: {:?}", job_id, err);
+                    let _ = self.mark_failed_job(job);
+                }
+            }
+            _ => {
+                error!("[WorkQueue] Cannot read processing job of {processing_queue}, job id: {job_id}");
+                self.push_failed_job(&job_id);
             }
         }
     }
@@ -295,7 +289,7 @@ where
     pub fn execute_job(&mut self, job: Job<M>, addr: Addr<WorkQueue<M>>) -> Result<(), Error> {
         // If job is cancelled -> move to cancel queued
         if job.is_cancelled() {
-            self.cancel_current_job(job);
+            self.mark_cancelled_job(job.id.as_str());
             return Ok(());
         }
 
@@ -311,7 +305,7 @@ where
             return self.re_enqueue(next_job);
         }
 
-        self.finish_current_job(job)
+        self.mark_finished_job(job)
     }
 
     pub fn cancel_job(&self, job_id: &str) -> Result<(), Error> {

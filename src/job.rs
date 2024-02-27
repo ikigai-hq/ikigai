@@ -1,6 +1,7 @@
 use async_trait::async_trait;
 use cron::Schedule;
 use serde::{Deserialize, Serialize};
+use std::fmt::Debug;
 use std::str::FromStr;
 use uuid::Uuid;
 
@@ -8,7 +9,10 @@ use crate::util::{get_datetime_as_secs, get_now, get_now_as_secs};
 
 #[async_trait]
 pub trait Executable {
-    async fn execute(&self);
+    type Value;
+    type Error: Debug;
+
+    async fn execute(&self) -> Result<Self::Value, Self::Error>;
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]

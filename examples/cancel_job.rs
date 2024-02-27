@@ -14,13 +14,17 @@ pub struct PrintJob {
 
 #[async_trait]
 impl Executable for PrintJob {
-    async fn execute(&self) {
+    type Value = ();
+    type Error = ();
+
+    async fn execute(&self) -> Result<Self::Value, Self::Error> {
         // Do your stuff here in async mode
         println!(
             "Hello in background {} at {}",
             self.number,
             get_now_as_secs()
         );
+        Ok(())
     }
 }
 

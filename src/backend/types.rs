@@ -1,6 +1,7 @@
 //! Backend is AJ support both storage (backend) and queue (broker)
 
 #![allow(clippy::borrowed_box)]
+
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
@@ -66,7 +67,7 @@ pub trait Backend {
 }
 
 pub fn upsert_to_storage<T: Serialize>(
-    backend: &Box<dyn Backend>,
+    backend: &dyn Backend,
     hash: &str,
     key: &str,
     value: T,
@@ -76,7 +77,7 @@ pub fn upsert_to_storage<T: Serialize>(
 }
 
 pub fn get_from_storage<T: DeserializeOwned>(
-    backend: &Box<dyn Backend>,
+    backend: &dyn Backend,
     hash: &str,
     key: &str,
 ) -> Result<Option<T>, Error> {

@@ -4,6 +4,8 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 use std::fmt::Debug;
 use std::marker::PhantomData;
+use std::ops::Deref;
+use std::sync::Arc;
 use std::time::Duration;
 
 use crate::job::{Job, JobStatus};
@@ -34,15 +36,16 @@ impl Default for WorkQueueConfig {
     }
 }
 
+#[derive(Clone)]
 pub struct WorkQueue<M>
 where
     M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
     Self: Actor<Context = Context<Self>>,
 {
-    pub job_name: String,
+    pub job_name: Arc<String>,
     config: WorkQueueConfig,
     _type: PhantomData<M>,
-    backend: Box<dyn Backend>,
+    backend: Arc<dyn Backend>,
 }
 
 impl<M> Actor for WorkQueue<M>
@@ -59,10 +62,10 @@ where
 {
     pub fn new(job_name: String, backend: impl Backend + 'static) -> Self {
         Self {
-            job_name,
+            job_name: Arc::new(job_name),
             config: WorkQueueConfig::default(),
             _type: PhantomData,
-            backend: Box::new(backend),
+            backend: Arc::new(backend),
         }
     }
 
@@ -91,11 +94,11 @@ where
     pub fn enqueue_with_config(&self, job: Job<M>, re_run: bool) -> Result<(), Error> {
         let key = job.id.clone();
         if let Some(existing_job) =
-            get_from_storage::<Job<M>>(&self.backend, &self.storage_name(), &key)?
+            get_from_storage::<Job<M>>(self.backend.deref(), &self.storage_name(), &key)?
         {
             if !existing_job.is_done() {
                 info!("Update exising job with new information: {}", job.id);
-                upsert_to_storage(&self.backend, &self.storage_name(), &key, &job)?;
+                upsert_to_storage(self.backend.deref(), &self.storage_name(), &key, &job)?;
                 return Ok(());
             }
 
@@ -121,7 +124,7 @@ where
         self.backend
             .queue_push(&self.format_queue_name(JobStatus::Queued), &key)?;
         job.enqueue();
-        upsert_to_storage(&self.backend, &self.storage_name(), &key, &job)?;
+        upsert_to_storage(self.backend.deref(), &self.storage_name(), &key, &job)?;
         Ok(())
     }
 
@@ -133,7 +136,7 @@ where
         }
 
         job.job_status = JobStatus::Queued;
-        upsert_to_storage(&self.backend, &self.storage_name(), &job.id, &job)?;
+        upsert_to_storage(self.backend.deref(), &self.storage_name(), &job.id, &job)?;
 
         let queued_queue = self.format_queue_name(JobStatus::Queued);
         if let Err(e) = self.backend.queue_push(&queued_queue, job.id.as_str()) {
@@ -153,7 +156,7 @@ where
     pub fn mark_finished_job(&self, mut job: Job<M>) -> Result<(), Error> {
         info!("Finish job {}", job.id);
         job.finish();
-        upsert_to_storage(&self.backend, &self.storage_name(), &job.id, &job)?;
+        upsert_to_storage(self.backend.deref(), &self.storage_name(), &job.id, &job)?;
 
         let finished_queue = self.format_queue_name(JobStatus::Finished);
         if let Err(e) = self.backend.queue_push(&finished_queue, job.id.as_str()) {
@@ -165,7 +168,7 @@ where
     pub fn mark_failed_job(&self, mut job: Job<M>) -> Result<(), Error> {
         info!("Failed job {}", job.id);
         job.fail();
-        upsert_to_storage(&self.backend, &self.storage_name(), &job.id, &job)?;
+        upsert_to_storage(self.backend.deref(), &self.storage_name(), &job.id, &job)?;
 
         self.push_failed_job(job.id.as_str());
         Ok(())
@@ -190,14 +193,14 @@ where
     pub fn read_job(&self, job_id: &str) -> Result<Option<Job<M>>, Error> {
         let storage_name = self.storage_name();
 
-        let item = get_from_storage(&self.backend, &storage_name, job_id)?;
+        let item = get_from_storage(self.backend.deref(), &storage_name, job_id)?;
         Ok(item)
     }
 
     // This logic will pick job from queued jobs -> processing jobs
     pub fn process_jobs(&mut self, ctx: &mut Context<WorkQueue<M>>) {
         self._pick_queued_job();
-        self._process_processing_jobs(ctx.address());
+        self._process_processing_jobs(ctx);
         ctx.run_later(self.config.process_tick_duration, |work_queue, ctx| {
             work_queue.process_jobs(ctx);
         });
@@ -232,11 +235,11 @@ where
         let storage_name = self.storage_name();
         for job_id in &job_ids {
             if let Ok(Some(mut item)) =
-                get_from_storage::<Job<M>>(&self.backend, &storage_name, job_id)
+                get_from_storage::<Job<M>>(self.backend.deref(), &storage_name, job_id)
             {
                 if item.job_status != JobStatus::Canceled {
                     item.start_processing();
-                    let _ = upsert_to_storage(&self.backend, &storage_name, job_id, item);
+                    let _ = upsert_to_storage(self.backend.deref(), &storage_name, job_id, item);
                 }
             }
         }
@@ -244,7 +247,7 @@ where
         Ok(job_ids)
     }
 
-    pub fn _process_processing_jobs(&mut self, addr: Addr<WorkQueue<M>>) {
+    pub fn _process_processing_jobs(&self, ctx: &mut Context<WorkQueue<M>>) {
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let total_processing_jobs = self.backend.queue_count(&processing_queue).unwrap_or(0);
         if total_processing_jobs == 0 {
@@ -254,7 +257,7 @@ where
         match self.get_processing_job_ids(total_processing_jobs) {
             Ok(job_ids) => {
                 for job_id in job_ids {
-                    self.execute_job_by_id(addr.clone(), job_id);
+                    self.execute_job_by_id(job_id, ctx);
                 }
 
                 if let Err(reason) = self.backend.queue_del(processing_queue.as_str()) {
@@ -270,14 +273,19 @@ where
         }
     }
 
-    pub fn execute_job_by_id(&mut self, addr: Addr<WorkQueue<M>>, job_id: String) {
+    pub fn execute_job_by_id(&self, job_id: String, ctx: &mut Context<WorkQueue<M>>) {
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         match self.read_job(&job_id) {
             Ok(Some(job)) => {
-                if let Err(err) = self.execute_job(job.clone(), addr) {
-                    error!("[WorkQueue] Handle job {} fail: {:?}", job_id, err);
-                    let _ = self.mark_failed_job(job);
-                }
+                // Anti pattern in Rust - Use Arc to wrap the value of Self
+                let this = self.clone();
+                let task = async move {
+                    if let Err(err) = this.execute_job(job.clone()).await {
+                        error!("[WorkQueue] Execute job {} fail: {:?}", job_id, err);
+                        let _ = this.mark_failed_job(job);
+                    }
+                };
+                wrap_future::<_, Self>(task).spawn(ctx);
             }
             _ => {
                 error!("[WorkQueue] Cannot read processing job of {processing_queue}, job id: {job_id}");
@@ -286,7 +294,7 @@ where
         }
     }
 
-    pub fn execute_job(&mut self, job: Job<M>, addr: Addr<WorkQueue<M>>) -> Result<(), Error> {
+    pub async fn execute_job(&self, job: Job<M>) -> Result<(), Error> {
         // If job is cancelled -> move to cancel queued
         if job.is_cancelled() {
             self.mark_cancelled_job(job.id.as_str());
@@ -298,7 +306,7 @@ where
             return self.re_enqueue(job);
         }
 
-        execute_job(addr, job.clone());
+        job.message.execute().await;
 
         // If this is interval job (has next tick) -> re_enqueue it
         if let Some(next_job) = job.next_tick() {
@@ -310,9 +318,11 @@ where
 
     pub fn cancel_job(&self, job_id: &str) -> Result<(), Error> {
         let storage_name = self.storage_name();
-        if let Some(mut job) = get_from_storage::<Job<M>>(&self.backend, &storage_name, job_id)? {
+        if let Some(mut job) =
+            get_from_storage::<Job<M>>(self.backend.deref(), &storage_name, job_id)?
+        {
             job.cancel();
-            upsert_to_storage(&self.backend, &storage_name, job_id, job)?;
+            upsert_to_storage(self.backend.deref(), &storage_name, job_id, job)?;
         }
 
         Ok(())
@@ -381,38 +391,6 @@ where
     WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
 {
     addr.do_send::<CancelJob>(CancelJob { job_id });
-}
-
-#[derive(Message, Debug)]
-#[rtype(result = "()")]
-pub struct Execute<M: Executable + Clone + Send + Sync + 'static>(pub Job<M>);
-
-impl<M> Handler<Execute<M>> for WorkQueue<M>
-where
-    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-
-    Self: Actor<Context = Context<Self>>,
-{
-    type Result = ();
-
-    fn handle(&mut self, msg: Execute<M>, ctx: &mut Self::Context) -> Self::Result {
-        let task = async move {
-            info!("Start Execute job {}", msg.0.id);
-            msg.0.message.execute().await;
-            info!("End Execute job {}", msg.0.id);
-        };
-
-        wrap_future::<_, Self>(task).spawn(ctx);
-    }
-}
-
-pub fn execute_job<M>(addr: Addr<WorkQueue<M>>, job: Job<M>)
-where
-    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-
-    WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
-{
-    addr.do_send::<Execute<M>>(Execute(job));
 }
 
 #[derive(Message, Debug)]

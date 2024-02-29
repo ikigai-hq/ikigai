@@ -9,10 +9,9 @@ use crate::util::{get_datetime_as_secs, get_now, get_now_as_secs};
 
 #[async_trait]
 pub trait Executable {
-    type Value;
-    type Error: Debug;
+    type Output: Debug;
 
-    async fn execute(&self) -> Result<Self::Value, Self::Error>;
+    async fn execute(&self) -> Self::Output;
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]

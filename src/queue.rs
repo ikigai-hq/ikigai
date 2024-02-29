@@ -306,10 +306,11 @@ where
             return self.re_enqueue(job);
         }
 
-        match job.message.execute().await {
-            Ok(_) => info!("[WorkQueue] Execution complete. Job {}", job.id),
-            Err(err) => return Err(Error::ExecutionError(format!("{:?}", err))),
-        }
+        let res = job.message.execute().await;
+        info!(
+            "[WorkQueue] Execution complete. Job {} - Result: {res:?}",
+            job.id
+        );
 
         // If this is interval job (has next tick) -> re_enqueue it
         if let Some(next_job) = job.next_tick() {

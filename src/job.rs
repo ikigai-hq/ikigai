@@ -5,25 +5,70 @@ use std::fmt::Debug;
 use std::str::FromStr;
 use uuid::Uuid;
 
-use crate::util::{get_datetime_as_secs, get_now, get_now_as_secs};
+use crate::util::{get_datetime_as_ms, get_now, get_now_as_ms};
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum RetryStrategy {
+    Interval(i64), // ms
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Retry {
+    retried_times: i32,
+    // None = never stop retry
+    max_retries: Option<i32>,
+    strategy: RetryStrategy,
+}
+
+impl Default for Retry {
+    fn default() -> Self {
+        Self {
+            retried_times: 0,
+            max_retries: Some(3),
+            strategy: RetryStrategy::Interval(50),
+        }
+    }
+}
+
+impl Retry {
+    pub fn should_retry(&self) -> bool {
+        if let Some(max_retries) = self.max_retries {
+            self.retried_times < max_retries
+        } else {
+            true
+        }
+    }
+
+    pub fn retry(&mut self) -> i64 {
+        self.retried_times += 1;
+        match &self.strategy {
+            RetryStrategy::Interval(ms) => get_now_as_ms() + ms,
+        }
+    }
+}
 
 #[async_trait]
 pub trait Executable {
     type Output: Debug;
 
     async fn execute(&self) -> Self::Output;
-}
 
-pub trait Retryable: Clone + 'static {
-    fn retry(&mut self) -> bool;
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct NoRetry {}
-
-impl Retryable for NoRetry {
-    fn retry(&mut self) -> bool {
+    // Declare the output of execution is failed -> Trigger retry
+    fn is_failed_output(&self, _job_output: &Self::Output) -> bool {
         false
+    }
+
+    // Override this function to custom retry logic
+    // None => no need to retry
+    // Some(ms) => next time to retry this function
+    fn should_retry(&self, retry_context: &mut Retry, job_output: &Self::Output) -> Option<i64> {
+        let should_retry = self.is_failed_output(job_output) && retry_context.should_retry();
+
+        if should_retry {
+            Some(retry_context.retry())
+        } else {
+            None
+        }
     }
 }
 
@@ -59,10 +104,7 @@ pub enum JobStatus {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Job<
-    M: Executable + Clone + Send + Sync + 'static,
-    R: Retryable + Clone + 'static = NoRetry,
-> {
+pub struct Job<M: Executable + Clone> {
     pub id: String,
     pub job_type: JobType,
     pub job_status: JobStatus,
@@ -72,21 +114,26 @@ pub struct Job<
     pub complete_at: Option<i64>,
     pub cancel_at: Option<i64>,
     pub created_at: i64,
-    pub retry: R,
+    pub retry: Option<Retry>,
 }
 
-impl<M, R> Job<M, R>
+impl<M> Job<M>
 where
-    M: Executable + Clone + Send + Sync + 'static,
-    R: Retryable + Clone + 'static,
+    M: Executable + Clone,
 {
-    pub fn new(id: String, job_type: JobType, job_status: JobStatus, message: M, retry: R) -> Self {
+    pub fn new(
+        id: String,
+        job_type: JobType,
+        job_status: JobStatus,
+        message: M,
+        retry: Option<Retry>,
+    ) -> Self {
         Self {
             id,
             job_type,
             job_status,
             message,
-            created_at: get_now_as_secs(),
+            created_at: get_now_as_ms(),
             enqueue_at: None,
             process_at: None,
             complete_at: None,
@@ -96,9 +143,9 @@ where
     }
 
     pub fn is_ready(&self) -> bool {
-        let now = get_now_as_secs();
+        let now = get_now_as_ms();
         match &self.job_type {
-            JobType::ScheduledAt(ts) => now > *ts,
+            JobType::ScheduledAt(ms) => now > *ms,
             JobType::Cron(_, next_slot, total_repeat, context) => {
                 if now < *next_slot {
                     return false;
@@ -123,7 +170,7 @@ where
     }
 
     pub fn next_tick(&mut self) -> Option<Self> {
-        let now = get_now_as_secs();
+        let now = get_now_as_ms();
         match &self.job_type {
             JobType::Cron(cron_expression, _, total_repeat, context) => {
                 let mut job = self.clone();
@@ -140,7 +187,7 @@ where
                 if let Some(upcoming_event) = schedule.after(&get_now()).next() {
                     job.job_type = JobType::Cron(
                         cron_expression.clone(),
-                        get_datetime_as_secs(upcoming_event),
+                        get_datetime_as_ms(upcoming_event),
                         *total_repeat + 1,
                         context.clone(),
                     );
@@ -175,46 +222,48 @@ where
     pub fn enqueue(&mut self) {
         debug!("[Job] Enqueue {}", self.id);
         self.job_status = JobStatus::Queued;
-        self.enqueue_at = Some(get_now_as_secs());
+        self.enqueue_at = Some(get_now_as_ms());
     }
 
     pub fn start_processing(&mut self) {
         debug!("[Job] Processing {}", self.id);
         self.job_status = JobStatus::Processing;
-        self.process_at = Some(get_now_as_secs());
+        self.process_at = Some(get_now_as_ms());
     }
 
     pub fn finish(&mut self) {
         debug!("[Job] Finish {}", self.id);
         self.job_status = JobStatus::Finished;
-        self.complete_at = Some(get_now_as_secs());
+        self.complete_at = Some(get_now_as_ms());
     }
 
     pub fn cancel(&mut self) {
         debug!("[Job] Cancel {}", self.id);
         self.job_status = JobStatus::Canceled;
-        self.cancel_at = Some(get_now_as_secs());
+        self.cancel_at = Some(get_now_as_ms());
     }
 
     pub fn fail(&mut self) {
         debug!("[Job] Cancel {}", self.id);
         self.job_status = JobStatus::Failed;
-        self.complete_at = Some(get_now_as_secs());
+        self.complete_at = Some(get_now_as_ms());
     }
 }
 
 #[derive(Debug, Clone, Default)]
-pub struct JobBuilder<M: Executable + Clone + Send + Sync + 'static> {
+pub struct JobBuilder<M: Executable + Clone> {
     pub id: Option<String>,
     pub job_type: Option<JobType>,
+    pub retry: Option<Retry>,
     pub message: M,
 }
 
-impl<M: Executable + Clone + Send + Sync + 'static> JobBuilder<M> {
+impl<M: Executable + Clone> JobBuilder<M> {
     pub fn new(message: M) -> Self {
         Self {
             id: None,
             job_type: None,
+            retry: None,
             message,
         }
     }
@@ -242,7 +291,7 @@ impl<M: Executable + Clone + Send + Sync + 'static> JobBuilder<M> {
         let next_time = cron.after(&now).next().unwrap_or(now);
         self.set_job_type(JobType::Cron(
             cron.to_string(),
-            get_datetime_as_secs(next_time),
+            get_datetime_as_ms(next_time),
             1,
             context,
         ))
@@ -252,6 +301,6 @@ impl<M: Executable + Clone + Send + Sync + 'static> JobBuilder<M> {
         let id = self.id.unwrap_or(Uuid::new_v4().to_string());
         let job_type = self.job_type.unwrap_or(JobType::Normal);
 
-        Job::new(id, job_type, JobStatus::Created, self.message, NoRetry {})
+        Job::new(id, job_type, JobStatus::Created, self.message, self.retry)
     }
 }

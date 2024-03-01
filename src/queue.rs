@@ -10,7 +10,7 @@ use std::time::Duration;
 
 use crate::job::{Job, JobStatus};
 use crate::types::{get_from_storage, upsert_to_storage, Backend};
-use crate::{Error, Executable, Retryable};
+use crate::{Error, Executable, JobType};
 
 const DEFAULT_TICK_DURATION: Duration = Duration::from_millis(100);
 const JOBS_PER_TICK: usize = 5;
@@ -306,14 +306,17 @@ where
             return self.re_enqueue(job);
         }
 
-        let res = job.message.execute().await;
+        let job_output = job.message.execute().await;
         info!(
-            "[WorkQueue] Execution complete. Job {} - Result: {res:?}",
+            "[WorkQueue] Execution complete. Job {} - Result: {job_output:?}",
             job.id
         );
-        if job.retry.retry() {
-            info!("[WorkQueue] Retry this job. {}", job.id);
-            return self.re_enqueue(job);
+        if let Some(retry_context) = job.retry.as_mut() {
+            if let Some(next_retry_ms) = job.message.should_retry(retry_context, &job_output) {
+                info!("[WorkQueue] Retry this job. {}", job.id);
+                job.job_type = JobType::ScheduledAt(next_retry_ms);
+                return self.re_enqueue(job);
+            }
         }
 
         // If this is interval job (has next tick) -> re_enqueue it

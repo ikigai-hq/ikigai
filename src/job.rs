@@ -14,6 +14,19 @@ pub trait Executable {
     async fn execute(&self) -> Self::Output;
 }
 
+pub trait Retryable: Clone + 'static {
+    fn retry(&mut self) -> bool;
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NoRetry {}
+
+impl Retryable for NoRetry {
+    fn retry(&mut self) -> bool {
+        false
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CronContext {
     pub max_repeat: Option<i32>,
@@ -46,7 +59,10 @@ pub enum JobStatus {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Job<M: Executable + Clone + Send + Sync + 'static> {
+pub struct Job<
+    M: Executable + Clone + Send + Sync + 'static,
+    R: Retryable + Clone + 'static = NoRetry,
+> {
     pub id: String,
     pub job_type: JobType,
     pub job_status: JobStatus,
@@ -56,10 +72,15 @@ pub struct Job<M: Executable + Clone + Send + Sync + 'static> {
     pub complete_at: Option<i64>,
     pub cancel_at: Option<i64>,
     pub created_at: i64,
+    pub retry: R,
 }
 
-impl<M: Executable + Clone + Send + Sync + 'static> Job<M> {
-    pub fn new(id: String, job_type: JobType, job_status: JobStatus, message: M) -> Self {
+impl<M, R> Job<M, R>
+where
+    M: Executable + Clone + Send + Sync + 'static,
+    R: Retryable + Clone + 'static,
+{
+    pub fn new(id: String, job_type: JobType, job_status: JobStatus, message: M, retry: R) -> Self {
         Self {
             id,
             job_type,
@@ -70,6 +91,7 @@ impl<M: Executable + Clone + Send + Sync + 'static> Job<M> {
             process_at: None,
             complete_at: None,
             cancel_at: None,
+            retry,
         }
     }
 
@@ -100,7 +122,7 @@ impl<M: Executable + Clone + Send + Sync + 'static> Job<M> {
         }
     }
 
-    pub fn next_tick(&self) -> Option<Self> {
+    pub fn next_tick(&mut self) -> Option<Self> {
         let now = get_now_as_secs();
         match &self.job_type {
             JobType::Cron(cron_expression, _, total_repeat, context) => {
@@ -230,6 +252,6 @@ impl<M: Executable + Clone + Send + Sync + 'static> JobBuilder<M> {
         let id = self.id.unwrap_or(Uuid::new_v4().to_string());
         let job_type = self.job_type.unwrap_or(JobType::Normal);
 
-        Job::new(id, job_type, JobStatus::Created, self.message)
+        Job::new(id, job_type, JobStatus::Created, self.message, NoRetry {})
     }
 }

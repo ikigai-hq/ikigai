@@ -1,4 +1,4 @@
-//! Backend is AJ support both storage (backend) and queue (broker)
+//! Backend in AJ support both storage (backend) and queue (broker)
 
 #![allow(clippy::borrowed_box)]
 

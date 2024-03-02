@@ -4,7 +4,7 @@ use std::time::Duration;
 use aj::async_trait::async_trait;
 use aj::mem::InMemory;
 use aj::serde::{Deserialize, Serialize};
-use aj::{get_now_as_ms, start_engine};
+use aj::start_engine;
 use aj::{get_now_as_ms, AJ};
 use aj::{Executable, JobBuilder};
 

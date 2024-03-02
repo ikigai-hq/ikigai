@@ -26,10 +26,9 @@ pub struct PrintJob {
 
 #[async_trait]
 impl Executable for PrintJob {
-    type Value = ();
-    type Error = ();
+    type Output = ();
 
-    async fn execute(&self) -> Result<Self::Value, Self::Error> {
+    async fn execute(&self) -> Self::Output {
         // Do your stuff here in async mode
         println!(
             "Hello in background {} at {}",

@@ -16,7 +16,7 @@ use actix_rt::System;
 use aj::async_trait::async_trait;
 use aj::mem::InMemory;
 use aj::serde::{Deserialize, Serialize};
-use aj::{get_now_as_secs, start_engine, AJ};
+use aj::{get_now_as_ms, start_engine, AJ};
 use aj::{Executable, JobBuilder};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -33,7 +33,7 @@ impl Executable for PrintJob {
         println!(
             "Hello in background {} at {}",
             self.number,
-            get_now_as_secs()
+            get_now_as_ms()
         );
         Ok(())
     }
@@ -48,7 +48,7 @@ fn main() {
     start_engine();
     let backend = InMemory::default();
     AJ::register::<PrintJob>("print_job", backend);
-    println!("Now is {}", get_now_as_secs());
+    println!("Now is {}", get_now_as_ms());
     run_job_instantly();
 
     // Sleep 1 sec

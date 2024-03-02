@@ -4,7 +4,7 @@ use std::time::Duration;
 use aj::async_trait::async_trait;
 use aj::mem::InMemory;
 use aj::serde::{Deserialize, Serialize};
-use aj::{get_now_as_secs, AJ};
+use aj::{get_now_as_ms, AJ};
 use aj::{Executable, JobBuilder};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -18,18 +18,14 @@ impl Executable for PrintJob {
 
     async fn execute(&self) -> Self::Output {
         // Do your stuff here in async mode
-        println!(
-            "Hello in background {} at {}",
-            self.number,
-            get_now_as_secs(),
-        );
+        println!("Hello in background {} at {}", self.number, get_now_as_ms(),);
     }
 }
 
 fn run_schedule_job(id: String) {
     let job = JobBuilder::new(PrintJob { number: 1 })
         .set_id(id)
-        .set_schedule_at(get_now_as_secs() + 5)
+        .set_schedule_at(get_now_as_ms() + 1000)
         .build();
     AJ::add_job(job);
 }
@@ -43,7 +39,7 @@ fn main() {
     aj::start_engine();
     let backend = InMemory::default();
     AJ::register::<PrintJob>("print_job", backend);
-    println!("Now is {}", get_now_as_secs());
+    println!("Now is {}", get_now_as_ms());
 
     let job_id: String = "1".into();
     run_schedule_job(job_id.clone());
@@ -52,7 +48,7 @@ fn main() {
     // Sleep
     std::thread::spawn(|| {
         actix_rt::System::new().block_on(async {
-            sleep(Duration::from_secs(10)).await;
+            sleep(Duration::from_secs(2)).await;
         })
     })
     .join()

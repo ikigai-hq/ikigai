@@ -22,15 +22,23 @@ pub struct Retry {
 
 impl Default for Retry {
     fn default() -> Self {
-        Self {
-            retried_times: 0,
-            max_retries: Some(3),
-            strategy: RetryStrategy::Interval(50),
-        }
+        Self::new_interval_retry(Some(3), 100)
     }
 }
 
 impl Retry {
+    pub fn new(retried_times: i32, max_retries: Option<i32>, strategy: RetryStrategy) -> Self {
+        Self {
+            retried_times,
+            max_retries,
+            strategy,
+        }
+    }
+
+    pub fn new_interval_retry(max_retries: Option<i32>, interval_ms: i64) -> Self {
+        Self::new(0, max_retries, RetryStrategy::Interval(interval_ms))
+    }
+
     pub fn should_retry(&self) -> bool {
         if let Some(max_retries) = self.max_retries {
             self.retried_times < max_retries
@@ -295,6 +303,11 @@ impl<M: Executable + Clone> JobBuilder<M> {
             1,
             context,
         ))
+    }
+
+    pub fn set_retry(mut self, retry: Retry) -> Self {
+        self.retry = Some(retry);
+        self
     }
 
     pub fn build(self) -> Job<M> {

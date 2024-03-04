@@ -4,7 +4,6 @@ use lazy_static::lazy_static;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use std::any::{Any, TypeId};
-use std::sync::{Arc, Mutex};
 
 use crate::job::Job;
 use crate::queue::{cancel_job, enqueue_job, WorkQueue};
@@ -13,13 +12,13 @@ use crate::{update_queue_config, Executable, WorkQueueConfig};
 
 // Todo: It's not good to wrap DASHMAP with Arc and Mutex. We do it because requirement of lazy_static!
 lazy_static! {
-    static ref QUEUE_REGISTRY: Arc<Mutex<Registry>> = Arc::new(Mutex::new(Registry::default()));
+    static ref QUEUE_REGISTRY: Registry = Registry::default();
 }
 
 #[derive(Debug, Default)]
 pub struct Registry {
-    registry: DashMap<TypeId, Box<dyn Any + Send>>,
-    registry_by_name: DashMap<String, Box<dyn Any + Send>>,
+    registry: DashMap<TypeId, Box<dyn Any + Send + Sync>>,
+    registry_by_name: DashMap<String, Box<dyn Any + Send + Sync>>,
 }
 
 #[derive(Default)]
@@ -38,7 +37,7 @@ impl AJ {
     {
         let type_id = TypeId::of::<M>();
 
-        let registry = QUEUE_REGISTRY.lock().unwrap();
+        let registry = &QUEUE_REGISTRY;
         if registry.registry_by_name.contains_key(queue_name) {
             panic!("You already register queue with name: {}", queue_name);
         }
@@ -63,7 +62,7 @@ impl AJ {
         WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
     {
         let type_id = TypeId::of::<M>();
-        if let Some(queue_addr) = QUEUE_REGISTRY.lock().unwrap().registry.get(&type_id) {
+        if let Some(queue_addr) = QUEUE_REGISTRY.registry.get(&type_id) {
             if let Some(addr) = queue_addr.downcast_ref::<Addr<WorkQueue<M>>>() {
                 return Some(addr.clone());
             }

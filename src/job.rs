@@ -1,3 +1,4 @@
+use crate::get_ms_as_datetime;
 use async_trait::async_trait;
 use chrono::{serde::ts_microseconds, serde::ts_microseconds_option, DateTime, Duration, Utc};
 use cron::Schedule;
@@ -300,6 +301,15 @@ impl<M: Executable + Clone> JobBuilder<M> {
 
     pub fn set_schedule_at(self, schedule_at: DateTime<Utc>) -> Self {
         self.set_job_type(JobType::ScheduledAt(schedule_at))
+    }
+
+    pub fn run_after_ms(self, ms: i64) -> Self {
+        let dt = get_ms_as_datetime(ms);
+        self.set_schedule_at(dt)
+    }
+
+    pub fn run_after_secs(self, secs: i64) -> Self {
+        self.run_after_ms(secs * 1_000)
     }
 
     pub fn set_cron(self, cron: Schedule, context: CronContext) -> Self {

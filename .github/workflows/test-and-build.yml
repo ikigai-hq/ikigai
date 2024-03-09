@@ -16,8 +16,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Clippy
-      run: cargo clippy --all-features -- -D warnings
+    - uses: qernal/github-actions-rust-clippy@v2.0.2
+      with:
+        args: "--all-features -- -D warnings"
+        path_glob: "**/src"
+        rust_version: 1.72
     - name: Build
       run: cargo build --verbose
     - name: Run tests

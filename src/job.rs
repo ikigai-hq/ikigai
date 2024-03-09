@@ -25,7 +25,7 @@ pub struct Retry {
 
 impl Default for Retry {
     fn default() -> Self {
-        Self::new_interval_retry(Some(3), Duration::milliseconds(100))
+        Self::new_interval_retry(Some(3), chrono::TimeDelta::try_milliseconds(100).unwrap())
     }
 }
 

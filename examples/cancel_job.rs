@@ -4,7 +4,7 @@ use std::time::Duration;
 use aj::async_trait::async_trait;
 use aj::mem::InMemory;
 use aj::serde::{Deserialize, Serialize};
-use aj::{get_now_as_ms, AJ};
+use aj::{get_now, get_now_as_ms, AJ};
 use aj::{Executable, JobBuilder};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -25,7 +25,7 @@ impl Executable for PrintJob {
 fn run_schedule_job(id: String) {
     let job = JobBuilder::new(PrintJob { number: 1 })
         .set_id(id)
-        .set_schedule_at(get_now_as_ms() + 1000)
+        .set_schedule_at(get_now() + chrono::Duration::seconds(1))
         .build();
     AJ::add_job(job);
 }

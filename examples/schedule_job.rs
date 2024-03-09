@@ -1,10 +1,10 @@
 use actix_rt::time::sleep;
-use std::time::Duration;
 
 use aj::async_trait::async_trait;
+use aj::chrono::Duration;
 use aj::mem::InMemory;
 use aj::serde::{Deserialize, Serialize};
-use aj::start_engine;
+use aj::{get_now, start_engine};
 use aj::{get_now_as_ms, AJ};
 use aj::{Executable, JobBuilder};
 
@@ -25,7 +25,7 @@ impl Executable for PrintJob {
 
 fn run_schedule_job() {
     let job = JobBuilder::new(PrintJob { number: 1 })
-        .set_schedule_at(get_now_as_ms() + 1000)
+        .set_schedule_at(get_now() + Duration::seconds(3))
         .build();
     AJ::add_job(job);
 }
@@ -40,7 +40,7 @@ fn main() {
     // Sleep
     std::thread::spawn(|| {
         actix_rt::System::new().block_on(async {
-            sleep(Duration::from_secs(6)).await;
+            sleep(std::time::Duration::from_secs(6)).await;
         })
     })
     .join()

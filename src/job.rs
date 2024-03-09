@@ -1,15 +1,17 @@
 use async_trait::async_trait;
+use chrono::{serde::ts_microseconds, serde::ts_microseconds_option, DateTime, Duration, Utc};
 use cron::Schedule;
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 use std::str::FromStr;
 use uuid::Uuid;
 
-use crate::util::{get_datetime_as_ms, get_now, get_now_as_ms};
+use crate::util::{get_now, get_now_as_ms};
 
+#[serde_as]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum RetryStrategy {
-    Interval(i64), // ms
+    Interval(#[serde_as(as = "serde_with::DurationMicroSeconds<i64>")] Duration), // ms
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -22,7 +24,7 @@ pub struct Retry {
 
 impl Default for Retry {
     fn default() -> Self {
-        Self::new_interval_retry(Some(3), 100)
+        Self::new_interval_retry(Some(3), Duration::milliseconds(100))
     }
 }
 
@@ -35,8 +37,8 @@ impl Retry {
         }
     }
 
-    pub fn new_interval_retry(max_retries: Option<i32>, interval_ms: i64) -> Self {
-        Self::new(0, max_retries, RetryStrategy::Interval(interval_ms))
+    pub fn new_interval_retry(max_retries: Option<i32>, interval: Duration) -> Self {
+        Self::new(0, max_retries, RetryStrategy::Interval(interval))
     }
 
     pub fn should_retry(&self) -> bool {
@@ -47,10 +49,10 @@ impl Retry {
         }
     }
 
-    pub fn retry(&mut self) -> i64 {
+    pub fn retry(&mut self) -> DateTime<Utc> {
         self.retried_times += 1;
         match &self.strategy {
-            RetryStrategy::Interval(ms) => get_now_as_ms() + ms,
+            RetryStrategy::Interval(ms) => get_now() + *ms,
         }
     }
 }
@@ -69,7 +71,11 @@ pub trait Executable {
     // Override this function to custom retry logic
     // None => no need to retry
     // Some(ms) => next time to retry this function
-    fn should_retry(&self, retry_context: &mut Retry, job_output: &Self::Output) -> Option<i64> {
+    fn should_retry(
+        &self,
+        retry_context: &mut Retry,
+        job_output: &Self::Output,
+    ) -> Option<DateTime<Utc>> {
         let should_retry = self.is_failed_output(job_output) && retry_context.should_retry();
 
         if should_retry {
@@ -83,19 +89,21 @@ pub trait Executable {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct CronContext {
     pub max_repeat: Option<i32>,
-    pub end_at: Option<i64>,
+    #[serde(with = "ts_microseconds_option")]
+    pub end_at: Option<DateTime<Utc>>,
 }
 
+#[serde_as]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum JobType {
-    // Instant background job
+    // DateTime<Utc> background job
     Normal,
     // Schedule Job: (Next schedule at)
-    ScheduledAt(i64),
+    ScheduledAt(#[serde(with = "ts_microseconds")] DateTime<Utc>),
     // Cron Job: Cron Expression, next schedule at, total repeat, Cron Context
     Cron(
         String,
-        i64,
+        #[serde(with = "ts_microseconds")] DateTime<Utc>,
         #[serde(default)] i32,
         #[serde(default)] CronContext,
     ),
@@ -151,9 +159,9 @@ where
     }
 
     pub fn is_ready(&self) -> bool {
-        let now = get_now_as_ms();
+        let now = get_now();
         match &self.job_type {
-            JobType::ScheduledAt(ms) => now > *ms,
+            JobType::ScheduledAt(schedule_at) => &now > schedule_at,
             JobType::Cron(_, next_slot, total_repeat, context) => {
                 if now < *next_slot {
                     return false;
@@ -178,7 +186,7 @@ where
     }
 
     pub fn next_tick(&mut self) -> Option<Self> {
-        let now = get_now_as_ms();
+        let now = get_now();
         match &self.job_type {
             JobType::Cron(cron_expression, _, total_repeat, context) => {
                 let mut job = self.clone();
@@ -195,7 +203,7 @@ where
                 if let Some(upcoming_event) = schedule.after(&get_now()).next() {
                     job.job_type = JobType::Cron(
                         cron_expression.clone(),
-                        get_datetime_as_ms(upcoming_event),
+                        upcoming_event,
                         *total_repeat + 1,
                         context.clone(),
                     );
@@ -290,19 +298,14 @@ impl<M: Executable + Clone> JobBuilder<M> {
         self.set_job_type(JobType::Normal)
     }
 
-    pub fn set_schedule_at(self, schedule_at: i64) -> Self {
+    pub fn set_schedule_at(self, schedule_at: DateTime<Utc>) -> Self {
         self.set_job_type(JobType::ScheduledAt(schedule_at))
     }
 
     pub fn set_cron(self, cron: Schedule, context: CronContext) -> Self {
         let now = get_now();
         let next_time = cron.after(&now).next().unwrap_or(now);
-        self.set_job_type(JobType::Cron(
-            cron.to_string(),
-            get_datetime_as_ms(next_time),
-            1,
-            context,
-        ))
+        self.set_job_type(JobType::Cron(cron.to_string(), next_time, 1, context))
     }
 
     pub fn set_retry(mut self, retry: Retry) -> Self {

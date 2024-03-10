@@ -106,7 +106,7 @@ impl AJ {
         M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
         WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
     {
-        let config = EnqueueConfig::new_skip_if_existing();
+        let config = EnqueueConfig::new_re_run_if_complete();
         Self::enqueue_job(job, config)
     }
 

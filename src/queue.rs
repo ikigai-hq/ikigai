@@ -19,28 +19,27 @@ const JOBS_PER_TICK: usize = 5;
 pub struct EnqueueConfig {
     // Will re run job if job is completed
     pub re_run: bool,
-    // Will override data of current job
+    // Will override data of current job in any case
+    pub override_running_data: bool,
+    // Will override data of current job if job is completed
     pub override_data: bool,
 }
 
 impl EnqueueConfig {
-    pub fn new(re_run: bool, override_data: bool) -> Self {
+    pub fn new(re_run: bool, override_running_data: bool, override_data: bool) -> Self {
         Self {
             re_run,
+            override_running_data,
             override_data,
         }
     }
 
-    pub fn new_re_run() -> Self {
-        Self::new(true, false)
-    }
-
     pub fn new_force_update_re_run() -> Self {
-        Self::new(true, true)
+        Self::new(true, true, true)
     }
 
-    pub fn new_skip_if_existing() -> Self {
-        Self::new(false, false)
+    pub fn new_re_run_if_complete() -> Self {
+        Self::new(true, false, true)
     }
 }
 
@@ -125,8 +124,13 @@ where
         let existing_job =
             get_from_storage::<Job<M>>(self.backend.deref(), &self.storage_name(), &key)?;
         if let Some(existing_job) = existing_job {
-            if config.override_data {
+            if config.override_running_data {
                 info!("Update exising job with new information: {}", job.id);
+                upsert_to_storage(self.backend.deref(), &self.storage_name(), &key, &job)?;
+            }
+
+            if config.override_data && existing_job.is_done() {
+                info!("Update completed job with new information: {}", job.id);
                 upsert_to_storage(self.backend.deref(), &self.storage_name(), &key, &job)?;
             }
 

@@ -16,6 +16,35 @@ const DEFAULT_TICK_DURATION: Duration = Duration::from_millis(100);
 const JOBS_PER_TICK: usize = 5;
 
 #[derive(Debug, Clone)]
+pub struct EnqueueConfig {
+    // Will re run job if job is completed
+    pub re_run: bool,
+    // Will override data of current job
+    pub override_data: bool,
+}
+
+impl EnqueueConfig {
+    pub fn new(re_run: bool, override_data: bool) -> Self {
+        Self {
+            re_run,
+            override_data,
+        }
+    }
+
+    pub fn new_re_run() -> Self {
+        Self::new(true, false)
+    }
+
+    pub fn new_force_update_re_run() -> Self {
+        Self::new(true, true)
+    }
+
+    pub fn new_skip_if_existing() -> Self {
+        Self::new(false, false)
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct WorkQueueConfig {
     pub process_tick_duration: Duration,
     pub job_per_ticks: usize,
@@ -91,19 +120,18 @@ where
         })
     }
 
-    pub fn enqueue_with_config(&self, job: Job<M>, re_run: bool) -> Result<(), Error> {
+    pub fn enqueue_with_config(&self, job: Job<M>, config: EnqueueConfig) -> Result<(), Error> {
         let key = job.id.clone();
-        if let Some(existing_job) =
-            get_from_storage::<Job<M>>(self.backend.deref(), &self.storage_name(), &key)?
-        {
-            if !existing_job.is_done() {
+        let existing_job =
+            get_from_storage::<Job<M>>(self.backend.deref(), &self.storage_name(), &key)?;
+        if let Some(existing_job) = existing_job {
+            if config.override_data {
                 info!("Update exising job with new information: {}", job.id);
                 upsert_to_storage(self.backend.deref(), &self.storage_name(), &key, &job)?;
-                return Ok(());
             }
 
-            if re_run {
-                info!("Job {} is completed but trigger re run", existing_job.id);
+            if config.re_run && existing_job.is_done() {
+                info!("Job {} is done but config want re-run", existing_job.id);
                 self.enqueue(job)?;
                 return Ok(());
             }
@@ -342,7 +370,7 @@ where
 
 #[derive(Message, Debug)]
 #[rtype(result = "()")]
-pub struct Enqueue<M: Executable + Clone + Send + Sync + 'static>(pub Job<M>, pub bool);
+pub struct Enqueue<M: Executable + Clone + Send + Sync + 'static>(pub Job<M>, pub EnqueueConfig);
 
 impl<M> Handler<Enqueue<M>> for WorkQueue<M>
 where
@@ -364,13 +392,13 @@ where
     }
 }
 
-pub fn enqueue_job<M>(addr: Addr<WorkQueue<M>>, job: Job<M>, force_update: bool)
+pub fn enqueue_job<M>(addr: Addr<WorkQueue<M>>, job: Job<M>, config: EnqueueConfig)
 where
     M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
 
     WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
 {
-    addr.do_send::<Enqueue<M>>(Enqueue(job, force_update));
+    addr.do_send::<Enqueue<M>>(Enqueue(job, config));
 }
 
 #[derive(Message, Debug)]

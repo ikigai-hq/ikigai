@@ -8,7 +8,7 @@ use std::any::{Any, TypeId};
 use crate::job::Job;
 use crate::queue::{cancel_job, enqueue_job, WorkQueue};
 use crate::types::Backend;
-use crate::{update_queue_config, Executable, WorkQueueConfig};
+use crate::{update_queue_config, EnqueueConfig, Executable, WorkQueueConfig};
 
 // Todo: It's not good to wrap DASHMAP with Arc and Mutex. We do it because requirement of lazy_static!
 lazy_static! {
@@ -71,7 +71,7 @@ impl AJ {
         None
     }
 
-    pub fn enqueue_job<M>(job: Job<M>, re_run: bool) -> bool
+    pub fn enqueue_job<M>(job: Job<M>, config: EnqueueConfig) -> bool
     where
         M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
 
@@ -79,7 +79,7 @@ impl AJ {
     {
         let addr: Option<Addr<WorkQueue<M>>> = AJ::get_queue_address();
         if let Some(queue_addr) = addr {
-            enqueue_job(queue_addr, job, re_run);
+            enqueue_job(queue_addr, job, config);
             true
         } else {
             false
@@ -106,16 +106,18 @@ impl AJ {
         M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
         WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
     {
-        Self::enqueue_job(job, false)
+        let config = EnqueueConfig::new_skip_if_existing();
+        Self::enqueue_job(job, config)
     }
 
-    pub fn add_job_and_rerun<M>(job: Job<M>) -> bool
+    pub fn add_job_and_force_run<M>(job: Job<M>) -> bool
     where
         M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
 
         WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
     {
-        Self::enqueue_job(job, true)
+        let config = EnqueueConfig::new_force_update_re_run();
+        Self::enqueue_job(job, config)
     }
 
     pub fn update_queue_config<M>(config: WorkQueueConfig)

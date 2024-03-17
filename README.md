@@ -1,66 +1,41 @@
 # aj ![ci status](https://github.com/cptrodgers/aj/actions/workflows/test-and-build.yml/badge.svg)
 
-aj is a one-stop solution for your background jobs (includes schedule, cron) based on actix engine (actor model).
+aj is a one-stop solution for your background jobs based on actix.
 
-This project is under development.
+## Features & Docs
 
-[Docs](https://github.com/zenclasshq/aj/blob/master/docs)
+- [x] Jobs.
+  - [x] Run: Instant, Schedule At, Cron
+  - [x] Update Job
+  - [x] Cancel Job
+  - [ ] Get job information
+- [x] Retry
+  - [x] Customizable failed and retry logic.
+  - Configurable:
+    - [x] Max times
+    - [x] Strategy:
+      - [x] Interval Strategy
+      - [x] Exponential Strategy
+- [x] Async (execution).
+- [x] Persistent.
+- [x] Customize Backend with `Backend` trait.
+  - [x] Native Supported: Redis (Production in mind), In-memory (testing purpose).
+  - [x] `Backend` trait: you can implement your backend by your demand.
+- [x] Custom job handler speed.
+  - [x] Queue Scan Speed.
+  - [x] Deliverable
+- [ ] Admin Dashboard (UI)
 
-## Usage ([examples](https://github.com/zenclasshq/aj/tree/master/examples))
+[examples](https://github.com/zenclasshq/aj/tree/master/examples)
 
-```rust
-use actix_rt::time::sleep;
-use std::time::Duration;
-use actix_rt::System;
+## Using by:
 
-use aj::async_trait::async_trait;
-use aj::mem::InMemory;
-use aj::serde::{Deserialize, Serialize};
-use aj::{get_now_as_ms, start_engine, AJ};
-use aj::{Executable, JobBuilder};
+- [ZenClass](https://zenclass.co): ZenClass is an education platform that help you build your class - especially class assignments. 
+    - Reminders
+    - Auto Version History.
+    - etc.
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PrintJob {
-    pub number: i32,
-}
-
-#[async_trait]
-impl Executable for PrintJob {
-    type Output = ();
-
-    async fn execute(&self) -> Self::Output {
-        // Do your stuff here in async mode
-        println!(
-            "Hello in background {} at {}",
-            self.number,
-            get_now_as_ms()
-        );
-        Ok(())
-    }
-}
-
-fn run_job_instantly() {
-    let job = JobBuilder::new(PrintJob { number: 1 }).build();
-    AJ::add_job(job);
-}
-
-fn main() {
-    start_engine();
-    let backend = InMemory::default();
-    AJ::register::<PrintJob>("print_job", backend);
-    println!("Now is {}", get_now_as_ms());
-    run_job_instantly();
-
-    // Sleep 1 sec
-    std::thread::spawn(|| {
-       System::new().block_on(async {
-           sleep(Duration::from_secs(1)).await;
-       })
-    })
-        .join()
-        .expect("Cannot spawn thread");
-}
-```
+Please contact me via rodgers@zenclass.co if you want to update the list.
 
 ## LICENSE
 

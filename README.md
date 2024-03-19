@@ -1,41 +1,43 @@
-# aj ![ci status](https://github.com/cptrodgers/aj/actions/workflows/test-and-build.yml/badge.svg)
+# aj 
+![ci status](https://github.com/cptrodgers/aj/actions/workflows/test-and-build.yml/badge.svg)
 
-aj is a one-stop solution for your background jobs based on actix.
+aj is solution for background jobs (based on actix).
 
 ## Features & Docs
 
 - [x] Jobs.
-  - [x] Run: Instant, Schedule At, Cron
-  - [x] Update Job
-  - [x] Cancel Job
-  - [ ] Get job information
-- [x] Retry
-  - [x] Customizable failed and retry logic.
+  - [x] Type: Instantly, Schedule (Run at specific time), Cron.
+  - [x] Update job
+  - [x] Cancel job
+  - [x] Get job
+- [x] Retry mechanism
+  - [x] Customizable failed and retry logic: You can handle case that you want to retry based on job output.
   - Configurable:
     - [x] Max times
     - [x] Strategy:
       - [x] Interval Strategy
-      - [x] Exponential Strategy
+      - [ ] Exponential Strategy
 - [x] Async (execution).
 - [x] Persistent.
-- [x] Customize Backend with `Backend` trait.
-  - [x] Native Supported: Redis (Production in mind), In-memory (testing purpose).
+- [x] Flexible Broker and Backend with `Backend` trait: You can choose your database or storage engine that you want to use.
+  - [x] Native support: 
+    - Redis
+    - In-memory (testing purpose)
   - [x] `Backend` trait: you can implement your backend by your demand.
-- [x] Custom job handler speed.
-  - [x] Queue Scan Speed.
-  - [x] Deliverable
+- [x] Custom processing speed.
+  - [x] Scan job period (tick).
+  - [x] Number of job per tick.
+- [ ] DAG
 - [ ] Admin Dashboard (UI)
+- [ ] Integration
 
 [examples](https://github.com/zenclasshq/aj/tree/master/examples)
 
 ## Using by:
 
-- [ZenClass](https://zenclass.co): ZenClass is an education platform that help you build your class - especially class assignments. 
-    - Reminders
-    - Auto Version History.
-    - etc.
+- [ZenClass](https://zenclass.co) - ZenClass is an education platform that help you build your class - especially class assignments: Reminders /  Scheduler, Version History.
 
-Please contact me via rodgers@zenclass.co if you want to update the list.
+If you're using `aj`, please contact rodgers@zenclass.co to update the list.
 
 ## LICENSE
 

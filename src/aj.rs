@@ -8,7 +8,7 @@ use std::any::{Any, TypeId};
 use crate::job::Job;
 use crate::queue::{cancel_job, enqueue_job, WorkQueue};
 use crate::types::Backend;
-use crate::{update_queue_config, EnqueueConfig, Executable, WorkQueueConfig};
+use crate::{get_job, update_queue_config, EnqueueConfig, Executable, WorkQueueConfig};
 
 // Todo: It's not good to wrap DASHMAP with Arc and Mutex. We do it because requirement of lazy_static!
 lazy_static! {
@@ -98,6 +98,19 @@ impl AJ {
             true
         } else {
             false
+        }
+    }
+
+    pub async fn get_job<M>(job_id: &str) -> Option<Job<M>>
+    where
+        M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
+    {
+        let addr: Option<Addr<WorkQueue<M>>> = AJ::get_queue_address();
+        if let Some(queue_addr) = addr {
+            get_job(queue_addr, job_id).await
+        } else {
+            None
         }
     }
 

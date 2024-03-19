@@ -370,6 +370,12 @@ where
 
         Ok(())
     }
+
+    pub fn get_job(&self, job_id: &str) -> Result<Option<Job<M>>, Error> {
+        let storage_name = self.storage_name();
+        let job = get_from_storage::<Job<M>>(self.backend.deref(), &storage_name, job_id)?;
+        Ok(job)
+    }
 }
 
 #[derive(Message, Debug)]
@@ -454,12 +460,46 @@ where
         self.config = msg.config;
     }
 }
+
 pub fn update_queue_config<M>(addr: Addr<WorkQueue<M>>, config: WorkQueueConfig)
 where
     M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-
     WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
 {
     let update_config_mgs = UpdateConfig { config };
     addr.do_send::<UpdateConfig>(update_config_mgs);
+}
+
+#[derive(Message, Debug)]
+#[rtype(result = "Option<Job<M>>")]
+pub struct GetJob<M>
+where
+    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+{
+    pub job_id: String,
+    _phantom: PhantomData<M>,
+}
+
+impl<M> Handler<GetJob<M>> for WorkQueue<M>
+where
+    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+    WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
+{
+    type Result = Option<Job<M>>;
+
+    fn handle(&mut self, msg: GetJob<M>, _: &mut Self::Context) -> Self::Result {
+        self.get_job(&msg.job_id).ok().flatten()
+    }
+}
+
+pub async fn get_job<M>(addr: Addr<WorkQueue<M>>, job_id: &str) -> Option<Job<M>>
+where
+    M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
+    WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
+{
+    let msg: GetJob<M> = GetJob {
+        job_id: job_id.to_string(),
+        _phantom: PhantomData,
+    };
+    addr.send::<GetJob<M>>(msg).await.ok().flatten()
 }

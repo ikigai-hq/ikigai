@@ -64,6 +64,13 @@ pub trait Executable {
 
     async fn execute(&self) -> Self::Output;
 
+    // Rust idiom prefers use `?` syntax to return as soon as possible.
+    // Sometimes, you have a logic that want to be run in any situations like logging, store the job result, etc.
+    // You can use `post_execute` fn.
+    async fn post_execute(&self, output: Self::Output) -> Self::Output {
+        output
+    }
+
     // Declare the output of execution is failed -> Trigger retry
     async fn is_failed_output(&self, _job_output: Self::Output) -> bool {
         false

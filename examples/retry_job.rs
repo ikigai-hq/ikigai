@@ -20,7 +20,7 @@ impl Executable for RetryJob {
         Err(())
     }
 
-    fn is_failed_output(&self, job_output: &Self::Output) -> bool {
+    async fn is_failed_output(&self, job_output: Self::Output) -> bool {
         job_output.is_err()
     }
 }

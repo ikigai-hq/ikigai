@@ -339,6 +339,7 @@ where
         }
 
         let job_output = job.message.execute().await;
+        let job_output = job.message.post_execute(job_output).await;
         info!(
             "[WorkQueue] Execution complete. Job {} - Result: {job_output:?}",
             job.id

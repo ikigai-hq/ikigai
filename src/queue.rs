@@ -344,7 +344,7 @@ where
             job.id
         );
         if let Some(retry_context) = job.retry.as_mut() {
-            if let Some(next_retry_ms) = job.message.should_retry(retry_context, &job_output) {
+            if let Some(next_retry_ms) = job.message.should_retry(retry_context, job_output).await {
                 info!("[WorkQueue] Retry this job. {}", job.id);
                 job.job_type = JobType::ScheduledAt(next_retry_ms);
                 return self.re_enqueue(job);

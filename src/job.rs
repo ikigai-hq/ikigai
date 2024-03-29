@@ -60,24 +60,24 @@ impl Retry {
 
 #[async_trait]
 pub trait Executable {
-    type Output: Debug;
+    type Output: Debug + Send;
 
     async fn execute(&self) -> Self::Output;
 
     // Declare the output of execution is failed -> Trigger retry
-    fn is_failed_output(&self, _job_output: &Self::Output) -> bool {
+    async fn is_failed_output(&self, _job_output: Self::Output) -> bool {
         false
     }
 
     // Override this function to custom retry logic
     // None => no need to retry
     // Some(ms) => next time to retry this function
-    fn should_retry(
+    async fn should_retry(
         &self,
         retry_context: &mut Retry,
-        job_output: &Self::Output,
+        job_output: Self::Output,
     ) -> Option<DateTime<Utc>> {
-        let should_retry = self.is_failed_output(job_output) && retry_context.should_retry();
+        let should_retry = self.is_failed_output(job_output).await && retry_context.should_retry();
 
         if should_retry {
             Some(retry_context.retry())

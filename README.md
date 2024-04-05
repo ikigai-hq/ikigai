@@ -31,13 +31,13 @@ aj is solution for background jobs (based on actix).
 - [ ] Admin Dashboard (UI)
 - [ ] Integration
 
-[examples](https://github.com/zenclasshq/aj/tree/master/examples)
+[examples](https://github.com/openexamhq/aj/tree/master/examples)
 
 ## Using by:
 
-- [ZenClass](https://zenclass.co) - ZenClass is an education platform that help you build your class - especially class assignments: Reminders /  Scheduler, Version History.
+- [ZenClass](https://zenclass.co) - ZenClass is an education platform that help you build your class.
 
-If you're using `aj`, please contact rodgers@zenclass.co to update the list.
+If you're using `aj`, please contact us to update the list.
 
 ## LICENSE
 

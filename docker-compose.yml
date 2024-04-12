@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres:14
+    environment:
+     POSTGRES_PASSWORD: openexam
+     POSTGRES_USER: openexam
+     POSTGRES_DB: openexam
+    ports:
+      - "5432:5432"
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"

@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>{{ org_name }}</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;">
+<div class="container" style="display: block; max-width: 640px; width: 640px; background: #ffffff; margin: 0 auto;">
+  <div class="header" style="padding: 20px 0; border-top: 4px solid #081637; text-align: center;">
+    <div class="title" style="font-weight: 700; font-size: 24px; line-height: 32px; text-align: center; color: #272F3E; margin: 36px 0 20px 0;">{{ org_name }}</div>
+  </div>
+  <div class="content" style="padding: 0 56px 24px 56px; font-weight: 400; font-size: 16px; line-height: 24px;">
+    <div class="title" style="font-weight: 700; font-size: 24px; line-height: 32px; text-align: center; color: #272F3E; margin: 36px 0 20px 0;">You Have Been Added to the {{ org_name }} powered by Open Exam</div>
+    <p style="margin: 0 0 8px 0; color: #272F3E;">Dear <b style="color: #272F3E;">{{ name }},</b></p>
+    <p style="margin: 0 0 8px 0; color: #272F3E;">Welcome to {{ org_name }} Learning Platform! We’re thrilled to have you aboard. To get started, you can use the following log-in credentials:</p>
+
+    <table style="margin: 24px 0 24px 0;">
+      <tr style="line-height: 30px;">
+        <td style="color: #4D5562; min-width: 180px;">Organization Name:</td>
+        <td style="padding-left: 25px; font-weight: 500; color: #F9930E;">{{ org_name }}</td>
+      </tr>
+      <tr style="line-height: 30px;">
+        <td style="color: #4D5562; min-width: 180px;">Address URL:</td>
+        <td style="padding-left: 25px; font-weight: 500; color: #1C53F4;"><a href="{{ org_url }}" style="text-decoration: none; font-weight: 500; color: #F9930E;">{{ org_url }}</a></td>
+      </tr>
+      <tr style="line-height: 30px;">
+        <td style="color: #4D5562; min-width: 180px;">Your account email:</td>
+        <td style="padding-left: 25px; font-weight: 500; color: #1C53F4;"><a style="text-decoration: none; font-weight: 500; color: #F9930E;">{{ email }}</a></td>
+      </tr>
+      <tr style="line-height: 30px;">
+        <td style="color: #4D5562; min-width: 180px;">Your account password:</td>
+        <td style="padding-left: 25px; font-weight: 500; color: #F9930E;">{{ password }}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="footer" style="max-width: 528px; margin: auto; border-top: 1px solid #D5D8DD; padding: 20px; text-align: center; color: #272F3E; font-size: 14px;">
+    <div>
+      Powered by: <b><a href="https://openexam.app" style="text-decoration: none; color: #F9930E;">Open Exam</a></b>
+    </div>
+  </div>
+</div>
+</body>
+</html>

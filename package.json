@@ -1,0 +1,52 @@
+{
+  "name": "zenklass-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/zenklass-lms",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel"
+  },
+  "devDependencies": {
+    "eslint-config-custom": "*",
+    "prettier": "latest",
+    "turbo": "latest"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "packageManager": "yarn@1.19.1",
+  "resolutions": {
+    "markdown-it": "10.0.0",
+    "prosemirror-markdown": "1.5.2",
+    "prosemirror-view": "1.23.0",
+    "prosemirror-model": "1.14.3",
+    "prosemirror-commands": "1.1.6",
+    "prosemirror-dropcursor": "1.3.3",
+    "prosemirror-gapcursor": "1.1.5",
+    "prosemirror-history": "1.1.3",
+    "prosemirror-inputrules": "1.1.3",
+    "prosemirror-keymap": "1.1.4",
+    "prosemirror-schema-list": "1.1.2",
+    "prosemirror-state": "1.3.4",
+    "prosemirror-tables": "1.1.1",
+    "prosemirror-transform": "1.2.5",
+    "prosemirror-utils": "0.9.6",
+    "@types/prosemirror-markdown": "1.0.3",
+    "@types/prosemirror-model": "1.7.2",
+    "@types/prosemirror-commands": "1.0.3",
+    "@types/prosemirror-dropcursor": "1.0.0",
+    "@types/prosemirror-gapcursor": "1.0.1",
+    "@types/prosemirror-history": "1.0.1",
+    "@types/prosemirror-inputrules": "1.0.2",
+    "@types/prosemirror-keymap": "1.0.1",
+    "@types/prosemirror-schema-list": "1.0.1",
+    "@types/prosemirror-state": "1.2.4",
+    "@types/prosemirror-view": "1.23.0",
+    "@types/prosemirror-transform": "1.4.2",
+    "@types/markdown-it": "10.0.1"
+  }
+}

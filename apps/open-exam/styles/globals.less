@@ -1,0 +1,286 @@
+@import "react-big-calendar/lib/css/react-big-calendar.css";
+@import "./customRBCalendar.less";
+@import "react-loading-skeleton/dist/skeleton.css";
+@import "video.js/dist/video-js.css";
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Inter", sans-serif !important;
+}
+
+html, body * {
+  // Chromium
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #2d35541a;
+    border-radius: 8px;
+  }
+
+  // Firefox
+  ::-moz-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  scrollbar-width: thin;
+  scrollbar-color: #2d35541a transparent;
+
+  // Microsoft Edge
+  scrollbar-base-color: #2d35541a;
+  scrollbar-face-color: #2d35541a;
+  scrollbar-track-color: transparent;
+}
+
+.circle-picker > span:nth-child(1) > div > span > div {
+  background: black !important;
+}
+
+.ant-picker-calendar-mode-switch {
+  display: none;
+}
+
+// Modal
+.ant-modal-content {
+  padding: 0 !important;
+}
+
+.ant-modal-confirm-btns {
+  margin-top: 24px !important;
+}
+
+.custom-confirm-popup {
+  max-width: 617px !important;
+  width: max-content !important;
+  .ant-modal-content {
+    .ant-modal-body {
+      padding: 24px 24px 32px 24px;
+
+      @media screen and (max-width: 512px) {
+        padding: 16px;
+        text-align: center;
+      }
+    }
+  }
+
+  .ant-modal-confirm-btns {
+    padding: 0 24px;
+
+    button {
+      height: auto;
+      padding: 11px 24px;
+      min-width: 173px;
+    }
+  }
+
+  // Responsive Assignment confirm popup
+  @media screen and (max-width: 512px) {
+    width: auto !important;
+    margin: 0 20px !important;
+
+    .ant-modal-confirm-title {
+      div {
+        margin-bottom: 0;
+      }
+    }
+
+    .ant-modal-confirm-content {
+      max-width: 100% !important;
+    }
+
+    .ant-modal-confirm-btns {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 12px;
+      padding: 0;
+
+      button {
+        width: 100%;
+        margin: 0 !important;
+      }
+    }
+  }
+}
+
+.ant-menu-inline-collapsed-tooltip {
+  display: none !important;
+}
+
+.ant-input-group-addon {
+  border: none !important;
+}
+
+// Attendace Popver
+.attendance-popover {
+  padding-bottom: 0px !important;
+
+  .ant-popover-arrow {
+    display: none;
+  }
+
+  .ant-popover-inner {
+    box-shadow: 0px 0px 20px rgb(19 48 122 / 10%);
+    border-radius: 4px;
+
+    .ant-popover-inner-content {
+      padding: 9px 12px;
+    }
+  }
+}
+
+.time-picker-non-footer {
+  .ant-picker-time-panel {
+    padding-bottom: 2px;
+  }
+
+  .ant-picker-footer {
+    display: none;
+  }
+}
+
+.popover-datepicker {
+  .ant-popover-inner {
+    width: 280px;
+    height: 310px;
+    padding: 0;
+  }
+
+  .ant-picker {
+    visibility: hidden;
+    width: 0px;
+    padding: 0px;
+    height: 0px;
+    position: absolute;
+    top: -4px;
+    left: 0px;
+    border: 0px;
+  }
+
+  .ant-picker-panel-container {
+    box-shadow: none;
+
+    .ant-picker-panel {
+      border-bottom: none;
+      min-height: 311px;
+
+      .ant-picker-month-panel {
+        height: 100%;
+      }
+    }
+  }
+
+  .ant-picker-content {
+    .ant-picker-body {
+      height: 100%;
+    }
+  }
+
+  .ant-picker-footer-extra {
+    text-align: right;
+    padding: 0 12px;
+  }
+}
+
+// Excel embed
+.ewa-embed-footer {
+  display: none !important;
+}
+
+.dnd-sortable-tree_simple_wrapper {
+  list-style: none;
+  box-sizing: border-box;
+  margin-bottom: -1px;
+}
+
+.dnd-sortable-tree_simple_tree-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 10px 10px;
+  border: 1px solid #dedede;
+  color: #222;
+  box-sizing: border-box;
+}
+
+.dnd-sortable-tree_simple_clone {
+  display: inline-block;
+  pointer-events: none;
+  padding: 5px;
+}
+
+.dnd-sortable-tree_simple_clone > .dnd-sortable-tree_simple_tree-item {
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  padding-right: 24px;
+  border-radius: 4px;
+  box-shadow: 0 15px 15px 0 rgba(34, 33, 81, 0.1);
+}
+
+.dnd-sortable-tree_simple_ghost {
+  opacity: 0.5;
+}
+
+.dnd-sortable-tree_simple_disable-selection {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dnd-sortable-tree_simple_disable-interaction {
+  pointer-events: none;
+}
+
+.dnd-sortable-tree_folder_tree-item-collapse_button {
+  border: 0;
+  width: 20px;
+  align-self: stretch;
+  transition: transform 250ms ease;
+  background: url("data:image/svg+xml;utf8,<svg width='10' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 70 41'><path d='M30.76 39.2402C31.885 40.3638 33.41 40.995 35 40.995C36.59 40.995 38.115 40.3638 39.24 39.2402L68.24 10.2402C69.2998 9.10284 69.8768 7.59846 69.8494 6.04406C69.822 4.48965 69.1923 3.00657 68.093 1.90726C66.9937 0.807959 65.5106 0.178263 63.9562 0.150837C62.4018 0.123411 60.8974 0.700397 59.76 1.76024L35 26.5102L10.24 1.76024C9.10259 0.700397 7.59822 0.123411 6.04381 0.150837C4.4894 0.178263 3.00632 0.807959 1.90702 1.90726C0.807714 3.00657 0.178019 4.48965 0.150593 6.04406C0.123167 7.59846 0.700153 9.10284 1.75999 10.2402L30.76 39.2402Z' /></svg>")
+    no-repeat center;
+}
+
+.dnd-sortable-tree_folder_tree-item-collapse_button-collapsed {
+  transform: rotate(-90deg);
+}
+.dnd-sortable-tree_simple_handle {
+  width: 20px;
+  align-self: stretch;
+  cursor: pointer;
+  background: url("data:image/svg+xml;utf8,<svg  xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' width='12'><path d='M7 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 2zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 14zm6-8a2 2 0 1 0-.001-4.001A2 2 0 0 0 13 6zm0 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 14z'></path></svg>")
+    no-repeat center;
+}
+
+.dnd-sortable-tree_simple_tree-item-collapse_button {
+  border: 0;
+  width: 20px;
+  align-self: stretch;
+  transition: transform 250ms ease;
+  background: url("data:image/svg+xml;utf8,<svg width='10' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 70 41'><path d='M30.76 39.2402C31.885 40.3638 33.41 40.995 35 40.995C36.59 40.995 38.115 40.3638 39.24 39.2402L68.24 10.2402C69.2998 9.10284 69.8768 7.59846 69.8494 6.04406C69.822 4.48965 69.1923 3.00657 68.093 1.90726C66.9937 0.807959 65.5106 0.178263 63.9562 0.150837C62.4018 0.123411 60.8974 0.700397 59.76 1.76024L35 26.5102L10.24 1.76024C9.10259 0.700397 7.59822 0.123411 6.04381 0.150837C4.4894 0.178263 3.00632 0.807959 1.90702 1.90726C0.807714 3.00657 0.178019 4.48965 0.150593 6.04406C0.123167 7.59846 0.700153 9.10284 1.75999 10.2402L30.76 39.2402Z' /></svg>")
+    no-repeat center;
+}
+
+.dnd-sortable-tree_folder_simple-item-collapse_button-collapsed {
+  transform: rotate(-90deg);
+}
+
+.rpv-default-layout__toolbar {
+  background-color: #adb5bd !important;
+}
+
+.rpv-default-layout__sidebar-headers {
+  background-color: #adb5bd !important;
+}
+
+.icon-highlight {
+  // z-index: 99999999;
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  border: transparent;
+  background: transparent;
+  cursor: pointer;
+}

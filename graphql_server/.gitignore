@@ -1,0 +1,9 @@
+/target
+/.idea
+tmp_data/
+/.vscode
+*.env
+output.log
+.DS_Store
+data
+firebase_service_account.json

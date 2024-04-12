@@ -1,0 +1,30 @@
+-- This file should undo anything in `up.sql`
+drop table quiz_answers;
+drop table quizzes;
+drop table quiz_structures;
+drop table rubric_submissions;
+drop table assignment_submissions;
+drop table assignments;
+drop table rubrics;
+drop table band_scores;
+drop table document_highlights;
+drop table thread_comments;
+drop table threads;
+drop table document_page_block_nested_documents;
+drop table document_page_blocks;
+drop table document_template_category_tags;
+drop table document_template_categories;
+drop table document_template_and_tag;
+drop table document_templates;
+drop table document_versions;
+drop table class_documents;
+drop table documents;
+drop table class_members;
+drop table classes;
+drop table tags;
+drop table organization_members;
+drop table organizations;
+alter table  users
+    drop column avatar_file_id;
+drop table files;
+drop table users;

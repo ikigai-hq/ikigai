@@ -42,7 +42,6 @@ const CreateClassModal = ({ onClose, visible }: CreateClassModalProps) => {
 
   const [value, setValue] = useState<{ [name: string]: string }>({
     title: "",
-    category: "",
   });
 
   const handleInputChange =
@@ -55,7 +54,6 @@ const CreateClassModal = ({ onClose, visible }: CreateClassModalProps) => {
       variables: {
         data: {
           name: value.title,
-          category: value.category,
         },
       },
     });
@@ -70,7 +68,7 @@ const CreateClassModal = ({ onClose, visible }: CreateClassModalProps) => {
       <Form
         name="CreateClass"
         layout="vertical"
-        initialValues={{ title: "", category: "" }}
+        initialValues={{ title: "" }}
         autoComplete="off"
         onFinish={handleCreateClass}
       >

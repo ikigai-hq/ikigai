@@ -171,7 +171,7 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
                 <DocumentBreadcrumb
                   onClick={() => {
                     router.push(
-                      formatDocumentRoute(breadcrumb.documentId),
+                      formatDocumentRoute(breadcrumb.id),
                       undefined,
                       { shallow: true },
                     );

@@ -256,17 +256,6 @@ pub fn get_all_documents_by_id(
     Ok(res)
 }
 
-pub fn available_for_student(document: &Document, student_id: i32) -> bool {
-    if document.creator_id == student_id {
-        return true;
-    }
-
-    match document.hide_rule {
-        HideRule::Public => true,
-        HideRule::Private => false,
-    }
-}
-
 pub fn create_a_document_version(
     conn: &PgConnection,
     creator_id: i32,

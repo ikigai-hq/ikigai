@@ -3,12 +3,10 @@ import React from "react";
 import { Col, Space } from "antd";
 import styled, { useTheme } from "styled-components";
 import { Trans } from "@lingui/macro";
+import Link from "next/link";
 
 import { BreakPoints } from "styles/mediaQuery";
 import { Text, TextWeight } from "components/common/Text";
-import RightIcon from "./RightIcon";
-import LeftIcon from "./LeftIcon";
-import { DesktopOnly } from "styles/styledCommon";
 import Logo from "../Logo";
 
 const Container = styled.div`
@@ -37,17 +35,25 @@ const FormContainer = styled.div`
   }
 `;
 
-const PositionRightIcon = styled.div`
-  position: absolute;
-  left: calc(50% + 257px);
-  top: 230px;
-`;
+export const FormAuthContainer = styled.div`
+  min-width: 200px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  border-radius: 12px;
+  box-shadow: 0px 0px 20px rgba(19, 48, 122, 0.1);
+  padding: 48px 48px 48px 48px;
+  margin-top: 52px;
+  margin-bottom: 52px;
+  background: ${(props) => props.theme.colors.gray[0]};
+  ${BreakPoints.tablet} {
+    margin-top: 52px;
+    margin-bottom: 48px;
+  }
 
-const PositionLeftIcon = styled.div`
-  position: absolute;
-  left: calc(50% - 257px - 175px);
-  top: 663px;
-  tranform: rotate(26.03deg);
+  ${BreakPoints.mobile} {
+    width: 100%;
+  }
 `;
 
 type LayoutManagementProps = {
@@ -62,26 +68,24 @@ export default function LayoutManagement({ children }: LayoutManagementProps) {
     <Container>
       <FormContainer>
         <Logo src={logoSrc} />
-        {children}
+        <FormAuthContainer>
+          {children}
+        </FormAuthContainer>
         <Col />
         <Space>
-          <Text
-            weight={TextWeight.medium}
-            level={2}
-            color={theme.colors.gray[6]}
-            style={{ cursor: "pointer" }}
-          >
-            <Trans>Powered by Open Exam</Trans>
-          </Text>
+          <Link href="https://github.com/openexamhq/open-exam" target="_blank" rel="noopener noreferrer">
+            <a>
+              <Text
+                weight={TextWeight.medium}
+                level={2}
+                color={theme.colors.gray[6]}
+                style={{ cursor: "pointer" }}
+              >
+                <Trans>Powered by Open Exam</Trans>
+              </Text>
+            </a>
+          </Link>
         </Space>
-        <DesktopOnly>
-          <PositionRightIcon>
-            <RightIcon />
-          </PositionRightIcon>
-          <PositionLeftIcon>
-            <LeftIcon />
-          </PositionLeftIcon>
-        </DesktopOnly>
       </FormContainer>
     </Container>
   );

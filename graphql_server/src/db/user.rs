@@ -1,10 +1,11 @@
+use crate::db::{Document, SpaceMember};
 use diesel::dsl::any;
 use diesel::result::Error;
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use oso::PolarClass;
 use uuid::Uuid;
 
-use super::schema::users;
+use super::schema::{user_activities, users};
 
 #[derive(Debug, Insertable)]
 #[table_name = "users"]
@@ -134,5 +135,49 @@ impl User {
 
     pub fn name(&self) -> String {
         format!("{} {}", self.first_name, self.last_name)
+    }
+}
+
+#[derive(Debug, Clone, Insertable, Queryable, SimpleObject)]
+#[table_name = "user_activities"]
+pub struct UserActivity {
+    pub user_id: i32,
+    pub last_document_id: Option<Uuid>,
+}
+
+impl UserActivity {
+    pub fn insert(conn: &PgConnection, user_id: i32, document_id: Uuid) -> Result<Self, Error> {
+        let item = Self {
+            user_id,
+            last_document_id: Some(document_id),
+        };
+        diesel::insert_into(user_activities::table)
+            .values(&item)
+            .on_conflict(user_activities::user_id)
+            .do_update()
+            .set(user_activities::last_document_id.eq(&item.last_document_id))
+            .get_result(conn)
+    }
+
+    pub fn find(conn: &PgConnection, user_id: i32) -> Result<Self, Error> {
+        user_activities::table.find(user_id).first(conn)
+    }
+
+    pub fn find_or_insert(conn: &PgConnection, user_id: i32) -> Result<Self, Error> {
+        if let Ok(activity) = Self::find(conn, user_id) {
+            Ok(activity)
+        } else {
+            // Insert a default
+            let mut space_members = SpaceMember::find_all_by_user(conn, user_id)?;
+            if space_members.is_empty() {
+                return Err(Error::NotFound);
+            }
+
+            let first_member = space_members.remove(0);
+            let document = Document::find_starter_of_space(conn, first_member.space_id)?
+                .ok_or(Error::NotFound)?;
+
+            Self::insert(conn, user_id, document.id)
+        }
     }
 }

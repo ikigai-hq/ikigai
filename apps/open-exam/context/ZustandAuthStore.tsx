@@ -10,12 +10,15 @@ export type UserCheckHelper = {
 export type IStore = {
   role: OrgRole,
   orgId?: number,
+  setOrgId: (orgId?: number) => void,
   currentUser: UserMe | undefined;
   checkHelper: UserCheckHelper;
   setCurrentUser: (currentUser: UserMe | undefined) => void;
 };
 
 const useAuthUserStore = create<IStore>((set, _get) => ({
+  orgId: undefined,
+  setOrgId: (orgId) => set({ orgId }),
   role: OrgRole.STUDENT,
   currentUser: undefined,
   updateUserData: {},

@@ -1376,6 +1376,50 @@ export interface RemoveHighlightDocVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: SendMagicLink
+// ====================================================
+
+export interface SendMagicLink {
+  userGenerateMagicLink: boolean;
+}
+
+export interface SendMagicLinkVariables {
+  email: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: VerifyMagicLink
+// ====================================================
+
+export interface VerifyMagicLink_userCheckMagicLink_user {
+  id: number;
+}
+
+export interface VerifyMagicLink_userCheckMagicLink {
+  user: VerifyMagicLink_userCheckMagicLink_user;
+  accessToken: string;
+}
+
+export interface VerifyMagicLink {
+  userCheckMagicLink: VerifyMagicLink_userCheckMagicLink;
+}
+
+export interface VerifyMagicLinkVariables {
+  userId: number;
+  otp: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetBandScores
 // ====================================================
 
@@ -2398,6 +2442,57 @@ export interface GetHighlightDocument {
 
 export interface GetHighlightDocumentVariables {
   documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: CheckToken
+// ====================================================
+
+export interface CheckToken_userMe {
+  id: number;
+}
+
+export interface CheckToken {
+  userMe: CheckToken_userMe;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: CheckDocument
+// ====================================================
+
+export interface CheckDocument {
+  userCheckDocument: number;
+}
+
+export interface CheckDocumentVariables {
+  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: MyLastActivity
+// ====================================================
+
+export interface MyLastActivity_userLastActivity {
+  lastDocumentId: any | null;
+}
+
+export interface MyLastActivity {
+  userLastActivity: MyLastActivity_userLastActivity;
 }
 
 /* tslint:disable */

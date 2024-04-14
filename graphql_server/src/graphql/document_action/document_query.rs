@@ -3,7 +3,7 @@ use async_graphql::*;
 use uuid::Uuid;
 
 use crate::db::*;
-use crate::error::{OpenExamError, OpenExamErrorExt};
+use crate::error::OpenExamErrorExt;
 use crate::helper::*;
 
 #[derive(Default)]
@@ -17,16 +17,8 @@ impl DocumentQuery {
         let conn = get_conn_from_ctx(ctx).await?;
         let document = Document::find_by_id(&conn, document_id).format_err()?;
 
-        if let Ok(user_auth) = get_user_auth_from_ctx(ctx).await {
-            if user_auth.org_role == OrgRole::Student
-                && !available_for_student(&document, user_auth.id)
-            {
-                return Err(OpenExamError::new_bad_request(
-                    "You don't have permission to read this document!",
-                ))
-                .format_err();
-            }
-        }
+        let user_id = get_user_id_from_ctx(ctx).await?;
+        UserActivity::insert(&conn, user_id, document.id).format_err()?;
 
         Ok(document)
     }

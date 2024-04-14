@@ -314,6 +314,13 @@ diesel::table! {
 }
 
 diesel::table! {
+    user_activities (user_id) {
+        user_id -> Int4,
+        last_document_id -> Nullable<Uuid>,
+    }
+}
+
+diesel::table! {
     users (id) {
         id -> Int4,
         email -> Varchar,
@@ -374,6 +381,8 @@ diesel::joinable!(thread_comments -> files (file_uuid));
 diesel::joinable!(thread_comments -> threads (thread_id));
 diesel::joinable!(thread_comments -> users (sender_id));
 diesel::joinable!(threads -> users (creator_id));
+diesel::joinable!(user_activities -> documents (last_document_id));
+diesel::joinable!(user_activities -> users (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     assignment_submissions,
@@ -401,5 +410,6 @@ diesel::allow_tables_to_appear_in_same_query!(
     tags,
     thread_comments,
     threads,
+    user_activities,
     users,
 );

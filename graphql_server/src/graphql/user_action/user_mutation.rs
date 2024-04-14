@@ -115,9 +115,10 @@ impl UserMutation {
         let magic_link = magic_link_for_document_url(document.id, &otp, user.id);
         if let Err(reason) = Mailer::send_magic_link_email(&user.email, magic_link) {
             error!("Cannot send magic link to {}: {:?}", user.email, reason);
+            Ok(false)
+        } else {
+            Ok(true)
         }
-
-        Ok(true)
     }
 
     async fn user_check_magic_link(

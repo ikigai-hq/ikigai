@@ -4,8 +4,6 @@ import type { AppProps } from "next/app";
 import type { NextPage } from "next";
 import Head from "next/head";
 
-import { RouteGuard } from "util/RouteGuard";
-
 import { useApollo } from "../graphql/ApolloClient";
 import OpenExamToaster from "components/Toaster";
 import ErrorBoundary from "../components/ErrorBoundary";
@@ -15,8 +13,8 @@ import { I18nProvider } from "@lingui/react";
 import { messages as enMessages } from "../locales/en/messages";
 import withTheme from "styles/theme";
 import { initMixpanel } from "../util/track";
-import { AuthenticatedWrapper } from "components/Authenticate/AuthenticateWrapper";
-import DocumentTemplateModal from "../components/DocumentTemplate/DocumentTemplateModal";
+import DocumentTemplateModal from "components/DocumentTemplate/DocumentTemplateModal";
+import { Initializing } from "../components/Initializing";
 
 require("../styles/globals.less");
 
@@ -60,16 +58,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <OpenExamToaster />
       <ApolloProvider client={client}>
         <I18nProvider i18n={i18n}>
-          <ErrorBoundary>
-            <RouteGuard>
-              <AuthenticatedWrapper>
-                <GrowthBookWrapper>
-                  {getLayout(<Component {...pageProps} />)}
-                  <DocumentTemplateModal />
-                </GrowthBookWrapper>
-              </AuthenticatedWrapper>
-            </RouteGuard>
-          </ErrorBoundary>
+          <GrowthBookWrapper>
+            <ErrorBoundary>
+              <Initializing>
+                {getLayout(<Component {...pageProps} />)}
+                <DocumentTemplateModal />
+              </Initializing>
+            </ErrorBoundary>
+          </GrowthBookWrapper>
         </I18nProvider>
       </ApolloProvider>
     </>,

@@ -31,36 +31,18 @@ pub struct NotificationMailContext {
 }
 
 #[derive(Serialize)]
-pub struct InvitationMailContext {
-    pub name: String,
-    pub org_name: String,
-    pub org_url: String,
-    pub email: String,
-    pub password: String,
-}
-
-#[derive(Serialize)]
-pub struct OTPMailContext {
-    pub org_name: String,
-    pub org_url: String,
-    pub reason: String,
-    pub name: String,
-    pub otp: String,
+pub struct MagicLinkContext {
+    pub magic_link: String,
 }
 
 const NOTIFICATION: &str = "notification.html";
-const INVITATION: &str = "invitation.html";
-const OTP: &str = "otp.html";
+const MAGIC_LINK: &str = "magic_link.html";
 
 pub struct Template;
 
 impl Template {
-    pub fn render_invitation(context: InvitationMailContext) -> Result<String, OpenExamError> {
-        Ok(EN_TEMPLATES.render(INVITATION, &Context::from_serialize(context)?)?)
-    }
-
-    pub fn render_otp(context: OTPMailContext) -> Result<String, OpenExamError> {
-        Ok(EN_TEMPLATES.render(OTP, &Context::from_serialize(context)?)?)
+    pub fn render_magic_link(context: MagicLinkContext) -> Result<String, OpenExamError> {
+        Ok(EN_TEMPLATES.render(MAGIC_LINK, &Context::from_serialize(context)?)?)
     }
 
     #[allow(dead_code)]

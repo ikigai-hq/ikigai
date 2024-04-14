@@ -6,7 +6,6 @@ pub use space_query::*;
 
 use async_graphql::dataloader::DataLoader;
 use async_graphql::{ComplexObject, Context, Result};
-use serde_json::json;
 
 use crate::authorization::SpaceActionPermission;
 use crate::db::*;
@@ -52,28 +51,14 @@ impl Space {
         space_quick_authorize(ctx, self.id, SpaceActionPermission::ViewSpaceContent).await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
-        if let Some(starter_doc) = Document::find_starter_of_space(&conn, self.id).format_err()? {
-            Ok(starter_doc)
-        } else {
-            let starter_doc = Document::new(
-                user_id,
-                "".into(),
-                self.name.clone(),
-                self.org_id,
-                None,
-                0,
-                None,
-                HideRule::Public,
-                json!({
-                    "style": "Default",
-                    "size": "Default",
-                    "width": "Standard",
-                }),
-                Some(self.id),
-            );
-            let starter_doc = Document::upsert(&conn, starter_doc).format_err()?;
-            Ok(starter_doc)
-        }
+        Document::get_or_create_starter_doc(
+            &conn,
+            user_id,
+            self.id,
+            self.org_id,
+            self.name.clone(),
+        )
+        .format_err()
     }
 
     async fn documents(&self, ctx: &Context<'_>) -> Result<Vec<Document>> {

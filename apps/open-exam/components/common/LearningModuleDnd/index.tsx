@@ -9,7 +9,7 @@ import {
   TreeItems,
 } from "../SortableTree/types";
 import { debounce } from "lodash";
-import useClassStore from "context/ZustandClassStore";
+import useSpaceStore from "context/ZustandClassStore";
 import useUserPermission from "hook/UseUserPermission";
 import { useEffect, useState } from "react";
 import { Permission } from "util/permission";
@@ -30,7 +30,7 @@ export type LearningModuleDndProps = {
 };
 
 const debounceUpdatePositions = debounce(
-  useClassStore.getState().updateDocumentPositions,
+  useSpaceStore.getState().updateDocumentPositions,
   300
 );
 
@@ -41,8 +41,8 @@ export const LearningModuleDnd = ({
   defaultCollapsed,
 }: LearningModuleDndProps) => {
   const userAllow = useUserPermission();
-  const cacheFlattenTrees = useClassStore((state) => state.flattenTreeItems);
-  const setCacheFlattenTrees = useClassStore((state) => state.setTreeItems);
+  const cacheFlattenTrees = useSpaceStore((state) => state.flattenTreeItems);
+  const setCacheFlattenTrees = useSpaceStore((state) => state.setTreeItems);
   const [convertedItems, setConvertedItems] = useState([]);
   const router = useRouter();
 

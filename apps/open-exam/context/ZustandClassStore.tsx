@@ -4,12 +4,11 @@ import cloneDeep from "lodash/cloneDeep";
 import {
   UpdatePositionData,
   UpdateDocumentPositions,
-  SoftDeleteDocuments, AddSpaceDocument,
+  SoftDeleteDocuments,
   GetDocuments_spaceGet_documents as IDocumentItemList,
   GetDocuments,
   DuplicateSpaceDocument,
 } from "graphql/types";
-import { ADD_SPACE_DOCUMENT } from "graphql/mutation/ClassMutation";
 import { mutate, query } from "graphql/ApolloClient";
 import {
   DUPLICATE_SPACE_DOCUMENT,
@@ -23,17 +22,16 @@ import { LearningModuleItemTypeWrapper } from "../components/common/LearningModu
 import { FlattenedItem } from "../components/common/SortableTree/types";
 
 export type IClassContext = {
-  classId?: number;
+  spaceId?: number;
   // Class Documents
   documents?: IDocumentItemList[];
   setDocuments: (newDocuments: IDocumentItemList[] | undefined) => void;
-  fetchAndSetDocuments: (classId: number) => Promise<void>;
+  fetchAndSetDocuments: (spaceId: number) => Promise<void>;
   duplicateDocument: (
     documentId: string
   ) => Promise<DuplicateSpaceDocument | undefined>;
   deleteDocument: (documentId: string) => Promise<string[] | undefined>;
   updateDocumentPositions: (items: UpdatePositionData[]) => Promise<boolean>;
-  addClassDocument: (documentId: string, isAssignment: boolean) => Promise<void>;
   // FIXME: This is not a good way to do this
   updateDocumentTitleLocal: (docId: number, title: string) => void;
   // Local cache collapsed value of docs:
@@ -43,9 +41,8 @@ export type IClassContext = {
   ) => void;
 };
 
-const useClassStore = create<IClassContext>((set, get) => ({
-  classId: undefined,
-  currentClass: undefined,
+const useSpaceStore = create<IClassContext>((set, get) => ({
+  spaceId: undefined,
   documents: undefined,
   setDocuments: (newDocuments: IDocumentItemList[] | undefined) => {
     set({
@@ -58,7 +55,7 @@ const useClassStore = create<IClassContext>((set, get) => ({
     const res = await mutate<DuplicateSpaceDocument>({
       mutation: DUPLICATE_SPACE_DOCUMENT,
       variables: {
-        classId: get().classId,
+        spaceId: get().spaceId,
         documentId,
       },
     });
@@ -89,7 +86,7 @@ const useClassStore = create<IClassContext>((set, get) => ({
     const res = await mutate<SoftDeleteDocuments>({
       mutation: SOFT_DELETE_DOCUMENTS,
       variables: {
-        classId: get().classId,
+        spaceId: get().spaceId,
         documentIds,
       },
     });
@@ -103,27 +100,11 @@ const useClassStore = create<IClassContext>((set, get) => ({
       return documentIds;
     }
   },
-  addClassDocument: async (documentId, isAssignment) => {
-    const res = await mutate<AddSpaceDocument>({
-      mutation: ADD_SPACE_DOCUMENT,
-      variables: {
-        classId: get().classId,
-        documentId,
-        isAssignment
-      },
-    });
-
-    const currentDocuments = get().documents;
-    if (res) {
-      currentDocuments.push(cloneDeep(res.spaceAddDocument));
-      set({ documents: currentDocuments });
-    }
-  },
-  fetchAndSetDocuments: async (classId) => {
+  fetchAndSetDocuments: async (spaceId) => {
     const data = await query<GetDocuments>({
       query: GET_SPACE_DOCUMENTS,
       variables: {
-        classId,
+        spaceId,
       },
       fetchPolicy: "network-only",
     });
@@ -169,4 +150,4 @@ const useClassStore = create<IClassContext>((set, get) => ({
   },
 }));
 
-export default useClassStore;
+export default useSpaceStore;

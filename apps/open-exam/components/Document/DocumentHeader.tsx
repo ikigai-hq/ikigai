@@ -27,7 +27,7 @@ import useDocumentPermission from "hook/UseDocumentPermission";
 import { isMobileView } from "hook/UseSupportMobile";
 import { formatDocumentRoute } from "config/Routes";
 import { getFullPathFromNode } from "components/common/SortableTree/utilities";
-import useClassStore from "context/ZustandClassStore";
+import useSpaceStore from "context/ZustandClassStore";
 import {
   CollapsedLeftIcon,
   ArrowDocument,
@@ -77,7 +77,7 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
   const updatePageBlockMode = usePageBlockStore(
     (state) => state.updatePageBlockMode,
   );
-  const docs = useClassStore((state) => state.documents);
+  const docs = useSpaceStore((state) => state.documents);
   
   const [openHistory, setOpenHistory] = useState(false);
   const [openSaveHistory, setOpenSaveHistory] = useState(false);
@@ -167,7 +167,7 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
                 bottom: 1,
               }}
             >
-              {breadcrumb.classId ? (
+              {breadcrumb.spaceId ? (
                 <DocumentBreadcrumb
                   onClick={() => {
                     router.push(

@@ -46,7 +46,6 @@ import { VideoRecordNode } from "../RecordExtension/VideoRecordNode";
 import { QuizNode } from "../QuizExtension/QuizNode";
 import FillInBlankNode from "../QuizExtension/FillInBlank/FillInBlankNode";
 import { CommonEmbedNode } from "../CommonEmbedExtension/CommonEmbedNode";
-import QuizDeletableManager from "../../NodeDeleteableManager";
 import FeedbackTextNode from "../FeedbackText/FeedbackTextNode";
 import { PageBlockNode } from "./PageBlockNode";
 

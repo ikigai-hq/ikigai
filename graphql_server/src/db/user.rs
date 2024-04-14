@@ -5,37 +5,24 @@ use oso::PolarClass;
 use uuid::Uuid;
 
 use super::schema::users;
-use crate::util::{check_pwd, hash_pwd};
 
 #[derive(Debug, Insertable)]
 #[table_name = "users"]
 pub struct NewUser {
     pub email: String,
-    pub password: String,
     pub first_name: String,
     pub last_name: String,
     pub avatar_file_id: Option<Uuid>,
 }
 
 impl NewUser {
-    pub fn new(email: String, password: String, first_name: String, last_name: String) -> NewUser {
-        let password = hash_pwd(&password);
+    pub fn new(email: String, first_name: String, last_name: String) -> NewUser {
         NewUser {
             email: email.to_lowercase(),
-            password,
             first_name,
             last_name,
             avatar_file_id: None,
         }
-    }
-
-    pub fn new_basic(
-        email: String,
-        password: String,
-        first_name: String,
-        last_name: String,
-    ) -> NewUser {
-        Self::new(email.to_lowercase(), password, first_name, last_name)
     }
 }
 
@@ -101,8 +88,6 @@ pub struct User {
     pub id: i32,
     #[graphql(skip_output)]
     pub email: String,
-    #[graphql(skip)]
-    pub password: String,
     pub first_name: String,
     pub last_name: String,
     pub updated_at: i64,
@@ -145,23 +130,6 @@ impl User {
             .execute(conn)?;
 
         Ok(())
-    }
-
-    pub fn update_password(
-        conn: &PgConnection,
-        id: i32,
-        new_password: String,
-    ) -> Result<(), Error> {
-        let hashed_pwd = hash_pwd(&new_password);
-        diesel::update(users::table.find(id))
-            .set(users::password.eq(hashed_pwd))
-            .execute(conn)?;
-
-        Ok(())
-    }
-
-    pub fn is_password(&self, password: &str) -> bool {
-        check_pwd(&self.password, password)
     }
 
     pub fn name(&self) -> String {

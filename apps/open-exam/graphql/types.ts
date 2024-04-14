@@ -52,49 +52,6 @@ export interface DuplicateSpaceDocumentVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: AddSpaceDocument
-// ====================================================
-
-export interface AddSpaceDocument_spaceAddDocument_assignment {
-  id: number;
-}
-
-export interface AddSpaceDocument_spaceAddDocument_submission {
-  id: number;
-  submitAt: number | null;
-  isSubmitted: boolean;
-  allowForStudentViewAnswer: boolean;
-}
-
-export interface AddSpaceDocument_spaceAddDocument {
-  id: any;
-  title: string;
-  createdAt: number;
-  parentId: any | null;
-  index: number;
-  documentType: DocumentType;
-  hideRule: HideRule;
-  deletedAt: number | null;
-  assignment: AddSpaceDocument_spaceAddDocument_assignment | null;
-  submission: AddSpaceDocument_spaceAddDocument_submission | null;
-}
-
-export interface AddSpaceDocument {
-  spaceAddDocument: AddSpaceDocument_spaceAddDocument;
-}
-
-export interface AddSpaceDocumentVariables {
-  spaceId: number;
-  documentId: any;
-  isAssignment: boolean;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL mutation operation: CreateSpace
 // ====================================================
 
@@ -247,6 +204,8 @@ export interface AddDocumentStandalone {
 
 export interface AddDocumentStandaloneVariables {
   data: NewDocument;
+  spaceId?: number | null;
+  isAssignment: boolean;
 }
 
 /* tslint:disable */
@@ -701,28 +660,6 @@ export interface UpdateDocumentVersion {
 
 export interface UpdateDocumentVersionVariables {
   data: DocumentVersionInput;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: DuplicateToClass
-// ====================================================
-
-export interface DuplicateToClass_documentDuplicateToClass {
-  id: any;
-}
-
-export interface DuplicateToClass {
-  documentDuplicateToClass: DuplicateToClass_documentDuplicateToClass;
-}
-
-export interface DuplicateToClassVariables {
-  originalDocumentId: any;
-  classId: number;
 }
 
 /* tslint:disable */
@@ -1431,27 +1368,6 @@ export interface RemoveHighlightDoc {
 
 export interface RemoveHighlightDocVariables {
   highlightId: any;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: AddOrgMember
-// ====================================================
-
-export interface AddOrgMember_orgAddOrgMember {
-  id: number;
-}
-
-export interface AddOrgMember {
-  orgAddOrgMember: AddOrgMember_orgAddOrgMember;
-}
-
-export interface AddOrgMemberVariables {
-  data: AddUserData;
 }
 
 /* tslint:disable */
@@ -2501,7 +2417,6 @@ export interface UserMe_userMe_members_organization {
   id: number;
   orgName: string;
   ownerId: number | null;
-  orgUrl: string;
 }
 
 export interface UserMe_userMe_members {
@@ -2511,28 +2426,9 @@ export interface UserMe_userMe_members {
   organization: UserMe_userMe_members_organization;
 }
 
-export interface UserMe_userMe_activeOrganization {
-  id: number;
-  orgName: string;
-  ownerId: number | null;
-  orgUrl: string;
-}
-
 export interface UserMe_userMe_activeUserAuth {
   orgId: number;
   orgRole: OrgRole;
-}
-
-export interface UserMe_userMe_activeOrgPersonalInformation_avatar {
-  uuid: any;
-  publicUrl: string | null;
-}
-
-export interface UserMe_userMe_activeOrgPersonalInformation {
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  avatar: UserMe_userMe_activeOrgPersonalInformation_avatar | null;
 }
 
 export interface UserMe_userMe {
@@ -2545,9 +2441,7 @@ export interface UserMe_userMe {
   avatarFileId: any | null;
   avatar: UserMe_userMe_avatar | null;
   members: UserMe_userMe_members[];
-  activeOrganization: UserMe_userMe_activeOrganization | null;
   activeUserAuth: UserMe_userMe_activeUserAuth | null;
-  activeOrgPersonalInformation: UserMe_userMe_activeOrgPersonalInformation | null;
 }
 
 export interface UserMe {
@@ -2640,14 +2534,6 @@ export enum SubmissionEventType {
 export enum ThreadCommentType {
   FILE = "FILE",
   TEXT = "TEXT",
-}
-
-export interface AddUserData {
-  identity: any;
-  password?: string | null;
-  firstName: string;
-  lastName: string;
-  orgRole: OrgRole;
 }
 
 export interface CategoryInput {

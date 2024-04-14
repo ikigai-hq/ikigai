@@ -12,7 +12,7 @@ import useAuthUserStore from "../../../context/ZustandAuthStore";
 const OrganizationCategoryList = (props: SelectedCategoryProps) => {
   const addTemplates = useDocumentTemplateStore(state => state.addTemplates);
   const addCategories = useDocumentTemplateStore(state => state.addCategories);
-  const orgId = useAuthUserStore(state => state.currentUser?.userMe?.activeOrganization?.id);
+  const orgId = useAuthUserStore(state => state.orgId);
   const categories = useDocumentTemplateStore(
     state =>
       Array.from(state.categories.values())

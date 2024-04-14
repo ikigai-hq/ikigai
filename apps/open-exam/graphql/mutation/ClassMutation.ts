@@ -22,30 +22,6 @@ export const DUPLICATE_SPACE_DOCUMENT = gql`
   }
 `;
 
-export const ADD_SPACE_DOCUMENT = gql`
-  mutation AddSpaceDocument($spaceId: Int!, $documentId: UUID!, $isAssignment: Boolean!) {
-    spaceAddDocument(spaceId: $spaceId, documentId: $documentId, isAssignment: $isAssignment) {
-      id
-      title
-      createdAt
-      parentId
-      index
-      documentType
-      hideRule
-      deletedAt
-      assignment {
-        id
-      }
-      submission {
-        id
-        submitAt
-        isSubmitted
-        allowForStudentViewAnswer
-      }
-    }
-  }
-`;
-
 export const CREATE_SPACE = gql`
   mutation CreateSpace($data: NewSpace!) {
     spaceCreate(data: $data) {

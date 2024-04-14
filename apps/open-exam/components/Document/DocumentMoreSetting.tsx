@@ -25,7 +25,7 @@ import styled, { useTheme } from "styled-components";
 import toast from "react-hot-toast";
 import { quickConfirmModal, useModal } from "hook/UseModal";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import useClassStore from "context/ZustandClassStore";
+import useSpaceStore from "context/ZustandClassStore";
 import { useRouter } from "next/router";
 import { formatDocumentRoute } from "config/Routes";
 import { formatDate, FormatType } from "util/Time";
@@ -78,7 +78,7 @@ const DocumentMoreSetting = ({ onClickOpenHistory }: DocumentMoreSettingProps) =
   };
 
   const { duplicateDocument, deleteDocument, docs } =
-    useClassStore((state) => {
+    useSpaceStore((state) => {
       return {
         duplicateDocument: state.duplicateDocument,
         deleteDocument: state.deleteDocument,

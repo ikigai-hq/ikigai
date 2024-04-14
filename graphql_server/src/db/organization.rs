@@ -86,10 +86,6 @@ impl Organization {
             .get_result(conn)
     }
 
-    pub fn find_first_org(conn: &PgConnection) -> Result<Self, Error> {
-        organizations::table.first(conn)
-    }
-
     pub fn find(
         conn: &PgConnection,
         org_id: impl Into<OrganizationIdentity>,
@@ -100,14 +96,16 @@ impl Organization {
         }
     }
 
+    pub fn find_by_owner(conn: &PgConnection, owner_id: i32) -> Result<Self, Error> {
+        organizations::table
+            .filter(organizations::owner_id.eq(owner_id))
+            .first(conn)
+    }
+
     pub fn find_all_by_ids(conn: &PgConnection, ids: Vec<i32>) -> Result<Vec<Self>, Error> {
         organizations::table
             .filter(organizations::id.eq_any(ids))
             .get_results(conn)
-    }
-
-    pub fn get_org_url_address(&self) -> String {
-        std::env::var("APP_URL").unwrap_or("http://localhost:3000".to_string())
     }
 }
 
@@ -263,7 +261,6 @@ impl OrganizationMember {
 pub struct PublicOrganizationInformation {
     pub id: i32,
     pub org_name: String,
-    pub org_url: String,
     pub owner_id: Option<i32>,
 }
 
@@ -271,7 +268,6 @@ impl From<Organization> for PublicOrganizationInformation {
     fn from(org: Organization) -> Self {
         Self {
             id: org.id,
-            org_url: org.get_org_url_address(),
             org_name: org.org_name,
             owner_id: org.owner_id,
         }

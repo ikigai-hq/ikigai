@@ -17,17 +17,34 @@ pub struct DocumentMutation;
 
 #[Object]
 impl DocumentMutation {
-    async fn document_create(&self, ctx: &Context<'_>, mut data: Document) -> Result<Document> {
+    async fn document_create(
+        &self,
+        ctx: &Context<'_>,
+        mut data: Document,
+        space_id: Option<i32>,
+        is_assignment: bool,
+    ) -> Result<Document> {
         let user_auth = get_user_auth_from_ctx(ctx).await?;
         data.id = Uuid::new_v4();
         data.creator_id = user_auth.id;
         data.org_id = user_auth.org_id;
         data.updated_by = Some(user_auth.id);
+        data.space_id = space_id;
         data.updated_at = get_now_as_secs();
         data.created_at = get_now_as_secs();
 
         let conn = get_conn_from_ctx(ctx).await?;
-        let doc = Document::upsert(&conn, data).format_err()?;
+        let doc = conn
+            .transaction::<_, OpenExamError, _>(|| {
+                let doc = Document::upsert(&conn, data)?;
+                if is_assignment {
+                    let new_assignment = NewAssignment::init(doc.id);
+                    Assignment::insert(&conn, new_assignment)?;
+                }
+
+                Ok(doc)
+            })
+            .format_err()?;
         Ok(doc)
     }
 

@@ -2,6 +2,7 @@ use diesel::result::Error;
 use diesel::sql_types::Integer;
 use diesel::{AsChangeset, Connection, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use oso::PolarClass;
+use serde_json::json;
 use uuid::Uuid;
 
 use super::schema::{document_highlights, documents};
@@ -137,6 +138,37 @@ impl Document {
             .do_update()
             .set(documents::updated_at.eq(get_now_as_secs()))
             .get_result(conn)
+    }
+
+    pub fn get_or_create_starter_doc(
+        conn: &PgConnection,
+        user_id: i32,
+        space_id: i32,
+        org_id: i32,
+        name: String,
+    ) -> Result<Self, Error> {
+        if let Some(starter_doc) = Document::find_starter_of_space(conn, space_id)? {
+            Ok(starter_doc)
+        } else {
+            let starter_doc = Self::new(
+                user_id,
+                "".into(),
+                name,
+                org_id,
+                None,
+                0,
+                None,
+                HideRule::Public,
+                json!({
+                    "style": "Default",
+                    "size": "Default",
+                    "width": "Standard",
+                }),
+                Some(space_id),
+            );
+
+            Document::upsert(conn, starter_doc)
+        }
     }
 
     pub fn update(

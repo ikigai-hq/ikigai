@@ -12,7 +12,7 @@ import DocumentHeader from "./DocumentHeader";
 import { useRouter } from "next/router";
 import { formatDocumentRoute } from "config/Routes";
 import LeftPanel from "./LeftPanel";
-import useClassStore from "context/ZustandClassStore";
+import useSpaceStore from "context/ZustandClassStore";
 import { RightPanel } from "./RightPanel";
 import usePageBlockStore from "context/ZustandPageBlockStore";
 import { ReviewPageBlocks } from "components/common/RichMarkdownEditor/extensions/PageBlockExtension/ReviewPageBlocks";
@@ -25,7 +25,7 @@ const DocumentDetail = () => {
   const authUser = useAuthUserStore((state) => state.currentUser);
   const isStudent =
     authUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
-  const docs = useClassStore((state) =>
+  const docs = useSpaceStore((state) =>
     (state.documents || [])
       .filter((doc) => !doc.deletedAt)
       .filter(

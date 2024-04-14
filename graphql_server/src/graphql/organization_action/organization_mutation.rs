@@ -5,11 +5,9 @@ use uuid::Uuid;
 
 use crate::db::*;
 use crate::error::{OpenExamError, OpenExamErrorExt};
-use crate::graphql::user_action::AddUserData;
-use crate::helper::user_helper::insert_org_member;
 use crate::helper::{
     document_quick_authorize, get_conn_from_ctx, get_user_auth_from_ctx, get_user_id_from_ctx,
-    organization_authorize, user_authorize, DocumentCloneConfig, UserAction,
+    organization_authorize, DocumentCloneConfig,
 };
 
 #[derive(Default)]
@@ -17,73 +15,6 @@ pub struct OrganizationMutation;
 
 #[Object]
 impl OrganizationMutation {
-    async fn org_add_org_member(&self, ctx: &Context<'_>, data: AddUserData) -> Result<PublicUser> {
-        let user_auth = get_user_auth_from_ctx(ctx).await?;
-        organization_authorize(
-            ctx,
-            user_auth.id,
-            user_auth.org_id,
-            OrganizationActionPermission::AddOrgMember,
-        )
-        .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let new_user = insert_org_member(&conn, data, user_auth.org_id)?;
-        Ok(new_user.into())
-    }
-
-    async fn org_update_org_member(
-        &self,
-        ctx: &Context<'_>,
-        org_member: OrganizationMember,
-    ) -> Result<PublicUser> {
-        let user_auth = get_user_auth_from_ctx(ctx).await?;
-        let other_user_id = org_member.user_id;
-        user_authorize(ctx, user_auth.id, other_user_id, UserAction::EditInfoMember).await?;
-
-        if user_auth.org_id != org_member.org_id {
-            return Err(OpenExamError::new_bad_request(
-                "Cannot update user of different organization",
-            ))
-            .format_err();
-        }
-        let conn = get_conn_from_ctx(ctx).await?;
-        OrganizationMember::upsert(&conn, org_member).format_err()?;
-        let org_user = User::find_by_id(&conn, other_user_id)?;
-
-        Ok(org_user.into())
-    }
-
-    async fn org_add_org_members(
-        &self,
-        ctx: &Context<'_>,
-        data: Vec<AddUserData>,
-    ) -> Result<Vec<PublicUser>> {
-        let user_auth = get_user_auth_from_ctx(ctx).await?;
-        organization_authorize(
-            ctx,
-            user_auth.id,
-            user_auth.org_id,
-            OrganizationActionPermission::AddOrgMember,
-        )
-        .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let mut result: Vec<PublicUser> = vec![];
-        for data in data {
-            let email = data.identity.email().cloned();
-            match insert_org_member(&conn, data, user_auth.org_id) {
-                Ok(new_user) => result.push(new_user.into()),
-                Err(e) => warn!(
-                    "Cannot import user({:?})  into org {}. Reason: {:?}",
-                    email, user_auth.org_id, e
-                ),
-            }
-        }
-
-        Ok(result)
-    }
-
     async fn org_update(
         &self,
         ctx: &Context<'_>,

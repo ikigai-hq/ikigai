@@ -9,7 +9,7 @@ import {TextButton} from "components/common/Button";
 import {DocumentType} from "graphql/types";
 import {formatDocumentRoute} from "config/Routes";
 import {Text, TextWeight} from "components/common/Text";
-import useClassStore from "context/ZustandClassStore";
+import useSpaceStore from "context/ZustandClassStore";
 import useDocumentStore from "context/ZustandDocumentStore";
 import {DEFAULT_DOCUMENT_TITLE} from "components/Document/common";
 
@@ -31,12 +31,11 @@ const CreateContentButton = (
   const [loading, setLoading] = useState(false);
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
   const createDocument = useDocumentStore((state) => state.createDocument);
-  const { documents, addClassDocument, refetchDocuments, classId } = useClassStore(
+  const { documents, refetchDocuments, spaceId } = useSpaceStore(
     (state) => {
       return {
-        classId: state.classId,
+        spaceId: state.spaceId,
         documents: state.documents,
-        addClassDocument: state.addClassDocument,
         refetchDocuments: state.fetchAndSetDocuments
       };
     }
@@ -44,37 +43,26 @@ const CreateContentButton = (
   
   const color = theme.colors.gray[5];
   
-  const setLessonType = async (documentId: string, docType: DocumentType) => {
-    switch (docType) {
-      case DocumentType.NORMAL:
-        await addClassDocument(documentId, false);
-        break;
-      case DocumentType.ASSIGNMENT:
-        await addClassDocument(documentId, true);
-        break;
-    }
-  };
-  
   const onCreate = async (docType: DocumentType) => {
     const indexes = documents
       .filter((doc) => !doc.deletedAt)
       .filter((doc) => doc.parentId === parentId)
       .map((doc) => doc.index);
     const index = indexes.length ? Math.max(...indexes) + 1 : 1;
-    const documentId = await createDocument(
+    return await createDocument(
       DEFAULT_DOCUMENT_TITLE,
       "",
       parentId,
-      index
+      index,
+      spaceId,
+      docType === DocumentType.ASSIGNMENT,
     );
-    await setLessonType(documentId, docType);
-    return documentId;
   };
   
   const clickCreateDocument = async (docType: DocumentType) => {
     setLoading(true);
     const res = await onCreate(docType);
-    refetchDocuments(classId);
+    refetchDocuments(spaceId);
     setIsOpenDropdown(false);
     if (res) {
       router.push(formatDocumentRoute(res));

@@ -5,10 +5,8 @@ use lettre::message::{Mailbox, SinglePart};
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
 
-use crate::db::Organization;
 use crate::error::OpenExamError;
-use crate::mailer::template::{InvitationMailContext, Template};
-use crate::util::url_util::org_url;
+use crate::mailer::template::{MagicLinkContext, Template};
 
 #[derive(Debug, Clone)]
 pub struct SmtpServerInfo {
@@ -18,12 +16,6 @@ pub struct SmtpServerInfo {
     pub smtp_username: String,
     pub smtp_password: String,
     pub smtp_port: i32,
-}
-
-impl From<Organization> for SmtpServerInfo {
-    fn from(org: Organization) -> Self {
-        Self::init(&org.org_name)
-    }
 }
 
 impl SmtpServerInfo {
@@ -45,12 +37,12 @@ impl SmtpServerInfo {
         }
     }
 
-    pub fn init(sender_name: &str) -> Self {
+    pub fn init() -> Self {
         let smtp_username = std::env::var("SMTP_USERNAME").unwrap();
         let smtp_password = std::env::var("SMTP_PASSWORD").unwrap();
         let smtp_endpoint = std::env::var("SMTP_ENDPOINT").unwrap();
         let sender = std::env::var("SMTP_SENDER").unwrap();
-        let sender_name = format!("{sender_name} (via OpenExam)");
+        let sender_name = "Open Exam".to_string();
         let smtp_port = 587;
         Self::new(
             sender,
@@ -88,33 +80,11 @@ impl Mailer {
         Ok(())
     }
 
-    pub fn send_member_invitation(
-        org: Organization,
-        to_email: &str,
-        name: &str,
-        password: &str,
-    ) -> Result<(), OpenExamError> {
-        let to = format!("{} <{}>", name, to_email).parse()?;
-        let org_name = &org.org_name;
-        let subject = format!("You've been added into {org_name} organization");
-        let body_html = Template::render_invitation(InvitationMailContext {
-            name: name.into(),
-            org_name: org_name.into(),
-            org_url: org_url(&org),
-            email: to_email.into(),
-            password: password.into(),
-        })?;
-        Self::send_email(SmtpServerInfo::from(org), to, &subject, &body_html)
-    }
-
-    pub fn send_html_mail(
-        org: Organization,
-        to_email: &str,
-        subject: &str,
-        body_html: &str,
-    ) -> Result<(), OpenExamError> {
-        let to = format!("<{}>", to_email).parse()?;
-        Self::send_email(SmtpServerInfo::from(org), to, subject, body_html)
+    pub fn send_magic_link_email(to_email: &str, magic_link: String) -> Result<(), OpenExamError> {
+        let to = format!("<{to_email}>").parse()?;
+        let subject = "Magic link to access your space in Open Exam".to_string();
+        let body_html = Template::render_magic_link(MagicLinkContext { magic_link })?;
+        Self::send_email(SmtpServerInfo::init(), to, &subject, &body_html)
     }
 }
 

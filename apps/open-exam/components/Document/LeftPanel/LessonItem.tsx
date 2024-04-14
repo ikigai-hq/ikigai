@@ -15,7 +15,7 @@ import { Permission } from "util/permission";
 import { LearningItemType } from "components/common/LearningModuleDnd/types";
 import { TextButtonWithHover } from "components/common/Button";
 import { formatDocumentRoute } from "config/Routes";
-import useClassStore from "context/ZustandClassStore";
+import useSpaceStore from "context/ZustandClassStore";
 import {
   ActionMenuDropdown,
   IMenuItem,
@@ -31,7 +31,6 @@ import usePageBlockStore from "context/ZustandPageBlockStore";
 import useQuizStore from "context/ZustandQuizStore";
 import useHighlightStore from "context/ZustandHighlightStore";
 import useEditorActionStore from "context/ZustandEditorAction";
-import CopyDocumentToClass from "./CopyDocumentToClass";
 
 export type DocumentItemProps = {
   item: LearningItemType;
@@ -59,7 +58,7 @@ const LessonItem = ({
   >();
   const activeDocument = useDocumentStore((state) => state.masterDocument);
   const changeRightPanel = useDocumentStore((state) => state.changeRightPanel);
-  const { duplicateDocument, deleteDocument, docs } = useClassStore((state) => {
+  const { duplicateDocument, deleteDocument, docs } = useSpaceStore((state) => {
     return {
       duplicateDocument: state.duplicateDocument,
       deleteDocument: state.deleteDocument,
@@ -123,13 +122,6 @@ const LessonItem = ({
       callback: (item: LearningItemType) => {
         onDuplicate(item);
       },
-    },
-    {
-      title: t`Copy to class`,
-      callback: (item: LearningItemType) => {
-        setSelectedMoveDocumentId(item.id);
-      },
-      hide: !allow(Permission.ManageClassContent),
     },
     {
       title: t`Delete`,
@@ -212,13 +204,6 @@ const LessonItem = ({
             </ButtonGroup>
           )}
         </div>
-        {!!selectedMoveDocumentId && (
-          <CopyDocumentToClass
-            selectedDocumentId={selectedMoveDocumentId}
-            visible={!!selectedMoveDocumentId}
-            onClose={() => setSelectedMoveDocumentId(undefined)}
-          />
-        )}
       </LessonItemContainer>
     </Link>
   );

@@ -14,8 +14,8 @@ export const SOFT_DELETE_DOCUMENTS = gql`
 `;
 
 export const ADD_DOCUMENT_STANDALONE = gql`
-  mutation AddDocumentStandalone($data: NewDocument!) {
-    documentCreate(data: $data) {
+  mutation AddDocumentStandalone($data: NewDocument!, $spaceId: Int, $isAssignment: Boolean!) {
+    documentCreate(data: $data, spaceId: $spaceId, isAssignment: $isAssignment) {
       id
     }
   }
@@ -216,17 +216,6 @@ export const RESTORE_DOCUMENT_VERSION = gql`
 export const UPDATE_DOCUMENT_VERSION = gql`
   mutation UpdateDocumentVersion($data: DocumentVersionInput!) {
     documentUpdateVersion(data: $data) {
-      id
-    }
-  }
-`;
-
-export const DUPLICATE_TO_CLASS = gql`
-  mutation DuplicateToClass($originalDocumentId: UUID!, $classId: Int!) {
-    documentDuplicateToClass(
-      originalDocumentId: $originalDocumentId
-      classId: $classId
-    ) {
       id
     }
   }

@@ -17,9 +17,9 @@ import toast from "react-hot-toast";
 import { OperationVariables } from "@apollo/client/core/types";
 import { QueryOptions } from "@apollo/client/core/watchQueryOptions";
 
-import useOrganizationStore from "context/ZustandOrganizationStore";
 import Config from "../config/Config";
 import TokenStorage from "../storage/TokenStorage";
+import useAuthUserStore from "../context/ZustandAuthStore";
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
@@ -36,7 +36,7 @@ const authLink = setContext((_, { headers }) => {
     finalHeaders.headers["authorization"] = token;
   }
   
-  const activeOrgId = useOrganizationStore.getState().organization?.id;
+  const activeOrgId = useAuthUserStore.getState().orgId;
   if (activeOrgId) {
     finalHeaders.headers["active-org-id"] = activeOrgId;
   }

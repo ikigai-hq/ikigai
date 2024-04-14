@@ -22,14 +22,11 @@ use async_graphql::futures_util::FutureExt;
 use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
 use async_graphql::{Data, Schema};
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse, GraphQLSubscription};
-use diesel::Connection;
 use dotenv::dotenv;
 
-use crate::authentication_token::JwtToken;
+use crate::authentication_token::{ActiveOrgId, JwtToken};
 use crate::background_job::register_jobs;
-use crate::connection_pool::{get_conn_from_actor, show_log_connection};
-use crate::db::{NewOrganization, NewUser, OrgRole, Organization, OrganizationMember, User};
-use crate::error::OpenExamError;
+use crate::connection_pool::show_log_connection;
 use crate::graphql::context_caching_data::RequestContextCachingData;
 use crate::graphql::{build_schema, OpenExamSchema};
 use crate::util::{is_local, log_util};
@@ -54,6 +51,13 @@ fn parse_authorization_token(req: &HttpRequest) -> Option<JwtToken> {
         .and_then(|val| val.to_str().map(|s| JwtToken(s.to_string())).ok())
 }
 
+fn parse_active_org_id(req: &HttpRequest) -> Option<ActiveOrgId> {
+    req.headers()
+        .get("active-org-id")
+        .and_then(|val| val.to_str().map(|s| s.parse::<i32>()).ok())
+        .and_then(|active_org_id| active_org_id.map(ActiveOrgId).ok())
+}
+
 async fn index(
     schema: web::Data<OpenExamSchema>,
     req: HttpRequest,
@@ -66,6 +70,10 @@ async fn index(
             request = request.data(claim);
         }
     };
+
+    if let Some(active_org_id) = parse_active_org_id(&req) {
+        request = request.data(active_org_id);
+    }
 
     request = request.data(RequestContextCachingData::new());
 
@@ -119,42 +127,10 @@ async fn index_playground() -> Result<HttpResponse> {
         )))
 }
 
-async fn seed_default_data() -> Result<(), OpenExamError> {
-    let conn = get_conn_from_actor().await?;
-    let has_org = Organization::find_first_org(&conn).is_ok();
-    if !has_org {
-        conn.transaction::<_, OpenExamError, _>(|| {
-            let default_user = NewUser::new_basic(
-                "default@openexam.app".into(),
-                "admin@123".into(),
-                "Default".into(),
-                "Account".into(),
-            );
-            let user = User::insert(&conn, &default_user)?;
-            let default_org = NewOrganization {
-                owner_id: Some(user.id),
-                org_name: "Open Exam".into(),
-            };
-            let org = Organization::insert(&conn, default_org)?;
-            let org_member = OrganizationMember::new(org.id, user.id, OrgRole::Teacher);
-            OrganizationMember::upsert(&conn, org_member)?;
-
-            Ok(())
-        })?;
-    }
-
-    Ok(())
-}
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
     log_util::setup_logger().unwrap();
-    if let Err(reason) = seed_default_data().await {
-        error!("Cannot init default organization {:?}", reason);
-        return Ok(());
-    }
-
     register_jobs();
 
     let addr = format!("127.0.0.1:{}", std::env::var("PORT").unwrap());

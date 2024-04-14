@@ -19,7 +19,7 @@ import { useQuery } from "@apollo/client";
 import { GET_SUBMISSIONS_OF_ASSIGNMENT } from "graphql/query/AssignmentQuery";
 import { AssignmentList } from "../AssignmentStudentList";
 import { useGetSpaceMembers } from "context/ZustandClassMembeStore";
-import useClassStore from "context/ZustandClassStore";
+import useSpaceStore from "context/ZustandClassStore";
 
 export type DocumentDetailProps = {
   document: IDocument;
@@ -32,8 +32,8 @@ const ReviewSubmissionDocumentHeader = ({ document }: DocumentDetailProps) => {
   const submission = document?.submission;
   const user = submission?.user;
   const assignmentDocumentId = submission?.assignment?.documentId;
-  const classId = useClassStore(state => state.classId);
-  const { members: students } = useGetSpaceMembers(classId, OrgRole.STUDENT);
+  const spaceId = useSpaceStore(state => state.spaceId);
+  const { members: students } = useGetSpaceMembers(spaceId, OrgRole.STUDENT);
 
   const { data } = useQuery<GetSubmissionsOfAssignment>(
     GET_SUBMISSIONS_OF_ASSIGNMENT,

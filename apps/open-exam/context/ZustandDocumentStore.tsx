@@ -23,7 +23,6 @@ import {
 } from "graphql/mutation";
 import {
   GET_DOCUMENT_DETAIL,
-  GET_DOCUMENT_DETAIL_BY_UUID,
 } from "graphql/query/DocumentQuery";
 import { UPDATE_DOCUMENT } from "graphql/mutation/ClassMutation";
 import {
@@ -156,7 +155,6 @@ export type IDocumentStore = {
   masterDocument: IDocument | undefined;
   masterDocumentType: DocumentType | undefined;
   feedbacks: BlockData[];
-  classId: number | undefined;
   permissions: IPermission;
   setMasterDocument: (activeDocument: IDocument | undefined) => void;
   fetchAndSetDocument: (documentId: string) => Promise<IDocument>;
@@ -185,6 +183,8 @@ export type IDocumentStore = {
     body: string,
     parentId?: string,
     index?: number,
+    space_id?: number,
+    isAssigment?: boolean,
   ) => Promise<string>;
 
   currentLeftPanelWidth: number;
@@ -222,7 +222,6 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
   },
   masterDocument: undefined,
   masterDocumentType: undefined,
-  classId: undefined,
   permissions: {
     camera: "",
     microphone: "",
@@ -256,7 +255,6 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
       masterDocumentId: masterDocument?.id,
       masterDocument: masterDocument,
       masterDocumentType: getDocumentType(masterDocument),
-      classId: getSpaceIdFromDocument(masterDocument),
       feedbacks: parseFeedbackBlock(masterDocument?.body || ""),
       documentConfig: getDocumentConfigDefault(masterDocument),
     });
@@ -448,7 +446,14 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
       get().setHeaderConfig({ rightPanelTab: panelType });
     }
   },
-  createDocument: async (title, body, parentId, index = 0) => {
+  createDocument: async (
+    title,
+    body,
+    parentId,
+    index = 0,
+    spaceId,
+    isAssignment = false,
+  ) => {
     const data: NewDocument = {
       title,
       body,
@@ -462,7 +467,11 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
     };
     const res = await mutate<AddDocumentStandalone>({
       mutation: ADD_DOCUMENT_STANDALONE,
-      variables: { data },
+      variables: {
+        data,
+        spaceId,
+        isAssignment,
+      },
     });
     if (res?.documentCreate) {
       return res?.documentCreate?.id;

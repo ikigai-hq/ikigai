@@ -14,7 +14,6 @@ import { handleError } from "graphql/ApolloClient";
 import { GetRubrics, GetRubrics_orgGetRubrics as IRubric, RubricInput, RubricType, UpsertRubric } from "graphql/types";
 import { formatDate, FormatType, getNowAsSec } from "util/Time";
 import { REMOVE_RUBRIC, UPSERT_RUBRIC } from "graphql/mutation";
-import useOrganizationStore from "context/ZustandOrganizationStore";
 import { useState } from "react";
 import EditRubric from "./EditRubric";
 import useUserPermission from "hook/UseUserPermission";
@@ -38,7 +37,7 @@ const RubricManagement = (
 ) => {
   const allow = useUserPermission();
   const theme = useTheme();
-  const orgId = useAuthUserStore(state => state.currentUser?.userMe?.activeOrganization?.id);
+  const orgId = useAuthUserStore(state => state.orgId);
   const { data: rubricsData, refetch } = useQuery<GetRubrics>(GET_RUBRICS, {
     onError: handleError,
   });

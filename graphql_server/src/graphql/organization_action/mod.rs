@@ -35,10 +35,6 @@ impl Organization {
         let members = OrganizationMember::find_all_by_org(&conn, self.id).format_err()?;
         Ok(members)
     }
-
-    async fn org_url(&self) -> String {
-        self.get_org_url_address()
-    }
 }
 
 #[ComplexObject]

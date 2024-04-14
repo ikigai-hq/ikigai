@@ -1,15 +1,8 @@
 use crate::db::*;
 use crate::error::OpenExamErrorExt;
-use crate::graphql::paging::PagingInput;
 use crate::helper::{get_conn_from_ctx, get_user_from_ctx, get_user_id_from_ctx};
 use crate::util::get_now_as_secs;
 use async_graphql::*;
-
-#[derive(InputObject)]
-pub struct AnnouncementFilter {
-    pub from_id: Option<i32>,
-    pub paging: PagingInput,
-}
 
 #[derive(Default)]
 pub struct UserQuery;

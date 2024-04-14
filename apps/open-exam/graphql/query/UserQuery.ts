@@ -21,27 +21,11 @@ export const USER_ME = gql`
           id
           orgName
           ownerId
-          orgUrl
         }
-      }
-      activeOrganization {
-        id
-        orgName
-        ownerId
-        orgUrl
       }
       activeUserAuth {
         orgId
         orgRole
-      }
-      activeOrgPersonalInformation {
-        firstName
-        lastName
-        fullName
-        avatar {
-          uuid
-          publicUrl
-        }
       }
     }
   }

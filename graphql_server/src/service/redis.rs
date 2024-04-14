@@ -1,7 +1,7 @@
 use redis::{Client, Commands, RedisResult};
 
-fn format_reset_pwd_key(user_id: i32) -> String {
-    format!("{user_id}:reset_pwd")
+fn format_magic_token(user_id: i32) -> String {
+    format!("users:magic_token:{user_id}")
 }
 
 #[derive(Debug, Clone)]
@@ -39,20 +39,19 @@ impl Redis {
         Ok(())
     }
 
-    pub fn set_reset_pwd_otp(&self, user_id: i32, otp: &str) -> RedisResult<()> {
-        let key = format_reset_pwd_key(user_id);
-        // Valid token in 5 mins
+    pub fn set_magic_token(&self, user_id: i32, otp: &str) -> RedisResult<()> {
+        let key = format_magic_token(user_id);
         self.set_value(&key, otp, Some(300))?;
         Ok(())
     }
 
-    pub fn get_reset_pwd_otp(&self, user_id: i32) -> RedisResult<String> {
-        let key = format_reset_pwd_key(user_id);
+    pub fn get_magic_token(&self, user_id: i32) -> RedisResult<String> {
+        let key = format_magic_token(user_id);
         self.get_value(&key)
     }
 
-    pub fn del_reset_pwd_otp(&self, user_id: i32) -> RedisResult<()> {
-        let key = format_reset_pwd_key(user_id);
+    pub fn del_magic_token(&self, user_id: i32) -> RedisResult<()> {
+        let key = format_magic_token(user_id);
         self.del_value(&key)
     }
 }

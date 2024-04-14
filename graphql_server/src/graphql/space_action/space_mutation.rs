@@ -80,30 +80,6 @@ impl SpaceMutation {
         Ok(true)
     }
 
-    async fn space_add_document(
-        &self,
-        ctx: &Context<'_>,
-        space_id: i32,
-        document_id: Uuid,
-        is_assignment: bool,
-    ) -> Result<Document> {
-        space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceContent).await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let space_doc = conn
-            .transaction::<_, OpenExamError, _>(|| {
-                if is_assignment {
-                    let new_assignment = NewAssignment::init(document_id);
-                    Assignment::insert(&conn, new_assignment)?;
-                }
-                let space_doc = Document::update_space_id(&conn, document_id, space_id)?;
-                Ok(space_doc)
-            })
-            .format_err()?;
-
-        Ok(space_doc)
-    }
-
     async fn space_duplicate_document(
         &self,
         ctx: &Context<'_>,

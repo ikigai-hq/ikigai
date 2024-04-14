@@ -3,7 +3,7 @@ use diesel::PgConnection;
 use oso::Oso;
 use uuid::Uuid;
 
-use crate::authentication_token::Claims;
+use crate::authentication_token::{ActiveOrgId, Claims};
 use crate::authorization::{
     DocumentActionPermission, DocumentAuth, OrganizationActionPermission, OrganizationAuth,
     SpaceActionPermission, SpaceAuth, UserAuth,
@@ -18,10 +18,22 @@ pub async fn get_conn_from_ctx(_ctx: &Context<'_>) -> Result<Connection> {
     Ok(conn)
 }
 
-// Assume that application has only one organization
 pub async fn get_active_org_id_from_ctx(ctx: &Context<'_>) -> Result<OrganizationIdentity> {
+    if let Ok(active_org_id) = ctx.data::<ActiveOrgId>() {
+        return Ok(active_org_id.0.into());
+    }
+
+    let user_id = get_user_id_from_ctx(ctx).await?;
     let conn = get_conn_from_ctx(ctx).await?;
-    Ok(Organization::find_first_org(&conn)?.id.into())
+    let org = OrganizationMember::find_all_by_user(&conn, user_id).format_err()?;
+    if let Some(first_org) = org.first() {
+        return Ok(first_org.org_id.into());
+    }
+
+    Err(OpenExamError::new_unauthorized(
+        "Cannot found active org id",
+    ))
+    .format_err()
 }
 
 pub async fn get_user_id_from_ctx(ctx: &Context<'_>) -> Result<i32> {
@@ -181,14 +193,13 @@ pub async fn organization_is_allowed(
     let current_user_id = get_user_id_from_ctx(ctx).await?;
     let organization = get_org_from_ctx(ctx, org_id).await?;
     let conn = get_conn_from_ctx(ctx).await?;
-    let org_member = if current_user_id == user_id {
+    let user_auth = if current_user_id == user_id {
         // Try to fetch org member in caching instead
         get_user_auth_from_ctx(ctx).await?
     } else {
         let org_member = OrganizationMember::find(&conn, org_id, user_id).format_err()?;
         UserAuth::new(&conn, org_member).format_err()?
     };
-    let user_auth = UserAuth::from(org_member);
     let organization_auth = OrganizationAuth::from(organization);
     let is_allowed = oso.is_allowed(user_auth, action.to_string(), organization_auth)?;
 
@@ -239,8 +250,7 @@ pub async fn document_is_allowed(
     let caching_data = ctx.data::<RequestContextCachingData>()?;
 
     let user = if let Some(user_id) = user_id {
-        let org_member = get_user_auth_by_user_id_from_ctx(ctx, user_id).await?;
-        UserAuth::from(org_member)
+        get_user_auth_by_user_id_from_ctx(ctx, user_id).await?
     } else {
         // Unauthorized user
         UserAuth::init_dummy()
@@ -257,59 +267,6 @@ pub async fn document_is_allowed(
         doc
     };
     let is_allowed = oso.is_allowed(user, action.to_string(), doc)?;
-
-    Ok(is_allowed)
-}
-
-pub enum UserAction {
-    ViewMember,
-    EditInfoMember,
-}
-
-impl ToString for UserAction {
-    fn to_string(&self) -> String {
-        match self {
-            Self::ViewMember => "view_member",
-            Self::EditInfoMember => "edit_info_member",
-        }
-        .into()
-    }
-}
-
-pub async fn user_authorize(
-    ctx: &Context<'_>,
-    user_id: i32,
-    other_user_id: i32,
-    action: UserAction,
-) -> Result<()> {
-    let is_allowed = user_is_allowed(ctx, user_id, other_user_id, action).await?;
-    if !is_allowed {
-        return Err(OpenExamError::new_unauthorized(
-            "You dont' have permission to do this action",
-        ))
-        .format_err()?;
-    }
-
-    Ok(())
-}
-
-pub async fn user_is_allowed(
-    ctx: &Context<'_>,
-    user_id: i32,
-    other_user_id: i32,
-    action: UserAction,
-) -> Result<bool> {
-    let oso = ctx.data::<Oso>()?;
-    let user: UserAuth = get_user_auth_by_user_id_from_ctx(ctx, user_id)
-        .await?
-        .into();
-    let other_user: UserAuth = get_user_auth_by_user_id_from_ctx(ctx, other_user_id)
-        .await?
-        .into();
-
-    println!("Hello {user:?} {other_user:?}");
-
-    let is_allowed = oso.is_allowed(user, action.to_string(), other_user)?;
 
     Ok(is_allowed)
 }

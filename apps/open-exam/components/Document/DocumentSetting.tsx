@@ -6,7 +6,7 @@ import useDocumentPermission from "hook/UseDocumentPermission";
 import { DocumentPermission, DocumentType, getDocumentType, Permission } from "util/permission";
 import { useRouter } from "next/router";
 import useDocumentStore from "context/ZustandDocumentStore";
-import useClassStore from "context/ZustandClassStore";
+import useSpaceStore from "context/ZustandClassStore";
 import styled from "styled-components";
 import { BreakPoints } from "styles/mediaQuery";
 import { GetDocumentDetail_documentGet as IDocument, OrgRole } from "graphql/types";
@@ -44,7 +44,7 @@ const DocumentSetting = ({
   const router = useRouter();
   const documentAllow = useDocumentPermission();
   const allow = useUserPermission();
-  const updateDocumentLocal = useClassStore((state) => state.updateDocumentTitleLocal);
+  const updateDocumentLocal = useSpaceStore((state) => state.updateDocumentTitleLocal);
   const update = useDocumentStore(state => state.update);
   const authUser = useAuthUserStore((state) => state.currentUser);
   const isStudent = authUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;

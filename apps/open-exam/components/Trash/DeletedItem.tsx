@@ -12,7 +12,7 @@ import { ConfirmPopup } from "util/ConfirmPopup";
 
 export type DeletedItemProps = {
   documentId?: string;
-  classId?: number;
+  spaceId?: number;
   deletedAt: number;
   title: string;
   imageSrc?: string;
@@ -22,18 +22,18 @@ export type DeletedItemProps = {
 
 const DeletedItem = (
   {
-    classId, documentId, title, deletedAt, onDelete, onRestore, imageSrc,
+    spaceId, documentId, title, deletedAt, onDelete, onRestore, imageSrc,
   }: DeletedItemProps
 ) => {
   const { modal } = useModal();
   const theme = useTheme();
-  const itemId = documentId || classId;
+  const itemId = documentId || spaceId;
   const onClickRestore = () => {
     // @ts-ignore
     modal.confirm(ConfirmPopup({
       title: t`Are you sure to restore ${title}?`,
       onOk: () => {
-        if (onRestore) onRestore(documentId || classId);
+        if (onRestore) onRestore(documentId || spaceId);
       },
       content: "",
       danger: false,
@@ -47,7 +47,7 @@ const DeletedItem = (
       title: t`Are you sure to delete ${title} permanently?`,
       content: t`You cannot recover data if you confirm to delete.`,
       onOk: () => {
-        if (onDelete) onDelete(documentId || classId);
+        if (onDelete) onDelete(documentId || spaceId);
       },
       danger: true,
       onCancel: () => {},

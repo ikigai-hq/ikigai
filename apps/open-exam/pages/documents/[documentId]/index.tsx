@@ -4,7 +4,7 @@ import DocumentDetail from "components/Document/DocumentDetail";
 import userMediaPermission from "../../../hook/UserMediaPermission";
 import useDocumentStore from "context/ZustandDocumentStore";
 import { NextPageWithLayout } from "pages/_app";
-import useClassStore from "context/ZustandClassStore";
+import useSpaceStore from "context/ZustandClassStore";
 import Loading from "components/Loading";
 import { useRouter } from "next/router";
 import ServerDocumentFetchError from "components/Document/ServerDocumentFetchError";
@@ -19,7 +19,7 @@ const DocumentPage: NextPageWithLayout = () => {
   const setPermissions = useDocumentStore((state) => state.setPermissions);
   const masterDocument = useDocumentStore((state) => state.masterDocument);
   const fetchError = useDocumentStore((state) => state.fetchError);
-  const classId = useClassStore((state) => state.classId);
+  const spaceId = useSpaceStore((state) => state.spaceId);
   const microphone = userMediaPermission("microphone" as PermissionName);
   const camera = userMediaPermission("camera" as PermissionName);
   const { error } = useLoadDocument(documentId as string);
@@ -36,7 +36,7 @@ const DocumentPage: NextPageWithLayout = () => {
       />
     );
 
-  if (!masterDocument || !classId) return <Loading />;
+  if (!masterDocument || !spaceId) return <Loading />;
 
   return <DocumentDetail />;
 };

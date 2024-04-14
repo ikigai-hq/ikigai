@@ -113,7 +113,7 @@ export const ContentItem = styled.div<{ $active?: boolean; $level: number }>`
   }
 `;
 
-export const ClassInfo: React.FC<{
+export const SpaceInfo: React.FC<{
   title: string;
   setActive?: (value: boolean) => void;
   imgUrl?: string;

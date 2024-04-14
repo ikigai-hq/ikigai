@@ -1,12 +1,12 @@
-import { Segmented, Tooltip, Typography } from "antd";
+import { Segmented, Typography } from "antd";
 import styled, { useTheme } from "styled-components";
 import React from "react";
 
 import CommunityCategoryList from "./CommunityCategoryList";
 import OrganizationCategoryList from "./OrganizationCategoryList";
 import { GetCommunityTemplateCategory_getCommunityDocumentTemplateCategories } from "graphql/types";
-import useOrganizationStore from "context/ZustandOrganizationStore";
 import { TemplateType } from "context/ZustandDocumentTemplateStore";
+import { Trans } from "@lingui/macro";
 
 export type DocumentTemplateListProps = {
   selectedTemplateType: TemplateType;
@@ -25,15 +25,12 @@ const LeftTemplateSide = ({
   onChangeSelectedCategory,
   isModal,
 }: DocumentTemplateListProps) => {
-  const branding = useOrganizationStore((state) => state.organization?.orgName);
   const theme = useTheme();
   const SEGMENT_OPTIONS = [
     {
       value: TemplateType.Library,
       label: (
-        <Tooltip arrow={false} title={branding}>
-          <Typography.Text>{branding}</Typography.Text>
-        </Tooltip>
+        <Typography.Text><Trans>Library</Trans></Typography.Text>
       ),
     },
   ];

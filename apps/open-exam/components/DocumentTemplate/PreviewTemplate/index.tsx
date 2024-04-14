@@ -34,7 +34,7 @@ const PreviewTemplate = (
     onError: handleError,
   });
   const allow = useUserPermission();
-  const user = useAuthUserStore((state) => state.currentUser);
+  const orgId = useAuthUserStore(state => state.orgId);
   const selectedTemplate = useDocumentTemplateStore(state => state.templates.get(selectedTemplateId));
   const addTemplates = useDocumentTemplateStore(state => state.addTemplates);
   const [openEditTemplate, setOpenEditTemplate] = useState(false);
@@ -65,8 +65,7 @@ const PreviewTemplate = (
   };
   
   const creator = selectedTemplate?.creator;
-  const canEditTemplate = allow(Permission.ManageTemplate) &&
-    user?.userMe?.activeOrganization?.id === selectedTemplate?.orgId;
+  const canEditTemplate = allow(Permission.ManageTemplate) && orgId === selectedTemplate?.orgId;
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <div

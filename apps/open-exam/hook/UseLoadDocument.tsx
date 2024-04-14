@@ -1,5 +1,5 @@
 import useSpaceMemberStore from "context/ZustandClassMembeStore";
-import useClassStore from "context/ZustandClassStore";
+import useSpaceStore from "context/ZustandClassStore";
 import useDocumentStore, {
   getSpaceIdFromDocument,
 } from "context/ZustandDocumentStore";
@@ -31,7 +31,7 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
     (state) => state.updateMapAvailableDocument,
   );
 
-  const classId = useClassStore((state) => state.classId);
+  const spaceId = useSpaceStore((state) => state.spaceId);
 
   const updateQuizzes = useQuizStore((state) => state.updateQuizzes);
   const syncQuizzes = useQuizStore((state) => state.syncQuizzes);
@@ -46,7 +46,7 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
     (state) => state.updatePageBlockMode,
   );
 
-  const fetchAndSetDocuments = useClassStore(
+  const fetchAndSetDocuments = useSpaceStore(
     (state) => state.fetchAndSetDocuments,
   );
   const fetchClassMembers = useSpaceMemberStore(
@@ -61,9 +61,9 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
 
   const fetchDocumentDetail = async () => {
     const masterDocument = await fetchAndSetDocument(documentId);
-    const classId = getSpaceIdFromDocument(masterDocument);
+    const spaceId = getSpaceIdFromDocument(masterDocument);
     setMasterDocument(masterDocument);
-    useClassStore.setState({ classId });
+    useSpaceStore.setState({ spaceId });
 
     // set initial current page block id.
     const parsedPageBlocks = parsePageBlock(masterDocument.body);
@@ -157,11 +157,11 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
   }, [documentId, currentUser?.userMe?.id]);
 
   useEffect(() => {
-    if (classId) {
-      fetchAndSetDocuments(classId);
-      fetchClassMembers(classId);
+    if (spaceId) {
+      fetchAndSetDocuments(spaceId);
+      fetchClassMembers(spaceId);
     }
-  }, [classId]);
+  }, [spaceId]);
 
   useEffect(
     () => useDocumentStore.setState({ loadingDocumentMaterial: loading }),

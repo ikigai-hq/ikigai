@@ -4,6 +4,9 @@ use serde::{Deserialize, Serialize};
 use crate::util::get_now_as_secs;
 
 #[derive(Debug)]
+pub struct ActiveOrgId(pub i32);
+
+#[derive(Debug)]
 pub struct JwtToken(pub String);
 
 impl JwtToken {
@@ -21,7 +24,7 @@ pub struct Claims {
 impl Claims {
     pub fn new(user_id: i32) -> Self {
         let exp = get_now_as_secs() as usize + 3600 * 24 * 365; // Expire in 1 year
-        Self { exp, user_id }
+        Self::new_with_ttl(user_id, exp)
     }
 
     pub fn new_with_ttl(user_id: i32, exp: usize) -> Self {

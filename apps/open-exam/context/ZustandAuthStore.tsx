@@ -9,6 +9,7 @@ export type UserCheckHelper = {
 
 export type IStore = {
   role: OrgRole,
+  orgId?: number,
   currentUser: UserMe | undefined;
   checkHelper: UserCheckHelper;
   setCurrentUser: (currentUser: UserMe | undefined) => void;

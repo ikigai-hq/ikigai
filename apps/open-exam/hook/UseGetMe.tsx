@@ -6,16 +6,10 @@ import TokenStorage from "storage/TokenStorage";
 import tokenStorage from "storage/TokenStorage";
 import UserStorage from "storage/UserStorage";
 import { useState } from "react";
-import { identifyMixpanel } from "../util/track";
-import useOrganizationStore from "../context/ZustandOrganizationStore";
 
 const useGetMe = () => {
   const [isNullUser, setIsNullUser] = useState(false);
   const setCurrentUser = useAuthUserStore((state) => state.setCurrentUser);
-
-  const setOrganization = useOrganizationStore(
-    (state) => state.setOrganization,
-  );
 
   const [getUserInfo, { loading: loadingUserInfo }] = useLazyQuery<UserMe>(
     USER_ME,
@@ -36,15 +30,8 @@ const useGetMe = () => {
         const user = data.userMe;
 
         if (user) {
-          const {
-            id: userId,
-          } = user;
-          
           setCurrentUser(data);
-          setOrganization(user.activeOrganization);
-
-          UserStorage.set(userId);
-          identifyMixpanel(userId);
+          UserStorage.set(user.id);
         }
       },
     },

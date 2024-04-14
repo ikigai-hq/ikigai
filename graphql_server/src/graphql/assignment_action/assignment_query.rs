@@ -10,9 +10,9 @@ pub struct AssignmentQuery;
 #[Object]
 impl AssignmentQuery {
     async fn assignment_get_band_scores(&self, ctx: &Context<'_>) -> Result<Vec<BandScore>> {
-        let org_member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
-        let band_scores = BandScore::find_all_by_org_id(&conn, org_member.org_id).format_err()?;
+        let band_scores = BandScore::find_all_by_org_id(&conn, user_auth.org_id).format_err()?;
         Ok(band_scores)
     }
 

@@ -1,24 +1,18 @@
+use diesel::PgConnection;
 use oso::PolarClass;
 
-use crate::db::{OrgRole, OrganizationMember};
+use crate::db::{OrgRole, OrganizationMember, SpaceMember};
+use crate::error::OpenExamError;
 
-#[derive(Clone, Debug, PolarClass)]
+#[derive(Clone, Debug, PolarClass, SimpleObject)]
 pub struct UserAuth {
     #[polar(attribute)]
     pub id: i32,
     #[polar(attribute)]
     pub org_id: i32,
     pub org_role: OrgRole,
-}
-
-impl From<OrganizationMember> for UserAuth {
-    fn from(member: OrganizationMember) -> Self {
-        Self {
-            id: member.user_id,
-            org_id: member.org_id,
-            org_role: member.org_role,
-        }
-    }
+    #[polar(attribute)]
+    pub space_ids: Vec<i32>,
 }
 
 impl UserAuth {
@@ -35,6 +29,20 @@ impl UserAuth {
             id: 0,
             org_id: 0,
             org_role: OrgRole::Student,
+            space_ids: vec![],
         }
+    }
+
+    pub fn new(conn: &PgConnection, member: OrganizationMember) -> Result<Self, OpenExamError> {
+        let space_ids = SpaceMember::find_all_by_user(conn, member.user_id)?
+            .into_iter()
+            .map(|m| m.space_id)
+            .collect();
+        Ok(Self {
+            id: member.user_id,
+            org_id: member.org_id,
+            org_role: member.org_role,
+            space_ids,
+        })
     }
 }

@@ -268,16 +268,16 @@ impl AssignmentMutation {
         ctx: &Context<'_>,
         mut new_band_score: NewBandScore,
     ) -> Result<BandScore> {
-        let org_member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            org_member.user_id,
-            org_member.org_id,
-            OrganizationActionPermission::AddClass,
+            user_auth.id,
+            user_auth.org_id,
+            OrganizationActionPermission::AddSpace,
         )
         .await?;
 
-        new_band_score.org_id = Some(org_member.org_id);
+        new_band_score.org_id = Some(user_auth.org_id);
         let conn = get_conn_from_ctx(ctx).await?;
         let band_score = BandScore::insert(&conn, new_band_score).format_err()?;
         Ok(band_score)
@@ -288,18 +288,18 @@ impl AssignmentMutation {
         ctx: &Context<'_>,
         band_score_id: i32,
     ) -> Result<bool, Error> {
-        let org_member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            org_member.user_id,
-            org_member.org_id,
-            OrganizationActionPermission::AddClass,
+            user_auth.id,
+            user_auth.org_id,
+            OrganizationActionPermission::AddSpace,
         )
         .await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
         let band_score = BandScore::find(&conn, band_score_id).format_err()?;
-        if band_score.org_id != Some(org_member.org_id) {
+        if band_score.org_id != Some(user_auth.org_id) {
             return Err(OpenExamError::new_bad_request(
                 "Cannot remove band score of another org",
             ))
@@ -316,18 +316,18 @@ impl AssignmentMutation {
         band_score_id: i32,
         range: BandScoreRanges,
     ) -> Result<bool, Error> {
-        let org_member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            org_member.user_id,
-            org_member.org_id,
-            OrganizationActionPermission::AddClass,
+            user_auth.id,
+            user_auth.org_id,
+            OrganizationActionPermission::AddSpace,
         )
         .await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
         let band_score = BandScore::find(&conn, band_score_id).format_err()?;
-        if band_score.org_id != Some(org_member.org_id) {
+        if band_score.org_id != Some(user_auth.org_id) {
             return Err(OpenExamError::new_bad_request(
                 "Cannot remove band score of another org",
             ))

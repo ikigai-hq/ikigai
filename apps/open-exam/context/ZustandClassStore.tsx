@@ -2,26 +2,19 @@ import create from "zustand";
 import cloneDeep from "lodash/cloneDeep";
 
 import {
-  GetClassById,
-  GetClassById_classGet as IClassDetail,
   UpdatePositionData,
   UpdateDocumentPositions,
-  ClassSoftDeleteDocuments, AddClassDocument,
-} from "graphql/types";
-import {
-  ADD_CLASS_DOCUMENT,
-} from "graphql/mutation/ClassMutation";
-import { mutate, query } from "graphql/ApolloClient";
-import { GET_CLASS_BY_ID } from "graphql/query/ClassQuery";
-import {
-  GetDocuments_classGet_classDocuments as IDocumentItemList,
+  SoftDeleteDocuments, AddSpaceDocument,
+  GetDocuments_spaceGet_documents as IDocumentItemList,
   GetDocuments,
-  DuplicateClassDocument,
+  DuplicateSpaceDocument,
 } from "graphql/types";
+import { ADD_SPACE_DOCUMENT } from "graphql/mutation/ClassMutation";
+import { mutate, query } from "graphql/ApolloClient";
 import {
-  DUPLICATE_CLASS_DOCUMENT,
+  DUPLICATE_SPACE_DOCUMENT,
 } from "graphql/mutation/ClassMutation";
-import { GET_CLASS_LESSONS } from "graphql/query/ClassQuery";
+import { GET_SPACE_DOCUMENTS } from "graphql/query/ClassQuery";
 import {
   SOFT_DELETE_DOCUMENTS,
   UPDATE_DOCUMENT_POSITIONS,
@@ -31,16 +24,13 @@ import { FlattenedItem } from "../components/common/SortableTree/types";
 
 export type IClassContext = {
   classId?: number;
-  currentClass?: IClassDetail;
-  fetchAndSetCurrentClass: (classId: number) => Promise<void>;
-  setCurrentClass: (currentClass: IClassDetail | undefined) => void;
   // Class Documents
   documents?: IDocumentItemList[];
   setDocuments: (newDocuments: IDocumentItemList[] | undefined) => void;
   fetchAndSetDocuments: (classId: number) => Promise<void>;
   duplicateDocument: (
     documentId: string
-  ) => Promise<DuplicateClassDocument | undefined>;
+  ) => Promise<DuplicateSpaceDocument | undefined>;
   deleteDocument: (documentId: string) => Promise<string[] | undefined>;
   updateDocumentPositions: (items: UpdatePositionData[]) => Promise<boolean>;
   addClassDocument: (documentId: string, isAssignment: boolean) => Promise<void>;
@@ -56,49 +46,27 @@ export type IClassContext = {
 const useClassStore = create<IClassContext>((set, get) => ({
   classId: undefined,
   currentClass: undefined,
-  setCurrentClass: (classData) => {
-    if (!classData) {
-      set({
-        currentClass: undefined,
-        documents: [],
-        classId: undefined,
-      });
-      return;
-    }
-
-    const currentClass = cloneDeep(classData);
-
-    const members = new Map();
-    currentClass.members.forEach((member) => {
-      members.set(member.userId, member);
-    });
-
-    set({
-      currentClass: cloneDeep(currentClass),
-      classId: currentClass.id,
-    });
-  },
   documents: undefined,
   setDocuments: (newDocuments: IDocumentItemList[] | undefined) => {
     set({
       documents: cloneDeep(
-        (newDocuments || []).filter((doc) => !doc.document.deletedAt)
+        (newDocuments || []).filter((doc) => !doc.deletedAt)
       ),
     });
   },
   duplicateDocument: async (documentId) => {
-    const res = await mutate<DuplicateClassDocument>({
-      mutation: DUPLICATE_CLASS_DOCUMENT,
+    const res = await mutate<DuplicateSpaceDocument>({
+      mutation: DUPLICATE_SPACE_DOCUMENT,
       variables: {
         classId: get().classId,
         documentId,
       },
     });
-    if (res.classDuplicateDocument) {
+    if (res.spaceDuplicateDocument) {
       const documents = get().documents;
       const newDocuments = [
         ...cloneDeep(documents),
-        ...(res.classDuplicateDocument as IDocumentItemList[]),
+        ...(res.spaceDuplicateDocument as unknown as IDocumentItemList[]),
       ];
       set({ documents: newDocuments });
     }
@@ -110,15 +78,15 @@ const useClassStore = create<IClassContext>((set, get) => ({
     const getChildIds = (parentId: string): string[] => {
       const result = [parentId];
       documents
-        .filter((doc) => doc.document.parentId === parentId)
+        .filter((doc) => doc.parentId === parentId)
         .forEach((doc) => {
-          result.push(...getChildIds(doc.documentId));
+          result.push(...getChildIds(doc.id));
         });
       return result;
     };
 
     const documentIds = getChildIds(documentId);
-    const res = await mutate<ClassSoftDeleteDocuments>({
+    const res = await mutate<SoftDeleteDocuments>({
       mutation: SOFT_DELETE_DOCUMENTS,
       variables: {
         classId: get().classId,
@@ -126,9 +94,9 @@ const useClassStore = create<IClassContext>((set, get) => ({
       },
     });
 
-    if (res.classSoftDeleteMultiple) {
+    if (res.spaceSoftDeleteMultiple) {
       const filteredDoc = documents.filter(
-        (doc) => !documentIds.includes(doc.documentId)
+        (doc) => !documentIds.includes(doc.id)
       );
 
       set({ documents: filteredDoc });
@@ -136,8 +104,8 @@ const useClassStore = create<IClassContext>((set, get) => ({
     }
   },
   addClassDocument: async (documentId, isAssignment) => {
-    const res = await mutate<AddClassDocument>({
-      mutation: ADD_CLASS_DOCUMENT,
+    const res = await mutate<AddSpaceDocument>({
+      mutation: ADD_SPACE_DOCUMENT,
       variables: {
         classId: get().classId,
         documentId,
@@ -147,31 +115,20 @@ const useClassStore = create<IClassContext>((set, get) => ({
 
     const currentDocuments = get().documents;
     if (res) {
-      currentDocuments.push(cloneDeep(res.classAddDocument));
+      currentDocuments.push(cloneDeep(res.spaceAddDocument));
       set({ documents: currentDocuments });
     }
   },
-  fetchAndSetCurrentClass: async (classId) => {
-    const data = await query<GetClassById>({
-      query: GET_CLASS_BY_ID,
-      variables: {
-        classId: classId,
-      },
-      fetchPolicy: "network-only",
-    });
-
-    get().setCurrentClass(data?.classGet);
-  },
   fetchAndSetDocuments: async (classId) => {
     const data = await query<GetDocuments>({
-      query: GET_CLASS_LESSONS,
+      query: GET_SPACE_DOCUMENTS,
       variables: {
         classId,
       },
       fetchPolicy: "network-only",
     });
     
-    get().setDocuments(data?.classGet?.classDocuments || []);
+    get().setDocuments(data?.spaceGet?.documents || []);
   },
   updateDocumentPositions: async (items) => {
     const res = await mutate<UpdateDocumentPositions>({
@@ -184,10 +141,10 @@ const useClassStore = create<IClassContext>((set, get) => ({
     if (res && res.documentUpdatePositions) {
       const docs = get().documents;
       items.forEach((item) => {
-        const currentDoc = docs.find((doc) => doc.documentId === item.id);
+        const currentDoc = docs.find((doc) => doc.id === item.id);
         if (currentDoc) {
-          currentDoc.document.index = item.index;
-          currentDoc.document.parentId = item.parentId || null;
+          currentDoc.index = item.index;
+          currentDoc.parentId = item.parentId || null;
         }
       });
 
@@ -200,9 +157,9 @@ const useClassStore = create<IClassContext>((set, get) => ({
     const docs = get().documents;
     if (!docs) return;
 
-    const doc = docs.find((doc) => doc.documentId === docId);
+    const doc = docs.find((doc) => doc.id === docId);
     if (doc) {
-      doc.document.title = title;
+      doc.title = title;
       set({ documents: docs });
     }
   },

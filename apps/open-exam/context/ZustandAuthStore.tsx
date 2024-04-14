@@ -1,15 +1,6 @@
 import create from "zustand";
 
-import {
-  UserMe,
-  OrgRole,
-  UpdateUserData,
-  UserUpdateInfo,
-} from "../graphql/types";
-import { mutate, query } from "../graphql/ApolloClient";
-import { UpdateUserInfo } from "../graphql/mutation";
-import toast from "react-hot-toast";
-import { USER_ME } from "graphql/query";
+import {OrgRole, UserMe,} from "../graphql/types";
 
 export type UserCheckHelper = {
   isStudent: boolean;
@@ -17,17 +8,14 @@ export type UserCheckHelper = {
 };
 
 export type IStore = {
+  role: OrgRole,
   currentUser: UserMe | undefined;
-  updateUserData: Partial<UpdateUserData>;
-  setCurrentUser: (currentUser: UserMe | undefined) => void;
-  setUpdateUserData: (updateUserData: Partial<UpdateUserData>) => void;
   checkHelper: UserCheckHelper;
-  updateInfo: (data: Partial<UpdateUserData>) => Promise<boolean>;
-  onSubmitUpdateUserData: () => void;
-  refreshUpdateUserData: () => void;
+  setCurrentUser: (currentUser: UserMe | undefined) => void;
 };
 
-const useAuthUserStore = create<IStore>((set, get) => ({
+const useAuthUserStore = create<IStore>((set, _get) => ({
+  role: OrgRole.STUDENT,
   currentUser: undefined,
   updateUserData: {},
   checkHelper: {
@@ -36,67 +24,21 @@ const useAuthUserStore = create<IStore>((set, get) => ({
   },
   setCurrentUser: (currentUser: UserMe | undefined) => {
     const isStudent =
-      currentUser?.userMe?.activeOrgMember?.orgRole === OrgRole.STUDENT;
+      currentUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
     const isTeacher =
-      currentUser?.userMe?.activeOrgMember?.orgRole === OrgRole.TEACHER;
+      currentUser?.userMe?.activeUserAuth?.orgRole === OrgRole.TEACHER;
+    const role = currentUser?.userMe?.activeUserAuth?.orgRole || OrgRole.STUDENT;
 
     const checkHelper = {
       isStudent,
       isTeacher,
     };
 
-    const updateUserData = {
-      firstName: currentUser.userMe.firstName,
-      lastName: currentUser.userMe.lastName,
-      avatarFileId: currentUser.userMe.avatarFileId,
-    };
-
     set({
+      role,
       checkHelper,
       currentUser,
-      updateUserData,
     });
-  },
-  updateInfo: async (data: Partial<UpdateUserData>): Promise<boolean> => {
-    const currentUser = get().currentUser.userMe;
-    const updateData: UpdateUserData = {
-      firstName: currentUser.firstName,
-      lastName: currentUser.lastName,
-      avatarFileId: currentUser.avatarFileId,
-      ...data,
-    };
-    const res = await mutate<UserUpdateInfo>({
-      mutation: UpdateUserInfo,
-      variables: {
-        input: updateData,
-      },
-    });
-
-    if (!!res) {
-      const data = await query<UserMe>({ query: USER_ME });
-      console.log("Updated", data);
-      get().setCurrentUser(data);
-      toast.success("Updated!");
-    }
-
-    return !!res;
-  },
-  setUpdateUserData: (data: Partial<UpdateUserData>) => {
-    const updateUserData = get().updateUserData;
-    set({ updateUserData: { ...updateUserData, ...data } });
-  },
-  onSubmitUpdateUserData: () => {
-    const updateUserData = get().updateUserData;
-    get().updateInfo(updateUserData);
-  },
-  refreshUpdateUserData: () => {
-    const currentUser = get().currentUser;
-    const updateUserData = {
-      firstName: currentUser.userMe.firstName,
-      lastName: currentUser.userMe.lastName,
-      avatarFileId: currentUser.userMe.avatarFileId,
-    };
-    set({ updateUserData: updateUserData });
   },
 }));
 

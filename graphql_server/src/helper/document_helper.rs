@@ -133,7 +133,7 @@ impl Document {
         conn: &PgConnection,
         creator_id: i32,
         config: DocumentCloneConfig,
-        clone_to_class: Option<i32>,
+        clone_to_space: Option<i32>,
         clone_children: bool,
         clone_to_document_id: Option<Uuid>,
     ) -> Result<Self, OpenExamError> {
@@ -150,6 +150,7 @@ impl Document {
             document.org_id = new_org_id;
             document.cover_photo_id = new_cover_photo_id;
             document.editor_config = new_editor_config;
+            document.space_id = clone_to_space;
 
             document
         } else {
@@ -163,6 +164,7 @@ impl Document {
                 new_cover_photo_id,
                 self.hide_rule,
                 new_editor_config,
+                clone_to_space,
             );
             Document::upsert(conn, new_doc)?
         };
@@ -200,27 +202,17 @@ impl Document {
             },
         )?;
 
-        // Step 3 (Optional): Document Type (Assignment, Submission, Report)
-        if let Some(class_id) = clone_to_class {
-            if let Ok(Some(assignment)) = Assignment::find_by_document(conn, self.id) {
-                let mut new_assignment = NewAssignment::from(assignment);
-                new_assignment.document_id = document.id;
-                Assignment::insert(conn, new_assignment)?;
-            }
+        // Step 3: Document Type
+        if let Ok(Some(assignment)) = Assignment::find_by_document(conn, self.id) {
+            let mut new_assignment = NewAssignment::from(assignment);
+            new_assignment.document_id = document.id;
+            Assignment::insert(conn, new_assignment)?;
+        }
 
-            if let Ok(Some(submission)) = Submission::find_by_document(conn, self.id) {
-                let mut new_submission = NewSubmission::from(submission);
-                new_submission.document_id = document.id;
-                Submission::insert(conn, new_submission)?;
-            }
-
-            if let Ok(Some(mut class_document)) =
-                ClassDocument::find_by_document_id_opt(conn, self.id)
-            {
-                class_document.document_id = document.id;
-                class_document.class_id = class_id;
-                ClassDocument::upsert(conn, class_document)?;
-            }
+        if let Ok(Some(submission)) = Submission::find_by_document(conn, self.id) {
+            let mut new_submission = NewSubmission::from(submission);
+            new_submission.document_id = document.id;
+            Submission::insert(conn, new_submission)?;
         }
 
         // Step 4: Clone Child Documents
@@ -238,7 +230,7 @@ impl Document {
                     conn,
                     creator_id,
                     new_config,
-                    clone_to_class,
+                    clone_to_space,
                     clone_children,
                     None,
                 )?;
@@ -249,20 +241,19 @@ impl Document {
     }
 }
 
-pub fn get_all_class_documents(
+pub fn get_all_documents_by_id(
     conn: &PgConnection,
     document_id: Uuid,
-) -> Result<Vec<ClassDocument>, OpenExamError> {
-    let mut result = vec![];
+) -> Result<Vec<Document>, OpenExamError> {
+    let mut res: Vec<Document> = vec![];
+    let mut child_documents = Document::find_by_parent(conn, document_id)?;
+    res.append(&mut child_documents);
 
-    if let Some(class_document) = ClassDocument::find_by_document_id_opt(conn, document_id)? {
-        result.push(class_document);
-    }
-    for child_document in Document::find_by_parent(conn, document_id)? {
-        result.append(&mut get_all_class_documents(conn, child_document.id)?);
+    for document in child_documents {
+        res.append(&mut get_all_documents_by_id(conn, document.id)?);
     }
 
-    Ok(result)
+    Ok(res)
 }
 
 pub fn available_for_student(document: &Document, student_id: i32) -> bool {

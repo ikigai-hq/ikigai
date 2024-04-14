@@ -80,7 +80,7 @@ pub struct MembersByClassId(pub i32);
 
 #[async_trait::async_trait]
 impl Loader<MembersByClassId> for OpenExamDataLoader {
-    type Value = Vec<Member>;
+    type Value = Vec<SpaceMember>;
     type Error = OpenExamError;
 
     async fn load(
@@ -89,11 +89,11 @@ impl Loader<MembersByClassId> for OpenExamDataLoader {
     ) -> Result<HashMap<MembersByClassId, Self::Value>, Self::Error> {
         let conn = get_conn_from_actor().await?;
         let class_ids = keys.iter().map(|c| c.0).collect::<Vec<i32>>();
-        let members = Member::find_all_by_classes(&conn, class_ids)?;
+        let members = SpaceMember::find_all_by_classes(&conn, class_ids)?;
 
         let mut result: HashMap<MembersByClassId, Self::Value> = HashMap::new();
         for member in members {
-            let id = MembersByClassId(member.class_id);
+            let id = MembersByClassId(member.space_id);
             if let Some(items) = result.get_mut(&id) {
                 items.push(member);
             } else {
@@ -110,7 +110,7 @@ pub struct ClassById(pub i32);
 
 #[async_trait::async_trait]
 impl Loader<ClassById> for OpenExamDataLoader {
-    type Value = Class;
+    type Value = Space;
     type Error = OpenExamError;
 
     async fn load(
@@ -119,48 +119,44 @@ impl Loader<ClassById> for OpenExamDataLoader {
     ) -> Result<HashMap<ClassById, Self::Value>, Self::Error> {
         let conn = get_conn_from_actor().await?;
         let class_ids = keys.iter().map(|c| c.0).unique().collect::<Vec<i32>>();
-        let res = Class::find_all_by_ids(&conn, class_ids)?;
+        let res = Space::find_all_by_ids(&conn, class_ids)?;
         Ok(res.into_iter().map(|p| (ClassById(p.id), p)).collect())
     }
 }
 
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
-pub struct ClassByDocumentId(pub Uuid);
+pub struct SpaceByDocumentId(pub Uuid);
 
 #[async_trait::async_trait]
-impl Loader<ClassByDocumentId> for OpenExamDataLoader {
-    type Value = Class;
+impl Loader<SpaceByDocumentId> for OpenExamDataLoader {
+    type Value = Space;
     type Error = OpenExamError;
 
     async fn load(
         &self,
-        keys: &[ClassByDocumentId],
-    ) -> std::result::Result<HashMap<ClassByDocumentId, Self::Value>, Self::Error> {
+        keys: &[SpaceByDocumentId],
+    ) -> std::result::Result<HashMap<SpaceByDocumentId, Self::Value>, Self::Error> {
         let document_ids = keys.iter().map(|i| i.0).unique().collect::<Vec<Uuid>>();
         let conn = get_conn_from_actor().await?;
-        let class_documents = ClassDocument::find_all_by_document_ids(&conn, document_ids)?;
-
-        let class_ids = class_documents
+        let documents = Document::find_by_ids(&conn, document_ids)?;
+        let space_ids: Vec<i32> = documents
             .iter()
-            .map(|i| i.class_id)
+            .filter_map(|d| d.space_id)
             .unique()
             .collect();
-        let classes: HashMap<i32, Class> = Class::find_all_by_ids(&conn, class_ids)?
+
+        let spaces: HashMap<i32, Space> = Space::find_all_by_ids(&conn, space_ids)?
             .into_iter()
             .map(|c| (c.id, c))
             .collect();
-        let class_document_hashmap: HashMap<Uuid, ClassDocument> = class_documents
-            .into_iter()
-            .map(|i| (i.document_id, i))
-            .collect();
 
-        let mut res: HashMap<ClassByDocumentId, Self::Value> = HashMap::new();
-        for key in keys {
-            let class_document = class_document_hashmap.get(&key.0);
-            let class = class_document.and_then(|i| classes.get(&i.class_id));
-
-            if let Some(class) = class {
-                res.insert(*key, class.clone());
+        let mut res: HashMap<SpaceByDocumentId, Self::Value> = HashMap::new();
+        for document in documents {
+            if let Some(space_id) = document.space_id {
+                let key = SpaceByDocumentId(document.id);
+                if let Some(space) = spaces.get(&space_id) {
+                    res.insert(key, space.clone());
+                }
             }
         }
 
@@ -487,7 +483,7 @@ pub struct ClassMemberByUserId(pub i32);
 
 #[async_trait::async_trait]
 impl Loader<ClassMemberByUserId> for OpenExamDataLoader {
-    type Value = Vec<Member>;
+    type Value = Vec<SpaceMember>;
     type Error = OpenExamError;
 
     async fn load(
@@ -496,7 +492,7 @@ impl Loader<ClassMemberByUserId> for OpenExamDataLoader {
     ) -> std::result::Result<HashMap<ClassMemberByUserId, Self::Value>, Self::Error> {
         let conn = get_conn_from_actor().await?;
         let user_ids: Vec<i32> = keys.iter().map(|c| c.0).collect();
-        let members = Member::find_all_by_users(&conn, user_ids)?;
+        let members = SpaceMember::find_all_by_users(&conn, user_ids)?;
 
         let mut result: HashMap<ClassMemberByUserId, Self::Value> = HashMap::new();
         for member in members {

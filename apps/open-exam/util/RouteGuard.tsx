@@ -7,7 +7,7 @@ import { isNonAuthenticatePage } from "config/Routes";
 import TokenStorage from "storage/TokenStorage";
 import Loading from "components/Loading";
 import CurrentPathStorage from "storage/CurrentPathStorage";
-import { redirectToSignIn } from "./UrlUtil";
+import { redirectToHome } from "./UrlUtil";
 
 interface Props {
   children: JSX.Element;
@@ -43,7 +43,7 @@ export const RouteGuard = ({ children }: Props): JSX.Element => {
         CurrentPathStorage.set(router.asPath);
         router.events.on("routeChangeStart", () => hideContent(true));
         router.events.on("routeChangeComplete", () => hideContent(false));
-        redirectToSignIn(router);
+        redirectToHome(router);
       } else {
         setInitialLoading(false);
       }

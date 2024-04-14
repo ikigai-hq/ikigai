@@ -91,7 +91,7 @@ export const getDocumentConfigDefault = (doc: IDocument) => {
 
   const userInfo = useAuthUserStore.getState().currentUser;
   const isStudent =
-    userInfo?.userMe?.activeOrgMember?.orgRole === OrgRole.STUDENT;
+    userInfo?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
   const documentType = getDocumentType(doc);
   if (documentType === DocumentType.Submission) {
     if (
@@ -125,7 +125,7 @@ export const getDocumentConfigDefault = (doc: IDocument) => {
   if (documentType === DocumentType.Assignment) {
     config.showAssignmentReport = false;
     config.showQuizSettingReview = true;
-    if (userInfo?.userMe?.activeOrgMember?.orgRole === OrgRole.STUDENT) {
+    if (userInfo?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT) {
       config.showFeedbackButton = false;
       config.showAssignees = false;
     }
@@ -160,7 +160,6 @@ export type IDocumentStore = {
   permissions: IPermission;
   setMasterDocument: (activeDocument: IDocument | undefined) => void;
   fetchAndSetDocument: (documentId: string) => Promise<IDocument>;
-  fetchAndSetDocumentByUuid: (documentUuid: string) => Promise<void>;
   update: (
     documentId: string,
     data: Partial<UpdateDocumentData>,
@@ -257,7 +256,7 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
       masterDocumentId: masterDocument?.id,
       masterDocument: masterDocument,
       masterDocumentType: getDocumentType(masterDocument),
-      classId: getClassIdFromDocument(masterDocument),
+      classId: getSpaceIdFromDocument(masterDocument),
       feedbacks: parseFeedbackBlock(masterDocument?.body || ""),
       documentConfig: getDocumentConfigDefault(masterDocument),
     });
@@ -302,22 +301,6 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
       get().updateMapAvailableDocument(documentId, data.documentGet);
     }
     return data.documentGet;
-  },
-  fetchAndSetDocumentByUuid: async (documentUuid) => {
-    const data = await query(
-      {
-        query: GET_DOCUMENT_DETAIL_BY_UUID,
-        variables: {
-          documentId: documentUuid,
-        },
-      },
-      true,
-    );
-
-    if (data) {
-      const activeDocument = data.documentGetByUuid;
-      get().setMasterDocument(activeDocument);
-    }
   },
   update: (documentId, data, isUpdateLocalOnly) => {
     const docs = get().mapAvailableDocument;
@@ -509,11 +492,11 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
   },
 }));
 
-export const getClassIdFromDocument = (doc?: IDocument): number | undefined => {
+export const getSpaceIdFromDocument = (doc?: IDocument): number | undefined => {
   if (!doc) return;
-  if (doc.classDocument) return doc.classDocument.classId;
-  if (doc.submission && doc.submission.assignment.document.classDocument)
-    return doc.submission.assignment.document.classDocument.classId;
+  if (doc.spaceId) return doc.spaceId;
+  if (doc.submission && doc.submission.assignment.document.spaceId)
+    return doc.submission.assignment.document.spaceId;
 };
 
 export default useDocumentStore;

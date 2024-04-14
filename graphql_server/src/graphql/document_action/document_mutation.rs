@@ -4,7 +4,7 @@ use itertools::Itertools;
 use uuid::Uuid;
 
 use crate::authorization::{
-    ClassActionPermission, DocumentActionPermission, OrganizationActionPermission,
+    DocumentActionPermission, OrganizationActionPermission, SpaceActionPermission,
 };
 use crate::background_job::document_job::insert_auto_version_history_jobs;
 use crate::db::*;
@@ -18,11 +18,11 @@ pub struct DocumentMutation;
 #[Object]
 impl DocumentMutation {
     async fn document_create(&self, ctx: &Context<'_>, mut data: Document) -> Result<Document> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         data.id = Uuid::new_v4();
-        data.creator_id = member.user_id;
-        data.org_id = member.org_id;
-        data.updated_by = Some(member.user_id);
+        data.creator_id = user_auth.id;
+        data.org_id = user_auth.org_id;
+        data.updated_by = Some(user_auth.id);
         data.updated_at = get_now_as_secs();
         data.created_at = get_now_as_secs();
 
@@ -320,10 +320,10 @@ impl DocumentMutation {
             let conn = get_conn_from_ctx(ctx).await?;
             DocumentTemplate::find(&conn, template_id).format_err()?
         };
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            member.user_id,
+            user_auth.id,
             template.org_id,
             OrganizationActionPermission::ManageTemplate,
         )
@@ -333,16 +333,16 @@ impl DocumentMutation {
         let original_document = Document::find_by_id(&conn, original_document_id).format_err()?;
         create_a_document_version(
             &conn,
-            member.user_id,
+            user_auth.id,
             &original_document,
             &original_document.title,
-            Some(member.user_id),
+            Some(user_auth.id),
         )
         .format_err()?;
         restore_document(
             &conn,
-            member.org_id,
-            member.user_id,
+            user_auth.org_id,
+            user_auth.id,
             original_document_id,
             template.document_id,
         )
@@ -399,23 +399,23 @@ impl DocumentMutation {
             DocumentActionPermission::ManageDocument,
         )
         .await?;
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
         let root_document = Document::find_by_id(&conn, version.root_document_id).format_err()?;
         let root_document_id = root_document.id;
         create_a_document_version(
             &conn,
-            member.user_id,
+            user_auth.id,
             &root_document,
             &root_document.title,
-            Some(member.user_id),
+            Some(user_auth.id),
         )
         .format_err()?;
         restore_document(
             &conn,
-            member.org_id,
-            member.user_id,
+            user_auth.org_id,
+            user_auth.id,
             root_document_id,
             version.versioning_document_id,
         )
@@ -434,7 +434,7 @@ impl DocumentMutation {
             DocumentActionPermission::ManageDocument,
         )
         .await?;
-        class_quick_authorize(ctx, class_id, ClassActionPermission::ManageClassContent).await?;
+        space_quick_authorize(ctx, class_id, SpaceActionPermission::ManageSpaceContent).await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
         duplicate_document_to_class(&conn, original_document_id, class_id).format_err()

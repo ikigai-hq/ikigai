@@ -3,7 +3,7 @@ use crate::db::*;
 use crate::error::OpenExamErrorExt;
 use crate::graphql::paging::{PagingInput, PagingResult};
 use crate::helper::{
-    get_conn_from_ctx, get_org_member_from_ctx, organization_authorize, user_authorize, UserAction,
+    get_conn_from_ctx, get_user_auth_from_ctx, organization_authorize, user_authorize, UserAction,
 };
 use async_graphql::*;
 
@@ -33,11 +33,11 @@ impl OrganizationQuery {
         ctx: &Context<'_>,
         filter_options: OrgMemberFilterOptions,
     ) -> Result<PagingResult<OrganizationMember>> {
-        let org_member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            org_member.user_id,
-            org_member.org_id,
+            user_auth.id,
+            user_auth.org_id,
             OrganizationActionPermission::AddOrgMember,
         )
         .await?;
@@ -46,7 +46,7 @@ impl OrganizationQuery {
         let (offset, limit) = filter_options.paging.get();
         let (items, total) = OrganizationMember::filter_all(
             &conn,
-            org_member.org_id,
+            user_auth.org_id,
             filter_options.keyword,
             filter_options.role,
             filter_options.created_at_from,
@@ -60,35 +60,35 @@ impl OrganizationQuery {
 
     // TODO: This is temporary function
     async fn org_find_all_members(&self, ctx: &Context<'_>) -> Result<Vec<OrganizationMember>> {
-        let org_member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            org_member.user_id,
-            org_member.org_id,
+            user_auth.id,
+            user_auth.org_id,
             OrganizationActionPermission::AddOrgMember,
         )
         .await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
-        OrganizationMember::find_all_by_org(&conn, org_member.org_id).format_err()
+        OrganizationMember::find_all_by_org(&conn, user_auth.org_id).format_err()
     }
 
     async fn org_member_stats(&self, ctx: &Context<'_>) -> Result<OrganizationStats> {
-        let org_member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            org_member.user_id,
-            org_member.org_id,
+            user_auth.id,
+            user_auth.org_id,
             OrganizationActionPermission::AddOrgMember,
         )
         .await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
         let total_teacher =
-            OrganizationMember::count_by_role(&conn, org_member.org_id, OrgRole::Teacher)
+            OrganizationMember::count_by_role(&conn, user_auth.org_id, OrgRole::Teacher)
                 .format_err()?;
         let total_student =
-            OrganizationMember::count_by_role(&conn, org_member.org_id, OrgRole::Student)
+            OrganizationMember::count_by_role(&conn, user_auth.org_id, OrgRole::Student)
                 .format_err()?;
 
         Ok(OrganizationStats {
@@ -102,35 +102,29 @@ impl OrganizationQuery {
         ctx: &Context<'_>,
         member_user_id: i32,
     ) -> Result<OrganizationMember> {
-        let org_member = get_org_member_from_ctx(ctx).await?;
-        user_authorize(
-            ctx,
-            org_member.user_id,
-            member_user_id,
-            UserAction::ViewMember,
-        )
-        .await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
+        user_authorize(ctx, user_auth.id, member_user_id, UserAction::ViewMember).await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
         let member =
-            OrganizationMember::find(&conn, org_member.org_id, member_user_id).format_err()?;
+            OrganizationMember::find(&conn, user_auth.org_id, member_user_id).format_err()?;
 
         Ok(member)
     }
 
     async fn org_get_rubrics(&self, ctx: &Context<'_>) -> Result<Vec<Rubric>> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
-        Rubric::find_all_by_org(&conn, member.org_id).format_err()
+        Rubric::find_all_by_org(&conn, user_auth.org_id).format_err()
     }
 
     async fn org_get_document_template_categories(
         &self,
         ctx: &Context<'_>,
     ) -> Result<Vec<Category>> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
-        Category::find_org_categories(&conn, member.org_id).format_err()
+        Category::find_org_categories(&conn, user_auth.org_id).format_err()
     }
 
     async fn get_community_document_template_categories(
@@ -142,9 +136,9 @@ impl OrganizationQuery {
     }
 
     async fn org_get_document_templates(&self, ctx: &Context<'_>) -> Result<Vec<DocumentTemplate>> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
-        DocumentTemplate::find_org_templates(&conn, member.org_id).format_err()
+        DocumentTemplate::find_org_templates(&conn, user_auth.org_id).format_err()
     }
 
     async fn get_community_document_templates(
@@ -156,9 +150,13 @@ impl OrganizationQuery {
     }
 
     async fn org_get_tags(&self, ctx: &Context<'_>) -> Result<Vec<Tag>> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
-        Tag::find_org_tags_by_use_case(&conn, member.org_id, TagUseCase::DocumentTemplateCategory)
-            .format_err()
+        Tag::find_org_tags_by_use_case(
+            &conn,
+            user_auth.org_id,
+            TagUseCase::DocumentTemplateCategory,
+        )
+        .format_err()
     }
 }

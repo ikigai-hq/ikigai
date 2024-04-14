@@ -1,4 +1,3 @@
-export * from "./Authentication";
 export * from "./FileMutation";
 export * from "./FileMutation";
 export * from "./UserMutation";

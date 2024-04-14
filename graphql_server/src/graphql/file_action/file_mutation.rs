@@ -1,3 +1,4 @@
+use crate::authorization::UserAuth;
 use aj::AJ;
 use aj::{JobBuilder, Retry};
 use async_graphql::*;
@@ -7,10 +8,9 @@ use uuid::Uuid;
 use crate::background_job::storage_job::{add_generate_waveform_job, CheckTranscodingFile};
 use crate::db::file::{File, FileStatus};
 use crate::db::Connection;
-use crate::db::OrganizationMember;
 use crate::error::{OpenExamError, OpenExamErrorExt};
 use crate::helper::{
-    get_conn_from_ctx, get_org_member_from_ctx, get_user_from_ctx, is_owner_of_file,
+    get_conn_from_ctx, get_user_auth_from_ctx, get_user_from_ctx, is_owner_of_file,
 };
 use crate::service::{MediaConvert, Storage, UploadInfo};
 use crate::util::{get_date_from_ts, get_now_as_secs};
@@ -39,10 +39,10 @@ impl FileMutation {
         ctx: &Context<'_>,
         data: CreateFileData,
     ) -> Result<CreateFileResponse> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
 
-        create_file_upload(conn, &member, data).await
+        create_file_upload(conn, &user_auth, data).await
     }
 
     async fn file_create_recording(
@@ -50,9 +50,9 @@ impl FileMutation {
         ctx: &Context<'_>,
         data: CreateFileData,
     ) -> Result<CreateFileResponse> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
-        create_file_upload(conn, &member, data).await
+        create_file_upload(conn, &user_auth, data).await
     }
 
     async fn file_create_multiple(
@@ -60,9 +60,9 @@ impl FileMutation {
         ctx: &Context<'_>,
         data: Vec<CreateFileData>,
     ) -> Result<Vec<CreateFileResponse>> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
-        let user_id = member.user_id;
+        let user_id = user_auth.id;
         let files = data
             .into_iter()
             .map(|d| {
@@ -72,7 +72,7 @@ impl FileMutation {
                     d.file_name,
                     d.content_type,
                     d.content_length,
-                    member.org_id,
+                    user_auth.org_id,
                 )
             })
             .collect();
@@ -152,7 +152,7 @@ impl FileMutation {
 
 async fn create_file_upload(
     conn: Connection,
-    member: &OrganizationMember,
+    member: &UserAuth,
     data: CreateFileData,
 ) -> Result<CreateFileResponse> {
     let CreateFileData {
@@ -163,7 +163,7 @@ async fn create_file_upload(
     } = data;
 
     let file = File::new(
-        member.user_id,
+        member.id,
         public,
         file_name,
         content_type,

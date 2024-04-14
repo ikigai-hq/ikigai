@@ -14,7 +14,6 @@ import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { messages as enMessages } from "../locales/en/messages";
 import withTheme from "styles/theme";
-import LocaleStorageInstance from "storage/LocaleStorage";
 import { initMixpanel } from "../util/track";
 import { AuthenticatedWrapper } from "components/Authenticate/AuthenticateWrapper";
 import DocumentTemplateModal from "../components/DocumentTemplate/DocumentTemplateModal";
@@ -25,7 +24,7 @@ i18n.load({
   en: enMessages,
 });
 
-i18n.activate(LocaleStorageInstance.get() || "en");
+i18n.activate("en");
 interface PageProps {
   initialApolloState: any;
 }

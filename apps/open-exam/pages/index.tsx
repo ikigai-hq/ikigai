@@ -2,15 +2,12 @@ import React from "react";
 import type { ReactElement } from "react";
 import type { NextPageWithLayout } from "./_app";
 
-import { Layout } from "components/common/Layout";
-import ClassContainer from "../components/ClassListManagement/index";
-
-const ClassesPage: NextPageWithLayout = () => {
-  return <ClassContainer />;
+const IndexPage: NextPageWithLayout = () => {
+  return <div>Hello</div>;
 };
 
-ClassesPage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
+IndexPage.getLayout = function getLayout(page: ReactElement) {
+  return <div>{page}</div>;
 };
 
-export default ClassesPage;
+export default IndexPage;

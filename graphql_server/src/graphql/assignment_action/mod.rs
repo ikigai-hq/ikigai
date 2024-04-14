@@ -15,11 +15,11 @@ use uuid::Uuid;
 use crate::db::*;
 use crate::error::OpenExamErrorExt;
 use crate::graphql::data_loader::{
-    AssignmentById, DocumentById, SubmissionByAssignmentId, OpenExamDataLoader,
+    AssignmentById, DocumentById, OpenExamDataLoader, SubmissionByAssignmentId,
 };
 use crate::helper::{
-    document_quick_authorize, get_conn_from_ctx, get_org_member_from_ctx,
-    get_public_user_from_loader, get_user_id_from_ctx,
+    document_quick_authorize, get_conn_from_ctx, get_public_user_from_loader,
+    get_user_auth_from_ctx, get_user_id_from_ctx,
 };
 
 #[ComplexObject]
@@ -136,8 +136,8 @@ impl Submission {
     }
 
     async fn grade(&self, ctx: &Context<'_>) -> Option<f64> {
-        let org_member = get_org_member_from_ctx(ctx).await.ok()?;
-        if org_member.org_role != OrgRole::Student {
+        let user_auth = get_user_auth_from_ctx(ctx).await.ok()?;
+        if user_auth.org_role != OrgRole::Student {
             return self.temp_grade;
         }
 
@@ -149,8 +149,8 @@ impl Submission {
     }
 
     async fn final_grade(&self, ctx: &Context<'_>) -> Option<f64> {
-        let org_member = get_org_member_from_ctx(ctx).await.ok()?;
-        if org_member.org_role != OrgRole::Student {
+        let user_auth = get_user_auth_from_ctx(ctx).await.ok()?;
+        if user_auth.org_role != OrgRole::Student {
             return self.final_grade;
         }
 

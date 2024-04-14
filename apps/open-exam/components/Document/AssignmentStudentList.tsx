@@ -11,7 +11,7 @@ import Modal from "../common/Modal";
 import { formatDate, FormatType } from "util/Time";
 import {
   GetDocumentDetail_documentGet_assignment_submissions as ISubmission,
-  GetClassMembers_classGet_members as IMember,
+  GetSpaceMembers_spaceGet_members as IMember,
   OrgRole,
 } from "graphql/types";
 import { formatDocumentRoute } from "config/Routes";

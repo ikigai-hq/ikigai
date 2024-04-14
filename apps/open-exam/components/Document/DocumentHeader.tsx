@@ -35,7 +35,7 @@ import {
   SettingIcon,
 } from "components/common/IconSvg";
 import { MenuProps } from "antd/lib";
-import { GetDocuments_classGet_classDocuments as IDocumentItemList } from "graphql/types";
+import { GetDocuments_spaceGet_documents as IDocumentItemList } from "graphql/types";
 import DocumentTypeIcon from "./DocumentTypeIcon";
 import DocumentMoreSetting from "./DocumentMoreSetting";
 import usePageBlockStore from "context/ZustandPageBlockStore";
@@ -98,13 +98,13 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
       label: (
         <MenuItem
           onClick={() =>
-            router.push(formatDocumentRoute(breadcrumb.documentId), undefined, {
+            router.push(formatDocumentRoute(breadcrumb.id), undefined, {
               shallow: true,
             })
           }
         >
-          <DocumentTypeIcon documentType={breadcrumb.document.documentType} />
-          {breadcrumb.document.title}
+          <DocumentTypeIcon documentType={breadcrumb.documentType} />
+          {breadcrumb.title}
         </MenuItem>
       ),
     }));

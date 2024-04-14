@@ -18,11 +18,11 @@ impl QuizMutation {
         ctx: &Context<'_>,
         mut data: QuizStructure,
     ) -> Result<QuizStructure> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
 
-        data.user_id = member.user_id;
-        data.org_id = member.org_id;
+        data.user_id = user_auth.id;
+        data.org_id = user_auth.org_id;
         let quiz_structure = QuizStructure::upsert(&conn, data).format_err()?;
         Ok(quiz_structure)
     }
@@ -74,12 +74,12 @@ impl QuizMutation {
         to_id: Uuid,
         to_document_id: Uuid,
     ) -> Result<Quiz> {
-        let org_member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
         let quiz = Quiz::find_by_id(&conn, from_id).format_err()?;
         document_authorize(
             ctx,
-            org_member.user_id,
+            user_auth.id,
             quiz.document_id,
             DocumentActionPermission::ManageDocument,
         )

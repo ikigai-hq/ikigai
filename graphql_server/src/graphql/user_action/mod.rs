@@ -4,6 +4,7 @@ pub mod user_query;
 pub use user_mutation::*;
 pub use user_query::*;
 
+use crate::authorization::UserAuth;
 use async_graphql::dataloader::DataLoader;
 use async_graphql::{ComplexObject, Context, Result};
 use uuid::Uuid;
@@ -13,7 +14,7 @@ use crate::error::OpenExamErrorExt;
 use crate::graphql::data_loader::{
     ClassMemberByUserId, FileById, FindOrganizationMember, OpenExamDataLoader,
 };
-use crate::helper::{get_active_org_id_from_ctx, get_conn_from_ctx, get_org_member_from_ctx};
+use crate::helper::{get_active_org_id_from_ctx, get_conn_from_ctx, get_user_auth_from_ctx};
 
 pub const COLOR_SET: [&str; 12] = [
     "#02677B", "#002366", "#0F52BA", "#FA8072", "#FFDAB9", "#f56a00", "#3C91E6", "#342E37",
@@ -77,8 +78,8 @@ impl User {
         Some(PersonInformation::new(self.clone()))
     }
 
-    async fn active_org_member(&self, ctx: &Context<'_>) -> Option<OrganizationMember> {
-        get_org_member_from_ctx(ctx).await.ok()
+    async fn active_user_auth(&self, ctx: &Context<'_>) -> Option<UserAuth> {
+        get_user_auth_from_ctx(ctx).await.ok()
     }
 
     async fn active_organization(&self, ctx: &Context<'_>) -> Result<Option<Organization>> {
@@ -131,7 +132,7 @@ impl PublicUser {
         })
     }
 
-    async fn class_members(&self, ctx: &Context<'_>) -> Result<Vec<Member>> {
+    async fn class_members(&self, ctx: &Context<'_>) -> Result<Vec<SpaceMember>> {
         let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
         let class_members = loader
             .load_one(ClassMemberByUserId(self.id))

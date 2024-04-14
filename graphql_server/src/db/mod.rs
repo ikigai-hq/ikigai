@@ -1,7 +1,5 @@
 pub mod assignments;
 pub mod band_score;
-pub mod class;
-pub mod class_member;
 pub mod document_template;
 pub mod document_version;
 pub mod documents;
@@ -11,13 +9,13 @@ pub mod page_block;
 pub mod quiz;
 pub mod rubric;
 pub mod schema;
+pub mod space;
+pub mod space_member;
 pub mod threads;
 pub mod user;
 
 pub use assignments::*;
 pub use band_score::*;
-pub use class::*;
-pub use class_member::*;
 pub use document_template::*;
 pub use document_version::*;
 pub use documents::*;
@@ -26,6 +24,8 @@ pub use organization::*;
 pub use page_block::*;
 pub use quiz::*;
 pub use rubric::*;
+pub use space::*;
+pub use space_member::*;
 pub use threads::*;
 pub use user::*;
 

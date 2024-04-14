@@ -24,14 +24,14 @@ const DocumentDetail = () => {
   const { push } = useRouter();
   const authUser = useAuthUserStore((state) => state.currentUser);
   const isStudent =
-    authUser?.userMe?.activeOrgMember?.orgRole === OrgRole.STUDENT;
+    authUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
   const docs = useClassStore((state) =>
     (state.documents || [])
-      .filter((doc) => !doc.document.deletedAt)
+      .filter((doc) => !doc.deletedAt)
       .filter(
         (doc) =>
-          doc.document.hideRule === HideRule.PUBLIC ||
-          (doc.document.hideRule === HideRule.PRIVATE && !isStudent),
+          doc.hideRule === HideRule.PUBLIC ||
+          (doc.hideRule === HideRule.PRIVATE && !isStudent),
       ),
   );
   const pageBlockMode = usePageBlockStore((state) => state.pageBlockMode);

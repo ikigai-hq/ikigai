@@ -14,8 +14,7 @@ resource OrganizationAuth {
         "edit_org_member_information",
         "add_org_member",
         "remove_org_member",
-        "add_class",
-        "remove_class",
+        "add_space",
         "manage_template",
         "manage_trash",
         "manage_org_information",
@@ -27,8 +26,7 @@ resource OrganizationAuth {
     "edit_org_member_information" if "Teacher";
     "add_org_member" if "Teacher";
     "remove_org_member" if "Teacher";
-    "add_class" if "Teacher";
-    "remove_class" if "Teacher";
+    "add_space" if "Teacher";
     "manage_template" if "Teacher";
     "manage_trash" if "Teacher";
     "manage_org_information" if "Teacher";
@@ -39,42 +37,43 @@ has_role(user: UserAuth, role: String, organization: OrganizationAuth) if
     user.role = role;
 
 #########################################
-###### Class Resource Authorization #####
+###### Space Resource Authorization #####
 #########################################
 
-allow(user: UserAuth, action, class: ClassAuth) if
-    has_permission(user, action, class);
+allow(user: UserAuth, action, space: SpaceAuth) if
+    has_permission(user, action, space);
 
-allow(user: UserAuth, "self_enroll", class: ClassAuth) if
-	has_role(user, "Student", class) and
-	class.allow_student_self_enroll;
+allow(user: UserAuth, "self_enroll", space: SpaceAuth) if
+	has_role(user, "Student", space) and
+	space.allow_student_self_enroll;
 
-resource ClassAuth {
+resource SpaceAuth {
     roles = ["Student", "Teacher"];
     permissions = [
-		"view_class_content",
+		"view_space_content",
 		"self_enroll",
-		"manage_class_content",
-		"manage_class_member",
-		"manage_class_setting",
+		"manage_space_content",
+		"manage_space_member",
+		"manage_space_setting",
     ];
 
-	"view_class_content" if "Student";
+	"view_space_content" if "Student";
 
 	"Student" if "Teacher";
-	"manage_class_content" if "Teacher";
-	"manage_class_member" if "Teacher";
-	"manage_class_setting" if "Teacher";
+	"manage_space_content" if "Teacher";
+	"manage_space_member" if "Teacher";
+	"manage_space_setting" if "Teacher";
 }
 
-has_role(user: UserAuth, "Teacher", class: ClassAuth) if
-    user.org_id = class.org_id and
+has_role(user: UserAuth, "Teacher", space: SpaceAuth) if
+    user.org_id = space.org_id and
+    space.id in user.space_ids and
     user.role = "Teacher";
 
-has_role(user: UserAuth, role: String, class: ClassAuth) if
-    user.org_id = class.org_id and
-    user.role = role and
-    class.has_this_member;
+has_role(user: UserAuth, role: String, space: SpaceAuth) if
+    user.org_id = space.org_id and
+    space.id in user.space_ids and
+    user.role = role;
 
 ############################################
 ###### Document Resource Authorization #####
@@ -125,10 +124,16 @@ has_role(user: UserAuth, "Writer", doc: DocumentAuth) if
 
 has_role(user: UserAuth, "Writer", doc: DocumentAuth) if
     user.org_id = doc.org_id and
+    doc.space_id in user.space_ids and
     user.role = "Teacher";
 
 has_role(user: UserAuth, "Reader", doc: DocumentAuth) if
-    user.org_id = doc.org_id;
+    user.org_id = doc.org_id and
+    doc.space_id in user.space_ids;
 
 has_role(_: UserAuth, "Reader", doc: DocumentAuth) if
     doc.is_public;
+
+has_role(user: UserAuth, "Reader", doc: DocumentAuth) if
+	doc.is_org_template and
+    user.org_id = doc.org_id;

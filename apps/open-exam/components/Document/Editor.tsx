@@ -15,7 +15,6 @@ import { DocumentPermission } from "util/permission";
 import { useRouter } from "next/router";
 import { DEFAULT_RIGHT_SIDE_WIDTH, DEFAULT_LEFT_SIDE_WIDTH } from "../../util";
 import useSupportMobile from "hook/UseSupportMobile";
-import useOrganizationStore from "../../context/ZustandOrganizationStore";
 import useQuizStore from "context/ZustandQuizStore";
 import usePageBlockStore from "context/ZustandPageBlockStore";
 import DocumentSetting from "./DocumentSetting";
@@ -40,7 +39,6 @@ const Editor = ({
   const router = useRouter();
   const currentDocIdQuery = router.query.documentId as string;
   const documentId = document.id;
-  const branding = useOrganizationStore((state) => state.branding);
   const update = useDocumentStore((state) => state.update);
   const documentAllow = useDocumentPermission();
   const syncPageBlocks = usePageBlockStore((state) => state.syncPageBlocks);
@@ -107,7 +105,7 @@ const Editor = ({
             <>
               <Head>
                 <title>
-                  {document.title || ""} - {branding?.orgName || "Open Exam"}
+                  {document.title || ""} - Open Exam
                 </title>
               </Head>
               {!isNestedDoc && (

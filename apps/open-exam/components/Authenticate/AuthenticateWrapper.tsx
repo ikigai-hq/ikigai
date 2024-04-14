@@ -21,7 +21,7 @@ export const AuthenticatedWrapper: React.FC<Props> = ({ children }: Props) => {
   const moveToSignIn = () => {
     TokenStorage.del();
     UserStorage.del();
-    router.push(Routes.SignIn);
+    router.push(Routes.Home);
   };
 
   useEffect(() => {

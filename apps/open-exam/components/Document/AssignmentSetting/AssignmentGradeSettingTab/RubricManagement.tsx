@@ -19,6 +19,7 @@ import { useState } from "react";
 import EditRubric from "./EditRubric";
 import useUserPermission from "hook/UseUserPermission";
 import { Permission } from "util/permission";
+import useAuthUserStore from "../../../../context/ZustandAuthStore";
 
 export type BandScoresDrawerProps = {
   visible: boolean;
@@ -37,7 +38,7 @@ const RubricManagement = (
 ) => {
   const allow = useUserPermission();
   const theme = useTheme();
-  const orgId = useOrganizationStore(state => state.organization?.id);
+  const orgId = useAuthUserStore(state => state.currentUser?.userMe?.activeOrganization?.id);
   const { data: rubricsData, refetch } = useQuery<GetRubrics>(GET_RUBRICS, {
     onError: handleError,
   });

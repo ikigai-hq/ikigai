@@ -14,7 +14,7 @@ const useSubmissionStatus = (
   isStudent: boolean;
 } => {
   const authUser = useAuthUserStore((state) => state.currentUser);
-  const isStudent = authUser?.userMe?.activeOrgMember?.orgRole === OrgRole.STUDENT;
+  const isStudent = authUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
 
   const docType = getDocumentType(document);
   const isSubmissionDocument = docType === DocumentType.Submission;

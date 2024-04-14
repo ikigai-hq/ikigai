@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import {
-  GetDocuments_classGet_classDocuments as IDocumentItemList,
+  GetDocuments_spaceGet_documents as IDocumentItemList,
   UpdatePositionData,
 } from "graphql/types";
 import {
@@ -50,7 +50,7 @@ export const LearningModuleDnd = ({
   useEffect(() => {
     const items = convertToTreeItems(
       docs
-        .filter((doc) => !doc.document.deletedAt),
+        .filter((doc) => !doc.deletedAt),
       null,
       defaultCollapsed,
       getFullPathFromNode(router.query?.documentId as string, docs)?.map(
@@ -96,23 +96,23 @@ const convertToTreeItems = (
   cacheFlattenTree?: FlattenedItem<LearningModuleItemTypeWrapper>[]
 ): TreeItems<LearningModuleItemTypeWrapper> => {
   return docs
-    .filter((doc) => doc.document.parentId === parentId)
-    .sort((docA, docB) => docA.document.index - docB.document.index)
+    .filter((doc) => doc.parentId === parentId)
+    .sort((docA, docB) => docA.index - docB.index)
     .map((doc) => {
-      let collapsed = !listCollapsed.includes(doc.documentId);
+      let collapsed = !listCollapsed.includes(doc.id);
       if (previousItems && previousItems.length > 0) {
-        const item = findItemDeep(previousItems, doc.documentId);
+        const item = findItemDeep(previousItems, doc.id);
         if (item) collapsed = item.collapsed;
       } else if (cacheFlattenTree && cacheFlattenTree.length > 0) {
         const item = cacheFlattenTree.find(
-          (item) => item.id === doc.documentId
+          (item) => item.id === doc.id
         );
         if (item) collapsed = item.collapsed;
       }
 
       const children = convertToTreeItems(
         docs,
-        doc.documentId,
+        doc.id,
         defaultCollapsed,
         listCollapsed,
         previousItems,
@@ -122,7 +122,7 @@ const convertToTreeItems = (
         .map((child) => child.data.indexTitle)
         .join("#");
       return {
-        id: doc.documentId,
+        id: doc.id,
         children,
         data: {
           ...convertDocumentToLearningItemType(doc, childrenTitle),
@@ -176,13 +176,13 @@ export const convertDocumentToLearningItemType = (
   childrenTitle: string
 ): LearningItemType => {
   return {
-    id: document.documentId,
-    title: document.document.title,
-    createdAt: document.document.createdAt,
-    index: document.document.index,
-    documentType: document.document.documentType,
-    indexTitle: `${document.document.title}#${childrenTitle}`,
-    parentId: document.document.parentId
+    id: document.id,
+    title: document.title,
+    createdAt: document.createdAt,
+    index: document.index,
+    documentType: document.documentType,
+    indexTitle: `${document.title}#${childrenTitle}`,
+    parentId: document.parentId
   };
 };
 

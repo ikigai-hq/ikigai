@@ -22,7 +22,7 @@ const Trash = () => {
         <Tabs.TabPane key="Document" tab={t`Document`}>
           <DeletedDocumentList />
         </Tabs.TabPane>
-        <Tabs.TabPane key="Class" tab={t`Class`}>
+        <Tabs.TabPane key="Space" tab={t`Space`}>
           <DeletedClassList />
         </Tabs.TabPane>
       </Tabs>

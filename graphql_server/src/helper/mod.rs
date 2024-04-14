@@ -28,30 +28,35 @@ pub async fn get_public_user_from_loader(ctx: &Context<'_>, user_id: i32) -> Res
 
 pub fn duplicate_class(
     conn: &PgConnection,
-    class_id: i32,
+    space_id: i32,
     org_id: i32,
     creator_id: i32,
-) -> Result<Class, OpenExamError> {
-    let class = Class::find_by_id(conn, class_id)?;
-    let class_id = class.id;
-    let class_documents = ClassDocument::find_all_by_class(conn, class_id)?;
+) -> Result<Space, OpenExamError> {
+    let space = Space::find_by_id(conn, space_id)?;
+    let space_documents = Document::find_all_by_space(conn, space_id)?;
 
     conn.transaction::<_, OpenExamError, _>(|| {
         // Duplicate Class
-        let mut new_class = NewClass::from(class);
-        new_class.org_id = org_id;
-        new_class.creator_id = creator_id;
-        let new_class = Class::insert(conn, new_class)?;
+        let mut new_space = NewSpace::from(space);
+        new_space.org_id = org_id;
+        new_space.creator_id = creator_id;
+        let new_class = Space::insert(conn, new_space)?;
 
         // Duplicate Class Contents
-        for class_document in class_documents.into_iter() {
-            let document = Document::find_by_id(conn, class_document.document_id)?;
-            // Only process head of learning module
-            if document.parent_id.is_none() && document.deleted_at.is_none() {
+        for space_document in space_documents.into_iter() {
+            // Only process head of materials
+            if space_document.parent_id.is_none() && space_document.deleted_at.is_none() {
                 let mut config = DocumentCloneConfig::new("", true);
                 config.set_org(org_id);
-                config.set_index(document.index);
-                document.deep_clone(conn, creator_id, config, Some(new_class.id), true, None)?;
+                config.set_index(space_document.index);
+                space_document.deep_clone(
+                    conn,
+                    creator_id,
+                    config,
+                    Some(new_class.id),
+                    true,
+                    None,
+                )?;
             }
         }
 

@@ -57,9 +57,9 @@ const CreateContentButton = (
   
   const onCreate = async (docType: DocumentType) => {
     const indexes = documents
-      .filter((doc) => !doc.document.deletedAt)
-      .filter((doc) => doc.document.parentId === parentId)
-      .map((doc) => doc.document.index);
+      .filter((doc) => !doc.deletedAt)
+      .filter((doc) => doc.parentId === parentId)
+      .map((doc) => doc.index);
     const index = indexes.length ? Math.max(...indexes) + 1 : 1;
     const documentId = await createDocument(
       DEFAULT_DOCUMENT_TITLE,

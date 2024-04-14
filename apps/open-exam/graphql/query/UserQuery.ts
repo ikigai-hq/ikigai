@@ -30,9 +30,8 @@ export const USER_ME = gql`
         ownerId
         orgUrl
       }
-      activeOrgMember {
+      activeUserAuth {
         orgId
-        userId
         orgRole
       }
       activeOrgPersonalInformation {
@@ -44,67 +43,6 @@ export const USER_ME = gql`
           publicUrl
         }
       }
-    }
-  }
-`;
-
-export const GET_ORGANIZATION_MEMBERS = gql`
-  query GetOrganizationMembers($filterOptions: OrgMemberFilterOptions!) {
-    orgFindMembers(filterOptions: $filterOptions) {
-      items {
-        userId
-        orgId
-        orgRole
-        personalInformation {
-          fullName
-          avatar {
-            publicUrl
-          }
-        }
-        user {
-          id
-          firstName
-          lastName
-          createdAt
-          randomColor
-          email
-          avatar {
-            publicUrl
-          }
-          classMembers {
-            classId
-            userId
-            class {
-              id
-              name
-              starterDocument {
-                documentId
-              }
-            }
-          }
-        }
-      }
-      total
-    }
-  }
-`;
-
-export const GET_INITIAL_ONBOARDING_USER_INFO = gql`
-  query GetInitialOnboardingUserInfo {
-    userMe {
-      id
-      firstName
-      lastName
-    }
-  }
-`;
-
-
-export const GET_ORG_STATS = gql`
-  query GetOrgStats {
-    orgMemberStats{
-      totalTeacher
-      totalStudent
     }
   }
 `;

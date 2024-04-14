@@ -10,7 +10,7 @@ import { StyledRightMenu } from "../common";
 import useDocumentStore from "context/ZustandDocumentStore";
 import { t } from "@lingui/macro";
 import { ButtonWithTooltip } from "components/common/Button";
-import { useGetClassMembers } from "context/ZustandClassMembeStore";
+import { useGetSpaceMembers } from "context/ZustandClassMembeStore";
 
 export type AdminAssignmentDocumentProps = {
   document: IDocument;
@@ -19,7 +19,7 @@ export type AdminAssignmentDocumentProps = {
 const AssignmentHeader = ({ document }: AdminAssignmentDocumentProps) => {
   const setIsClose = useDocumentStore((state) => state.setIsClose);
   const [openStudentList, setOpenStudentList] = useState(false);
-  const { members: students } = useGetClassMembers(document?.classDocument?.classId, OrgRole.STUDENT);
+  const { members: students } = useGetSpaceMembers(document?.spaceId, OrgRole.STUDENT);
 
   useEffect(() => {
     setIsClose(false);

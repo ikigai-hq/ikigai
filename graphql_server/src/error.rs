@@ -194,10 +194,3 @@ impl From<std::io::Error> for OpenExamError {
         Self::InternalServerError
     }
 }
-
-impl From<yup_oauth2::Error> for OpenExamError {
-    fn from(e: yup_oauth2::Error) -> Self {
-        error!("Yup OAUTH 2 Error: {:?}", e);
-        Self::InternalServerError
-    }
-}

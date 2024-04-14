@@ -13,13 +13,11 @@ import { setContext } from "@apollo/client/link/context";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { ApolloLink, split } from "apollo-link";
 import { getMainDefinition } from "apollo-utilities";
-import { parse } from "querystring";
 import toast from "react-hot-toast";
 import { OperationVariables } from "@apollo/client/core/types";
 import { QueryOptions } from "@apollo/client/core/watchQueryOptions";
 
 import useOrganizationStore from "context/ZustandOrganizationStore";
-import ClassAccessTokenStorage from "../storage/ClassAccessTokenStorage";
 import Config from "../config/Config";
 import TokenStorage from "../storage/TokenStorage";
 
@@ -27,20 +25,6 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 const authLink = setContext((_, { headers }) => {
   let token = TokenStorage.get();
-
-  // Parse Private Access Token (Quick Link Feature)
-  let privateAccessToken: string | string[] = "";
-  if (window && window.location) {
-    const cachedClassAccessToken = ClassAccessTokenStorage.get();
-    privateAccessToken =
-      parse(window.location.search.replace("?", "")).token ||
-      cachedClassAccessToken;
-
-    if (privateAccessToken && privateAccessToken !== cachedClassAccessToken) {
-      // Store new class access token
-      ClassAccessTokenStorage.set(privateAccessToken as string);
-    }
-  }
 
   const finalHeaders = {
     headers: {
@@ -50,10 +34,6 @@ const authLink = setContext((_, { headers }) => {
   
   if (token) {
     finalHeaders.headers["authorization"] = token;
-  }
-
-  if (privateAccessToken) {
-    finalHeaders.headers["class-access-token"] = privateAccessToken;
   }
   
   const activeOrgId = useOrganizationStore.getState().organization?.id;

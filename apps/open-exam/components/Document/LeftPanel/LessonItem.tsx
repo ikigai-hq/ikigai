@@ -82,15 +82,15 @@ const LessonItem = ({
       if (res.includes(activeDocument.id)) {
         // Found the first non deleted one
         const otherDoc = [...docs]
-          .sort((a, b) => a.document.index - b.document.index)
+          .sort((a, b) => a.index - b.index)
           .find(
             (doc) =>
-              !doc.document.deletedAt &&
-              !doc.document.parentId &&
-              doc.documentId !== item.id
+              !doc.deletedAt &&
+              !doc.parentId &&
+              doc.id !== item.id
           );
         if (otherDoc) {
-          router.push(formatDocumentRoute(otherDoc.documentId), undefined, {
+          router.push(formatDocumentRoute(otherDoc.id), undefined, {
             shallow: true,
           });
           return;

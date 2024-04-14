@@ -3,9 +3,9 @@ import { Divider, Typography } from "antd";
 import { t, Trans } from "@lingui/macro";
 import toast from "react-hot-toast";
 
-import { GET_ORG_CLASSES } from "graphql/query/ClassQuery";
+import { GET_ORG_SPACES } from "graphql/query/ClassQuery";
 import { handleError } from "graphql/ApolloClient";
-import { GetOrgClasses } from "graphql/types";
+import { GetOrgSpaces } from "graphql/types";
 import Modal from "components/common/Modal";
 import Loading from "components/Loading";
 import { Select } from "components/common/Select";
@@ -22,7 +22,7 @@ export type MoveDocumentProps = {
 
 const CopyDocumentToClass = ({ visible, onClose, selectedDocumentId }: MoveDocumentProps) => {
   const [selectedClassId, setSelectedClassId] = useState<undefined | number>();
-  const { data, loading } = useQuery<GetOrgClasses>(GET_ORG_CLASSES, {
+  const { data, loading } = useQuery<GetOrgSpaces>(GET_ORG_SPACES, {
     onError: handleError,
     fetchPolicy: "network-only",
   });
@@ -46,7 +46,7 @@ const CopyDocumentToClass = ({ visible, onClose, selectedDocumentId }: MoveDocum
     }
   };
   
-  const options = (data?.classGetAllOrgClasses || [])
+  const options = (data?.spaceGetAllOrgSpaces || [])
     .filter(data => data.id !== currentClassId)
     .filter(data =>
       data.name.toLowerCase().includes(keyword.toLowerCase()) ||

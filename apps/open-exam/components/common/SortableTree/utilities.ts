@@ -2,7 +2,7 @@ import { arrayMove } from "@dnd-kit/sortable";
 
 import type { FlattenedItem, TreeItem, TreeItems } from "./types";
 import { UniqueIdentifier } from "@dnd-kit/core";
-import { GetDocuments_classGet_classDocuments as IDocumentItemList } from "../../../graphql/types";
+import { GetDocuments_spaceGet_documents as IDocumentItemList } from "../../../graphql/types";
 
 export const iOS =
   typeof window !== "undefined"
@@ -272,9 +272,9 @@ export function removeChildrenOf<T>(
 export function getFullPathFromNode(id: string, docs: IDocumentItemList[], isHeader?: boolean) {
   let fullPath = [];
   if (id) {
-    const current = docs.find((item) => item.documentId === id);
-    if (current && current.document.parentId) {
-      fullPath = getFullPathFromNode(current.document.parentId, docs);
+    const current = docs.find((item) => item.id === id);
+    if (current && current.parentId) {
+      fullPath = getFullPathFromNode(current.parentId, docs);
     }
     if (current) fullPath.push(current);
   }

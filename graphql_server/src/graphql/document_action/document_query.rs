@@ -17,9 +17,9 @@ impl DocumentQuery {
         let conn = get_conn_from_ctx(ctx).await?;
         let document = Document::find_by_id(&conn, document_id).format_err()?;
 
-        if let Ok(org_member) = get_org_member_from_ctx(ctx).await {
-            if org_member.org_role == OrgRole::Student
-                && !available_for_student(&document, org_member.user_id)
+        if let Ok(user_auth) = get_user_auth_from_ctx(ctx).await {
+            if user_auth.org_role == OrgRole::Student
+                && !available_for_student(&document, user_auth.id)
             {
                 return Err(OpenExamError::new_bad_request(
                     "You don't have permission to read this document!",
@@ -35,17 +35,17 @@ impl DocumentQuery {
         &self,
         ctx: &Context<'_>,
     ) -> Result<Vec<Document>, Error> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            member.user_id,
-            member.org_id,
+            user_auth.id,
+            user_auth.org_id,
             OrganizationActionPermission::ManageTrash,
         )
         .await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
-        let documents = Document::find_deleted_documents(&conn, member.org_id).format_err()?;
+        let documents = Document::find_deleted_documents(&conn, user_auth.org_id).format_err()?;
         Ok(documents)
     }
 

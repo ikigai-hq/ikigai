@@ -47,7 +47,7 @@ const DocumentSetting = ({
   const updateDocumentLocal = useClassStore((state) => state.updateDocumentTitleLocal);
   const update = useDocumentStore(state => state.update);
   const authUser = useAuthUserStore((state) => state.currentUser);
-  const isStudent = authUser?.userMe?.activeOrgMember?.orgRole === OrgRole.STUDENT;
+  const isStudent = authUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
   const currentDocIdQuery = router.query.documentId as string;
   const setOpenTemplateModal = useDocumentTemplateStore(state => state.setChangeOpenTemplateModal);
   const isTemplateEnabled = useFeatureIsOn(TEMPLATE);

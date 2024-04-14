@@ -52,37 +52,6 @@ diesel::table! {
 }
 
 diesel::table! {
-    class_documents (class_id, document_id) {
-        class_id -> Int4,
-        document_id -> Uuid,
-        updated_at -> Int8,
-        created_at -> Int8,
-    }
-}
-
-diesel::table! {
-    class_members (class_id, user_id) {
-        class_id -> Int4,
-        user_id -> Int4,
-        updated_at -> Int8,
-        created_at -> Int8,
-    }
-}
-
-diesel::table! {
-    classes (id) {
-        id -> Int4,
-        name -> Text,
-        updated_at -> Int8,
-        created_at -> Int8,
-        org_id -> Int4,
-        banner_id -> Nullable<Uuid>,
-        creator_id -> Int4,
-        deleted_at -> Nullable<Int8>,
-    }
-}
-
-diesel::table! {
     document_highlights (uuid) {
         document_id -> Uuid,
         creator_id -> Int4,
@@ -188,6 +157,7 @@ diesel::table! {
         last_edited_content_at -> Int8,
         updated_at -> Int8,
         created_at -> Int8,
+        space_id -> Nullable<Int4>,
     }
 }
 
@@ -289,6 +259,28 @@ diesel::table! {
 }
 
 diesel::table! {
+    space_members (space_id, user_id) {
+        space_id -> Int4,
+        user_id -> Int4,
+        updated_at -> Int8,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
+    spaces (id) {
+        id -> Int4,
+        name -> Text,
+        updated_at -> Int8,
+        created_at -> Int8,
+        org_id -> Int4,
+        banner_id -> Nullable<Uuid>,
+        creator_id -> Int4,
+        deleted_at -> Nullable<Int8>,
+    }
+}
+
+diesel::table! {
     tags (name) {
         name -> Varchar,
         org_id -> Int4,
@@ -341,13 +333,6 @@ diesel::joinable!(assignments -> band_scores (band_score_id));
 diesel::joinable!(assignments -> documents (document_id));
 diesel::joinable!(assignments -> rubrics (grade_by_rubric_id));
 diesel::joinable!(band_scores -> organizations (org_id));
-diesel::joinable!(class_documents -> classes (class_id));
-diesel::joinable!(class_documents -> documents (document_id));
-diesel::joinable!(class_members -> classes (class_id));
-diesel::joinable!(class_members -> users (user_id));
-diesel::joinable!(classes -> files (banner_id));
-diesel::joinable!(classes -> organizations (org_id));
-diesel::joinable!(classes -> users (creator_id));
 diesel::joinable!(document_highlights -> documents (document_id));
 diesel::joinable!(document_highlights -> threads (thread_id));
 diesel::joinable!(document_highlights -> users (creator_id));
@@ -366,6 +351,7 @@ diesel::joinable!(document_versions -> documents (versioning_document_id));
 diesel::joinable!(document_versions -> users (creator_id));
 diesel::joinable!(documents -> files (cover_photo_id));
 diesel::joinable!(documents -> organizations (org_id));
+diesel::joinable!(documents -> spaces (space_id));
 diesel::joinable!(files -> organizations (org_id));
 diesel::joinable!(organization_members -> organizations (org_id));
 diesel::joinable!(organization_members -> users (user_id));
@@ -379,6 +365,11 @@ diesel::joinable!(quizzes -> quiz_structures (quiz_structure_id));
 diesel::joinable!(rubric_submissions -> assignment_submissions (submission_id));
 diesel::joinable!(rubric_submissions -> rubrics (rubric_id));
 diesel::joinable!(rubrics -> organizations (org_id));
+diesel::joinable!(space_members -> spaces (space_id));
+diesel::joinable!(space_members -> users (user_id));
+diesel::joinable!(spaces -> files (banner_id));
+diesel::joinable!(spaces -> organizations (org_id));
+diesel::joinable!(spaces -> users (creator_id));
 diesel::joinable!(tags -> organizations (org_id));
 diesel::joinable!(thread_comments -> files (file_uuid));
 diesel::joinable!(thread_comments -> threads (thread_id));
@@ -389,9 +380,6 @@ diesel::allow_tables_to_appear_in_same_query!(
     assignment_submissions,
     assignments,
     band_scores,
-    class_documents,
-    class_members,
-    classes,
     document_highlights,
     document_page_block_nested_documents,
     document_page_blocks,
@@ -409,6 +397,8 @@ diesel::allow_tables_to_appear_in_same_query!(
     quizzes,
     rubric_submissions,
     rubrics,
+    space_members,
+    spaces,
     tags,
     thread_comments,
     threads,

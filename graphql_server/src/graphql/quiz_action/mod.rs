@@ -10,8 +10,8 @@ use async_graphql::*;
 use crate::authorization::DocumentActionPermission;
 use crate::db::*;
 use crate::graphql::data_loader::{
-    AnswersByQuiz, FindPublicUserById, QuizAnswerByUser, QuizId, QuizStructureById,
-    OpenExamDataLoader,
+    AnswersByQuiz, FindPublicUserById, OpenExamDataLoader, QuizAnswerByUser, QuizId,
+    QuizStructureById,
 };
 use crate::helper::{document_quick_authorize, get_user_id_from_ctx};
 

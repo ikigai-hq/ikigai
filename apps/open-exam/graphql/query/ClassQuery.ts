@@ -1,96 +1,36 @@
 import { gql } from "@apollo/client";
 
-export const GET_CLASS_LESSONS = gql`
-  query GetDocuments($classId: Int!) {
-    classGet(classId: $classId) {
+export const GET_SPACE_DOCUMENTS = gql`
+  query GetDocuments($spaceId: Int!) {
+    spaceGet(spaceId: $spaceId) {
       id
-      classDocuments {
-        classId
-        documentId
-        document {
-          id
-          title
-          createdAt
-          parentId
-          index
-          documentType
-          hideRule
-          deletedAt
-          assignment {
-            id
-          }
-          submission {
-            id
-          }
-        }
-      }
-    }
-  }
-`;
-
-export const GET_CLASS_BY_ID = gql`
-  query GetClassById($classId: Int!) {
-    classGet(classId: $classId) {
-      id
-      name
-      updatedAt
-      createdAt
-      bannerId
-      banner {
-        uuid
-        publicUrl
-        fileName
-      }
-      creator {
+      documents {
         id
-        firstName
-        lastName
-        randomColor
-        avatar {
-          publicUrl
-        }
-        orgPersonalInformation {
-          fullName
-          avatar {
-            publicUrl
-          }
-        }
-      }
-      members {
-        userId
-        classId
-        user {
-          id
-          firstName
-          lastName
-          avatar {
-            publicUrl
-          }
-          randomColor
-          orgMember {
-            orgRole
-          }
-          email
-          orgPersonalInformation {
-            fullName
-            avatar {
-              publicUrl
-            }
-          }
-        }
+        title
         createdAt
+        parentId
+        index
+        documentType
+        hideRule
+        deletedAt
+        assignment {
+          id
+        }
+        submission {
+          id
+        }
       }
     }
   }
 `;
 
-export const GET_CLASS_MEMBERS = gql`
-  query GetClassMembers($classId: Int!) {
-    classGet(classId: $classId) {
+export const GET_SPACE_MEMBERS = gql`
+  query GetSpaceMembers($spaceId: Int!) {
+    spaceGet(spaceId: $spaceId) {
       id
       members {
         userId
-        classId
+        spaceId
         createdAt
         user {
           id
@@ -116,9 +56,9 @@ export const GET_CLASS_MEMBERS = gql`
   }
 `;
 
-export const GET_BASIC_CLASS_DETAIL = gql`
-  query GetBasicClassDetail($classId: Int!) {
-    classGet(classId: $classId) {
+export const GET_BASIC_SPACE_DETAIL = gql`
+  query GetBasicSpaceDetail($spaceId: Int!) {
+    spaceGet(spaceId: $spaceId) {
       id
       name
       banner {
@@ -128,25 +68,9 @@ export const GET_BASIC_CLASS_DETAIL = gql`
   }
 `;
 
-export const GET_MY_CLASSES = gql`
-  query GetMyClasses {
-    classGetMyClasses {
-      id
-      name
-      deletedAt
-      banner {
-        publicUrl
-      }
-      starterDocument {
-        documentId
-      }
-    }
-  }
-`;
-
-export const GET_DELETED_CLASSES = gql`
-  query GetDeletedClasses {
-    classGetDeletedClasses {
+export const GET_DELETED_SPACES = gql`
+  query GetDeletedSpaces {
+    spaceGetDeletedSpaces {
       id
       name
       deletedAt
@@ -157,9 +81,9 @@ export const GET_DELETED_CLASSES = gql`
   }
 `;
 
-export const GET_ORG_CLASSES = gql`
-  query GetOrgClasses {
-    classGetAllOrgClasses {
+export const GET_ORG_SPACES = gql`
+  query GetOrgSpaces {
+    spaceGetAllOrgSpaces {
       id
       name
     }

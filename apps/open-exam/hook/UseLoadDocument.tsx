@@ -1,7 +1,7 @@
-import useClassMemberStore from "context/ZustandClassMembeStore";
+import useSpaceMemberStore from "context/ZustandClassMembeStore";
 import useClassStore from "context/ZustandClassStore";
 import useDocumentStore, {
-  getClassIdFromDocument,
+  getSpaceIdFromDocument,
 } from "context/ZustandDocumentStore";
 import usePageBlockStore from "context/ZustandPageBlockStore";
 import useQuizStore from "context/ZustandQuizStore";
@@ -49,7 +49,7 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
   const fetchAndSetDocuments = useClassStore(
     (state) => state.fetchAndSetDocuments,
   );
-  const fetchClassMembers = useClassMemberStore(
+  const fetchClassMembers = useSpaceMemberStore(
     (state) => state.fetchMembersOfClass,
   );
 
@@ -61,7 +61,7 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
 
   const fetchDocumentDetail = async () => {
     const masterDocument = await fetchAndSetDocument(documentId);
-    const classId = getClassIdFromDocument(masterDocument);
+    const classId = getSpaceIdFromDocument(masterDocument);
     setMasterDocument(masterDocument);
     useClassStore.setState({ classId });
 

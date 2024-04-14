@@ -11,22 +11,22 @@ use crate::service::redis::Redis;
 use crate::util::log_util::Logger;
 
 pub mod assignment_action;
-pub mod class_action;
 pub mod context_caching_data;
 pub mod data_loader;
 pub mod document_action;
 pub mod file_action;
 pub mod notification_center;
+pub mod open_exam_mutation;
+pub mod open_exam_query;
+pub mod open_exam_subscription;
 pub mod organization_action;
 pub mod paging;
 pub mod quiz_action;
 pub mod scalar_type;
+pub mod space_action;
 pub mod thread_action;
 pub mod user_action;
 pub mod validator;
-pub mod open_exam_mutation;
-pub mod open_exam_query;
-pub mod open_exam_subscription;
 
 pub type OpenExamSchema = Schema<OpenExamQuery, OpenExamMutation, Subscription>;
 

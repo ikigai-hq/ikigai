@@ -6,14 +6,14 @@ import { Tooltip } from "antd";
 import useDocumentStore from "context/ZustandDocumentStore";
 import useUserPermission from "hook/UseUserPermission";
 import {
-  GetBasicClassDetail,
-  GetDocuments_classGet_classDocuments,
+  GetBasicSpaceDetail,
+  GetDocuments_spaceGet_documents,
 } from "graphql/types";
 import { Text, TextWeight } from "components/common/Text";
 import { useTheme } from "styled-components";
 import useClassStore from "context/ZustandClassStore";
 import { Permission } from "util/permission";
-import { GET_BASIC_CLASS_DETAIL } from "graphql/query/ClassQuery";
+import { GET_BASIC_SPACE_DETAIL } from "graphql/query/ClassQuery";
 import { handleError } from "graphql/ApolloClient";
 import CreateContentButton from "./CreateContentButton";
 import { ListModule, TitlePanel, ClassInfo } from "./common";
@@ -22,7 +22,7 @@ import LearningModuleDnd from "components/common/LearningModuleDnd";
 import LessonItemDnd from "./LessonItemDnd";
 
 interface Props {
-  docs: GetDocuments_classGet_classDocuments[];
+  docs: GetDocuments_spaceGet_documents[];
 }
 
 const LeftPanel: React.FC<Props> = ({ docs }) => {
@@ -39,14 +39,10 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
   const { classId } = useClassStore((state) => {
     return {
       classId: state.classId,
-      currentClass: state.currentClass,
-      refetchDocuments: state.fetchAndSetDocuments,
-      setAsLesson: state.addClassDocument,
-      documents: state.documents,
     };
   }, shallow);
-  const { data: basicClassDetailRes } = useQuery<GetBasicClassDetail>(
-    GET_BASIC_CLASS_DETAIL,
+  const { data: basicClassDetailRes } = useQuery<GetBasicSpaceDetail>(
+    GET_BASIC_SPACE_DETAIL,
     {
       skip: !classId,
       onError: handleError,
@@ -61,8 +57,8 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
     <RightBodyContainer $hide={leftPanelHidden} $leftPanel={true}>
       <div style={{ width: "100%" }}>
         <ClassInfo
-          imgUrl={basicClassDetailRes?.classGet?.banner?.publicUrl}
-          title={basicClassDetailRes?.classGet?.name}
+          imgUrl={basicClassDetailRes?.spaceGet?.banner?.publicUrl}
+          title={basicClassDetailRes?.spaceGet?.name}
         />
         {allow(Permission.ManageClassContent) && (
           <TitlePanel>

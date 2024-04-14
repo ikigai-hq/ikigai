@@ -1,6 +1,6 @@
 import {
   GetAnswersOfStructure,
-  GetClassMembers_classGet_members as IMember,
+  GetSpaceMembers_spaceGet_members as IMember,
   OrgRole,
   QuizType,
 } from "graphql/types";

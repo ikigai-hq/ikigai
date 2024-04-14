@@ -49,21 +49,14 @@ impl Document {
         Ok(submission)
     }
 
-    // DEPRECATED
-    async fn class_document(&self, ctx: &Context<'_>) -> Result<Option<ClassDocument>> {
-        let conn = get_conn_from_ctx(ctx).await?;
-        let class_document = ClassDocument::find_by_document_id_opt(&conn, self.id).format_err()?;
-        Ok(class_document)
-    }
-
-    async fn class(&self, ctx: &Context<'_>) -> Result<Option<Class>> {
+    async fn space(&self, ctx: &Context<'_>) -> Result<Option<Space>> {
         if get_user_id_from_ctx(ctx).await.is_err() {
             return Ok(None);
         }
 
         let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
-        let submission = loader.load_one(ClassByDocumentId(self.id)).await?;
-        Ok(submission)
+        let space = loader.load_one(SpaceByDocumentId(self.id)).await?;
+        Ok(space)
     }
 
     async fn children(&self, ctx: &Context<'_>) -> Result<Vec<Document>> {

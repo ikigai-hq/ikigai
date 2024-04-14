@@ -142,12 +142,12 @@ const DocumentMoreSetting = ({ onClickOpenHistory }: DocumentMoreSettingProps) =
           if (res.includes(activeDocument.id)) {
             // Found the first non deleted one
             const otherDoc = [...docs]
-              .sort((a, b) => a.document.index - b.document.index)
-              .find((doc) => !doc.document.deletedAt
-                && !doc.document.parentId && doc.documentId !== activeDocument.id
+              .sort((a, b) => a.index - b.index)
+              .find((doc) => !doc.deletedAt
+                && !doc.parentId && doc.id !== activeDocument.id
               );
             if (otherDoc) {
-              return router.push(formatDocumentRoute(otherDoc.documentId), undefined, {
+              return router.push(formatDocumentRoute(otherDoc.id), undefined, {
                 shallow: true,
               });
             }

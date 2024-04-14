@@ -22,6 +22,10 @@ pub struct DocumentAuth {
     pub is_doing_submission: bool,
     #[polar(attribute)]
     pub is_doing_open_type_submission: bool,
+    #[polar(attribute)]
+    pub space_id: Option<i32>,
+    #[polar(attribute)]
+    pub is_org_template: bool,
 }
 
 impl DocumentAuth {
@@ -32,6 +36,7 @@ impl DocumentAuth {
 
         let document = Document::find_by_id(conn, document_id)?;
         let submission = Submission::find_by_document(conn, document_id)?;
+        let is_org_template = DocumentTemplate::find(conn, document_id).is_ok();
 
         if let Some(submission) = &submission {
             allow_for_student_view_answer = submission.allow_for_student_view_answer;
@@ -47,6 +52,8 @@ impl DocumentAuth {
             allow_for_student_view_answer,
             is_doing_submission,
             is_doing_open_type_submission,
+            space_id: document.space_id,
+            is_org_template,
         })
     }
 }

@@ -8,7 +8,7 @@ use crate::error::{OpenExamError, OpenExamErrorExt};
 use crate::graphql::user_action::AddUserData;
 use crate::helper::user_helper::insert_org_member;
 use crate::helper::{
-    document_quick_authorize, get_conn_from_ctx, get_org_member_from_ctx, get_user_id_from_ctx,
+    document_quick_authorize, get_conn_from_ctx, get_user_auth_from_ctx, get_user_id_from_ctx,
     organization_authorize, user_authorize, DocumentCloneConfig, UserAction,
 };
 
@@ -18,17 +18,17 @@ pub struct OrganizationMutation;
 #[Object]
 impl OrganizationMutation {
     async fn org_add_org_member(&self, ctx: &Context<'_>, data: AddUserData) -> Result<PublicUser> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            member.user_id,
-            member.org_id,
+            user_auth.id,
+            user_auth.org_id,
             OrganizationActionPermission::AddOrgMember,
         )
         .await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
-        let new_user = insert_org_member(&conn, data, member.org_id)?;
+        let new_user = insert_org_member(&conn, data, user_auth.org_id)?;
         Ok(new_user.into())
     }
 
@@ -37,17 +37,11 @@ impl OrganizationMutation {
         ctx: &Context<'_>,
         org_member: OrganizationMember,
     ) -> Result<PublicUser> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         let other_user_id = org_member.user_id;
-        user_authorize(
-            ctx,
-            member.user_id,
-            other_user_id,
-            UserAction::EditInfoMember,
-        )
-        .await?;
+        user_authorize(ctx, user_auth.id, other_user_id, UserAction::EditInfoMember).await?;
 
-        if member.org_id != org_member.org_id {
+        if user_auth.org_id != org_member.org_id {
             return Err(OpenExamError::new_bad_request(
                 "Cannot update user of different organization",
             ))
@@ -65,11 +59,11 @@ impl OrganizationMutation {
         ctx: &Context<'_>,
         data: Vec<AddUserData>,
     ) -> Result<Vec<PublicUser>> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            member.user_id,
-            member.org_id,
+            user_auth.id,
+            user_auth.org_id,
             OrganizationActionPermission::AddOrgMember,
         )
         .await?;
@@ -78,11 +72,11 @@ impl OrganizationMutation {
         let mut result: Vec<PublicUser> = vec![];
         for data in data {
             let email = data.identity.email().cloned();
-            match insert_org_member(&conn, data, member.org_id) {
+            match insert_org_member(&conn, data, user_auth.org_id) {
                 Ok(new_user) => result.push(new_user.into()),
                 Err(e) => warn!(
                     "Cannot import user({:?})  into org {}. Reason: {:?}",
-                    email, member.org_id, e
+                    email, user_auth.org_id, e
                 ),
             }
         }
@@ -111,29 +105,29 @@ impl OrganizationMutation {
     }
 
     async fn org_remove_org_member(&self, ctx: &Context<'_>, user_id: i32) -> Result<bool> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            member.user_id,
-            member.org_id,
+            user_auth.id,
+            user_auth.org_id,
             OrganizationActionPermission::RemoveOrgMember,
         )
         .await?;
 
-        if member.user_id == user_id {
+        if user_auth.id == user_id {
             return Err(OpenExamError::new_bad_request("Cannot remove yourself!")).format_err();
         }
 
         let conn = get_conn_from_ctx(ctx).await?;
-        let org_member = OrganizationMember::find(&conn, member.org_id, user_id).format_err()?;
-        if org_member.org_id != member.org_id {
+        let org_member = OrganizationMember::find(&conn, user_auth.org_id, user_id).format_err()?;
+        if org_member.org_id != user_auth.org_id {
             return Err(OpenExamError::new_bad_request(
                 "Cannot remove account of another org!",
             ))
             .format_err();
         }
 
-        let org = Organization::find(&conn, org_member.org_id).format_err()?;
+        let org = Organization::find(&conn, user_auth.org_id).format_err()?;
         if org.owner_id == Some(user_id) {
             return Err(OpenExamError::new_bad_request(
                 "Cannot remove owner of organization!",
@@ -142,8 +136,8 @@ impl OrganizationMutation {
         }
 
         conn.transaction::<_, OpenExamError, _>(|| {
-            OrganizationMember::remove(&conn, member.org_id, user_id)?;
-            Member::remove_by_user(&conn, user_id)?;
+            OrganizationMember::remove(&conn, user_auth.org_id, user_id)?;
+            SpaceMember::remove_by_user(&conn, user_id)?;
             Ok(())
         })
         .format_err()?;
@@ -192,11 +186,11 @@ impl OrganizationMutation {
         ctx: &Context<'_>,
         document_id: Uuid,
     ) -> Result<DocumentTemplate> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            member.user_id,
-            member.org_id,
+            user_auth.id,
+            user_auth.org_id,
             OrganizationActionPermission::ManageTemplate,
         )
         .await?;
@@ -210,16 +204,16 @@ impl OrganizationMutation {
             .transaction::<_, OpenExamError, _>(|| {
                 // Step 1: Clone new document
                 let mut config = DocumentCloneConfig::new("", true);
-                config.org_id = Some(member.org_id);
+                config.org_id = Some(user_auth.org_id);
                 let new_document =
-                    document.deep_clone(&conn, member.user_id, config, None, false, None)?;
+                    document.deep_clone(&conn, user_auth.id, config, None, false, None)?;
 
                 // Step 2: Create template with new document
                 let template = DocumentTemplate::new(
                     new_document.title,
                     new_document.id,
-                    member.org_id,
-                    member.user_id,
+                    user_auth.org_id,
+                    user_auth.id,
                 );
                 let template = DocumentTemplate::upsert(&conn, template)?;
                 Ok(template)
@@ -238,10 +232,10 @@ impl OrganizationMutation {
             let conn = get_conn_from_ctx(ctx).await?;
             DocumentTemplate::find(&conn, template.id).format_err()?
         };
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            member.user_id,
+            user_auth.id,
             current_template.org_id,
             OrganizationActionPermission::ManageTemplate,
         )
@@ -262,10 +256,10 @@ impl OrganizationMutation {
             DocumentTemplate::find(&conn, template_id).format_err()?
         };
 
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            member.user_id,
+            user_auth.id,
             template.org_id,
             OrganizationActionPermission::ManageTemplate,
         )
@@ -282,18 +276,18 @@ impl OrganizationMutation {
         ctx: &Context<'_>,
         category: String,
     ) -> Result<Category> {
-        let member = get_org_member_from_ctx(ctx).await?;
+        let user_auth = get_user_auth_from_ctx(ctx).await?;
         organization_authorize(
             ctx,
-            member.user_id,
-            member.org_id,
+            user_auth.id,
+            user_auth.org_id,
             OrganizationActionPermission::ManageTemplate,
         )
         .await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
-        let last_index = Category::find_last_org_internal_index(&conn, member.org_id);
-        let category = Category::new(category, member.org_id, last_index);
+        let last_index = Category::find_last_org_internal_index(&conn, user_auth.org_id);
+        let category = Category::new(category, user_auth.org_id, last_index);
         let category = Category::upsert(&conn, category).format_err()?;
 
         Ok(category)

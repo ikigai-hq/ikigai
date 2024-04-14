@@ -90,6 +90,7 @@ pub struct Document {
     pub updated_at: i64,
     #[graphql(skip_input)]
     pub created_at: i64,
+    pub space_id: Option<i32>,
 }
 
 impl Document {
@@ -104,6 +105,7 @@ impl Document {
         cover_photo_id: Option<Uuid>,
         hide_rule: HideRule,
         editor_config: serde_json::Value,
+        space_id: Option<i32>,
     ) -> Self {
         Self {
             id: Uuid::new_v4(),
@@ -122,6 +124,7 @@ impl Document {
             updated_at: get_now_as_secs(),
             is_public: false,
             created_at: get_now_as_secs(),
+            space_id,
         }
     }
 
@@ -145,6 +148,15 @@ impl Document {
         data.last_edited_content_at = get_now_as_secs();
         diesel::update(documents::table.find(id))
             .set(data)
+            .get_result(conn)
+    }
+
+    pub fn update_space_id(conn: &PgConnection, id: Uuid, space_id: i32) -> Result<Self, Error> {
+        diesel::update(documents::table.find(id))
+            .set((
+                documents::space_id.eq(space_id),
+                documents::updated_at.eq(get_now_as_secs()),
+            ))
             .get_result(conn)
     }
 
@@ -202,6 +214,50 @@ impl Document {
             .filter(documents::parent_id.eq(parent_id))
             .order_by(documents::index.asc())
             .get_results(conn)
+    }
+
+    pub fn find_all_by_space(conn: &PgConnection, space_id: i32) -> Result<Vec<Document>, Error> {
+        documents::table
+            .filter(documents::space_id.eq(space_id))
+            .filter(documents::deleted_at.is_null())
+            .get_results(conn)
+    }
+
+    pub fn find_starter_of_space(
+        conn: &PgConnection,
+        space_id: i32,
+    ) -> Result<Option<Document>, Error> {
+        match documents::table
+            .filter(documents::space_id.eq(space_id))
+            .filter(documents::parent_id.is_null())
+            .order_by(documents::index.asc())
+            .first(conn)
+        {
+            Ok(document) => Ok(Some(document)),
+            Err(Error::NotFound) => Ok(None),
+            Err(e) => Err(e),
+        }
+    }
+
+    pub fn find_last_index(
+        conn: &PgConnection,
+        space_id: i32,
+        parent_id: Option<Uuid>,
+    ) -> Result<i32, Error> {
+        let mut query = documents::table.into_boxed();
+        query = query.filter(documents::space_id.eq(space_id));
+
+        if let Some(parent_id) = parent_id {
+            query = query.filter(documents::parent_id.eq(parent_id));
+        } else {
+            query = query.filter(documents::parent_id.is_null());
+        };
+
+        match query.order_by(documents::index.desc()).first::<Self>(conn) {
+            Ok(document) => Ok(document.index + 1),
+            Err(Error::NotFound) => Ok(1),
+            Err(e) => Err(e),
+        }
     }
 
     pub fn find_deleted_documents(conn: &PgConnection, org_id: i32) -> Result<Vec<Self>, Error> {

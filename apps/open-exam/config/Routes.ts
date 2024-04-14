@@ -2,15 +2,8 @@ import slugid from "slugid";
 import slugify from "slugify";
 
 export enum Routes {
-  Classes = "/",
+  Home = "/",
   DocumentDetail = "/documents/:documentId",
-  Organization = "/organization",
-  SignIn = "/signin",
-  ForgotPassword = "/forgot-password",
-  ResetPassword = "/reset-password",
-  MyAccount = "/profile/my-account",
-  Trash = "/trash",
-  SecuritySettings = "/profile/security-settings",
   NotFound = "/404",
 }
 
@@ -25,9 +18,7 @@ export const isNonAuthenticatePage = (pathName: string): boolean => {
 };
 
 export const nonAuthPathNameStandalone: Array<string> = [
-  Routes.SignIn,
-  Routes.ForgotPassword,
-  Routes.ResetPassword,
+  Routes.Home,
   Routes.NotFound,
 ];
 

@@ -4,24 +4,6 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: Login
-// ====================================================
-
-export interface Login {
-  userLogin: string;
-}
-
-export interface LoginVariables {
-  identity: any;
-  password: string;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL mutation operation: UpdateDocument
 // ====================================================
 
@@ -40,10 +22,10 @@ export interface UpdateDocumentVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: DuplicateClassDocument
+// GraphQL mutation operation: DuplicateSpaceDocument
 // ====================================================
 
-export interface DuplicateClassDocument_classDuplicateDocument_document {
+export interface DuplicateSpaceDocument_spaceDuplicateDocument {
   id: any;
   title: string;
   createdAt: number;
@@ -52,20 +34,15 @@ export interface DuplicateClassDocument_classDuplicateDocument_document {
   documentType: DocumentType;
   hideRule: HideRule;
   deletedAt: number | null;
+  spaceId: number | null;
 }
 
-export interface DuplicateClassDocument_classDuplicateDocument {
-  classId: number;
-  documentId: any;
-  document: DuplicateClassDocument_classDuplicateDocument_document;
+export interface DuplicateSpaceDocument {
+  spaceDuplicateDocument: DuplicateSpaceDocument_spaceDuplicateDocument[];
 }
 
-export interface DuplicateClassDocument {
-  classDuplicateDocument: DuplicateClassDocument_classDuplicateDocument[];
-}
-
-export interface DuplicateClassDocumentVariables {
-  classId: number;
+export interface DuplicateSpaceDocumentVariables {
+  spaceId: number;
   documentId: any;
 }
 
@@ -75,21 +52,21 @@ export interface DuplicateClassDocumentVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: AddClassDocument
+// GraphQL mutation operation: AddSpaceDocument
 // ====================================================
 
-export interface AddClassDocument_classAddDocument_document_assignment {
+export interface AddSpaceDocument_spaceAddDocument_assignment {
   id: number;
 }
 
-export interface AddClassDocument_classAddDocument_document_submission {
+export interface AddSpaceDocument_spaceAddDocument_submission {
   id: number;
   submitAt: number | null;
   isSubmitted: boolean;
   allowForStudentViewAnswer: boolean;
 }
 
-export interface AddClassDocument_classAddDocument_document {
+export interface AddSpaceDocument_spaceAddDocument {
   id: any;
   title: string;
   createdAt: number;
@@ -98,22 +75,16 @@ export interface AddClassDocument_classAddDocument_document {
   documentType: DocumentType;
   hideRule: HideRule;
   deletedAt: number | null;
-  assignment: AddClassDocument_classAddDocument_document_assignment | null;
-  submission: AddClassDocument_classAddDocument_document_submission | null;
+  assignment: AddSpaceDocument_spaceAddDocument_assignment | null;
+  submission: AddSpaceDocument_spaceAddDocument_submission | null;
 }
 
-export interface AddClassDocument_classAddDocument {
-  classId: number;
-  documentId: any;
-  document: AddClassDocument_classAddDocument_document;
+export interface AddSpaceDocument {
+  spaceAddDocument: AddSpaceDocument_spaceAddDocument;
 }
 
-export interface AddClassDocument {
-  classAddDocument: AddClassDocument_classAddDocument;
-}
-
-export interface AddClassDocumentVariables {
-  classId: number;
+export interface AddSpaceDocumentVariables {
+  spaceId: number;
   documentId: any;
   isAssignment: boolean;
 }
@@ -124,42 +95,25 @@ export interface AddClassDocumentVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: CreateClass
+// GraphQL mutation operation: CreateSpace
 // ====================================================
 
-export interface CreateClass_classCreate_starterDocument {
-  documentId: any;
+export interface CreateSpace_spaceCreate_starterDocument {
+  id: any;
 }
 
-export interface CreateClass_classCreate {
+export interface CreateSpace_spaceCreate {
   id: number;
   orgId: number;
-  starterDocument: CreateClass_classCreate_starterDocument;
+  starterDocument: CreateSpace_spaceCreate_starterDocument;
 }
 
-export interface CreateClass {
-  classCreate: CreateClass_classCreate;
+export interface CreateSpace {
+  spaceCreate: CreateSpace_spaceCreate;
 }
 
-export interface CreateClassVariables {
-  data: NewClass;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: DeleteClass
-// ====================================================
-
-export interface DeleteClass {
-  classDelete: boolean;
-}
-
-export interface DeleteClassVariables {
-  classId: number;
+export interface CreateSpaceVariables {
+  data: NewSpace;
 }
 
 /* tslint:disable */
@@ -168,36 +122,19 @@ export interface DeleteClassVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: SoftDeleteClass
+// GraphQL mutation operation: DuplicateSpace
 // ====================================================
 
-export interface SoftDeleteClass {
-  classSoftDelete: boolean;
-}
-
-export interface SoftDeleteClassVariables {
-  classId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: RestoreClass
-// ====================================================
-
-export interface RestoreClass_classRestore {
+export interface DuplicateSpace_spaceDuplicate {
   id: number;
 }
 
-export interface RestoreClass {
-  classRestore: RestoreClass_classRestore;
+export interface DuplicateSpace {
+  spaceDuplicate: DuplicateSpace_spaceDuplicate;
 }
 
-export interface RestoreClassVariables {
-  classId: number;
+export interface DuplicateSpaceVariables {
+  spaceId: number;
 }
 
 /* tslint:disable */
@@ -206,19 +143,53 @@ export interface RestoreClassVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: DuplicateClass
+// GraphQL mutation operation: SoftDeleteSpace
 // ====================================================
 
-export interface DuplicateClass_classDuplicate {
+export interface SoftDeleteSpace {
+  spaceSoftDelete: boolean;
+}
+
+export interface SoftDeleteSpaceVariables {
+  spaceId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: RestoreSpace
+// ====================================================
+
+export interface RestoreSpace_spaceRestore {
   id: number;
 }
 
-export interface DuplicateClass {
-  classDuplicate: DuplicateClass_classDuplicate;
+export interface RestoreSpace {
+  spaceRestore: RestoreSpace_spaceRestore;
 }
 
-export interface DuplicateClassVariables {
-  classId: number;
+export interface RestoreSpaceVariables {
+  spaceId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: DeleteSpace
+// ====================================================
+
+export interface DeleteSpace {
+  spaceDelete: boolean;
+}
+
+export interface DeleteSpaceVariables {
+  spaceId: number;
 }
 
 /* tslint:disable */
@@ -245,16 +216,16 @@ export interface DocumentUpdatePublicVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: ClassSoftDeleteDocuments
+// GraphQL mutation operation: SoftDeleteDocuments
 // ====================================================
 
-export interface ClassSoftDeleteDocuments {
-  classSoftDeleteMultiple: boolean;
+export interface SoftDeleteDocuments {
+  spaceSoftDeleteMultiple: boolean;
 }
 
-export interface ClassSoftDeleteDocumentsVariables {
+export interface SoftDeleteDocumentsVariables {
   documentIds: any[];
-  classId: number;
+  spaceId: number;
 }
 
 /* tslint:disable */
@@ -1468,77 +1439,6 @@ export interface RemoveHighlightDocVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: UserUpdateInfo
-// ====================================================
-
-export interface UserUpdateInfo {
-  userUpdateInfo: boolean;
-}
-
-export interface UserUpdateInfoVariables {
-  input: UpdateUserData;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: UserUpdatePassword
-// ====================================================
-
-export interface UserUpdatePassword {
-  userUpdatePassword: boolean;
-}
-
-export interface UserUpdatePasswordVariables {
-  currentPassword: string;
-  newPassword: string;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: UserForgotPassword
-// ====================================================
-
-export interface UserForgotPassword {
-  userForgotPassword: boolean;
-}
-
-export interface UserForgotPasswordVariables {
-  identity: any;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: UserResetPassword
-// ====================================================
-
-export interface UserResetPassword {
-  userResetPassword: boolean;
-}
-
-export interface UserResetPasswordVariables {
-  identity: any;
-  otp: string;
-  newPassword: string;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL mutation operation: AddOrgMember
 // ====================================================
 
@@ -1552,86 +1452,6 @@ export interface AddOrgMember {
 
 export interface AddOrgMemberVariables {
   data: AddUserData;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: RemoveOrgMember
-// ====================================================
-
-export interface RemoveOrgMember {
-  orgRemoveOrgMember: boolean;
-}
-
-export interface RemoveOrgMemberVariables {
-  userId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: CreateUser
-// ====================================================
-
-export interface CreateUser {
-  userRegister: string;
-}
-
-export interface CreateUserVariables {
-  data: AddUserData;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: UpdateMemberNote
-// ====================================================
-
-export interface UpdateMemberNote_orgUpdateOrgMember {
-  id: number;
-}
-
-export interface UpdateMemberNote {
-  orgUpdateOrgMember: UpdateMemberNote_orgUpdateOrgMember;
-}
-
-export interface UpdateMemberNoteVariables {
-  orgMember: OrganizationMemberInput;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: UpdateOrg
-// ====================================================
-
-export interface UpdateOrg_orgUpdate {
-  id: number;
-  orgName: string;
-  ownerId: number | null;
-  orgUrl: string;
-}
-
-export interface UpdateOrg {
-  orgUpdate: UpdateOrg_orgUpdate;
-}
-
-export interface UpdateOrgVariables {
-  orgId: number;
-  data: UpdateOrganizationData;
 }
 
 /* tslint:disable */
@@ -1774,15 +1594,15 @@ export interface GetRubrics {
 // GraphQL query operation: GetDocuments
 // ====================================================
 
-export interface GetDocuments_classGet_classDocuments_document_assignment {
+export interface GetDocuments_spaceGet_documents_assignment {
   id: number;
 }
 
-export interface GetDocuments_classGet_classDocuments_document_submission {
+export interface GetDocuments_spaceGet_documents_submission {
   id: number;
 }
 
-export interface GetDocuments_classGet_classDocuments_document {
+export interface GetDocuments_spaceGet_documents {
   id: any;
   title: string;
   createdAt: number;
@@ -1791,27 +1611,21 @@ export interface GetDocuments_classGet_classDocuments_document {
   documentType: DocumentType;
   hideRule: HideRule;
   deletedAt: number | null;
-  assignment: GetDocuments_classGet_classDocuments_document_assignment | null;
-  submission: GetDocuments_classGet_classDocuments_document_submission | null;
+  assignment: GetDocuments_spaceGet_documents_assignment | null;
+  submission: GetDocuments_spaceGet_documents_submission | null;
 }
 
-export interface GetDocuments_classGet_classDocuments {
-  classId: number;
-  documentId: any;
-  document: GetDocuments_classGet_classDocuments_document;
-}
-
-export interface GetDocuments_classGet {
+export interface GetDocuments_spaceGet {
   id: number;
-  classDocuments: GetDocuments_classGet_classDocuments[];
+  documents: GetDocuments_spaceGet_documents[];
 }
 
 export interface GetDocuments {
-  classGet: GetDocuments_classGet;
+  spaceGet: GetDocuments_spaceGet;
 }
 
 export interface GetDocumentsVariables {
-  classId: number;
+  spaceId: number;
 }
 
 /* tslint:disable */
@@ -1820,146 +1634,55 @@ export interface GetDocumentsVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetClassById
+// GraphQL query operation: GetSpaceMembers
 // ====================================================
 
-export interface GetClassById_classGet_banner {
-  uuid: any;
-  publicUrl: string | null;
-  fileName: string;
-}
-
-export interface GetClassById_classGet_creator_avatar {
-  publicUrl: string | null;
-}
-
-export interface GetClassById_classGet_creator_orgPersonalInformation_avatar {
-  publicUrl: string | null;
-}
-
-export interface GetClassById_classGet_creator_orgPersonalInformation {
-  fullName: string;
-  avatar: GetClassById_classGet_creator_orgPersonalInformation_avatar | null;
-}
-
-export interface GetClassById_classGet_creator {
-  id: number;
-  firstName: string;
-  lastName: string;
-  randomColor: string;
-  avatar: GetClassById_classGet_creator_avatar | null;
-  orgPersonalInformation: GetClassById_classGet_creator_orgPersonalInformation | null;
-}
-
-export interface GetClassById_classGet_members_user_avatar {
-  publicUrl: string | null;
-}
-
-export interface GetClassById_classGet_members_user_orgMember {
+export interface GetSpaceMembers_spaceGet_members_user_orgMember {
   orgRole: OrgRole;
 }
 
-export interface GetClassById_classGet_members_user_orgPersonalInformation_avatar {
+export interface GetSpaceMembers_spaceGet_members_user_orgPersonalInformation_avatar {
   publicUrl: string | null;
 }
 
-export interface GetClassById_classGet_members_user_orgPersonalInformation {
+export interface GetSpaceMembers_spaceGet_members_user_orgPersonalInformation {
   fullName: string;
-  avatar: GetClassById_classGet_members_user_orgPersonalInformation_avatar | null;
+  avatar: GetSpaceMembers_spaceGet_members_user_orgPersonalInformation_avatar | null;
 }
 
-export interface GetClassById_classGet_members_user {
-  id: number;
-  firstName: string;
-  lastName: string;
-  avatar: GetClassById_classGet_members_user_avatar | null;
-  randomColor: string;
-  orgMember: GetClassById_classGet_members_user_orgMember | null;
-  email: string;
-  orgPersonalInformation: GetClassById_classGet_members_user_orgPersonalInformation | null;
-}
-
-export interface GetClassById_classGet_members {
-  userId: number;
-  classId: number;
-  user: GetClassById_classGet_members_user;
-  createdAt: number;
-}
-
-export interface GetClassById_classGet {
-  id: number;
-  name: string;
-  updatedAt: number;
-  createdAt: number;
-  bannerId: any | null;
-  banner: GetClassById_classGet_banner | null;
-  creator: GetClassById_classGet_creator;
-  members: GetClassById_classGet_members[];
-}
-
-export interface GetClassById {
-  classGet: GetClassById_classGet;
-}
-
-export interface GetClassByIdVariables {
-  classId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GetClassMembers
-// ====================================================
-
-export interface GetClassMembers_classGet_members_user_orgMember {
-  orgRole: OrgRole;
-}
-
-export interface GetClassMembers_classGet_members_user_orgPersonalInformation_avatar {
+export interface GetSpaceMembers_spaceGet_members_user_avatar {
   publicUrl: string | null;
 }
 
-export interface GetClassMembers_classGet_members_user_orgPersonalInformation {
-  fullName: string;
-  avatar: GetClassMembers_classGet_members_user_orgPersonalInformation_avatar | null;
-}
-
-export interface GetClassMembers_classGet_members_user_avatar {
-  publicUrl: string | null;
-}
-
-export interface GetClassMembers_classGet_members_user {
+export interface GetSpaceMembers_spaceGet_members_user {
   id: number;
   firstName: string;
   lastName: string;
   email: string;
   randomColor: string;
-  orgMember: GetClassMembers_classGet_members_user_orgMember | null;
-  orgPersonalInformation: GetClassMembers_classGet_members_user_orgPersonalInformation | null;
-  avatar: GetClassMembers_classGet_members_user_avatar | null;
+  orgMember: GetSpaceMembers_spaceGet_members_user_orgMember | null;
+  orgPersonalInformation: GetSpaceMembers_spaceGet_members_user_orgPersonalInformation | null;
+  avatar: GetSpaceMembers_spaceGet_members_user_avatar | null;
 }
 
-export interface GetClassMembers_classGet_members {
+export interface GetSpaceMembers_spaceGet_members {
   userId: number;
-  classId: number;
+  spaceId: number;
   createdAt: number;
-  user: GetClassMembers_classGet_members_user;
+  user: GetSpaceMembers_spaceGet_members_user;
 }
 
-export interface GetClassMembers_classGet {
+export interface GetSpaceMembers_spaceGet {
   id: number;
-  members: GetClassMembers_classGet_members[];
+  members: GetSpaceMembers_spaceGet_members[];
 }
 
-export interface GetClassMembers {
-  classGet: GetClassMembers_classGet;
+export interface GetSpaceMembers {
+  spaceGet: GetSpaceMembers_spaceGet;
 }
 
-export interface GetClassMembersVariables {
-  classId: number;
+export interface GetSpaceMembersVariables {
+  spaceId: number;
 }
 
 /* tslint:disable */
@@ -1968,25 +1691,25 @@ export interface GetClassMembersVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetBasicClassDetail
+// GraphQL query operation: GetBasicSpaceDetail
 // ====================================================
 
-export interface GetBasicClassDetail_classGet_banner {
+export interface GetBasicSpaceDetail_spaceGet_banner {
   publicUrl: string | null;
 }
 
-export interface GetBasicClassDetail_classGet {
+export interface GetBasicSpaceDetail_spaceGet {
   id: number;
   name: string;
-  banner: GetBasicClassDetail_classGet_banner | null;
+  banner: GetBasicSpaceDetail_spaceGet_banner | null;
 }
 
-export interface GetBasicClassDetail {
-  classGet: GetBasicClassDetail_classGet;
+export interface GetBasicSpaceDetail {
+  spaceGet: GetBasicSpaceDetail_spaceGet;
 }
 
-export interface GetBasicClassDetailVariables {
-  classId: number;
+export interface GetBasicSpaceDetailVariables {
+  spaceId: number;
 }
 
 /* tslint:disable */
@@ -1995,51 +1718,22 @@ export interface GetBasicClassDetailVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetMyClasses
+// GraphQL query operation: GetDeletedSpaces
 // ====================================================
 
-export interface GetMyClasses_classGetMyClasses_banner {
+export interface GetDeletedSpaces_spaceGetDeletedSpaces_banner {
   publicUrl: string | null;
 }
 
-export interface GetMyClasses_classGetMyClasses_starterDocument {
-  documentId: any;
-}
-
-export interface GetMyClasses_classGetMyClasses {
+export interface GetDeletedSpaces_spaceGetDeletedSpaces {
   id: number;
   name: string;
   deletedAt: number | null;
-  banner: GetMyClasses_classGetMyClasses_banner | null;
-  starterDocument: GetMyClasses_classGetMyClasses_starterDocument;
+  banner: GetDeletedSpaces_spaceGetDeletedSpaces_banner | null;
 }
 
-export interface GetMyClasses {
-  classGetMyClasses: GetMyClasses_classGetMyClasses[];
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GetDeletedClasses
-// ====================================================
-
-export interface GetDeletedClasses_classGetDeletedClasses_banner {
-  publicUrl: string | null;
-}
-
-export interface GetDeletedClasses_classGetDeletedClasses {
-  id: number;
-  name: string;
-  deletedAt: number | null;
-  banner: GetDeletedClasses_classGetDeletedClasses_banner | null;
-}
-
-export interface GetDeletedClasses {
-  classGetDeletedClasses: GetDeletedClasses_classGetDeletedClasses[];
+export interface GetDeletedSpaces {
+  spaceGetDeletedSpaces: GetDeletedSpaces_spaceGetDeletedSpaces[];
 }
 
 /* tslint:disable */
@@ -2048,16 +1742,16 @@ export interface GetDeletedClasses {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetOrgClasses
+// GraphQL query operation: GetOrgSpaces
 // ====================================================
 
-export interface GetOrgClasses_classGetAllOrgClasses {
+export interface GetOrgSpaces_spaceGetAllOrgSpaces {
   id: number;
   name: string;
 }
 
-export interface GetOrgClasses {
-  classGetAllOrgClasses: GetOrgClasses_classGetAllOrgClasses[];
+export interface GetOrgSpaces {
+  spaceGetAllOrgSpaces: GetOrgSpaces_spaceGetAllOrgSpaces[];
 }
 
 /* tslint:disable */
@@ -2068,10 +1762,6 @@ export interface GetOrgClasses {
 // ====================================================
 // GraphQL query operation: GetDocumentDetail
 // ====================================================
-
-export interface GetDocumentDetail_documentGet_classDocument {
-  classId: number;
-}
 
 export interface GetDocumentDetail_documentGet_quizzes_structure {
   id: any;
@@ -2143,13 +1833,9 @@ export interface GetDocumentDetail_documentGet_submission_user {
   orgPersonalInformation: GetDocumentDetail_documentGet_submission_user_orgPersonalInformation | null;
 }
 
-export interface GetDocumentDetail_documentGet_submission_assignment_document_classDocument {
-  classId: number;
-}
-
 export interface GetDocumentDetail_documentGet_submission_assignment_document {
   id: any;
-  classDocument: GetDocumentDetail_documentGet_submission_assignment_document_classDocument | null;
+  spaceId: number | null;
 }
 
 export interface GetDocumentDetail_documentGet_submission_assignment {
@@ -2305,7 +1991,7 @@ export interface GetDocumentDetail_documentGet {
   editorConfig: any;
   updatedAt: number;
   deletedAt: number | null;
-  classDocument: GetDocumentDetail_documentGet_classDocument | null;
+  spaceId: number | null;
   quizzes: GetDocumentDetail_documentGet_quizzes[];
   submission: GetDocumentDetail_documentGet_submission | null;
   assignment: GetDocumentDetail_documentGet_assignment | null;
@@ -2832,9 +2518,8 @@ export interface UserMe_userMe_activeOrganization {
   orgUrl: string;
 }
 
-export interface UserMe_userMe_activeOrgMember {
+export interface UserMe_userMe_activeUserAuth {
   orgId: number;
-  userId: number;
   orgRole: OrgRole;
 }
 
@@ -2861,119 +2546,12 @@ export interface UserMe_userMe {
   avatar: UserMe_userMe_avatar | null;
   members: UserMe_userMe_members[];
   activeOrganization: UserMe_userMe_activeOrganization | null;
-  activeOrgMember: UserMe_userMe_activeOrgMember | null;
+  activeUserAuth: UserMe_userMe_activeUserAuth | null;
   activeOrgPersonalInformation: UserMe_userMe_activeOrgPersonalInformation | null;
 }
 
 export interface UserMe {
   userMe: UserMe_userMe;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GetOrganizationMembers
-// ====================================================
-
-export interface GetOrganizationMembers_orgFindMembers_items_personalInformation_avatar {
-  publicUrl: string | null;
-}
-
-export interface GetOrganizationMembers_orgFindMembers_items_personalInformation {
-  fullName: string;
-  avatar: GetOrganizationMembers_orgFindMembers_items_personalInformation_avatar | null;
-}
-
-export interface GetOrganizationMembers_orgFindMembers_items_user_avatar {
-  publicUrl: string | null;
-}
-
-export interface GetOrganizationMembers_orgFindMembers_items_user_classMembers_class_starterDocument {
-  documentId: any;
-}
-
-export interface GetOrganizationMembers_orgFindMembers_items_user_classMembers_class {
-  id: number;
-  name: string;
-  starterDocument: GetOrganizationMembers_orgFindMembers_items_user_classMembers_class_starterDocument;
-}
-
-export interface GetOrganizationMembers_orgFindMembers_items_user_classMembers {
-  classId: number;
-  userId: number;
-  class: GetOrganizationMembers_orgFindMembers_items_user_classMembers_class;
-}
-
-export interface GetOrganizationMembers_orgFindMembers_items_user {
-  id: number;
-  firstName: string;
-  lastName: string;
-  createdAt: number;
-  randomColor: string;
-  email: string;
-  avatar: GetOrganizationMembers_orgFindMembers_items_user_avatar | null;
-  classMembers: GetOrganizationMembers_orgFindMembers_items_user_classMembers[];
-}
-
-export interface GetOrganizationMembers_orgFindMembers_items {
-  userId: number;
-  orgId: number;
-  orgRole: OrgRole;
-  personalInformation: GetOrganizationMembers_orgFindMembers_items_personalInformation;
-  user: GetOrganizationMembers_orgFindMembers_items_user;
-}
-
-export interface GetOrganizationMembers_orgFindMembers {
-  items: GetOrganizationMembers_orgFindMembers_items[];
-  total: number;
-}
-
-export interface GetOrganizationMembers {
-  orgFindMembers: GetOrganizationMembers_orgFindMembers;
-}
-
-export interface GetOrganizationMembersVariables {
-  filterOptions: OrgMemberFilterOptions;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GetInitialOnboardingUserInfo
-// ====================================================
-
-export interface GetInitialOnboardingUserInfo_userMe {
-  id: number;
-  firstName: string;
-  lastName: string;
-}
-
-export interface GetInitialOnboardingUserInfo {
-  userMe: GetInitialOnboardingUserInfo_userMe;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GetOrgStats
-// ====================================================
-
-export interface GetOrgStats_orgMemberStats {
-  totalTeacher: number;
-  totalStudent: number;
-}
-
-export interface GetOrgStats {
-  orgMemberStats: GetOrgStats_orgMemberStats;
 }
 
 /* tslint:disable */
@@ -3111,10 +2689,6 @@ export interface GradeSubmissionData {
   feedback?: string | null;
 }
 
-export interface NewClass {
-  name: string;
-}
-
 export interface NewComment {
   threadId: number;
   content: string;
@@ -3129,6 +2703,7 @@ export interface NewDocument {
   title: string;
   body: string;
   editorConfig: any;
+  spaceId?: number | null;
 }
 
 export interface NewDocumentHighlight {
@@ -3140,19 +2715,8 @@ export interface NewDocumentHighlight {
   originalText: string;
 }
 
-export interface OrgMemberFilterOptions {
-  keyword?: string | null;
-  role?: OrgRole | null;
-  classId?: number | null;
-  paging: PagingInput;
-  createdAtFrom?: number | null;
-  createdAtTo?: number | null;
-}
-
-export interface OrganizationMemberInput {
-  orgId: number;
-  userId: number;
-  orgRole: OrgRole;
+export interface NewSpace {
+  name: string;
 }
 
 export interface PageBlockDocumentInput {
@@ -3167,11 +2731,6 @@ export interface PageBlockInput {
   documentId: any;
   title: string;
   viewMode: PageViewMode;
-}
-
-export interface PagingInput {
-  offset: number;
-  limit: number;
 }
 
 export interface QuizAnswerInput {
@@ -3248,20 +2807,10 @@ export interface UpdateDocumentData {
   editorConfig: any;
 }
 
-export interface UpdateOrganizationData {
-  orgName: string;
-}
-
 export interface UpdatePositionData {
   id: any;
   parentId?: any | null;
   index: number;
-}
-
-export interface UpdateUserData {
-  firstName: string;
-  lastName: string;
-  avatarFileId?: any | null;
 }
 
 //==============================================================

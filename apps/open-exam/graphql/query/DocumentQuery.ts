@@ -13,9 +13,7 @@ export const GET_DOCUMENT_DETAIL = gql`
       editorConfig
       updatedAt
       deletedAt
-      classDocument {
-        classId
-      }
+      spaceId
       quizzes {
         id
         documentId
@@ -90,9 +88,7 @@ export const GET_DOCUMENT_DETAIL = gql`
           gradeByRubricId
           document {
             id
-            classDocument {
-              classId
-            }
+            spaceId
           }
         }
         rubricGrade {

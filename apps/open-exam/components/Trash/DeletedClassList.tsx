@@ -5,21 +5,21 @@ import toast from "react-hot-toast";
 import { t } from "@lingui/macro";
 
 import DeletedItem from "./DeletedItem";
-import { GET_DELETED_CLASSES } from "graphql/query/ClassQuery";
+import { GET_DELETED_SPACES } from "graphql/query/ClassQuery";
 import { handleError } from "graphql/ApolloClient";
-import { GetDeletedClasses } from "graphql/types";
+import { GetDeletedSpaces } from "graphql/types";
 import Loading from "../Loading";
-import { DELETE_CLASS, RESTORE_CLASS } from "graphql/mutation/ClassMutation";
+import { DELETE_SPACE, RESTORE_SPACE } from "graphql/mutation/ClassMutation";
 
 const DeletedClassList = () => {
-  const { data, loading, refetch } = useQuery<GetDeletedClasses>(GET_DELETED_CLASSES, {
+  const { data, loading, refetch } = useQuery<GetDeletedSpaces>(GET_DELETED_SPACES, {
     onError: handleError,
     fetchPolicy: "network-only",
   });
-  const [restoreClass] = useMutation(RESTORE_CLASS, {
+  const [restoreClass] = useMutation(RESTORE_SPACE, {
     onError: handleError,
   });
-  const [deleteClass] = useMutation(DELETE_CLASS, {
+  const [deleteClass] = useMutation(DELETE_SPACE, {
     onError: handleError,
   });
   
@@ -37,7 +37,7 @@ const DeletedClassList = () => {
   
   if (loading || !data) return <Loading />;
   
-  const items = cloneDeep(data.classGetDeletedClasses)
+  const items = cloneDeep(data.spaceGetDeletedSpaces)
     .sort((a, b) => b.deletedAt - a.deletedAt);
   return (
     <Row>

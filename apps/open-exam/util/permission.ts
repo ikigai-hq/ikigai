@@ -109,7 +109,7 @@ export const getDocumentPermissions = (
 ): DocumentPermission[] => {
   if (isPreviewMode) return VIEW_ONLY_PERMISSIONS;
   
-  const role = user?.userMe?.activeOrgMember?.orgRole;
+  const role = user?.userMe?.activeUserAuth?.orgRole;
   const documentType = getDocumentType(doc);
 
   if (role === OrgRole.TEACHER) return FULL_DOCUMENT_PERMISSIONS;

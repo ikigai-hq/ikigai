@@ -5,7 +5,6 @@ use pbkdf2::{
     password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
     Pbkdf2,
 };
-use phonenumber::{Mode, PhoneNumber};
 use rand::Rng;
 use rand_core::OsRng;
 
@@ -172,23 +171,6 @@ pub fn generate_otp() -> String {
             OTP_CODE_CHARSET[idx] as char
         })
         .collect()
-}
-
-pub fn format_phone_number(phone_number: PhoneNumber) -> String {
-    phone_number.format().mode(Mode::E164).to_string()
-}
-
-pub fn format_phone_search_key(keyword: &str) -> &str {
-    if keyword.is_empty() {
-        return "";
-    }
-
-    let mut chars = keyword.chars();
-    if keyword.find('0') == Some(0) {
-        chars.next();
-    }
-
-    chars.as_str()
 }
 
 pub fn is_local() -> bool {

@@ -8,8 +8,8 @@ export const DOCUMENT_UPDATE_PUBLIC = gql`
 `;
 
 export const SOFT_DELETE_DOCUMENTS = gql`
-  mutation ClassSoftDeleteDocuments($documentIds: [UUID!]!, $classId: Int!) {
-    classSoftDeleteMultiple(classId: $classId, documentIds: $documentIds)
+  mutation SoftDeleteDocuments($documentIds: [UUID!]!, $spaceId: Int!) {
+    spaceSoftDeleteMultiple(spaceId: $spaceId, documentIds: $documentIds)
   }
 `;
 
@@ -34,7 +34,7 @@ export const DOCUMENT_UPDATE_HIDE_RULE = gql`
   }
 `;
 
-// NOTE: using this to update pageblock title.
+// NOTE: using this to update PageBLock title.
 export const DOCUMENT_ADD_PAGE_BLOCK = gql`
   mutation DocumentAddPageBlock($data: PageBlockInput!) {
     documentAddPageBlock(data: $data) {

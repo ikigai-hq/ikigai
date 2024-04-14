@@ -2,18 +2,17 @@ use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 use uuid::Uuid;
 
-use crate::authorization::{ClassAuth, DocumentAuth};
-use crate::db::{Organization, OrganizationMember, User};
+use crate::authorization::{DocumentAuth, SpaceAuth, UserAuth};
+use crate::db::{Organization, User};
 
 // Shared User info to avoid query it again
 #[derive(Default)]
 pub struct RequestContextCachingData {
     user: Arc<RwLock<Option<User>>>,
     document_auth: Arc<RwLock<HashMap<Uuid, DocumentAuth>>>,
-    // (class_id, user_id) - ClassAuth
-    class_auth: Arc<RwLock<HashMap<(i32, i32), ClassAuth>>>,
-    // Active org members
-    org_members: Arc<RwLock<HashMap<i32, OrganizationMember>>>,
+    // (space_id, user_id) - ClassAuth
+    space_auth: Arc<RwLock<HashMap<(i32, i32), SpaceAuth>>>,
+    user_auth: Arc<RwLock<HashMap<i32, UserAuth>>>,
     org_auth: Arc<RwLock<HashMap<i32, Organization>>>,
 }
 
@@ -39,15 +38,15 @@ impl RequestContextCachingData {
         }
     }
 
-    pub fn add_org_member(&self, member: OrganizationMember) -> OrganizationMember {
-        if let Ok(mut guard_org_members) = self.org_members.try_write() {
-            guard_org_members.insert(member.user_id, member.clone());
+    pub fn add_user_auth(&self, user: UserAuth) -> UserAuth {
+        if let Ok(mut guard_org_members) = self.user_auth.try_write() {
+            guard_org_members.insert(user.id, user.clone());
         }
-        member
+        user
     }
 
-    pub fn get_org_member(&self, user_id: i32) -> Option<OrganizationMember> {
-        if let Ok(guard_org_members) = self.org_members.try_read() {
+    pub fn get_user_auth(&self, user_id: i32) -> Option<UserAuth> {
+        if let Ok(guard_org_members) = self.user_auth.try_read() {
             guard_org_members.get(&user_id).cloned()
         } else {
             None
@@ -75,16 +74,16 @@ impl RequestContextCachingData {
         }
     }
 
-    pub fn add_class_auth(&self, class_id: i32, user_id: i32, class_auth: ClassAuth) -> ClassAuth {
-        if let Ok(mut guard_classes) = self.class_auth.try_write() {
+    pub fn add_space_auth(&self, class_id: i32, user_id: i32, class_auth: SpaceAuth) -> SpaceAuth {
+        if let Ok(mut guard_classes) = self.space_auth.try_write() {
             guard_classes.insert((class_id, user_id), class_auth.clone());
         }
 
         class_auth
     }
 
-    pub fn get_class_auth(&self, class_id: i32, user_id: i32) -> Option<ClassAuth> {
-        if let Ok(guard_classes) = self.class_auth.try_read() {
+    pub fn get_space_auth(&self, class_id: i32, user_id: i32) -> Option<SpaceAuth> {
+        if let Ok(guard_classes) = self.space_auth.try_read() {
             guard_classes.get(&(class_id, user_id)).cloned()
         } else {
             None

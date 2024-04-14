@@ -20,8 +20,8 @@ impl PagingInput {
 
 #[derive(SimpleObject)]
 #[graphql(concrete(name = "FileList", params(File)))]
-#[graphql(concrete(name = "ClassList", params(Class)))]
-#[graphql(concrete(name = "MemberList", params(Member)))]
+#[graphql(concrete(name = "SpaceList", params(Space)))]
+#[graphql(concrete(name = "SpaceMemberList", params(SpaceMember)))]
 #[graphql(concrete(name = "AssignmentList", params(Assignment)))]
 #[graphql(concrete(name = "OrganizationMemberList", params(OrganizationMember)))]
 pub struct PagingResult<T: OutputType> {

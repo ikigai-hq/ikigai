@@ -6,89 +6,82 @@ export const UPDATE_DOCUMENT = gql`
   }
 `;
 
-export const DUPLICATE_CLASS_DOCUMENT = gql`
-  mutation DuplicateClassDocument($classId: Int!, $documentId: UUID!) {
-    classDuplicateDocument(classId: $classId, documentId: $documentId) {
-      classId
-      documentId
-      document {
+export const DUPLICATE_SPACE_DOCUMENT = gql`
+  mutation DuplicateSpaceDocument($spaceId: Int!, $documentId: UUID!) {
+    spaceDuplicateDocument(spaceId: $spaceId, documentId: $documentId) {
+      id
+      title
+      createdAt
+      parentId
+      index
+      documentType
+      hideRule
+      deletedAt
+      spaceId
+    }
+  }
+`;
+
+export const ADD_SPACE_DOCUMENT = gql`
+  mutation AddSpaceDocument($spaceId: Int!, $documentId: UUID!, $isAssignment: Boolean!) {
+    spaceAddDocument(spaceId: $spaceId, documentId: $documentId, isAssignment: $isAssignment) {
+      id
+      title
+      createdAt
+      parentId
+      index
+      documentType
+      hideRule
+      deletedAt
+      assignment {
         id
-        title
-        createdAt
-        parentId
-        index
-        documentType
-        hideRule
-        deletedAt
+      }
+      submission {
+        id
+        submitAt
+        isSubmitted
+        allowForStudentViewAnswer
       }
     }
   }
 `;
 
-export const ADD_CLASS_DOCUMENT = gql`
-  mutation AddClassDocument($classId: Int!, $documentId: UUID!, $isAssignment: Boolean!) {
-    classAddDocument(classId: $classId, documentId: $documentId, isAssignment: $isAssignment) {
-      classId
-      documentId
-      document {
-        id
-        title
-        createdAt
-        parentId
-        index
-        documentType
-        hideRule
-        deletedAt
-        assignment {
-          id
-        }
-        submission {
-          id
-          submitAt
-          isSubmitted
-          allowForStudentViewAnswer
-        }
-      }
-    }
-  }
-`;
-
-export const CREATE_CLASS = gql`
-  mutation CreateClass($data: NewClass!) {
-    classCreate(data: $data) {
+export const CREATE_SPACE = gql`
+  mutation CreateSpace($data: NewSpace!) {
+    spaceCreate(data: $data) {
       id
       orgId
       starterDocument {
-        documentId
+        id
       }
     }
   }
 `;
 
-export const DELETE_CLASS = gql`
-  mutation DeleteClass($classId: Int!) {
-    classDelete(classId: $classId)
-  }
-`;
-
-export const SOFT_DELETE_CLASS = gql`
-  mutation SoftDeleteClass($classId: Int!) {
-    classSoftDelete(classId: $classId)
-  }
-`;
-
-export const RESTORE_CLASS = gql`
-  mutation RestoreClass($classId: Int!) {
-    classRestore(classId: $classId) {
+export const DUPLICATE_SPACE = gql`
+  mutation DuplicateSpace($spaceId: Int!) {
+    spaceDuplicate(spaceId: $spaceId) {
       id
     }
   }
 `;
 
-export const DUPLICATE_CLASS = gql`
-  mutation DuplicateClass($classId: Int!) {
-    classDuplicate(classId: $classId) {
+export const SOFT_DELETE_SPACE = gql`
+  mutation SoftDeleteSpace($spaceId: Int!) {
+    spaceSoftDelete(spaceId: $spaceId)
+  }
+`;
+
+export const RESTORE_SPACE = gql`
+  mutation RestoreSpace($spaceId: Int!) {
+    spaceRestore(spaceId: $spaceId) {
       id
     }
+  }
+`;
+
+export const DELETE_SPACE = gql`
+  mutation DeleteSpace($spaceId: Int!) {
+    spaceDelete(spaceId: $spaceId)
   }
 `;

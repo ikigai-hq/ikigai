@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import shallow from "zustand/shallow";
-import {Divider, Tooltip, Typography} from "antd";
-import {SettingOutlined } from "@ant-design/icons";
+import {Avatar, Divider, Tooltip, Typography} from "antd";
+import {DesktopOutlined, SettingOutlined, UserOutlined} from "@ant-design/icons";
 import { Trans, t } from "@lingui/macro";
 import styled, { useTheme } from "styled-components";
 
@@ -18,8 +18,8 @@ import { RightBodyContainer } from "../common";
 import LearningModuleDnd from "components/common/LearningModuleDnd";
 import LessonItemDnd from "./LessonItemDnd";
 import useSpaceStore from "context/ZustandSpaceStore";
-import {TextButtonWithHover} from "../../common/Button";
-import useAuthUserStore from "../../../context/ZustandAuthStore";
+import {TextButtonWithHover} from "components/common/Button";
+import useAuthUserStore from "context/ZustandAuthStore";
 import EditProfileModal from "../../UserCredential/EditProfileModal";
 
 interface Props {
@@ -42,13 +42,26 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
           <UserInformation
             onClick={me ? () => setOpenProfile(true) : undefined}
           >
-            <Typography.Text>{myName}</Typography.Text><br/>
-            <Typography.Text type="secondary" ellipsis>{me?.email || ""}</Typography.Text>
+            <div>
+              <Avatar
+                icon={<UserOutlined />}
+                src={me?.avatar?.publicUrl}
+                style={{ backgroundColor: me?.randomColor }}
+              />
+            </div>
+            <div>
+              <Typography.Text>{myName}</Typography.Text><br/>
+              <Typography.Text type="secondary" ellipsis>{me?.email || ""}</Typography.Text>
+            </div>
           </UserInformation>
           <SpaceInformation>
-            <Typography.Title level={5} style={{ marginTop: 10, flex: 1 }} ellipsis={{ rows: 3 }}>
+            <Typography.Paragraph
+              style={{ marginTop: 10, flex: 1 }}
+              ellipsis={{ rows: 2 }}
+              strong
+            >
               {space?.name}
-            </Typography.Title>
+            </Typography.Paragraph>
             <div>
               <TextButtonWithHover type="text" icon={<SettingOutlined />}/>
             </div>
@@ -110,6 +123,9 @@ const SpaceInfoContainer = styled.div`
 const UserInformation = styled.div`
   padding: 0 15px 0 15px;
   border-radius: 8px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 
   &:hover {
     background-color: #b8babd;

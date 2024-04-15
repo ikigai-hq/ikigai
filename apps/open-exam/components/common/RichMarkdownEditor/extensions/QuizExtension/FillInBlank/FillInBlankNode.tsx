@@ -138,7 +138,6 @@ export default class FillInBlankNode extends Node {
       });
       view.dispatch(transaction);
     } catch (e) {
-      // TODO: Should use segment to track this instead of sentry
       console.log("Cannot apply transaction in FillInBlank Node", e);
     }
   };

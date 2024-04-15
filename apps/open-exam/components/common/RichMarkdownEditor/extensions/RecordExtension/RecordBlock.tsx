@@ -21,7 +21,6 @@ import {
 } from "util/requestMediaPermissions";
 import useDocumentStore, { PermissionType } from "context/ZustandDocumentStore";
 import Bowser from "bowser";
-import { ignoreSentryError } from "util/sentryUlti";
 import { useTheme } from "styled-components";
 import { t, Trans } from "@lingui/macro";
 import VideoPlayerWithFileId from "./RecordPlayer/VideoPlayerWithFileId";
@@ -198,7 +197,6 @@ const RecordBlock = ({
           }
         };
       } catch (error) {
-        ignoreSentryError();
         _renderModalContent(error.type, error.message);
       }
     }

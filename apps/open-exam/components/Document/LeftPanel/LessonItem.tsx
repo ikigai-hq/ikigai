@@ -213,7 +213,7 @@ const StyledText = styled(Typography.Text)<{
   $active?: boolean;
   $weight?: number;
 }>`
-  color: ${(props) => props.theme.colors.gray[9]};
+  color: ${(props) => props.theme.colors.gray[7]};
   font-family: Inter;
   font-size: 14px;
   font-style: normal;

@@ -1,5 +1,4 @@
 /**
- * NOTE: This requires `@sentry/nextjs` version 7.3.0 or higher.
  *
  * NOTE: If using this with `next` version 12.2.0 or lower, uncomment the
  * penultimate line in `CustomErrorComponent`.

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { HideRule, OrgRole } from "graphql/types";
+import { OrgRole } from "graphql/types";
 import useAuthUserStore from "context/ZustandAuthStore";
 import { DocumentType, getDocumentType } from "util/permission";
 import ReviewAssignmentDocument from "./Assignment/ReviewAssignmentDocument";
@@ -9,8 +9,6 @@ import DoingSubmissionDocument from "./Submission/DoingSubmissionDocument";
 import ReviewSubmissionDocumentHeader from "./Submission/ReviewSubmissionDocumentHeader";
 import AssignmentHeader from "./Assignment/AssignmentHeader";
 import DocumentHeader from "./DocumentHeader";
-import { useRouter } from "next/router";
-import { formatDocumentRoute } from "config/Routes";
 import LeftPanel from "./LeftPanel";
 import useSpaceStore from "context/ZustandClassStore";
 import { RightPanel } from "./RightPanel";
@@ -21,18 +19,12 @@ import useDocumentStore from "context/ZustandDocumentStore";
 import useSubmissionStatus from "hook/UseSubmissionStatus";
 
 const DocumentDetail = () => {
-  const { push } = useRouter();
   const authUser = useAuthUserStore((state) => state.currentUser);
   const isStudent =
     authUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
   const docs = useSpaceStore((state) =>
     (state.documents || [])
       .filter((doc) => !doc.deletedAt)
-      .filter(
-        (doc) =>
-          doc.hideRule === HideRule.PUBLIC ||
-          (doc.hideRule === HideRule.PRIVATE && !isStudent),
-      ),
   );
   const pageBlockMode = usePageBlockStore((state) => state.pageBlockMode);
   const mapPageBlockData = usePageBlockStore((state) => state.mapPageBlockData);
@@ -89,15 +81,6 @@ const DocumentDetail = () => {
   if (isDoingSubmission) {
     return <DoingSubmissionDocument currentDocument={masterDocument} />;
   }
-
-  const moveBackToAssignment = async () => {
-    updatePageBlockMode(false);
-    await push(
-      formatDocumentRoute(masterDocument.submission.assignment.documentId),
-      undefined,
-      { shallow: true },
-    );
-  };
 
   return (
     <Container>

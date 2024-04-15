@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { t, Trans } from "@lingui/macro";
-import { Radio, Space, Typography } from "antd";
+import { Space } from "antd";
 import { Button } from "components/common/Button";
 import {
   ClockIcon,
@@ -16,10 +16,9 @@ import useDocumentStore, {
 } from "context/ZustandDocumentStore";
 import { handleError } from "graphql/ApolloClient";
 import {
-  DOCUMENT_UPDATE_HIDE_RULE,
   SAVE_AS_DOCUMENT_TEMPLATE,
 } from "graphql/mutation/DocumentMutation";
-import { HideRule, SaveAsDocumentTemplate } from "graphql/types";
+import { SaveAsDocumentTemplate } from "graphql/types";
 import React, { useState } from "react";
 import styled, { useTheme } from "styled-components";
 import toast from "react-hot-toast";
@@ -61,13 +60,6 @@ const DocumentMoreSetting = ({ onClickOpenHistory }: DocumentMoreSettingProps) =
     "style": activeDocument.editorConfig.style || EditorConfigType.DEFAULT,
     "width": activeDocument.editorConfig.width || EditorConfigType.WIDTH_STANDARD,
   };
-  const [hideRule, setHideRule] = useState(activeDocument.hideRule);
-  const [updateHideRule, { loading: loadingHideRule }] = useMutation(
-    DOCUMENT_UPDATE_HIDE_RULE,
-    {
-      onError: handleError,
-    }
-  );
   const [saveAsTemplate, { loading : loadingSaveAsTemplate}] = useMutation<SaveAsDocumentTemplate>(
     SAVE_AS_DOCUMENT_TEMPLATE, {
     onError: handleError,
@@ -85,14 +77,6 @@ const DocumentMoreSetting = ({ onClickOpenHistory }: DocumentMoreSettingProps) =
         docs: state.documents,
       };
     });
-
-  const onChangeHideRule = async (hideRule: HideRule) => {
-    setHideRule(hideRule);
-    await updateHideRule({
-      variables: { documentId: activeDocument.id, hideRule },
-    });
-    toast.success(t`Updated!`);
-  };
 
   const onDuplicate = () => {
     quickConfirmModal(
@@ -311,37 +295,6 @@ const DocumentMoreSetting = ({ onClickOpenHistory }: DocumentMoreSettingProps) =
                   </SettingButton>
                 </SettingContainer>
               }
-              <SettingContainer $padding="16px 0" $gap={12}>
-                <Text weight={TextWeight.bold} level={2}>
-                  <Trans>Visible Mode</Trans>
-                </Text>
-                <Radio.Group
-                  value={hideRule}
-                  onChange={(e) => onChangeHideRule(e.target.value)}
-                  disabled={loadingHideRule}
-                >
-                  <Space direction="vertical" style={{ paddingLeft: 8 }}>
-                    <Radio value={HideRule.PRIVATE}>
-                      <Text><Trans>Private</Trans></Text>
-                    </Radio>
-                    <Radio value={HideRule.PUBLIC}>
-                      <Text><Trans>Public</Trans></Text>
-                    </Radio>
-                  </Space>
-                </Radio.Group>
-                {
-                  hideRule === HideRule.PRIVATE &&
-                  <Typography.Text type="secondary">
-                    <Trans>No students can access.</Trans>
-                  </Typography.Text>
-                }
-                {
-                  hideRule === HideRule.PUBLIC &&
-                  <Typography.Text type="secondary">
-                    <Trans>Students can access.</Trans>
-                  </Typography.Text>
-                }
-              </SettingContainer>
             </>
           )
         }

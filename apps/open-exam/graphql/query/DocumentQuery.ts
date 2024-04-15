@@ -7,7 +7,6 @@ export const GET_DOCUMENT_DETAIL = gql`
       body
       title
       isPublic
-      hideRule
       coverPhotoId
       coverPhotoUrl
       editorConfig

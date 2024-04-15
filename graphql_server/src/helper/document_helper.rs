@@ -162,7 +162,6 @@ impl Document {
                 config.parent_id,
                 config.index,
                 new_cover_photo_id,
-                self.hide_rule,
                 new_editor_config,
                 clone_to_space,
             );

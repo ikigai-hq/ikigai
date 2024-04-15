@@ -32,7 +32,6 @@ export interface DuplicateSpaceDocument_spaceDuplicateDocument {
   parentId: any | null;
   index: number;
   documentType: DocumentType;
-  hideRule: HideRule;
   deletedAt: number | null;
   spaceId: number | null;
 }
@@ -223,24 +222,6 @@ export interface UpdateDocumentPositions {
 
 export interface UpdateDocumentPositionsVariables {
   items: UpdatePositionData[];
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: DocumentUpdateHideRule
-// ====================================================
-
-export interface DocumentUpdateHideRule {
-  documentUpdateHideRule: boolean;
-}
-
-export interface DocumentUpdateHideRuleVariables {
-  documentId: any;
-  hideRule: HideRule;
 }
 
 /* tslint:disable */
@@ -1491,7 +1472,6 @@ export interface GetSubmissionsOfAssignment_documentGet_assignment {
 
 export interface GetSubmissionsOfAssignment_documentGet {
   id: any;
-  hideRule: HideRule;
   assignment: GetSubmissionsOfAssignment_documentGet_assignment | null;
 }
 
@@ -1569,7 +1549,6 @@ export interface GetDocuments_spaceGet_documents {
   parentId: any | null;
   index: number;
   documentType: DocumentType;
-  hideRule: HideRule;
   deletedAt: number | null;
   assignment: GetDocuments_spaceGet_documents_assignment | null;
   submission: GetDocuments_spaceGet_documents_submission | null;
@@ -1945,7 +1924,6 @@ export interface GetDocumentDetail_documentGet {
   body: string;
   title: string;
   isPublic: boolean;
-  hideRule: HideRule;
   coverPhotoId: any | null;
   coverPhotoUrl: string | null;
   editorConfig: any;
@@ -2588,11 +2566,6 @@ export enum GradeMethod {
 export enum GradeType {
   GRADE = "GRADE",
   NON_GRADE = "NON_GRADE",
-}
-
-export enum HideRule {
-  PRIVATE = "PRIVATE",
-  PUBLIC = "PUBLIC",
 }
 
 export enum HighlightType {

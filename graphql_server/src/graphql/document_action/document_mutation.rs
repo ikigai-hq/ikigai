@@ -108,27 +108,6 @@ impl DocumentMutation {
         Ok(true)
     }
 
-    async fn document_update_hide_rule(
-        &self,
-        ctx: &Context<'_>,
-        document_id: Uuid,
-        hide_rule: HideRule,
-    ) -> Result<bool> {
-        let user = get_user_from_ctx(ctx).await?;
-        document_authorize(
-            ctx,
-            user.id,
-            document_id,
-            DocumentActionPermission::ManageDocument,
-        )
-        .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        Document::update_hide_rule(&conn, document_id, hide_rule).format_err()?;
-
-        Ok(true)
-    }
-
     async fn document_add_highlight(
         &self,
         ctx: &Context<'_>,

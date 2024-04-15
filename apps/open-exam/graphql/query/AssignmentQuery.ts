@@ -23,7 +23,6 @@ export const GET_SUBMISSIONS_OF_ASSIGNMENT = gql`
   query GetSubmissionsOfAssignment($assignmentDocumentId: UUID!) {
     documentGet(documentId: $assignmentDocumentId) {
       id
-      hideRule
       assignment {
         id
         submissions {

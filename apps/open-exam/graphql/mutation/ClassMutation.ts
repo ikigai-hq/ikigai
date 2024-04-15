@@ -15,7 +15,6 @@ export const DUPLICATE_SPACE_DOCUMENT = gql`
       parentId
       index
       documentType
-      hideRule
       deletedAt
       spaceId
     }

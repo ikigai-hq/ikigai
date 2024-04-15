@@ -28,12 +28,6 @@ export const UPDATE_DOCUMENT_POSITIONS = gql`
 `;
 
 
-export const DOCUMENT_UPDATE_HIDE_RULE = gql`
-  mutation DocumentUpdateHideRule($documentId: UUID!, $hideRule: HideRule!) {
-    documentUpdateHideRule(documentId: $documentId, hideRule: $hideRule)
-  }
-`;
-
 // NOTE: using this to update PageBLock title.
 export const DOCUMENT_ADD_PAGE_BLOCK = gql`
   mutation DocumentAddPageBlock($data: PageBlockInput!) {

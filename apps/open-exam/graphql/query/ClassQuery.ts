@@ -11,7 +11,6 @@ export const GET_SPACE_DOCUMENTS = gql`
         parentId
         index
         documentType
-        hideRule
         deletedAt
         assignment {
           id

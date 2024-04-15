@@ -150,7 +150,6 @@ diesel::table! {
         title -> Text,
         body -> Text,
         is_public -> Bool,
-        hide_rule -> Int4,
         editor_config -> Jsonb,
         deleted_at -> Nullable<Int8>,
         updated_by -> Nullable<Int4>,

@@ -9,23 +9,6 @@ use super::schema::{document_highlights, documents};
 use crate::impl_enum_for_db;
 use crate::util::get_now_as_secs;
 
-#[derive(
-    Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
-)]
-#[sql_type = "Integer"]
-pub enum HideRule {
-    Public = 0,
-    Private = 1,
-}
-
-impl_enum_for_db!(HideRule);
-
-impl Default for HideRule {
-    fn default() -> Self {
-        Self::Public
-    }
-}
-
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Enum)]
 pub enum DocumentType {
     Normal,
@@ -78,8 +61,6 @@ pub struct Document {
     pub body: String,
     #[graphql(skip_input)]
     pub is_public: bool,
-    #[graphql(skip_input)]
-    pub hide_rule: HideRule,
     pub editor_config: serde_json::Value,
     #[graphql(skip_input)]
     pub deleted_at: Option<i64>,
@@ -104,7 +85,6 @@ impl Document {
         parent_id: Option<Uuid>,
         index: i32,
         cover_photo_id: Option<Uuid>,
-        hide_rule: HideRule,
         editor_config: serde_json::Value,
         space_id: Option<i32>,
     ) -> Self {
@@ -117,7 +97,6 @@ impl Document {
             parent_id,
             index,
             cover_photo_id,
-            hide_rule,
             editor_config,
             deleted_at: None,
             updated_by: None,
@@ -158,7 +137,6 @@ impl Document {
                 None,
                 0,
                 None,
-                HideRule::Public,
                 json!({
                     "style": "Default",
                     "size": "Default",
@@ -213,19 +191,6 @@ impl Document {
         diesel::update(documents::table.find(id))
             .set((
                 documents::is_public.eq(is_public),
-                documents::updated_at.eq(get_now_as_secs()),
-            ))
-            .get_result(conn)
-    }
-
-    pub fn update_hide_rule(
-        conn: &PgConnection,
-        id: Uuid,
-        hide_rule: HideRule,
-    ) -> Result<Self, Error> {
-        diesel::update(documents::table.find(id))
-            .set((
-                documents::hide_rule.eq(hide_rule),
                 documents::updated_at.eq(get_now_as_secs()),
             ))
             .get_result(conn)

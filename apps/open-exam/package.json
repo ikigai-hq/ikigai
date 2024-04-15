@@ -45,6 +45,7 @@
     "antd": "5.7.3",
     "apollo-link": "^1.2.14",
     "axios": "^0.27.2",
+    "babel-plugin-styled-components": "^2.1.4",
     "bowser": "^2.11.0",
     "cookie": "^0.4.1",
     "cron-time-generator": "^2.0.0",

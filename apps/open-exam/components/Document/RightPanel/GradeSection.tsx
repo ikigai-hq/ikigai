@@ -90,17 +90,17 @@ const GradeSection = ({ rubricFinalScore }: GradeSectionProps) => {
           <RightTextWrapper>
             <InputNumber
               size={"small"}
-              readOnly={!userAllow(Permission.ManageClassContent)}
+              readOnly={!userAllow(Permission.ManageSpaceContent)}
               value={finalGrade}
               onChange={(value) => setFinalGrade(value)}
             />
           </RightTextWrapper>
         </TextWrapper>
         <div style={{ marginTop: "15px" }}>
-          {userAllow(Permission.ManageClassContent) ? (
+          {userAllow(Permission.ManageSpaceContent) ? (
             <Input.TextArea
               placeholder={t`Type your feedback`}
-              readOnly={!userAllow(Permission.ManageClassContent)}
+              readOnly={!userAllow(Permission.ManageSpaceContent)}
               value={feedback}
               onChange={(e) => setFeedback(e.currentTarget.value)}
               rows={7}
@@ -110,7 +110,7 @@ const GradeSection = ({ rubricFinalScore }: GradeSectionProps) => {
           )}
         </div>
       </Section>
-      {userAllow(Permission.ManageClassContent) && (
+      {userAllow(Permission.ManageSpaceContent) && (
         <Button
           width={"100%"}
           style={{ marginTop: "15px" }}
@@ -122,7 +122,7 @@ const GradeSection = ({ rubricFinalScore }: GradeSectionProps) => {
           <Trans>Grade</Trans>
         </Button>
       )}
-      {userAllow(Permission.ManageClassContent) && (
+      {userAllow(Permission.ManageSpaceContent) && (
         <Button
           width={"100%"}
           style={{ marginTop: "15px" }}

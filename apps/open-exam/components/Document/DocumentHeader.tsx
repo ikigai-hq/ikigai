@@ -27,7 +27,7 @@ import useDocumentPermission from "hook/UseDocumentPermission";
 import { isMobileView } from "hook/UseSupportMobile";
 import { formatDocumentRoute } from "config/Routes";
 import { getFullPathFromNode } from "components/common/SortableTree/utilities";
-import useSpaceStore from "context/ZustandClassStore";
+import useSpaceStore from "../../context/ZustandSpaceStore";
 import {
   CollapsedLeftIcon,
   ArrowDocument,
@@ -226,7 +226,7 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
           title: t`Collapse/Expand Left Side`,
           destroyTooltipOnHide: true,
         }}
-        isSelected={leftPanelHidden}
+        isSelected={!leftPanelHidden}
       />
       {renderBreadcrumb()}
       <StyledActionContainer>
@@ -240,7 +240,7 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
             title: t`Collapse/Expand Right Side`,
             destroyTooltipOnHide: true,
           }}
-          isSelected={rightPanelHidden}
+          isSelected={!rightPanelHidden}
         />
         <Popover
           content={<DocumentMoreSetting onClickOpenHistory={() => setOpenHistory(true)} />}

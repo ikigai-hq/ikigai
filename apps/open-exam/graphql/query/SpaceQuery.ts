@@ -1,9 +1,10 @@
 import { gql } from "@apollo/client";
 
-export const GET_SPACE_DOCUMENTS = gql`
+export const GET_SPACE_INFORMATION = gql`
   query GetDocuments($spaceId: Int!) {
     spaceGet(spaceId: $spaceId) {
       id
+      name
       documents {
         id
         title

@@ -9,7 +9,7 @@ import {
   TreeItems,
 } from "../SortableTree/types";
 import { debounce } from "lodash";
-import useSpaceStore from "context/ZustandClassStore";
+import useSpaceStore from "../../../context/ZustandSpaceStore";
 import useUserPermission from "hook/UseUserPermission";
 import { useEffect, useState } from "react";
 import { Permission } from "util/permission";
@@ -46,7 +46,7 @@ export const LearningModuleDnd = ({
   const [convertedItems, setConvertedItems] = useState([]);
   const router = useRouter();
 
-  const canDnd = !keyword && userAllow(Permission.ManageClassContent);
+  const canDnd = !keyword && userAllow(Permission.ManageSpaceContent);
   useEffect(() => {
     const items = convertToTreeItems(
       docs
@@ -70,7 +70,7 @@ export const LearningModuleDnd = ({
     const oldItems = convertToUpdatePositionData(convertedItems);
     const newItems = convertToUpdatePositionData(items);
     if (
-      userAllow(Permission.ManageClassContent) &&
+      userAllow(Permission.ManageSpaceContent) &&
       !isEqual(oldItems, newItems)
     ) {
       debounceUpdatePositions(convertToUpdatePositionData(items));

@@ -4,7 +4,7 @@ import DocumentDetail from "components/Document/DocumentDetail";
 import userMediaPermission from "../../../hook/UserMediaPermission";
 import useDocumentStore from "context/ZustandDocumentStore";
 import { NextPageWithLayout } from "pages/_app";
-import useSpaceStore from "context/ZustandClassStore";
+import useSpaceStore from "../../../context/ZustandSpaceStore";
 import Loading from "components/Loading";
 import { useRouter } from "next/router";
 import ServerDocumentFetchError from "components/Document/ServerDocumentFetchError";

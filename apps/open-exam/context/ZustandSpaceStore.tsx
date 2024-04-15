@@ -7,13 +7,13 @@ import {
   SoftDeleteDocuments,
   GetDocuments_spaceGet_documents as IDocumentItemList,
   GetDocuments,
-  DuplicateSpaceDocument,
+  DuplicateSpaceDocument, GetDocuments_spaceGet,
 } from "graphql/types";
 import { mutate, query } from "graphql/ApolloClient";
 import {
   DUPLICATE_SPACE_DOCUMENT,
-} from "graphql/mutation/ClassMutation";
-import { GET_SPACE_DOCUMENTS } from "graphql/query/ClassQuery";
+} from "../graphql/mutation/SpaceMutation";
+import { GET_SPACE_INFORMATION } from "../graphql/query/SpaceQuery";
 import {
   SOFT_DELETE_DOCUMENTS,
   UPDATE_DOCUMENT_POSITIONS,
@@ -21,12 +21,15 @@ import {
 import { LearningModuleItemTypeWrapper } from "../components/common/LearningModuleDnd/types";
 import { FlattenedItem } from "../components/common/SortableTree/types";
 
-export type IClassContext = {
+export type ISpaceDetail = GetDocuments_spaceGet;
+
+export type ISpaceContext = {
   spaceId?: number;
+  space?: ISpaceDetail;
   // Class Documents
   documents?: IDocumentItemList[];
   setDocuments: (newDocuments: IDocumentItemList[] | undefined) => void;
-  fetchAndSetDocuments: (spaceId: number) => Promise<void>;
+  fetchSpaceAndSetDocuments: (spaceId: number) => Promise<void>;
   duplicateDocument: (
     documentId: string
   ) => Promise<DuplicateSpaceDocument | undefined>;
@@ -41,8 +44,9 @@ export type IClassContext = {
   ) => void;
 };
 
-const useSpaceStore = create<IClassContext>((set, get) => ({
+const useSpaceStore = create<ISpaceContext>((set, get) => ({
   spaceId: undefined,
+  space: undefined,
   documents: undefined,
   setDocuments: (newDocuments: IDocumentItemList[] | undefined) => {
     set({
@@ -100,16 +104,19 @@ const useSpaceStore = create<IClassContext>((set, get) => ({
       return documentIds;
     }
   },
-  fetchAndSetDocuments: async (spaceId) => {
+  fetchSpaceAndSetDocuments: async (spaceId) => {
     const data = await query<GetDocuments>({
-      query: GET_SPACE_DOCUMENTS,
+      query: GET_SPACE_INFORMATION,
       variables: {
         spaceId,
       },
       fetchPolicy: "network-only",
     });
     
-    get().setDocuments(data?.spaceGet?.documents || []);
+    get().setDocuments(cloneDeep(data?.spaceGet?.documents) || []);
+    set({
+      space: cloneDeep(data?.spaceGet),
+    });
   },
   updateDocumentPositions: async (items) => {
     const res = await mutate<UpdateDocumentPositions>({

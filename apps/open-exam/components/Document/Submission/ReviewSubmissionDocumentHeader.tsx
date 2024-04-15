@@ -19,7 +19,7 @@ import { useQuery } from "@apollo/client";
 import { GET_SUBMISSIONS_OF_ASSIGNMENT } from "graphql/query/AssignmentQuery";
 import { AssignmentList } from "../AssignmentStudentList";
 import { useGetSpaceMembers } from "context/ZustandClassMembeStore";
-import useSpaceStore from "context/ZustandClassStore";
+import useSpaceStore from "../../../context/ZustandSpaceStore";
 
 export type DocumentDetailProps = {
   document: IDocument;
@@ -65,7 +65,7 @@ const ReviewSubmissionDocumentHeader = ({ document }: DocumentDetailProps) => {
     <>
       <div style={{ flex: 1 }} />
       <StyledLeftMenu>
-        {allow(Permission.ManageClassContent) && (
+        {allow(Permission.ManageSpaceContent) && (
           <Dropdown
             trigger={["click"]}
             placement="bottomLeft"
@@ -94,7 +94,7 @@ const ReviewSubmissionDocumentHeader = ({ document }: DocumentDetailProps) => {
             </ReviewContainer>
           </Dropdown>
         )}
-        {!allow(Permission.ManageClassContent) && (
+        {!allow(Permission.ManageSpaceContent) && (
           <ReviewContainer>
             <AvatarWithName
               name={user?.orgPersonalInformation?.fullName}

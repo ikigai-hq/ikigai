@@ -24,7 +24,7 @@ export type RubricSectionProps = {
 
 const RubricSection = ({ rubric, onChangeFinalScore }: RubricSectionProps) => {
   const allow = useUserPermission();
-  const canGrade = allow(Permission.ManageClassContent);
+  const canGrade = allow(Permission.ManageSpaceContent);
   const [insideRubric, setInsideRubric] = useState(cloneDeep(rubric));
   const [gradeRubric] = useMutation<GradeRubricSubmission>(GRADE_RUBRIC_SUBMISSION, {
     onError: handleError,

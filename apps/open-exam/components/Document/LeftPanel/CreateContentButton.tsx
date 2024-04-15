@@ -9,7 +9,7 @@ import {TextButton} from "components/common/Button";
 import {DocumentType} from "graphql/types";
 import {formatDocumentRoute} from "config/Routes";
 import {Text, TextWeight} from "components/common/Text";
-import useSpaceStore from "context/ZustandClassStore";
+import useSpaceStore from "../../../context/ZustandSpaceStore";
 import useDocumentStore from "context/ZustandDocumentStore";
 import {DEFAULT_DOCUMENT_TITLE} from "components/Document/common";
 
@@ -36,7 +36,7 @@ const CreateContentButton = (
       return {
         spaceId: state.spaceId,
         documents: state.documents,
-        refetchDocuments: state.fetchAndSetDocuments
+        refetchDocuments: state.fetchSpaceAndSetDocuments,
       };
     }
   );

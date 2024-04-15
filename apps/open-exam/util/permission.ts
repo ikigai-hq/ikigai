@@ -4,42 +4,42 @@
 import {GetDocumentDetail_documentGet as IDocument, OrgRole, UserMe,} from "graphql/types";
 
 export enum Permission {
-  // Class Permission
-  ViewClassContent,
+  // Space Permission
+  ViewSpaceContent,
   SelfEnroll,
-  ManageClassContent,
-  ManageClassMember,
-  ManageClassSetting,
+  ManageSpaceContent,
+  ManageSpaceMember,
+  ManageSpaceSetting,
   
   // Org Permission
   ViewMemberPublicInformation,
   EditOrgMemberInformation,
   AddOrgMember,
   RemoveOrgMember,
-  AddClass,
-  RemoveClass,
+  AddSpace,
+  RemoveSpace,
   ManageTemplate,
   ManageTrash,
   ManageOrgInformation,
 }
 
 export const STUDENT_PERMISSIONS = [
-  Permission.ViewClassContent,
+  Permission.ViewSpaceContent,
   Permission.SelfEnroll,
   Permission.ViewMemberPublicInformation,
 ];
 
 export const TEACHER_PERMISSIONS = [
   ...STUDENT_PERMISSIONS,
-  Permission.ManageClassContent,
-  Permission.ManageClassMember,
-  Permission.ManageClassSetting,
+  Permission.ManageSpaceContent,
+  Permission.ManageSpaceMember,
+  Permission.ManageSpaceSetting,
   Permission.ViewMemberPublicInformation,
   Permission.EditOrgMemberInformation,
   Permission.AddOrgMember,
   Permission.RemoveOrgMember,
-  Permission.AddClass,
-  Permission.RemoveClass,
+  Permission.AddSpace,
+  Permission.RemoveSpace,
   Permission.ManageTemplate,
   Permission.ManageTrash,
   Permission.ManageOrgInformation,

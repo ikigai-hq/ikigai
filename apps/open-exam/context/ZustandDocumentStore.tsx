@@ -24,7 +24,7 @@ import {
 import {
   GET_DOCUMENT_DETAIL,
 } from "graphql/query/DocumentQuery";
-import { UPDATE_DOCUMENT } from "graphql/mutation/ClassMutation";
+import { UPDATE_DOCUMENT } from "../graphql/mutation/SpaceMutation";
 import {
   ADD_DOCUMENT_STANDALONE,
   DOCUMENT_UPDATE_PUBLIC,
@@ -501,11 +501,6 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
   },
 }));
 
-export const getSpaceIdFromDocument = (doc?: IDocument): number | undefined => {
-  if (!doc) return;
-  if (doc.spaceId) return doc.spaceId;
-  if (doc.submission && doc.submission.assignment.document.spaceId)
-    return doc.submission.assignment.document.spaceId;
-};
+export const getSpaceIdFromDocument = (doc?: IDocument): number | undefined => doc.spaceId;
 
 export default useDocumentStore;

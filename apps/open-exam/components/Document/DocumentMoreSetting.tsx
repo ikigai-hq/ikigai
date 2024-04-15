@@ -24,7 +24,7 @@ import styled, { useTheme } from "styled-components";
 import toast from "react-hot-toast";
 import { quickConfirmModal, useModal } from "hook/UseModal";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import useSpaceStore from "context/ZustandClassStore";
+import useSpaceStore from "../../context/ZustandSpaceStore";
 import { useRouter } from "next/router";
 import { formatDocumentRoute } from "config/Routes";
 import { formatDate, FormatType } from "util/Time";

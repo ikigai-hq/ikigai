@@ -54,6 +54,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           content="initial-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no"
         />
         <meta name="theme-color" content="#ffffff" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <OpenExamToaster />
       <ApolloProvider client={client}>

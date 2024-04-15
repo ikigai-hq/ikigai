@@ -5,7 +5,7 @@ import {
   OrgRole,
 } from "graphql/types";
 import { query } from "../graphql/ApolloClient";
-import { GET_SPACE_MEMBERS } from "graphql/query/ClassQuery";
+import { GET_SPACE_MEMBERS } from "../graphql/query/SpaceQuery";
 
 // Type hint: Map<Space ID, Map<User ID, ISpaceMember>>
 export type SpaceMembersType = Map<number, Map<number, ISpaceMember>>;
@@ -25,12 +25,12 @@ const addMember = (data: SpaceMembersType, member: ISpaceMember) => {
 
 export type SpaceMemberContext = {
   data: SpaceMembersType;
-  fetchMembersOfClass: (spaceId: number) => Promise<void>;
+  fetchMembersOfSpace: (spaceId: number) => Promise<void>;
 };
 
 const useSpaceMemberStore = create<SpaceMemberContext>((set, get) => ({
   data: new Map(),
-  fetchMembersOfClass: async (spaceId: number) => {
+  fetchMembersOfSpace: async (spaceId: number) => {
     const spaceMembers = await query<GetSpaceMembers>({
       query: GET_SPACE_MEMBERS,
       variables: {

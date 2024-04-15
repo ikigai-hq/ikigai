@@ -10,7 +10,7 @@ import ReviewSubmissionDocumentHeader from "./Submission/ReviewSubmissionDocumen
 import AssignmentHeader from "./Assignment/AssignmentHeader";
 import DocumentHeader from "./DocumentHeader";
 import LeftPanel from "./LeftPanel";
-import useSpaceStore from "context/ZustandClassStore";
+import useSpaceStore from "../../context/ZustandSpaceStore";
 import { RightPanel } from "./RightPanel";
 import usePageBlockStore from "context/ZustandPageBlockStore";
 import { ReviewPageBlocks } from "components/common/RichMarkdownEditor/extensions/PageBlockExtension/ReviewPageBlocks";

@@ -17,10 +17,10 @@ msgstr ""
 msgid "\"{0}\""
 msgstr "\"{0}\""
 
-#: components/Document/DocumentMoreSetting.tsx:230
-#: components/Document/DocumentMoreSetting.tsx:238
-#: components/Document/DocumentMoreSetting.tsx:256
-#: components/Document/DocumentMoreSetting.tsx:267
+#: components/Document/DocumentMoreSetting.tsx:214
+#: components/Document/DocumentMoreSetting.tsx:222
+#: components/Document/DocumentMoreSetting.tsx:240
+#: components/Document/DocumentMoreSetting.tsx:251
 #: components/Document/RightPanel/BlockMenu/defaultMenu.config.tsx:84
 #: components/Document/RightPanel/BlockMenu/defaultMenu.config.tsx:97
 #: components/Document/RightPanel/BlockMenu/defaultMenu.config.tsx:110
@@ -64,14 +64,14 @@ msgid "Activation"
 msgstr "Activation"
 
 #: components/AddMember.tsx:161
-msgid "Add"
-msgstr "Add"
+#~ msgid "Add"
+#~ msgstr "Add"
 
 #: components/DocumentTemplate/LeftTemplateSide/CategoryList.tsx:110
 msgid "Add category"
 msgstr "Add category"
 
-#: components/Document/LeftPanel/CreateContentButton.tsx:125
+#: components/Document/LeftPanel/CreateContentButton.tsx:113
 msgid "Add content"
 msgstr "Add content"
 
@@ -88,18 +88,18 @@ msgid "Add level"
 msgstr "Add level"
 
 #: components/Organization/index.tsx:67
-msgid "Add member"
-msgstr "Add member"
+#~ msgid "Add member"
+#~ msgstr "Add member"
 
 #: components/AddMember.tsx:69
-msgid "Add org member successfully!"
-msgstr "Add org member successfully!"
+#~ msgid "Add org member successfully!"
+#~ msgstr "Add org member successfully!"
 
 #: components/Organization/AddOrgMemberModal.tsx:19
-msgid "Add Organization Member"
-msgstr "Add Organization Member"
+#~ msgid "Add Organization Member"
+#~ msgstr "Add Organization Member"
 
-#: components/Document/LeftPanel/CreateContentButton.tsx:123
+#: components/Document/LeftPanel/CreateContentButton.tsx:111
 msgid "Add sub content"
 msgstr "Add sub content"
 
@@ -112,8 +112,8 @@ msgid "Add tag for document template"
 msgstr "Add tag for document template"
 
 #: components/Organization/OrganizationMembersTab.tsx:178
-msgid "Added at"
-msgstr "Added at"
+#~ msgid "Added at"
+#~ msgstr "Added at"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/SingleChoiceSetting.tsx:91
 msgid "After providing possible answers, select the correct one."
@@ -158,8 +158,8 @@ msgid "Are you sure to delete {title} permanently?"
 msgstr "Are you sure to delete {title} permanently?"
 
 #: components/ClassListManagement/MenuActions.tsx:66
-msgid "Are you sure to delete this class?"
-msgstr "Are you sure to delete this class?"
+#~ msgid "Are you sure to delete this class?"
+#~ msgstr "Are you sure to delete this class?"
 
 #: components/ClassListManagement/MenuActions.tsx:66
 #~ msgid "Are you sure to delete this course?"
@@ -173,12 +173,12 @@ msgstr "Are you sure to restore {title}?"
 msgid "Are you sure want to delete this document permanently?"
 msgstr "Are you sure want to delete this document permanently?"
 
-#: components/Document/DocumentMoreSetting.tsx:130
-#: components/Document/LeftPanel/LessonItem.tsx:140
+#: components/Document/DocumentMoreSetting.tsx:114
+#: components/Document/LeftPanel/LessonItem.tsx:132
 msgid "Are you sure you want to delete this ?"
 msgstr "Are you sure you want to delete this ?"
 
-#: components/Document/LeftPanel/CreateContentButton.tsx:93
+#: components/Document/LeftPanel/CreateContentButton.tsx:81
 msgid "Assignment"
 msgstr "Assignment"
 
@@ -203,16 +203,17 @@ msgid "Auto"
 msgstr "Auto"
 
 #: components/Document/DocumentHeader.tsx:157
-msgid "Back"
-msgstr "Back"
+#~ msgid "Back"
+#~ msgstr "Back"
 
 #: components/Document/ServerDocumentFetchError.tsx:28
 #: components/ErrorBoundary.tsx:54
+#: components/Initializing.tsx:191
 #: pages/404.tsx:23
 msgid "Back to home"
 msgstr "Back to home"
 
-#: components/DocumentTemplate/PreviewTemplate/index.tsx:84
+#: components/DocumentTemplate/PreviewTemplate/index.tsx:83
 msgid "Back to templates"
 msgstr "Back to templates"
 
@@ -229,32 +230,30 @@ msgid "Basic"
 msgstr "Basic"
 
 #: components/ProfileSetting/BasicInformation.tsx:96
-msgid "Basic Information"
-msgstr "Basic Information"
+#~ msgid "Basic Information"
+#~ msgstr "Basic Information"
 
 #: components/Document/RightPanel/BlockMenu/InsertBlocks.tsx:75
 msgid "Blocks"
 msgstr "Blocks"
 
 #: components/Organization/index.tsx:51
-msgid "Branding"
-msgstr "Branding"
+#~ msgid "Branding"
+#~ msgstr "Branding"
 
 #: components/Document/PreviewDocument.tsx:55
 msgid "Can not view this document"
 msgstr "Can not view this document"
 
 #: components/common/AddResourceModal.tsx:121
-#: components/Document/DocumentMoreSetting.tsx:136
-#: components/Document/LeftPanel/LessonItem.tsx:146
-#: components/ProfileSetting/SecuritySettings.tsx:166
-#: pages/profile/my-account.tsx:40
+#: components/Document/DocumentMoreSetting.tsx:120
+#: components/Document/LeftPanel/LessonItem.tsx:138
 msgid "Cancel"
 msgstr "Cancel"
 
 #: components/ClassListManagement/MenuActions.tsx:56
-msgid "Cannot duplicate class"
-msgstr "Cannot duplicate class"
+#~ msgid "Cannot duplicate class"
+#~ msgstr "Cannot duplicate class"
 
 #: components/ClassListManagement/MenuActions.tsx:56
 #~ msgid "Cannot duplicate course"
@@ -265,49 +264,49 @@ msgid "Cannot process file"
 msgstr "Cannot process file"
 
 #: components/ProfileSetting/BasicInformation.tsx:119
-msgid "Change Avatar"
-msgstr "Change Avatar"
+#~ msgid "Change Avatar"
+#~ msgstr "Change Avatar"
 
 #: components/ProfileSetting/Contact.tsx:83
-msgid "Change Email"
-msgstr "Change Email"
+#~ msgid "Change Email"
+#~ msgstr "Change Email"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:228
 msgid "Change or Edit"
 msgstr "Change or Edit"
 
 #: components/UserCredential/ResetPasswordForm.tsx:56
-msgid "Check Your Email"
-msgstr "Check Your Email"
+#~ msgid "Check Your Email"
+#~ msgstr "Check Your Email"
 
 #: components/UserCredential/ResetPasswordForm.tsx:106
-msgid "Check your spam filter, or"
-msgstr "Check your spam filter, or"
+#~ msgid "Check your spam filter, or"
+#~ msgstr "Check your spam filter, or"
 
 #: components/Document/Submission/ReviewSubmissionDocumentHeader.tsx:89
 msgid "Choose another student"
 msgstr "Choose another student"
 
 #: components/Trash/index.tsx:25
-msgid "Class"
-msgstr "Class"
+#~ msgid "Class"
+#~ msgstr "Class"
 
 #: components/ClassListManagement/ClassList.tsx:29
 #: components/common/SideMenu.tsx:57
 #: components/Organization/OrganizationMembersTab.tsx:161
-msgid "Classes"
-msgstr "Classes"
+#~ msgid "Classes"
+#~ msgstr "Classes"
 
 #: components/common/FileUpload.tsx:181
 #: components/common/ManualFileUpload.tsx:50
 msgid "Click or drag file to this area to upload"
 msgstr "Click or drag file to this area to upload"
 
-#: components/Document/DocumentHeader.tsx:250
+#: components/Document/DocumentHeader.tsx:226
 msgid "Collapse/Expand Left Side"
 msgstr "Collapse/Expand Left Side"
 
-#: components/Document/DocumentHeader.tsx:264
+#: components/Document/DocumentHeader.tsx:240
 msgid "Collapse/Expand Right Side"
 msgstr "Collapse/Expand Right Side"
 
@@ -320,57 +319,56 @@ msgid "COMMENTS"
 msgstr "COMMENTS"
 
 #: components/ClassListManagement/MenuActions.tsx:65
-msgid "Confirm Delete Class"
-msgstr "Confirm Delete Class"
+#~ msgid "Confirm Delete Class"
+#~ msgstr "Confirm Delete Class"
 
 #: components/ClassListManagement/MenuActions.tsx:65
 #~ msgid "Confirm Delete Course"
 #~ msgstr "Confirm Delete Course"
 
 #: components/ProfileSetting/SecuritySettings.tsx:144
-msgid "Confirm New Password"
-msgstr "Confirm New Password"
+#~ msgid "Confirm New Password"
+#~ msgstr "Confirm New Password"
 
 #: components/UserCredential/SignUp.tsx:205
 #~ msgid "Confirm Password"
 #~ msgstr "Confirm Password"
 
 #: components/ProfileSetting/SecuritySettings.tsx:152
-msgid "Confirm password should be same with new password"
-msgstr "Confirm password should be same with new password"
+#~ msgid "Confirm password should be same with new password"
+#~ msgstr "Confirm password should be same with new password"
 
 #: components/UserCredential/NewAuthLayout.tsx:72
-msgid "Contact"
-msgstr "Contact"
+#~ msgid "Contact"
+#~ msgstr "Contact"
 
 #: components/ProfileSetting/Contact.tsx:79
-msgid "Contact Media"
-msgstr "Contact Media"
+#~ msgid "Contact Media"
+#~ msgstr "Contact Media"
 
 #: components/ClassListManagement/CreateClassModal.tsx:99
-msgid "Continue"
-msgstr "Continue"
+#~ msgid "Continue"
+#~ msgstr "Continue"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:204
 msgid "Continue on last submission"
 msgstr "Continue on last submission"
 
 #: components/Document/DocumentSharing.tsx:32
-#: components/Document/LeftPanel/CopyDocumentToClass.tsx:44
 msgid "Copied!"
 msgstr "Copied!"
 
 #: components/Document/LeftPanel/CopyDocumentToClass.tsx:99
-msgid "Copy"
-msgstr "Copy"
+#~ msgid "Copy"
+#~ msgstr "Copy"
 
 #: components/Document/DocumentSharing.tsx:63
 msgid "Copy public url"
 msgstr "Copy public url"
 
 #: components/Document/LeftPanel/LessonItem.tsx:128
-msgid "Copy to class"
-msgstr "Copy to class"
+#~ msgid "Copy to class"
+#~ msgstr "Copy to class"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/SingleChoice/SingleChoiceReview.tsx:41
 #: components/Document/RightPanel/SummarySection.tsx:32
@@ -398,12 +396,12 @@ msgid "Correct. Explain:"
 msgstr "Correct. Explain:"
 
 #: components/ClassListManagement/ClassList.tsx:35
-msgid "Create Class"
-msgstr "Create Class"
+#~ msgid "Create Class"
+#~ msgstr "Create Class"
 
 #: components/ClassListManagement/CreateClassModal.tsx:67
-msgid "Create New Class"
-msgstr "Create New Class"
+#~ msgid "Create New Class"
+#~ msgstr "Create New Class"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:115
 msgid "Create new rubric"
@@ -424,35 +422,34 @@ msgid "Criteria"
 msgstr "Criteria"
 
 #: components/ProfileSetting/SecuritySettings.tsx:112
-msgid "Current Password"
-msgstr "Current Password"
+#~ msgid "Current Password"
+#~ msgstr "Current Password"
 
-#: components/Document/DocumentMoreSetting.tsx:195
+#: components/Document/DocumentMoreSetting.tsx:179
 msgid "Default"
 msgstr "Default"
 
-#: components/ClassListManagement/MenuActions.tsx:84
 #: components/common/RichMarkdownEditor/BlockComponents/index.tsx:149
 #: components/common/RichMarkdownEditor/extensions/CommonEmbedExtension/CommonEmbedDropdownMenu.tsx:20
-#: components/common/RichMarkdownEditor/extensions/PageBlockExtension/PageBlock.tsx:293
+#: components/common/RichMarkdownEditor/extensions/PageBlockExtension/PageBlock.tsx:292
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/QuizDropdownMenu.tsx:139
 #: components/common/RichMarkdownEditor/extensions/RecordExtension/RecordBlock.tsx:296
-#: components/Document/DocumentMoreSetting.tsx:299
-#: components/Document/LeftPanel/LessonItem.tsx:135
+#: components/Document/DocumentMoreSetting.tsx:283
+#: components/Document/LeftPanel/LessonItem.tsx:127
 #: components/DocumentTemplate/EditCategoryModal.tsx:194
 #: components/DocumentTemplate/EditTemplateModal.tsx:180
 msgid "Delete"
 msgstr "Delete"
 
 #: components/ProfileSetting/BasicInformation.tsx:125
-msgid "Delete Avatar"
-msgstr "Delete Avatar"
+#~ msgid "Delete Avatar"
+#~ msgstr "Delete Avatar"
 
 #: components/Document/RightPanel/FeedbackPanel.tsx:239
 msgid "Delete Comment"
 msgstr "Delete Comment"
 
-#: components/Document/DocumentMoreSetting.tsx:140
+#: components/Document/DocumentMoreSetting.tsx:124
 msgid "Delete content successfully!"
 msgstr "Delete content successfully!"
 
@@ -466,13 +463,13 @@ msgid "Delete permanently"
 msgstr "Delete permanently"
 
 #: components/ClassListManagement/MenuActions.tsx:37
-msgid "Deleted successfully!"
-msgstr "Deleted successfully!"
+#~ msgid "Deleted successfully!"
+#~ msgstr "Deleted successfully!"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:56
-#: components/Document/LeftPanel/LessonItem.tsx:80
-#: components/Trash/DeletedClassList.tsx:34
+#: components/Document/LeftPanel/LessonItem.tsx:79
 #: components/Trash/DeletedDocumentList.tsx:37
+#: components/Trash/DeletedSpaceList.tsx:34
 msgid "Deleted!"
 msgstr "Deleted!"
 
@@ -486,10 +483,10 @@ msgid "Description will show before your students start the submission"
 msgstr "Description will show before your students start the submission"
 
 #: components/UserCredential/ResetPasswordForm.tsx:102
-msgid "Did not receive the email?"
-msgstr "Did not receive the email?"
+#~ msgid "Did not receive the email?"
+#~ msgstr "Did not receive the email?"
 
-#: components/common/RichMarkdownEditor/extensions/PageBlockExtension/PageBlock.tsx:271
+#: components/common/RichMarkdownEditor/extensions/PageBlockExtension/PageBlock.tsx:270
 msgid "Do you want delete this page block?"
 msgstr "Do you want delete this page block?"
 
@@ -502,8 +499,8 @@ msgid "Do you want to apply this template to current document?"
 msgstr "Do you want to apply this template to current document?"
 
 #: components/Organization/OrganizationMembersTab.tsx:109
-msgid "Do you want to delete member?"
-msgstr "Do you want to delete member?"
+#~ msgid "Do you want to delete member?"
+#~ msgstr "Do you want to delete member?"
 
 #: components/common/RichMarkdownEditor/BlockComponents/index.tsx:121
 msgid "Do you want to delete this block?"
@@ -517,7 +514,7 @@ msgstr "Do you want to delete this category?"
 msgid "Do you want to delete this document template?"
 msgstr "Do you want to delete this document template?"
 
-#: components/Document/DocumentMoreSetting.tsx:100
+#: components/Document/DocumentMoreSetting.tsx:84
 msgid "Do you want to duplicate this document?"
 msgstr "Do you want to duplicate this document?"
 
@@ -538,14 +535,18 @@ msgstr "Do you want to reset this file upload?"
 msgid "Do you want to restore this version?"
 msgstr "Do you want to restore this version?"
 
-#: components/Document/DocumentMoreSetting.tsx:114
+#: components/Document/DocumentMoreSetting.tsx:98
 msgid "Do you want to save this document as template?"
 msgstr "Do you want to save this document as template?"
 
-#: components/Document/LeftPanel/CreateContentButton.tsx:88
+#: components/Document/LeftPanel/CreateContentButton.tsx:76
 #: components/Trash/index.tsx:22
 msgid "Document"
 msgstr "Document"
+
+#: components/Document/LeftPanel/index.tsx:65
+msgid "Documents"
+msgstr "Documents"
 
 #: components/UserCredential/SignIn.tsx:163
 #~ msgid "Don't have an account"
@@ -563,25 +564,23 @@ msgstr "Download (.csv)"
 msgid "Downloadable"
 msgstr "Downloadable"
 
-#: components/ClassListManagement/MenuActions.tsx:79
-#: components/Document/DocumentMoreSetting.tsx:291
-#: components/Document/LeftPanel/LessonItem.tsx:121
+#: components/Document/DocumentMoreSetting.tsx:275
+#: components/Document/LeftPanel/LessonItem.tsx:120
 msgid "Duplicate"
 msgstr "Duplicate"
 
 #: components/Document/LeftPanel/CopyDocumentToClass.tsx:76
-msgid "Duplicate to class"
-msgstr "Duplicate to class"
+#~ msgid "Duplicate to class"
+#~ msgstr "Duplicate to class"
 
-#: components/ClassListManagement/MenuActions.tsx:55
-#: components/Document/DocumentMoreSetting.tsx:104
-#: components/Document/LeftPanel/LessonItem.tsx:73
+#: components/Document/DocumentMoreSetting.tsx:88
+#: components/Document/LeftPanel/LessonItem.tsx:72
 msgid "Duplicated!"
 msgstr "Duplicated!"
 
 #: components/ClassListManagement/MenuActions.tsx:54
-msgid "Duplicating..."
-msgstr "Duplicating..."
+#~ msgid "Duplicating..."
+#~ msgstr "Duplicating..."
 
 #: components/DocumentTemplate/EditCategoryModal.tsx:148
 msgid "Edit category"
@@ -592,8 +591,8 @@ msgid "Edit Cover"
 msgstr "Edit Cover"
 
 #: components/Organization/OrganizationMembersTab.tsx:206
-msgid "Edit information"
-msgstr "Edit information"
+#~ msgid "Edit information"
+#~ msgstr "Edit information"
 
 #: components/DocumentVersionHistory/DocumentHistoryList.tsx:108
 msgid "Edit name"
@@ -607,43 +606,43 @@ msgstr "Edit score"
 msgid "Edit template"
 msgstr "Edit template"
 
-#: components/DocumentTemplate/PreviewTemplate/index.tsx:141
+#: components/DocumentTemplate/PreviewTemplate/index.tsx:140
 msgid "Edit Template"
 msgstr "Edit Template"
 
 #: components/IdentityInput/index.tsx:57
-#: components/Organization/OrganizationMembersTab.tsx:154
-#: components/ProfileSetting/Contact.tsx:86
+#: components/MagicLink/index.tsx:41
+#: components/UserCredential/EditProfileModal.tsx:50
 msgid "Email"
 msgstr "Email"
 
 #: components/AddMember.tsx:110
-msgid "Email or Phone Number"
-msgstr "Email or Phone Number"
+#~ msgid "Email or Phone Number"
+#~ msgstr "Email or Phone Number"
 
 #: components/ProfileSetting/BasicInformation.tsx:155
-msgid "Enter first name"
-msgstr "Enter first name"
+#~ msgid "Enter first name"
+#~ msgstr "Enter first name"
 
 #: components/ProfileSetting/BasicInformation.tsx:171
-msgid "Enter last name"
-msgstr "Enter last name"
+#~ msgid "Enter last name"
+#~ msgstr "Enter last name"
 
 #: components/AddMember.tsx:129
-msgid "Enter password"
-msgstr "Enter password"
+#~ msgid "Enter password"
+#~ msgstr "Enter password"
 
 #: components/ProfileSetting/SecuritySettings.tsx:118
-msgid "Enter your current password"
-msgstr "Enter your current password"
+#~ msgid "Enter your current password"
+#~ msgstr "Enter your current password"
 
 #: components/UserCredential/SignUp.tsx:168
 #~ msgid "Enter your email"
 #~ msgstr "Enter your email"
 
 #: components/UserCredential/ForgotPassForm.tsx:54
-msgid "Enter your email or phone number to reset password"
-msgstr "Enter your email or phone number to reset password"
+#~ msgid "Enter your email or phone number to reset password"
+#~ msgstr "Enter your email or phone number to reset password"
 
 #: components/UserCredential/SignUp.tsx:149
 #~ msgid "Enter your last name"
@@ -652,12 +651,12 @@ msgstr "Enter your email or phone number to reset password"
 #: components/ProfileSetting/SecuritySettings.tsx:136
 #: components/ProfileSetting/SecuritySettings.tsx:156
 #: components/UserCredential/ResetPasswordForm.tsx:80
-msgid "Enter your new password"
-msgstr "Enter your new password"
+#~ msgid "Enter your new password"
+#~ msgstr "Enter your new password"
 
 #: components/UserCredential/SignIn.tsx:111
-msgid "Enter your password"
-msgstr "Enter your password"
+#~ msgid "Enter your password"
+#~ msgstr "Enter your password"
 
 #: components/common/RichMarkdownEditor/extensions/FileExtension/FileBlockHeader.tsx:139
 msgid "Exit Full Screen"
@@ -688,7 +687,7 @@ msgstr "Failed!"
 msgid "feedback"
 msgstr "feedback"
 
-#: components/Document/DocumentHeader.tsx:339
+#: components/Document/DocumentHeader.tsx:315
 msgid "Feedback"
 msgstr "Feedback"
 
@@ -697,28 +696,28 @@ msgid "Feedback at"
 msgstr "Feedback at"
 
 #: components/Organization/OrganizationMembersTab.tsx:297
-msgid "Filter by added at"
-msgstr "Filter by added at"
+#~ msgid "Filter by added at"
+#~ msgstr "Filter by added at"
 
 #: components/Organization/OrganizationMembersTab.tsx:278
-msgid "Filter by role"
-msgstr "Filter by role"
+#~ msgid "Filter by role"
+#~ msgstr "Filter by role"
 
-#: components/AddMember.tsx:95
+#: components/UserCredential/EditProfileModal.tsx:56
 msgid "First name"
 msgstr "First name"
 
 #: components/ProfileSetting/BasicInformation.tsx:148
-msgid "First Name"
-msgstr "First Name"
+#~ msgid "First Name"
+#~ msgstr "First Name"
 
-#: components/Document/DocumentHeader.tsx:323
+#: components/Document/DocumentHeader.tsx:299
 msgid "Focus Mode"
 msgstr "Focus Mode"
 
 #: components/UserCredential/SignIn.tsx:123
-msgid "Forgot password"
-msgstr "Forgot password"
+#~ msgid "Forgot password"
+#~ msgstr "Forgot password"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:272
 msgid "From point"
@@ -731,7 +730,7 @@ msgstr "Full Screen"
 #: components/Document/AssignmentSetting/index.tsx:43
 #: components/Document/AssignmentStudentList.tsx:159
 #: components/Document/AssignmentStudentList.tsx:186
-#: components/Document/DocumentHeader.tsx:367
+#: components/Document/DocumentHeader.tsx:343
 #: components/Document/RightPanel/GradeSection.tsx:87
 #: components/Document/RightPanel/GradeSection.tsx:122
 msgid "Grade"
@@ -751,8 +750,8 @@ msgid "Hour : Minute : Second"
 msgstr "Hour : Minute : Second"
 
 #: components/ClassListManagement/CreateClassModal.tsx:84
-msgid "How about class title?"
-msgstr "How about class title?"
+#~ msgid "How about class title?"
+#~ msgstr "How about class title?"
 
 #: components/Document/AssignmentStudentList.tsx:39
 msgid "In Doing"
@@ -770,17 +769,21 @@ msgstr "Invalid email"
 msgid "Item are available for 60 days. After that time, item will be permanently deleted."
 msgstr "Item are available for 60 days. After that time, item will be permanently deleted."
 
-#: components/AddMember.tsx:101
+#: components/UserCredential/EditProfileModal.tsx:63
 msgid "Last name"
 msgstr "Last name"
 
 #: components/ProfileSetting/BasicInformation.tsx:164
-msgid "Last Name"
-msgstr "Last Name"
+#~ msgid "Last Name"
+#~ msgstr "Last Name"
 
 #: components/UserCredential/SignUp.tsx:142
 #~ msgid "Last name must be not empty"
 #~ msgstr "Last name must be not empty"
+
+#: components/DocumentTemplate/LeftTemplateSide/index.tsx:33
+msgid "Library"
+msgstr "Library"
 
 #: components/Document/AssignmentSetting/index.tsx:208
 msgid "Limit"
@@ -791,44 +794,44 @@ msgid "Limit the number of times to take the assignment"
 msgstr "Limit the number of times to take the assignment"
 
 #: components/UserCredential/SignIn.tsx:136
-msgid "Login"
-msgstr "Login"
+#~ msgid "Login"
+#~ msgstr "Login"
 
 #: components/UserCredential/SignIn.tsx:55
-msgid "Login successfully!"
-msgstr "Login successfully!"
+#~ msgid "Login successfully!"
+#~ msgstr "Login successfully!"
 
 #: components/UserCredential/SignIn.tsx:79
-msgid "Login to your account"
-msgstr "Login to your account"
+#~ msgid "Login to your account"
+#~ msgstr "Login to your account"
 
 #: components/ProfileSetting/ProfileLeftMenu.tsx:67
 #: components/ProfileSetting/ProfileLeftMenu.tsx:112
-msgid "Logout"
-msgstr "Logout"
+#~ msgid "Logout"
+#~ msgstr "Logout"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:137
 msgid "Manual"
 msgstr "Manual"
 
 #: components/Organization/index.tsx:43
-msgid "Members"
-msgstr "Members"
+#~ msgid "Members"
+#~ msgstr "Members"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:129
 msgid "Method"
 msgstr "Method"
 
 #: components/Organization/BrandingSetting.tsx:64
-msgid "Minimum length of organization name is 3. Maximum length of organization name is 100."
-msgstr "Minimum length of organization name is 3. Maximum length of organization name is 100."
+#~ msgid "Minimum length of organization name is 3. Maximum length of organization name is 100."
+#~ msgstr "Minimum length of organization name is 3. Maximum length of organization name is 100."
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:61
 #: components/Document/RightPanel/SummarySection.tsx:61
 msgid "minutes"
 msgstr "minutes"
 
-#: components/Document/DocumentMoreSetting.tsx:215
+#: components/Document/DocumentMoreSetting.tsx:199
 msgid "Mono"
 msgstr "Mono"
 
@@ -841,18 +844,15 @@ msgid "Multiple Choice"
 msgstr "Multiple Choice"
 
 #: components/ProfileSetting/ProfileLeftMenu.tsx:54
-msgid "My Account"
-msgstr "My Account"
+#~ msgid "My Account"
+#~ msgstr "My Account"
 
 #: components/ProfileSetting/Layout.tsx:27
-msgid "My Profile"
-msgstr "My Profile"
+#~ msgid "My Profile"
+#~ msgstr "My Profile"
 
-#: components/AddMember.tsx:90
 #: components/DocumentTemplate/EditCategoryModal.tsx:152
 #: components/DocumentTemplate/EditTemplateModal.tsx:145
-#: components/Organization/BrandingSetting.tsx:55
-#: components/Organization/OrganizationMembersTab.tsx:136
 msgid "Name"
 msgstr "Name"
 
@@ -872,12 +872,12 @@ msgid "New Option"
 msgstr "New Option"
 
 #: components/ProfileSetting/SecuritySettings.tsx:126
-msgid "New Password"
-msgstr "New Password"
+#~ msgid "New Password"
+#~ msgstr "New Password"
 
 #: components/UserCredential/ResetPasswordForm.tsx:75
-msgid "New password:"
-msgstr "New password:"
+#~ msgid "New password:"
+#~ msgstr "New password:"
 
 #: components/PreviewDocument.tsx:17
 msgid "No document"
@@ -888,8 +888,8 @@ msgid "No limit"
 msgstr "No limit"
 
 #: components/Document/DocumentMoreSetting.tsx:335
-msgid "No students can access."
-msgstr "No students can access."
+#~ msgid "No students can access."
+#~ msgstr "No students can access."
 
 #: components/Document/AssignmentStudentList.tsx:37
 msgid "Not Submitted"
@@ -920,53 +920,53 @@ msgid "Open settings"
 msgstr "Open settings"
 
 #: components/ClassListManagement/MenuActions.tsx:96
-msgid "Options"
-msgstr "Options"
+#~ msgid "Options"
+#~ msgstr "Options"
 
 #: components/common/SideMenu.tsx:68
-msgid "Organization"
-msgstr "Organization"
+#~ msgid "Organization"
+#~ msgstr "Organization"
 
 #: components/Organization/BrandingSetting.tsx:48
-msgid "Organization General"
-msgstr "Organization General"
+#~ msgid "Organization General"
+#~ msgstr "Organization General"
 
 #: components/ProfileSetting/OrganizationProfileEdit.tsx:39
-msgid "Organization Profile"
-msgstr "Organization Profile"
+#~ msgid "Organization Profile"
+#~ msgstr "Organization Profile"
 
 #: components/ProfileSetting/ProfileLeftMenu.tsx:64
-msgid "Other"
-msgstr "Other"
+#~ msgid "Other"
+#~ msgstr "Other"
 
 #: components/UserCredential/ResetPasswordForm.tsx:67
-msgid "OTP Code:"
-msgstr "OTP Code:"
+#~ msgid "OTP Code:"
+#~ msgstr "OTP Code:"
 
 #: components/Organization/OrganizationMembersTab.tsx:127
-msgid "OWNER"
-msgstr "OWNER"
+#~ msgid "OWNER"
+#~ msgstr "OWNER"
 
-#: components/Document/DocumentMoreSetting.tsx:310
+#: components/Document/DocumentMoreSetting.tsx:294
 msgid "Page History"
 msgstr "Page History"
 
 #: components/AddMember.tsx:118
 #: components/UserCredential/SignIn.tsx:99
-msgid "Password"
-msgstr "Password"
+#~ msgid "Password"
+#~ msgstr "Password"
 
 #: components/AddMember.tsx:121
-msgid "Password is optional. We will generate random password for user in case you don‘t provide this information"
-msgstr "Password is optional. We will generate random password for user in case you don‘t provide this information"
+#~ msgid "Password is optional. We will generate random password for user in case you don‘t provide this information"
+#~ msgstr "Password is optional. We will generate random password for user in case you don‘t provide this information"
 
 #: components/ProfileSetting/SecuritySettings.tsx:132
-msgid "Password length must be greater than 8"
-msgstr "Password length must be greater than 8"
+#~ msgid "Password length must be greater than 8"
+#~ msgstr "Password length must be greater than 8"
 
 #: components/UserCredential/ResetPasswordForm.tsx:85
-msgid "Password length must be greater than 8 chars."
-msgstr "Password length must be greater than 8 chars."
+#~ msgid "Password length must be greater than 8 chars."
+#~ msgstr "Password length must be greater than 8 chars."
 
 #: components/UserCredential/SignUp.tsx:190
 #~ msgid "Password must be 8 chars or longer"
@@ -998,7 +998,7 @@ msgstr "Please choose the correct answer and save again!"
 msgid "point"
 msgstr "point"
 
-#: components/UserCredential/AuthLayout.tsx:74
+#: components/UserCredential/AuthLayout.tsx:84
 msgid "Powered by Open Exam"
 msgstr "Powered by Open Exam"
 
@@ -1007,20 +1007,24 @@ msgid "Pre-Assignment Descriptions"
 msgstr "Pre-Assignment Descriptions"
 
 #: components/UserCredential/NewAuthLayout.tsx:78
-msgid "Privacy & Terms"
-msgstr "Privacy & Terms"
+#~ msgid "Privacy & Terms"
+#~ msgstr "Privacy & Terms"
 
 #: components/Document/DocumentMoreSetting.tsx:325
-msgid "Private"
-msgstr "Private"
+#~ msgid "Private"
+#~ msgstr "Private"
+
+#: components/UserCredential/EditProfileModal.tsx:47
+msgid "Profile"
+msgstr "Profile"
 
 #: components/Header/ProfileDropdown.tsx:88
-msgid "Profile Setting"
-msgstr "Profile Setting"
+#~ msgid "Profile Setting"
+#~ msgstr "Profile Setting"
 
 #: components/Document/DocumentMoreSetting.tsx:328
-msgid "Public"
-msgstr "Public"
+#~ msgid "Public"
+#~ msgstr "Public"
 
 #: components/Document/DocumentSharing.tsx:41
 msgid "Publish document"
@@ -1034,7 +1038,7 @@ msgstr "Question"
 msgid "questions"
 msgstr "questions"
 
-#: components/Document/DocumentHeader.tsx:367
+#: components/Document/DocumentHeader.tsx:343
 msgid "Questions"
 msgstr "Questions"
 
@@ -1067,12 +1071,12 @@ msgid "Remove Cover"
 msgstr "Remove Cover"
 
 #: components/Organization/OrganizationMembersTab.tsx:211
-msgid "Remove Member"
-msgstr "Remove Member"
+#~ msgid "Remove Member"
+#~ msgstr "Remove Member"
 
 #: components/Organization/OrganizationMembersTab.tsx:104
-msgid "Remove member successfully!"
-msgstr "Remove member successfully!"
+#~ msgid "Remove member successfully!"
+#~ msgstr "Remove member successfully!"
 
 #: components/common/RichMarkdownEditor/extensions/RecordExtension/RecordBlock.tsx:285
 msgid "Replace record"
@@ -1096,16 +1100,16 @@ msgstr "Reset"
 
 #: components/UserCredential/ForgotPassForm.tsx:51
 #: components/UserCredential/ForgotPassForm.tsx:76
-msgid "Reset Password"
-msgstr "Reset Password"
+#~ msgid "Reset Password"
+#~ msgstr "Reset Password"
 
 #: components/UserCredential/ResetPasswordForm.tsx:31
-msgid "Reset password successfully!"
-msgstr "Reset password successfully!"
+#~ msgid "Reset password successfully!"
+#~ msgstr "Reset password successfully!"
 
 #: components/UserCredential/ResetPasswordForm.tsx:95
-msgid "Reset your password"
-msgstr "Reset your password"
+#~ msgid "Reset your password"
+#~ msgstr "Reset your password"
 
 #: components/Document/DocumentSetting.tsx:177
 #: components/Trash/DeletedItem.tsx:91
@@ -1113,8 +1117,8 @@ msgid "Restore"
 msgstr "Restore"
 
 #: components/DocumentVersionHistory/DocumentHistoryList.tsx:62
-#: components/Trash/DeletedClassList.tsx:28
 #: components/Trash/DeletedDocumentList.tsx:31
+#: components/Trash/DeletedSpaceList.tsx:28
 msgid "Restored!"
 msgstr "Restored!"
 
@@ -1130,14 +1134,14 @@ msgstr "Review & Grade"
 msgid "Review last submission"
 msgstr "Review last submission"
 
-#: components/Document/DocumentHeader.tsx:354
+#: components/Document/DocumentHeader.tsx:330
 msgid "Review setting quizzes"
 msgstr "Review setting quizzes"
 
 #: components/AddMember.tsx:136
 #: components/Organization/OrganizationMembersTab.tsx:120
-msgid "Role"
-msgstr "Role"
+#~ msgid "Role"
+#~ msgstr "Role"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:143
 msgid "Rubric"
@@ -1169,13 +1173,10 @@ msgstr "Rubrics consist of rows and columns. The rows correspond to the criteria
 #: components/Document/AssignmentSetting/index.tsx:244
 #: components/DocumentTemplate/EditCategoryModal.tsx:184
 #: components/DocumentTemplate/EditTemplateModal.tsx:171
-#: components/ProfileSetting/OrganizationProfileEdit.tsx:54
-#: components/ProfileSetting/SecuritySettings.tsx:174
-#: pages/profile/my-account.tsx:48
 msgid "Save"
 msgstr "Save"
 
-#: components/Document/DocumentMoreSetting.tsx:282
+#: components/Document/DocumentMoreSetting.tsx:266
 msgid "Save as Template"
 msgstr "Save as Template"
 
@@ -1183,29 +1184,28 @@ msgstr "Save as Template"
 msgid "Save document version"
 msgstr "Save document version"
 
-#: components/Document/DocumentMoreSetting.tsx:118
+#: components/Document/DocumentMoreSetting.tsx:102
 msgid "Saved!"
 msgstr "Saved!"
 
-#: components/Document/DocumentHeader.tsx:194
+#: components/Document/DocumentHeader.tsx:170
 msgid "Saving"
 msgstr "Saving"
 
 #: components/Document/RightPanel/BlockMenu/InsertBlocks.tsx:72
-#: components/Organization/OrganizationMembersTab.tsx:266
 msgid "Search"
 msgstr "Search"
 
 #: components/ProfileSetting/ProfileLeftMenu.tsx:58
 #: components/ProfileSetting/SecuritySettings.tsx:94
-msgid "Security Settings"
-msgstr "Security Settings"
+#~ msgid "Security Settings"
+#~ msgstr "Security Settings"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:183
 msgid "Select a bandscore"
 msgstr "Select a bandscore"
 
-#: components/common/RichMarkdownEditor/extensions/PageBlockExtension/PageBlock.tsx:284
+#: components/common/RichMarkdownEditor/extensions/PageBlockExtension/PageBlock.tsx:283
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/QuizDropdownMenu.tsx:121
 msgid "Select and copy"
 msgstr "Select and copy"
@@ -1215,10 +1215,22 @@ msgid "Select and Copy"
 msgstr "Select and Copy"
 
 #: components/Organization/OrganizationMembersTab.tsx:285
-msgid "Select Role"
-msgstr "Select Role"
+#~ msgid "Select Role"
+#~ msgstr "Select Role"
 
-#: components/Document/DocumentMoreSetting.tsx:205
+#: components/MagicLink/index.tsx:33
+msgid "Send email failed! Please try again."
+msgstr "Send email failed! Please try again."
+
+#: components/MagicLink/index.tsx:66
+msgid "Send me a magic link!"
+msgstr "Send me a magic link!"
+
+#: components/MagicLink/index.tsx:31
+msgid "Sent. Please check your email inbox!"
+msgstr "Sent. Please check your email inbox!"
+
+#: components/Document/DocumentMoreSetting.tsx:189
 msgid "Serif"
 msgstr "Serif"
 
@@ -1226,7 +1238,7 @@ msgstr "Serif"
 msgid "Setting quizzes review"
 msgstr "Setting quizzes review"
 
-#: components/Document/DocumentHeader.tsx:283
+#: components/Document/DocumentHeader.tsx:259
 msgid "Settings"
 msgstr "Settings"
 
@@ -1234,7 +1246,7 @@ msgstr "Settings"
 msgid "Setup the rubric for this assignment. Teacher will grade submissions by following the rubric criteria."
 msgstr "Setup the rubric for this assignment. Teacher will grade submissions by following the rubric criteria."
 
-#: components/Document/DocumentHeader.tsx:308
+#: components/Document/DocumentHeader.tsx:284
 msgid "Share"
 msgstr "Share"
 
@@ -1242,9 +1254,13 @@ msgstr "Share"
 msgid "Single Choice"
 msgstr "Single Choice"
 
-#: components/Document/DocumentMoreSetting.tsx:222
+#: components/Document/DocumentMoreSetting.tsx:206
 msgid "Size"
 msgstr "Size"
+
+#: components/Trash/index.tsx:25
+msgid "Space"
+msgstr "Space"
 
 #: components/Document/RightPanel/SummarySection.tsx:68
 msgid "Start at"
@@ -1266,10 +1282,7 @@ msgstr "Status"
 msgid "Structured Assignment"
 msgstr "Structured Assignment"
 
-#: components/AddMember.tsx:149
 #: components/Document/AssignmentStudentList.tsx:98
-#: components/Organization/OrganizationMembersTab.tsx:37
-#: components/Organization/OrganizationMembersTab.tsx:243
 msgid "Student"
 msgstr "Student"
 
@@ -1282,10 +1295,10 @@ msgid "Student will follow setup of teacher."
 msgstr "Student will follow setup of teacher."
 
 #: components/Document/DocumentMoreSetting.tsx:341
-msgid "Students can access."
-msgstr "Students can access."
+#~ msgid "Students can access."
+#~ msgstr "Students can access."
 
-#: components/Document/DocumentMoreSetting.tsx:183
+#: components/Document/DocumentMoreSetting.tsx:167
 msgid "Style"
 msgstr "Style"
 
@@ -1299,7 +1312,6 @@ msgid "Submission List"
 msgstr "Submission List"
 
 #: components/Document/Submission/DoingSubmissionDocument.tsx:95
-#: components/ProfileSetting/Contact.tsx:60
 msgid "Submit"
 msgstr "Submit"
 
@@ -1333,8 +1345,8 @@ msgstr "Tags"
 #: components/AddMember.tsx:146
 #: components/Organization/OrganizationMembersTab.tsx:33
 #: components/Organization/OrganizationMembersTab.tsx:235
-msgid "Teacher"
-msgstr "Teacher"
+#~ msgid "Teacher"
+#~ msgstr "Teacher"
 
 #: components/Document/DocumentSetting.tsx:259
 msgid "Templates"
@@ -1364,8 +1376,8 @@ msgstr "The option that accepts input with sensitive (uppercase and lowercase) c
 msgid "There are some problems with this document. {fetchError}"
 msgstr "There are some problems with this document. {fetchError}"
 
-#: components/Document/DocumentMoreSetting.tsx:132
-#: components/Document/LeftPanel/LessonItem.tsx:142
+#: components/Document/DocumentMoreSetting.tsx:116
+#: components/Document/LeftPanel/LessonItem.tsx:134
 msgid ""
 "This action cannot be undone. Once you delete this, \n"
 "you will lose all the content and settings associated with it."
@@ -1405,13 +1417,13 @@ msgstr ""
 msgid "True, False, Not Given"
 msgstr "True, False, Not Given"
 
-#: components/Document/DocumentMoreSetting.tsx:158
+#: components/Document/DocumentMoreSetting.tsx:142
 msgid "Try again!"
 msgstr "Try again!"
 
 #: components/UserCredential/ResetPasswordForm.tsx:114
-msgid "try another email again!"
-msgstr "try another email again!"
+#~ msgid "try another email again!"
+#~ msgstr "try another email again!"
 
 #: components/ErrorBoundary.tsx:50
 msgid "Try to reload!"
@@ -1426,12 +1438,12 @@ msgid "Type the limitation number"
 msgstr "Type the limitation number"
 
 #: components/Organization/OrganizationMembersTab.tsx:271
-msgid "Type to search"
-msgstr "Type to search"
+#~ msgid "Type to search"
+#~ msgstr "Type to search"
 
 #: components/Document/LeftPanel/CopyDocumentToClass.tsx:83
-msgid "Type to search class"
-msgstr "Type to search class"
+#~ msgid "Type to search class"
+#~ msgstr "Type to search class"
 
 #: components/DocumentVersionHistory/SaveHistoryManuallyModal.tsx:44
 msgid "Type version name.."
@@ -1448,12 +1460,16 @@ msgid "Type your assignment description"
 msgstr "Type your assignment description"
 
 #: components/ClassListManagement/CreateClassModal.tsx:91
-msgid "Type your class name..."
-msgstr "Type your class name..."
+#~ msgid "Type your class name..."
+#~ msgstr "Type your class name..."
 
 #: components/IdentityInput/index.tsx:64
 msgid "Type your email"
 msgstr "Type your email"
+
+#: components/MagicLink/index.tsx:46
+msgid "Type your email!"
+msgstr "Type your email!"
 
 #: components/Document/RightPanel/GradeSection.tsx:102
 msgid "Type your feedback"
@@ -1483,6 +1499,7 @@ msgstr "Typing your description"
 msgid "Ungraded"
 msgstr "Ungraded"
 
+#: components/Document/LeftPanel/index.tsx:37
 #: components/DocumentVersionHistory/DocumentHistoryList.tsx:78
 msgid "Unknown"
 msgstr "Unknown"
@@ -1500,7 +1517,7 @@ msgstr "Unlimited time"
 msgid "Untitled"
 msgstr "Untitled"
 
-#: components/Organization/BrandingSetting.tsx:78
+#: components/UserCredential/EditProfileModal.tsx:75
 msgid "Update"
 msgstr "Update"
 
@@ -1509,15 +1526,13 @@ msgid "Update assignment successfully"
 msgstr "Update assignment successfully"
 
 #: components/ProfileSetting/SecuritySettings.tsx:70
-msgid "Update password successfully"
-msgstr "Update password successfully"
+#~ msgid "Update password successfully"
+#~ msgstr "Update password successfully"
 
-#: components/Document/DocumentMoreSetting.tsx:94
 #: components/DocumentTemplate/EditCategoryModal.tsx:112
 #: components/DocumentTemplate/EditTemplateModal.tsx:107
 #: components/DocumentVersionHistory/EditVersionModal.tsx:36
-#: components/Organization/BrandingSetting.tsx:25
-#: components/ProfileSetting/OrganizationProfileEdit.tsx:33
+#: components/UserCredential/EditProfileModal.tsx:38
 msgid "Updated!"
 msgstr "Updated!"
 
@@ -1549,7 +1564,7 @@ msgstr "uploaded successfully."
 msgid "Uploaded!"
 msgstr "Uploaded!"
 
-#: components/DocumentTemplate/PreviewTemplate/index.tsx:132
+#: components/DocumentTemplate/PreviewTemplate/index.tsx:131
 msgid "Use template"
 msgstr "Use template"
 
@@ -1558,8 +1573,8 @@ msgid "Use this rubric"
 msgstr "Use this rubric"
 
 #: components/ProfileSetting/ProfileLeftMenu.tsx:51
-msgid "User Settings"
-msgstr "User Settings"
+#~ msgid "User Settings"
+#~ msgstr "User Settings"
 
 #: components/common/PanelDetail.tsx:42
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:149
@@ -1571,20 +1586,20 @@ msgid "View and Edit"
 msgstr "View and Edit"
 
 #: components/Document/DocumentMoreSetting.tsx:316
-msgid "Visible Mode"
-msgstr "Visible Mode"
+#~ msgid "Visible Mode"
+#~ msgstr "Visible Mode"
 
 #: components/common/FilePreview.tsx:222
 msgid "We do not yet support the preview of this file"
 msgstr "We do not yet support the preview of this file"
 
 #: components/UserCredential/ResetPasswordForm.tsx:59
-msgid "We have emailed you OTP Code to <0>{identity}</0> to reset password."
-msgstr "We have emailed you OTP Code to <0>{identity}</0> to reset password."
+#~ msgid "We have emailed you OTP Code to <0>{identity}</0> to reset password."
+#~ msgstr "We have emailed you OTP Code to <0>{identity}</0> to reset password."
 
 #: components/Organization/AddOrgMemberModal.tsx:23
-msgid "We will send organization and access (includes password) information via email."
-msgstr "We will send organization and access (includes password) information via email."
+#~ msgid "We will send organization and access (includes password) information via email."
+#~ msgstr "We will send organization and access (includes password) information via email."
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/index.tsx:94
 msgid "We're developing it!!"
@@ -1592,12 +1607,16 @@ msgstr "We're developing it!!"
 
 #: components/UserCredential/NewAuthLayout.tsx:52
 #: components/UserCredential/NewAuthLayout.tsx:61
-msgid "welcome"
-msgstr "welcome"
+#~ msgid "welcome"
+#~ msgstr "welcome"
 
-#: components/Document/DocumentMoreSetting.tsx:245
+#: components/Document/DocumentMoreSetting.tsx:229
 msgid "Width"
 msgstr "Width"
+
+#: components/MagicLink/index.tsx:21
+msgid "Wrong email format!"
+msgstr "Wrong email format!"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/SingleChoice/SingleChoiceReview.tsx:25
 msgid "Wrong! Correct answer is"

@@ -15,7 +15,7 @@ import { Permission } from "util/permission";
 import { LearningItemType } from "components/common/LearningModuleDnd/types";
 import { TextButtonWithHover } from "components/common/Button";
 import { formatDocumentRoute } from "config/Routes";
-import useSpaceStore from "context/ZustandClassStore";
+import useSpaceStore from "../../../context/ZustandSpaceStore";
 import {
   ActionMenuDropdown,
   IMenuItem,
@@ -118,7 +118,7 @@ const LessonItem = ({
   const menuList: IMenuItem<LearningItemType>[] = [
     {
       title: t`Duplicate`,
-      hide: !allow(Permission.ManageClassContent),
+      hide: !allow(Permission.ManageSpaceContent),
       callback: (item: LearningItemType) => {
         onDuplicate(item);
       },
@@ -126,7 +126,7 @@ const LessonItem = ({
     {
       title: t`Delete`,
       color: theme.colors.red[4],
-      hide: !allow(Permission.ManageClassContent),
+      hide: !allow(Permission.ManageSpaceContent),
       callback: (item: LearningItemType) => {
         modal.confirm({
           title: t`Are you sure you want to delete this ?`,
@@ -179,7 +179,7 @@ const LessonItem = ({
               </StyledText>
             )}
           </div>
-          {allow(Permission.ManageClassContent) && !dragging && (
+          {allow(Permission.ManageSpaceContent) && !dragging && (
             <ButtonGroup>
               <ActionMenuDropdown
                 item={item}

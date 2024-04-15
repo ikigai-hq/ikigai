@@ -1,5 +1,5 @@
 import useSpaceMemberStore from "context/ZustandClassMembeStore";
-import useSpaceStore from "context/ZustandClassStore";
+import useSpaceStore from "../context/ZustandSpaceStore";
 import useDocumentStore, {
   getSpaceIdFromDocument,
 } from "context/ZustandDocumentStore";
@@ -46,11 +46,11 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
     (state) => state.updatePageBlockMode,
   );
 
-  const fetchAndSetDocuments = useSpaceStore(
-    (state) => state.fetchAndSetDocuments,
+  const fetchSpaceAndSetDocuments = useSpaceStore(
+    (state) => state.fetchSpaceAndSetDocuments,
   );
-  const fetchClassMembers = useSpaceMemberStore(
-    (state) => state.fetchMembersOfClass,
+  const fetchMembersOfSpace = useSpaceMemberStore(
+    (state) => state.fetchMembersOfSpace,
   );
 
   const syncHighlights = useHighlightStore((state) => state.syncHighlights);
@@ -158,8 +158,8 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
 
   useEffect(() => {
     if (spaceId) {
-      fetchAndSetDocuments(spaceId);
-      fetchClassMembers(spaceId);
+      fetchSpaceAndSetDocuments(spaceId);
+      fetchMembersOfSpace(spaceId);
     }
   }, [spaceId]);
 

@@ -16,3 +16,9 @@ export const VERIFY_MAGIC_LINK = gql`
     }
   }
 `;
+
+export const UPDATE_PROFILE = gql`
+  mutation UpdateProfile($input: UpdateUserData!) {
+    userUpdateInfo(input: $input)
+  }
+`;

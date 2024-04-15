@@ -5,11 +5,11 @@ import toast from "react-hot-toast";
 import { t } from "@lingui/macro";
 
 import DeletedItem from "./DeletedItem";
-import { GET_DELETED_SPACES } from "graphql/query/ClassQuery";
+import { GET_DELETED_SPACES } from "../../graphql/query/SpaceQuery";
 import { handleError } from "graphql/ApolloClient";
 import { GetDeletedSpaces } from "graphql/types";
 import Loading from "../Loading";
-import { DELETE_SPACE, RESTORE_SPACE } from "graphql/mutation/ClassMutation";
+import { DELETE_SPACE, RESTORE_SPACE } from "../../graphql/mutation/SpaceMutation";
 
 const DeletedSpaceList = () => {
   const { data, loading, refetch } = useQuery<GetDeletedSpaces>(GET_DELETED_SPACES, {

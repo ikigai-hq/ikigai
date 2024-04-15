@@ -6,7 +6,7 @@ import useDocumentPermission from "hook/UseDocumentPermission";
 import { DocumentPermission, DocumentType, getDocumentType, Permission } from "util/permission";
 import { useRouter } from "next/router";
 import useDocumentStore from "context/ZustandDocumentStore";
-import useSpaceStore from "context/ZustandClassStore";
+import useSpaceStore from "../../context/ZustandSpaceStore";
 import styled from "styled-components";
 import { BreakPoints } from "styles/mediaQuery";
 import { GetDocumentDetail_documentGet as IDocument, OrgRole } from "graphql/types";

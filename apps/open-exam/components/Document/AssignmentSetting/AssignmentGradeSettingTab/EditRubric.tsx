@@ -12,7 +12,7 @@ export type EditRubricProps = {
 
 const EditRubric = ({ visible, onClose, rubric }: EditRubricProps) => {
   const allow = useUserPermission();
-  const canEditRubric = allow(Permission.ManageClassSetting);
+  const canEditRubric = allow(Permission.ManageSpaceSetting);
   return (
     <Drawer
       open={visible}

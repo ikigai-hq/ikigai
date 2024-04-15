@@ -85,10 +85,6 @@ export const GET_DOCUMENT_DETAIL = gql`
           testDuration
           documentId
           gradeByRubricId
-          document {
-            id
-            spaceId
-          }
         }
         rubricGrade {
           submissionId

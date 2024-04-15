@@ -79,7 +79,6 @@ export const DocumentIcon = styled.img`
 `;
 
 export const TitlePanel = styled.div`
-  padding: 0 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;

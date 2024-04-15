@@ -101,7 +101,7 @@ const RubricManagement = (
           </Trans>
         </Typography.Text>
         {
-          allow(Permission.ManageClassContent) &&
+          allow(Permission.ManageSpaceContent) &&
           <Button
             type="primary"
             style={{
@@ -146,17 +146,17 @@ const RubricManagement = (
                       />
                     </Tooltip>
                     <Tooltip
-                      title={allow(Permission.ManageClassContent) ? t`View and Edit` : t`View`}
+                      title={allow(Permission.ManageSpaceContent) ? t`View and Edit` : t`View`}
                       arrow={false}
                     >
                       <TextButtonWithHover
                         type="text"
-                        icon={allow(Permission.ManageClassContent) ? <EditOutlined /> : <EyeOutlined />}
+                        icon={allow(Permission.ManageSpaceContent) ? <EditOutlined /> : <EyeOutlined />}
                         onClick={() => setEditingRubric(rubric)}
                       />
                     </Tooltip>
                     {
-                      allow(Permission.ManageClassContent) &&
+                      allow(Permission.ManageSpaceContent) &&
                       <Popconfirm
                         title={t`Do you want to remove ${rubric.name}?`}
                         onConfirm={() => onRemoveRubric(rubric.id)}

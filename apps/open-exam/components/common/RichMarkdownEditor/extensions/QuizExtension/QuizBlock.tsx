@@ -33,7 +33,7 @@ import {
 } from "graphql/types";
 import { debounce } from "lodash";
 import { EditorView } from "prosemirror-view";
-import { copyBlock } from "@zkls/editor/dist/util/copyBlock";
+import { copyBlock } from "@openexam/editor/dist/util/copyBlock";
 import useDocumentPermission from "hook/UseDocumentPermission";
 import { DocumentPermission } from "util/permission";
 import { Trans } from "@lingui/macro";

@@ -1,7 +1,7 @@
 import create from "zustand";
 import { EditorView } from "prosemirror-view";
 import { EditorState } from "prosemirror-state";
-import RichMarkdownEditor from "@zkls/editor";
+import RichMarkdownEditor from "@openexam/editor";
 
 export interface Heading {
   title: string;

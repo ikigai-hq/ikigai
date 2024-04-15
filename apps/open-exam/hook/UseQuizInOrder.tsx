@@ -2,7 +2,7 @@ import useDocumentStore from "context/ZustandDocumentStore";
 import usePageBlockStore from "context/ZustandPageBlockStore";
 import useQuizStore from "context/ZustandQuizStore";
 import { getZenBlocksInOrder } from "util/BlockUtil";
-import { ExtensionName } from "@zkls/editor/dist/types/extensions.enum";
+import { ExtensionName } from "@openexam/editor/dist/types/extensions.enum";
 
 export const useQuizzesInOrder = () => {
   const masterDocument = useDocumentStore((state) => state.masterDocument);

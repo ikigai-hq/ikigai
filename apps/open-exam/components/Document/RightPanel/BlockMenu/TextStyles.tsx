@@ -12,8 +12,8 @@ import { Button, Col, Divider, Row, Tooltip } from "antd";
 import { TextColorPicker } from "./TextColorPicker";
 import useEditorActionStore from "context/ZustandEditorAction";
 import shallow from "zustand/shallow";
-import isMarkActive from "@zkls/editor/dist/queries/isMarkActive";
-import isNodeActive from "@zkls/editor/dist/queries/isNodeActive";
+import isMarkActive from "@openexam/editor/dist/queries/isMarkActive";
+import isNodeActive from "@openexam/editor/dist/queries/isNodeActive";
 import { ButtonWithTooltip } from "components/common/Button";
 import { lift } from "prosemirror-commands";
 

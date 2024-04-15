@@ -1,4 +1,4 @@
-import { EmbedDescriptor } from "@zkls/editor/dist/types";
+import { EmbedDescriptor } from "@openexam/editor/dist/types";
 import { YoutubeIcon } from "./YoutubeIcon";
 import { CommonEmbedBlock } from "../extensions/CommonEmbedExtension/CommonEmbedBlock";
 

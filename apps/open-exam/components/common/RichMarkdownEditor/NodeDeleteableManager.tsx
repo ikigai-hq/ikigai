@@ -1,5 +1,5 @@
 import { Plugin } from "prosemirror-state";
-import { Extension } from "@zkls/editor";
+import { Extension } from "@openexam/editor";
 import { QUIZ_BLOCK_NAME } from "./extensions/QuizExtension/QuizNode";
 import { FILL_IN_BLANK_NAME } from "./extensions/QuizExtension/FillInBlank/FillInBlankNode";
 import useDocumentStore from "context/ZustandDocumentStore";

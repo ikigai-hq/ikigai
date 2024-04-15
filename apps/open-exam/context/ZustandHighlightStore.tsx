@@ -23,7 +23,7 @@ import {
   extractOriginalText,
   extractUUIDAndText,
   parseMarkdown,
-} from "@zkls/editor/dist/util/regex";
+} from "@openexam/editor/dist/util/regex";
 import { HIGHLIGHT_RULE_REGEX } from "util/RegexMatch";
 
 export type HighlightData = {

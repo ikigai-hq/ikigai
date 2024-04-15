@@ -1,5 +1,5 @@
 {
-  "name": "@zkls/editor",
+  "name": "@openexam/editor",
   "description": "A rich text editor with Markdown shortcuts",
   "version": "11.21.3",
   "main": "dist/index.js",

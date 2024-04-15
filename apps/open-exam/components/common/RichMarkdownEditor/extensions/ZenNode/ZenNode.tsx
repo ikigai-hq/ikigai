@@ -1,12 +1,12 @@
-import Node from "@zkls/editor/dist/nodes/Node";
+import Node from "@openexam/editor/dist/nodes/Node";
 import { NodeType, Node as ProseMirrorNode } from "prosemirror-model";
-import { NodeComponentOptions } from "@zkls/editor/dist/lib/ComponentView";
+import { NodeComponentOptions } from "@openexam/editor/dist/lib/ComponentView";
 import { MarkdownSerializerState } from "prosemirror-markdown";
 import Token from "markdown-it/lib/token";
 import { EditorState, Transaction } from "prosemirror-state";
 import { WrapComponent } from "../../WrapComponent";
 import { ZenNodeAttrs } from "./type";
-import { ZenNodeType } from "@zkls/editor/dist/types/extensions.enum";
+import { ZenNodeType } from "@openexam/editor/dist/types/extensions.enum";
 import { TableOfContent } from "../TableOfContentExtention";
 
 export class ZenCommonNode extends Node {

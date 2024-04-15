@@ -1,13 +1,13 @@
-import Node from "@zkls/editor/dist/nodes/Node";
+import Node from "@openexam/editor/dist/nodes/Node";
 import { NodeType, Node as ProseMirrorNode } from "prosemirror-model";
-import { NodeComponentOptions } from "@zkls/editor/dist/lib/ComponentView";
+import { NodeComponentOptions } from "@openexam/editor/dist/lib/ComponentView";
 import { InputRule } from "prosemirror-inputrules";
 import Token from "markdown-it/lib/token";
 import { RecordBlockAttrs } from "./type";
 import { EditorState, Transaction } from "prosemirror-state";
 import dynamic from "next/dynamic";
 import { WrapComponent } from "../../WrapComponent";
-import { FORCE_UPDATE_KEY } from "@zkls/editor/dist/constant/metaKey";
+import { FORCE_UPDATE_KEY } from "@openexam/editor/dist/constant/metaKey";
 
 const RecordBlock = dynamic(() => import("./RecordBlock"), {
   ssr: false,

@@ -37,9 +37,9 @@ import {
   NestedDocumentContainer,
   NestedDocumentWrapper,
 } from "./ReviewPageBlocks";
-import RichMarkdownEditor from "@zkls/editor";
+import RichMarkdownEditor from "@openexam/editor";
 import { embedList } from "../../embed/embedList";
-import Annotation from "@zkls/editor/dist/plugins/Annotation";
+import Annotation from "@openexam/editor/dist/plugins/Annotation";
 import { FileBlockNode } from "../FileExtension/FileNode";
 import { AudioRecordNode } from "../RecordExtension/AudioRecordNode";
 import { VideoRecordNode } from "../RecordExtension/VideoRecordNode";

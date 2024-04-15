@@ -23,7 +23,7 @@ import {
   CREATE_QUIZ_STRUCTURE,
 } from "graphql/mutation";
 import { handleError } from "graphql/ApolloClient";
-import { copyBlock } from "@zkls/editor/dist/util/copyBlock";
+import { copyBlock } from "@openexam/editor/dist/util/copyBlock";
 import { EditorView } from "prosemirror-view";
 import { QuizTitle } from "../../../BlockComponents";
 import useQuizStore from "context/ZustandQuizStore";

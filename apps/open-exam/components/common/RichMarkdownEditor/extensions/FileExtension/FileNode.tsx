@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
-import Node from "@zkls/editor/dist/nodes/Node";
+import Node from "@openexam/editor/dist/nodes/Node";
 import { NodeType, Node as ProseMirrorNode } from "prosemirror-model";
-import { NodeComponentOptions } from "@zkls/editor/dist/lib/ComponentView";
+import { NodeComponentOptions } from "@openexam/editor/dist/lib/ComponentView";
 import { MarkdownSerializerState } from "prosemirror-markdown";
 import { InputRule } from "prosemirror-inputrules";
 import Token from "markdown-it/lib/token";
@@ -12,7 +12,7 @@ import { isZeroUUIDString } from "../../utils";
 import { DEFAULT_FILE_ID, DEFAULT_SIZE, FILE_BLOCK_NAME } from "./utils";
 import { WrapComponent } from "../../WrapComponent";
 import { FileExtension } from ".";
-import { FORCE_UPDATE_KEY } from "@zkls/editor/dist/constant/metaKey";
+import { FORCE_UPDATE_KEY } from "@openexam/editor/dist/constant/metaKey";
 
 export class FileBlockNode extends Node {
   get name() {

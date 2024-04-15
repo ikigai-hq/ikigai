@@ -2,7 +2,7 @@ import { FeedbackTextAttrs } from "./index";
 import { FormEvent, useEffect, useMemo, useRef } from "react";
 import styled from "styled-components";
 import { EditorView } from "prosemirror-view";
-import { copyBlock } from "@zkls/editor/dist/util/copyBlock";
+import { copyBlock } from "@openexam/editor/dist/util/copyBlock";
 import { t } from "@lingui/macro";
 
 export type FeedbackTextBlockProps = {

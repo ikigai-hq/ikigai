@@ -1,6 +1,6 @@
-import { Node } from "@zkls/editor";
+import { Node } from "@openexam/editor";
 import { NodeType, Node as ProseMirrorNode } from "prosemirror-model";
-import { NodeComponentOptions } from "@zkls/editor/dist/lib/ComponentView";
+import { NodeComponentOptions } from "@openexam/editor/dist/lib/ComponentView";
 import { InputRule } from "prosemirror-inputrules";
 import Token from "markdown-it/lib/token";
 import { ApolloProvider } from "@apollo/client";

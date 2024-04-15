@@ -1,4 +1,4 @@
-import { NodeComponentOptions } from "@zkls/editor/dist/lib/ComponentView";
+import { NodeComponentOptions } from "@openexam/editor/dist/lib/ComponentView";
 import { RecordNode } from "./RecordNode";
 import { MarkdownSerializerState } from "prosemirror-markdown";
 import { Node as ProseMirrorNode } from "prosemirror-model";

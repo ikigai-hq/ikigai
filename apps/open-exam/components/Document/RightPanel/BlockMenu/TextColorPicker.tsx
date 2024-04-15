@@ -1,9 +1,9 @@
 import { DownOutlined } from "@ant-design/icons";
 import { t } from "@lingui/macro";
-import isMarkActive from "@zkls/editor/dist/queries/isMarkActive";
-import getMarkRange from "@zkls/editor/dist/queries/getMarkRange";
-import { ExtensionName } from "@zkls/editor/dist/types/extensions.enum";
-import { textColor } from "@zkls/editor/dist/util/mappingColor";
+import isMarkActive from "@openexam/editor/dist/queries/isMarkActive";
+import getMarkRange from "@openexam/editor/dist/queries/getMarkRange";
+import { ExtensionName } from "@openexam/editor/dist/types/extensions.enum";
+import { textColor } from "@openexam/editor/dist/util/mappingColor";
 import { ColorPicker, Tooltip } from "antd";
 import useEditorActionStore from "context/ZustandEditorAction";
 import React, { useState } from "react";

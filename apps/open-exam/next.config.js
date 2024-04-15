@@ -39,7 +39,7 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV,
   },
-  transpilePackages: ["@zkls/editor"],
+  transpilePackages: ["@openexam/editor"],
   images: {
     remotePatterns: [
       {

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { CarouselRef } from "antd/lib/carousel";
 import dynamic from "next/dynamic";
 import { EditorView } from "prosemirror-view";
-import { copyBlock } from "@zkls/editor/dist/util/copyBlock";
+import { copyBlock } from "@openexam/editor/dist/util/copyBlock";
 import { useQuery } from "@apollo/client";
 
 import { FileUploadResponse } from "components/common/AddResourceModal";

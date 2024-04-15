@@ -7,7 +7,7 @@ import { BlockGroupItem } from "./BlockGroupItem";
 import { cloneDeep, debounce } from "lodash";
 import { Trans, t } from "@lingui/macro";
 import usePageBlockStore from "context/ZustandPageBlockStore";
-import { ParentBlockMenu } from "@zkls/editor/dist/types/extensions.enum";
+import { ParentBlockMenu } from "@openexam/editor/dist/types/extensions.enum";
 
 interface Props {}
 

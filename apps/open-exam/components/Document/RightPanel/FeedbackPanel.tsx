@@ -25,7 +25,7 @@ import type { MenuProps } from "antd";
 import useDocumentStore, {
   PanelContentType,
 } from "context/ZustandDocumentStore";
-import getMarkPos from "@zkls/editor/dist/lib/getMarkPos";
+import getMarkPos from "@openexam/editor/dist/lib/getMarkPos";
 import useEditorActionStore from "context/ZustandEditorAction";
 import { NodeSelection } from "prosemirror-state";
 

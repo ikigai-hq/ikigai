@@ -1,7 +1,7 @@
 import { NodeSelection } from "prosemirror-state";
-import { copyBlock } from "@zkls/editor/dist/util/copyBlock";
-import { NodeComponentOptions } from "@zkls/editor/dist/lib/ComponentView";
-import Editor from "@zkls/editor";
+import { copyBlock } from "@openexam/editor/dist/util/copyBlock";
+import { NodeComponentOptions } from "@openexam/editor/dist/lib/ComponentView";
+import Editor from "@openexam/editor";
 
 export const selectAndCopyNode = (
   options: NodeComponentOptions,

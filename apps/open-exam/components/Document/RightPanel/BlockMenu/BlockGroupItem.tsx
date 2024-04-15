@@ -6,13 +6,13 @@ import { IMappingBlockGroupItemValue } from "./defaultMenu.config";
 import { BlockItem } from "./BlockItem";
 import useEditorActionStore from "context/ZustandEditorAction";
 import { Trans } from "@lingui/macro";
-import { ExtensionName } from "@zkls/editor/dist/types/extensions.enum";
+import { ExtensionName } from "@openexam/editor/dist/types/extensions.enum";
 import {
   useBoundingClientRect,
   AdvancedClientRect,
-} from "@zkls/editor/dist/hooks/useBoundingClientRect";
-import { EmbedBlockMenu } from "@zkls/editor/dist/components/embedBlockMenu/EmbedBlockMenu";
-import { TableList } from "@zkls/editor/dist/components/common/TableList";
+} from "@openexam/editor/dist/hooks/useBoundingClientRect";
+import { EmbedBlockMenu } from "@openexam/editor/dist/components/embedBlockMenu/EmbedBlockMenu";
+import { TableList } from "@openexam/editor/dist/components/common/TableList";
 import useHandleClickOutside from "hook/UseHandleClickOutside";
 import { capitalize } from "lodash";
 import { ArrowDocument } from "components/common/IconSvg";

@@ -48,7 +48,7 @@ import {
   InlineTextGroup,
   InlineTextMenuInfo,
   PageLayoutGroup,
-} from "@zkls/editor/dist/types/extensions.enum";
+} from "@openexam/editor/dist/types/extensions.enum";
 import { Trans } from "@lingui/macro";
 import { Text, TextWeight } from "components/common/Text";
 

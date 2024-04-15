@@ -1,4 +1,4 @@
-import { ExtensionName } from "@zkls/editor/dist/types/extensions.enum";
+import { ExtensionName } from "@openexam/editor/dist/types/extensions.enum";
 import {
   QUIZ_CONTENT_RULE_REGEX,
   PAGE_BLOCK_CONTENT_RULE,

@@ -1,8 +1,8 @@
-import Node from "@zkls/editor/dist/nodes/Node";
+import Node from "@openexam/editor/dist/nodes/Node";
 import { NodeType, Node as ProseMirrorNode } from "prosemirror-model";
 import { InputRule } from "prosemirror-inputrules";
 import { EditorState, Transaction } from "prosemirror-state";
-import { NodeComponentOptions } from "@zkls/editor/dist/lib/ComponentView";
+import { NodeComponentOptions } from "@openexam/editor/dist/lib/ComponentView";
 import { MarkdownSerializerState } from "prosemirror-markdown";
 
 import Token from "markdown-it/lib/token";

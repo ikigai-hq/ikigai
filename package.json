@@ -1,9 +1,10 @@
 {
-  "name": "zenklass-monorepo",
-  "version": "0.0.0",
+  "name": "open-exam",
+  "version": "0.1.0",
   "private": true,
+  "license": "AGPL-3.0-only",
   "workspaces": [
-    "apps/zenklass-lms",
+    "apps/open-exam",
     "packages/*"
   ],
   "scripts": {

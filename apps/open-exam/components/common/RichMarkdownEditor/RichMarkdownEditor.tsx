@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { v4 } from "uuid";
 
-import RichMarkdownEditor from "@zkls/editor";
+import RichMarkdownEditor from "@openexam/editor";
 import { Fragment, Node, Schema, Slice } from "prosemirror-model";
 import { EditorView } from "prosemirror-view";
 import { EditorState } from "prosemirror-state";

@@ -1,5 +1,4 @@
 import React from "react";
-import * as Sentry from "@sentry/browser";
 import EmptyState from "./EmptyState";
 import Link from "next/link";
 import { Button } from "./common/Button";
@@ -22,7 +21,6 @@ class ErrorBoundary extends React.Component<any, any> {
   componentDidCatch(error, errorInfo) {
     // You can use your own error logging service here
     console.error("Catching Error", { error, errorInfo });
-    Sentry.captureException(error, errorInfo);
   }
 
   onClickReload = () => {

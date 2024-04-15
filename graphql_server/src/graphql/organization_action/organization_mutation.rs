@@ -136,8 +136,15 @@ impl OrganizationMutation {
                 // Step 1: Clone new document
                 let mut config = DocumentCloneConfig::new("", true);
                 config.org_id = Some(user_auth.org_id);
-                let new_document =
-                    document.deep_clone(&conn, user_auth.id, config, None, false, None)?;
+                let new_document = document.deep_clone(
+                    &conn,
+                    user_auth.id,
+                    config,
+                    None,
+                    false,
+                    None,
+                    true,
+                )?;
 
                 // Step 2: Create template with new document
                 let template = DocumentTemplate::new(

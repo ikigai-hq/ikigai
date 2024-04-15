@@ -75,8 +75,15 @@ impl PageBlock {
                 config.prefix_title = "";
                 config.parent_id = None;
                 config.index = 0;
-                let new_document =
-                    document.deep_clone(conn, to_document.creator_id, config, None, false, None)?;
+                let new_document = document.deep_clone(
+                    conn,
+                    to_document.creator_id,
+                    config,
+                    None,
+                    false,
+                    None,
+                    false,
+                )?;
                 let page_block_nested_document =
                     PageBlockDocument::new(page_block.id, new_document.id, pb_document.index);
                 PageBlockDocument::upsert(conn, page_block_nested_document)?;
@@ -136,6 +143,7 @@ impl Document {
         clone_to_space: Option<i32>,
         clone_children: bool,
         clone_to_document_id: Option<Uuid>,
+        clone_document_type: bool,
     ) -> Result<Self, OpenExamError> {
         let new_body = self.body.clone();
         let new_title = format!("{}{}", config.prefix_title, self.title);
@@ -202,16 +210,18 @@ impl Document {
         )?;
 
         // Step 3: Document Type
-        if let Ok(Some(assignment)) = Assignment::find_by_document(conn, self.id) {
-            let mut new_assignment = NewAssignment::from(assignment);
-            new_assignment.document_id = document.id;
-            Assignment::insert(conn, new_assignment)?;
-        }
+        if clone_document_type {
+            if let Ok(Some(assignment)) = Assignment::find_by_document(conn, self.id) {
+                let mut new_assignment = NewAssignment::from(assignment);
+                new_assignment.document_id = document.id;
+                Assignment::insert(conn, new_assignment)?;
+            }
 
-        if let Ok(Some(submission)) = Submission::find_by_document(conn, self.id) {
-            let mut new_submission = NewSubmission::from(submission);
-            new_submission.document_id = document.id;
-            Submission::insert(conn, new_submission)?;
+            if let Ok(Some(submission)) = Submission::find_by_document(conn, self.id) {
+                let mut new_submission = NewSubmission::from(submission);
+                new_submission.document_id = document.id;
+                Submission::insert(conn, new_submission)?;
+            }
         }
 
         // Step 4: Clone Child Documents
@@ -232,6 +242,7 @@ impl Document {
                     clone_to_space,
                     clone_children,
                     None,
+                    clone_document_type,
                 )?;
             }
         }
@@ -267,7 +278,7 @@ pub fn create_a_document_version(
         let mut config = DocumentCloneConfig::new("", true);
         config.org_id = Some(root_document.org_id);
         let versioning_document =
-            root_document.deep_clone(conn, creator_id, config, None, false, None)?;
+            root_document.deep_clone(conn, creator_id, config, None, false, None, true)?;
 
         // Step 2: Create Version
         let document_version = DocumentVersion::quick_new(
@@ -306,7 +317,7 @@ pub fn restore_document(
         let mut config = DocumentCloneConfig::new("", true);
         config.set_org(org_id);
         let duplicated_document =
-            backup_document.deep_clone(conn, user_id, config, None, false, Some(document_id))?;
+            backup_document.deep_clone(conn, user_id, config, None, false, Some(document_id), true)?;
 
         Ok(duplicated_document)
     })
@@ -328,6 +339,7 @@ pub fn duplicate_document_to_class(
             Some(class_id),
             true,
             None,
+            true,
         )?;
 
         Ok(duplicated_document)

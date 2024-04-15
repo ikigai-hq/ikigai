@@ -113,6 +113,7 @@ impl SpaceMutation {
                     Some(space_id),
                     true,
                     None,
+                    true,
                 )
             })
             .format_err()?;

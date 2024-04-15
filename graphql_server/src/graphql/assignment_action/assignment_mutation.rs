@@ -123,9 +123,10 @@ impl AssignmentMutation {
                     &conn,
                     user_id,
                     DocumentCloneConfig::new("", false),
-                    None,
+                    assignment_document.space_id,
                     false,
                     None,
+                    false,
                 )?;
                 let submission = if let Some(current_submission) = last_submission {
                     Submission::reset_attempt(
@@ -200,9 +201,10 @@ impl AssignmentMutation {
                     &conn,
                     student_id,
                     DocumentCloneConfig::new("", false),
-                    None,
+                    assignment_document.space_id,
                     false,
                     None,
+                    false,
                 )?;
                 let new_submission = NewSubmission::new(
                     student_id,

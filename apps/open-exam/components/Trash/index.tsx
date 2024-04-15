@@ -5,7 +5,6 @@ import React from "react";
 
 import { Text, TextWeight } from "../common/Text";
 import DeletedDocumentList from "./DeletedDocumentList";
-import DeletedSpaceList from "./DeletedSpaceList";
 
 const Trash = () => {
   const theme = useTheme();
@@ -21,9 +20,6 @@ const Trash = () => {
       <Tabs>
         <Tabs.TabPane key="Document" tab={t`Document`}>
           <DeletedDocumentList />
-        </Tabs.TabPane>
-        <Tabs.TabPane key="Space" tab={t`Space`}>
-          <DeletedSpaceList />
         </Tabs.TabPane>
       </Tabs>
     </TrashContainer>

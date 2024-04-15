@@ -55,6 +55,7 @@ pub fn duplicate_class(
                     Some(new_class.id),
                     true,
                     None,
+                    true
                 )?;
             }
         }

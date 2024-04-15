@@ -54,7 +54,7 @@ export const LearningModuleDnd = ({
       null,
       defaultCollapsed,
       getFullPathFromNode(router.query?.documentId as string, docs)?.map(
-        (f) => f.documentId
+        (f) => f.id
       ),
       convertedItems,
       cacheFlattenTrees

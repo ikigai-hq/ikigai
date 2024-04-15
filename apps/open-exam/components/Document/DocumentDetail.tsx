@@ -101,9 +101,7 @@ const DocumentDetail = () => {
 
   return (
     <Container>
-      <DocumentHeader
-        overrideClose={isSubmissionDocument ? moveBackToAssignment : undefined}
-      >
+      <DocumentHeader>
         {isAssignmentDocument && !isStudent && (
           <AssignmentHeader document={masterDocument} />
         )}

@@ -127,15 +127,15 @@ impl UserMutation {
         user_id: i32,
         otp: String,
     ) -> Result<UserToken> {
-        let magic_otp = Redis::init().get_magic_token(user_id).format_err()?;
-        if otp != magic_otp {
+        let magic_otp = Redis::init().get_magic_token(user_id);
+        if Ok(otp) != magic_otp {
             return Err(OpenExamError::new_bad_request(
                 "Magic token is expired or incorrect!",
             ))
             .format_err();
         }
 
-        Redis::init().del_magic_token(user_id).format_err()?;
+        let _ = Redis::init().del_magic_token(user_id);
         let conn = get_conn_from_ctx(ctx).await?;
         let user = User::find_by_id(&conn, user_id).format_err()?;
         let access_token = Claims::new(user_id).encode()?;

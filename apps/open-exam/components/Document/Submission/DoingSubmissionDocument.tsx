@@ -116,7 +116,7 @@ const DoingSubmissionDocument = ({
         overlayInnerStyle={{ padding: "10px 20px" }}
       >
         <Container>
-          <DocumentHeader overrideClose={onSubmit}>
+          <DocumentHeader>
             <SubmitSubmission deadline={deadline} onSubmit={onSubmit} />
           </DocumentHeader>
           <PresentationMode

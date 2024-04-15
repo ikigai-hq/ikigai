@@ -269,23 +269,16 @@ export function removeChildrenOf<T>(
   });
 }
 
-export function getFullPathFromNode(id: string, docs: IDocumentItemList[], isHeader?: boolean) {
-  let fullPath = [];
+export function getFullPathFromNode(
+  id: string, docs: IDocumentItemList[],
+): IDocumentItemList[] {
+  let fullPath: IDocumentItemList[] = [];
   if (id) {
     const current = docs.find((item) => item.id === id);
     if (current && current.parentId) {
       fullPath = getFullPathFromNode(current.parentId, docs);
     }
     if (current) fullPath.push(current);
-  }
-
-  if (isHeader && fullPath.length > 3) {
-    return [
-      fullPath[0], 
-      fullPath.slice(1, fullPath.length - 2), 
-      fullPath[fullPath.length - 2], 
-      fullPath[fullPath.length - 1]
-    ]; 
   }
 
   return fullPath;

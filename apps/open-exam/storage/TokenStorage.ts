@@ -1,5 +1,5 @@
 class TokenStorage {
-  key: string = "readyduo_token";
+  key: string = "openexam_token";
 
   public get(): string | null {
     if (typeof window === "undefined") {

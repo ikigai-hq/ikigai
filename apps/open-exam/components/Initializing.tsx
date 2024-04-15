@@ -32,7 +32,6 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
   const [checkMagicLink] = useMutation<VerifyMagicLink>(VERIFY_MAGIC_LINK);
   
   useEffect(() => {
-    console.log("Hello", router.isReady);
     if (router.isReady) verifyAuth();
   }, [router.isReady]);
   
@@ -44,10 +43,10 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
       if (checkNext) checkNext = await verifyMagicLink();
       console.info("Verifying Document", checkNext);
       if (checkNext) checkNext = await verifyDocument();
-      console.info("Verifying Last Activity", checkNext);
-      if (checkNext) checkNext = await verifyLastActivity();
       console.info("Verifying User Authentication", checkNext);
-      if (checkNext) await verifyUserAuth();
+      if (checkNext) checkNext = await verifyUserAuth();
+      console.info("Verifying Last Activity", checkNext);
+      if (checkNext) await verifyLastActivity();
     } catch (e) {
       console.error("Cannot verify user auth", e);
       setHasError(e.message);
@@ -77,6 +76,11 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
     const documentId = router.query.documentId as string;
     const isDocumentRoute = documentId && router.pathname.includes("/documents");
     const token = TokenStorage.get();
+    if (isDocumentRoute && !token) {
+      await router.push(Routes.Home);
+      return false;
+    }
+    
     if (!token || !isDocumentRoute) return true;
    
     const { data } = await checkDocument({ variables: { documentId }});
@@ -101,6 +105,13 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
       }
     }
     
+    const documentId = router.query.documentId as string;
+    const isDocumentRoute = documentId && router.pathname.includes("/documents");
+    if (isDocumentRoute && token) {
+      await router.push(formatDocumentRoute(documentId));
+      return false;
+    }
+    
     return true;
   };
   
@@ -120,22 +131,27 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
       if (data) {
         TokenStorage.set(data.userCheckMagicLink.accessToken);
         UserStorage.set(data.userCheckMagicLink.user.id);
-        await router.push(router.pathname);
-        return false;
       }
     }
     
     return true;
   };
   
-  const verifyUserAuth = async () => {
+  const verifyUserAuth = async (): Promise<boolean> => {
     const token = TokenStorage.get();
-    if (!token) return;
+    if (!token) return true;
     
     const { data } = await getMe();
     if (data) {
       setUserAuth(data);
+      return true;
+    } else {
+      return false;
     }
+  };
+  
+  const backToHome = () => {
+    window.location.replace(Routes.Home);
   };
   
   if (!completeCheck) {
@@ -171,8 +187,8 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
               {hasError}
             </Typography.Text>
           </div>
-          <div>
-            <Button><Trans>Back to home</Trans></Button>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "5px"}}>
+            <Button onClick={backToHome}><Trans>Back to home</Trans></Button>
           </div>
         </div>
       </LayoutManagement>

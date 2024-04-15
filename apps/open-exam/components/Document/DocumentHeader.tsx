@@ -38,20 +38,18 @@ import { MenuProps } from "antd/lib";
 import { GetDocuments_spaceGet_documents as IDocumentItemList } from "graphql/types";
 import DocumentTypeIcon from "./DocumentTypeIcon";
 import DocumentMoreSetting from "./DocumentMoreSetting";
-import usePageBlockStore from "context/ZustandPageBlockStore";
 import useHighlightStore from "context/ZustandHighlightStore";
 import DocumentVersionHistory from "../DocumentVersionHistory";
 import SaveHistoryManuallyModal from "../DocumentVersionHistory/SaveHistoryManuallyModal";
 import { useKeyPress } from "ahooks";
 import useSubmissionStatus from "hook/UseSubmissionStatus";
+import {isArray} from "lodash";
 
 export type DocumentHeaderProps = {
-  overrideClose?: () => Promise<void>;
   children?: React.ReactNode;
 };
 
 const DocumentHeader: React.FC<DocumentHeaderProps> = ({
-  overrideClose,
   children,
 }) => {
   const router = useRouter();
@@ -73,10 +71,6 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
 
   const setFocusMode = useDocumentStore((state) => state.setFocusMode);
 
-  const pageBlockMode = usePageBlockStore((state) => state.pageBlockMode);
-  const updatePageBlockMode = usePageBlockStore(
-    (state) => state.updatePageBlockMode,
-  );
   const docs = useSpaceStore((state) => state.documents);
   
   const [openHistory, setOpenHistory] = useState(false);
@@ -110,20 +104,6 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
     }));
   };
 
-  const backToPreviousPage = () => {
-    if (overrideClose) {
-      overrideClose();
-      return;
-    }
-
-    if (pageBlockMode) {
-      updatePageBlockMode(false);
-      return;
-    }
-
-    return router.push("/");
-  };
-
   if (!masterDocument) {
     return (
       <DocumentHeaderWrapper>
@@ -135,29 +115,25 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
   const renderBreadcrumb = () => {
     if (docs) {
       const listBreadcrumb = getFullPathFromNode(
-        router.query.documentId as string,
+        masterDocument.id,
         docs,
-        true,
       );
-
+      
       const isLastSubmission = (index: number): boolean => {
         return index === listBreadcrumb.length - 1;
       };
-
+      
+      const finalBreadcrumb = listBreadcrumb.length > 3 ?
+        [
+          listBreadcrumb[0],
+          listBreadcrumb.slice(1, listBreadcrumb.length - 2),
+          listBreadcrumb[listBreadcrumb.length - 2],
+          listBreadcrumb[listBreadcrumb.length - 1]
+        ] :
+        listBreadcrumb;
       return (
         <DocumentBreadcrumbContainer>
-          <ButtonWithTooltip
-            btnProps={{
-              onClick: backToPreviousPage,
-              icon: <ArrowDocument />,
-              type: "text",
-              style: { marginRight: "10px" },
-            }}
-            tooltipProps={{
-              title: t`Back`,
-            }}
-          />
-          {listBreadcrumb.map((breadcrumb, index) => (
+          {finalBreadcrumb.map((breadcrumb, index) => (
             <div
               key={index}
               style={{
@@ -167,7 +143,7 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
                 bottom: 1,
               }}
             >
-              {breadcrumb.spaceId ? (
+              {!isArray(breadcrumb) ? (
                 <DocumentBreadcrumb
                   onClick={() => {
                     router.push(
@@ -183,7 +159,7 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
                         theme.colors.gray[isLastSubmission(index) ? 10 : 6]
                       }
                     >
-                      {breadcrumb?.document?.title || DEFAULT_DOCUMENT_TITLE}
+                      {breadcrumb?.title || DEFAULT_DOCUMENT_TITLE}
                     </DocumentBreadcrumbTitle>
                     {isSaving && isLastSubmission(index) && (
                       <Text

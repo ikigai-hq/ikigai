@@ -382,7 +382,7 @@ const RecordBlock = ({
         <Button
           type="primary"
           style={{ float: "right" }}
-          width="149px"
+          customWidth="149px"
           onClick={() => setModal(null)}
         >
           <Trans>OK</Trans>

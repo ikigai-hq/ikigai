@@ -7,13 +7,13 @@ import {
 import styled from "styled-components";
 
 type ButtonProps = {
-  width?: string;
+  customWidth?: string;
   margin?: string;
 };
 
-export const Button = styled(ButtonAntd)`
+export const Button = styled(ButtonAntd)<ButtonProps>`
   & {
-    width: ${({ width = "max-content" }: ButtonProps) => `${width}`};
+    width: ${({ customWidth = "max-content" }: ButtonProps) => `${customWidth}`};
     height: auto;
     padding: 11px 26px;
     display: flex;

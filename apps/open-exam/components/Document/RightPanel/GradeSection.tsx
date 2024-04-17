@@ -112,7 +112,7 @@ const GradeSection = ({ rubricFinalScore }: GradeSectionProps) => {
       </Section>
       {userAllow(Permission.ManageSpaceContent) && (
         <Button
-          width={"100%"}
+          customWidth={"100%"}
           style={{ marginTop: "15px" }}
           loading={loading}
           disabled={loading}
@@ -124,7 +124,7 @@ const GradeSection = ({ rubricFinalScore }: GradeSectionProps) => {
       )}
       {userAllow(Permission.ManageSpaceContent) && (
         <Button
-          width={"100%"}
+          customWidth={"100%"}
           style={{ marginTop: "15px" }}
           loading={requestRedoLoading}
           disabled={requestRedoLoading}

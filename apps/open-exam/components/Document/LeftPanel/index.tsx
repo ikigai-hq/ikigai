@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import shallow from "zustand/shallow";
-import {Avatar, Divider, Tooltip, Typography} from "antd";
-import {DesktopOutlined, SettingOutlined, UserOutlined} from "@ant-design/icons";
+import { Avatar, Divider, Tooltip, Typography } from "antd";
+import { SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { Trans, t } from "@lingui/macro";
 import styled, { useTheme } from "styled-components";
 

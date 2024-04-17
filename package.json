@@ -8,8 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev --parallel"
+    "dev-op-client": "cd apps/open-exam && yarn dev"
   },
   "devDependencies": {
     "eslint-config-custom": "*",

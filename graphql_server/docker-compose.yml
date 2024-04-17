@@ -1,0 +1,38 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres:14
+    environment:
+     POSTGRES_PASSWORD: openexam
+     POSTGRES_USER: openexam
+     POSTGRES_DB: openexam
+    ports:
+      - "5432:5432"
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  migration:
+    build:
+      dockerfile: Migration.Dockerfile
+    environment:
+      DATABASE_URL: postgres://openexam:openexam@postgres:5432/openexam
+    depends_on:
+      postgres:
+        condition: service_healthy
+  graphql-server:
+    build:
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgres://openexam:openexam@postgres:5432/openexam
+      REDIS_URL: postgres://openexam:openexam@postgres:5432/openexam
+    env_file:
+      - ".env"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    ports:
+      - "8000:8000"

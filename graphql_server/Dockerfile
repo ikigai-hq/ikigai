@@ -18,8 +18,6 @@ FROM ubuntu:20.04
 RUN apt-get update && apt-get -y upgrade && \
     apt-get -y install libpq-dev openssl ca-certificates libssl-dev software-properties-common
 
-RUN cargo install diesel_cli --no-default-features --features postgres --version 2.0.1
-
 RUN add-apt-repository ppa:chris-needham/ppa
 RUN apt-get update && apt-get -y install audiowaveform
 

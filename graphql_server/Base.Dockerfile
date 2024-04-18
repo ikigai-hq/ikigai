@@ -1,4 +1,4 @@
-FROM rust:1.70 as build
+FROM rodgers/open-exam-rust-base as build
 
 WORKDIR /app
 

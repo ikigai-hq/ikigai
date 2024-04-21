@@ -41,9 +41,6 @@ pub struct File {
     #[graphql(skip)]
     pub download_url_expire_in: Option<i64>,
     pub org_id: i32,
-    pub transcoding_output_key: Option<String>,
-    pub transcoding_output_content_type: Option<String>,
-    pub transcoding_output_content_length: Option<i64>,
     pub waveform_audio_json_str: Option<String>,
 }
 
@@ -70,9 +67,6 @@ impl File {
             download_cached_url: None,
             download_url_expire_in: None,
             org_id,
-            transcoding_output_key: None,
-            transcoding_output_content_type: None,
-            transcoding_output_content_length: None,
             waveform_audio_json_str: None,
         }
     }
@@ -121,24 +115,6 @@ impl File {
                 files::updated_at.eq(get_now_as_secs()),
             ))
             .get_result(conn)
-    }
-
-    pub fn update_transcoding_info(
-        conn: &PgConnection,
-        file_id: Uuid,
-        transcoding_key: String,
-        transcoding_content_length: i64,
-        transcoding_content_type: String,
-    ) -> Result<(), Error> {
-        diesel::update(files::table.find(file_id))
-            .set((
-                files::transcoding_output_key.eq(transcoding_key),
-                files::transcoding_output_content_length.eq(transcoding_content_length),
-                files::transcoding_output_content_type.eq(transcoding_content_type),
-                files::updated_at.eq(get_now_as_secs()),
-            ))
-            .execute(conn)?;
-        Ok(())
     }
 
     pub fn update_waveform(

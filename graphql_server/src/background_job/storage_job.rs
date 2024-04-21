@@ -37,15 +37,9 @@ impl Executable for GenerateWaveform {
             File::find_by_id(&conn, self.file_id)?
         };
 
-        let key = if file.content_type.contains("audio/mpeg") {
-            Some(file.key())
-        } else {
-            file.transcoding_output_key.clone()
-        };
-
-        let res = if let Some(key) = key {
+        let res = if file.content_type.contains("audio/mpeg") {
             let waveform_json_str =
-                AudioWaveform::generate_waveform_json(file.uuid, &key, "mp3").await?;
+                AudioWaveform::generate_waveform_json(file.uuid, &file.key(), "mp3").await?;
 
             info!("Save waveform {}", self.file_id);
             let conn = get_conn_from_actor().await?;

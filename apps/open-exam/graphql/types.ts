@@ -1597,24 +1597,6 @@ export interface GetDeletedDocuments {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetDownloadTranscodingUrl
-// ====================================================
-
-export interface GetDownloadTranscodingUrl {
-  fileGetDownloadTranscodingUrl: string | null;
-}
-
-export interface GetDownloadTranscodingUrlVariables {
-  fileId: any;
-  documentId: any;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL query operation: GetFullFileInfo
 // ====================================================
 
@@ -1623,9 +1605,6 @@ export interface GetFullFileInfo_getFile {
   downloadUrlByDocumentId: string | null;
   contentType: string;
   contentLength: number;
-  transcodingOutputKey: string | null;
-  transcodingOutputContentType: string | null;
-  transcodingOutputContentLength: number | null;
 }
 
 export interface GetFullFileInfo {

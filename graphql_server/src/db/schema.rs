@@ -121,9 +121,6 @@ diesel::table! {
         download_cached_url -> Nullable<Varchar>,
         download_url_expire_in -> Nullable<Int8>,
         org_id -> Int4,
-        transcoding_output_key -> Nullable<Varchar>,
-        transcoding_output_content_type -> Nullable<Varchar>,
-        transcoding_output_content_length -> Nullable<Int8>,
         waveform_audio_json_str -> Nullable<Text>,
     }
 }

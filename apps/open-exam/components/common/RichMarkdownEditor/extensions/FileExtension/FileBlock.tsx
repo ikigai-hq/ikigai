@@ -10,9 +10,8 @@ import { FileUploadResponse } from "components/common/AddResourceModal";
 import { FileAttrs, FileNodeAttrs, Size } from "./type";
 import FileUpload from "../../../FileUpload";
 import { isZeroUUIDString } from "../../utils";
-import { GetDownloadTranscodingUrl, GetFullFileInfo } from "graphql/types";
+import { GetFullFileInfo } from "graphql/types";
 import {
-  GET_DOWNLOAD_TRANSCODING_URL,
   GET_FULL_FILE_INFO,
 } from "graphql/query";
 import { handleError } from "graphql/ApolloClient";
@@ -110,20 +109,6 @@ const FileBlock = ({
     },
     onError: handleError,
   });
-  const { data: transcodingUrlData } = useQuery<GetDownloadTranscodingUrl>(
-    GET_DOWNLOAD_TRANSCODING_URL,
-    {
-      skip:
-        !selectedFile ||
-        !selectedFile.fileId ||
-        isZeroUUIDString(selectedFile.fileId) ||
-        !documentId,
-      variables: {
-        fileId: selectedFile?.fileId,
-        documentId,
-      },
-    },
-  );
 
   useEffect(() => {
     // Case: change name of file => change attrs of block => re-render => need to keep current selected file.
@@ -235,13 +220,9 @@ const FileBlock = ({
   };
 
   if (files.length && selectedFile) {
-    const downloadUrl =
-      transcodingUrlData?.fileGetDownloadTranscodingUrl ||
-      originalFile?.getFile?.downloadUrlByDocumentId;
+    const downloadUrl = originalFile?.getFile?.downloadUrlByDocumentId;
     const fileUuid = originalFile?.getFile?.uuid;
-    const contentType =
-      originalFile?.getFile?.transcodingOutputContentType ||
-      originalFile?.getFile?.contentType;
+    const contentType = originalFile?.getFile?.contentType;
 
     if (downloadUrl && initContent.current && !isAudio(contentType)) {
       if (!width && !height) {

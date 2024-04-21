@@ -1,11 +1,10 @@
 import { useQuery } from "@apollo/client";
 
 import {
-  GET_DOWNLOAD_TRANSCODING_URL,
   GET_FULL_FILE_INFO,
 } from "graphql/query";
 import { handleError } from "graphql/ApolloClient";
-import { GetDownloadTranscodingUrl, GetFullFileInfo } from "graphql/types";
+import { GetFullFileInfo } from "graphql/types";
 import Loading from "components/Loading";
 import { RecordBlockBody, RecordBox } from "../recordStyles";
 import AudioPlayer from "./AudioPlayer";
@@ -31,21 +30,10 @@ const VideoPlayerWithFileId = ({
     },
     onError: handleError,
   });
-  const { data: transcodingUrlData } = useQuery<GetDownloadTranscodingUrl>(
-    GET_DOWNLOAD_TRANSCODING_URL,
-    {
-      variables: {
-        fileId,
-        documentId,
-      },
-      onError: handleError,
-    }
-  );
 
-  if (!originalFile || !transcodingUrlData) return <Loading />;
+  if (!originalFile) return <Loading />;
 
   const url = originalFile.getFile.downloadUrlByDocumentId;
-  const transcodingUrl = transcodingUrlData.fileGetDownloadTranscodingUrl;
   const fileRes = originalFile.getFile;
   return (
     <RecordBlockBody
@@ -60,23 +48,17 @@ const VideoPlayerWithFileId = ({
           }}
         >
           <AudioPlayer
-            src={transcodingUrl || url}
+            src={url}
             recording={isRecording}
-            contentType={
-              transcodingUrlData ?
-                originalFile.getFile.transcodingOutputContentType :
-                originalFile.getFile.contentType
-            }
+            contentType={originalFile.getFile.contentType}
             isRecordingBlock
           />
         </RecordBox>
       )}
       {recordType === "video" && !isRecording && (
         <VideoPlayer
-          src={transcodingUrl || url}
-          contentType={
-            fileRes.transcodingOutputContentType || fileRes.contentType
-          }
+          src={url}
+          contentType={fileRes.contentType}
         />
       )}
     </RecordBlockBody>

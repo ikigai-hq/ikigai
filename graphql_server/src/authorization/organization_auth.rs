@@ -1,6 +1,7 @@
-use crate::db::Organization;
 use oso::PolarClass;
 use std::fmt::{Display, Formatter};
+
+use crate::db::Organization;
 
 #[derive(Clone, Debug, PolarClass)]
 pub struct OrganizationAuth {
@@ -26,7 +27,6 @@ pub enum OrganizationActionPermission {
     AddOrgMember,
     RemoveOrgMember,
     AddSpace,
-    ManageTemplate,
     ManageTrash,
     ManageOrgInformation,
 }
@@ -39,7 +39,6 @@ impl Display for OrganizationActionPermission {
             Self::AddOrgMember => "add_org_member",
             Self::RemoveOrgMember => "remove_org_member",
             Self::AddSpace => "add_space",
-            Self::ManageTemplate => "manage_template",
             Self::ManageTrash => "manage_trash",
             Self::ManageOrgInformation => "manage_org_information",
         };

@@ -18,7 +18,6 @@ export enum Permission {
   RemoveOrgMember,
   AddSpace,
   RemoveSpace,
-  ManageTemplate,
   ManageTrash,
   ManageOrgInformation,
 }
@@ -40,7 +39,6 @@ export const TEACHER_PERMISSIONS = [
   Permission.RemoveOrgMember,
   Permission.AddSpace,
   Permission.RemoveSpace,
-  Permission.ManageTemplate,
   Permission.ManageTrash,
   Permission.ManageOrgInformation,
 ];

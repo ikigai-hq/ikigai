@@ -1,12 +1,9 @@
-import { useMutation } from "@apollo/client";
 import { t, Trans } from "@lingui/macro";
 import { Space } from "antd";
 import { Button } from "components/common/Button";
 import {
-  ClockIcon,
   CopyIcon,
   DeleteIcon,
-  Images,
   StandardIcon,
   WideIcon
 } from "components/common/IconSvg";
@@ -14,12 +11,7 @@ import { Text, TextWeight } from "components/common/Text";
 import useDocumentStore, {
   EditorConfigType,
 } from "context/ZustandDocumentStore";
-import { handleError } from "graphql/ApolloClient";
-import {
-  SAVE_AS_DOCUMENT_TEMPLATE,
-} from "graphql/mutation/DocumentMutation";
-import { SaveAsDocumentTemplate } from "graphql/types";
-import React, { useState } from "react";
+import React from "react";
 import styled, { useTheme } from "styled-components";
 import toast from "react-hot-toast";
 import { quickConfirmModal, useModal } from "hook/UseModal";
@@ -28,42 +20,22 @@ import useSpaceStore from "../../context/ZustandSpaceStore";
 import { useRouter } from "next/router";
 import { formatDocumentRoute } from "config/Routes";
 import { formatDate, FormatType } from "util/Time";
-import { DocumentPermission, Permission } from "util/permission";
+import { DocumentPermission } from "util/permission";
 import useDocumentPermission from "hook/UseDocumentPermission";
-import useUserPermission from "../../hook/UseUserPermission";
-import useDocumentTemplateStore, {
-  TemplateType,
-} from "context/ZustandDocumentTemplateStore";
-import { useFeatureIsOn } from "@growthbook/growthbook-react";
-import { PAGE_HISTORY, TEMPLATE } from "../../util/FeatureConstant";
 
-interface DocumentMoreSettingProps {
-  onClickOpenHistory: () => void;
-}
-
-const DocumentMoreSetting = ({ onClickOpenHistory }: DocumentMoreSettingProps) => {
+const DocumentMoreSetting = () => {
   const theme = useTheme();
   const { modal } = useModal();
   const router = useRouter();
 
   const activeDocument = useDocumentStore((state) => state.masterDocument);
-  const setOpenTemplateModal = useDocumentTemplateStore(state => state.setChangeOpenTemplateModal);
-  const setOpenTemplateType = useDocumentTemplateStore(state => state.setOpenTemplateType);
-  const setSelectedPreviewTemplateId = useDocumentTemplateStore(state => state.setSelectedPreviewTemplateId);
   const documentAllow = useDocumentPermission();
-  const allow = useUserPermission();
-  const isTemplateEnabled = useFeatureIsOn(TEMPLATE);
-  const isPageHistoryEnabled = useFeatureIsOn(PAGE_HISTORY);
 
   const editorConfig = {
     "size": activeDocument.editorConfig.size || EditorConfigType.DEFAULT,
     "style": activeDocument.editorConfig.style || EditorConfigType.DEFAULT,
     "width": activeDocument.editorConfig.width || EditorConfigType.WIDTH_STANDARD,
   };
-  const [saveAsTemplate, { loading : loadingSaveAsTemplate}] = useMutation<SaveAsDocumentTemplate>(
-    SAVE_AS_DOCUMENT_TEMPLATE, {
-    onError: handleError,
-  });
 
   const getActiveConfig = (config: string, type: string) => {
     return editorConfig[type] === config;
@@ -91,23 +63,6 @@ const DocumentMoreSetting = ({ onClickOpenHistory }: DocumentMoreSettingProps) =
     );
   };
   
-  const onSaveAsTemplate = () => {
-    if (loadingSaveAsTemplate) return;
-    quickConfirmModal(
-      modal,
-      t`Do you want to save this document as template?`,
-      async () => {
-        const { data } = await saveAsTemplate({ variables: { documentId: activeDocument.id }});
-        if (data) {
-          toast.success(t`Saved!`);
-          setOpenTemplateType(TemplateType.Library);
-          setSelectedPreviewTemplateId(data.orgAddTemplate.id);
-          setOpenTemplateModal(true);
-        }
-      },
-    );
-  };
-
   const onDelete = () => {
     modal.confirm({
       zIndex: 1100,
@@ -255,19 +210,6 @@ const DocumentMoreSetting = ({ onClickOpenHistory }: DocumentMoreSettingProps) =
       </SettingContainer>
       <div>
         {
-          allow(Permission.ManageTemplate) && isTemplateEnabled &&
-          <SettingContainer $gap={0} $padding="8px 0">
-            <SettingButton
-              type="text"
-              icon={<Images />}
-              onClick={onSaveAsTemplate}
-              loading={loadingSaveAsTemplate}
-            >
-              <Trans>Save as Template</Trans>
-            </SettingButton>
-          </SettingContainer>
-        }
-        {
           documentAllow(DocumentPermission.ManageDocument) && (
             <>
               <SettingContainer $gap={0} $padding="8px 0">
@@ -283,18 +225,6 @@ const DocumentMoreSetting = ({ onClickOpenHistory }: DocumentMoreSettingProps) =
                   <Trans>Delete</Trans>
                 </SettingButton>
               </SettingContainer>
-              {
-                isPageHistoryEnabled &&
-                <SettingContainer $padding="8px 0">
-                  <SettingButton
-                    type="text"
-                    icon={<ClockIcon />}
-                    onClick={onClickOpenHistory}
-                  >
-                    <Trans>Page History</Trans>
-                  </SettingButton>
-                </SettingContainer>
-              }
             </>
           )
         }

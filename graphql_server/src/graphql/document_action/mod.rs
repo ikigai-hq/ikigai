@@ -139,14 +139,3 @@ impl PageBlockDocument {
         Ok(document)
     }
 }
-
-#[ComplexObject]
-impl DocumentVersion {
-    async fn created_by(&self, ctx: &Context<'_>) -> Option<PublicUser> {
-        if let Some(creator_id) = self.creator_id {
-            get_public_user_from_loader(ctx, creator_id).await.ok()
-        } else {
-            None
-        }
-    }
-}

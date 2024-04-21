@@ -6,7 +6,7 @@ import Icon, {
   ShareAltOutlined,
   SnippetsOutlined,
 } from "@ant-design/icons";
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import styled, { useTheme } from "styled-components";
 import { t, Trans } from "@lingui/macro";
@@ -37,11 +37,7 @@ import {
 import { MenuProps } from "antd/lib";
 import { GetDocuments_spaceGet_documents as IDocumentItemList } from "graphql/types";
 import DocumentTypeIcon from "./DocumentTypeIcon";
-import DocumentMoreSetting from "./DocumentMoreSetting";
 import useHighlightStore from "context/ZustandHighlightStore";
-import DocumentVersionHistory from "../DocumentVersionHistory";
-import SaveHistoryManuallyModal from "../DocumentVersionHistory/SaveHistoryManuallyModal";
-import { useKeyPress } from "ahooks";
 import useSubmissionStatus from "hook/UseSubmissionStatus";
 import {isArray} from "lodash";
 
@@ -73,17 +69,9 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
 
   const docs = useSpaceStore((state) => state.documents);
   
-  const [openHistory, setOpenHistory] = useState(false);
-  const [openSaveHistory, setOpenSaveHistory] = useState(false);
   const isPublic = masterDocument?.isPublic;
   const { isDoingSubmission } = useSubmissionStatus(masterDocument);
   
-  useKeyPress("ctrl.shift.s", (e) => {
-    // WARN: this is global catch
-    e.preventDefault();
-    setOpenSaveHistory(true);
-  });
-
   const getMenuList = (
     subBreadcrumb: IDocumentItemList[],
   ): MenuProps["items"] => {
@@ -243,7 +231,6 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
           isSelected={!rightPanelHidden}
         />
         <Popover
-          content={<DocumentMoreSetting onClickOpenHistory={() => setOpenHistory(true)} />}
           placement="bottomRight"
           trigger="click"
           arrow={false}
@@ -346,21 +333,6 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
         )}
         {children}
       </StyledActionContainer>
-      {
-        openHistory && masterDocument &&
-        <DocumentVersionHistory
-          visible={openHistory}
-          onClose={() => setOpenHistory(false)}
-          documentId={masterDocument.id}
-        />
-      }
-      {
-        openSaveHistory &&
-        <SaveHistoryManuallyModal
-          visible={openSaveHistory}
-          onClose={() => setOpenSaveHistory(false)}
-        />
-      }
     </DocumentHeaderWrapper>
   );
 };

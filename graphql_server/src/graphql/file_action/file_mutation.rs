@@ -1,19 +1,15 @@
 use crate::authorization::UserAuth;
-use aj::AJ;
-use aj::{JobBuilder, Retry};
 use async_graphql::*;
-use chrono::Duration;
 use uuid::Uuid;
 
-use crate::background_job::storage_job::{add_generate_waveform_job, CheckTranscodingFile};
+use crate::background_job::storage_job::add_generate_waveform_job;
 use crate::db::file::{File, FileStatus};
 use crate::db::Connection;
 use crate::error::{OpenExamError, OpenExamErrorExt};
 use crate::helper::{
     get_conn_from_ctx, get_user_auth_from_ctx, get_user_from_ctx, is_owner_of_file,
 };
-use crate::service::{MediaConvert, Storage, UploadInfo};
-use crate::util::{get_date_from_ts, get_now_as_secs};
+use crate::service::{Storage, UploadInfo};
 
 #[derive(Clone, InputObject)]
 pub struct CreateFileData {
@@ -102,39 +98,6 @@ impl FileMutation {
             file.content_type = file_info.content_type;
             file.status = FileStatus::Success;
             let file = File::upsert(&conn, &file)?;
-
-            // Convert to mp4 for standard video
-            if ["video/webm", "video/x-msvideo", "video/mov"].contains(&file.content_type.as_str())
-            {
-                let transcoding_key = MediaConvert::init().transcoding_to_mp4(&file.key()).await?;
-                let job = JobBuilder::new(CheckTranscodingFile {
-                    file_id: file.uuid,
-                    transcoding_key,
-                })
-                .set_schedule_at(get_date_from_ts(get_now_as_secs() + 15))
-                .set_retry(Retry::new_interval_retry(
-                    Some(5),
-                    Duration::try_seconds(10).unwrap(),
-                ))
-                .build();
-                AJ::add_job(job);
-            }
-
-            // Convert to mp3 for standard audio
-            if file.content_type.contains("audio") && file.content_type != "audio/mpeg" {
-                let transcoding_key = MediaConvert::init().transcoding_to_mp3(&file.key()).await?;
-                let job = JobBuilder::new(CheckTranscodingFile {
-                    file_id: file.uuid,
-                    transcoding_key,
-                })
-                .set_schedule_at(get_date_from_ts(get_now_as_secs() + 10))
-                .set_retry(Retry::new_interval_retry(
-                    Some(5),
-                    Duration::try_seconds(10).unwrap(),
-                ))
-                .build();
-                AJ::add_job(job);
-            }
 
             // Generate waveform in case file is mp3 file
             if file.content_type == "audio/mpeg" {

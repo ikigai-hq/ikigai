@@ -15,7 +15,6 @@ resource OrganizationAuth {
         "add_org_member",
         "remove_org_member",
         "add_space",
-        "manage_template",
         "manage_trash",
         "manage_org_information",
     ];
@@ -27,7 +26,6 @@ resource OrganizationAuth {
     "add_org_member" if "Teacher";
     "remove_org_member" if "Teacher";
     "add_space" if "Teacher";
-    "manage_template" if "Teacher";
     "manage_trash" if "Teacher";
     "manage_org_information" if "Teacher";
 }
@@ -133,7 +131,3 @@ has_role(user: UserAuth, "Reader", doc: DocumentAuth) if
 
 has_role(_: UserAuth, "Reader", doc: DocumentAuth) if
     doc.is_public;
-
-has_role(user: UserAuth, "Reader", doc: DocumentAuth) if
-	doc.is_org_template and
-    user.org_id = doc.org_id;

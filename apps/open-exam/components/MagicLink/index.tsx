@@ -30,7 +30,7 @@ const MagicLink = () => {
       if (data.userGenerateMagicLink) {
         toast.success(t`Sent. Please check your email inbox!`);
       } else {
-        toast.error(t`Send email failed! Please try again.`);
+        toast.error(t`Failed! Please try again.`);
       }
     }
   };
@@ -49,8 +49,8 @@ const MagicLink = () => {
       />
       <DescriptionDiv>
         <Typography.Text type="secondary">
-          We will send a magic link to your email.
-          You can access your space by open the magic link.
+          We will send a link to your email.
+          You can access your space by open the magic link inside email.
         </Typography.Text>
       </DescriptionDiv>
       <DescriptionDiv>

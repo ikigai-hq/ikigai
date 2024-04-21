@@ -11,13 +11,10 @@ use async_graphql::{ComplexObject, Context, Result};
 use crate::db::*;
 use crate::error::OpenExamErrorExt;
 use crate::graphql::data_loader::{
-    FindCategoryTags, FindDocumentTemplateTags, FindOrgById, FindPublicUserById, FindUserById,
-    OpenExamDataLoader,
+    FindOrgById, FindPublicUserById, FindUserById, OpenExamDataLoader,
 };
 use crate::graphql::user_action::PersonInformation;
-use crate::helper::{
-    get_conn_from_ctx, get_public_user_from_loader, get_user_id_from_ctx, organization_authorize,
-};
+use crate::helper::{get_conn_from_ctx, get_user_id_from_ctx, organization_authorize};
 
 #[ComplexObject]
 impl Organization {
@@ -66,53 +63,5 @@ impl OrganizationMember {
             .await?
             .ok_or(format!("Cannot load user {}!", self.user_id))?;
         Ok(PersonInformation::new(user))
-    }
-}
-
-#[ComplexObject]
-impl Category {
-    async fn tags(&self, ctx: &Context<'_>) -> Result<Vec<CategoryTag>> {
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
-        let tags = loader
-            .load_one(FindCategoryTags {
-                category_id: self.id,
-            })
-            .await?
-            .unwrap_or_default();
-        Ok(tags)
-    }
-}
-
-#[ComplexObject]
-impl DocumentTemplate {
-    async fn creator(&self, ctx: &Context<'_>) -> Option<PublicUser> {
-        if let Some(created_by) = self.created_by {
-            get_public_user_from_loader(ctx, created_by).await.ok()
-        } else {
-            None
-        }
-    }
-
-    async fn org(&self, ctx: &Context<'_>) -> Result<PublicOrganizationInformation> {
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
-        let org = loader
-            .load_one(FindOrgById {
-                org_id: self.org_id,
-            })
-            .await?
-            .ok_or(format!("Cannot load org {}!", self.org_id))?;
-        let published_org = PublicOrganizationInformation::from(org);
-        Ok(published_org)
-    }
-
-    async fn tags(&self, ctx: &Context<'_>) -> Result<Vec<DocumentTemplateTag>> {
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
-        let tags = loader
-            .load_one(FindDocumentTemplateTags {
-                template_id: self.id,
-            })
-            .await?
-            .unwrap_or_default();
-        Ok(tags)
     }
 }

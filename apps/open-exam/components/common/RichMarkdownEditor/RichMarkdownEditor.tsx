@@ -14,13 +14,10 @@ import { CommonEmbedNode } from "./extensions/CommonEmbedExtension/CommonEmbedNo
 import FillInBlankNode, {
   FILL_IN_BLANK_NAME,
 } from "./extensions/QuizExtension/FillInBlank/FillInBlankNode";
-import QuizDeletableManager from "./NodeDeleteableManager";
 import { isZeroUUIDString } from "./utils";
 import FeedbackTextNode from "./extensions/FeedbackText/FeedbackTextNode";
 import styled, { useTheme } from "styled-components";
 import useEditorActionStore from "context/ZustandEditorAction";
-import { useFeatureIsOn } from "@growthbook/growthbook-react";
-import { DRAG_AND_DROP_FEATURE } from "util/FeatureConstant";
 import { uploadFile } from "util/FileUtil";
 import { FILE_BLOCK_NAME } from "./extensions/FileExtension/utils";
 import toast from "react-hot-toast";
@@ -147,7 +144,6 @@ const CustomRichMarkdownEditor: React.FC<CustomRichMarkdownEditorProps> = (
     isViewInMobileApp,
     isNestedDoc,
   } = props;
-  const isDragAndDropEnable = useFeatureIsOn(DRAG_AND_DROP_FEATURE);
 
   const theme = useTheme();
   const cacheBody = useRef(defaultVal);
@@ -282,9 +278,7 @@ const CustomRichMarkdownEditor: React.FC<CustomRichMarkdownEditorProps> = (
         transformPasted={handleTransformPasted}
         disableFloatingMenu={isViewInMobileApp}
         disableExtensions={isViewInMobileApp ? ["blockmenu"] : undefined}
-        disableDragAndDrop={
-          !isDragAndDropEnable || isViewInMobileApp || isNestedDoc || readOnly
-        }
+        disableDragAndDrop={isViewInMobileApp || isNestedDoc || readOnly}
         isEnablePageBlock={!isNestedDoc}
         onPastedFiles={onFilesPasted}
         addHighlight={addHighlight}

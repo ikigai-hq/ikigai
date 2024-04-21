@@ -13,7 +13,6 @@ import { I18nProvider } from "@lingui/react";
 import { messages as enMessages } from "../locales/en/messages";
 import withTheme from "styles/theme";
 import { initMixpanel } from "../util/track";
-import DocumentTemplateModal from "components/DocumentTemplate/DocumentTemplateModal";
 import { Initializing } from "../components/Initializing";
 
 require("../styles/globals.less");
@@ -63,7 +62,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             <ErrorBoundary>
               <Initializing>
                 {getLayout(<Component {...pageProps} />)}
-                <DocumentTemplateModal />
               </Initializing>
             </ErrorBoundary>
           </GrowthBookWrapper>

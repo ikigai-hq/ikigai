@@ -1,7 +1,5 @@
 pub mod assignments;
 pub mod band_score;
-pub mod document_template;
-pub mod document_version;
 pub mod documents;
 pub mod file;
 pub mod organization;
@@ -16,8 +14,6 @@ pub mod user;
 
 pub use assignments::*;
 pub use band_score::*;
-pub use document_template::*;
-pub use document_version::*;
 pub use documents::*;
 pub use file::*;
 pub use organization::*;

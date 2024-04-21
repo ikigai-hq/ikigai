@@ -87,59 +87,6 @@ diesel::table! {
 }
 
 diesel::table! {
-    document_template_and_tag (document_template_id, tag) {
-        document_template_id -> Uuid,
-        tag -> Varchar,
-    }
-}
-
-diesel::table! {
-    document_template_categories (id) {
-        id -> Uuid,
-        name -> Varchar,
-        org_id -> Int4,
-        org_internal_index -> Nullable<Int4>,
-        is_community -> Bool,
-        community_index -> Nullable<Int4>,
-        updated_at -> Int8,
-        created_at -> Int8,
-    }
-}
-
-diesel::table! {
-    document_template_category_tags (category_id, tag) {
-        category_id -> Uuid,
-        tag -> Varchar,
-    }
-}
-
-diesel::table! {
-    document_templates (id) {
-        id -> Uuid,
-        name -> Text,
-        document_id -> Uuid,
-        org_id -> Int4,
-        created_by -> Nullable<Int4>,
-        is_published -> Bool,
-        updated_at -> Int8,
-        created_at -> Int8,
-    }
-}
-
-diesel::table! {
-    document_versions (id) {
-        id -> Uuid,
-        root_document_id -> Uuid,
-        versioning_document_id -> Uuid,
-        name -> Text,
-        creator_id -> Nullable<Int4>,
-        is_auto -> Bool,
-        updated_at -> Int8,
-        created_at -> Int8,
-    }
-}
-
-diesel::table! {
     documents (id) {
         id -> Uuid,
         creator_id -> Int4,
@@ -280,16 +227,6 @@ diesel::table! {
 }
 
 diesel::table! {
-    tags (name) {
-        name -> Varchar,
-        org_id -> Int4,
-        use_case -> Int4,
-        updated_at -> Int8,
-        created_at -> Int8,
-    }
-}
-
-diesel::table! {
     thread_comments (id) {
         id -> Int8,
         thread_id -> Int4,
@@ -344,16 +281,6 @@ diesel::joinable!(document_highlights -> users (creator_id));
 diesel::joinable!(document_page_block_nested_documents -> document_page_blocks (page_block_id));
 diesel::joinable!(document_page_block_nested_documents -> documents (document_id));
 diesel::joinable!(document_page_blocks -> documents (document_id));
-diesel::joinable!(document_template_and_tag -> document_templates (document_template_id));
-diesel::joinable!(document_template_and_tag -> tags (tag));
-diesel::joinable!(document_template_categories -> organizations (org_id));
-diesel::joinable!(document_template_category_tags -> document_template_categories (category_id));
-diesel::joinable!(document_template_category_tags -> tags (tag));
-diesel::joinable!(document_templates -> documents (document_id));
-diesel::joinable!(document_templates -> organizations (org_id));
-diesel::joinable!(document_templates -> users (created_by));
-diesel::joinable!(document_versions -> documents (versioning_document_id));
-diesel::joinable!(document_versions -> users (creator_id));
 diesel::joinable!(documents -> files (cover_photo_id));
 diesel::joinable!(documents -> organizations (org_id));
 diesel::joinable!(documents -> spaces (space_id));
@@ -375,7 +302,6 @@ diesel::joinable!(space_members -> users (user_id));
 diesel::joinable!(spaces -> files (banner_id));
 diesel::joinable!(spaces -> organizations (org_id));
 diesel::joinable!(spaces -> users (creator_id));
-diesel::joinable!(tags -> organizations (org_id));
 diesel::joinable!(thread_comments -> files (file_uuid));
 diesel::joinable!(thread_comments -> threads (thread_id));
 diesel::joinable!(thread_comments -> users (sender_id));
@@ -390,11 +316,6 @@ diesel::allow_tables_to_appear_in_same_query!(
     document_highlights,
     document_page_block_nested_documents,
     document_page_blocks,
-    document_template_and_tag,
-    document_template_categories,
-    document_template_category_tags,
-    document_templates,
-    document_versions,
     documents,
     files,
     organization_members,
@@ -406,7 +327,6 @@ diesel::allow_tables_to_appear_in_same_query!(
     rubrics,
     space_members,
     spaces,
-    tags,
     thread_comments,
     threads,
     user_activities,

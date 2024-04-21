@@ -3,10 +3,7 @@ use diesel::Connection;
 use itertools::Itertools;
 use uuid::Uuid;
 
-use crate::authorization::{
-    DocumentActionPermission, OrganizationActionPermission, SpaceActionPermission,
-};
-use crate::background_job::document_job::insert_auto_version_history_jobs;
+use crate::authorization::DocumentActionPermission;
 use crate::db::*;
 use crate::error::{OpenExamError, OpenExamErrorExt};
 use crate::helper::*;
@@ -59,13 +56,7 @@ impl DocumentMutation {
         let user_id = get_user_id_from_ctx(ctx).await?;
         data.updated_by = Some(user_id);
         let conn = get_conn_from_ctx(ctx).await?;
-        let document = Document::find_by_id(&conn, document_id).format_err()?;
-        let should_create_auto_version = document.body != data.body || document.title != data.title;
         Document::update(&conn, document_id, data).format_err()?;
-
-        if should_create_auto_version {
-            insert_auto_version_history_jobs(document_id, user_id);
-        }
 
         Ok(true)
     }
@@ -298,141 +289,5 @@ impl DocumentMutation {
         Document::delete(&conn, document_id).format_err()?;
 
         Ok(true)
-    }
-
-    async fn document_apply_template(
-        &self,
-        ctx: &Context<'_>,
-        original_document_id: Uuid,
-        template_id: Uuid,
-    ) -> Result<Document> {
-        document_quick_authorize(
-            ctx,
-            original_document_id,
-            DocumentActionPermission::ManageDocument,
-        )
-        .await?;
-        let template = {
-            let conn = get_conn_from_ctx(ctx).await?;
-            DocumentTemplate::find(&conn, template_id).format_err()?
-        };
-        let user_auth = get_user_auth_from_ctx(ctx).await?;
-        organization_authorize(
-            ctx,
-            user_auth.id,
-            template.org_id,
-            OrganizationActionPermission::ManageTemplate,
-        )
-        .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let original_document = Document::find_by_id(&conn, original_document_id).format_err()?;
-        create_a_document_version(
-            &conn,
-            user_auth.id,
-            &original_document,
-            &original_document.title,
-            Some(user_auth.id),
-        )
-        .format_err()?;
-        restore_document(
-            &conn,
-            user_auth.org_id,
-            user_auth.id,
-            original_document_id,
-            template.document_id,
-        )
-        .format_err()
-    }
-
-    async fn document_create_version(
-        &self,
-        ctx: &Context<'_>,
-        name: String,
-        document_id: Uuid,
-    ) -> Result<DocumentVersion> {
-        document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
-            .await?;
-
-        let user_id = get_user_id_from_ctx(ctx).await?;
-        let conn = get_conn_from_ctx(ctx).await?;
-        let root_document = Document::find_by_id(&conn, document_id).format_err()?;
-        create_a_document_version(&conn, user_id, &root_document, &name, Some(user_id)).format_err()
-    }
-
-    async fn document_update_version(
-        &self,
-        ctx: &Context<'_>,
-        data: DocumentVersion,
-    ) -> Result<DocumentVersion> {
-        let updating_version = {
-            let conn = get_conn_from_ctx(ctx).await?;
-            DocumentVersion::find(&conn, data.id).format_err()?
-        };
-        document_quick_authorize(
-            ctx,
-            updating_version.root_document_id,
-            DocumentActionPermission::ManageDocument,
-        )
-        .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        DocumentVersion::upsert(&conn, data).format_err()
-    }
-
-    async fn document_apply_history_version(
-        &self,
-        ctx: &Context<'_>,
-        version_id: Uuid,
-    ) -> Result<Document> {
-        let version = {
-            let conn = get_conn_from_ctx(ctx).await?;
-            DocumentVersion::find(&conn, version_id).format_err()?
-        };
-        document_quick_authorize(
-            ctx,
-            version.root_document_id,
-            DocumentActionPermission::ManageDocument,
-        )
-        .await?;
-        let user_auth = get_user_auth_from_ctx(ctx).await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let root_document = Document::find_by_id(&conn, version.root_document_id).format_err()?;
-        let root_document_id = root_document.id;
-        create_a_document_version(
-            &conn,
-            user_auth.id,
-            &root_document,
-            &root_document.title,
-            Some(user_auth.id),
-        )
-        .format_err()?;
-        restore_document(
-            &conn,
-            user_auth.org_id,
-            user_auth.id,
-            root_document_id,
-            version.versioning_document_id,
-        )
-        .format_err()
-    }
-
-    async fn document_duplicate_to_class(
-        &self,
-        ctx: &Context<'_>,
-        original_document_id: Uuid,
-        class_id: i32,
-    ) -> Result<Document> {
-        document_quick_authorize(
-            ctx,
-            original_document_id,
-            DocumentActionPermission::ManageDocument,
-        )
-        .await?;
-        space_quick_authorize(ctx, class_id, SpaceActionPermission::ManageSpaceContent).await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        duplicate_document_to_class(&conn, original_document_id, class_id).format_err()
     }
 }

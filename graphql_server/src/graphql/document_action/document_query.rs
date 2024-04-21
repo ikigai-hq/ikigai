@@ -40,19 +40,4 @@ impl DocumentQuery {
         let documents = Document::find_deleted_documents(&conn, user_auth.org_id).format_err()?;
         Ok(documents)
     }
-
-    async fn document_get_history_versions(
-        &self,
-        ctx: &Context<'_>,
-        document_id: Uuid,
-    ) -> Result<Vec<DocumentVersion>> {
-        document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
-            .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let versions =
-            DocumentVersion::find_by_document_id(&conn, document_id, None).format_err()?;
-
-        Ok(versions)
-    }
 }

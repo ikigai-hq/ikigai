@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use diesel::{Connection, PgConnection};
+use diesel::PgConnection;
 use regex::Regex;
 use uuid::Uuid;
 
@@ -264,86 +264,4 @@ pub fn get_all_documents_by_id(
     }
 
     Ok(res)
-}
-
-pub fn create_a_document_version(
-    conn: &PgConnection,
-    creator_id: i32,
-    root_document: &Document,
-    name: &str,
-    version_creator_id: Option<i32>,
-) -> Result<DocumentVersion, OpenExamError> {
-    let version = conn.transaction::<_, OpenExamError, _>(|| {
-        // Step 1: Clone a versioning document
-        let mut config = DocumentCloneConfig::new("", true);
-        config.org_id = Some(root_document.org_id);
-        let versioning_document =
-            root_document.deep_clone(conn, creator_id, config, None, false, None, true)?;
-
-        // Step 2: Create Version
-        let document_version = DocumentVersion::quick_new(
-            name.into(),
-            root_document.id,
-            versioning_document.id,
-            version_creator_id,
-        );
-        Ok(DocumentVersion::upsert(conn, document_version)?)
-    })?;
-
-    Ok(version)
-}
-
-pub fn restore_document(
-    conn: &PgConnection,
-    org_id: i32,
-    user_id: i32,
-    document_id: Uuid,
-    backup_document_id: Uuid,
-) -> Result<Document, OpenExamError> {
-    let page_blocks = PageBlock::find_all_by_document(conn, document_id)?;
-    let page_block_ids = page_blocks.iter().map(|page_block| page_block.id).collect();
-    let page_block_documents = PageBlockDocument::find_all_by_page_blocks(conn, page_block_ids)?;
-
-    let backup_document = Document::find_by_id(conn, backup_document_id)?;
-    conn.transaction::<_, OpenExamError, _>(|| {
-        // Step 1: Remove outdated data
-        Quiz::delete_by_document_id(conn, document_id)?;
-        for page_block_document in page_block_documents {
-            Document::delete(conn, page_block_document.document_id)?;
-        }
-        PageBlock::delete_by_document(conn, document_id)?;
-
-        // Step 2: Clone template document -> current document with current document id
-        let mut config = DocumentCloneConfig::new("", true);
-        config.set_org(org_id);
-        let duplicated_document =
-            backup_document.deep_clone(conn, user_id, config, None, false, Some(document_id), true)?;
-
-        Ok(duplicated_document)
-    })
-}
-
-pub fn duplicate_document_to_class(
-    conn: &PgConnection,
-    original_document_id: Uuid,
-    class_id: i32,
-) -> Result<Document, OpenExamError> {
-    let original_document = Document::find_by_id(conn, original_document_id)?;
-    let duplicated_document = conn.transaction::<_, OpenExamError, _>(|| {
-        let mut config = DocumentCloneConfig::new("", true);
-        config.set_org(original_document.org_id);
-        let duplicated_document = original_document.deep_clone(
-            conn,
-            original_document.creator_id,
-            config,
-            Some(class_id),
-            true,
-            None,
-            true,
-        )?;
-
-        Ok(duplicated_document)
-    })?;
-
-    Ok(duplicated_document)
 }

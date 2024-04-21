@@ -3,7 +3,7 @@ import React, { ChangeEvent, KeyboardEvent, useState } from "react";
 import { StyledTitle } from "./common";
 import { t, Trans } from "@lingui/macro";
 import useDocumentPermission from "hook/UseDocumentPermission";
-import { DocumentPermission, DocumentType, getDocumentType, Permission } from "util/permission";
+import { DocumentPermission, DocumentType, getDocumentType } from "util/permission";
 import { useRouter } from "next/router";
 import useDocumentStore from "context/ZustandDocumentStore";
 import useSpaceStore from "../../context/ZustandSpaceStore";
@@ -15,16 +15,12 @@ import { Dropdown, Popconfirm, Space, Typography } from "antd";
 import FileUpload, { DraggerStyled } from "components/common/FileUpload";
 import { FileUploadResponse } from "components/common/AddResourceModal";
 import AssignmentSettingWrapper from "./AssignmentSetting";
-import { Images, PictureIcon, SettingIcon, TrashIcon } from "components/common/IconSvg";
+import { PictureIcon, SettingIcon, TrashIcon } from "components/common/IconSvg";
 import { Button } from "components/common/Button";
 import useAuthUserStore from "context/ZustandAuthStore";
 import { useMutation } from "@apollo/client";
 import { DELETE_DOCUMENT_PERMANENT, RESTORE_DOCUMENT } from "../../graphql/mutation/DocumentMutation";
 import { handleError } from "../../graphql/ApolloClient";
-import useUserPermission from "../../hook/UseUserPermission";
-import useDocumentTemplateStore from "../../context/ZustandDocumentTemplateStore";
-import { useFeatureIsOn } from "@growthbook/growthbook-react";
-import { TEMPLATE } from "../../util/FeatureConstant";
 
 interface DocumentSettingProps {
   isNestedDoc: boolean;
@@ -43,14 +39,11 @@ const DocumentSetting = ({
   const documentId = document.id;
   const router = useRouter();
   const documentAllow = useDocumentPermission();
-  const allow = useUserPermission();
   const updateDocumentLocal = useSpaceStore((state) => state.updateDocumentTitleLocal);
   const update = useDocumentStore(state => state.update);
   const authUser = useAuthUserStore((state) => state.currentUser);
   const isStudent = authUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
   const currentDocIdQuery = router.query.documentId as string;
-  const setOpenTemplateModal = useDocumentTemplateStore(state => state.setChangeOpenTemplateModal);
-  const isTemplateEnabled = useFeatureIsOn(TEMPLATE);
   
   const [documentCoverPhoto, setDocumentCoverPhoto] = useState(
     document.coverPhotoUrl
@@ -145,10 +138,6 @@ const DocumentSetting = ({
     },
   ];
   
-  const showTemplates = allow(Permission.ManageTemplate) &&
-    isTemplateEnabled &&
-    !isPublishedPage &&
-    !isReadOnlyFinal;
   return (
     <>
       {
@@ -248,17 +237,6 @@ const DocumentSetting = ({
               <Trans>Assignment Settings</Trans>
             </Button>
           )}
-          {
-           showTemplates &&
-            <Button
-              onClick={() => setOpenTemplateModal(true)}
-              size="large"
-              icon={<Images />}
-              type="text"
-            >
-              <Trans>Templates</Trans>
-            </Button>
-          }
         </Space>
       </DocumentTitle>
       <AssignmentSettingWrapper

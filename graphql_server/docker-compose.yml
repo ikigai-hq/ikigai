@@ -1,8 +1,10 @@
-version: '3.1'
+version: "3.1"
 
 services:
   postgres:
     image: postgres:14
+    volumes:
+      - ./postgres_data:/var/lib/postgresql
     environment:
      POSTGRES_PASSWORD: openexam
      POSTGRES_USER: openexam
@@ -10,12 +12,14 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready", "-d", "db_prod" ]
-      interval: 30s
-      timeout: 60s
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
       retries: 5
   redis:
     image: redis
+    volumes:
+      - ./redis_data:/data
     ports:
       - "6379:6379"
   migration:
@@ -31,9 +35,6 @@ services:
     platform: "linux/amd64"
     build:
       dockerfile: Dockerfile
-    environment:
-      DATABASE_URL: postgres://openexam:openexam@postgres:5432/openexam
-      REDIS_URL: redis://redis:6379
     env_file:
       - ".env"
     depends_on:
@@ -43,5 +44,4 @@ services:
         condition: service_started
       migration:
         condition: service_completed_successfully
-    ports:
-      - "8000:8000"
+    network_mode: host

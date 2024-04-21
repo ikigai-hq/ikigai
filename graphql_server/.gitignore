@@ -7,3 +7,5 @@ output.log
 .DS_Store
 data
 firebase_service_account.json
+redis_data
+postgres_data

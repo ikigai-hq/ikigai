@@ -21,15 +21,11 @@ RUN apt-get update && apt-get -y upgrade && \
 RUN add-apt-repository ppa:chris-needham/ppa
 RUN apt-get update && apt-get -y install audiowaveform
 
-
-
 WORKDIR /app
 COPY --from=build-phase /app/target/release/open-exam-graphql-server /app
 RUN mkdir /app/tmp_data
 ADD authorization.polar /app
 ADD email_templates /app/email_templates
-ADD migrations /app/migrations
-
 
 ENV RUST_BACKTRACE=full
 

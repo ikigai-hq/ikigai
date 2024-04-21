@@ -30,13 +30,13 @@ by using [docker-compose](https://docs.docker.com/compose/).
 ### Start `open-exam-graphql-server`
 
 ```bash
-docker-compse up
+docker-compse up -d 
 ```
 
 ### Stop `open-exam-graphql-server`
 
 ```bash
-docker-compse down
+docker-compse stop
 ```
 
 ##  Run by source code (local dev - developer only)

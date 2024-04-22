@@ -13,7 +13,8 @@ type ButtonProps = {
 
 export const Button = styled(ButtonAntd)<ButtonProps>`
   & {
-    width: ${({ customWidth = "max-content" }: ButtonProps) => `${customWidth}`};
+    width: ${({ customWidth = "max-content" }: ButtonProps) =>
+      `${customWidth}`};
     height: auto;
     padding: 11px 26px;
     display: flex;
@@ -28,7 +29,6 @@ export const ButtonWithTooltip: React.FC<{
   btnChildren?: React.ReactNode;
   isSelected?: boolean;
 }> = ({ btnProps, tooltipProps, btnChildren, isSelected }) => {
-
   return (
     <Tooltip {...tooltipProps} destroyTooltipOnHide arrow={false}>
       <SelectedButton
@@ -47,16 +47,18 @@ const SelectedButton = styled(ButtonAntd)<{ $isSelected?: boolean }>`
     background: ${({ $isSelected, theme }) => {
       return $isSelected ? `${theme.colors.primary[1]} !important` : undefined;
     }};
-  
+
     &:hover {
-      background: ${props => props.theme.colors.primary[1]};
-  
+      background: ${(props) => props.theme.colors.primary[1]};
+
       svg {
-        color: ${props => props.theme.colors.primary[7]}
+        color: ${(props) => props.theme.colors.primary[7]};
       }
     }
 
-    ${props => props.$isSelected && `
+    ${(props) =>
+      props.$isSelected &&
+      `
       svg {
         color: ${props.theme.colors.primary[7]}
       }
@@ -86,7 +88,7 @@ export const TextButtonWithHover = styled(TextButton)<{
       : undefined;
   }};
 
-  &:hover
+  &: hover
     ${() => {
       return `background: ${(props) => props.theme.colors.gray[4]}`;
     }};
@@ -95,5 +97,5 @@ export const TextButtonWithHover = styled(TextButton)<{
 export const TextButtonBlock = styled(TextButtonWithHover)<{ margin?: string }>`
   padding: 4px;
 
-  ${props => props.margin && `margin: ${props.margin}`};
+  ${(props) => props.margin && `margin: ${props.margin}`};
 `;

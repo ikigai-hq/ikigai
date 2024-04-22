@@ -42,7 +42,10 @@ const BlockMenuContainer = styled.div`
   width: 100%;
   overflow: hidden;
 
-  .ant-tabs, .ant-tabs-content-holder, .ant-tabs-content, .ant-tabs-tabpane {
+  .ant-tabs,
+  .ant-tabs-content-holder,
+  .ant-tabs-content,
+  .ant-tabs-tabpane {
     height: 100%;
   }
 

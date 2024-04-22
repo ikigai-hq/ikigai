@@ -26,7 +26,7 @@ const SingleChoiceSetting = (props: SingleChoiceSettingProps) => {
 
   const [options, setOptions] = useState<string[]>(quizBody);
   const [correctOption, setCorrectOption] = useState<number | undefined>(
-    quizAnswer.correctOption
+    quizAnswer.correctOption,
   );
 
   useEffect(() => {

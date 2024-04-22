@@ -75,7 +75,7 @@ const FillInBlankSetting = ({
           quizTitle: quizData?.structure?.quizTitle,
           quizBody: quizData?.structure?.quizBody,
           quizAnswer: { correctOptions },
-          explanation: explanation,
+          explanation,
         },
       },
     });
@@ -104,10 +104,7 @@ const FillInBlankSetting = ({
         </Trans>
       </Typography.Text>
       {correctOptions.map((option, index) => (
-        <div
-          style={{ display: "flex", alignItems: "center" }}
-          key={`${index}`}
-        >
+        <div style={{ display: "flex", alignItems: "center" }} key={`${index}`}>
           <Input
             value={option}
             width={"100%"}

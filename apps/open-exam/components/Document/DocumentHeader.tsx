@@ -39,15 +39,13 @@ import { GetDocuments_spaceGet_documents as IDocumentItemList } from "graphql/ty
 import DocumentTypeIcon from "./DocumentTypeIcon";
 import useHighlightStore from "context/ZustandHighlightStore";
 import useSubmissionStatus from "hook/UseSubmissionStatus";
-import {isArray} from "lodash";
+import { isArray } from "lodash";
 
 export type DocumentHeaderProps = {
   children?: React.ReactNode;
 };
 
-const DocumentHeader: React.FC<DocumentHeaderProps> = ({
-  children,
-}) => {
+const DocumentHeader: React.FC<DocumentHeaderProps> = ({ children }) => {
   const router = useRouter();
   const theme = useTheme();
 
@@ -68,10 +66,10 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
   const setFocusMode = useDocumentStore((state) => state.setFocusMode);
 
   const docs = useSpaceStore((state) => state.documents);
-  
+
   const isPublic = masterDocument?.isPublic;
   const { isDoingSubmission } = useSubmissionStatus(masterDocument);
-  
+
   const getMenuList = (
     subBreadcrumb: IDocumentItemList[],
   ): MenuProps["items"] => {
@@ -102,23 +100,21 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
 
   const renderBreadcrumb = () => {
     if (docs) {
-      const listBreadcrumb = getFullPathFromNode(
-        masterDocument.id,
-        docs,
-      );
-      
+      const listBreadcrumb = getFullPathFromNode(masterDocument.id, docs);
+
       const isLastSubmission = (index: number): boolean => {
         return index === listBreadcrumb.length - 1;
       };
-      
-      const finalBreadcrumb = listBreadcrumb.length > 3 ?
-        [
-          listBreadcrumb[0],
-          listBreadcrumb.slice(1, listBreadcrumb.length - 2),
-          listBreadcrumb[listBreadcrumb.length - 2],
-          listBreadcrumb[listBreadcrumb.length - 1]
-        ] :
-        listBreadcrumb;
+
+      const finalBreadcrumb =
+        listBreadcrumb.length > 3
+          ? [
+              listBreadcrumb[0],
+              listBreadcrumb.slice(1, listBreadcrumb.length - 2),
+              listBreadcrumb[listBreadcrumb.length - 2],
+              listBreadcrumb[listBreadcrumb.length - 1],
+            ]
+          : listBreadcrumb;
       return (
         <DocumentBreadcrumbContainer>
           {finalBreadcrumb.map((breadcrumb, index) => (
@@ -134,11 +130,9 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
               {!isArray(breadcrumb) ? (
                 <DocumentBreadcrumb
                   onClick={() => {
-                    router.push(
-                      formatDocumentRoute(breadcrumb.id),
-                      undefined,
-                      { shallow: true },
-                    );
+                    router.push(formatDocumentRoute(breadcrumb.id), undefined, {
+                      shallow: true,
+                    });
                   }}
                 >
                   <Space size={8}>
@@ -199,7 +193,6 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
         </DocumentBreadcrumbContainer>
       );
     }
-    return;
   };
 
   return (
@@ -274,21 +267,19 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
           </Popover>
         )}
         <Divider type="vertical" style={{ height: "22px" }} />
-        {
-          !isMobileView() && isDoingSubmission && (
-            <ButtonWithTooltip
-              btnProps={{
-                type: "text",
-                icon: <Icon component={FullscreenOutlined} />,
-                onClick: () => setFocusMode(true),
-              }}
-              tooltipProps={{
-                title: t`Focus Mode`,
-                destroyTooltipOnHide: true,
-              }}
-            />
-          )
-        }
+        {!isMobileView() && isDoingSubmission && (
+          <ButtonWithTooltip
+            btnProps={{
+              type: "text",
+              icon: <Icon component={FullscreenOutlined} />,
+              onClick: () => setFocusMode(true),
+            }}
+            tooltipProps={{
+              title: t`Focus Mode`,
+              destroyTooltipOnHide: true,
+            }}
+          />
+        )}
         {!isMobileView() && documentConfig.showFeedbackButton && (
           <ButtonWithTooltip
             btnProps={{
@@ -327,8 +318,12 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({
               icon: <SnippetsOutlined />,
               onClick: () => changeRightPanel(PanelContentType.Submission),
             }}
-            tooltipProps={{ title: documentConfig.showGradeSummary ? t`Grade` : t`Questions` }}
-            isSelected={documentConfig.rightPanelTab === PanelContentType.Submission}
+            tooltipProps={{
+              title: documentConfig.showGradeSummary ? t`Grade` : t`Questions`,
+            }}
+            isSelected={
+              documentConfig.rightPanelTab === PanelContentType.Submission
+            }
           />
         )}
         {children}

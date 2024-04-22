@@ -19,7 +19,7 @@ const AvatarWithName = (props: AvatarWithNameProps) => {
   const shouldStrong = props.strong === undefined ? true : props.strong;
   return (
     <div style={{ display: props.inline ? "inline-block" : undefined }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
         {props.role && (
           <Tag style={{ marginRight: "5px" }} color={getRoleColor(props.role)}>
             {getRoleName(props.role)}

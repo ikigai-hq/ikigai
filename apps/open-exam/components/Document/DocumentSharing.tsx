@@ -1,13 +1,13 @@
-import {Button, Input, Switch, Tooltip} from "antd";
-import {CopyOutlined} from "@ant-design/icons";
+import { Button, Input, Switch, Tooltip } from "antd";
+import { CopyOutlined } from "@ant-design/icons";
 import toast from "react-hot-toast";
-import {t, Trans} from "@lingui/macro";
+import { t, Trans } from "@lingui/macro";
 import * as React from "react";
-import {useState} from "react";
+import { useState } from "react";
 
 import useDocumentStore from "../../context/ZustandDocumentStore";
-import {Text, TextWeight} from "../common/Text";
-import {formatPublicDocumentUrl} from "../../config/Routes";
+import { Text, TextWeight } from "../common/Text";
+import { formatPublicDocumentUrl } from "../../config/Routes";
 
 export type ShareDocumentModalProps = {};
 
@@ -22,10 +22,10 @@ const DocumentSharing = ({}: ShareDocumentModalProps) => {
     await switchPublic(isPublic);
     setLoading(false);
   };
-  
+
   const publicUrl = formatPublicDocumentUrl(
     activeDocument?.id,
-    activeDocument?.title
+    activeDocument?.title,
   );
   const onClickCopy = () => {
     navigator.clipboard.writeText(publicUrl);
@@ -33,7 +33,7 @@ const DocumentSharing = ({}: ShareDocumentModalProps) => {
   };
 
   return (
-    <div style={{ width: "350px" , padding: '2px 5px'}}>
+    <div style={{ width: "350px", padding: "2px 5px" }}>
       <div>
         <div style={{ display: "flex" }}>
           <div style={{ flex: "1" }}>

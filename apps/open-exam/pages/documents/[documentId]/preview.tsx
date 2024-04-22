@@ -16,10 +16,10 @@ const PreviewDocumentCSR = dynamic(
 export default function DocumentPage() {
   const router = useRouter();
   const documentId = router.query.documentId as string;
-  
-  const activeDocument = useDocumentStore(state => state.masterDocument);
+
+  const activeDocument = useDocumentStore((state) => state.masterDocument);
   const { loading } = useLoadDocument(documentId);
-  
+
   if (loading || !activeDocument) return <Loading />;
 
   return <PreviewDocumentCSR doc={activeDocument} onlyWide />;

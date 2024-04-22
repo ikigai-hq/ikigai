@@ -7,12 +7,11 @@ import {
   SoftDeleteDocuments,
   GetDocuments_spaceGet_documents as IDocumentItemList,
   GetDocuments,
-  DuplicateSpaceDocument, GetDocuments_spaceGet,
+  DuplicateSpaceDocument,
+  GetDocuments_spaceGet,
 } from "graphql/types";
 import { mutate, query } from "graphql/ApolloClient";
-import {
-  DUPLICATE_SPACE_DOCUMENT,
-} from "../graphql/mutation/SpaceMutation";
+import { DUPLICATE_SPACE_DOCUMENT } from "../graphql/mutation/SpaceMutation";
 import { GET_SPACE_INFORMATION } from "../graphql/query/SpaceQuery";
 import {
   SOFT_DELETE_DOCUMENTS,
@@ -31,7 +30,7 @@ export type ISpaceContext = {
   setDocuments: (newDocuments: IDocumentItemList[] | undefined) => void;
   fetchSpaceAndSetDocuments: (spaceId: number) => Promise<void>;
   duplicateDocument: (
-    documentId: string
+    documentId: string,
   ) => Promise<DuplicateSpaceDocument | undefined>;
   deleteDocument: (documentId: string) => Promise<string[] | undefined>;
   updateDocumentPositions: (items: UpdatePositionData[]) => Promise<boolean>;
@@ -40,7 +39,7 @@ export type ISpaceContext = {
   // Local cache collapsed value of docs:
   flattenTreeItems: FlattenedItem<LearningModuleItemTypeWrapper>[];
   setTreeItems: (
-    flattenTreeItems: FlattenedItem<LearningModuleItemTypeWrapper>[]
+    flattenTreeItems: FlattenedItem<LearningModuleItemTypeWrapper>[],
   ) => void;
 };
 
@@ -51,7 +50,7 @@ const useSpaceStore = create<ISpaceContext>((set, get) => ({
   setDocuments: (newDocuments: IDocumentItemList[] | undefined) => {
     set({
       documents: cloneDeep(
-        (newDocuments || []).filter((doc) => !doc.deletedAt)
+        (newDocuments || []).filter((doc) => !doc.deletedAt),
       ),
     });
   },
@@ -97,7 +96,7 @@ const useSpaceStore = create<ISpaceContext>((set, get) => ({
 
     if (res.spaceSoftDeleteMultiple) {
       const filteredDoc = documents.filter(
-        (doc) => !documentIds.includes(doc.id)
+        (doc) => !documentIds.includes(doc.id),
       );
 
       set({ documents: filteredDoc });
@@ -112,7 +111,7 @@ const useSpaceStore = create<ISpaceContext>((set, get) => ({
       },
       fetchPolicy: "network-only",
     });
-    
+
     get().setDocuments(cloneDeep(data?.spaceGet?.documents) || []);
     set({
       space: cloneDeep(data?.spaceGet),

@@ -223,7 +223,9 @@ const FillInBlankBlock = ({
         </QuizTitle>
         <InputFillInBlank
           $hasValue={!!inputFillInBlank}
-          contentEditable={documentAllow(DocumentPermission.InteractiveWithTool)}
+          contentEditable={documentAllow(
+            DocumentPermission.InteractiveWithTool,
+          )}
           onInput={(e) => onChangeAnswer(e.currentTarget.innerText)}
           suppressContentEditableWarning={true}
           onKeyDown={(e) => e.keyCode === 13 && e.preventDefault()}

@@ -25,7 +25,6 @@ export const BlockHeaderWrapper: React.FC<Props> = ({ children }) => {
 export const QuizTitle = styled.span`
   font-size: 14px;
   font-weight: 500;
-
 `;
 
 export const InputWrapper = styled(Input.TextArea)<{ fitContent?: boolean }>`
@@ -121,7 +120,7 @@ export const BlockDropdownMenu: React.FC<BlockDropdownMenuProps> = ({
         title: deleteTitle || t`Do you want to delete this block?`,
         onOk: handleDelete,
         content: "",
-      }) as any
+      }) as any,
     );
   };
 

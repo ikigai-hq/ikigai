@@ -12,7 +12,7 @@ const Loading = (props) => {
         width: "100%",
         textAlign: "center",
         color: theme.colors.blue[5],
-        ...props.style
+        ...props.style,
       }}
     >
       <Spin

@@ -10,12 +10,10 @@ const withTheme = (node: JSX.Element) => (
     <ConfigProvider
       theme={{
         token,
-        components
+        components,
       }}
     >
-      <App>
-        {node}
-      </App>
+      <App>{node}</App>
     </ConfigProvider>
   </ThemeProvider>
 );

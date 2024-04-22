@@ -100,10 +100,7 @@ const RecordingAudioBlock = ({
       </Space>
       {!isMobile && (
         <GroupOptions>
-          <TogglePlay
-            size={44}
-            onClick={handleToggleRecord}
-          >
+          <TogglePlay size={44} onClick={handleToggleRecord}>
             {isRecording ? (
               <PauseIcon color={theme.colors.gray[0]} />
             ) : (
@@ -180,10 +177,7 @@ const RecordingAudioBlock = ({
         <div>
           <div style={{ display: "flex" }}>
             <div style={{ flex: 1 }}>
-              <TogglePlay
-                size={44}
-                onClick={handleToggleRecord}
-              >
+              <TogglePlay size={44} onClick={handleToggleRecord}>
                 {isRecording ? (
                   <PauseIcon color={theme.colors.gray[0]} />
                 ) : (

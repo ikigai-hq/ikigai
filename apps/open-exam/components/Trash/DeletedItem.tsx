@@ -20,61 +20,67 @@ export type DeletedItemProps = {
   onDelete?: (itemId: string | number) => void | Promise<void>;
 };
 
-const DeletedItem = (
-  {
-    spaceId, documentId, title, deletedAt, onDelete, onRestore, imageSrc,
-  }: DeletedItemProps
-) => {
+const DeletedItem = ({
+  spaceId,
+  documentId,
+  title,
+  deletedAt,
+  onDelete,
+  onRestore,
+  imageSrc,
+}: DeletedItemProps) => {
   const { modal } = useModal();
   const theme = useTheme();
   const itemId = documentId || spaceId;
   const onClickRestore = () => {
     // @ts-ignore
-    modal.confirm(ConfirmPopup({
-      title: t`Are you sure to restore ${title}?`,
-      onOk: () => {
-        if (onRestore) onRestore(documentId || spaceId);
-      },
-      content: "",
-      danger: false,
-      onCancel: () => {},
-    }));
+    modal.confirm(
+      ConfirmPopup({
+        title: t`Are you sure to restore ${title}?`,
+        onOk: () => {
+          if (onRestore) onRestore(documentId || spaceId);
+        },
+        content: "",
+        danger: false,
+        onCancel: () => {},
+      }),
+    );
   };
-  
+
   const onClickDelete = () => {
     // @ts-ignore
-    modal.confirm(ConfirmPopup({
-      title: t`Are you sure to delete ${title} permanently?`,
-      content: t`You cannot recover data if you confirm to delete.`,
-      onOk: () => {
-        if (onDelete) onDelete(documentId || spaceId);
-      },
-      danger: true,
-      onCancel: () => {},
-    }));
+    modal.confirm(
+      ConfirmPopup({
+        title: t`Are you sure to delete ${title} permanently?`,
+        content: t`You cannot recover data if you confirm to delete.`,
+        onOk: () => {
+          if (onDelete) onDelete(documentId || spaceId);
+        },
+        danger: true,
+        onCancel: () => {},
+      }),
+    );
   };
-  
+
   // FIXME: replace / by starter document
-  const itemPath = documentId ?
-    formatDocumentRoute(documentId) :
-    "/";
+  const itemPath = documentId ? formatDocumentRoute(documentId) : "/";
   return (
     <ItemContainer>
       <ItemBody>
         <div style={{ cursor: "pointer" }}>
           <Link href={itemPath} target="_blank" passHref rel="noreferrer">
             <a href={itemPath} target="_blank" rel="noreferrer">
-              <Text weight={TextWeight.bold}>
-                {title}
-              </Text>
+              <Text weight={TextWeight.bold}>{title}</Text>
             </a>
-          </Link><br/>
+          </Link>
+          <br />
           <Typography.Text type="secondary">
-            {fromNow(deletedAt) } - {formatDate(deletedAt, FormatType.DateTimeFormat)}
+            {fromNow(deletedAt)} -{" "}
+            {formatDate(deletedAt, FormatType.DateTimeFormat)}
           </Typography.Text>
         </div>
-        <Divider/>
-        <div style={{ flex: 1, maxHeight: "200px", marginBottom: "5px"}}>
+        <Divider />
+        <div style={{ flex: 1, maxHeight: "200px", marginBottom: "5px" }}>
           <img
             width="100%"
             height="100%"
@@ -90,7 +96,7 @@ const DeletedItem = (
           >
             <Trans>Restore</Trans>
           </TextButtonWithHover>
-          <div style={{ flex: 1 }}/>
+          <div style={{ flex: 1 }} />
           <TextButtonWithHover
             type="text"
             style={{ color: "red", fontWeight: 500 }}
@@ -113,10 +119,9 @@ const ItemBody = styled.div`
   width: 100%;
   height: 360px;
   border-radius: 8px;
-  background: var(--gray-1, #FFF);
+  background: var(--gray-1, #fff);
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.02),
-    0px 1px 6px -1px rgba(0, 0, 0, 0.02),
-    0px 1px 2px 0px rgba(0, 0, 0, 0.03);
+    0px 1px 6px -1px rgba(0, 0, 0, 0.02), 0px 1px 2px 0px rgba(0, 0, 0, 0.03);
   padding: 20px;
   display: flex;
   flex-direction: column;

@@ -15,7 +15,10 @@ const Trash = () => {
       </Text>
       <br />
       <Typography.Text type="secondary">
-        <Trans>Item are available for 60 days. After that time, item will be permanently deleted.</Trans>
+        <Trans>
+          Item are available for 60 days. After that time, item will be
+          permanently deleted.
+        </Trans>
       </Typography.Text>
       <Tabs>
         <Tabs.TabPane key="Document" tab={t`Document`}>

@@ -11,9 +11,8 @@ const PublicDocument = () => {
   if (isUndefined(masterDocument)) {
     return <Loading />;
   }
-  
+
   return <PreviewDocument doc={masterDocument} />;
 };
-
 
 export default PublicDocument;

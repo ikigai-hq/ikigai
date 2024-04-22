@@ -14,17 +14,17 @@ moment.locale("en", {
 });
 
 export const extractSecondDuration = (time: moment.Moment): number => {
-  let hour = time.hour();
-  let minute = time.minute();
-  let seconds = time.seconds();
+  const hour = time.hour();
+  const minute = time.minute();
+  const seconds = time.seconds();
 
   return hour * 3600 + minute * 60 + seconds;
 };
 
 export const secondDurationToMoment = (seconds: number): moment.Moment => {
-  let hour = Math.floor(seconds / 3600);
-  let minute = Math.floor((seconds % 3600) / 60);
-  let second = seconds % 60;
+  const hour = Math.floor(seconds / 3600);
+  const minute = Math.floor((seconds % 3600) / 60);
+  const second = seconds % 60;
 
   return getNow().hour(hour).minute(minute).second(second);
 };
@@ -57,14 +57,14 @@ export const fromNow = (timestamp: number): string => {
   return moment.fromNow();
 };
 
-export const formatMoment = (m: Moment, formatType?: FormatType)  => {
+export const formatMoment = (m: Moment, formatType?: FormatType) => {
   const format = formatType ? formatType : FormatType.DateFormat;
   return m.format(format);
 };
 
 export const formatDate = (
   timestamp: number,
-  formatType?: FormatType
+  formatType?: FormatType,
 ): string => {
   const parseMoment = convertTsToDate(timestamp);
   return formatMoment(parseMoment, formatType);
@@ -80,10 +80,10 @@ export const secondsToTimestamp = (seconds: number) => {
   let m: any = Math.floor(seconds / 60);
   let s: any = seconds - m * 60;
 
-  m = m < 10 ? "0" + m : m;
-  s = s < 10 ? "0" + s : s;
+  m = m < 10 ? `0${m}` : m;
+  s = s < 10 ? `0${s}` : s;
 
-  return m + ":" + s;
+  return `${m}:${s}`;
 };
 
 export const getMomentByStr = (dateStr: string) => {

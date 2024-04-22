@@ -11,16 +11,24 @@ export type MultipleChoiceReviewProps = {
   documentId?: string;
 };
 
-const MultipleChoiceReview: React.FC<MultipleChoiceReviewProps> = ({ attrs, documentId }) => {
+const MultipleChoiceReview: React.FC<MultipleChoiceReviewProps> = ({
+  attrs,
+  documentId,
+}) => {
   const masterDocument = useDocumentStore((state) => state.masterDocument);
   const quizzes = useQuizStore((state) => state.quizzes);
 
   const quizInfo = quizzes.get(attrs.quizId);
-  const options = quizInfo?.structure?.quizBody ? [...quizInfo.structure.quizBody] : [];
+  const options = quizInfo?.structure?.quizBody
+    ? [...quizInfo.structure.quizBody]
+    : [];
   const reviewingSubmissionUserId = masterDocument?.submission?.user?.id;
-  const answerInfo = quizInfo?.answers?.find((a) => a.userId === reviewingSubmissionUserId);
+  const answerInfo = quizInfo?.answers?.find(
+    (a) => a.userId === reviewingSubmissionUserId,
+  );
   const isCorrectAnswer = answerInfo?.isCorrect;
-  const expectedAnswers: number[] = quizInfo?.structureAnswer?.correctOptions || [];
+  const expectedAnswers: number[] =
+    quizInfo?.structureAnswer?.correctOptions || [];
   const userAnswers = answerInfo?.answer?.answer;
   const explanation = quizInfo?.structureExplanation;
   const wrongMessage = `Wrong! Correct answer is "${expectedAnswers
@@ -41,11 +49,21 @@ const MultipleChoiceReview: React.FC<MultipleChoiceReviewProps> = ({ attrs, docu
         </Checkbox.Group>
       </div>
       {isCorrectAnswer && (
-        <Alert message={explanation ? `${t`Correct. Explain`}: ${explanation}` : t`Correct.`} type="success" showIcon />
+        <Alert
+          message={
+            explanation ? `${t`Correct. Explain`}: ${explanation}` : t`Correct.`
+          }
+          type="success"
+          showIcon
+        />
       )}
       {!isCorrectAnswer && (
         <Alert
-          message={explanation ? `${wrongMessage}. ${`Explain`}: ${explanation}` : wrongMessage}
+          message={
+            explanation
+              ? `${wrongMessage}. ${`Explain`}: ${explanation}`
+              : wrongMessage
+          }
           type="error"
           showIcon
         />

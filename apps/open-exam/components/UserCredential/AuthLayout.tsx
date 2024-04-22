@@ -62,18 +62,20 @@ type LayoutManagementProps = {
 
 export default function LayoutManagement({ children }: LayoutManagementProps) {
   const theme = useTheme();
-  
+
   const logoSrc = "/logo.png";
   return (
     <Container>
       <FormContainer>
         <Logo src={logoSrc} />
-        <FormAuthContainer>
-          {children}
-        </FormAuthContainer>
+        <FormAuthContainer>{children}</FormAuthContainer>
         <Col />
         <Space>
-          <Link href="https://github.com/openexamhq/open-exam" target="_blank" rel="noopener noreferrer">
+          <Link
+            href="https://github.com/openexamhq/open-exam"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <a>
               <Text
                 weight={TextWeight.medium}

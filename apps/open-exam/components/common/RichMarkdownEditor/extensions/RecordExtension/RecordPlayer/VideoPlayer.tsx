@@ -1,4 +1,10 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { secondsToTimestamp } from "util/Time";
 import styled from "styled-components";
 import { Text, TextWeight } from "components/common/Text";
@@ -12,10 +18,14 @@ export type Props = {
   maxDurationSeconds?: number;
 };
 
-const VideoPlayer = forwardRef<any, Props>(
-  (props, ref) => {
+const VideoPlayer = forwardRef<any, Props>((props, ref) => {
   const theme = useTheme();
-  const { src, controls = true, contentType = "video/webm", maxDurationSeconds } = props;
+  const {
+    src,
+    controls = true,
+    contentType = "video/webm",
+    maxDurationSeconds,
+  } = props;
   const [durationTime, setDurationTime] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [isMuted, setMuted] = useState(false);
@@ -28,13 +38,19 @@ const VideoPlayer = forwardRef<any, Props>(
       const current = videoRef.current.currentTime;
       const duration = videoRef.current.duration;
       setCurrentTime(current);
-      if (typeof duration === 'number' && duration !== Infinity && !Number.isNaN(duration)) {
+      if (
+        typeof duration === "number" &&
+        duration !== Infinity &&
+        !Number.isNaN(duration)
+      ) {
         setDurationTime(duration);
       }
-      progressBarRef.current.style.width = `${Math.min(current / duration, 1) * 100}%`;
+      progressBarRef.current.style.width = `${
+        Math.min(current / duration, 1) * 100
+      }%`;
     }
   };
-  
+
   const setProgress = (e) => {
     const elementRect = e.target.getBoundingClientRect();
     const offsetX = e.clientX - elementRect.left;
@@ -58,18 +74,18 @@ const VideoPlayer = forwardRef<any, Props>(
 
   useEffect(() => {
     if (src) {
-      videoRef.current.addEventListener('loadedmetadata', updateProgress);
-      videoRef.current.addEventListener('timeupdate', updateProgress);
+      videoRef.current.addEventListener("loadedmetadata", updateProgress);
+      videoRef.current.addEventListener("timeupdate", updateProgress);
       return () => {
-        videoRef.current?.removeEventListener('loadedmetadata', updateProgress);
-        videoRef.current?.removeEventListener('timeupdate', updateProgress);
+        videoRef.current?.removeEventListener("loadedmetadata", updateProgress);
+        videoRef.current?.removeEventListener("timeupdate", updateProgress);
       };
     }
   }, [src]);
 
   useImperativeHandle(ref, () => ({
     videoRef: videoRef.current,
-    setDurationTime: setDurationTime
+    setDurationTime,
   }));
 
   return (
@@ -87,46 +103,53 @@ const VideoPlayer = forwardRef<any, Props>(
       >
         <source src={src} type={contentType} />
       </video>
-      {
-        controls ? (
-          <Controls>
-            <ProgressRange
-              id="progressRage"
-              ref={progressRangeRef}
-              onClick={setProgress}
-            >
-              <ProgressBar id="progressBar" ref={progressBarRef} />
-            </ProgressRange>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                width: '100%',
-                marginTop: 12
-              }}>
-              <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                <div onClick={togglePlay} style={{ display: 'flex' }}>
-                  {
-                    videoRef?.current?.paused === undefined || videoRef?.current?.paused
-                      ? <PlayIcon color={theme.colors.gray[0]} />
-                      : <PauseIcon color={theme.colors.gray[0]} />
-                  }
-                </div>
-                <VolumeIcon isMuted={isMuted} onClick={handleVolume} />
+      {controls ? (
+        <Controls>
+          <ProgressRange
+            id="progressRage"
+            ref={progressRangeRef}
+            onClick={setProgress}
+          >
+            <ProgressBar id="progressBar" ref={progressBarRef} />
+          </ProgressRange>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+              marginTop: 12,
+            }}
+          >
+            <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+              <div onClick={togglePlay} style={{ display: "flex" }}>
+                {videoRef?.current?.paused === undefined ||
+                videoRef?.current?.paused ? (
+                  <PlayIcon color={theme.colors.gray[0]} />
+                ) : (
+                  <PauseIcon color={theme.colors.gray[0]} />
+                )}
               </div>
-              <Text level={1} color={theme.colors.gray[0]}>
-                {secondsToTimestamp(currentTime)} / {secondsToTimestamp(durationTime)}
-              </Text>
+              <VolumeIcon isMuted={isMuted} onClick={handleVolume} />
             </div>
-          </Controls>
-        ) : (
-          <DurationTime color={theme.colors.gray[0]} level={4} weight={TextWeight.medium}>
-            {secondsToTimestamp(durationTime)}
-            {maxDurationSeconds ? `/${secondsToTimestamp(maxDurationSeconds)}` : ""}
-          </DurationTime>
-        )
-      }
+            <Text level={1} color={theme.colors.gray[0]}>
+              {secondsToTimestamp(currentTime)} /{" "}
+              {secondsToTimestamp(durationTime)}
+            </Text>
+          </div>
+        </Controls>
+      ) : (
+        <DurationTime
+          color={theme.colors.gray[0]}
+          level={4}
+          weight={TextWeight.medium}
+        >
+          {secondsToTimestamp(durationTime)}
+          {maxDurationSeconds
+            ? `/${secondsToTimestamp(maxDurationSeconds)}`
+            : ""}
+        </DurationTime>
+      )}
     </VideoPlayerBox>
   );
 });
@@ -149,7 +172,7 @@ const Controls = styled.div`
 
 const ProgressRange = styled.div`
   width: 100%;
-  background: rgba(255,255,255, 0.3);
+  background: rgba(255, 255, 255, 0.3);
   height: 2px;
   border-radius: 4px;
   cursor: pointer;

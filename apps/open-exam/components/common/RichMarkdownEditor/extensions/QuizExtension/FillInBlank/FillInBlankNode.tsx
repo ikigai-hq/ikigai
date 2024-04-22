@@ -62,7 +62,7 @@ export default class FillInBlankNode extends Node {
             end,
             type.create({
               quizId: v4().toString(),
-            })
+            }),
           );
         }
 
@@ -125,7 +125,7 @@ export default class FillInBlankNode extends Node {
   handleAttributesChange = (
     node: ProseMirrorNode,
     position: number,
-    newAttrs: { [key: string]: any }
+    newAttrs: { [key: string]: any },
   ) => {
     const { view } = this.editor;
     const { tr } = view.state;

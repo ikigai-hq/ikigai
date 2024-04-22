@@ -11,7 +11,7 @@ export const embedList: EmbedDescriptor[] = [
     icon: YoutubeIcon,
     matcher: (url) => {
       return url.match(
-        /(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([a-zA-Z0-9_-]{11})/
+        /(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([a-zA-Z0-9_-]{11})/,
       );
     },
     component: CommonEmbedBlock,

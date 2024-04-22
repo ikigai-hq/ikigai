@@ -14,16 +14,8 @@ const EditRubric = ({ visible, onClose, rubric }: EditRubricProps) => {
   const allow = useUserPermission();
   const canEditRubric = allow(Permission.ManageSpaceSetting);
   return (
-    <Drawer
-      open={visible}
-      onClose={onClose}
-      width="90vw"
-    >
-      <Rubric
-        rubric={rubric}
-        afterSave={onClose}
-        readOnly={!canEditRubric}
-      />
+    <Drawer open={visible} onClose={onClose} width="90vw">
+      <Rubric rubric={rubric} afterSave={onClose} readOnly={!canEditRubric} />
     </Drawer>
   );
 };

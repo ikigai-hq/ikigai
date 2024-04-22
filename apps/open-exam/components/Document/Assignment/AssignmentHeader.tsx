@@ -19,7 +19,10 @@ export type AdminAssignmentDocumentProps = {
 const AssignmentHeader = ({ document }: AdminAssignmentDocumentProps) => {
   const setIsClose = useDocumentStore((state) => state.setIsClose);
   const [openStudentList, setOpenStudentList] = useState(false);
-  const { members: students } = useGetSpaceMembers(document?.spaceId, OrgRole.STUDENT);
+  const { members: students } = useGetSpaceMembers(
+    document?.spaceId,
+    OrgRole.STUDENT,
+  );
 
   useEffect(() => {
     setIsClose(false);
@@ -32,7 +35,7 @@ const AssignmentHeader = ({ document }: AdminAssignmentDocumentProps) => {
           btnProps={{
             type: "text",
             icon: <AuditOutlined />,
-            onClick: () => setOpenStudentList(true)
+            onClick: () => setOpenStudentList(true),
           }}
           tooltipProps={{
             title: t`Submission List`,

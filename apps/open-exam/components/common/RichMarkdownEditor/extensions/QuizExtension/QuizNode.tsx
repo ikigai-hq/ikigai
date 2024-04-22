@@ -99,8 +99,8 @@ export class QuizNode extends Node {
           const { quizTitle, quizzType } = JSON.parse(tok.content);
           return {
             quizId: tok.info,
-            quizTitle: quizTitle,
-            quizzType: quizzType,
+            quizTitle,
+            quizzType,
           };
         } catch (error) {
           return { quizId: tok.info, quizTitle: tok.content };

@@ -22,7 +22,9 @@ export default class QuizDeletableManager extends Extension {
           const user = useAuthUserStore.getState().currentUser;
           // If we don't have user and document. Reject transaction
           if (!activeDocument || !user) return false;
-          if (documentAllow(activeDocument, user, DocumentPermission.EditDocument))
+          if (
+            documentAllow(activeDocument, user, DocumentPermission.EditDocument)
+          )
             return true;
 
           let result = true;

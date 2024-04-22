@@ -130,7 +130,7 @@ const RecordBlock = ({
       case MediaPermissionsErrorType.CouldNotStartVideoSource:
         setModal({
           name: t`Recording Failed`,
-          message: message,
+          message,
         });
         break;
       case MediaPermissionsErrorType.DISMISSED:

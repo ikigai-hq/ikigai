@@ -7,7 +7,10 @@ export type ServerDocumentFetchErrorProps = {
   showBackToHome: boolean;
 };
 
-const ServerDocumentFetchError = ({ fetchError, showBackToHome }: ServerDocumentFetchErrorProps) => {
+const ServerDocumentFetchError = ({
+  fetchError,
+  showBackToHome,
+}: ServerDocumentFetchErrorProps) => {
   return (
     <div>
       <Result
@@ -22,12 +25,11 @@ const ServerDocumentFetchError = ({ fetchError, showBackToHome }: ServerDocument
             >
               <Trans>Reload</Trans>
             </Button>
-            {
-              showBackToHome &&
-              <Button onClick={() => window.location.pathname = "/"}>
+            {showBackToHome && (
+              <Button onClick={() => (window.location.pathname = "/")}>
                 <Trans>Back to home</Trans>
               </Button>
-            }
+            )}
           </div>
         }
       />

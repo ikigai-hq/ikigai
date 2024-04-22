@@ -13,7 +13,7 @@ export enum MediaPermissionsErrorType {
 }
 
 export const requestMediaPermissions = (
-  constraints?: MediaStreamConstraints
+  constraints?: MediaStreamConstraints,
 ): Promise<MediaStream> => {
   const browser = Bowser.getParser(window.navigator.userAgent);
   const browserName = browser.getBrowserName();

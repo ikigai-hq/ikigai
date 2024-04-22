@@ -24,18 +24,18 @@ import useAuthUserStore from "../context/ZustandAuthStore";
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 const authLink = setContext((_, { headers }) => {
-  let token = TokenStorage.get();
+  const token = TokenStorage.get();
 
   const finalHeaders = {
     headers: {
       ...headers,
     },
   };
-  
+
   if (token) {
-    finalHeaders.headers["authorization"] = token;
+    finalHeaders.headers.authorization = token;
   }
-  
+
   const activeOrgId = useAuthUserStore.getState().orgId;
   if (activeOrgId) {
     finalHeaders.headers["active-org-id"] = activeOrgId;
@@ -50,7 +50,7 @@ const cleanTypeName = new ApolloLink((operation, forward) => {
       key === "__typename" ? undefined : value;
     operation.variables = JSON.parse(
       JSON.stringify(operation.variables),
-      omitTypename
+      omitTypename,
     );
   }
   return forward(operation).map((data) => {
@@ -80,7 +80,7 @@ const createIsomorphicLink = () => {
     authLink.concat(
       createHttpLink({
         uri: Config.graphQlEndpoint,
-      })
+      }),
     ),
   ]);
 
@@ -94,7 +94,7 @@ const createIsomorphicLink = () => {
     },
     // @ts-ignore
     wsLink,
-    httpLink
+    httpLink,
   );
 };
 
@@ -108,7 +108,7 @@ const createApolloClient = (): ApolloClient<any> => {
 };
 
 export const initializeApollo = (
-  initialState: any = null
+  initialState: any = null,
 ): ApolloClient<any> => {
   const _apolloClient = apolloClient ?? createApolloClient();
 
@@ -163,10 +163,10 @@ export async function query<T = any, TVariables = OperationVariables>(
 export async function mutate<
   TData = any,
   TVariables = OperationVariables,
-  TContext = DefaultContext
+  TContext = DefaultContext,
 >(
   options: MutationOptions<TData, TVariables, TContext>,
-  ignoreError?: boolean
+  ignoreError?: boolean,
 ): Promise<TData | undefined> {
   try {
     const { data } = await getApolloClient().mutate(options);
@@ -182,6 +182,6 @@ export async function mutate<
 }
 
 export const handleError = (e: ApolloError) => {
-  let message = e.message;
+  const message = e.message;
   toast.error(message);
 };

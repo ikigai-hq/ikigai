@@ -49,7 +49,7 @@ export const TextColorPicker = () => {
       activeDocumentEditorId === currentPointingDocumentId
         ? currentPointingEditorState
         : editorState;
-    const spec = targetEditorState?.schema["marks"][ExtensionName.TextColor];
+    const spec = targetEditorState?.schema.marks[ExtensionName.TextColor];
     const isActive = isMarkActive(spec)(targetEditorState);
 
     if (isActive) {

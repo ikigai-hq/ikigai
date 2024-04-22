@@ -1,7 +1,11 @@
 // FIXME: This is the temporary way to handle policy of the application.
 // We should replace by permission return in backend side.
 
-import {GetDocumentDetail_documentGet as IDocument, OrgRole, UserMe,} from "graphql/types";
+import {
+  GetDocumentDetail_documentGet as IDocument,
+  OrgRole,
+  UserMe,
+} from "graphql/types";
 
 export enum Permission {
   // Space Permission
@@ -10,7 +14,7 @@ export enum Permission {
   ManageSpaceContent,
   ManageSpaceMember,
   ManageSpaceSetting,
-  
+
   // Org Permission
   ViewMemberPublicInformation,
   EditOrgMemberInformation,
@@ -52,10 +56,7 @@ export const getPermissions = (orgRole: OrgRole): Permission[] => {
   }
 };
 
-export const allow = (
-  orgRole: OrgRole,
-  permission: Permission,
-): boolean => {
+export const allow = (orgRole: OrgRole, permission: Permission): boolean => {
   return getPermissions(orgRole).includes(permission);
 };
 
@@ -80,9 +81,7 @@ export enum DocumentPermission {
   ManageDocument,
 }
 
-export const VIEW_ONLY_PERMISSIONS = [
-  DocumentPermission.ViewDocument,
-];
+export const VIEW_ONLY_PERMISSIONS = [DocumentPermission.ViewDocument];
 
 export const INTERACTION_PERMISSIONS = [
   ...VIEW_ONLY_PERMISSIONS,
@@ -106,7 +105,7 @@ export const getDocumentPermissions = (
   isPreviewMode?: boolean,
 ): DocumentPermission[] => {
   if (isPreviewMode) return VIEW_ONLY_PERMISSIONS;
-  
+
   const role = user?.userMe?.activeUserAuth?.orgRole;
   const documentType = getDocumentType(doc);
 

@@ -5,9 +5,7 @@ import LayoutManagement from "../components/UserCredential/AuthLayout";
 import MagicLink from "../components/MagicLink";
 
 const IndexPage: NextPageWithLayout = () => {
-  return (
-    <MagicLink />
-  );
+  return <MagicLink />;
 };
 
 IndexPage.getLayout = function getLayout(page: ReactElement) {

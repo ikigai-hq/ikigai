@@ -26,70 +26,85 @@ const RubricSection = ({ rubric, onChangeFinalScore }: RubricSectionProps) => {
   const allow = useUserPermission();
   const canGrade = allow(Permission.ManageSpaceContent);
   const [insideRubric, setInsideRubric] = useState(cloneDeep(rubric));
-  const [gradeRubric] = useMutation<GradeRubricSubmission>(GRADE_RUBRIC_SUBMISSION, {
-    onError: handleError,
-  });
-  
-  const onSelectLevel = async (criteriaIndex: number, levelIndex: number, defaultScore?: number) => {
+  const [gradeRubric] = useMutation<GradeRubricSubmission>(
+    GRADE_RUBRIC_SUBMISSION,
+    {
+      onError: handleError,
+    },
+  );
+
+  const onSelectLevel = async (
+    criteriaIndex: number,
+    levelIndex: number,
+    defaultScore?: number,
+  ) => {
     if (!canGrade) return;
-    
+
     const items = insideRubric.gradedData.items[criteriaIndex];
     // Reset Phase
-    items.forEach(item => {
+    items.forEach((item) => {
       item.userPick.selected = false;
       item.userPick.score = 0;
     });
-    
+
     // Select Phase
     const item = items[levelIndex];
     item.userPick.selected = true;
     item.userPick.score = defaultScore || item.score;
-    
-    const { data } = await gradeRubric({ variables: {
-      data: {
-        submissionId: rubric.submissionId,
-        rubricId: rubric.rubricId,
-        gradedData: {
-          rubricType: insideRubric.gradedData.rubricType,
-          criteria: insideRubric.gradedData.criteria,
-          weightingCriteria: insideRubric.gradedData.weightingCriteria,
-          level: insideRubric.gradedData.level,
-          items: insideRubric.gradedData.items,
+
+    const { data } = await gradeRubric({
+      variables: {
+        data: {
+          submissionId: rubric.submissionId,
+          rubricId: rubric.rubricId,
+          gradedData: {
+            rubricType: insideRubric.gradedData.rubricType,
+            criteria: insideRubric.gradedData.criteria,
+            weightingCriteria: insideRubric.gradedData.weightingCriteria,
+            level: insideRubric.gradedData.level,
+            items: insideRubric.gradedData.items,
+          },
         },
-      }
-    }});
-    
+      },
+    });
+
     if (data) {
-      insideRubric.gradedData.totalUserScore = data.assignmentUpdateRubricSubmission.gradedData.totalUserScore;
+      insideRubric.gradedData.totalUserScore =
+        data.assignmentUpdateRubricSubmission.gradedData.totalUserScore;
       setInsideRubric({ ...insideRubric });
       onChangeFinalScore(insideRubric.gradedData.totalUserScore);
     }
   };
-  
+
   const getSelectedScore = (criteriaIndex: number) =>
-    insideRubric
-      .gradedData.items[criteriaIndex]
-      .find((item) => item.userPick.selected);
-  
+    insideRubric.gradedData.items[criteriaIndex].find(
+      (item) => item.userPick.selected,
+    );
+
   const renderSelectedScore = (criteriaIndex: number) => {
     const selectedScore = getSelectedScore(criteriaIndex);
-    const selectedScoreIndex = insideRubric
-      .gradedData
-      .items[criteriaIndex]
-      .findIndex(item => item.userPick.selected);
+    const selectedScoreIndex = insideRubric.gradedData.items[
+      criteriaIndex
+    ].findIndex((item) => item.userPick.selected);
     if (!selectedScore || selectedScoreIndex < 0) return <></>;
-    
-    const readOnly = !canGrade || insideRubric.gradedData.rubricType === RubricType.POINT_BASED;
+
+    const readOnly =
+      !canGrade ||
+      insideRubric.gradedData.rubricType === RubricType.POINT_BASED;
     return (
       <Tooltip
         arrow={false}
         title={!readOnly ? t`Edit score` : undefined}
-        popupVisible={insideRubric.gradedData.rubricType !== RubricType.POINT_BASED}
+        popupVisible={
+          insideRubric.gradedData.rubricType !== RubricType.POINT_BASED
+        }
       >
         <InputNumber
           size="small"
           value={roundRealNumber(selectedScore.userPick.score)}
-          onChange={e => onSelectLevel(criteriaIndex, selectedScoreIndex, roundRealNumber(e))}
+          onChange={(e) =>
+            onSelectLevel(criteriaIndex, selectedScoreIndex, roundRealNumber(e))
+          }
           min={selectedScore.score}
           max={selectedScore.toScore}
           controls={false}
@@ -99,72 +114,80 @@ const RubricSection = ({ rubric, onChangeFinalScore }: RubricSectionProps) => {
       </Tooltip>
     );
   };
-  
+
   return (
     <div>
       <Divider />
       <Text type="secondary" color={"#888E9C"}>
         <Trans>RUBRIC</Trans>
       </Text>
-      {
-        insideRubric.gradedData.criteria.map((criteria, criteriaIndex) => (
-          <div style={{ marginTop: "10px" }} key={criteria}>
-            <div style={{ display: "flex", alignItems: "baseline", width: "100%" }}>
-              <Text type="secondary" color={"#888E9C"} strong style={{ flex: 1 }}>
-                {criteria} ({roundRealNumber((insideRubric.gradedData.weightingCriteria[criteriaIndex] || 1) * 100)}%)
-              </Text>
-              {renderSelectedScore(criteriaIndex)}
-            </div>
-            {
-              (insideRubric.gradedData.items[criteriaIndex] || []).map((item, levelIndex) => (
-                <CriteriaLevelContainer
-                  key={levelIndex}
-                  $selected={item.userPick.selected}
-                  $canGrade={canGrade}
-                  onClick={() => onSelectLevel(criteriaIndex, levelIndex)}
-                >
-                  <div style={{ flex: 1 }}>
-                    <Typography.Text type="secondary" strong>
-                      {insideRubric.gradedData.level[levelIndex]}<br />
+      {insideRubric.gradedData.criteria.map((criteria, criteriaIndex) => (
+        <div style={{ marginTop: "10px" }} key={criteria}>
+          <div
+            style={{ display: "flex", alignItems: "baseline", width: "100%" }}
+          >
+            <Text type="secondary" color={"#888E9C"} strong style={{ flex: 1 }}>
+              {criteria} (
+              {roundRealNumber(
+                (insideRubric.gradedData.weightingCriteria[criteriaIndex] ||
+                  1) * 100,
+              )}
+              %)
+            </Text>
+            {renderSelectedScore(criteriaIndex)}
+          </div>
+          {(insideRubric.gradedData.items[criteriaIndex] || []).map(
+            (item, levelIndex) => (
+              <CriteriaLevelContainer
+                key={levelIndex}
+                $selected={item.userPick.selected}
+                $canGrade={canGrade}
+                onClick={() => onSelectLevel(criteriaIndex, levelIndex)}
+              >
+                <div style={{ flex: 1 }}>
+                  <Typography.Text type="secondary" strong>
+                    {insideRubric.gradedData.level[levelIndex]}
+                    <br />
+                  </Typography.Text>
+                  <Typography.Paragraph type="secondary">
+                    {item.explanation}
+                  </Typography.Paragraph>
+                </div>
+                <div>
+                  {insideRubric.gradedData.rubricType ===
+                    RubricType.POINT_BASED && (
+                    <Typography.Text strong>{item.score}</Typography.Text>
+                  )}
+                  {insideRubric.gradedData.rubricType ===
+                    RubricType.POINT_RANGE && (
+                    <Typography.Text strong>
+                      {item.score} - {item.toScore}
                     </Typography.Text>
-                    <Typography.Paragraph type="secondary">
-                      {item.explanation}
-                    </Typography.Paragraph>
-                  </div>
-                  <div>
-                    {
-                      insideRubric.gradedData.rubricType === RubricType.POINT_BASED &&
-                      <Typography.Text strong>
-                        {item.score}
-                      </Typography.Text>
-                    }
-                    {
-                      insideRubric.gradedData.rubricType === RubricType.POINT_RANGE &&
-                      <Typography.Text strong>
-                        {item.score} - {item.toScore}
-                      </Typography.Text>
-                    }
-                  </div>
-                </CriteriaLevelContainer>
-              ))
-            }
-          </ div>
-        ))
-      }
+                  )}
+                </div>
+              </CriteriaLevelContainer>
+            ),
+          )}
+        </div>
+      ))}
     </div>
   );
 };
 
-const CriteriaLevelContainer = styled.div<{ $selected: boolean, $canGrade: boolean }>`
+const CriteriaLevelContainer = styled.div<{
+  $selected: boolean;
+  $canGrade: boolean;
+}>`
   border: 1px solid ${(props) => props.theme.colors.gray[3]};
   padding: 4px;
   margin-top: 5px;
   display: flex;
   cursor: pointer;
-  background-color: ${props => props.$selected ? "#52C41A" : "unset"};
+  background-color: ${(props) => (props.$selected ? "#52C41A" : "unset")};
 
   :hover {
-    background-color: ${props => props.$canGrade ? "rgba(82,196,26,0.62)" : undefined };
+    background-color: ${(props) =>
+      props.$canGrade ? "rgba(82,196,26,0.62)" : undefined};
   }
 `;
 

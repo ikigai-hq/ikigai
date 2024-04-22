@@ -23,6 +23,9 @@
     "extract": "lingui extract",
     "compile": "lingui compile"
   },
+  "eslintIgnore": [
+    "@types/*"
+  ],
   "lint-staged": {
     "**/*.{ts,tsx}": [
       "prettier --write"

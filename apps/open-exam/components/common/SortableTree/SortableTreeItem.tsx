@@ -30,11 +30,11 @@ export interface TreeItemProps<T> extends HTMLAttributes<HTMLLIElement> {
 const animateLayoutChanges: AnimateLayoutChanges = ({
   isSorting,
   isDragging,
-}) => (isSorting || isDragging ? false : true);
+}) => !(isSorting || isDragging);
 
 type SortableTreeItemProps<
   T,
-  TElement extends HTMLElement
+  TElement extends HTMLElement,
 > = TreeItemProps<T> & {
   id: string;
   TreeItemComponent: TreeItemComponentType<T, TElement>;
@@ -43,7 +43,7 @@ type SortableTreeItemProps<
 
 const SortableTreeItemNotMemoized = function SortableTreeItem<
   T,
-  TElement extends HTMLElement
+  TElement extends HTMLElement,
 >({
   id,
   depth,
@@ -105,5 +105,5 @@ const SortableTreeItemNotMemoized = function SortableTreeItem<
 };
 
 export const SortableTreeItem = React.memo(
-  SortableTreeItemNotMemoized
+  SortableTreeItemNotMemoized,
 ) as typeof SortableTreeItemNotMemoized;

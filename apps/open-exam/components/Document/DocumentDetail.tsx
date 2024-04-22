@@ -23,8 +23,7 @@ const DocumentDetail = () => {
   const isStudent =
     authUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
   const docs = useSpaceStore((state) =>
-    (state.documents || [])
-      .filter((doc) => !doc.deletedAt)
+    (state.documents || []).filter((doc) => !doc.deletedAt),
   );
   const pageBlockMode = usePageBlockStore((state) => state.pageBlockMode);
   const mapPageBlockData = usePageBlockStore((state) => state.mapPageBlockData);

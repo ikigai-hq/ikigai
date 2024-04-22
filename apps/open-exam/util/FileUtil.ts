@@ -1,10 +1,6 @@
 import axios from "axios";
 
-import {
-  CreateFileData,
-  FileCreate,
-  FileCreateRecording,
-} from "graphql/types";
+import { CreateFileData, FileCreate, FileCreateRecording } from "graphql/types";
 import { getApolloClient } from "graphql/ApolloClient";
 import {
   CREATE_FILE,
@@ -35,10 +31,10 @@ export type UploadingInformation = {
 //   Should remove in the future
 export const uploadRecordingFile = async (
   uploadingInfo: UploadingInformation,
-  config?: any
+  config?: any,
 ): Promise<FileInfo | string> => {
   const uploadingFile = uploadingInfo.uploadingFile;
-  
+
   // Create File + Upload Info
   const inputData: CreateFileData = {
     fileName: uploadingFile.name,
@@ -54,29 +50,29 @@ export const uploadRecordingFile = async (
     });
   if (createFileError || !data) return "upload.uploaded_failed";
   const { file, uploadInfo } = data.fileCreateRecording;
-  
+
   // Upload to S3
   const s3Result = await uploadS3(
     uploadInfo.uploadUrl,
     uploadInfo.fields,
     uploadingFile,
-    config
+    config,
   );
   if (!s3Result) return "upload.uploaded_failed";
-  
+
   // Check file
   const { errors } = await apolloClient.mutate({
     mutation: CHECK_UPLOADING_FILE,
     variables: { fileId: file.uuid },
   });
   if (errors) return "upload.uploaded_failed";
-  
+
   return { ...file };
-}
+};
 
 export const uploadFile = async (
   uploadingInfo: UploadingInformation,
-  config?: any
+  config?: any,
 ): Promise<FileInfo | string> => {
   const uploadingFile = uploadingInfo.uploadingFile;
 
@@ -101,7 +97,7 @@ export const uploadFile = async (
     uploadInfo.uploadUrl,
     uploadInfo.fields,
     uploadingFile,
-    config
+    config,
   );
   if (!s3Result) return "upload.uploaded_failed";
 
@@ -119,7 +115,7 @@ export const uploadS3 = async (
   uploadUrl: string,
   fields: Record<string, string>,
   file: File,
-  config?: any
+  config?: any,
 ): Promise<boolean> => {
   const formData = new FormData();
   Object.entries(fields).map(([key, value]) => {

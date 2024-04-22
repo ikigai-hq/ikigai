@@ -2,7 +2,7 @@ import { MutableRefObject, useLayoutEffect } from "react";
 
 const useResizeObserver = (
   ref: MutableRefObject<any>,
-  callback: (target: any) => void
+  callback: (target: any) => void,
 ) => {
   useLayoutEffect(() => {
     const element = ref?.current;
@@ -20,7 +20,6 @@ const useResizeObserver = (
       observer.disconnect();
     };
   }, [callback, ref]);
-
 };
 
 export default useResizeObserver;

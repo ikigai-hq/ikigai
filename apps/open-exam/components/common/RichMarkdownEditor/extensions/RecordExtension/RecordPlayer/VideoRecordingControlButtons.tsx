@@ -1,6 +1,6 @@
-import {Button, Space} from "antd";
-import {CheckCircleOutlined, DeleteOutlined} from "@ant-design/icons";
-import {isMobileView} from "../../../../../../hook/UseSupportMobile";
+import { Button, Space } from "antd";
+import { CheckCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import { isMobileView } from "../../../../../../hook/UseSupportMobile";
 
 export type VideoRecordingControlButtonsProps = {
   cancelRecord: () => void | Promise<void>;
@@ -8,11 +8,15 @@ export type VideoRecordingControlButtonsProps = {
   endRecording: () => void | Promise<void>;
 };
 
-const VideoRecordingControlButtons = ({ cancelRecord, endRecording, uploading }: VideoRecordingControlButtonsProps) => {
+const VideoRecordingControlButtons = ({
+  cancelRecord,
+  endRecording,
+  uploading,
+}: VideoRecordingControlButtonsProps) => {
   const isMobile = isMobileView();
   if (!isMobile) {
     return (
-      <Space size={20} style={{ justifyContent: 'end' }}>
+      <Space size={20} style={{ justifyContent: "end" }}>
         <Button danger type="link" block onClick={cancelRecord}>
           <Space align="center">
             <DeleteOutlined />
@@ -28,9 +32,15 @@ const VideoRecordingControlButtons = ({ cancelRecord, endRecording, uploading }:
       </Space>
     );
   }
-  
+
   return (
-    <div style={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
+    <div
+      style={{
+        display: "flex",
+        width: "100%",
+        justifyContent: "space-between",
+      }}
+    >
       <Button danger type="link" block onClick={cancelRecord}>
         <Space align="center">
           <DeleteOutlined />

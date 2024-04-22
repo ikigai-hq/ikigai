@@ -68,7 +68,7 @@ export abstract class RecordNode extends Node {
   handleAttributesChange = (
     node: ProseMirrorNode,
     position: number,
-    newAttrs: RecordBlockAttrs
+    newAttrs: RecordBlockAttrs,
   ) => {
     const { view } = this.editor;
     const { tr } = view.state;
@@ -139,7 +139,7 @@ export abstract class RecordNode extends Node {
 
   renderComponent = (
     recordType: "audio" | "video",
-    options: NodeComponentOptions
+    options: NodeComponentOptions,
   ) => {
     const { node, getPos, componentView } = options;
 

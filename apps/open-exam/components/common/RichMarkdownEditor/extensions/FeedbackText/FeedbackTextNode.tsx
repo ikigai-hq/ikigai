@@ -60,7 +60,7 @@ export default class FeedbackTextNode extends Node {
 
   createFeedbackTextWithSelection(
     state: EditorState,
-    dispatch: (tr: Transaction) => void
+    dispatch: (tr: Transaction) => void,
   ) {
     const { from, to } = state.selection;
     if (state.selection.empty) {
@@ -70,7 +70,7 @@ export default class FeedbackTextNode extends Node {
           id: v4(),
           feedback: "",
           autoFocus: true,
-        })
+        }),
       );
       dispatch(tr);
       return true;
@@ -84,7 +84,7 @@ export default class FeedbackTextNode extends Node {
           id: v4(),
           feedback: "",
           autoFocus: true,
-        })
+        }),
       );
     dispatch(tr);
   }
@@ -104,7 +104,7 @@ export default class FeedbackTextNode extends Node {
               id: v4(),
               feedback: "",
               autoFocus: true,
-            })
+            }),
           );
         }
 
@@ -133,7 +133,7 @@ export default class FeedbackTextNode extends Node {
   handleAttributesChange = (
     node: ProseMirrorNode,
     position: number,
-    newAttrs: FeedbackTextAttrs
+    newAttrs: FeedbackTextAttrs,
   ) => {
     const { view } = this.editor;
     const { tr } = view.state;
@@ -156,12 +156,11 @@ export default class FeedbackTextNode extends Node {
             id,
             feedback,
           };
-        } else {
-          return {
-            id: v4(),
-            feedback: tok.info || "",
-          };
         }
+        return {
+          id: v4(),
+          feedback: tok.info || "",
+        };
       },
     };
   }

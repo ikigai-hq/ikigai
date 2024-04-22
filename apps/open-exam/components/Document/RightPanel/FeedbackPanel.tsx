@@ -294,18 +294,19 @@ const Highlight = ({
         </CommentBox>
         {thread.comments.map((comment: IComment, index: number) => (
           <CommentBox key={comment.id} $isActive={isActive}>
-            {
-              (index === 0 || 
-                comment.sender.id !== thread.comments[Math.max(index - 1, 0)].sender.id) && (
-                <Space size={8} align="center">
-                  <AvatarWithName
-                    avatarSize={25}
-                    name={comment.sender.orgPersonalInformation?.fullName}
-                    avtUrl={comment.sender.orgPersonalInformation?.avatar?.publicUrl}
-                  />
-                </Space>
-              )
-            }
+            {(index === 0 ||
+              comment.sender.id !==
+                thread.comments[Math.max(index - 1, 0)].sender.id) && (
+              <Space size={8} align="center">
+                <AvatarWithName
+                  avatarSize={25}
+                  name={comment.sender.orgPersonalInformation?.fullName}
+                  avtUrl={
+                    comment.sender.orgPersonalInformation?.avatar?.publicUrl
+                  }
+                />
+              </Space>
+            )}
             <section>
               <Text level={0} style={{ marginLeft: 30 }}>
                 {fromNow(comment.createdAt)}

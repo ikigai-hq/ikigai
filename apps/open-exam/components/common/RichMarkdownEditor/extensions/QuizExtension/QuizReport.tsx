@@ -20,7 +20,7 @@ const QuizReport = ({ quizId }: QuizReportProps) => {
 
   const total = data.quizGetStats.countAnswers.reduce(
     (partialSum, a) => partialSum + a,
-    0
+    0,
   );
   return (
     <div>

@@ -1,18 +1,29 @@
-import React, {ReactNode, useEffect, useState} from "react";
-import {useLazyQuery, useMutation } from "@apollo/client";
+import React, { ReactNode, useEffect, useState } from "react";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { Trans } from "@lingui/macro";
 
 import TokenStorage from "../storage/TokenStorage";
-import {CheckDocument, CheckToken, MyLastActivity, UserMe, VerifyMagicLink} from "../graphql/types";
-import {CHECK_DOCUMENT, CHECK_TOKEN, MY_LAST_ACTIVITY, USER_ME} from "../graphql/query";
+import {
+  CheckDocument,
+  CheckToken,
+  MyLastActivity,
+  UserMe,
+  VerifyMagicLink,
+} from "../graphql/types";
+import {
+  CHECK_DOCUMENT,
+  CHECK_TOKEN,
+  MY_LAST_ACTIVITY,
+  USER_ME,
+} from "../graphql/query";
 import UserStorage from "../storage/UserStorage";
 import useAuthUserStore from "../context/ZustandAuthStore";
-import {formatDocumentRoute, Routes} from "../config/Routes";
+import { formatDocumentRoute, Routes } from "../config/Routes";
 import LayoutManagement from "./UserCredential/AuthLayout";
 import Loading from "./Loading";
-import {VERIFY_MAGIC_LINK} from "../graphql/mutation/UserMutation";
-import {Button, Typography} from "antd";
+import { VERIFY_MAGIC_LINK } from "../graphql/mutation/UserMutation";
+import { Button, Typography } from "antd";
 
 interface Props {
   children: ReactNode;
@@ -22,19 +33,19 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
   const router = useRouter();
   const [completeCheck, setCompleteCheck] = useState(false);
   const [hasError, setHasError] = useState();
-  const setOrgId = useAuthUserStore(state => state.setOrgId);
-  const setUserAuth = useAuthUserStore(state => state.setCurrentUser);
-  
+  const setOrgId = useAuthUserStore((state) => state.setOrgId);
+  const setUserAuth = useAuthUserStore((state) => state.setCurrentUser);
+
   const [checkToken] = useLazyQuery<CheckToken>(CHECK_TOKEN);
   const [checkDocument] = useLazyQuery<CheckDocument>(CHECK_DOCUMENT);
   const [getMe] = useLazyQuery<UserMe>(USER_ME);
   const [getLastActivity] = useLazyQuery<MyLastActivity>(MY_LAST_ACTIVITY);
   const [checkMagicLink] = useMutation<VerifyMagicLink>(VERIFY_MAGIC_LINK);
-  
+
   useEffect(() => {
     if (router.isReady) verifyAuth();
   }, [router.isReady]);
-  
+
   const verifyAuth = async () => {
     try {
       console.info("Verifying Token");
@@ -54,11 +65,11 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
       setCompleteCheck(true);
     }
   };
-  
+
   const verifyToken = async (): Promise<boolean> => {
     const token = TokenStorage.get();
     if (!token) return true;
-    
+
     const { error } = await checkToken();
     if (error && error.graphQLErrors.length > 0) {
       const errorCode = error.graphQLErrors[0].extensions.code;
@@ -71,55 +82,59 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
     }
     return true;
   };
-  
+
   const verifyDocument = async (): Promise<boolean> => {
     const documentId = router.query.documentId as string;
-    const isDocumentRoute = documentId && router.pathname.includes("/documents");
+    const isDocumentRoute =
+      documentId && router.pathname.includes("/documents");
     const token = TokenStorage.get();
     if (isDocumentRoute && !token) {
       await router.push(Routes.Home);
       return false;
     }
-    
+
     if (!token || !isDocumentRoute) return true;
-   
-    const { data } = await checkDocument({ variables: { documentId }});
+
+    const { data } = await checkDocument({ variables: { documentId } });
     if (data) {
       setOrgId(data.userCheckDocument);
     } else {
       await router.push(Routes.Home);
       return false;
     }
-    
+
     return true;
   };
-  
+
   const verifyLastActivity = async (): Promise<boolean> => {
     const isHome = router.pathname === Routes.Home;
     const token = TokenStorage.get();
     if (isHome && token) {
       const { data } = await getLastActivity();
       if (data) {
-        await router.push(formatDocumentRoute(data.userLastActivity.lastDocumentId));
+        await router.push(
+          formatDocumentRoute(data.userLastActivity.lastDocumentId),
+        );
         return false;
       }
     }
-    
+
     const documentId = router.query.documentId as string;
-    const isDocumentRoute = documentId && router.pathname.includes("/documents");
+    const isDocumentRoute =
+      documentId && router.pathname.includes("/documents");
     if (isDocumentRoute && token) {
       await router.push(formatDocumentRoute(documentId));
       return false;
     }
-    
+
     return true;
   };
-  
+
   const verifyMagicLink = async (): Promise<boolean> => {
     const otp = router.query.otp as string;
     const userIdAsStr = router.query.user_id as string;
     const userId = parseInt(userIdAsStr, 10);
-    
+
     if (otp && userId) {
       const { data } = await checkMagicLink({
         variables: {
@@ -127,33 +142,32 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
           otp,
         },
       });
-      
+
       if (data) {
         TokenStorage.set(data.userCheckMagicLink.accessToken);
         UserStorage.set(data.userCheckMagicLink.user.id);
       }
     }
-    
+
     return true;
   };
-  
+
   const verifyUserAuth = async (): Promise<boolean> => {
     const token = TokenStorage.get();
     if (!token) return true;
-    
+
     const { data } = await getMe();
     if (data) {
       setUserAuth(data);
       return true;
-    } else {
-      return false;
     }
+    return false;
   };
-  
+
   const backToHome = () => {
     window.location.replace(Routes.Home);
   };
-  
+
   if (!completeCheck) {
     return (
       <LayoutManagement>
@@ -164,14 +178,16 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
           }}
         >
           <Loading />
-          <div style={{ width: "100%", textAlign: "center", marginTop: "15px" }}>
+          <div
+            style={{ width: "100%", textAlign: "center", marginTop: "15px" }}
+          >
             Checking...
           </div>
         </div>
       </LayoutManagement>
     );
   }
-  
+
   if (hasError) {
     return (
       <LayoutManagement>
@@ -181,19 +197,29 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
             flexDirection: "column",
           }}
         >
-          <div style={{ width: "100%", textAlign: "center", marginTop: "15px" }}>
+          <div
+            style={{ width: "100%", textAlign: "center", marginTop: "15px" }}
+          >
             <Typography.Text type="danger">
-              Cannot initializing application because: <br/>
+              Cannot initializing application because: <br />
               {hasError}
             </Typography.Text>
           </div>
-          <div style={{ display: "flex", justifyContent: "center", marginTop: "5px"}}>
-            <Button onClick={backToHome}><Trans>Back to home</Trans></Button>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "5px",
+            }}
+          >
+            <Button onClick={backToHome}>
+              <Trans>Back to home</Trans>
+            </Button>
           </div>
         </div>
       </LayoutManagement>
     );
   }
-  
+
   return <>{children}</>;
 };

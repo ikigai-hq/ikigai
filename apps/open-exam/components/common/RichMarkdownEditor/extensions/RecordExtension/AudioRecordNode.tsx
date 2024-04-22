@@ -18,7 +18,7 @@ export class AudioRecordNode extends RecordNode {
     state.write(`{{{${node.attrs.fileId}\n`);
     state.text(
       `${node.attrs.fileId};${node.attrs.name};${node.attrs.contentType};${node.attrs.publicUrl}`,
-      false
+      false,
     );
     state.ensureNewLine();
     state.write(`{{{`);

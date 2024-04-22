@@ -1,8 +1,6 @@
 import { useQuery } from "@apollo/client";
 
-import {
-  GET_FULL_FILE_INFO,
-} from "graphql/query";
+import { GET_FULL_FILE_INFO } from "graphql/query";
 import { handleError } from "graphql/ApolloClient";
 import { GetFullFileInfo } from "graphql/types";
 import Loading from "components/Loading";
@@ -56,10 +54,7 @@ const VideoPlayerWithFileId = ({
         </RecordBox>
       )}
       {recordType === "video" && !isRecording && (
-        <VideoPlayer
-          src={url}
-          contentType={fileRes.contentType}
-        />
+        <VideoPlayer src={url} contentType={fileRes.contentType} />
       )}
     </RecordBlockBody>
   );

@@ -29,7 +29,14 @@ const VideoPlayer = ({ options, paddingTop }: IVideoPlayerProps) => {
   }, []);
 
   return (
-    <div data-vjs-player style={{ paddingTop: paddingTop ? `${paddingTop}%` : 'none', width: '100%', height: '100%' }}>
+    <div
+      data-vjs-player
+      style={{
+        paddingTop: paddingTop ? `${paddingTop}%` : "none",
+        width: "100%",
+        height: "100%",
+      }}
+    >
       <video ref={videoNode} className="video-js" />
     </div>
   );

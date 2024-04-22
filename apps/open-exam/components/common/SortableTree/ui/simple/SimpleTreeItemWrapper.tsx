@@ -48,7 +48,7 @@ export const SimpleTreeItemWrapper: TreeItemComponentType<{}, HTMLDivElement> =
           ghost && "dnd-sortable-tree_simple_ghost",
           disableSelection && "dnd-sortable-tree_simple_disable-selection",
           disableInteraction && "dnd-sortable-tree_simple_disable-interaction",
-          className
+          className,
         )}
         style={{
           ...style,
@@ -58,7 +58,7 @@ export const SimpleTreeItemWrapper: TreeItemComponentType<{}, HTMLDivElement> =
         <div
           className={clsx(
             "dnd-sortable-tree_simple_tree-item",
-            contentClassName
+            contentClassName,
           )}
           ref={ref}
           {...(manualDrag ? undefined : handleProps)}
@@ -70,22 +70,25 @@ export const SimpleTreeItemWrapper: TreeItemComponentType<{}, HTMLDivElement> =
               {...handleProps}
             />
           )}
-          {!manualDrag && !hideCollapseButton && !!onCollapse && !!childCount && (
-            <button
-              onClick={(e) => {
-                if (!disableCollapseOnItemClick) {
-                  return;
-                }
-                e.preventDefault();
-                onCollapse?.();
-              }}
-              className={clsx(
-                "dnd-sortable-tree_simple_tree-item-collapse_button",
-                collapsed &&
-                  "dnd-sortable-tree_folder_simple-item-collapse_button-collapsed"
-              )}
-            />
-          )}
+          {!manualDrag &&
+            !hideCollapseButton &&
+            !!onCollapse &&
+            !!childCount && (
+              <button
+                onClick={(e) => {
+                  if (!disableCollapseOnItemClick) {
+                    return;
+                  }
+                  e.preventDefault();
+                  onCollapse?.();
+                }}
+                className={clsx(
+                  "dnd-sortable-tree_simple_tree-item-collapse_button",
+                  collapsed &&
+                    "dnd-sortable-tree_folder_simple-item-collapse_button-collapsed",
+                )}
+              />
+            )}
           {props.children}
         </div>
       </li>

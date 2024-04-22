@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import shallow from "zustand/shallow";
 import { Avatar, Divider, Tooltip, Typography } from "antd";
 import { SettingOutlined, UserOutlined } from "@ant-design/icons";
@@ -7,9 +7,7 @@ import styled, { useTheme } from "styled-components";
 
 import useDocumentStore from "context/ZustandDocumentStore";
 import useUserPermission from "hook/UseUserPermission";
-import {
-  GetDocuments_spaceGet_documents,
-} from "graphql/types";
+import { GetDocuments_spaceGet_documents } from "graphql/types";
 import { Text, TextWeight } from "components/common/Text";
 import { Permission } from "util/permission";
 import CreateContentButton from "./CreateContentButton";
@@ -18,7 +16,7 @@ import { RightBodyContainer } from "../common";
 import LearningModuleDnd from "components/common/LearningModuleDnd";
 import LessonItemDnd from "./LessonItemDnd";
 import useSpaceStore from "context/ZustandSpaceStore";
-import {TextButtonWithHover} from "components/common/Button";
+import { TextButtonWithHover } from "components/common/Button";
 import useAuthUserStore from "context/ZustandAuthStore";
 import EditProfileModal from "../../UserCredential/EditProfileModal";
 
@@ -29,11 +27,14 @@ interface Props {
 const LeftPanel: React.FC<Props> = ({ docs }) => {
   const theme = useTheme();
   const allow = useUserPermission();
-  const leftPanelHidden = useDocumentStore(state => state.leftPanelHidden, shallow);
-  const space = useSpaceStore(state => state.space);
-  const me = useAuthUserStore(state => state.currentUser?.userMe);
+  const leftPanelHidden = useDocumentStore(
+    (state) => state.leftPanelHidden,
+    shallow,
+  );
+  const space = useSpaceStore((state) => state.space);
+  const me = useAuthUserStore((state) => state.currentUser?.userMe);
   const [openProfile, setOpenProfile] = useState(false);
-  
+
   const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
   return (
     <RightBodyContainer $hide={leftPanelHidden} $leftPanel={true}>
@@ -50,8 +51,11 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
               />
             </div>
             <div>
-              <Typography.Text>{myName}</Typography.Text><br/>
-              <Typography.Text type="secondary" ellipsis>{me?.email || ""}</Typography.Text>
+              <Typography.Text>{myName}</Typography.Text>
+              <br />
+              <Typography.Text type="secondary" ellipsis>
+                {me?.email || ""}
+              </Typography.Text>
             </div>
           </UserInformation>
           <SpaceInformation>
@@ -63,7 +67,7 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
               {space?.name}
             </Typography.Paragraph>
             <div>
-              <TextButtonWithHover type="text" icon={<SettingOutlined />}/>
+              <TextButtonWithHover type="text" icon={<SettingOutlined />} />
             </div>
           </SpaceInformation>
         </SpaceInfoContainer>
@@ -75,9 +79,7 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
               weight={TextWeight.medium}
               level={2}
             >
-              <Trans>
-                Documents
-              </Trans>
+              <Trans>Documents</Trans>
             </Text>
             <Tooltip
               trigger="hover"
@@ -103,13 +105,12 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
           )}
         </ListModule>
       </div>
-      {
-        openProfile &&
-          <EditProfileModal
-            visible={openProfile}
-            onClose={() => setOpenProfile(false)}
-          />
-      }
+      {openProfile && (
+        <EditProfileModal
+          visible={openProfile}
+          onClose={() => setOpenProfile(false)}
+        />
+      )}
     </RightBodyContainer>
   );
 };
@@ -140,6 +141,6 @@ const SpaceInformation = styled.div`
 `;
 
 const NoMarginDivider = styled(Divider)<{ $margin: number }>`
-  margin-top: ${props => props.$margin}px;
-  margin-bottom: ${props => props.$margin}px;
+  margin-top: ${(props) => props.$margin}px;
+  margin-bottom: ${(props) => props.$margin}px;
 `;

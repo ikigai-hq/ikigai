@@ -88,13 +88,9 @@ const useQuizStore = create<IQuizStore>((set, get) => ({
         structureExplanation,
       });
     }
-    set({ quizzes: quizzes });
+    set({ quizzes });
   },
-  updateStore: (
-    quizId,
-    metadata,
-    documentId?,
-  ) => {
+  updateStore: (quizId, metadata, documentId?) => {
     const quizzes = [...get().mapQuizBlockData.get(documentId)];
     if (quizzes) {
       const quizIndex = quizzes.findIndex((quiz) => quiz.id === quizId);

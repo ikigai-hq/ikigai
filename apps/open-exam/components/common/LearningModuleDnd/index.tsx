@@ -31,7 +31,7 @@ export type LearningModuleDndProps = {
 
 const debounceUpdatePositions = debounce(
   useSpaceStore.getState().updateDocumentPositions,
-  300
+  300,
 );
 
 export const LearningModuleDnd = ({
@@ -49,21 +49,20 @@ export const LearningModuleDnd = ({
   const canDnd = !keyword && userAllow(Permission.ManageSpaceContent);
   useEffect(() => {
     const items = convertToTreeItems(
-      docs
-        .filter((doc) => !doc.deletedAt),
+      docs.filter((doc) => !doc.deletedAt),
       null,
       defaultCollapsed,
       getFullPathFromNode(router.query?.documentId as string, docs)?.map(
-        (f) => f.id
+        (f) => f.id,
       ),
       convertedItems,
-      cacheFlattenTrees
+      cacheFlattenTrees,
     );
     setConvertedItems(items);
   }, [docs]);
 
   const onChangeConvertedItems = (
-    items: TreeItems<LearningModuleItemTypeWrapper>
+    items: TreeItems<LearningModuleItemTypeWrapper>,
   ) => {
     setConvertedItems(items);
     setCacheFlattenTrees(flattenTree(items));
@@ -93,7 +92,7 @@ const convertToTreeItems = (
   defaultCollapsed: boolean,
   listCollapsed: number[],
   previousItems?: TreeItems<LearningModuleItemTypeWrapper>,
-  cacheFlattenTree?: FlattenedItem<LearningModuleItemTypeWrapper>[]
+  cacheFlattenTree?: FlattenedItem<LearningModuleItemTypeWrapper>[],
 ): TreeItems<LearningModuleItemTypeWrapper> => {
   return docs
     .filter((doc) => doc.parentId === parentId)
@@ -104,9 +103,7 @@ const convertToTreeItems = (
         const item = findItemDeep(previousItems, doc.id);
         if (item) collapsed = item.collapsed;
       } else if (cacheFlattenTree && cacheFlattenTree.length > 0) {
-        const item = cacheFlattenTree.find(
-          (item) => item.id === doc.id
-        );
+        const item = cacheFlattenTree.find((item) => item.id === doc.id);
         if (item) collapsed = item.collapsed;
       }
 
@@ -116,7 +113,7 @@ const convertToTreeItems = (
         defaultCollapsed,
         listCollapsed,
         previousItems,
-        cacheFlattenTree
+        cacheFlattenTree,
       );
       const childrenTitle = children
         .map((child) => child.data.indexTitle)
@@ -134,7 +131,7 @@ const convertToTreeItems = (
 
 export const convertToUpdatePositionData = (
   items: TreeItems<LearningModuleItemTypeWrapper>,
-  parentId?: number
+  parentId?: number,
 ): UpdatePositionData[] => {
   const results = [];
   items.forEach((item, index) => {
@@ -144,7 +141,7 @@ export const convertToUpdatePositionData = (
       index,
     });
     results.push(
-      ...convertToUpdatePositionData(item.children, item.id as number)
+      ...convertToUpdatePositionData(item.children, item.id as number),
     );
   });
   return results;
@@ -152,7 +149,7 @@ export const convertToUpdatePositionData = (
 
 export const canVisibleByKeyword = (
   title: string,
-  keyword: string
+  keyword: string,
 ): boolean => {
   if (!keyword) return true;
 
@@ -161,11 +158,10 @@ export const canVisibleByKeyword = (
 
 export const filterTree = (
   trees: TreeItems<LearningModuleItemTypeWrapper>,
-  keyword: string
+  keyword: string,
 ): TreeItems<LearningModuleItemTypeWrapper> => {
-  const items = flattenTree(trees).filter(
-    (item) =>
-      canVisibleByKeyword(item.data.indexTitle, keyword)
+  const items = flattenTree(trees).filter((item) =>
+    canVisibleByKeyword(item.data.indexTitle, keyword),
   );
 
   return buildTree(items);
@@ -173,7 +169,7 @@ export const filterTree = (
 
 export const convertDocumentToLearningItemType = (
   document: IDocumentItemList,
-  childrenTitle: string
+  childrenTitle: string,
 ): LearningItemType => {
   return {
     id: document.id,
@@ -182,7 +178,7 @@ export const convertDocumentToLearningItemType = (
     index: document.index,
     documentType: document.documentType,
     indexTitle: `${document.title}#${childrenTitle}`,
-    parentId: document.parentId
+    parentId: document.parentId,
   };
 };
 

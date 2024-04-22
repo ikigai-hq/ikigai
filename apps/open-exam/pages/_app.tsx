@@ -14,6 +14,7 @@ import { messages as enMessages } from "../locales/en/messages";
 import withTheme from "styles/theme";
 import { initMixpanel } from "../util/track";
 import { Initializing } from "../components/Initializing";
+import SpaceSetting from "../components/SpaceSetting";
 
 require("../styles/globals.less");
 
@@ -62,6 +63,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             <ErrorBoundary>
               <Initializing>
                 {getLayout(<Component {...pageProps} />)}
+                <SpaceSetting />
               </Initializing>
             </ErrorBoundary>
           </GrowthBookWrapper>

@@ -25,6 +25,9 @@ export type ISpaceDetail = GetDocuments_spaceGet;
 export type ISpaceContext = {
   spaceId?: number;
   space?: ISpaceDetail;
+  spaceSettingVisible: boolean;
+  setSpaceSettingVisible: (visible: boolean) => void;
+  setSpaceName: (spaceName: string) => void;
   // Class Documents
   documents?: IDocumentItemList[];
   setDocuments: (newDocuments: IDocumentItemList[] | undefined) => void;
@@ -46,6 +49,19 @@ export type ISpaceContext = {
 const useSpaceStore = create<ISpaceContext>((set, get) => ({
   spaceId: undefined,
   space: undefined,
+  setSpaceName: (spaceName) => {
+    const currentSpace = get().space;
+    if (!currentSpace) return;
+    
+    set({
+      space: {
+        ...currentSpace,
+        name: spaceName,
+      }
+    })
+  },
+  spaceSettingVisible: false,
+  setSpaceSettingVisible: (visible) => set({ spaceSettingVisible: visible }),
   documents: undefined,
   setDocuments: (newDocuments: IDocumentItemList[] | undefined) => {
     set({

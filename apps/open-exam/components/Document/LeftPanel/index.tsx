@@ -34,7 +34,8 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
   const space = useSpaceStore((state) => state.space);
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
   const [openProfile, setOpenProfile] = useState(false);
-
+  const setSpaceSettingVisible = useSpaceStore(state => state.setSpaceSettingVisible);
+  
   const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
   return (
     <RightBodyContainer $hide={leftPanelHidden} $leftPanel={true}>
@@ -67,7 +68,11 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
               {space?.name}
             </Typography.Paragraph>
             <div>
-              <TextButtonWithHover type="text" icon={<SettingOutlined />} />
+              <TextButtonWithHover
+                type="text"
+                icon={<SettingOutlined />}
+                onClick={() => setSpaceSettingVisible(true)}
+              />
             </div>
           </SpaceInformation>
         </SpaceInfoContainer>
@@ -137,7 +142,7 @@ const UserInformation = styled.div`
 const SpaceInformation = styled.div`
   display: flex;
   padding: 0 10px 0 15px;
-  align-items: center;
+  align-items: baseline;
 `;
 
 const NoMarginDivider = styled(Divider)<{ $margin: number }>`

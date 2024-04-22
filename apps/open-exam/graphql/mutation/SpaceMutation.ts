@@ -21,6 +21,12 @@ export const DUPLICATE_SPACE_DOCUMENT = gql`
   }
 `;
 
+export const UPDATE_SPACE = gql`
+  mutation UpdateSpace($spaceId: Int!, $data: UpdateSpaceData!) {
+    spaceUpdate(spaceId: $spaceId, data: $data)
+  }
+`;
+
 export const CREATE_SPACE = gql`
   mutation CreateSpace($data: NewSpace!) {
     spaceCreate(data: $data) {

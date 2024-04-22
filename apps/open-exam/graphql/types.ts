@@ -796,6 +796,24 @@ export interface DuplicateSpaceDocumentVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: UpdateSpace
+// ====================================================
+
+export interface UpdateSpace {
+  spaceUpdate: boolean;
+}
+
+export interface UpdateSpaceVariables {
+  spaceId: number;
+  data: UpdateSpaceData;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: CreateSpace
 // ====================================================
 
@@ -2253,6 +2271,11 @@ export interface UpdatePositionData {
   id: any;
   parentId?: any | null;
   index: number;
+}
+
+export interface UpdateSpaceData {
+  name: string;
+  bannerId?: any | null;
 }
 
 export interface UpdateUserData {

@@ -10,7 +10,7 @@ import { StyledRightMenu } from "../common";
 import useDocumentStore from "context/ZustandDocumentStore";
 import { t } from "@lingui/macro";
 import { ButtonWithTooltip } from "components/common/Button";
-import { useGetSpaceMembers } from "context/ZustandClassMembeStore";
+import { useGetSpaceMembers } from "../../../context/ZustandSpaceMembeStore";
 
 export type AdminAssignmentDocumentProps = {
   document: IDocument;

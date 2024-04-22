@@ -1,4 +1,4 @@
-import useSpaceMemberStore from "context/ZustandClassMembeStore";
+import useSpaceMemberStore from "../context/ZustandSpaceMembeStore";
 import useSpaceStore from "../context/ZustandSpaceStore";
 import useDocumentStore, {
   getSpaceIdFromDocument,

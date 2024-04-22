@@ -18,7 +18,7 @@ import { Permission } from "util/permission";
 import { useQuery } from "@apollo/client";
 import { GET_SUBMISSIONS_OF_ASSIGNMENT } from "graphql/query/AssignmentQuery";
 import { AssignmentList } from "../AssignmentStudentList";
-import { useGetSpaceMembers } from "context/ZustandClassMembeStore";
+import { useGetSpaceMembers } from "../../../context/ZustandSpaceMembeStore";
 import useSpaceStore from "../../../context/ZustandSpaceStore";
 
 export type DocumentDetailProps = {

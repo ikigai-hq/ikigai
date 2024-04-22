@@ -60,7 +60,7 @@ export class CommonEmbedNode extends Node {
   handleAttributesChange = (
     node: ProseMirrorNode,
     position: number,
-    newAttrs: CommonEmbedNodeAttrs
+    newAttrs: CommonEmbedNodeAttrs,
   ) => {
     const { view } = this.editor;
     const { tr } = view.state;

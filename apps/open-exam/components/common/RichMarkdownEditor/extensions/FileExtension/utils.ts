@@ -35,6 +35,7 @@ export const getHeightByFileType = (height: number, type: string) => {
 };
 
 export const getSizeByFile = () => {
-  const width = (document.querySelector(".ProseMirror") as HTMLElement).offsetWidth;
-  return { ...DEFAULT_SIZE, width: width };
+  const width = (document.querySelector(".ProseMirror") as HTMLElement)
+    .offsetWidth;
+  return { ...DEFAULT_SIZE, width };
 };

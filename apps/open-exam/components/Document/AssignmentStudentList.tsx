@@ -69,9 +69,14 @@ export const AssignmentList = ({
   const { push } = useRouter();
   const theme = useTheme();
 
-  const startByTeacher = useDocumentStore((state) => state.startSubmissionByTeacher);
+  const startByTeacher = useDocumentStore(
+    (state) => state.startSubmissionByTeacher,
+  );
 
-  const onSelectGradeStudent = async (student: IMember, submission?: ISubmission) => {
+  const onSelectGradeStudent = async (
+    student: IMember,
+    submission?: ISubmission,
+  ) => {
     if (submission?.documentId) {
       push(formatDocumentRoute(submission.documentId));
     } else {
@@ -82,8 +87,9 @@ export const AssignmentList = ({
     }
   };
 
-  const students = members
-    .filter((member) => member.user.orgMember?.orgRole === OrgRole.STUDENT);
+  const students = members.filter(
+    (member) => member.user.orgMember?.orgRole === OrgRole.STUDENT,
+  );
   const getSubmission = (userId: number): ISubmission | undefined => {
     return submissions.find((submission) => submission.userId === userId);
   };
@@ -100,7 +106,10 @@ export const AssignmentList = ({
       key: "student",
       width: 150,
       render: (_, student: IMember) => (
-        <div onClick={() => onClickStudent(student)} style={{ cursor: "pointer" }}>
+        <div
+          onClick={() => onClickStudent(student)}
+          style={{ cursor: "pointer" }}
+        >
           <AvatarWithName
             name={student.user.orgPersonalInformation?.fullName}
             avtUrl={student.user.orgPersonalInformation?.avatar?.publicUrl}
@@ -118,7 +127,11 @@ export const AssignmentList = ({
         const submission = getSubmission(student.user.id);
 
         if (!submission || !submission.submitAt) return null;
-        return <Text>{formatDate(submission.startAt, FormatType.DateTimeFormat)}</Text>;
+        return (
+          <Text>
+            {formatDate(submission.startAt, FormatType.DateTimeFormat)}
+          </Text>
+        );
       },
     },
     {
@@ -130,7 +143,11 @@ export const AssignmentList = ({
         const submission = getSubmission(student.user.id);
 
         if (!submission || !submission.feedbackAt) return null;
-        return <Text>{formatDate(submission.feedbackAt, FormatType.DateTimeFormat)}</Text>;
+        return (
+          <Text>
+            {formatDate(submission.feedbackAt, FormatType.DateTimeFormat)}
+          </Text>
+        );
       },
     },
     {
@@ -141,7 +158,11 @@ export const AssignmentList = ({
       render: (_, student: IMember) => {
         const submission = getSubmission(student.user.id);
         const status = getSubmissionStatus(submission);
-        return <Tag color={getSubmissionColor(status)}>{formatStudentStatus(status)}</Tag>;
+        return (
+          <Tag color={getSubmissionColor(status)}>
+            {formatStudentStatus(status)}
+          </Tag>
+        );
       },
       filters: SubmissionStatusFilterList.map((status) => {
         return {
@@ -163,7 +184,11 @@ export const AssignmentList = ({
       render: (_, student: IMember) => {
         const submission = getSubmission(student.user.id);
 
-        return <Text>{submission?.finalGrade === undefined ? "-" : submission.finalGrade}</Text>;
+        return (
+          <Text>
+            {submission?.finalGrade === undefined ? "-" : submission.finalGrade}
+          </Text>
+        );
       },
     },
     {
@@ -175,7 +200,10 @@ export const AssignmentList = ({
         const submission = getSubmission(student.user.id);
 
         return (
-          <TextButtonWithHover type={"text"} onClick={() => onClickStudent(student)}>
+          <TextButtonWithHover
+            type={"text"}
+            onClick={() => onClickStudent(student)}
+          >
             {submission && (
               <Text color={theme.colors.primary[5]}>
                 <Trans>Review & Grade</Trans>

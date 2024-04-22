@@ -36,7 +36,7 @@ const Modal = ({
   const theme = useTheme();
   return (
     <ModalContainer
-      bodyStyle={{...(bodyStyle || { padding }), ...{overflow: 'auto'}}}
+      bodyStyle={{ ...(bodyStyle || { padding }), ...{ overflow: "auto" } }}
       open={visible}
       footer={null}
       width={width}

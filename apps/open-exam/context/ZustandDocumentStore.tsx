@@ -5,7 +5,8 @@ import {
   AddDocumentStandalone,
   GetDocumentDetail,
   GetDocumentDetail_documentGet as IDocument,
-  GetDocumentDetail_documentGet_assignment, NewDocument,
+  GetDocumentDetail_documentGet_assignment,
+  NewDocument,
   OrgRole,
   TeacherStartSubmission,
   UpdateAssignment,
@@ -21,9 +22,7 @@ import {
   TEACHER_START_SUBMISSION,
   UPDATE_ASSIGNMENT,
 } from "graphql/mutation";
-import {
-  GET_DOCUMENT_DETAIL,
-} from "graphql/query/DocumentQuery";
+import { GET_DOCUMENT_DETAIL } from "graphql/query/DocumentQuery";
 import { UPDATE_DOCUMENT } from "../graphql/mutation/SpaceMutation";
 import {
   ADD_DOCUMENT_STANDALONE,
@@ -167,7 +166,7 @@ export type IDocumentStore = {
   submitSubmission: () => Promise<number>;
   startSubmissionByTeacher: (
     studentId: number,
-  ) => Promise<{ id: number; documentId: string} | undefined>;
+  ) => Promise<{ id: number; documentId: string } | undefined>;
 
   // For handling case: force pause audio when closing assignment.
   isClose?: boolean;
@@ -253,7 +252,7 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
 
     set({
       masterDocumentId: masterDocument?.id,
-      masterDocument: masterDocument,
+      masterDocument,
       masterDocumentType: getDocumentType(masterDocument),
       feedbacks: parseFeedbackBlock(masterDocument?.body || ""),
       documentConfig: getDocumentConfigDefault(masterDocument),
@@ -501,6 +500,7 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
   },
 }));
 
-export const getSpaceIdFromDocument = (doc?: IDocument): number | undefined => doc.spaceId;
+export const getSpaceIdFromDocument = (doc?: IDocument): number | undefined =>
+  doc.spaceId;
 
 export default useDocumentStore;

@@ -1,4 +1,9 @@
-import { GOOGLE_DOC_REGEX, GOOGLE_PPT_REGEX, GOOGLE_SHEET_REGEX, YOUTUBE_REGEX } from "./RegexMatch";
+import {
+  GOOGLE_DOC_REGEX,
+  GOOGLE_PPT_REGEX,
+  GOOGLE_SHEET_REGEX,
+  YOUTUBE_REGEX,
+} from "./RegexMatch";
 
 const MICROSOFT_ONE_DRIVE = "https://onedrive.live.com/embed";
 

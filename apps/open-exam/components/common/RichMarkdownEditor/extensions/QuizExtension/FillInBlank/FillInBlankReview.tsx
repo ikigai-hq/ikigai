@@ -40,15 +40,13 @@ const FillInBlankReview = ({ quizId }: FillBlankReviewProps) => {
         $hasValue={!!answer}
         suppressContentEditableWarning={true}
       >
-        {answer.replace(/(?:\r\n|\r|\n)/g, ' ')}
+        {answer.replace(/(?:\r\n|\r|\n)/g, " ")}
       </InputFillInBlank>
-      {
-        isCorrect ? (
-          <CheckCircleOutlined style={{ color: "#52C41A" }} />
-        ) : (
-          <CloseCircleOutlined style={{ color: "#FA541C" }} />
-        )
-      }
+      {isCorrect ? (
+        <CheckCircleOutlined style={{ color: "#52C41A" }} />
+      ) : (
+        <CloseCircleOutlined style={{ color: "#FA541C" }} />
+      )}
     </CustomizeTooltip>
   );
 };

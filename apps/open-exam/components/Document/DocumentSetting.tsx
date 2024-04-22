@@ -3,13 +3,20 @@ import React, { ChangeEvent, KeyboardEvent, useState } from "react";
 import { StyledTitle } from "./common";
 import { t, Trans } from "@lingui/macro";
 import useDocumentPermission from "hook/UseDocumentPermission";
-import { DocumentPermission, DocumentType, getDocumentType } from "util/permission";
+import {
+  DocumentPermission,
+  DocumentType,
+  getDocumentType,
+} from "util/permission";
 import { useRouter } from "next/router";
 import useDocumentStore from "context/ZustandDocumentStore";
 import useSpaceStore from "../../context/ZustandSpaceStore";
 import styled from "styled-components";
 import { BreakPoints } from "styles/mediaQuery";
-import { GetDocumentDetail_documentGet as IDocument, OrgRole } from "graphql/types";
+import {
+  GetDocumentDetail_documentGet as IDocument,
+  OrgRole,
+} from "graphql/types";
 import type { MenuProps } from "antd";
 import { Dropdown, Popconfirm, Space, Typography } from "antd";
 import FileUpload, { DraggerStyled } from "components/common/FileUpload";
@@ -19,7 +26,10 @@ import { PictureIcon, SettingIcon, TrashIcon } from "components/common/IconSvg";
 import { Button } from "components/common/Button";
 import useAuthUserStore from "context/ZustandAuthStore";
 import { useMutation } from "@apollo/client";
-import { DELETE_DOCUMENT_PERMANENT, RESTORE_DOCUMENT } from "../../graphql/mutation/DocumentMutation";
+import {
+  DELETE_DOCUMENT_PERMANENT,
+  RESTORE_DOCUMENT,
+} from "../../graphql/mutation/DocumentMutation";
 import { handleError } from "../../graphql/ApolloClient";
 
 interface DocumentSettingProps {
@@ -30,23 +40,27 @@ interface DocumentSettingProps {
   setIsFocusAtStart: (value: boolean) => void;
 }
 
-const DocumentSetting = ({ 
-  isNestedDoc, 
-  isReadOnly, 
-  document, 
+const DocumentSetting = ({
+  isNestedDoc,
+  isReadOnly,
+  document,
   isPublishedPage,
-  setIsFocusAtStart }: DocumentSettingProps) => {
+  setIsFocusAtStart,
+}: DocumentSettingProps) => {
   const documentId = document.id;
   const router = useRouter();
   const documentAllow = useDocumentPermission();
-  const updateDocumentLocal = useSpaceStore((state) => state.updateDocumentTitleLocal);
-  const update = useDocumentStore(state => state.update);
+  const updateDocumentLocal = useSpaceStore(
+    (state) => state.updateDocumentTitleLocal,
+  );
+  const update = useDocumentStore((state) => state.update);
   const authUser = useAuthUserStore((state) => state.currentUser);
-  const isStudent = authUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
+  const isStudent =
+    authUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
   const currentDocIdQuery = router.query.documentId as string;
-  
+
   const [documentCoverPhoto, setDocumentCoverPhoto] = useState(
-    document.coverPhotoUrl
+    document.coverPhotoUrl,
   );
   const [openAssignmentSetting, setOpenAssignmentSetting] = useState(false);
   const [restoreDocument] = useMutation(RESTORE_DOCUMENT, {
@@ -73,33 +87,34 @@ const DocumentSetting = ({
     updateDocumentLocal(document.id, value);
     update(document.id, { title: value });
   };
-  
+
   const onRestore = async () => {
     if (!document.deletedAt) return;
-    
+
     await restoreDocument({
       variables: {
         documentId: document.id,
       },
     });
-    
+
     router.reload();
   };
-  
+
   const onDeletePermanently = async () => {
     if (!document.deletedAt) return;
-    
+
     await deleteDocumentPermanently({
       variables: {
         documentId: document.id,
       },
     });
-    
+
     router.push("/");
   };
 
-  const isReadOnlyFinal = !documentAllow(DocumentPermission.EditDocument) || isReadOnly;
-  
+  const isReadOnlyFinal =
+    !documentAllow(DocumentPermission.EditDocument) || isReadOnly;
+
   // Permission check
   const docType = getDocumentType(document);
   const isAssignmentDocument = docType === DocumentType.Assignment;
@@ -128,7 +143,7 @@ const DocumentSetting = ({
     },
     {
       icon: <TrashIcon />,
-      label: (<Trans>Remove Cover</Trans>),
+      label: <Trans>Remove Cover</Trans>,
       danger: true,
       key: "2",
       onClick: () => {
@@ -137,11 +152,10 @@ const DocumentSetting = ({
       },
     },
   ];
-  
+
   return (
     <>
-      {
-        document.deletedAt &&
+      {document.deletedAt && (
         <div
           style={{
             width: "100%",
@@ -152,11 +166,9 @@ const DocumentSetting = ({
           }}
         >
           <div style={{ flex: 1 }} />
-          <div style={{ display: "flex"}}>
+          <div style={{ display: "flex" }}>
             <Typography.Text style={{ color: "white" }}>
-              <Trans>
-                This document is in the trash.
-              </Trans>
+              <Trans>This document is in the trash.</Trans>
             </Typography.Text>
             <Button
               size="small"
@@ -174,46 +186,46 @@ const DocumentSetting = ({
               </Button>
             </Popconfirm>
           </div>
-          <div style={{ flex: 1 }}/>
+          <div style={{ flex: 1 }} />
         </div>
-      }
-      {
-        documentCoverPhoto && (
-          <DocumentPhotoCover>
-            <img src={documentCoverPhoto} alt="photoCover" />
-            <Dropdown
-              placement="bottomRight"
-              menu={{ items }}
-              getPopupContainer={(trigger: any) => trigger.parentNode}
-            >
-              <EditCoverButton size="large" icon={<PictureIcon />}>
-                <Trans>Edit Cover</Trans>
-              </EditCoverButton>
-            </Dropdown>
-          </DocumentPhotoCover>
-        )
-      }
+      )}
+      {documentCoverPhoto && (
+        <DocumentPhotoCover>
+          <img src={documentCoverPhoto} alt="photoCover" />
+          <Dropdown
+            placement="bottomRight"
+            menu={{ items }}
+            getPopupContainer={(trigger: any) => trigger.parentNode}
+          >
+            <EditCoverButton size="large" icon={<PictureIcon />}>
+              <Trans>Edit Cover</Trans>
+            </EditCoverButton>
+          </Dropdown>
+        </DocumentPhotoCover>
+      )}
       <DocumentTitle>
-        {!isPublishedPage && !isReadOnlyFinal && documentAllow(DocumentPermission.ManageDocument) && !documentCoverPhoto && (
-          <AddCoverButton>
-            <FileUpload
-              handleAddFileUuid={(newPhotoCover) => {
-                const photoCover =
-                  newPhotoCover as FileUploadResponse;
-                setDocumentCoverPhoto(photoCover.publicUrl);
-                update(document.id, { coverPhotoId: photoCover.uuid });
-              }}
-              acceptType="image/png, image/jpg, image/jpeg"
-              isPublic={true}
-              multiple={false}
-              showProgress={false}
-            >
-              <Button size="large" type="dashed" icon={<PictureIcon />}>
-                <Trans>Add Cover</Trans>
-              </Button>
-            </FileUpload>
-          </AddCoverButton>
-        )}
+        {!isPublishedPage &&
+          !isReadOnlyFinal &&
+          documentAllow(DocumentPermission.ManageDocument) &&
+          !documentCoverPhoto && (
+            <AddCoverButton>
+              <FileUpload
+                handleAddFileUuid={(newPhotoCover) => {
+                  const photoCover = newPhotoCover as FileUploadResponse;
+                  setDocumentCoverPhoto(photoCover.publicUrl);
+                  update(document.id, { coverPhotoId: photoCover.uuid });
+                }}
+                acceptType="image/png, image/jpg, image/jpeg"
+                isPublic={true}
+                multiple={false}
+                showProgress={false}
+              >
+                <Button size="large" type="dashed" icon={<PictureIcon />}>
+                  <Trans>Add Cover</Trans>
+                </Button>
+              </FileUpload>
+            </AddCoverButton>
+          )}
         <StyledTitle
           autoSize
           bordered={false}
@@ -228,10 +240,10 @@ const DocumentSetting = ({
         <Space style={{ marginTop: 10 }}>
           {isAssignmentDocument && !isStudent && !isReadOnlyFinal && (
             <Button
-              onClick={() => setOpenAssignmentSetting(true)} 
-              className="assignment-settings" 
-              size="large" 
-              icon={<SettingIcon />} 
+              onClick={() => setOpenAssignmentSetting(true)}
+              className="assignment-settings"
+              size="large"
+              icon={<SettingIcon />}
               type="text"
             >
               <Trans>Assignment Settings</Trans>
@@ -305,8 +317,8 @@ const DocumentTitle = styled.div<{ $isHighlight?: boolean }>`
     }
 
     .assignment-settings {
-      background: #ECFFF4;
-      color: #0D715F;
+      background: #ecfff4;
+      color: #0d715f;
     }
 
     &:hover {
@@ -323,7 +335,8 @@ const DocumentTitle = styled.div<{ $isHighlight?: boolean }>`
 
 const EditCoverButton = styled(Button)`
   &&& {
-    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
+    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px,
+      rgba(15, 15, 15, 0.1) 0px 2px 4px;
     height: 34px;
     position: absolute;
     bottom: 16px;
@@ -368,7 +381,7 @@ const DocumentPhotoCover = styled.div`
       height: 16px;
       margin-inline-end: 4px;
     }
-  
+
     &:hover {
       ${EditCoverButton} {
         opacity: 1;

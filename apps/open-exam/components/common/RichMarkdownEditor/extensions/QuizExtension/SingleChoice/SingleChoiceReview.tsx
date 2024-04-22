@@ -16,13 +16,19 @@ const SingleChoiceReview = ({ attrs }: SingleChoiceReviewProps) => {
   const quizzes = useQuizStore((state) => state.quizzes);
 
   const quizInfo = quizzes.get(attrs.quizId);
-  const options = quizInfo?.structure?.quizBody ? [...quizInfo.structure.quizBody] : [];
+  const options = quizInfo?.structure?.quizBody
+    ? [...quizInfo.structure.quizBody]
+    : [];
   const reviewingSubmissionUserId = masterDocument?.submission?.user?.id;
-  const answerInfo = quizInfo?.answers?.find((a) => a.userId === reviewingSubmissionUserId);
+  const answerInfo = quizInfo?.answers?.find(
+    (a) => a.userId === reviewingSubmissionUserId,
+  );
   const indexAnswer = options.indexOf(answerInfo?.answer?.answer);
   const isCorrectAnswer = answerInfo?.isCorrect;
   const explanation = quizInfo?.structureExplanation;
-  const wrongMessage = `${t`Wrong! Correct answer is`} "${options[quizInfo?.structureAnswer?.correctOption || 0]}"`;
+  const wrongMessage = `${t`Wrong! Correct answer is`} "${
+    options[quizInfo?.structureAnswer?.correctOption || 0]
+  }"`;
 
   return (
     <div>
@@ -38,11 +44,21 @@ const SingleChoiceReview = ({ attrs }: SingleChoiceReviewProps) => {
         </Radio.Group>
       </div>
       {isCorrectAnswer && (
-        <Alert message={explanation ? `${t`Correct. Explain:`} ${explanation}` : t`Correct`} type="success" showIcon />
+        <Alert
+          message={
+            explanation ? `${t`Correct. Explain:`} ${explanation}` : t`Correct`
+          }
+          type="success"
+          showIcon
+        />
       )}
       {!isCorrectAnswer && (
         <Alert
-          message={explanation ? `${wrongMessage}. ${t`Explain`}: ${explanation}` : wrongMessage}
+          message={
+            explanation
+              ? `${wrongMessage}. ${t`Explain`}: ${explanation}`
+              : wrongMessage
+          }
           type="error"
           showIcon
         />

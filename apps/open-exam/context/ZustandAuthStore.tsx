@@ -1,7 +1,7 @@
 import create from "zustand";
 
-import {OrgRole, UserMe,} from "../graphql/types";
-import {cloneDeep} from "lodash";
+import { OrgRole, UserMe } from "../graphql/types";
+import { cloneDeep } from "lodash";
 
 export type UserCheckHelper = {
   isStudent: boolean;
@@ -9,9 +9,9 @@ export type UserCheckHelper = {
 };
 
 export type IStore = {
-  role: OrgRole,
-  orgId?: number,
-  setOrgId: (orgId?: number) => void,
+  role: OrgRole;
+  orgId?: number;
+  setOrgId: (orgId?: number) => void;
   currentUser: UserMe | undefined;
   checkHelper: UserCheckHelper;
   setCurrentUser: (currentUser: UserMe | undefined) => void;
@@ -34,7 +34,8 @@ const useAuthUserStore = create<IStore>((set, get) => ({
       currentUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
     const isTeacher =
       currentUser?.userMe?.activeUserAuth?.orgRole === OrgRole.TEACHER;
-    const role = currentUser?.userMe?.activeUserAuth?.orgRole || OrgRole.STUDENT;
+    const role =
+      currentUser?.userMe?.activeUserAuth?.orgRole || OrgRole.STUDENT;
 
     const checkHelper = {
       isStudent,
@@ -50,11 +51,11 @@ const useAuthUserStore = create<IStore>((set, get) => ({
   setProfile: (firstName, lastName) => {
     const currentUser = get().currentUser;
     if (!currentUser) return;
-    
+
     currentUser.userMe.firstName = firstName;
     currentUser.userMe.lastName = lastName;
     set({ currentUser });
-  }
+  },
 }));
 
 export default useAuthUserStore;

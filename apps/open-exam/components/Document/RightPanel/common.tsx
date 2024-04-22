@@ -28,7 +28,7 @@ export const QuestionPanelContainer = styled.div`
 `;
 
 export const PanelTitle = styled(Typography.Text)`
-  color: var(--gray-gray-7, #888E9C);
+  color: var(--gray-gray-7, #888e9c);
   font-size: 13px;
   font-style: normal;
   font-weight: 500;

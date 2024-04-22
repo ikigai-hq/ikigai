@@ -19,7 +19,7 @@ export function getProjection<T>(
   activeId: UniqueIdentifier | null,
   overId: UniqueIdentifier | null,
   dragOffset: number,
-  indentationWidth: number
+  indentationWidth: number,
 ) {
   _revertLastChanges();
   _revertLastChanges = () => {};
@@ -113,7 +113,7 @@ function flatten<T extends Record<string, any>>(
   items: TreeItems<T>,
   parentId: UniqueIdentifier | null = null,
   depth = 0,
-  parent: FlattenedItem<T> | null = null
+  parent: FlattenedItem<T> | null = null,
 ): FlattenedItem<T>[] {
   return items.reduce<FlattenedItem<T>[]>((acc, item, index) => {
     const flattenedItem: FlattenedItem<T> = {
@@ -122,7 +122,7 @@ function flatten<T extends Record<string, any>>(
       depth,
       index,
       isLast: items.length === index + 1,
-      parent: parent,
+      parent,
     };
     return [
       ...acc,
@@ -133,13 +133,13 @@ function flatten<T extends Record<string, any>>(
 }
 
 export function flattenTree<T extends Record<string, any>>(
-  items: TreeItems<T>
+  items: TreeItems<T>,
 ): FlattenedItem<T>[] {
   return flatten(items);
 }
 
 export function buildTree<T extends Record<string, any>>(
-  flattenedItems: FlattenedItem<T>[]
+  flattenedItems: FlattenedItem<T>[],
 ): TreeItems<T> {
   const root: TreeItem<T> = { id: "root", children: [] } as any;
   const nodes: Record<string, TreeItem<T>> = { [root.id]: root };
@@ -163,7 +163,7 @@ export function findItem<T>(items: TreeItem<T>[], itemId: UniqueIdentifier) {
 
 export function findItemDeep<T extends Record<string, any>>(
   items: TreeItems<T>,
-  itemId: UniqueIdentifier
+  itemId: UniqueIdentifier,
 ): TreeItem<T> | undefined {
   for (const item of items) {
     const { id, children } = item;
@@ -186,7 +186,7 @@ export function findItemDeep<T extends Record<string, any>>(
 
 export function removeItem<T extends Record<string, any>>(
   items: TreeItems<T>,
-  id: string
+  id: string,
 ) {
   const newItems = [];
 
@@ -207,12 +207,12 @@ export function removeItem<T extends Record<string, any>>(
 
 export function setProperty<
   TData extends Record<string, any>,
-  T extends keyof TreeItem<TData>
+  T extends keyof TreeItem<TData>,
 >(
   items: TreeItems<TData>,
   id: string,
   property: T,
-  setter: (value: TreeItem<TData>[T]) => TreeItem<TData>[T]
+  setter: (value: TreeItem<TData>[T]) => TreeItem<TData>[T],
 ) {
   for (const item of items) {
     if (item.id === id) {
@@ -240,7 +240,7 @@ function countChildren<T>(items: TreeItem<T>[], count = 0): number {
 
 export function getChildCount<T extends Record<string, any>>(
   items: TreeItems<T>,
-  id: UniqueIdentifier
+  id: UniqueIdentifier,
 ) {
   if (!id) {
     return 0;
@@ -253,7 +253,7 @@ export function getChildCount<T extends Record<string, any>>(
 
 export function removeChildrenOf<T>(
   items: FlattenedItem<T>[],
-  ids: UniqueIdentifier[]
+  ids: UniqueIdentifier[],
 ) {
   const excludeParentIds = [...ids];
 
@@ -270,7 +270,8 @@ export function removeChildrenOf<T>(
 }
 
 export function getFullPathFromNode(
-  id: string, docs: IDocumentItemList[],
+  id: string,
+  docs: IDocumentItemList[],
 ): IDocumentItemList[] {
   let fullPath: IDocumentItemList[] = [];
   if (id) {

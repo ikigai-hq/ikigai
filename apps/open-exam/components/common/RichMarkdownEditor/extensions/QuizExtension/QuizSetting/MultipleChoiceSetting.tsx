@@ -22,7 +22,9 @@ const MultipleChoiceSetting = (props: MultipleChoiceSettingProps) => {
 
   const [options, setOptions] = useState<string[]>(quizBody);
 
-  const [correctOptions, setCorrectOptions] = useState<number[] | undefined>(quizAnswer.correctOptions || []);
+  const [correctOptions, setCorrectOptions] = useState<number[] | undefined>(
+    quizAnswer.correctOptions || [],
+  );
 
   useEffect(() => {
     onChangeBody(options);
@@ -74,7 +76,11 @@ const MultipleChoiceSetting = (props: MultipleChoiceSettingProps) => {
         After providing possible answers, select the correct options.
       </Trans>
       <Checkbox.Group style={{ width: "100%" }} value={correctOptions}>
-        <Space direction="vertical" style={{ width: "100%" }} key={options.length}>
+        <Space
+          direction="vertical"
+          style={{ width: "100%" }}
+          key={options.length}
+        >
           {options.map((option, index) => (
             <StyledCheckbox
               key={index}

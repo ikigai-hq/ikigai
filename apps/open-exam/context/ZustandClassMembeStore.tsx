@@ -49,10 +49,9 @@ const useSpaceMemberStore = create<SpaceMemberContext>((set, get) => ({
 }));
 
 export const useGetSpaceMembers = (spaceId?: number, filterRole?: OrgRole) => {
-  const members = useSpaceMemberStore(state => state.data.get(spaceId));
-  const filteredMembers = members ?
-    Array.from(members.values())
-      .filter((member) => {
+  const members = useSpaceMemberStore((state) => state.data.get(spaceId));
+  const filteredMembers = members
+    ? Array.from(members.values()).filter((member) => {
         if (!filterRole) return true;
         return member.user.orgMember.orgRole === filterRole;
       })

@@ -36,21 +36,25 @@ export type AssignmentGradeSettingTabProps = {
   onChangeValue: (key: keyof UpdateAssignmentData) => (value: any) => void;
 };
 
-const AssignmentGradeSettingTab = ({ updateData, rubric, onChangeValue }: AssignmentGradeSettingTabProps) => {
+const AssignmentGradeSettingTab = ({
+  updateData,
+  rubric,
+  onChangeValue,
+}: AssignmentGradeSettingTabProps) => {
   const { data: bandScoresData } = useQuery<GetBandScores>(GET_BAND_SCORES, {
     onError: handleError,
   });
   const [insideRubric, setInsideRubric] = useState(rubric);
   const selectedBandScore = bandScoresData?.assignmentGetBandScores.find(
-    (bandScore) => bandScore.id === updateData.bandScoreId
+    (bandScore) => bandScore.id === updateData.bandScoreId,
   );
   const [openRubricManagement, setOpenRubricManagement] = useState(false);
   const [viewRubric, setViewRubric] = useState(false);
-  
+
   useEffect(() => {
     setInsideRubric(rubric);
   }, [rubric]);
-  
+
   const bandscoreColumns = [
     {
       title: t`Correct answers`,
@@ -68,10 +72,10 @@ const AssignmentGradeSettingTab = ({ updateData, rubric, onChangeValue }: Assign
       key: "score",
     },
   ];
-  
+
   let weightingIntoFinalGrade = updateData.weightingIntoFinalGrade * 100;
-  weightingIntoFinalGrade =  roundRealNumber(weightingIntoFinalGrade);
-  
+  weightingIntoFinalGrade = roundRealNumber(weightingIntoFinalGrade);
+
   return (
     <div>
       <TitleSettingSection>
@@ -80,16 +84,12 @@ const AssignmentGradeSettingTab = ({ updateData, rubric, onChangeValue }: Assign
       <div>
         {updateData.gradedType === GradeType.NON_GRADE && (
           <Typography.Text type="secondary">
-            <Trans>
-              This assignment will not be counted into final grade.
-            </Trans>
+            <Trans>This assignment will not be counted into final grade.</Trans>
           </Typography.Text>
         )}
         {updateData.gradedType === GradeType.GRADE && (
           <Typography.Text type="secondary">
-            <Trans>
-              This assignment will be counted into final grade.
-            </Trans>
+            <Trans>This assignment will be counted into final grade.</Trans>
           </Typography.Text>
         )}
       </div>
@@ -106,13 +106,14 @@ const AssignmentGradeSettingTab = ({ updateData, rubric, onChangeValue }: Assign
           </Radio>
         </Space>
       </Radio.Group>
-      {
-        updateData.gradedType === GradeType.GRADE &&
+      {updateData.gradedType === GradeType.GRADE && (
         <div>
           <InputNumber
             style={{ width: "170px", marginTop: "10px" }}
             suffix={
-              <Typography.Text type="secondary"><Trans>% of final grade</Trans></Typography.Text>
+              <Typography.Text type="secondary">
+                <Trans>% of final grade</Trans>
+              </Typography.Text>
             }
             min={0}
             max={100}
@@ -123,7 +124,7 @@ const AssignmentGradeSettingTab = ({ updateData, rubric, onChangeValue }: Assign
             }}
           />
         </div>
-      }
+      )}
       <Divider />
       <TitleSettingSection>
         <Trans>Method</Trans>
@@ -146,26 +147,23 @@ const AssignmentGradeSettingTab = ({ updateData, rubric, onChangeValue }: Assign
       </Radio.Group>
       <div style={{ marginTop: "5px" }}>
         <Typography.Text type="secondary">
-          {
-            updateData.gradeMethod === GradeMethod.MANUAL &&
+          {updateData.gradeMethod === GradeMethod.MANUAL && (
             <Trans>
-              Open Exam will try to pre-calculate score of submissions.
-              But teacher need to review submission and feedback to student.
+              Open Exam will try to pre-calculate score of submissions. But
+              teacher need to review submission and feedback to student.
             </Trans>
-          }
-          {
-            updateData.gradeMethod === GradeMethod.AUTO_GRADE &&
+          )}
+          {updateData.gradeMethod === GradeMethod.AUTO_GRADE && (
             <Trans>
               Open Exam will auto calculate score and release to student.
             </Trans>
-          }
-          {
-            updateData.gradeMethod === GradeMethod.RUBRIC &&
+          )}
+          {updateData.gradeMethod === GradeMethod.RUBRIC && (
             <Trans>
-              Setup the rubric for this assignment.
-              Teacher will grade submissions by following the rubric criteria.
+              Setup the rubric for this assignment. Teacher will grade
+              submissions by following the rubric criteria.
             </Trans>
-          }
+          )}
         </Typography.Text>
       </div>
       {updateData.gradeMethod !== GradeMethod.RUBRIC && (
@@ -183,10 +181,7 @@ const AssignmentGradeSettingTab = ({ updateData, rubric, onChangeValue }: Assign
               placeholder={t`Select a bandscore`}
             >
               {bandScoresData?.assignmentGetBandScores.map((bandScore) => (
-                <Select.Option
-                  value={bandScore.id}
-                  key={bandScore.id}
-                >
+                <Select.Option value={bandScore.id} key={bandScore.id}>
                   {bandScore.name}
                 </Select.Option>
               ))}
@@ -210,8 +205,7 @@ const AssignmentGradeSettingTab = ({ updateData, rubric, onChangeValue }: Assign
             <Trans>Rubric Config</Trans>
           </Typography.Title>
           <div style={{ display: "flex" }}>
-            {
-              insideRubric &&
+            {insideRubric && (
               <Tag
                 color="success"
                 style={{
@@ -223,11 +217,8 @@ const AssignmentGradeSettingTab = ({ updateData, rubric, onChangeValue }: Assign
               >
                 {insideRubric.name}
               </Tag>
-            }
-            <Tooltip
-              title={t`Change or Edit`}
-              arrow={false}
-            >
+            )}
+            <Tooltip title={t`Change or Edit`} arrow={false}>
               <TextButtonWithHover
                 size="small"
                 icon={<UnorderedListOutlined />}
@@ -248,14 +239,13 @@ const AssignmentGradeSettingTab = ({ updateData, rubric, onChangeValue }: Assign
             visible={openRubricManagement}
             onClose={() => setOpenRubricManagement(false)}
           />
-          {
-            rubric && viewRubric &&
+          {rubric && viewRubric && (
             <EditRubric
               visible={viewRubric}
               onClose={() => setViewRubric(false)}
               rubric={rubric}
             />
-          }
+          )}
         </div>
       )}
     </div>

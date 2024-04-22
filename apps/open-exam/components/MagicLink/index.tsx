@@ -1,21 +1,24 @@
 import { Trans, t } from "@lingui/macro";
-import {Button, Input, Typography} from "antd";
+import { Button, Input, Typography } from "antd";
 import { useMutation } from "@apollo/client";
 import styled from "styled-components";
 import toast from "react-hot-toast";
-import {useState} from "react";
+import { useState } from "react";
 
-import {handleError} from "graphql/ApolloClient";
-import {SEND_MAGIC_LINK} from "graphql/mutation/UserMutation";
-import {SendMagicLink} from "graphql/types";
+import { handleError } from "graphql/ApolloClient";
+import { SEND_MAGIC_LINK } from "graphql/mutation/UserMutation";
+import { SendMagicLink } from "graphql/types";
 import validator from "validator";
 
 const MagicLink = () => {
   const [email, setEmail] = useState("");
-  const [sendMagicLink, { loading }] = useMutation<SendMagicLink>(SEND_MAGIC_LINK, {
-    onError: handleError,
-  });
-  
+  const [sendMagicLink, { loading }] = useMutation<SendMagicLink>(
+    SEND_MAGIC_LINK,
+    {
+      onError: handleError,
+    },
+  );
+
   const send = async () => {
     if (!validator.isEmail(email)) {
       toast.error(t`Wrong email format!`);
@@ -23,7 +26,7 @@ const MagicLink = () => {
     }
     const { data } = await sendMagicLink({
       variables: {
-        email
+        email,
       },
     });
     if (data) {
@@ -34,28 +37,25 @@ const MagicLink = () => {
       }
     }
   };
-  
+
   return (
     <Container>
       <Typography.Text strong>
-        <Trans>
-          Email
-        </Trans>
+        <Trans>Email</Trans>
       </Typography.Text>
       <Input
         placeholder={t`Type your email!`}
         value={email}
-        onChange={e => setEmail(e.currentTarget.value)}
+        onChange={(e) => setEmail(e.currentTarget.value)}
       />
       <DescriptionDiv>
         <Typography.Text type="secondary">
-          We will send a link to your email.
-          You can access your space by open the magic link inside email.
+          We will send a link to your email. You can access your space by open
+          the magic link inside email.
         </Typography.Text>
       </DescriptionDiv>
       <DescriptionDiv>
-        <Typography.Text type="secondary">
-        </Typography.Text>
+        <Typography.Text type="secondary"></Typography.Text>
       </DescriptionDiv>
       <Button
         type="primary"

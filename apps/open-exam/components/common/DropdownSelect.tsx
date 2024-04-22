@@ -53,7 +53,7 @@ const DropdownSelect: React.FC<Props> = ({
     <Dropdown
       trigger={["click"]}
       placement="bottomRight"
-      menu={{ items: items, style: { minWidth: "auto !important" } }}
+      menu={{ items, style: { minWidth: "auto !important" } }}
       overlayStyle={{ width }}
     >
       <Selected>

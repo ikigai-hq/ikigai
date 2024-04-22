@@ -68,10 +68,14 @@ const AnalyserCanvas = ({ audioStream }: Props) => {
       }}
     >
       <canvas
-        width={(refContainter?.current?.offsetWidth)}
+        width={refContainter?.current?.offsetWidth}
         height="100"
         ref={analyserCanvas}
-        style={{ position: "absolute", pointerEvents: "none", opacity: refContainter?.current ? 1 : 0 }}
+        style={{
+          position: "absolute",
+          pointerEvents: "none",
+          opacity: refContainter?.current ? 1 : 0,
+        }}
       />
     </div>
   );

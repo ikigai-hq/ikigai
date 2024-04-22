@@ -104,9 +104,7 @@ const Editor = ({
           {!isViewInMobileApp && (
             <>
               <Head>
-                <title>
-                  {document.title || ""} - Open Exam
-                </title>
+                <title>{document.title || ""} - Open Exam</title>
               </Head>
               {!isNestedDoc && (
                 <>

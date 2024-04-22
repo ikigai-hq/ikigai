@@ -15,15 +15,24 @@ interface Props {
 const ImagePreview: React.FC<Props> = (props) => {
   const {
     fileItem,
-    isFullScreen, downloadUrl, zoom, handleFullScreen, handleZoom } =
-    props;
+    isFullScreen,
+    downloadUrl,
+    zoom,
+    handleFullScreen,
+    handleZoom,
+  } = props;
   const { fileId } = fileItem;
 
-  // Image 
+  // Image
   const imageRef = useRef(null);
   const [offsetX, setOffsetX] = useState(0);
   const [offsetY, setOffsetY] = useState(0);
-  const [imageAttrs, setimageAttrs] = useState({ x: 0, y: 0, width: "", height: "" });
+  const [imageAttrs, setimageAttrs] = useState({
+    x: 0,
+    y: 0,
+    width: "",
+    height: "",
+  });
   const [isMouseDown, setisMouseDown] = useState(false);
   const [startX, setStartX] = useState(0);
   const [startY, setStartY] = useState(0);
@@ -31,13 +40,20 @@ const ImagePreview: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if (imageRef.current && isFullScreen) {
-      const ratio = imageRef.current.naturalWidth / imageRef.current.naturalHeight;
-      const isHorizontal = (window.innerHeight * ratio) > window.innerWidth;
+      const ratio =
+        imageRef.current.naturalWidth / imageRef.current.naturalHeight;
+      const isHorizontal = window.innerHeight * ratio > window.innerWidth;
       setimageAttrs({
-        x: ((isHorizontal ? window.innerWidth : window.innerHeight * ratio) * 2 - window.innerWidth) / 4,
-        y: ((isHorizontal ? window.innerWidth / ratio : window.innerHeight) * 2 - window.innerHeight) / 4,
+        x:
+          ((isHorizontal ? window.innerWidth : window.innerHeight * ratio) * 2 -
+            window.innerWidth) /
+          4,
+        y:
+          ((isHorizontal ? window.innerWidth / ratio : window.innerHeight) * 2 -
+            window.innerHeight) /
+          4,
         width: isHorizontal ? "100%" : "auto",
-        height: isHorizontal ? "auto" : "100%"
+        height: isHorizontal ? "auto" : "100%",
       });
     }
   }, [isFullScreen]);
@@ -68,18 +84,20 @@ const ImagePreview: React.FC<Props> = (props) => {
   const handleMoveImage = (deltaX, deltaY, isForce = false) => {
     if (zoom > 1 || isForce) {
       setOffsetX((prevX) => {
-        if ((prevX + deltaX) >= 0) return Math.min(prevX + deltaX, Math.abs(imageAttrs.x));
+        if (prevX + deltaX >= 0)
+          return Math.min(prevX + deltaX, Math.abs(imageAttrs.x));
         return Math.max(prevX + deltaX, -Math.abs(imageAttrs.x));
       });
       setOffsetY((prevY) => {
-        if ((prevY + deltaY) >= 0) return Math.min(prevY + deltaY, Math.abs(imageAttrs.y));
+        if (prevY + deltaY >= 0)
+          return Math.min(prevY + deltaY, Math.abs(imageAttrs.y));
         return Math.max(prevY + deltaY, -Math.abs(imageAttrs.y));
       });
     }
   };
 
   const handleMouseDown = (e) => {
-    const timer =setTimeout(() => {
+    const timer = setTimeout(() => {
       setisMouseDown(true);
       setStartX(e.clientX);
       setStartY(e.clientY);
@@ -107,7 +125,10 @@ const ImagePreview: React.FC<Props> = (props) => {
   };
 
   return (
-    <ImagePreviewWrapper $isFullScreen={isFullScreen} onClick={() => handleFullScreen(false)}>
+    <ImagePreviewWrapper
+      $isFullScreen={isFullScreen}
+      onClick={() => handleFullScreen(false)}
+    >
       <MaskImage
         $zoom={zoom}
         $offsetX={offsetX}
@@ -133,9 +154,9 @@ const ImagePreview: React.FC<Props> = (props) => {
 };
 
 const ImagePreviewWrapper = styled.div<{ $isFullScreen: boolean }>`
-  width: ${props => props.$isFullScreen ? "100vw" : "auto"};
+  width: ${(props) => (props.$isFullScreen ? "100vw" : "auto")};
   height: 100%;
-  position: ${props => props.$isFullScreen ? "fixed" : "unset"};
+  position: ${(props) => (props.$isFullScreen ? "fixed" : "unset")};
   top: 0;
   left: 0;
   display: flex;
@@ -144,30 +165,39 @@ const ImagePreviewWrapper = styled.div<{ $isFullScreen: boolean }>`
 `;
 
 const MaskImage = styled.div<{
-  $zoom: number,
-  $offsetX: number,
-  $offsetY: number,
-  $isFullScreen: boolean,
-  $imageAttrs: any
+  $zoom: number;
+  $offsetX: number;
+  $offsetY: number;
+  $isFullScreen: boolean;
+  $imageAttrs: any;
 }>`
   height: 100%;
   width: 100%;
   text-align: center;
   box-sizing: border-box;
-  transform: ${props => `scale(${props.$zoom}) translateX(${props.$offsetX}px) translateY(${props.$offsetY}px)`};
+  transform: ${(props) =>
+    `scale(${props.$zoom}) translateX(${props.$offsetX}px) translateY(${props.$offsetY}px)`};
   transition-property: opacity, transform;
   transition-duration: 270ms;
   transition-timing-function: ease;
 
   img {
     object-fit: contain;
-    cursor: ${props => props.$isFullScreen ? (props.$zoom === 2 ? "zoom-out" : "zoom-in") : "pointer"};
-    position: ${props => props.$isFullScreen ? "absolute" : "unset"};
+    cursor: ${(props) =>
+      props.$isFullScreen
+        ? props.$zoom === 2
+          ? "zoom-out"
+          : "zoom-in"
+        : "pointer"};
+    position: ${(props) => (props.$isFullScreen ? "absolute" : "unset")};
     top: 50%;
     left: 50%;
-    transform: ${props => props.$isFullScreen ? "translateX(-50%) translateY(-50%)" : "unset"};
-    height: ${props => props.$isFullScreen ? props.$imageAttrs.height : "100%"};
-    width: ${props => props.$isFullScreen ? props.$imageAttrs.width : "auto"}
+    transform: ${(props) =>
+      props.$isFullScreen ? "translateX(-50%) translateY(-50%)" : "unset"};
+    height: ${(props) =>
+      props.$isFullScreen ? props.$imageAttrs.height : "100%"};
+    width: ${(props) =>
+      props.$isFullScreen ? props.$imageAttrs.width : "auto"};
   }
 `;
 

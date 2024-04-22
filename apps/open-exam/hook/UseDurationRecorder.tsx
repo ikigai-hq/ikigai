@@ -1,9 +1,9 @@
-import {useStopwatch} from "react-timer-hook";
-import {useEffect} from "react";
+import { useStopwatch } from "react-timer-hook";
+import { useEffect } from "react";
 
 const useDurationRecorder = (isRecording: boolean) => {
   const { start, pause, seconds, minutes, hours } = useStopwatch();
-  
+
   useEffect(() => {
     if (isRecording) {
       start();

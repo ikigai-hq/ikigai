@@ -100,7 +100,7 @@ const FileUpload: React.FC<Props> = ({
 
     const fileUpload: UploadingInformation = {
       uploadingFile: file as File,
-      isPublic: isPublic,
+      isPublic,
       parentFolderId: parentFolderId || null,
     };
 

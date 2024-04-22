@@ -16,10 +16,7 @@ import { LearningItemType } from "components/common/LearningModuleDnd/types";
 import { TextButtonWithHover } from "components/common/Button";
 import { formatDocumentRoute } from "config/Routes";
 import useSpaceStore from "../../../context/ZustandSpaceStore";
-import {
-  ActionMenuDropdown,
-  IMenuItem,
-} from "../../common/ActionMenuDropdown";
+import { ActionMenuDropdown, IMenuItem } from "../../common/ActionMenuDropdown";
 import CreateContentButton from "./CreateContentButton";
 import useDocumentStore from "context/ZustandDocumentStore";
 import DocumentTypeIcon from "../DocumentTypeIcon";
@@ -82,12 +79,7 @@ const LessonItem = ({
         // Found the first non deleted one
         const otherDoc = [...docs]
           .sort((a, b) => a.index - b.index)
-          .find(
-            (doc) =>
-              !doc.deletedAt &&
-              !doc.parentId &&
-              doc.id !== item.id
-          );
+          .find((doc) => !doc.deletedAt && !doc.parentId && doc.id !== item.id);
         if (otherDoc) {
           router.push(formatDocumentRoute(otherDoc.id), undefined, {
             shallow: true,
@@ -151,7 +143,7 @@ const LessonItem = ({
   ];
 
   const active = router.query.documentId === item.id;
-  let icon = !hasChildren ? (
+  const icon = !hasChildren ? (
     <MinusDocument />
   ) : (
     <ArrowDocument

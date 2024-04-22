@@ -11,9 +11,7 @@ import { FileAttrs, FileNodeAttrs, Size } from "./type";
 import FileUpload from "../../../FileUpload";
 import { isZeroUUIDString } from "../../utils";
 import { GetFullFileInfo } from "graphql/types";
-import {
-  GET_FULL_FILE_INFO,
-} from "graphql/query";
+import { GET_FULL_FILE_INFO } from "graphql/query";
 import { handleError } from "graphql/ApolloClient";
 import Loading from "components/Loading";
 import { FileBlockHeader } from "./FileBlockHeader";
@@ -201,7 +199,7 @@ const FileBlock = ({
                 fileId: selectedFile.fileId,
                 fileName: selectedFile.name,
                 publicUrl: downloadUrl,
-                contentType: contentType,
+                contentType,
               }}
               isFullScreen={isFullScreen}
               setFullScreen={setFullScreen}

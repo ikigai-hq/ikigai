@@ -1,14 +1,9 @@
 import { Divider, Radio, Space, Typography, message } from "antd";
 import { Moment } from "moment";
-import {
-  extractSecondDuration,
-  secondDurationToMoment,
-} from "util/Time";
+import { extractSecondDuration, secondDurationToMoment } from "util/Time";
 import React, { useEffect, useState } from "react";
 
-import {
-  UpdateAssignmentData,
-} from "graphql/types";
+import { UpdateAssignmentData } from "graphql/types";
 import Modal from "components/common/Modal";
 import { Tabs } from "components/common/Tabs";
 import { Text } from "components/common/Text";
@@ -66,7 +61,8 @@ const AssignmentSetting = ({ open, onClose }: AssignmentSettingProps) => {
       preDescription: assignment?.preDescription || "",
       testDuration: assignment?.testDuration,
       forceAutoSubmit: true,
-      allowSubmissionChangeStructure: assignment?.allowSubmissionChangeStructure,
+      allowSubmissionChangeStructure:
+        assignment?.allowSubmissionChangeStructure,
       weightingIntoFinalGrade: assignment?.weightingIntoFinalGrade,
     };
   };
@@ -74,7 +70,7 @@ const AssignmentSetting = ({ open, onClose }: AssignmentSettingProps) => {
   const [loading, setLoading] = useState(false);
   const [activeKey, setActiveKey] = useState(SettingTab.BasicSetting);
   const [updateData, setUpdateData] = useState<UpdateAssignmentData>(
-    castingUpdateData()
+    castingUpdateData(),
   );
 
   useEffect(() => {
@@ -118,7 +114,6 @@ const AssignmentSetting = ({ open, onClose }: AssignmentSettingProps) => {
     : undefined;
   const limit = updateData.maxNumberOfAttempt !== null;
 
-  
   return (
     <Modal visible={open} onClose={onClose} title={"Settings"} width={865}>
       <Tabs
@@ -167,25 +162,31 @@ const AssignmentSetting = ({ open, onClose }: AssignmentSettingProps) => {
                 />
                 <Divider />
                 <TitleSettingSection>
-                  <Trans>
-                    Assignment type
-                  </Trans>
+                  <Trans>Assignment type</Trans>
                 </TitleSettingSection>
                 <Radio.Group
-                  onChange={e => onChangeValue("allowSubmissionChangeStructure")(e.target.value)}
+                  onChange={(e) =>
+                    onChangeValue("allowSubmissionChangeStructure")(
+                      e.target.value,
+                    )
+                  }
                   value={updateData.allowSubmissionChangeStructure}
                 >
                   <Space direction="vertical">
                     <Radio value={false}>
-                      <Trans>Structured Assignment</Trans><br/>
+                      <Trans>Structured Assignment</Trans>
+                      <br />
                       <Typography.Text type="secondary">
                         <Trans>Student will follow setup of teacher.</Trans>
                       </Typography.Text>
                     </Radio>
                     <Radio value={true}>
-                      <Trans>Open Assignment</Trans><br/>
+                      <Trans>Open Assignment</Trans>
+                      <br />
                       <Typography.Text type="secondary">
-                        <Trans>Student can do anything, included setup of teacher.</Trans>
+                        <Trans>
+                          Student can do anything, included setup of teacher.
+                        </Trans>
                       </Typography.Text>
                     </Radio>
                   </Space>
@@ -225,11 +226,13 @@ const AssignmentSetting = ({ open, onClose }: AssignmentSettingProps) => {
           {
             key: SettingTab.Grade,
             label: translateTab(SettingTab.Grade),
-            children: <AssignmentGradeSettingTab
-              updateData={updateData}
-              rubric={assignment?.rubric}
-              onChangeValue={onChangeValue}
-            />,
+            children: (
+              <AssignmentGradeSettingTab
+                updateData={updateData}
+                rubric={assignment?.rubric}
+                onChangeValue={onChangeValue}
+              />
+            ),
           },
         ]}
       />

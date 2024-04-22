@@ -5,7 +5,7 @@ import {
   CopyIcon,
   DeleteIcon,
   StandardIcon,
-  WideIcon
+  WideIcon,
 } from "components/common/IconSvg";
 import { Text, TextWeight } from "components/common/Text";
 import useDocumentStore, {
@@ -32,23 +32,22 @@ const DocumentMoreSetting = () => {
   const documentAllow = useDocumentPermission();
 
   const editorConfig = {
-    "size": activeDocument.editorConfig.size || EditorConfigType.DEFAULT,
-    "style": activeDocument.editorConfig.style || EditorConfigType.DEFAULT,
-    "width": activeDocument.editorConfig.width || EditorConfigType.WIDTH_STANDARD,
+    size: activeDocument.editorConfig.size || EditorConfigType.DEFAULT,
+    style: activeDocument.editorConfig.style || EditorConfigType.DEFAULT,
+    width: activeDocument.editorConfig.width || EditorConfigType.WIDTH_STANDARD,
   };
 
   const getActiveConfig = (config: string, type: string) => {
     return editorConfig[type] === config;
   };
 
-  const { duplicateDocument, deleteDocument, docs } =
-    useSpaceStore((state) => {
-      return {
-        duplicateDocument: state.duplicateDocument,
-        deleteDocument: state.deleteDocument,
-        docs: state.documents,
-      };
-    });
+  const { duplicateDocument, deleteDocument, docs } = useSpaceStore((state) => {
+    return {
+      duplicateDocument: state.duplicateDocument,
+      deleteDocument: state.deleteDocument,
+      docs: state.documents,
+    };
+  });
 
   const onDuplicate = () => {
     quickConfirmModal(
@@ -62,7 +61,7 @@ const DocumentMoreSetting = () => {
       },
     );
   };
-  
+
   const onDelete = () => {
     modal.confirm({
       zIndex: 1100,
@@ -82,15 +81,18 @@ const DocumentMoreSetting = () => {
             // Found the first non deleted one
             const otherDoc = [...docs]
               .sort((a, b) => a.index - b.index)
-              .find((doc) => !doc.deletedAt
-                && !doc.parentId && doc.id !== activeDocument.id
+              .find(
+                (doc) =>
+                  !doc.deletedAt &&
+                  !doc.parentId &&
+                  doc.id !== activeDocument.id,
               );
             if (otherDoc) {
               return router.push(formatDocumentRoute(otherDoc.id), undefined, {
                 shallow: true,
               });
             }
-            
+
             return router.push("/");
           }
         }
@@ -109,9 +111,9 @@ const DocumentMoreSetting = () => {
     useDocumentStore
       .getState()
       .update(
-        activeDocument.id, 
+        activeDocument.id,
         { editorConfig: { ...activeDocument.editorConfig, ...editorConfig } },
-        !documentAllow(DocumentPermission.ManageDocument)
+        !documentAllow(DocumentPermission.ManageDocument),
       );
   };
 
@@ -124,10 +126,10 @@ const DocumentMoreSetting = () => {
         <Space.Compact block style={{ justifyContent: "space-between" }}>
           <StyleButton
             $font="Inter"
-            $active={
-              getActiveConfig(EditorConfigType.DEFAULT, "style")
+            $active={getActiveConfig(EditorConfigType.DEFAULT, "style")}
+            onClick={() =>
+              onUpdateDocumentConfig({ style: EditorConfigType.DEFAULT })
             }
-            onClick={() => onUpdateDocumentConfig({ style: EditorConfigType.DEFAULT })}
           >
             <Text level={7}>Aa</Text>
             <Text level={1} weight={TextWeight.medium}>
@@ -137,7 +139,9 @@ const DocumentMoreSetting = () => {
           <StyleButton
             $font="Roboto Serif"
             $active={getActiveConfig(EditorConfigType.STYLE_SERIF, "style")}
-            onClick={() => onUpdateDocumentConfig({ style: EditorConfigType.STYLE_SERIF })}
+            onClick={() =>
+              onUpdateDocumentConfig({ style: EditorConfigType.STYLE_SERIF })
+            }
           >
             <Text level={7}>Aa</Text>
             <Text level={1} weight={TextWeight.medium}>
@@ -147,7 +151,9 @@ const DocumentMoreSetting = () => {
           <StyleButton
             $font="Roboto Mono"
             $active={getActiveConfig(EditorConfigType.STYLE_MONO, "style")}
-            onClick={() => onUpdateDocumentConfig({ style: EditorConfigType.STYLE_MONO })}
+            onClick={() =>
+              onUpdateDocumentConfig({ style: EditorConfigType.STYLE_MONO })
+            }
           >
             <Text level={7}>Aa</Text>
             <Text level={1} weight={TextWeight.medium}>
@@ -161,17 +167,21 @@ const DocumentMoreSetting = () => {
           <Trans>Size</Trans>
         </Text>
         <GroupButton>
-          <StyleButton 
+          <StyleButton
             $active={getActiveConfig(EditorConfigType.DEFAULT, "size")}
-            onClick={() => onUpdateDocumentConfig({ size: EditorConfigType.DEFAULT })}
+            onClick={() =>
+              onUpdateDocumentConfig({ size: EditorConfigType.DEFAULT })
+            }
           >
             <SettingButton>
               <Trans>{EditorConfigType.DEFAULT}</Trans>
             </SettingButton>
           </StyleButton>
-          <StyleButton 
+          <StyleButton
             $active={getActiveConfig(EditorConfigType.SIZE_LARGE, "size")}
-            onClick={() => onUpdateDocumentConfig({ size: EditorConfigType.SIZE_LARGE })}
+            onClick={() =>
+              onUpdateDocumentConfig({ size: EditorConfigType.SIZE_LARGE })
+            }
           >
             <SettingButton>
               <Trans>{EditorConfigType.SIZE_LARGE}</Trans>
@@ -184,9 +194,11 @@ const DocumentMoreSetting = () => {
           <Trans>Width</Trans>
         </Text>
         <GroupButton>
-          <StyleButton 
+          <StyleButton
             $active={getActiveConfig(EditorConfigType.WIDTH_STANDARD, "width")}
-            onClick={() => onUpdateDocumentConfig({ width: EditorConfigType.WIDTH_STANDARD })}
+            onClick={() =>
+              onUpdateDocumentConfig({ width: EditorConfigType.WIDTH_STANDARD })
+            }
           >
             <SettingButton $size="large">
               <StandardIcon />
@@ -195,9 +207,11 @@ const DocumentMoreSetting = () => {
               <Trans>{EditorConfigType.WIDTH_STANDARD}</Trans>
             </Text>
           </StyleButton>
-          <StyleButton 
+          <StyleButton
             $active={getActiveConfig(EditorConfigType.WIDTH_WIDE, "width")}
-            onClick={() => onUpdateDocumentConfig({ width: EditorConfigType.WIDTH_WIDE })}
+            onClick={() =>
+              onUpdateDocumentConfig({ width: EditorConfigType.WIDTH_WIDE })
+            }
           >
             <SettingButton $size="large">
               <WideIcon />
@@ -209,25 +223,27 @@ const DocumentMoreSetting = () => {
         </GroupButton>
       </SettingContainer>
       <div>
-        {
-          documentAllow(DocumentPermission.ManageDocument) && (
-            <>
-              <SettingContainer $gap={0} $padding="8px 0">
-                <SettingButton type="text" icon={<CopyIcon />} onClick={onDuplicate}>
-                  <Trans>Duplicate</Trans>
-                </SettingButton>
-                <SettingButton
-                  danger
-                  type="text"
-                  icon={<DeleteIcon style={{ color: theme.colors.red[4] }} />}
-                  onClick={onDelete}
-                >
-                  <Trans>Delete</Trans>
-                </SettingButton>
-              </SettingContainer>
-            </>
-          )
-        }
+        {documentAllow(DocumentPermission.ManageDocument) && (
+          <>
+            <SettingContainer $gap={0} $padding="8px 0">
+              <SettingButton
+                type="text"
+                icon={<CopyIcon />}
+                onClick={onDuplicate}
+              >
+                <Trans>Duplicate</Trans>
+              </SettingButton>
+              <SettingButton
+                danger
+                type="text"
+                icon={<DeleteIcon style={{ color: theme.colors.red[4] }} />}
+                onClick={onDelete}
+              >
+                <Trans>Delete</Trans>
+              </SettingButton>
+            </SettingContainer>
+          </>
+        )}
         <SettingContainer $padding="12px 0 0 0">
           <Text
             level={1}
@@ -314,7 +330,10 @@ const StyleButton = styled.div<{ $font?: string; $active?: boolean }>`
   }
 
   ${SettingButton} {
-    border-color: ${props => props.$active ? props.theme.colors.primary[5] : props.theme.colors.gray[4]};
+    border-color: ${(props) =>
+      props.$active
+        ? props.theme.colors.primary[5]
+        : props.theme.colors.gray[4]};
   }
 `;
 

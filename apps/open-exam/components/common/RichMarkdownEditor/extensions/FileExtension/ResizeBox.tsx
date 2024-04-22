@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Enable, Resizable, ResizeCallback, Size as SizeReiszeType } from "re-resizable";
+import {
+  Enable,
+  Resizable,
+  ResizeCallback,
+  Size as SizeReiszeType,
+} from "re-resizable";
 import { Size } from "./type";
 import {
   DEFAULT_AUDIO_BLOCK,
@@ -17,7 +22,7 @@ interface Props {
   children?: React.ReactNode;
   isPdf?: boolean;
   resizeParent?: number;
-  isFullScreen?: boolean
+  isFullScreen?: boolean;
 }
 
 const disabledResize: Enable = {
@@ -31,7 +36,6 @@ const disabledResize: Enable = {
   topLeft: false,
 };
 
-
 export const ResizeBox: React.FC<Props> = ({
   children,
   getResizableDimension,
@@ -40,18 +44,22 @@ export const ResizeBox: React.FC<Props> = ({
   isPdf,
   resizeParent,
   isAudio,
-  isFullScreen
+  isFullScreen,
 }) => {
   const [width, setWidth] = useState(initialSize.width);
   const [height, setHeight] = useState(
-    disabled ? DEFAULT_AUDIO_BLOCK : initialSize.height
+    disabled ? DEFAULT_AUDIO_BLOCK : initialSize.height,
   );
-  const aspectRatio = (width && height) ? (width / height) : (16 / 9);
+  const aspectRatio = width && height ? width / height : 16 / 9;
 
   const handleResizeStop: ResizeCallback = (event, direction, ref, d) => {
     const nWidth = width > resizeParent ? resizeParent : width;
-    const nHeight = isPdf ? height : (width > resizeParent ? resizeParent / aspectRatio : height);
-    
+    const nHeight = isPdf
+      ? height
+      : width > resizeParent
+      ? resizeParent / aspectRatio
+      : height;
+
     const updatedWidth = nWidth + d.width;
     const updatedHeight = nHeight + d.height;
 
@@ -74,13 +82,19 @@ export const ResizeBox: React.FC<Props> = ({
     const isOverSize = width > resizeParent;
     if (isFullScreen) {
       return {
-        width: 'calc(100vw - 20px)',
-        height: 'calc(100vh - 20px)'
+        width: "calc(100vw - 20px)",
+        height: "calc(100vh - 20px)",
       };
-    } 
+    }
     return {
-      width: isAudio ? '100%' : (isOverSize ? resizeParent : width),
-      height: isAudio ? '100%' : (isPdf ? height : (isOverSize ? resizeParent / aspectRatio : height)) 
+      width: isAudio ? "100%" : isOverSize ? resizeParent : width,
+      height: isAudio
+        ? "100%"
+        : isPdf
+        ? height
+        : isOverSize
+        ? resizeParent / aspectRatio
+        : height,
     };
   };
 
@@ -96,13 +110,14 @@ export const ResizeBox: React.FC<Props> = ({
       onResizeStop={handleResizeStop}
       onResize={(event, direction, ref, d) => {
         const pdfBodyEl = ref.getElementsByClassName(
-          "pdf-body-container"
+          "pdf-body-container",
         )[0] as HTMLDivElement;
 
         if (pdfBodyEl) {
           const hRatio = ref.offsetHeight / pdfBodyEl.offsetHeight;
-          pdfBodyEl.style.height = `${pdfBodyEl.offsetHeight * hRatio - SPACE_BETWEEN_HEADER_BODY - 48
-            }px`;
+          pdfBodyEl.style.height = `${
+            pdfBodyEl.offsetHeight * hRatio - SPACE_BETWEEN_HEADER_BODY - 48
+          }px`;
         }
       }}
     >

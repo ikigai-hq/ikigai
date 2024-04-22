@@ -54,12 +54,12 @@ const dropAnimation = {
 
 export type SortableTreeProps<
   TData extends Record<string, any>,
-  TElement extends HTMLElement
+  TElement extends HTMLElement,
 > = {
   items: TreeItems<TData>;
   onItemsChanged(
     items: TreeItems<TData>,
-    reason: ItemChangedReason<TData>
+    reason: ItemChangedReason<TData>,
   ): void;
   TreeItemComponent: TreeItemComponentType<TData, TElement>;
   indentationWidth?: number;
@@ -74,7 +74,7 @@ const defaultPointerSensorOptions: PointerSensorOptions = {
 };
 export function SortableTree<
   TreeItemData extends Record<string, any>,
-  TElement extends HTMLElement = HTMLDivElement
+  TElement extends HTMLElement = HTMLDivElement,
 >({
   items,
   indicator,
@@ -98,12 +98,12 @@ export function SortableTree<
     const collapsedItems = flattenedTree.reduce<UniqueIdentifier[]>(
       (acc, { children, collapsed, id }) =>
         collapsed && children?.length ? [...acc, id] : acc,
-      []
+      [],
     );
 
     return removeChildrenOf(
       flattenedTree,
-      activeId ? [activeId, ...collapsedItems] : collapsedItems
+      activeId ? [activeId, ...collapsedItems] : collapsedItems,
     );
   }, [activeId, items]);
   const projected = getProjection(
@@ -111,7 +111,7 @@ export function SortableTree<
     activeId,
     overId,
     offsetLeft,
-    indentationWidth
+    indentationWidth,
   );
   const sensorContext: SensorContext<TreeItemData> = useRef({
     items: flattenedItems,
@@ -120,13 +120,13 @@ export function SortableTree<
   const sensors = useSensors(
     useSensor(
       PointerSensor,
-      pointerSensorOptions ?? defaultPointerSensorOptions
-    )
+      pointerSensorOptions ?? defaultPointerSensorOptions,
+    ),
   );
 
   const sortedIds = useMemo(
     () => flattenedItems.map(({ id }) => id),
-    [flattenedItems]
+    [flattenedItems],
   );
   const activeItem = activeId
     ? flattenedItems.find(({ id }) => id === activeId)
@@ -149,11 +149,11 @@ export function SortableTree<
         item,
       });
     },
-    [onItemsChanged]
+    [onItemsChanged],
   );
 
   const handleCollapse = useCallback(
-    function handleCollapse(id: string) {
+    (id: string) => {
       const item = findItemDeep(itemsRef.current, id)!;
       onItemsChanged(
         setProperty(itemsRef.current, id, "collapsed", ((value: boolean) => {
@@ -161,11 +161,11 @@ export function SortableTree<
         }) as any),
         {
           type: item.collapsed ? "collapsed" : "expanded",
-          item: item,
-        }
+          item,
+        },
       );
     },
-    [onItemsChanged]
+    [onItemsChanged],
   );
 
   const announcements: Announcements = useMemo(
@@ -186,7 +186,7 @@ export function SortableTree<
         return `Moving was cancelled. ${active.id} was dropped in its original position.`;
       },
     }),
-    []
+    [],
   );
 
   return (
@@ -255,7 +255,7 @@ export function SortableTree<
                 />
               ) : null}
             </DragOverlay>,
-            document.body
+            document.body,
           )}
         </>
       </SortableContext>
@@ -307,7 +307,7 @@ export function SortableTree<
       onItemsChanged(newItems, {
         type: "dropped",
         draggedItem: newActiveItem,
-        draggedFromParent: draggedFromParent,
+        draggedFromParent,
         droppedToParent: currentParent,
       });
     }
@@ -329,7 +329,7 @@ export function SortableTree<
   function getMovementAnnouncement(
     eventName: string,
     activeId: UniqueIdentifier,
-    overId?: UniqueIdentifier
+    overId?: UniqueIdentifier,
   ) {
     if (overId && projected) {
       if (eventName !== "onDragEnd") {
@@ -339,12 +339,11 @@ export function SortableTree<
           overId === currentPosition.overId
         ) {
           return;
-        } else {
-          setCurrentPosition({
-            parentId: projected.parentId,
-            overId,
-          });
         }
+        setCurrentPosition({
+          parentId: projected.parentId,
+          overId,
+        });
       }
 
       const clonedItems: FlattenedItem<TreeItemData>[] = flattenTree(items);
@@ -361,27 +360,23 @@ export function SortableTree<
       if (!previousItem) {
         const nextItem = sortedItems[overIndex + 1];
         announcement = `${activeId} was ${movedVerb} before ${nextItem.id}.`;
+      } else if (projected.depth > previousItem.depth) {
+        announcement = `${activeId} was ${nestedVerb} under ${previousItem.id}.`;
       } else {
-        if (projected.depth > previousItem.depth) {
-          announcement = `${activeId} was ${nestedVerb} under ${previousItem.id}.`;
-        } else {
-          let previousSibling: FlattenedItem<TreeItemData> | undefined =
-            previousItem;
-          while (previousSibling && projected.depth < previousSibling.depth) {
-            const parentId: UniqueIdentifier | null = previousSibling.parentId;
-            previousSibling = sortedItems.find(({ id }) => id === parentId);
-          }
+        let previousSibling: FlattenedItem<TreeItemData> | undefined =
+          previousItem;
+        while (previousSibling && projected.depth < previousSibling.depth) {
+          const parentId: UniqueIdentifier | null = previousSibling.parentId;
+          previousSibling = sortedItems.find(({ id }) => id === parentId);
+        }
 
-          if (previousSibling) {
-            announcement = `${activeId} was ${movedVerb} after ${previousSibling.id}.`;
-          }
+        if (previousSibling) {
+          announcement = `${activeId} was ${movedVerb} after ${previousSibling.id}.`;
         }
       }
 
       return announcement;
     }
-
-    return;
   }
 }
 

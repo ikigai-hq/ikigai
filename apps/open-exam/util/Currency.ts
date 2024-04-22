@@ -13,7 +13,7 @@ export const currencyOptions: ComboBoxItem[] = [
 export const formatCurrency = (
   amount: number,
   currency: string,
-  locale: string = "vi"
+  locale: string = "vi",
 ) => {
   let countryFormat = "en-us";
   if (locale === "vi") {

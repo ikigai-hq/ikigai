@@ -52,7 +52,9 @@ export const Input = styled(InputAntd)<inputProps>`
 export const InputArea = styled(TextArea)<{ $isActive?: boolean }>`
   border: 1px solid
     ${(props) =>
-      props.value || props.$isActive ? props.theme.colors.gray[3] : props.theme.colors.gray[2]};
+      props.value || props.$isActive
+        ? props.theme.colors.gray[3]
+        : props.theme.colors.gray[2]};
   border-radius: 8px;
   box-shadow: none;
   font-weight: 400;
@@ -62,7 +64,9 @@ export const InputArea = styled(TextArea)<{ $isActive?: boolean }>`
   outline: none;
   color: ${(props) => props.theme.colors.gray[8]};
   background: ${(props) =>
-    props.value || props.$isActive ? props.theme.colors.gray[0] : props.theme.colors.gray[2]};
+    props.value || props.$isActive
+      ? props.theme.colors.gray[0]
+      : props.theme.colors.gray[2]};
   &::placeholder {
     color: ${(props) => props.theme.colors.blue[9]};
     opacity: 0.5;
@@ -71,7 +75,9 @@ export const InputArea = styled(TextArea)<{ $isActive?: boolean }>`
   &:hover,
   &:focus {
     border-color: ${(props) =>
-      props.value || props.$isActive ? props.theme.colors.gray[3] : props.theme.colors.gray[2]};
+      props.value || props.$isActive
+        ? props.theme.colors.gray[3]
+        : props.theme.colors.gray[2]};
     box-shadow: none;
   }
 `;

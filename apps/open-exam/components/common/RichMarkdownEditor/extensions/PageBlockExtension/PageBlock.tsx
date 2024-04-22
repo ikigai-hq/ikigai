@@ -133,7 +133,7 @@ export const PageBlock: React.FC<PageBlock> = ({
     if (newDocumentId) {
       const variables: DocumentAddPageBlockDocumentVariables = {
         data: {
-          pageBlockId: pageBlockId,
+          pageBlockId,
           documentId: newDocumentId,
           index,
           createdAt: getNowAsSec(),

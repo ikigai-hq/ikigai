@@ -2,7 +2,7 @@ import React from "react";
 
 export type LogoProps = {
   src: string;
-}
+};
 
 const Logo = ({ src }: LogoProps) => {
   return (

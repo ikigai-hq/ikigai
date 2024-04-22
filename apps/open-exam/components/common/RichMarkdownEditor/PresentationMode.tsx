@@ -30,7 +30,11 @@ export const PresentationMode: React.FC<Props> = ({
 
   return (
     <Fragment>
-      <DocumentBodyContainer $isPresentationMode={(!!pageBlocks.length && pageBlockMode) || isMobileView()}>
+      <DocumentBodyContainer
+        $isPresentationMode={
+          (!!pageBlocks.length && pageBlockMode) || isMobileView()
+        }
+      >
         <BodyWrapper>
           <>
             <FocusMode $isFocusMode={isFocusMode}>
@@ -69,12 +73,14 @@ const BottomQuestionBoxes = styled.div`
   }
 `;
 
-const FocusMode= styled.div<{ $isFocusMode?: boolean }>`
+const FocusMode = styled.div<{ $isFocusMode?: boolean }>`
   width: 100%;
   flex-grow: 1;
   overflow: auto;
 
-  ${props => props.$isFocusMode && `
+  ${(props) =>
+    props.$isFocusMode &&
+    `
     transition: all 0.2s;
     position: fixed;
     width: 100%;

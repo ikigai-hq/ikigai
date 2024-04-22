@@ -19,56 +19,56 @@ const SubmitSubmission = ({ deadline, onSubmit }: SubmissionDocumentProps) => {
 
   return (
     <SubmitSubmissionContainer>
-      <Button type="primary" style={{ padding: "8px 12px", gap: 8 }} onClick={onSubmit}>
-        {
-          deadline ? (
+      <Button
+        type="primary"
+        style={{ padding: "8px 12px", gap: 8 }}
+        onClick={onSubmit}
+      >
+        {deadline ? (
+          <Wrapper>
             <Wrapper>
-              <Wrapper>
-                <DesktopOnly>
-                  <ClockCircleFilled />
-                </DesktopOnly>
-                <Countdown
-                  value={deadline}
-                  valueStyle={{
-                    fontSize: 16,
-                    color: theme.colors.gray[0],
-                    lineHeight: "24px",
-                  }}
-                />
-              </Wrapper>
-              <Text
-                level={3}
-                color={theme.colors.gray[0]}
-                style={{ position: "relative", bottom: 1 }}
-              >
-                /
-              </Text>
+              <DesktopOnly>
+                <ClockCircleFilled />
+              </DesktopOnly>
+              <Countdown
+                value={deadline}
+                valueStyle={{
+                  fontSize: 16,
+                  color: theme.colors.gray[0],
+                  lineHeight: "24px",
+                }}
+              />
             </Wrapper>
-          ) : null
-        }
+            <Text
+              level={3}
+              color={theme.colors.gray[0]}
+              style={{ position: "relative", bottom: 1 }}
+            >
+              /
+            </Text>
+          </Wrapper>
+        ) : null}
         <Wrapper>
           <Text level={3} color={theme.colors.gray[0]}>
             Submit
           </Text>
-          {
-            deadline ? (
-              <DesktopOnly>
-                <SendIcon
-                  style={{
-                    width: 18,
-                    color: theme.colors.gray[0],
-                  }}
-                />
-              </DesktopOnly>
-            ) : (
+          {deadline ? (
+            <DesktopOnly>
               <SendIcon
                 style={{
                   width: 18,
                   color: theme.colors.gray[0],
                 }}
               />
-            )
-          }
+            </DesktopOnly>
+          ) : (
+            <SendIcon
+              style={{
+                width: 18,
+                color: theme.colors.gray[0],
+              }}
+            />
+          )}
         </Wrapper>
       </Button>
     </SubmitSubmissionContainer>

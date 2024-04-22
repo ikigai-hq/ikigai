@@ -30,7 +30,7 @@ export type QuizDropdownMenu = {
     quizId: string,
     quizDataChange: ICreateQuizStructure,
     structureAnswer: any,
-    structureExplanation: string
+    structureExplanation: string,
   ) => Promise<void>;
   openSetting: boolean;
   setOpenSetting: (openSetting: boolean) => void;
@@ -58,7 +58,7 @@ const QuizDropdownMenu: React.FC<QuizDropdownMenu> = (props) => {
     CREATE_QUIZ_STRUCTURE,
     {
       onError: handleError,
-    }
+    },
   );
 
   const documentAllow = useDocumentPermission();
@@ -68,7 +68,7 @@ const QuizDropdownMenu: React.FC<QuizDropdownMenu> = (props) => {
     quizTitle: string,
     quizBody: any,
     structureAnswer: any,
-    structureExplanation: string
+    structureExplanation: string,
   ) => {
     if (!documentAllow(DocumentPermission.ManageDocument)) return;
 
@@ -97,7 +97,7 @@ const QuizDropdownMenu: React.FC<QuizDropdownMenu> = (props) => {
           attrs.quizId,
           res.data.quizCreateStructure,
           structureAnswer,
-          structureExplanation
+          structureExplanation,
         );
     }
   };
@@ -108,7 +108,7 @@ const QuizDropdownMenu: React.FC<QuizDropdownMenu> = (props) => {
         title: t`Do you want delete this quiz?`,
         onOk: handleDelete,
         content: "",
-      }) as any
+      }) as any,
     );
   };
 
@@ -148,7 +148,7 @@ const QuizDropdownMenu: React.FC<QuizDropdownMenu> = (props) => {
         placement="bottom"
         trigger={["click"]}
         overlayStyle={{ width: "180px" }}
-        menu={{ items: items }}
+        menu={{ items }}
       >
         {children}
       </Dropdown>

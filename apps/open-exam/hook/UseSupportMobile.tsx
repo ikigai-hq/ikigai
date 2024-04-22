@@ -4,7 +4,7 @@ export const LIMIT_SCREEN_SIZE = 700;
 
 const useSupportMobile = () => {
   const [mobile, setMobile] = useState(
-    window && window?.innerWidth <= LIMIT_SCREEN_SIZE
+    window && window?.innerWidth <= LIMIT_SCREEN_SIZE,
   );
 
   const handleWindowSizeChange = () => {

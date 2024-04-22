@@ -196,7 +196,7 @@ const parseHighlightsBlock = (
 
       highlightData.push({
         id: extractData?.uuid,
-        documentId: documentId,
+        documentId,
         content: parseMarkdown(highlightContent),
         type: highlightType,
         originalText: parseMarkdown(originalText),

@@ -50,15 +50,15 @@ export const ConfirmPopup = ({
         </Text>
       </ContentContainer>
     ),
-    okText: okText,
-    cancelText: cancelText,
+    okText,
+    cancelText,
     className: "custom-confirm-popup",
     onOk,
     onCancel,
     icon: null,
     autoFocusButton: null,
     okButtonProps: {
-      danger: danger,
+      danger,
     },
     okType: danger ? "default" : "primary",
   };

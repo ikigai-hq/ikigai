@@ -7,10 +7,10 @@ export type PreviewDocumentProps = {
 };
 
 const PreviewDocument = ({ documentId }: PreviewDocumentProps) => {
-  const documentPreviewUrl = documentId ?
-    `${window.location.origin}/documents/${documentId}/preview?no-redirect=0` :
-    undefined;
-  
+  const documentPreviewUrl = documentId
+    ? `${window.location.origin}/documents/${documentId}/preview?no-redirect=0`
+    : undefined;
+
   if (!documentPreviewUrl) {
     return (
       <div style={{ width: "100%", height: "100%" }}>
@@ -18,7 +18,7 @@ const PreviewDocument = ({ documentId }: PreviewDocumentProps) => {
       </div>
     );
   }
-  
+
   return (
     <iframe
       src={documentPreviewUrl}

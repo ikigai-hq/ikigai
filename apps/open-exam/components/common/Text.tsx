@@ -59,7 +59,7 @@ const mappingLevel: { [key: number]: TitleLevel } = {
 
 const { Text: AntdText } = Typography;
 
-export const Text = styled(AntdText) <TitleProps>`
+export const Text = styled(AntdText)<TitleProps>`
   white-space: pre-line;
   font-size: ${({ level = 2 }: TitleProps) =>
     `${mappingLevel[level].fontSize}px`};
@@ -68,7 +68,7 @@ export const Text = styled(AntdText) <TitleProps>`
   font-weight: ${({ weight = TextWeight.regular }: TitleProps) => `${weight}`};
   color: ${(props) => {
     if (!props.color) return props.theme.colors.gray[8];
-    if (props.color.includes('#')) return props.color;
+    if (props.color.includes("#")) return props.color;
     return props.theme.colors[props.color];
   }};
   font-family: "Inter", sans-serif;

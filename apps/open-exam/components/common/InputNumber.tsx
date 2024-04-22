@@ -9,7 +9,9 @@ interface inputProps {
 export const InputNumber = styled(InputNumerAntd)<inputProps>`
   border: ${(props) =>
     `${
-      props.background ? props.background : `1px solid ${props.theme.colors.gray[4]}`
+      props.background
+        ? props.background
+        : `1px solid ${props.theme.colors.gray[4]}`
     }`};
   border-radius: 4px;
   box-shadow: none;

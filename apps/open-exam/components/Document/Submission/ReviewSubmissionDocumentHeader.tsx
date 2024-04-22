@@ -32,14 +32,14 @@ const ReviewSubmissionDocumentHeader = ({ document }: DocumentDetailProps) => {
   const submission = document?.submission;
   const user = submission?.user;
   const assignmentDocumentId = submission?.assignment?.documentId;
-  const spaceId = useSpaceStore(state => state.spaceId);
+  const spaceId = useSpaceStore((state) => state.spaceId);
   const { members: students } = useGetSpaceMembers(spaceId, OrgRole.STUDENT);
 
   const { data } = useQuery<GetSubmissionsOfAssignment>(
     GET_SUBMISSIONS_OF_ASSIGNMENT,
     {
       variables: {
-        assignmentDocumentId: assignmentDocumentId,
+        assignmentDocumentId,
       },
       skip: !assignmentDocumentId,
     },

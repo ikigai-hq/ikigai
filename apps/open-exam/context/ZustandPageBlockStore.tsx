@@ -84,7 +84,7 @@ const usePageBlockStore = create<IPageBlockStore>((set, get) => ({
     return cloneDeep(nestedDocuments);
   },
   updatePageBlockMode: (pageBlockMode: boolean) => {
-    set({ pageBlockMode: pageBlockMode });
+    set({ pageBlockMode });
   },
   updateCurrentPageBlockId: (pageBlockId: string) => {
     set({ currentPageBlockId: pageBlockId });
@@ -124,11 +124,7 @@ const usePageBlockStore = create<IPageBlockStore>((set, get) => ({
       });
     }
   },
-  updatePageBlockTitle: async (
-    title,
-    pageBlockId,
-    documentId,
-  ) => {
+  updatePageBlockTitle: async (title, pageBlockId, documentId) => {
     const variables: DocumentAddPageBlockVariables = {
       data: {
         id: pageBlockId,

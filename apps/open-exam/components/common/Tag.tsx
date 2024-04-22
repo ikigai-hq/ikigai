@@ -2,14 +2,7 @@ import React from "react";
 
 import { Tag as TagAntd, TagProps } from "antd";
 import styled from "styled-components";
-import {
-  red,
-  orange,
-  gold, 
-  green, 
-  blue,
-  gray
-} from '@ant-design/colors';
+import { red, orange, gold, green, blue, gray } from "@ant-design/colors";
 
 export type TagColor =
   | "polarGreen"

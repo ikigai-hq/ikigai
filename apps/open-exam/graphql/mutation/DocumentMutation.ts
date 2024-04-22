@@ -1,6 +1,5 @@
 import { gql } from "@apollo/client";
 
-
 export const DOCUMENT_UPDATE_PUBLIC = gql`
   mutation DocumentUpdatePublic($documentId: UUID!, $isPublic: Boolean!) {
     documentUpdatePublic(documentId: $documentId, isPublic: $isPublic)
@@ -14,8 +13,16 @@ export const SOFT_DELETE_DOCUMENTS = gql`
 `;
 
 export const ADD_DOCUMENT_STANDALONE = gql`
-  mutation AddDocumentStandalone($data: NewDocument!, $spaceId: Int, $isAssignment: Boolean!) {
-    documentCreate(data: $data, spaceId: $spaceId, isAssignment: $isAssignment) {
+  mutation AddDocumentStandalone(
+    $data: NewDocument!
+    $spaceId: Int
+    $isAssignment: Boolean!
+  ) {
+    documentCreate(
+      data: $data
+      spaceId: $spaceId
+      isAssignment: $isAssignment
+    ) {
       id
     }
   }
@@ -26,7 +33,6 @@ export const UPDATE_DOCUMENT_POSITIONS = gql`
     documentUpdatePositions(items: $items)
   }
 `;
-
 
 // NOTE: using this to update PageBLock title.
 export const DOCUMENT_ADD_PAGE_BLOCK = gql`

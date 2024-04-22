@@ -33,24 +33,12 @@ export default function DocumentPage({ data }: IProps) {
     <>
       <Head>
         <title>{data?.title || "Open Exam"}</title>
-        <meta
-          property="og:title"
-          content={data?.title || "Open Exam"}
-        />
-        <meta
-          property="og:image"
-          content={data?.coverPhotoUrl}
-        />
+        <meta property="og:title" content={data?.title || "Open Exam"} />
+        <meta property="og:image" content={data?.coverPhotoUrl} />
         <meta property="og:description" content={data?.title} />
 
-        <meta
-          name="twitter:title"
-          content={data?.title || "Open Exam"}
-        />
-        <meta
-          name="twitter:image"
-          content={data?.coverPhotoUrl}
-        />
+        <meta name="twitter:title" content={data?.title || "Open Exam"} />
+        <meta name="twitter:image" content={data?.coverPhotoUrl} />
         <meta name="twitter:description" content={data?.title} />
       </Head>
       <PublicDocumentNoSSR />

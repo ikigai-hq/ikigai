@@ -10,7 +10,7 @@ export const isImage = (mimeType: string): boolean => {
     "image/jpeg",
     "image/png",
     "image/svg+xml",
-    "image/webp"
+    "image/webp",
   ].includes(mimeType);
 };
 
@@ -48,6 +48,14 @@ export const isVideo = (mimeType: string): boolean => {
 };
 
 export const isFileSupport = (mimeType: string): boolean => {
-  return isOfficeFile(mimeType) || isPpt(mimeType) || isDoc(mimeType) || isExcel(mimeType) 
-    || isAudio(mimeType) || isVideo(mimeType) || isImage(mimeType) || isPdf(mimeType);
+  return (
+    isOfficeFile(mimeType) ||
+    isPpt(mimeType) ||
+    isDoc(mimeType) ||
+    isExcel(mimeType) ||
+    isAudio(mimeType) ||
+    isVideo(mimeType) ||
+    isImage(mimeType) ||
+    isPdf(mimeType)
+  );
 };

@@ -1,14 +1,21 @@
-use crate::authorization::{
-    DocumentActionPermission, OrganizationActionPermission, SpaceActionPermission,
-};
+use crate::authentication_token::Claims;
 use async_graphql::*;
 use diesel::{Connection, PgConnection};
 use uuid::Uuid;
 
+use crate::authorization::{
+    DocumentActionPermission, OrganizationActionPermission, SpaceActionPermission,
+};
 use crate::db::*;
 use crate::error::{OpenExamError, OpenExamErrorExt};
 use crate::helper::*;
 use crate::util::get_now_as_secs;
+
+#[derive(SimpleObject)]
+pub struct SpaceWithAccessToken {
+    pub space: Space,
+    pub access_token: String,
+}
 
 #[derive(Default)]
 pub struct SpaceMutation;
@@ -222,6 +229,79 @@ impl SpaceMutation {
         SpaceMember::remove(&conn, space_id, user_id).format_err()?;
 
         Ok(true)
+    }
+
+    async fn space_generate_invite_token(
+        &self,
+        ctx: &Context<'_>,
+        data: SpaceInviteToken,
+    ) -> Result<SpaceInviteToken> {
+        space_quick_authorize(ctx, data.space_id, SpaceActionPermission::ManageSpaceMember).await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        let item = SpaceInviteToken::upsert(&conn, data).format_err()?;
+
+        Ok(item)
+    }
+
+    async fn space_set_active_invite_token(
+        &self,
+        ctx: &Context<'_>,
+        space_id: i32,
+        token: String,
+        is_active: bool,
+    ) -> Result<SpaceInviteToken> {
+        space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceMember).await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        let item = SpaceInviteToken::set_active(&conn, space_id, token, is_active).format_err()?;
+
+        Ok(item)
+    }
+
+    async fn space_join_by_invite_token(
+        &self,
+        ctx: &Context<'_>,
+        email: String,
+        space_id: i32,
+        token: String,
+    ) -> Result<SpaceWithAccessToken> {
+        let conn = get_conn_from_ctx(ctx).await?;
+        let space = Space::find_by_id(&conn, space_id).format_err()?;
+        let space_invite_token = SpaceInviteToken::find(&conn, space_id, token).format_err()?;
+
+        if !space_invite_token.is_active {
+            return Err(OpenExamError::new_bad_request("Link is inactive!")).format_err();
+        }
+
+        if let Some(expire_at) = space_invite_token.expire_at {
+            let now = get_now_as_secs();
+            if expire_at < now {
+                return Err(OpenExamError::new_bad_request("Link is expired!")).format_err();
+            }
+        }
+
+        let user = if let Some(user) = User::find_by_email_opt(&conn, &email)? {
+            user
+        } else {
+            let new_user = NewUser::new(email.clone(), email, "".into());
+            User::insert(&conn, &new_user).format_err()?
+        };
+
+        if OrganizationMember::find(&conn, space.org_id, user.id).is_err() {
+            let member =
+                OrganizationMember::new(space.org_id, user.id, space_invite_token.inviting_role);
+            OrganizationMember::upsert(&conn, member).format_err()?;
+        }
+
+        let space_member = add_space_member(&conn, &space, user.id)?;
+        let claims = Claims::new(space_member.user_id);
+        let access_token = claims.encode()?;
+
+        Ok(SpaceWithAccessToken {
+            space,
+            access_token,
+        })
     }
 }
 

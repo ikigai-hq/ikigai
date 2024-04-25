@@ -1,0 +1,10 @@
+-- Your SQL goes here
+CREATE TABLE space_invite_tokens (
+    space_id INT NOT NULL REFERENCES spaces(id),
+    token VARCHAR(32) NOT NULL,
+    inviting_role INT NOT NULL,
+    expire_at BIGINT,
+    is_active BOOL NOT NULL,
+    created_at BIGINT DEFAULT (EXTRACT(EPOCH FROM now()))::BIGINT NOT NULL,
+    PRIMARY KEY (space_id, token)
+);

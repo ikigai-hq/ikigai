@@ -10,7 +10,7 @@ use async_graphql::{ComplexObject, Context, Result};
 use crate::authorization::SpaceActionPermission;
 use crate::db::*;
 use crate::error::OpenExamErrorExt;
-use crate::graphql::data_loader::{ClassById, FileById, MembersByClassId, OpenExamDataLoader};
+use crate::graphql::data_loader::{FileById, MembersByClassId, OpenExamDataLoader, SpaceById};
 use crate::helper::{
     get_conn_from_ctx, get_public_user_from_loader, get_user_id_from_ctx, space_quick_authorize,
 };
@@ -70,12 +70,12 @@ impl SpaceMember {
         get_public_user_from_loader(ctx, self.user_id).await
     }
 
-    async fn class(&self, ctx: &Context<'_>) -> Result<Space> {
+    async fn space(&self, ctx: &Context<'_>) -> Result<Space> {
         let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
-        let class = loader
-            .load_one(ClassById(self.space_id))
+        let space = loader
+            .load_one(SpaceById(self.space_id))
             .await?
-            .ok_or(format!("Not found class {}", self.space_id))?;
-        Ok(class)
+            .ok_or(format!("Not found space {}", self.space_id))?;
+        Ok(space)
     }
 }

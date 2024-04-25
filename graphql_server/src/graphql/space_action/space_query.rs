@@ -57,4 +57,14 @@ impl SpaceQuery {
         let conn = get_conn_from_ctx(ctx).await?;
         Space::find_my_spaces(&conn, user_auth.org_id, user_auth.id).format_err()
     }
+
+    async fn space_get_invite_tokens(
+        &self,
+        ctx: &Context<'_>,
+        space_id: i32,
+    ) -> Result<Vec<SpaceInviteToken>> {
+        space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceMember).await?;
+        let conn = get_conn_from_ctx(ctx).await?;
+        SpaceInviteToken::find_all_by_spaces(&conn, space_id).format_err()
+    }
 }

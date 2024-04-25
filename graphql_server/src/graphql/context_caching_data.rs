@@ -74,17 +74,17 @@ impl RequestContextCachingData {
         }
     }
 
-    pub fn add_space_auth(&self, class_id: i32, user_id: i32, class_auth: SpaceAuth) -> SpaceAuth {
+    pub fn add_space_auth(&self, space_id: i32, user_id: i32, class_auth: SpaceAuth) -> SpaceAuth {
         if let Ok(mut guard_classes) = self.space_auth.try_write() {
-            guard_classes.insert((class_id, user_id), class_auth.clone());
+            guard_classes.insert((space_id, user_id), class_auth.clone());
         }
 
         class_auth
     }
 
-    pub fn get_space_auth(&self, class_id: i32, user_id: i32) -> Option<SpaceAuth> {
+    pub fn get_space_auth(&self, space_id: i32, user_id: i32) -> Option<SpaceAuth> {
         if let Ok(guard_classes) = self.space_auth.try_read() {
-            guard_classes.get(&(class_id, user_id)).cloned()
+            guard_classes.get(&(space_id, user_id)).cloned()
         } else {
             None
         }

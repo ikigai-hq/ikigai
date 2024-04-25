@@ -355,12 +355,18 @@ msgid "Continue on last submission"
 msgstr "Continue on last submission"
 
 #: components/Document/DocumentSharing.tsx:32
+#: components/SpaceSetting/CreateSpaceInvite.tsx:115
+#: components/SpaceSetting/InviteSpaceSetting.tsx:118
 msgid "Copied!"
 msgstr "Copied!"
 
-#: components/Document/LeftPanel/CopyDocumentToClass.tsx:99
-#~ msgid "Copy"
-#~ msgstr "Copy"
+#: components/SpaceSetting/CreateSpaceInvite.tsx:118
+msgid "Copy"
+msgstr "Copy"
+
+#: components/SpaceSetting/InviteSpaceSetting.tsx:110
+msgid "Copy invite link"
+msgstr "Copy invite link"
 
 #: components/Document/DocumentSharing.tsx:63
 msgid "Copy public url"
@@ -464,6 +470,7 @@ msgstr "Delete permanently"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:65
 #: components/Document/LeftPanel/LessonItem.tsx:76
+#: components/SpaceSetting/InviteSpaceSetting.tsx:48
 #: components/Trash/DeletedDocumentList.tsx:40
 #: components/Trash/DeletedSpaceList.tsx:40
 msgid "Deleted!"
@@ -510,6 +517,10 @@ msgstr "Do you want to delete this block?"
 #~ msgid "Do you want to delete this document template?"
 #~ msgstr "Do you want to delete this document template?"
 
+#: components/SpaceSetting/InviteSpaceSetting.tsx:124
+msgid "Do you want to delete this invite link"
+msgstr "Do you want to delete this invite link"
+
 #: components/Document/DocumentMoreSetting.tsx:55
 msgid "Do you want to duplicate this document?"
 msgstr "Do you want to duplicate this document?"
@@ -540,7 +551,7 @@ msgstr "Do you want to reset this file upload?"
 msgid "Document"
 msgstr "Document"
 
-#: components/Document/LeftPanel/index.tsx:87
+#: components/Document/LeftPanel/index.tsx:76
 msgid "Documents"
 msgstr "Documents"
 
@@ -658,6 +669,18 @@ msgstr "Email"
 msgid "Exit Full Screen"
 msgstr "Exit Full Screen"
 
+#: components/SpaceSetting/InviteSpaceSetting.tsx:78
+msgid "Expire"
+msgstr "Expire"
+
+#: components/SpaceSetting/CreateSpaceInvite.tsx:57
+msgid "Expire after"
+msgstr "Expire after"
+
+#: components/SpaceSetting/InviteSpaceSetting.tsx:85
+msgid "Expired"
+msgstr "Expired"
+
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/FillInBlank/FillInBlankReview.tsx:36
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/SingleChoice/SingleChoiceReview.tsx:59
 msgid "Explain"
@@ -727,9 +750,17 @@ msgstr "From point"
 msgid "Full Screen"
 msgstr "Full Screen"
 
-#: components/SpaceSetting/index.tsx:19
+#: components/SpaceSetting/index.tsx:23
 msgid "General"
 msgstr "General"
+
+#: components/SpaceSetting/CreateSpaceInvite.tsx:92
+msgid "Generate"
+msgstr "Generate"
+
+#: components/SpaceSetting/InviteSpaceSetting.tsx:145
+msgid "Generate Invite Link"
+msgstr "Generate Invite Link"
 
 #: components/Document/AssignmentSetting/index.tsx:38
 #: components/Document/AssignmentStudentList.tsx:180
@@ -768,6 +799,23 @@ msgstr "Insert Blocks"
 #: components/IdentityInput/index.tsx:42
 msgid "Invalid email"
 msgstr "Invalid email"
+
+#: components/SpaceSetting/InviteSpaceSetting.tsx:66
+msgid "Invite token"
+msgstr "Invite token"
+
+#: components/SpaceSetting/InviteSpaceSetting.tsx:54
+msgid "Inviter"
+msgstr "Inviter"
+
+#: components/SpaceSetting/index.tsx:33
+msgid "Invites"
+msgstr "Invites"
+
+#: components/SpaceSetting/CreateSpaceInvite.tsx:73
+#: components/SpaceSetting/InviteSpaceSetting.tsx:72
+msgid "Inviting role"
+msgstr "Inviting role"
 
 #: components/Trash/index.tsx:18
 msgid "Item are available for 60 days. After that time, item will be permanently deleted."
@@ -818,9 +866,13 @@ msgstr "Limit the number of times to take the assignment"
 msgid "Manual"
 msgstr "Manual"
 
-#: components/Organization/index.tsx:43
-#~ msgid "Members"
-#~ msgstr "Members"
+#: components/SpaceSetting/MemberSpaceSetting.tsx:34
+msgid "Member since"
+msgstr "Member since"
+
+#: components/SpaceSetting/index.tsx:28
+msgid "Members"
+msgstr "Members"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:130
 msgid "Method"
@@ -855,10 +907,13 @@ msgstr "Multiple Choice"
 #~ msgid "My Profile"
 #~ msgstr "My Profile"
 
-#: components/DocumentTemplate/EditCategoryModal.tsx:152
-#: components/DocumentTemplate/EditTemplateModal.tsx:145
-#~ msgid "Name"
-#~ msgstr "Name"
+#: components/SpaceSetting/MemberSpaceSetting.tsx:16
+msgid "Name"
+msgstr "Name"
+
+#: components/SpaceSetting/InviteSpaceSetting.tsx:91
+msgid "Never"
+msgstr "Never"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:110
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:195
@@ -1141,10 +1196,9 @@ msgstr "Review last submission"
 msgid "Review setting quizzes"
 msgstr "Review setting quizzes"
 
-#: components/AddMember.tsx:136
-#: components/Organization/OrganizationMembersTab.tsx:120
-#~ msgid "Role"
-#~ msgstr "Role"
+#: components/SpaceSetting/MemberSpaceSetting.tsx:28
+msgid "Role"
+msgstr "Role"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:144
 msgid "Rubric"
@@ -1263,11 +1317,15 @@ msgstr "Size"
 #~ msgid "Space"
 #~ msgstr "Space"
 
+#: components/SpaceSetting/CreateSpaceInvite.tsx:52
+msgid "Space invite link"
+msgstr "Space invite link"
+
 #: components/SpaceSetting/GeneralSpaceSetting.tsx:42
 msgid "Space name"
 msgstr "Space name"
 
-#: components/SpaceSetting/index.tsx:29
+#: components/SpaceSetting/index.tsx:43
 msgid "Space settings"
 msgstr "Space settings"
 
@@ -1292,6 +1350,7 @@ msgid "Structured Assignment"
 msgstr "Structured Assignment"
 
 #: components/Document/AssignmentStudentList.tsx:104
+#: components/SpaceSetting/CreateSpaceInvite.tsx:81
 msgid "Student"
 msgstr "Student"
 
@@ -1350,11 +1409,9 @@ msgstr "Tag"
 #~ msgid "Tags"
 #~ msgstr "Tags"
 
-#: components/AddMember.tsx:146
-#: components/Organization/OrganizationMembersTab.tsx:33
-#: components/Organization/OrganizationMembersTab.tsx:235
-#~ msgid "Teacher"
-#~ msgstr "Teacher"
+#: components/SpaceSetting/CreateSpaceInvite.tsx:82
+msgid "Teacher"
+msgstr "Teacher"
 
 #: components/Document/DocumentSetting.tsx:259
 #~ msgid "Templates"
@@ -1511,7 +1568,7 @@ msgstr "Typing your description"
 msgid "Ungraded"
 msgstr "Ungraded"
 
-#: components/Document/LeftPanel/index.tsx:39
+#: components/Document/LeftPanel/index.tsx:40
 msgid "Unknown"
 msgstr "Unknown"
 
@@ -1585,6 +1642,10 @@ msgstr "Use this rubric"
 #: components/ProfileSetting/ProfileLeftMenu.tsx:51
 #~ msgid "User Settings"
 #~ msgstr "User Settings"
+
+#: components/SpaceSetting/InviteSpaceSetting.tsx:95
+msgid "Uses"
+msgstr "Uses"
 
 #: components/common/PanelDetail.tsx:42
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:160

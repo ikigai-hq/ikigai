@@ -159,13 +159,17 @@ impl Space {
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
 #[table_name = "space_invite_tokens"]
-#[graphql(input_name = "SpaceInviteTokenInput")]
+#[graphql(input_name = "SpaceInviteTokenInput", complex)]
 pub struct SpaceInviteToken {
     pub space_id: i32,
     #[graphql(skip_input)]
     pub token: String,
+    #[graphql(skip_input)]
+    pub creator_id: i32,
     pub inviting_role: OrgRole,
     pub expire_at: Option<i64>,
+    #[graphql(skip_input)]
+    pub uses: i32,
     #[graphql(skip_input)]
     pub is_active: bool,
     #[graphql(skip_input)]
@@ -186,6 +190,12 @@ impl SpaceInviteToken {
         Ok(item)
     }
 
+    pub fn increase_use(conn: &PgConnection, space_id: i32, token: &str) -> Result<Self, Error> {
+        diesel::update(space_invite_tokens::table.find((space_id, token)))
+            .set(space_invite_tokens::uses.eq(space_invite_tokens::uses + 1))
+            .get_result(conn)
+    }
+
     pub fn set_active(
         conn: &PgConnection,
         space_id: i32,
@@ -197,7 +207,7 @@ impl SpaceInviteToken {
             .get_result(conn)
     }
 
-    pub fn find(conn: &PgConnection, space_id: i32, token: String) -> Result<Self, Error> {
+    pub fn find(conn: &PgConnection, space_id: i32, token: &str) -> Result<Self, Error> {
         space_invite_tokens::table
             .find((space_id, token))
             .get_result(conn)

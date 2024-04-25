@@ -183,39 +183,6 @@ impl SpaceMutation {
         Ok(true)
     }
 
-    async fn space_add_member(
-        &self,
-        ctx: &Context<'_>,
-        space_id: i32,
-        user_id: i32,
-    ) -> Result<SpaceMember> {
-        space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceMember).await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let space = Space::find_by_id(&conn, space_id).format_err()?;
-        add_space_member(&conn, &space, user_id)
-    }
-
-    async fn space_add_members(
-        &self,
-        ctx: &Context<'_>,
-        space_id: i32,
-        user_ids: Vec<i32>,
-    ) -> Result<Vec<SpaceMember>> {
-        space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceMember).await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let space = Space::find_by_id(&conn, space_id).format_err()?;
-        let mut members = vec![];
-        for user_id in user_ids {
-            if let Ok(member) = add_space_member(&conn, &space, user_id) {
-                members.push(member);
-            }
-        }
-
-        Ok(members)
-    }
-
     async fn space_remove_member(
         &self,
         ctx: &Context<'_>,
@@ -234,11 +201,12 @@ impl SpaceMutation {
     async fn space_generate_invite_token(
         &self,
         ctx: &Context<'_>,
-        data: SpaceInviteToken,
+        mut data: SpaceInviteToken,
     ) -> Result<SpaceInviteToken> {
         space_quick_authorize(ctx, data.space_id, SpaceActionPermission::ManageSpaceMember).await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
+        data.creator_id = get_user_id_from_ctx(ctx).await?;
         let item = SpaceInviteToken::upsert(&conn, data).format_err()?;
 
         Ok(item)
@@ -268,7 +236,7 @@ impl SpaceMutation {
     ) -> Result<SpaceWithAccessToken> {
         let conn = get_conn_from_ctx(ctx).await?;
         let space = Space::find_by_id(&conn, space_id).format_err()?;
-        let space_invite_token = SpaceInviteToken::find(&conn, space_id, token).format_err()?;
+        let space_invite_token = SpaceInviteToken::find(&conn, space_id, &token).format_err()?;
 
         if !space_invite_token.is_active {
             return Err(OpenExamError::new_bad_request("Link is inactive!")).format_err();
@@ -294,7 +262,8 @@ impl SpaceMutation {
             OrganizationMember::upsert(&conn, member).format_err()?;
         }
 
-        let space_member = add_space_member(&conn, &space, user.id)?;
+        SpaceInviteToken::increase_use(&conn, space.id, &token).format_err()?;
+        let space_member = add_space_member(&conn, &space, user.id, Some(token))?;
         let claims = Claims::new(space_member.user_id);
         let access_token = claims.encode()?;
 
@@ -303,11 +272,30 @@ impl SpaceMutation {
             access_token,
         })
     }
+
+    async fn space_remove_invite_token(
+        &self,
+        ctx: &Context<'_>,
+        space_id: i32,
+        invite_token: String,
+    ) -> Result<bool> {
+        space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceMember).await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        SpaceInviteToken::remove(&conn, space_id, invite_token).format_err()?;
+
+        Ok(true)
+    }
 }
 
-fn add_space_member(conn: &PgConnection, space: &Space, user_id: i32) -> Result<SpaceMember> {
+fn add_space_member(
+    conn: &PgConnection,
+    space: &Space,
+    user_id: i32,
+    token: Option<String>,
+) -> Result<SpaceMember> {
     OrganizationMember::find(conn, space.org_id, user_id).format_err()?;
-    let new_member = SpaceMember::new(space.id, user_id);
+    let new_member = SpaceMember::new(space.id, user_id, token);
     let new_member = SpaceMember::upsert(conn, new_member).format_err()?;
 
     Ok(new_member)

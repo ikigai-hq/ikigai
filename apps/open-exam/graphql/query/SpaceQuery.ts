@@ -81,11 +81,24 @@ export const GET_DELETED_SPACES = gql`
   }
 `;
 
-export const GET_ORG_SPACES = gql`
-  query GetOrgSpaces {
-    spaceGetAllOrgSpaces {
-      id
-      name
+export const GET_SPACE_INVITE_TOKENS = gql`
+  query GetSpaceInviteTokens($spaceId: Int!) {
+    spaceGetInviteTokens(spaceId: $spaceId) {
+      spaceId
+      creator {
+        id
+        firstName
+        lastName
+        avatar {
+          publicUrl
+        }
+        randomColor
+      }
+      token
+      invitingRole
+      uses
+      expireAt
+      createdAt
     }
   }
 `;

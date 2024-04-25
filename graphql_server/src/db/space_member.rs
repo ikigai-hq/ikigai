@@ -16,15 +16,18 @@ pub struct SpaceMember {
     pub updated_at: i64,
     #[graphql(skip_input)]
     pub created_at: i64,
+    #[graphql(skip_input)]
+    pub join_by_token: Option<String>,
 }
 
 impl SpaceMember {
-    pub fn new(space_id: i32, user_id: i32) -> Self {
+    pub fn new(space_id: i32, user_id: i32, join_by_token: Option<String>) -> Self {
         Self {
             space_id,
             user_id,
             updated_at: get_now_as_secs(),
             created_at: get_now_as_secs(),
+            join_by_token,
         }
     }
 

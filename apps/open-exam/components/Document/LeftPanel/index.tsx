@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import shallow from "zustand/shallow";
-import { Avatar, Divider, Tooltip, Typography } from "antd";
-import { SettingOutlined, UserOutlined } from "@ant-design/icons";
+import { Divider, Tooltip, Typography } from "antd";
+import { SettingOutlined } from "@ant-design/icons";
 import { Trans, t } from "@lingui/macro";
 import styled, { useTheme } from "styled-components";
 
@@ -19,6 +19,7 @@ import useSpaceStore from "context/ZustandSpaceStore";
 import { TextButtonWithHover } from "components/common/Button";
 import useAuthUserStore from "context/ZustandAuthStore";
 import EditProfileModal from "../../UserCredential/EditProfileModal";
+import UserBasicInformation from "../../UserBasicInformation";
 
 interface Props {
   docs: GetDocuments_spaceGet_documents[];
@@ -41,24 +42,12 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
     <RightBodyContainer $hide={leftPanelHidden} $leftPanel={true}>
       <div style={{ width: "100%" }}>
         <SpaceInfoContainer>
-          <UserInformation
-            onClick={me ? () => setOpenProfile(true) : undefined}
-          >
-            <div>
-              <Avatar
-                icon={<UserOutlined />}
-                src={me?.avatar?.publicUrl}
-                style={{ backgroundColor: me?.randomColor }}
-              />
-            </div>
-            <div>
-              <Typography.Text>{myName}</Typography.Text>
-              <br />
-              <Typography.Text type="secondary" ellipsis>
-                {me?.email || ""}
-              </Typography.Text>
-            </div>
-          </UserInformation>
+          <UserBasicInformation
+            name={myName}
+            avatar={me?.randomColor}
+            randomColor={me?.randomColor}
+            email={me?.email}
+          />
           <SpaceInformation>
             <Typography.Paragraph
               style={{ marginTop: 10, flex: 1 }}
@@ -124,19 +113,6 @@ export default LeftPanel;
 
 const SpaceInfoContainer = styled.div`
   padding: 5px;
-`;
-
-const UserInformation = styled.div`
-  padding: 0 15px 0 15px;
-  border-radius: 8px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-
-  &:hover {
-    background-color: #b8babd;
-    cursor: pointer;
-  }
 `;
 
 const SpaceInformation = styled.div`

@@ -79,3 +79,10 @@ impl SpaceMember {
         Ok(space)
     }
 }
+
+#[ComplexObject]
+impl SpaceInviteToken {
+    async fn creator(&self, ctx: &Context<'_>) -> Result<PublicUser> {
+        get_public_user_from_loader(ctx, self.creator_id).await
+    }
+}

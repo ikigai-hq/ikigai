@@ -44,7 +44,7 @@ fn create_default_space(
         creator_id: user_id,
     };
     let space = Space::insert(conn, new_space)?;
-    let space_member = SpaceMember::new(space.id, user_id);
+    let space_member = SpaceMember::new(space.id, user_id, None);
     SpaceMember::upsert(conn, space_member)?;
 
     Ok(space)

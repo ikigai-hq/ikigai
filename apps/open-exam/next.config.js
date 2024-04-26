@@ -1,28 +1,18 @@
 /** @type {import('next').NextConfig} */
 
-const withAntdLess = require("next-plugin-antd-less");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
-const pluginAntdLess = withAntdLess({
-  lessVarsFilePath: "styles/variables.less",
-});
-
-const nextComposePlugins = require("next-compose-plugins");
-const { withPlugins } = nextComposePlugins.extend(() => ({}));
-
+const withAntdLess = require("next-plugin-antd-less");
 const { theme } = require("antd/lib");
 const { convertLegacyToken } = require("@ant-design/compatible/lib");
-
 const { defaultAlgorithm, defaultSeed } = theme;
-
 const mapToken = defaultAlgorithm(defaultSeed);
 const v4Token = convertLegacyToken(mapToken);
-
-const nextPlugins = [
-  [pluginAntdLess],
-  withBundleAnalyzer,
-];
+withAntdLess({
+  lessVarsFilePath: "styles/variables.less",
+  modifyVars: v4Token,
+});
 
 const nextConfig = {
   reactStrictMode: false,
@@ -30,16 +20,9 @@ const nextConfig = {
   compiler: {
     styledComponents: true
   },
-  loader: "less-loader",
-  options: {
-    lessOptions: {
-      modifyVars: v4Token,
-    },
-  },
   env: {
     NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV,
   },
-  transpilePackages: ["@openexam/editor"],
   images: {
     remotePatterns: [
       {
@@ -50,4 +33,9 @@ const nextConfig = {
   }
 };
 
-module.exports = withPlugins(nextPlugins, nextConfig);
+module.exports = (_phase, { defaultConfig }) => {
+  return [withAntdLess, withBundleAnalyzer].reduce(
+    (config, plugin) => plugin(config),
+    nextConfig,
+  );
+};

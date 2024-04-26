@@ -8,11 +8,16 @@ export type UserNameProps = {
   email: string;
   randomColor: string;
   avatar?: string;
+  onClick?: () => void;
 }
 
 const UserBasicInformation = (props: UserNameProps) => {
+  const onClick = () => {
+    if (props.onClick) props.onClick();
+  };
+  
   return (
-    <UserInformation>
+    <UserInformation onClick={onClick}>
       <div>
         <Avatar
           icon={<UserOutlined />}

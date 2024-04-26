@@ -957,6 +957,34 @@ export interface DeleteSpaceInviteTokenVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: JoinSpaceByInviteToken
+// ====================================================
+
+export interface JoinSpaceByInviteToken_spaceJoinByInviteToken_starterDocument {
+  id: any;
+}
+
+export interface JoinSpaceByInviteToken_spaceJoinByInviteToken {
+  starterDocument: JoinSpaceByInviteToken_spaceJoinByInviteToken_starterDocument;
+  accessToken: string;
+}
+
+export interface JoinSpaceByInviteToken {
+  spaceJoinByInviteToken: JoinSpaceByInviteToken_spaceJoinByInviteToken;
+}
+
+export interface JoinSpaceByInviteTokenVariables {
+  email: string;
+  spaceId: number;
+  token: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: CreateComment
 // ====================================================
 
@@ -1843,33 +1871,6 @@ export interface GetSpaceMembersVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetBasicSpaceDetail
-// ====================================================
-
-export interface GetBasicSpaceDetail_spaceGet_banner {
-  publicUrl: string | null;
-}
-
-export interface GetBasicSpaceDetail_spaceGet {
-  id: number;
-  name: string;
-  banner: GetBasicSpaceDetail_spaceGet_banner | null;
-}
-
-export interface GetBasicSpaceDetail {
-  spaceGet: GetBasicSpaceDetail_spaceGet;
-}
-
-export interface GetBasicSpaceDetailVariables {
-  spaceId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL query operation: GetDeletedSpaces
 // ====================================================
 
@@ -1905,6 +1906,7 @@ export interface GetSpaceInviteTokens_spaceGetInviteTokens_creator {
   id: number;
   firstName: string;
   lastName: string;
+  email: string;
   avatar: GetSpaceInviteTokens_spaceGetInviteTokens_creator_avatar | null;
   randomColor: string;
 }

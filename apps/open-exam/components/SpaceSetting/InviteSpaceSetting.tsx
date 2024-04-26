@@ -2,6 +2,9 @@ import {Button, Popconfirm, Table, TableProps, Tooltip, Typography} from "antd";
 import {t, Trans} from "@lingui/macro";
 import {useState} from "react";
 import {useMutation, useQuery} from "@apollo/client";
+import {toast} from "react-hot-toast";
+import copy from "copy-to-clipboard";
+import {CopyOutlined, DeleteOutlined} from "@ant-design/icons";
 
 import CreateSpaceInvite from "./CreateSpaceInvite";
 import {GET_SPACE_INVITE_TOKENS} from "graphql/query/SpaceQuery";
@@ -12,12 +15,9 @@ import {
   GetSpaceInviteTokens_spaceGetInviteTokens as ISpaceInviteToken,
 } from "graphql/types";
 import {fromNow, getNowAsSec} from "util/Time";
-import {formatPreJoinSpaceUrl} from "../../config/Routes";
-import {TextButtonWithHover} from "../common/Button";
-import {CopyOutlined, DeleteOutlined} from "@ant-design/icons";
-import {toast} from "react-hot-toast";
-import copy from "copy-to-clipboard";
-import {DELETE_SPACE_INVITE_TOKEN} from "../../graphql/mutation/SpaceMutation";
+import {formatPreJoinSpaceUrl} from "config/Routes";
+import {TextButtonWithHover} from "components/common/Button";
+import {DELETE_SPACE_INVITE_TOKEN} from "graphql/mutation/SpaceMutation";
 import UserBasicInformation from "../UserBasicInformation";
 
 const InviteSpaceSetting = () => {
@@ -59,7 +59,7 @@ const InviteSpaceSetting = () => {
           name={`${invite.creator.firstName} ${invite.creator.lastName}`}
           avatar={invite.creator.avatar?.publicUrl}
           randomColor={invite.creator.randomColor}
-          email="n/a"
+          email={invite.creator.email}
         />,
     },
     {

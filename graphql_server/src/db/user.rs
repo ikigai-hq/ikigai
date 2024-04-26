@@ -54,7 +54,6 @@ pub struct PublicUser {
     pub id: i32,
     pub first_name: String,
     pub last_name: String,
-    #[graphql(skip_output)]
     pub email: String,
     pub avatar_file_id: Option<Uuid>,
     pub updated_at: i64,
@@ -87,7 +86,6 @@ impl From<User> for PublicUser {
 pub struct User {
     #[polar(attribute)]
     pub id: i32,
-    #[graphql(skip_output)]
     pub email: String,
     pub first_name: String,
     pub last_name: String,

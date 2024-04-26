@@ -13,7 +13,7 @@ use crate::util::get_now_as_secs;
 
 #[derive(SimpleObject)]
 pub struct SpaceWithAccessToken {
-    pub space: Space,
+    pub starter_document: Document,
     pub access_token: String,
 }
 
@@ -266,9 +266,10 @@ impl SpaceMutation {
         let space_member = add_space_member(&conn, &space, user.id, Some(token))?;
         let claims = Claims::new(space_member.user_id);
         let access_token = claims.encode()?;
+        let starter_document = Document::get_or_create_starter_doc(&conn, space_member.user_id, space_id, space.org_id, space.name).format_err()?;
 
         Ok(SpaceWithAccessToken {
-            space,
+            starter_document,
             access_token,
         })
     }

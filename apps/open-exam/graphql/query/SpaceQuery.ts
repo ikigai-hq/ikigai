@@ -56,18 +56,6 @@ export const GET_SPACE_MEMBERS = gql`
   }
 `;
 
-export const GET_BASIC_SPACE_DETAIL = gql`
-  query GetBasicSpaceDetail($spaceId: Int!) {
-    spaceGet(spaceId: $spaceId) {
-      id
-      name
-      banner {
-        publicUrl
-      }
-    }
-  }
-`;
-
 export const GET_DELETED_SPACES = gql`
   query GetDeletedSpaces {
     spaceGetDeletedSpaces {
@@ -89,6 +77,7 @@ export const GET_SPACE_INVITE_TOKENS = gql`
         id
         firstName
         lastName
+        email
         avatar {
           publicUrl
         }

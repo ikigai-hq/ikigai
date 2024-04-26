@@ -1,22 +1,22 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import shallow from "zustand/shallow";
-import { Divider, Tooltip, Typography } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
-import { Trans, t } from "@lingui/macro";
-import styled, { useTheme } from "styled-components";
+import {Divider, Tooltip, Typography} from "antd";
+import {SettingOutlined} from "@ant-design/icons";
+import {t, Trans} from "@lingui/macro";
+import styled, {useTheme} from "styled-components";
 
 import useDocumentStore from "context/ZustandDocumentStore";
 import useUserPermission from "hook/UseUserPermission";
-import { GetDocuments_spaceGet_documents } from "graphql/types";
-import { Text, TextWeight } from "components/common/Text";
-import { Permission } from "util/permission";
+import {GetDocuments_spaceGet_documents} from "graphql/types";
+import {Text, TextWeight} from "components/common/Text";
+import {Permission} from "util/permission";
 import CreateContentButton from "./CreateContentButton";
-import { ListModule, TitlePanel } from "./common";
-import { RightBodyContainer } from "../common";
+import {ListModule, TitlePanel} from "./common";
+import {RightBodyContainer} from "../common";
 import LearningModuleDnd from "components/common/LearningModuleDnd";
 import LessonItemDnd from "./LessonItemDnd";
 import useSpaceStore from "context/ZustandSpaceStore";
-import { TextButtonWithHover } from "components/common/Button";
+import {TextButtonWithHover} from "components/common/Button";
 import useAuthUserStore from "context/ZustandAuthStore";
 import EditProfileModal from "../../UserCredential/EditProfileModal";
 import UserBasicInformation from "../../UserBasicInformation";
@@ -43,6 +43,7 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
       <div style={{ width: "100%" }}>
         <SpaceInfoContainer>
           <UserBasicInformation
+            onClick={() => setOpenProfile(true)}
             name={myName}
             avatar={me?.randomColor}
             randomColor={me?.randomColor}
@@ -56,13 +57,18 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
             >
               {space?.name}
             </Typography.Paragraph>
-            <div>
-              <TextButtonWithHover
-                type="text"
-                icon={<SettingOutlined />}
-                onClick={() => setSpaceSettingVisible(true)}
-              />
-            </div>
+            {
+              allow(Permission.ManageSpaceSetting) &&
+              (
+                <div>
+                  <TextButtonWithHover
+                    type="text"
+                    icon={<SettingOutlined />}
+                    onClick={() => setSpaceSettingVisible(true)}
+                  />
+                </div>
+              )
+            }
           </SpaceInformation>
         </SpaceInfoContainer>
         <NoMarginDivider $margin={0} />

@@ -6,7 +6,7 @@ use uuid::Uuid;
 use crate::db::*;
 use crate::error::OpenExamError;
 
-#[derive(PolarClass, Clone)]
+#[derive(PolarClass, Clone, Debug)]
 pub struct DocumentAuth {
     #[polar(attribute)]
     pub id: Uuid,
@@ -23,7 +23,7 @@ pub struct DocumentAuth {
     #[polar(attribute)]
     pub is_doing_open_type_submission: bool,
     #[polar(attribute)]
-    pub space_id: Option<i32>,
+    pub space_id: i32,
 }
 
 impl DocumentAuth {
@@ -49,7 +49,7 @@ impl DocumentAuth {
             allow_for_student_view_answer,
             is_doing_submission,
             is_doing_open_type_submission,
-            space_id: document.space_id,
+            space_id: document.space_id.unwrap_or(-1),
         })
     }
 }

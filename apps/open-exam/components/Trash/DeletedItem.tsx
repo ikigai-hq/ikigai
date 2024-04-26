@@ -33,8 +33,8 @@ const DeletedItem = ({
   const theme = useTheme();
   const itemId = documentId || spaceId;
   const onClickRestore = () => {
-    // @ts-ignore
     modal.confirm(
+      // @ts-ignore
       ConfirmPopup({
         title: t`Are you sure to restore ${title}?`,
         onOk: () => {
@@ -48,8 +48,8 @@ const DeletedItem = ({
   };
 
   const onClickDelete = () => {
-    // @ts-ignore
     modal.confirm(
+      // @ts-ignore
       ConfirmPopup({
         title: t`Are you sure to delete ${title} permanently?`,
         content: t`You cannot recover data if you confirm to delete.`,

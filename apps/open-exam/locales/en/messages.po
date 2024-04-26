@@ -551,7 +551,7 @@ msgstr "Do you want to reset this file upload?"
 msgid "Document"
 msgstr "Document"
 
-#: components/Document/LeftPanel/index.tsx:76
+#: components/Document/LeftPanel/index.tsx:82
 msgid "Documents"
 msgstr "Documents"
 
@@ -619,6 +619,7 @@ msgstr "Edit score"
 
 #: components/IdentityInput/index.tsx:62
 #: components/MagicLink/index.tsx:44
+#: components/PreJoinSpace.tsx:50
 #: components/UserCredential/EditProfileModal.tsx:47
 msgid "Email"
 msgstr "Email"
@@ -820,6 +821,14 @@ msgstr "Inviting role"
 #: components/Trash/index.tsx:18
 msgid "Item are available for 60 days. After that time, item will be permanently deleted."
 msgstr "Item are available for 60 days. After that time, item will be permanently deleted."
+
+#: components/PreJoinSpace.tsx:66
+msgid "Join"
+msgstr "Join"
+
+#: components/PreJoinSpace.tsx:40
+msgid "Joined! We're moving you to your space..."
+msgstr "Joined! We're moving you to your space..."
 
 #: components/UserCredential/EditProfileModal.tsx:63
 msgid "Last name"
@@ -1537,6 +1546,7 @@ msgid "Type your email"
 msgstr "Type your email"
 
 #: components/MagicLink/index.tsx:47
+#: components/PreJoinSpace.tsx:53
 msgid "Type your email!"
 msgstr "Type your email!"
 
@@ -1686,6 +1696,7 @@ msgid "Width"
 msgstr "Width"
 
 #: components/MagicLink/index.tsx:24
+#: components/PreJoinSpace.tsx:25
 msgid "Wrong email format!"
 msgstr "Wrong email format!"
 
@@ -1704,6 +1715,10 @@ msgstr "You cannot recover data if you confirm to delete."
 #: components/EmptyState.tsx:33
 msgid "You have no class here"
 msgstr "You have no class here"
+
+#: components/PreJoinSpace.tsx:47
+msgid "You've been invited to join Open Exam"
+msgstr "You've been invited to join Open Exam"
 
 #: components/Document/Submission/DoingSubmissionDocument.tsx:94
 msgid "Your submission is completed. We will move you to assignment page!"

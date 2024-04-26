@@ -917,6 +917,74 @@ export interface DeleteSpaceVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: GenerateSpaceInviteToken
+// ====================================================
+
+export interface GenerateSpaceInviteToken_spaceGenerateInviteToken {
+  spaceId: number;
+  token: string;
+}
+
+export interface GenerateSpaceInviteToken {
+  spaceGenerateInviteToken: GenerateSpaceInviteToken_spaceGenerateInviteToken;
+}
+
+export interface GenerateSpaceInviteTokenVariables {
+  data: SpaceInviteTokenInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: DeleteSpaceInviteToken
+// ====================================================
+
+export interface DeleteSpaceInviteToken {
+  spaceRemoveInviteToken: boolean;
+}
+
+export interface DeleteSpaceInviteTokenVariables {
+  spaceId: number;
+  inviteToken: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: JoinSpaceByInviteToken
+// ====================================================
+
+export interface JoinSpaceByInviteToken_spaceJoinByInviteToken_starterDocument {
+  id: any;
+}
+
+export interface JoinSpaceByInviteToken_spaceJoinByInviteToken {
+  starterDocument: JoinSpaceByInviteToken_spaceJoinByInviteToken_starterDocument;
+  accessToken: string;
+}
+
+export interface JoinSpaceByInviteToken {
+  spaceJoinByInviteToken: JoinSpaceByInviteToken_spaceJoinByInviteToken;
+}
+
+export interface JoinSpaceByInviteTokenVariables {
+  email: string;
+  spaceId: number;
+  token: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: CreateComment
 // ====================================================
 
@@ -1803,33 +1871,6 @@ export interface GetSpaceMembersVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetBasicSpaceDetail
-// ====================================================
-
-export interface GetBasicSpaceDetail_spaceGet_banner {
-  publicUrl: string | null;
-}
-
-export interface GetBasicSpaceDetail_spaceGet {
-  id: number;
-  name: string;
-  banner: GetBasicSpaceDetail_spaceGet_banner | null;
-}
-
-export interface GetBasicSpaceDetail {
-  spaceGet: GetBasicSpaceDetail_spaceGet;
-}
-
-export interface GetBasicSpaceDetailVariables {
-  spaceId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL query operation: GetDeletedSpaces
 // ====================================================
 
@@ -1854,16 +1895,38 @@ export interface GetDeletedSpaces {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetOrgSpaces
+// GraphQL query operation: GetSpaceInviteTokens
 // ====================================================
 
-export interface GetOrgSpaces_spaceGetAllOrgSpaces {
-  id: number;
-  name: string;
+export interface GetSpaceInviteTokens_spaceGetInviteTokens_creator_avatar {
+  publicUrl: string | null;
 }
 
-export interface GetOrgSpaces {
-  spaceGetAllOrgSpaces: GetOrgSpaces_spaceGetAllOrgSpaces[];
+export interface GetSpaceInviteTokens_spaceGetInviteTokens_creator {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  avatar: GetSpaceInviteTokens_spaceGetInviteTokens_creator_avatar | null;
+  randomColor: string;
+}
+
+export interface GetSpaceInviteTokens_spaceGetInviteTokens {
+  spaceId: number;
+  creator: GetSpaceInviteTokens_spaceGetInviteTokens_creator;
+  token: string;
+  invitingRole: OrgRole;
+  uses: number;
+  expireAt: number | null;
+  createdAt: number;
+}
+
+export interface GetSpaceInviteTokens {
+  spaceGetInviteTokens: GetSpaceInviteTokens_spaceGetInviteTokens[];
+}
+
+export interface GetSpaceInviteTokensVariables {
+  spaceId: number;
 }
 
 /* tslint:disable */
@@ -2245,6 +2308,12 @@ export interface RubricUserPickedInput {
   selected: boolean;
   score: number;
   comment: string;
+}
+
+export interface SpaceInviteTokenInput {
+  spaceId: number;
+  invitingRole: OrgRole;
+  expireAt?: number | null;
 }
 
 export interface UpdateAssignmentData {

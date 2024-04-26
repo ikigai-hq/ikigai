@@ -56,18 +56,6 @@ export const GET_SPACE_MEMBERS = gql`
   }
 `;
 
-export const GET_BASIC_SPACE_DETAIL = gql`
-  query GetBasicSpaceDetail($spaceId: Int!) {
-    spaceGet(spaceId: $spaceId) {
-      id
-      name
-      banner {
-        publicUrl
-      }
-    }
-  }
-`;
-
 export const GET_DELETED_SPACES = gql`
   query GetDeletedSpaces {
     spaceGetDeletedSpaces {
@@ -81,11 +69,25 @@ export const GET_DELETED_SPACES = gql`
   }
 `;
 
-export const GET_ORG_SPACES = gql`
-  query GetOrgSpaces {
-    spaceGetAllOrgSpaces {
-      id
-      name
+export const GET_SPACE_INVITE_TOKENS = gql`
+  query GetSpaceInviteTokens($spaceId: Int!) {
+    spaceGetInviteTokens(spaceId: $spaceId) {
+      spaceId
+      creator {
+        id
+        firstName
+        lastName
+        email
+        avatar {
+          publicUrl
+        }
+        randomColor
+      }
+      token
+      invitingRole
+      uses
+      expireAt
+      createdAt
     }
   }
 `;

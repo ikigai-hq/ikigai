@@ -106,21 +106,21 @@ impl Loader<MembersByClassId> for OpenExamDataLoader {
 }
 
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
-pub struct ClassById(pub i32);
+pub struct SpaceById(pub i32);
 
 #[async_trait::async_trait]
-impl Loader<ClassById> for OpenExamDataLoader {
+impl Loader<SpaceById> for OpenExamDataLoader {
     type Value = Space;
     type Error = OpenExamError;
 
     async fn load(
         &self,
-        keys: &[ClassById],
-    ) -> Result<HashMap<ClassById, Self::Value>, Self::Error> {
+        keys: &[SpaceById],
+    ) -> Result<HashMap<SpaceById, Self::Value>, Self::Error> {
         let conn = get_conn_from_actor().await?;
         let class_ids = keys.iter().map(|c| c.0).unique().collect::<Vec<i32>>();
         let res = Space::find_all_by_ids(&conn, class_ids)?;
-        Ok(res.into_iter().map(|p| (ClassById(p.id), p)).collect())
+        Ok(res.into_iter().map(|p| (SpaceById(p.id), p)).collect())
     }
 }
 

@@ -124,11 +124,11 @@ pub fn user_is_owner_of_file(conn: &PgConnection, user_id: i32, file_id: Uuid) -
 
 pub async fn space_quick_authorize(
     ctx: &Context<'_>,
-    class_id: i32,
+    space_id: i32,
     action: SpaceActionPermission,
 ) -> Result<()> {
     let user_auth = get_user_auth_from_ctx(ctx).await?;
-    let is_allowed = space_is_allow(ctx, user_auth, class_id, action).await?;
+    let is_allowed = space_is_allow(ctx, user_auth, space_id, action).await?;
     if !is_allowed {
         return Err(OpenExamError::new_unauthorized(
             "You dont' have permission to do this action in class",
@@ -142,13 +142,13 @@ pub async fn space_quick_authorize(
 pub async fn space_is_allow(
     ctx: &Context<'_>,
     user_auth: UserAuth,
-    class_id: i32,
+    space_id: i32,
     action: SpaceActionPermission,
 ) -> Result<bool> {
     let oso = ctx.data::<Oso>()?;
     let user_id = user_auth.id;
     let caching_data = ctx.data::<RequestContextCachingData>()?;
-    let class_auth = if let Some(space_auth) = caching_data.get_space_auth(class_id, user_id) {
+    let class_auth = if let Some(space_auth) = caching_data.get_space_auth(space_id, user_id) {
         info!(
             "Use caching data of request info space auth {:?}",
             space_auth
@@ -156,10 +156,10 @@ pub async fn space_is_allow(
         space_auth
     } else {
         let conn = get_conn_from_ctx(ctx).await?;
-        let class = Space::find_by_id(&conn, class_id).format_err()?;
+        let class = Space::find_by_id(&conn, space_id).format_err()?;
         let class_auth = SpaceAuth::new(&class);
         info!("Set caching data of request info space {:?}", class_auth);
-        caching_data.add_space_auth(class_id, user_id, class_auth)
+        caching_data.add_space_auth(space_id, user_id, class_auth)
     };
     let is_allowed = oso.is_allowed(user_auth, action.to_string(), class_auth)?;
 

@@ -70,10 +70,6 @@ impl PersonInformation {
 
 #[ComplexObject]
 impl User {
-    async fn email(&self) -> String {
-        self.email.clone()
-    }
-
     async fn active_org_personal_information(&self) -> Option<PersonInformation> {
         Some(PersonInformation::new(self.clone()))
     }
@@ -115,10 +111,6 @@ impl User {
 
 #[ComplexObject]
 impl PublicUser {
-    async fn email(&self) -> String {
-        self.email.clone()
-    }
-
     async fn random_color(&self) -> String {
         get_random_color(self.id)
     }

@@ -4,27 +4,20 @@ import slugify from "slugify";
 export enum Routes {
   Home = "/",
   DocumentDetail = "/documents/:documentId",
+  PreJoinSpace = "/spaces/:spaceId/join/:token",
   NotFound = "/404",
 }
-
-export const isNonAuthenticatePage = (pathName: string): boolean => {
-  // Standalone page
-  if (nonAuthPathNameStandalone.includes(pathName)) {
-    return true;
-  }
-
-  // Share Page
-  return pathName.includes("/share/");
-};
-
-export const nonAuthPathNameStandalone: Array<string> = [
-  Routes.Home,
-  Routes.NotFound,
-];
 
 export const formatDocumentRoute = (documentId: string) => {
   return Routes.DocumentDetail.replace(":documentId", documentId.toString());
 };
+
+export const formatPreJoinSpaceUrl = (spaceId: number, token: string) => {
+  const path = Routes.PreJoinSpace
+    .replace(":spaceId", spaceId.toString())
+    .replace(":token", token);
+  return `${window.location.protocol}//${window.location.host}${path}`;
+}
 
 export const formatPublicDocumentUrl = (
   documentUuid: string,

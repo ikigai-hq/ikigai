@@ -3,8 +3,9 @@ use diesel::{AsChangeset, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl
 use uuid::Uuid;
 
 use super::schema::spaces;
-use crate::db::schema::space_members;
-use crate::util::get_now_as_secs;
+use crate::db::schema::{space_invite_tokens, space_members};
+use crate::db::OrgRole;
+use crate::util::{generate_code, get_now_as_secs};
 
 #[derive(Debug, Clone, Insertable, InputObject)]
 #[table_name = "spaces"]
@@ -152,6 +153,75 @@ impl Space {
 
     pub fn remove(conn: &PgConnection, space_id: i32) -> Result<(), Error> {
         diesel::delete(spaces::table.find(space_id)).execute(conn)?;
+        Ok(())
+    }
+}
+
+#[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
+#[table_name = "space_invite_tokens"]
+#[graphql(input_name = "SpaceInviteTokenInput", complex)]
+pub struct SpaceInviteToken {
+    pub space_id: i32,
+    #[graphql(skip_input)]
+    pub token: String,
+    #[graphql(skip_input)]
+    pub creator_id: i32,
+    pub inviting_role: OrgRole,
+    pub expire_at: Option<i64>,
+    #[graphql(skip_input)]
+    pub uses: i32,
+    #[graphql(skip_input)]
+    pub is_active: bool,
+    #[graphql(skip_input)]
+    pub created_at: i64,
+}
+
+impl SpaceInviteToken {
+    pub fn upsert(conn: &PgConnection, mut item: Self) -> Result<Self, Error> {
+        item.is_active = true;
+        item.created_at = get_now_as_secs();
+        item.token = generate_code();
+
+        diesel::insert_into(space_invite_tokens::table)
+            .values(&item)
+            .on_conflict_do_nothing()
+            .execute(conn)?;
+
+        Ok(item)
+    }
+
+    pub fn increase_use(conn: &PgConnection, space_id: i32, token: &str) -> Result<Self, Error> {
+        diesel::update(space_invite_tokens::table.find((space_id, token)))
+            .set(space_invite_tokens::uses.eq(space_invite_tokens::uses + 1))
+            .get_result(conn)
+    }
+
+    pub fn set_active(
+        conn: &PgConnection,
+        space_id: i32,
+        token: String,
+        is_active: bool,
+    ) -> Result<Self, Error> {
+        diesel::update(space_invite_tokens::table.find((space_id, token)))
+            .set(space_invite_tokens::is_active.eq(is_active))
+            .get_result(conn)
+    }
+
+    pub fn find(conn: &PgConnection, space_id: i32, token: &str) -> Result<Self, Error> {
+        space_invite_tokens::table
+            .find((space_id, token))
+            .get_result(conn)
+    }
+
+    pub fn find_all_by_spaces(conn: &PgConnection, space_id: i32) -> Result<Vec<Self>, Error> {
+        space_invite_tokens::table
+            .filter(space_invite_tokens::space_id.eq(space_id))
+            .order_by(space_invite_tokens::created_at.desc())
+            .get_results(conn)
+    }
+
+    pub fn remove(conn: &PgConnection, space_id: i32, token: String) -> Result<(), Error> {
+        diesel::delete(space_invite_tokens::table.find((space_id, token))).execute(conn)?;
         Ok(())
     }
 }

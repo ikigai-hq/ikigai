@@ -202,11 +202,25 @@ diesel::table! {
 }
 
 diesel::table! {
+    space_invite_tokens (space_id, token) {
+        space_id -> Int4,
+        token -> Varchar,
+        creator_id -> Int4,
+        inviting_role -> Int4,
+        expire_at -> Nullable<Int8>,
+        uses -> Int4,
+        is_active -> Bool,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
     space_members (space_id, user_id) {
         space_id -> Int4,
         user_id -> Int4,
         updated_at -> Int8,
         created_at -> Int8,
+        join_by_token -> Nullable<Varchar>,
     }
 }
 
@@ -294,6 +308,8 @@ diesel::joinable!(quizzes -> quiz_structures (quiz_structure_id));
 diesel::joinable!(rubric_submissions -> assignment_submissions (submission_id));
 diesel::joinable!(rubric_submissions -> rubrics (rubric_id));
 diesel::joinable!(rubrics -> organizations (org_id));
+diesel::joinable!(space_invite_tokens -> spaces (space_id));
+diesel::joinable!(space_invite_tokens -> users (creator_id));
 diesel::joinable!(space_members -> spaces (space_id));
 diesel::joinable!(space_members -> users (user_id));
 diesel::joinable!(spaces -> files (banner_id));
@@ -322,6 +338,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     quizzes,
     rubric_submissions,
     rubrics,
+    space_invite_tokens,
     space_members,
     spaces,
     thread_comments,

@@ -1,14 +1,21 @@
-use crate::authorization::{
-    DocumentActionPermission, OrganizationActionPermission, SpaceActionPermission,
-};
+use crate::authentication_token::Claims;
 use async_graphql::*;
 use diesel::{Connection, PgConnection};
 use uuid::Uuid;
 
+use crate::authorization::{
+    DocumentActionPermission, OrganizationActionPermission, SpaceActionPermission,
+};
 use crate::db::*;
 use crate::error::{OpenExamError, OpenExamErrorExt};
 use crate::helper::*;
 use crate::util::get_now_as_secs;
+
+#[derive(SimpleObject)]
+pub struct SpaceWithAccessToken {
+    pub starter_document: Document,
+    pub access_token: String,
+}
 
 #[derive(Default)]
 pub struct SpaceMutation;
@@ -176,39 +183,6 @@ impl SpaceMutation {
         Ok(true)
     }
 
-    async fn space_add_member(
-        &self,
-        ctx: &Context<'_>,
-        space_id: i32,
-        user_id: i32,
-    ) -> Result<SpaceMember> {
-        space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceMember).await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let space = Space::find_by_id(&conn, space_id).format_err()?;
-        add_space_member(&conn, &space, user_id)
-    }
-
-    async fn space_add_members(
-        &self,
-        ctx: &Context<'_>,
-        space_id: i32,
-        user_ids: Vec<i32>,
-    ) -> Result<Vec<SpaceMember>> {
-        space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceMember).await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let space = Space::find_by_id(&conn, space_id).format_err()?;
-        let mut members = vec![];
-        for user_id in user_ids {
-            if let Ok(member) = add_space_member(&conn, &space, user_id) {
-                members.push(member);
-            }
-        }
-
-        Ok(members)
-    }
-
     async fn space_remove_member(
         &self,
         ctx: &Context<'_>,
@@ -223,11 +197,106 @@ impl SpaceMutation {
 
         Ok(true)
     }
+
+    async fn space_generate_invite_token(
+        &self,
+        ctx: &Context<'_>,
+        mut data: SpaceInviteToken,
+    ) -> Result<SpaceInviteToken> {
+        space_quick_authorize(ctx, data.space_id, SpaceActionPermission::ManageSpaceMember).await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        data.creator_id = get_user_id_from_ctx(ctx).await?;
+        let item = SpaceInviteToken::upsert(&conn, data).format_err()?;
+
+        Ok(item)
+    }
+
+    async fn space_set_active_invite_token(
+        &self,
+        ctx: &Context<'_>,
+        space_id: i32,
+        token: String,
+        is_active: bool,
+    ) -> Result<SpaceInviteToken> {
+        space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceMember).await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        let item = SpaceInviteToken::set_active(&conn, space_id, token, is_active).format_err()?;
+
+        Ok(item)
+    }
+
+    async fn space_join_by_invite_token(
+        &self,
+        ctx: &Context<'_>,
+        email: String,
+        space_id: i32,
+        token: String,
+    ) -> Result<SpaceWithAccessToken> {
+        let conn = get_conn_from_ctx(ctx).await?;
+        let space = Space::find_by_id(&conn, space_id).format_err()?;
+        let space_invite_token = SpaceInviteToken::find(&conn, space_id, &token).format_err()?;
+
+        if !space_invite_token.is_active {
+            return Err(OpenExamError::new_bad_request("Link is inactive!")).format_err();
+        }
+
+        if let Some(expire_at) = space_invite_token.expire_at {
+            let now = get_now_as_secs();
+            if expire_at < now {
+                return Err(OpenExamError::new_bad_request("Link is expired!")).format_err();
+            }
+        }
+
+        let user = if let Some(user) = User::find_by_email_opt(&conn, &email)? {
+            user
+        } else {
+            let new_user = NewUser::new(email.clone(), email, "".into());
+            User::insert(&conn, &new_user).format_err()?
+        };
+
+        if OrganizationMember::find(&conn, space.org_id, user.id).is_err() {
+            let member =
+                OrganizationMember::new(space.org_id, user.id, space_invite_token.inviting_role);
+            OrganizationMember::upsert(&conn, member).format_err()?;
+        }
+
+        SpaceInviteToken::increase_use(&conn, space.id, &token).format_err()?;
+        let space_member = add_space_member(&conn, &space, user.id, Some(token))?;
+        let claims = Claims::new(space_member.user_id);
+        let access_token = claims.encode()?;
+        let starter_document = Document::get_or_create_starter_doc(&conn, space_member.user_id, space_id, space.org_id, space.name).format_err()?;
+
+        Ok(SpaceWithAccessToken {
+            starter_document,
+            access_token,
+        })
+    }
+
+    async fn space_remove_invite_token(
+        &self,
+        ctx: &Context<'_>,
+        space_id: i32,
+        invite_token: String,
+    ) -> Result<bool> {
+        space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceMember).await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        SpaceInviteToken::remove(&conn, space_id, invite_token).format_err()?;
+
+        Ok(true)
+    }
 }
 
-fn add_space_member(conn: &PgConnection, space: &Space, user_id: i32) -> Result<SpaceMember> {
+fn add_space_member(
+    conn: &PgConnection,
+    space: &Space,
+    user_id: i32,
+    token: Option<String>,
+) -> Result<SpaceMember> {
     OrganizationMember::find(conn, space.org_id, user_id).format_err()?;
-    let new_member = SpaceMember::new(space.id, user_id);
+    let new_member = SpaceMember::new(space.id, user_id, token);
     let new_member = SpaceMember::upsert(conn, new_member).format_err()?;
 
     Ok(new_member)

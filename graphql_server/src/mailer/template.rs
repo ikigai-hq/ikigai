@@ -22,12 +22,11 @@ lazy_static! {
 
 #[derive(Serialize)]
 pub struct NotificationMailContext {
-    pub org_name: String,
-    pub org_url: String,
     pub name: String,
-    pub notification_title: String,
-    pub notification_description: String,
-    pub button_url: Option<String>,
+    pub title: String,
+    pub description: String,
+    pub button_url: String,
+    pub button_name: String,
 }
 
 #[derive(Serialize)]
@@ -45,7 +44,6 @@ impl Template {
         Ok(EN_TEMPLATES.render(MAGIC_LINK, &Context::from_serialize(context)?)?)
     }
 
-    #[allow(dead_code)]
     pub fn render_notification(context: NotificationMailContext) -> Result<String, OpenExamError> {
         Ok(EN_TEMPLATES.render(NOTIFICATION, &Context::from_serialize(context)?)?)
     }

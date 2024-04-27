@@ -1,14 +1,15 @@
-use crate::authentication_token::Claims;
 use async_graphql::*;
 use diesel::{Connection, PgConnection};
 use uuid::Uuid;
 
+use crate::authentication_token::Claims;
 use crate::authorization::{
     DocumentActionPermission, OrganizationActionPermission, SpaceActionPermission,
 };
 use crate::db::*;
 use crate::error::{OpenExamError, OpenExamErrorExt};
 use crate::helper::*;
+use crate::notification_center::send_notification;
 use crate::util::get_now_as_secs;
 
 #[derive(SimpleObject)]
@@ -266,7 +267,25 @@ impl SpaceMutation {
         let space_member = add_space_member(&conn, &space, user.id, Some(token))?;
         let claims = Claims::new(space_member.user_id);
         let access_token = claims.encode()?;
-        let starter_document = Document::get_or_create_starter_doc(&conn, space_member.user_id, space_id, space.org_id, space.name).format_err()?;
+        let starter_document = Document::get_or_create_starter_doc(
+            &conn,
+            space_member.user_id,
+            space_id,
+            space.org_id,
+            space.name.clone(),
+        )
+        .format_err()?;
+
+        let organization = Organization::find(&conn, space.org_id).format_err()?;
+        if let Some(owner_id) = organization.owner_id {
+            let notification = Notification::new_space_member_notification(NewSpaceMemberContext {
+                space_name: space.name,
+                space_id: space.id,
+                email: user.email,
+            });
+            let notification = Notification::insert(&conn, notification).format_err()?;
+            send_notification(&conn, notification, vec![owner_id]).format_err()?;
+        }
 
         Ok(SpaceWithAccessToken {
             starter_document,

@@ -54,3 +54,4 @@ bytes = "1.1.0"
 urlencoding = "2.1.3"
 aj = "0.4.2"
 awc = { version = "3.4.0", features = ["rustls"]}
+dyn-clone = "1.0.17"

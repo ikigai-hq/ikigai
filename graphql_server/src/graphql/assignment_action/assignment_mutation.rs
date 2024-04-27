@@ -1,13 +1,14 @@
-use crate::authorization::{DocumentActionPermission, OrganizationActionPermission};
 use aj::JobBuilder;
 use aj::AJ;
 use async_graphql::*;
 use diesel::Connection;
 
+use crate::authorization::{DocumentActionPermission, OrganizationActionPermission};
 use crate::background_job::submission_job::CompleteSubmission;
 use crate::db::*;
 use crate::error::{OpenExamError, OpenExamErrorExt};
 use crate::helper::*;
+use crate::notification_center::send_notification;
 use crate::util::{get_date_from_ts, get_now_as_secs};
 
 #[derive(Default)]
@@ -227,6 +228,7 @@ impl AssignmentMutation {
         ctx: &Context<'_>,
         submission_id: i32,
     ) -> Result<Submission> {
+        let user = get_user_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
         let submission = Submission::find_by_id(&conn, submission_id).format_err()?;
         let assignment = Assignment::find_by_id(&conn, submission.assignment_id).format_err()?;
@@ -242,6 +244,29 @@ impl AssignmentMutation {
         }
 
         submit_submission(&conn, &submission, &assignment, false).format_err()?;
+
+        let assignment_document =
+            Document::find_by_id(&conn, assignment.document_id).format_err()?;
+        let notification =
+            Notification::new_submit_submission_notification(SubmitSubmissionContext {
+                document_submission_id: submission.document_id,
+                submission_name: assignment_document.title,
+                student_name: user.name(),
+            });
+        let notification = Notification::insert(&conn, notification).format_err()?;
+        let space_members = SpaceMember::find_all_space_members_by_role_and_class(
+            &conn,
+            assignment_document.space_id.unwrap_or(-1),
+            assignment_document.org_id,
+            OrgRole::Teacher,
+        )
+        .format_err()?;
+        let receivers = space_members
+            .iter()
+            .map(|space_member| space_member.user_id)
+            .collect();
+        send_notification(&conn, notification, receivers).format_err()?;
+
         Ok(submission)
     }
 
@@ -251,6 +276,7 @@ impl AssignmentMutation {
         submission_id: i32,
         grade_data: GradeSubmissionData,
     ) -> Result<bool> {
+        let user_id = get_user_id_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
         let submission = Submission::find_by_id(&conn, submission_id).format_err()?;
         let assignment = Assignment::find_by_id(&conn, submission.assignment_id).format_err()?;
@@ -261,6 +287,16 @@ impl AssignmentMutation {
         )
         .await?;
         Submission::grade_submission(&conn, submission_id, grade_data).format_err()?;
+
+        let submission_document =
+            Document::find_by_id(&conn, submission.document_id).format_err()?;
+        let notification =
+            Notification::new_feedback_submission_notification(FeedbackSubmissionContext {
+                document_submission_id: submission.document_id,
+                submission_name: submission_document.title,
+            });
+        let notification = Notification::insert(&conn, notification).format_err()?;
+        send_notification(&conn, notification, vec![user_id]).format_err()?;
 
         Ok(true)
     }

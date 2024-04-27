@@ -6,7 +6,7 @@ use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
 
 use crate::error::OpenExamError;
-use crate::mailer::template::{MagicLinkContext, Template};
+use crate::mailer::template::{MagicLinkContext, NotificationMailContext, Template};
 
 #[derive(Debug, Clone)]
 pub struct SmtpServerInfo {
@@ -78,6 +78,26 @@ impl Mailer {
             .singlepart(SinglePart::html(body_html.to_string()))?;
         Self::from_registry().do_send(SendEmail(email, smtp));
         Ok(())
+    }
+
+    pub fn send_notification_email(
+        to_email: &str,
+        name: String,
+        title: String,
+        description: String,
+        button_name: String,
+        button_url: String,
+    ) -> Result<(), OpenExamError> {
+        let to = format!("{name} <{to_email}>").parse()?;
+        let subject = title.clone();
+        let body_html = Template::render_notification(NotificationMailContext {
+            name,
+            title,
+            description,
+            button_name,
+            button_url,
+        })?;
+        Self::send_email(SmtpServerInfo::init(), to, &subject, &body_html)
     }
 
     pub fn send_magic_link_email(to_email: &str, magic_link: String) -> Result<(), OpenExamError> {

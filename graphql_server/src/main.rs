@@ -42,6 +42,7 @@ mod error;
 mod graphql;
 mod helper;
 mod mailer;
+mod notification_center;
 mod service;
 mod util;
 

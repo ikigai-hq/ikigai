@@ -126,6 +126,23 @@ diesel::table! {
 }
 
 diesel::table! {
+    notification_receivers (notification_id, user_id) {
+        notification_id -> Uuid,
+        user_id -> Int4,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
+    notifications (id) {
+        id -> Uuid,
+        notification_type -> Int4,
+        context -> Jsonb,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
     organization_members (org_id, user_id) {
         org_id -> Int4,
         user_id -> Int4,
@@ -296,6 +313,8 @@ diesel::joinable!(documents -> files (cover_photo_id));
 diesel::joinable!(documents -> organizations (org_id));
 diesel::joinable!(documents -> spaces (space_id));
 diesel::joinable!(files -> organizations (org_id));
+diesel::joinable!(notification_receivers -> notifications (notification_id));
+diesel::joinable!(notification_receivers -> users (user_id));
 diesel::joinable!(organization_members -> organizations (org_id));
 diesel::joinable!(organization_members -> users (user_id));
 diesel::joinable!(organizations -> users (owner_id));
@@ -331,6 +350,8 @@ diesel::allow_tables_to_appear_in_same_query!(
     document_page_blocks,
     documents,
     files,
+    notification_receivers,
+    notifications,
     organization_members,
     organizations,
     quiz_answers,

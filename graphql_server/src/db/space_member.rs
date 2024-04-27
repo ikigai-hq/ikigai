@@ -2,7 +2,8 @@ use diesel::result::Error;
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use oso::PolarClass;
 
-use super::schema::space_members;
+use super::schema::{organization_members, space_members};
+use crate::db::{OrgRole, OrganizationMember};
 use crate::util::get_now_as_secs;
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, PolarClass, InputObject)]
@@ -54,6 +55,30 @@ impl SpaceMember {
 
     pub fn find(conn: &PgConnection, space_id: i32, user_id: i32) -> Result<Self, Error> {
         space_members::table.find((space_id, user_id)).first(conn)
+    }
+
+    pub fn find_all_space_members_by_role_and_class(
+        conn: &PgConnection,
+        space_id: i32,
+        org_id: i32,
+        role: OrgRole,
+    ) -> Result<Vec<Self>, Error> {
+        let members: Vec<Self> = space_members::table
+            .filter(space_members::space_id.eq(space_id))
+            .get_results(conn)?;
+        let user_ids: Vec<i32> = members.iter().map(|member| member.user_id).collect();
+
+        let org_members: Vec<OrganizationMember> = organization_members::table
+            .filter(organization_members::org_id.eq(org_id))
+            .filter(organization_members::user_id.eq_any(user_ids))
+            .filter(organization_members::org_role.eq(role))
+            .get_results(conn)?;
+        let org_member_ids: Vec<i32> = org_members.iter().map(|m| m.user_id).collect();
+
+        Ok(members
+            .into_iter()
+            .filter(|member| org_member_ids.contains(&member.user_id))
+            .collect())
     }
 
     pub fn find_all_by_classes(

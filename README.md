@@ -26,7 +26,13 @@ TBD
 TBD
 
 # Ikigai sponsors
-TBD
+
+🌟 Become a Sponsor! 🌟
+
+🚀 Help us keep `Ikigai` thriving! By sponsoring, you directly support ongoing development, ensuring more features, better maintenance, and a stronger community.
+
+[Sponsor us](https://ko-fi.com/ikigaihq)
+
 
 # Join Our Supportive Community! (Need help)
 

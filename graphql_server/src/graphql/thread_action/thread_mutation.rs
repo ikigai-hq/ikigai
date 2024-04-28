@@ -1,7 +1,7 @@
 use async_graphql::*;
 
 use crate::db::*;
-use crate::error::{OpenExamError, OpenExamErrorExt};
+use crate::error::{OpenAssignmentError, OpenAssignmentErrorExt};
 use crate::helper::*;
 
 #[derive(Default)]
@@ -22,7 +22,7 @@ impl ThreadMutation {
         let conn = get_conn_from_ctx(ctx).await?;
         let comment = Comment::find_by_id(&conn, comment_id).format_err()?;
         if user_id != comment.sender_id {
-            return Err(OpenExamError::new_bad_request("Incorrect sender")).format_err()?;
+            return Err(OpenAssignmentError::new_bad_request("Incorrect sender")).format_err()?;
         }
         Comment::remove(&conn, comment_id).format_err()?;
 

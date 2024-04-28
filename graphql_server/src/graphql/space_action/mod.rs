@@ -9,8 +9,8 @@ use async_graphql::{ComplexObject, Context, Result};
 
 use crate::authorization::SpaceActionPermission;
 use crate::db::*;
-use crate::error::OpenExamErrorExt;
-use crate::graphql::data_loader::{FileById, MembersByClassId, OpenExamDataLoader, SpaceById};
+use crate::error::OpenAssignmentErrorExt;
+use crate::graphql::data_loader::{FileById, MembersByClassId, OpenAssignmentDataLoader, SpaceById};
 use crate::helper::{
     get_conn_from_ctx, get_public_user_from_loader, get_user_id_from_ctx, space_quick_authorize,
 };
@@ -23,7 +23,7 @@ impl Space {
 
     async fn banner(&self, ctx: &Context<'_>) -> Option<File> {
         if let Some(banner_id) = self.banner_id {
-            let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+            let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
             loader.load_one(FileById(banner_id)).await.ok().flatten()
         } else {
             None
@@ -35,7 +35,7 @@ impl Space {
             .await
             .is_ok()
         {
-            let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+            let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
             let students = loader
                 .load_one(MembersByClassId(self.id))
                 .await?
@@ -71,7 +71,7 @@ impl SpaceMember {
     }
 
     async fn space(&self, ctx: &Context<'_>) -> Result<Space> {
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+        let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
         let space = loader
             .load_one(SpaceById(self.space_id))
             .await?

@@ -1,14 +1,14 @@
 {
-  "name": "open-exam",
+  "name": "open-assignment",
   "version": "0.1.0",
   "private": true,
   "license": "AGPL-3.0-only",
   "workspaces": [
-    "apps/open-exam",
+    "apps/open-assigment",
     "packages/*"
   ],
   "scripts": {
-    "dev-op-client": "cd apps/open-exam && yarn dev"
+    "dev-client": "cd apps/open-assignment && yarn dev"
   },
   "devDependencies": {
     "eslint-config-custom": "*",

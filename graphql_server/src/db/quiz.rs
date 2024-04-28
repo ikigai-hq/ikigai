@@ -4,7 +4,7 @@ use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use uuid::Uuid;
 
 use super::schema::{quiz_answers, quiz_structures, quizzes};
-use crate::error::OpenExamError;
+use crate::error::OpenAssignmentError;
 use crate::impl_enum_for_db;
 use crate::util::get_now_as_secs;
 
@@ -167,7 +167,7 @@ impl Quiz {
     pub fn delete_by_document_id(
         conn: &PgConnection,
         document_id: Uuid,
-    ) -> Result<(), OpenExamError> {
+    ) -> Result<(), OpenAssignmentError> {
         diesel::delete(quizzes::table.filter(quizzes::document_id.eq(document_id)))
             .execute(conn)?;
         Ok(())
@@ -317,7 +317,7 @@ pub fn try_get_score(quiz: &QuizStructure, answer: &QuizAnswer) -> f64 {
     }
 }
 
-pub fn get_score(quiz: &QuizStructure, answer: &QuizAnswer) -> Result<f64, OpenExamError> {
+pub fn get_score(quiz: &QuizStructure, answer: &QuizAnswer) -> Result<f64, OpenAssignmentError> {
     match quiz.quiz_type {
         QuizType::SingleChoice => {
             let body: ChoiceQuizBody = serde_json::from_value(quiz.quiz_body.clone())?;
@@ -410,7 +410,7 @@ impl QuizStructureStats {
     pub fn get(
         conn: &PgConnection,
         quiz_structure_id: Uuid,
-    ) -> Result<Option<QuizStructureStats>, OpenExamError> {
+    ) -> Result<Option<QuizStructureStats>, OpenAssignmentError> {
         let quizz_structure = QuizStructure::find(conn, quiz_structure_id)?;
         let quizzes = Quiz::find_all_by_structure(conn, quiz_structure_id)?;
         let quiz_ids = quizzes.iter().map(|quizz| quizz.id).collect();
@@ -430,7 +430,7 @@ impl QuizStructureStats {
     pub fn single_choice_answers(
         options: ChoiceQuizBody,
         answers: Vec<QuizAnswer>,
-    ) -> Result<QuizStructureStats, OpenExamError> {
+    ) -> Result<QuizStructureStats, OpenAssignmentError> {
         let mut single_choice_answers = vec![];
 
         for answer in answers {
@@ -459,7 +459,7 @@ impl QuizStructureStats {
     pub fn multiple_choice_answers(
         options: ChoiceQuizBody,
         answers: Vec<QuizAnswer>,
-    ) -> Result<QuizStructureStats, OpenExamError> {
+    ) -> Result<QuizStructureStats, OpenAssignmentError> {
         let mut multiple_choice_answers = vec![];
 
         for answer in answers {

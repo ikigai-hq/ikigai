@@ -1,7 +1,7 @@
 use actix::SystemService;
 
 use crate::db::Submission;
-use crate::error::OpenExamErrorExt;
+use crate::error::OpenAssignmentErrorExt;
 use async_graphql::*;
 use futures_core::Stream;
 use tokio::sync::mpsc::channel;

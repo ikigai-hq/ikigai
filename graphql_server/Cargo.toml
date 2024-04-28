@@ -1,5 +1,5 @@
 [package]
-name = "open-exam-graphql-server"
+name = "graphql-server"
 version = "0.1.0"
 authors = ["Rodgers <me@cptrodgers.com>"]
 edition = "2018"

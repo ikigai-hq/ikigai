@@ -9,9 +9,9 @@ use async_graphql::dataloader::DataLoader;
 use async_graphql::{ComplexObject, Context, Result};
 
 use crate::db::*;
-use crate::error::OpenExamErrorExt;
+use crate::error::OpenAssignmentErrorExt;
 use crate::graphql::data_loader::{
-    FindOrgById, FindPublicUserById, FindUserById, OpenExamDataLoader,
+    FindOrgById, FindPublicUserById, FindUserById, OpenAssignmentDataLoader,
 };
 use crate::graphql::user_action::PersonInformation;
 use crate::helper::{get_conn_from_ctx, get_user_id_from_ctx, organization_authorize};
@@ -37,7 +37,7 @@ impl Organization {
 #[ComplexObject]
 impl OrganizationMember {
     async fn user(&self, ctx: &Context<'_>) -> Result<PublicUser> {
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+        let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
         let user = loader
             .load_one(FindPublicUserById(self.user_id))
             .await?
@@ -46,7 +46,7 @@ impl OrganizationMember {
     }
 
     async fn organization(&self, ctx: &Context<'_>) -> Result<PublicOrganizationInformation> {
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+        let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
         let org = loader
             .load_one(FindOrgById {
                 org_id: self.org_id,
@@ -57,7 +57,7 @@ impl OrganizationMember {
     }
 
     async fn personal_information(&self, ctx: &Context<'_>) -> Result<PersonInformation> {
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+        let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
         let user = loader
             .load_one(FindUserById(self.user_id))
             .await?

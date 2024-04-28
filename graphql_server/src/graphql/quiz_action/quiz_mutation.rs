@@ -4,7 +4,7 @@ use uuid::Uuid;
 
 use crate::authorization::DocumentActionPermission;
 use crate::db::*;
-use crate::error::{OpenExamError, OpenExamErrorExt};
+use crate::error::{OpenAssignmentError, OpenAssignmentErrorExt};
 use crate::helper::*;
 use crate::util::get_now_as_secs;
 
@@ -86,7 +86,7 @@ impl QuizMutation {
         .await?;
 
         let new_quiz = conn
-            .transaction::<_, OpenExamError, _>(|| {
+            .transaction::<_, OpenAssignmentError, _>(|| {
                 let mut quiz_structure = QuizStructure::find(&conn, quiz.quiz_structure_id)?;
                 quiz_structure.id = Uuid::new_v4();
                 let new_quiz_structure = QuizStructure::upsert(&conn, quiz_structure)?;

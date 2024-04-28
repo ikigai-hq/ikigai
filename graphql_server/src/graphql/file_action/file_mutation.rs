@@ -5,7 +5,7 @@ use uuid::Uuid;
 use crate::background_job::storage_job::add_generate_waveform_job;
 use crate::db::file::{File, FileStatus};
 use crate::db::Connection;
-use crate::error::{OpenExamError, OpenExamErrorExt};
+use crate::error::{OpenAssignmentError, OpenAssignmentErrorExt};
 use crate::helper::{
     get_conn_from_ctx, get_user_auth_from_ctx, get_user_from_ctx, is_owner_of_file,
 };
@@ -108,7 +108,7 @@ impl FileMutation {
         } else {
             file.status = FileStatus::Failed;
             File::upsert(&conn, &file)?;
-            Err(OpenExamError::new_bad_request("File does not exist")).format_err()
+            Err(OpenAssignmentError::new_bad_request("File does not exist")).format_err()
         }
     }
 }

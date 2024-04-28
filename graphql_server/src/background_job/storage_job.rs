@@ -5,7 +5,7 @@ use uuid::Uuid;
 
 use crate::connection_pool::get_conn_from_actor;
 use crate::db::File;
-use crate::error::OpenExamError;
+use crate::error::OpenAssignmentError;
 use crate::service::audio_waveform::AudioWaveform;
 
 pub fn add_generate_waveform_job(file_id: Uuid) {
@@ -28,7 +28,7 @@ pub struct GenerateWaveform {
 
 #[async_trait]
 impl Executable for GenerateWaveform {
-    type Output = Result<bool, OpenExamError>;
+    type Output = Result<bool, OpenAssignmentError>;
 
     async fn execute(&self) -> Self::Output {
         info!("Start generate waveform {}", self.file_id);

@@ -7,7 +7,7 @@ use crate::authorization::{
     DocumentActionPermission, OrganizationActionPermission, SpaceActionPermission,
 };
 use crate::db::*;
-use crate::error::{OpenExamError, OpenExamErrorExt};
+use crate::error::{OpenAssignmentError, OpenAssignmentErrorExt};
 use crate::helper::*;
 use crate::notification_center::send_notification;
 use crate::util::get_now_as_secs;
@@ -101,7 +101,7 @@ impl SpaceMutation {
 
         let original_document = Document::find_by_id(&conn, document_id).format_err()?;
         if original_document.deleted_at.is_some() {
-            return Err(OpenExamError::new_bad_request(
+            return Err(OpenAssignmentError::new_bad_request(
                 "Cannot duplicate deleted document!",
             ))
             .format_err();
@@ -113,7 +113,7 @@ impl SpaceMutation {
         config.set_org(user_auth.org_id);
 
         let doc = conn
-            .transaction::<_, OpenExamError, _>(|| {
+            .transaction::<_, OpenAssignmentError, _>(|| {
                 original_document.deep_clone(
                     &conn,
                     user_auth.id,
@@ -240,13 +240,13 @@ impl SpaceMutation {
         let space_invite_token = SpaceInviteToken::find(&conn, space_id, &token).format_err()?;
 
         if !space_invite_token.is_active {
-            return Err(OpenExamError::new_bad_request("Link is inactive!")).format_err();
+            return Err(OpenAssignmentError::new_bad_request("Link is inactive!")).format_err();
         }
 
         if let Some(expire_at) = space_invite_token.expire_at {
             let now = get_now_as_secs();
             if expire_at < now {
-                return Err(OpenExamError::new_bad_request("Link is expired!")).format_err();
+                return Err(OpenAssignmentError::new_bad_request("Link is expired!")).format_err();
             }
         }
 

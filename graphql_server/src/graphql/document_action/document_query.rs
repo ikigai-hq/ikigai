@@ -3,7 +3,7 @@ use async_graphql::*;
 use uuid::Uuid;
 
 use crate::db::*;
-use crate::error::OpenExamErrorExt;
+use crate::error::OpenAssignmentErrorExt;
 use crate::helper::*;
 
 #[derive(Default)]

@@ -10,7 +10,7 @@ use crate::graphql::thread_action::ThreadMutation;
 use crate::graphql::user_action::UserMutation;
 
 #[derive(MergedObject, Default)]
-pub struct OpenExamMutation(
+pub struct OpenAssignmentMutation(
     AssignmentMutation,
     UserMutation,
     FileMutation,

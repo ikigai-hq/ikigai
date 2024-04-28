@@ -3,7 +3,7 @@ use aj::Executable;
 
 use crate::connection_pool::get_conn_from_actor;
 use crate::db::{Assignment, Submission};
-use crate::error::OpenExamError;
+use crate::error::OpenAssignmentError;
 use crate::helper::submit_submission;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -12,7 +12,7 @@ pub struct CompleteSubmission {
     pub submission_id: i32,
 }
 
-async fn handle_complete_submission(msg: &CompleteSubmission) -> Result<(), OpenExamError> {
+async fn handle_complete_submission(msg: &CompleteSubmission) -> Result<(), OpenAssignmentError> {
     info!("Start complete submission by background_job job {:?}", msg);
     let submission_id = msg.submission_id;
 

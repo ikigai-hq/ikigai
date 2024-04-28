@@ -3,7 +3,7 @@ use async_graphql::*;
 use diesel::{Connection, PgConnection};
 
 use crate::db::*;
-use crate::error::{OpenExamError, OpenExamErrorExt};
+use crate::error::{OpenAssignmentError, OpenAssignmentErrorExt};
 use crate::graphql::validator::Email;
 use crate::helper::{get_conn_from_ctx, get_user_from_ctx};
 use crate::mailer::Mailer;
@@ -17,7 +17,7 @@ pub struct UserToken {
     pub access_token: String,
 }
 
-fn create_default_org(conn: &PgConnection, user_id: i32) -> Result<Organization, OpenExamError> {
+fn create_default_org(conn: &PgConnection, user_id: i32) -> Result<Organization, OpenAssignmentError> {
     let new_org = NewOrganization {
         owner_id: Some(user_id),
         org_name: "My organization".into(),
@@ -34,7 +34,7 @@ fn create_default_space(
     conn: &PgConnection,
     org_id: i32,
     user_id: i32,
-) -> Result<Space, OpenExamError> {
+) -> Result<Space, OpenAssignmentError> {
     let new_space = NewSpace {
         name: "My space".into(),
         updated_at: get_now_as_secs(),
@@ -76,7 +76,7 @@ impl UserMutation {
                     )
                     .format_err()?
                 } else {
-                    conn.transaction::<_, OpenExamError, _>(|| {
+                    conn.transaction::<_, OpenAssignmentError, _>(|| {
                         let org = if let Ok(org) = Organization::find_by_owner(&conn, user.id) {
                             org
                         } else {
@@ -95,7 +95,7 @@ impl UserMutation {
             }
             None => {
                 // Create user, org, and space
-                conn.transaction::<_, OpenExamError, _>(|| {
+                conn.transaction::<_, OpenAssignmentError, _>(|| {
                     let user = NewUser::new(email.clone(), email, "".into());
                     let user = User::insert(&conn, &user)?;
                     let org = create_default_org(&conn, user.id)?;
@@ -129,7 +129,7 @@ impl UserMutation {
     ) -> Result<UserToken> {
         let magic_otp = Redis::init().get_magic_token(user_id);
         if Ok(otp) != magic_otp {
-            return Err(OpenExamError::new_bad_request(
+            return Err(OpenAssignmentError::new_bad_request(
                 "Magic token is expired or incorrect!",
             ))
             .format_err();

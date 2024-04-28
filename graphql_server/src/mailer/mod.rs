@@ -5,7 +5,7 @@ use lettre::message::{Mailbox, SinglePart};
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
 
-use crate::error::OpenExamError;
+use crate::error::OpenAssignmentError;
 use crate::mailer::template::{MagicLinkContext, NotificationMailContext, Template};
 
 #[derive(Debug, Clone)]
@@ -42,7 +42,7 @@ impl SmtpServerInfo {
         let smtp_password = std::env::var("SMTP_PASSWORD").unwrap();
         let smtp_endpoint = std::env::var("SMTP_ENDPOINT").unwrap();
         let sender = std::env::var("SMTP_SENDER").unwrap();
-        let sender_name = "Open Exam".to_string();
+        let sender_name = "Open Assignment".to_string();
         let smtp_port = 587;
         Self::new(
             sender,
@@ -54,7 +54,7 @@ impl SmtpServerInfo {
         )
     }
 
-    pub fn get_from_mailbox(&self) -> Result<Mailbox, OpenExamError> {
+    pub fn get_from_mailbox(&self) -> Result<Mailbox, OpenAssignmentError> {
         Ok(format!("{} <{}>", self.sender_name, self.sender).parse()?)
     }
 }
@@ -68,7 +68,7 @@ impl Mailer {
         to: Mailbox,
         subject: &str,
         body_html: &str,
-    ) -> Result<(), OpenExamError> {
+    ) -> Result<(), OpenAssignmentError> {
         info!("Send Email. Email: {}. Subject {}", to.email, subject);
         let from = smtp.get_from_mailbox()?;
         let email = Message::builder()
@@ -87,7 +87,7 @@ impl Mailer {
         description: String,
         button_name: String,
         button_url: String,
-    ) -> Result<(), OpenExamError> {
+    ) -> Result<(), OpenAssignmentError> {
         let to = format!("{name} <{to_email}>").parse()?;
         let subject = title.clone();
         let body_html = Template::render_notification(NotificationMailContext {
@@ -100,9 +100,9 @@ impl Mailer {
         Self::send_email(SmtpServerInfo::init(), to, &subject, &body_html)
     }
 
-    pub fn send_magic_link_email(to_email: &str, magic_link: String) -> Result<(), OpenExamError> {
+    pub fn send_magic_link_email(to_email: &str, magic_link: String) -> Result<(), OpenAssignmentError> {
         let to = format!("<{to_email}>").parse()?;
-        let subject = "Magic link to access your space in Open Exam".to_string();
+        let subject = "Magic link to access your space in Open Assignment".to_string();
         let body_html = Template::render_magic_link(MagicLinkContext { magic_link })?;
         Self::send_email(SmtpServerInfo::init(), to, &subject, &body_html)
     }

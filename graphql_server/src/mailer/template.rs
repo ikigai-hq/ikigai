@@ -1,7 +1,7 @@
 use lazy_static::lazy_static;
 use tera::{Context, Tera};
 
-use crate::error::OpenExamError;
+use crate::error::OpenAssignmentError;
 
 fn get_mail_templates(locale: &str) -> Tera {
     let dir = format!("email_templates/{locale}/*.html");
@@ -40,11 +40,11 @@ const MAGIC_LINK: &str = "magic_link.html";
 pub struct Template;
 
 impl Template {
-    pub fn render_magic_link(context: MagicLinkContext) -> Result<String, OpenExamError> {
+    pub fn render_magic_link(context: MagicLinkContext) -> Result<String, OpenAssignmentError> {
         Ok(EN_TEMPLATES.render(MAGIC_LINK, &Context::from_serialize(context)?)?)
     }
 
-    pub fn render_notification(context: NotificationMailContext) -> Result<String, OpenExamError> {
+    pub fn render_notification(context: NotificationMailContext) -> Result<String, OpenAssignmentError> {
         Ok(EN_TEMPLATES.render(NOTIFICATION, &Context::from_serialize(context)?)?)
     }
 }

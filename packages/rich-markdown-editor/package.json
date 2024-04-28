@@ -1,5 +1,5 @@
 {
-  "name": "@openexam/editor",
+  "name": "@open-assignment/editor",
   "description": "A rich text editor with Markdown shortcuts",
   "version": "11.21.3",
   "main": "dist/index.js",
@@ -76,7 +76,7 @@
     "@types/prosemirror-schema-list": "1.0.1",
     "@types/prosemirror-view": "1.23.0",
     "@types/react": "^16",
-    "@types/react-dom": "^16",
+    "@types/react-dom": "^18.3.0",
     "@types/refractor": "^2.8.0",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
     "@typescript-eslint/parser": "^4.15.2",

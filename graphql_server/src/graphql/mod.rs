@@ -3,9 +3,9 @@ use async_graphql::extensions::ApolloTracing;
 use async_graphql::Schema;
 
 use crate::authorization::init_oso;
-use crate::graphql::data_loader::OpenExamDataLoader;
-use crate::graphql::open_exam_mutation::OpenExamMutation;
-use crate::graphql::open_exam_query::OpenExamQuery;
+use crate::graphql::data_loader::OpenAssignmentDataLoader;
+use crate::graphql::open_exam_mutation::OpenAssignmentMutation;
+use crate::graphql::open_exam_query::OpenAssignmentQuery;
 use crate::graphql::open_exam_subscription::Subscription;
 use crate::service::redis::Redis;
 use crate::util::log_util::Logger;
@@ -26,19 +26,19 @@ pub mod thread_action;
 pub mod user_action;
 pub mod validator;
 
-pub type OpenExamSchema = Schema<OpenExamQuery, OpenExamMutation, Subscription>;
+pub type OpenAssignmentSchema = Schema<OpenAssignmentQuery, OpenAssignmentMutation, Subscription>;
 
-pub fn build_schema() -> OpenExamSchema {
+pub fn build_schema() -> OpenAssignmentSchema {
     let redis = Redis::init();
 
     Schema::build(
-        OpenExamQuery::default(),
-        OpenExamMutation::default(),
+        OpenAssignmentQuery::default(),
+        OpenAssignmentMutation::default(),
         Subscription,
     )
     .limit_depth(10)
     .data(redis)
-    .data(DataLoader::new(OpenExamDataLoader, tokio::spawn))
+    .data(DataLoader::new(OpenAssignmentDataLoader, tokio::spawn))
     .data(init_oso())
     .extension(Logger)
     .extension(ApolloTracing)

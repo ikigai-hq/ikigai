@@ -5,7 +5,7 @@ use uuid::Uuid;
 
 use crate::db::file::File;
 use crate::db::Document;
-use crate::error::OpenExamErrorExt;
+use crate::error::OpenAssignmentErrorExt;
 use crate::helper::{document_quick_authorize, get_conn_from_ctx};
 
 #[derive(Default)]

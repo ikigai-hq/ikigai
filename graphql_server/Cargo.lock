@@ -1849,6 +1849,61 @@ dependencies = [
 ]
 
 [[package]]
+name = "graphql-server"
+version = "0.1.0"
+dependencies = [
+ "actix",
+ "actix-cors",
+ "actix-web",
+ "actix-web-actors",
+ "aj",
+ "anyhow",
+ "async-graphql",
+ "async-graphql-actix-web",
+ "async-recursion",
+ "awc",
+ "aws-config",
+ "aws-sdk-mediaconvert",
+ "aws-sdk-s3",
+ "aws-sdk-sns",
+ "bytes",
+ "chrono",
+ "cron",
+ "csv",
+ "diesel",
+ "dotenv",
+ "dyn-clone",
+ "fern",
+ "futures-core",
+ "hmac 0.11.0",
+ "itertools",
+ "jsonwebtoken",
+ "lazy_static",
+ "lettre",
+ "log",
+ "num-derive",
+ "num-traits",
+ "oso",
+ "pbkdf2 0.7.5",
+ "r2d2",
+ "rand",
+ "rand_core",
+ "redis",
+ "regex",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "simple-aws-s3",
+ "tera",
+ "thiserror",
+ "tokio",
+ "urlencoding",
+ "uuid",
+ "validator",
+ "zip",
+]
+
+[[package]]
 name = "h2"
 version = "0.3.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2549,61 +2604,6 @@ name = "opaque-debug"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
-
-[[package]]
-name = "open-exam-graphql-server"
-version = "0.1.0"
-dependencies = [
- "actix",
- "actix-cors",
- "actix-web",
- "actix-web-actors",
- "aj",
- "anyhow",
- "async-graphql",
- "async-graphql-actix-web",
- "async-recursion",
- "awc",
- "aws-config",
- "aws-sdk-mediaconvert",
- "aws-sdk-s3",
- "aws-sdk-sns",
- "bytes",
- "chrono",
- "cron",
- "csv",
- "diesel",
- "dotenv",
- "dyn-clone",
- "fern",
- "futures-core",
- "hmac 0.11.0",
- "itertools",
- "jsonwebtoken",
- "lazy_static",
- "lettre",
- "log",
- "num-derive",
- "num-traits",
- "oso",
- "pbkdf2 0.7.5",
- "r2d2",
- "rand",
- "rand_core",
- "redis",
- "regex",
- "reqwest",
- "serde",
- "serde_json",
- "simple-aws-s3",
- "tera",
- "thiserror",
- "tokio",
- "urlencoding",
- "uuid",
- "validator",
- "zip",
-]
 
 [[package]]
 name = "openssl"

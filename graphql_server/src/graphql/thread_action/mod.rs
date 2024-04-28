@@ -8,13 +8,13 @@ use async_graphql::dataloader::DataLoader;
 use async_graphql::*;
 
 use crate::db::{Comment, File, PublicUser, Thread};
-use crate::graphql::data_loader::{FileById, LoadCommentsOfThread, OpenExamDataLoader};
+use crate::graphql::data_loader::{FileById, LoadCommentsOfThread, OpenAssignmentDataLoader};
 use crate::helper::get_public_user_from_loader;
 
 #[ComplexObject]
 impl Thread {
     async fn comments(&self, ctx: &Context<'_>) -> Result<Vec<Comment>> {
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+        let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
 
         let comments = loader
             .load_one(LoadCommentsOfThread { thread_id: self.id })
@@ -37,7 +37,7 @@ impl Comment {
 
     async fn file(&self, ctx: &Context<'_>) -> Result<Option<File>> {
         if let Some(file_uuid) = self.file_uuid {
-            let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+            let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
 
             let file = loader
                 .load_one(FileById(file_uuid))

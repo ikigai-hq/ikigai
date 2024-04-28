@@ -4,7 +4,7 @@ use uuid::Uuid;
 
 use crate::authorization::OrganizationActionPermission;
 use crate::db::*;
-use crate::error::{OpenExamError, OpenExamErrorExt};
+use crate::error::{OpenAssignmentError, OpenAssignmentErrorExt};
 use crate::helper::{
     get_conn_from_ctx, get_user_auth_from_ctx, get_user_id_from_ctx, organization_authorize,
 };
@@ -45,13 +45,13 @@ impl OrganizationMutation {
         .await?;
 
         if user_auth.id == user_id {
-            return Err(OpenExamError::new_bad_request("Cannot remove yourself!")).format_err();
+            return Err(OpenAssignmentError::new_bad_request("Cannot remove yourself!")).format_err();
         }
 
         let conn = get_conn_from_ctx(ctx).await?;
         let org_member = OrganizationMember::find(&conn, user_auth.org_id, user_id).format_err()?;
         if org_member.org_id != user_auth.org_id {
-            return Err(OpenExamError::new_bad_request(
+            return Err(OpenAssignmentError::new_bad_request(
                 "Cannot remove account of another org!",
             ))
             .format_err();
@@ -59,13 +59,13 @@ impl OrganizationMutation {
 
         let org = Organization::find(&conn, user_auth.org_id).format_err()?;
         if org.owner_id == Some(user_id) {
-            return Err(OpenExamError::new_bad_request(
+            return Err(OpenAssignmentError::new_bad_request(
                 "Cannot remove owner of organization!",
             ))
             .format_err();
         }
 
-        conn.transaction::<_, OpenExamError, _>(|| {
+        conn.transaction::<_, OpenAssignmentError, _>(|| {
             OrganizationMember::remove(&conn, user_auth.org_id, user_id)?;
             SpaceMember::remove_by_user(&conn, user_id)?;
             Ok(())

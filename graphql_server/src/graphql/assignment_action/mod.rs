@@ -13,9 +13,9 @@ use itertools::Itertools;
 use uuid::Uuid;
 
 use crate::db::*;
-use crate::error::OpenExamErrorExt;
+use crate::error::OpenAssignmentErrorExt;
 use crate::graphql::data_loader::{
-    AssignmentById, DocumentById, OpenExamDataLoader, SubmissionByAssignmentId,
+    AssignmentById, DocumentById, OpenAssignmentDataLoader, SubmissionByAssignmentId,
 };
 use crate::helper::{
     document_quick_authorize, get_conn_from_ctx, get_public_user_from_loader,
@@ -33,7 +33,7 @@ impl Assignment {
         .await
         .is_ok()
         {
-            let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+            let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
             let submissions = loader
                 .load_one(SubmissionByAssignmentId(self.id))
                 .await?
@@ -60,7 +60,7 @@ impl Assignment {
     // TODO: Deprecated, should remove in the future
     async fn my_submission(&self, ctx: &Context<'_>) -> Result<Option<Submission>> {
         let user_id = get_user_id_from_ctx(ctx).await?;
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+        let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
         let submissions = loader
             .load_one(SubmissionByAssignmentId(self.id))
             .await?
@@ -114,7 +114,7 @@ impl Submission {
     }
 
     async fn assignment(&self, ctx: &Context<'_>) -> Result<Assignment> {
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+        let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
         let assignment = loader
             .load_one(AssignmentById(self.assignment_id))
             .await?
@@ -170,7 +170,7 @@ impl RubricTableData {
 }
 
 async fn get_document(ctx: &Context<'_>, document_id: Uuid) -> Result<Document> {
-    let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+    let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
     let document = loader
         .load_one(DocumentById(document_id))
         .await?

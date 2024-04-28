@@ -1,4 +1,4 @@
-# Open Exam RBAC
+# Open Assignment RBAC
 
 ## Organization Auth Permissions
 

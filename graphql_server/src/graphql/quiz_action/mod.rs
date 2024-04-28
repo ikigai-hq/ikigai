@@ -10,7 +10,7 @@ use async_graphql::*;
 use crate::authorization::DocumentActionPermission;
 use crate::db::*;
 use crate::graphql::data_loader::{
-    AnswersByQuiz, FindPublicUserById, OpenExamDataLoader, QuizAnswerByUser, QuizId,
+    AnswersByQuiz, FindPublicUserById, OpenAssignmentDataLoader, QuizAnswerByUser, QuizId,
     QuizStructureById,
 };
 use crate::helper::{document_quick_authorize, get_user_id_from_ctx};
@@ -18,7 +18,7 @@ use crate::helper::{document_quick_authorize, get_user_id_from_ctx};
 #[ComplexObject]
 impl Quiz {
     async fn structure(&self, ctx: &Context<'_>) -> Result<QuizStructure> {
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+        let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
         let quiz_structure = loader
             .load_one(QuizStructureById(self.quiz_structure_id))
             .await?
@@ -52,7 +52,7 @@ impl Quiz {
 
     async fn my_answer(&self, ctx: &Context<'_>) -> Result<Option<QuizAnswer>> {
         if let Ok(user_id) = get_user_id_from_ctx(ctx).await {
-            let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+            let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
             Ok(loader
                 .load_one(QuizAnswerByUser {
                     user_id,
@@ -76,7 +76,7 @@ impl Quiz {
             return Ok(vec![]);
         }
 
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+        let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
         let answers = loader
             .load_one(AnswersByQuiz(self.id))
             .await?
@@ -92,7 +92,7 @@ impl QuizAnswer {
     }
 
     async fn score(&self, ctx: &Context<'_>) -> Result<Option<f64>> {
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+        let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
         let quiz = loader
             .load_one(QuizId(self.quiz_id))
             .await?
@@ -108,7 +108,7 @@ impl QuizAnswer {
     }
 
     async fn user(&self, ctx: &Context<'_>) -> Result<PublicUser> {
-        let loader = ctx.data_unchecked::<DataLoader<OpenExamDataLoader>>();
+        let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
         let user = loader
             .load_one(FindPublicUserById(self.user_id))
             .await?

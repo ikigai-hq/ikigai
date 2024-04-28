@@ -1,3 +1,3 @@
-# Open Exam
+# Open Assignment
 
 TBD

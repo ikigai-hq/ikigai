@@ -1,10 +1,10 @@
 {
   "__schema": {
     "queryType": {
-      "name": "OpenAssignmentQuery"
+      "name": "IkigaiQuery"
     },
     "mutationType": {
-      "name": "OpenAssignmentMutation"
+      "name": "IkigaiMutation"
     },
     "subscriptionType": {
       "name": "Subscription"
@@ -12,7 +12,7 @@
     "types": [
       {
         "kind": "OBJECT",
-        "name": "OpenAssignmentQuery",
+        "name": "IkigaiQuery",
         "description": null,
         "fields": [
           {
@@ -5481,7 +5481,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "OpenAssignmentMutation",
+        "name": "IkigaiMutation",
         "description": null,
         "fields": [
           {

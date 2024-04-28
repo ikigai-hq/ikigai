@@ -3,7 +3,7 @@ use std::io::Read;
 use std::process::Command;
 use uuid::Uuid;
 
-use crate::error::OpenAssignmentError;
+use crate::error::IkigaiError;
 use crate::service::Storage;
 
 pub struct AudioWaveform;
@@ -13,7 +13,7 @@ impl AudioWaveform {
         file_id: Uuid,
         key: &str,
         extension: &str,
-    ) -> Result<String, OpenAssignmentError> {
+    ) -> Result<String, IkigaiError> {
         let current_dir = std::env::current_dir()?;
         let input_path = format!(
             "{}/tmp_data/{}_waveform.json",

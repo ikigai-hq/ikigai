@@ -2,7 +2,7 @@ use diesel::PgConnection;
 use oso::PolarClass;
 
 use crate::db::{OrgRole, OrganizationMember, SpaceMember};
-use crate::error::OpenAssignmentError;
+use crate::error::IkigaiError;
 
 #[derive(Clone, Debug, PolarClass, SimpleObject)]
 pub struct UserAuth {
@@ -33,7 +33,7 @@ impl UserAuth {
         }
     }
 
-    pub fn new(conn: &PgConnection, member: OrganizationMember) -> Result<Self, OpenAssignmentError> {
+    pub fn new(conn: &PgConnection, member: OrganizationMember) -> Result<Self, IkigaiError> {
         let space_ids = SpaceMember::find_all_by_user(conn, member.user_id)?
             .into_iter()
             .map(|m| m.space_id)

@@ -1,5 +1,5 @@
 use crate::db::*;
-use crate::error::OpenAssignmentErrorExt;
+use crate::error::IkigaiErrorExt;
 use crate::helper::{get_conn_from_ctx, get_user_from_ctx, get_user_id_from_ctx};
 use crate::util::get_now_as_secs;
 use async_graphql::*;
@@ -35,7 +35,7 @@ impl UserQuery {
     }
 
     // FIXME: Replace this step by using new authorization logic
-    // Currently, open exam use active org id, so this step is necessary to get org id before do any action
+    // Currently, ikigai use active org id, so this step is necessary to get org id before do any action
     // However, it can be replaced by authorization logic and not rely on active org id
     async fn user_check_document(&self, ctx: &Context<'_>, document_id: Uuid) -> Result<i32> {
         get_user_id_from_ctx(ctx).await?;

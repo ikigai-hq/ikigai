@@ -1,5 +1,5 @@
 use crate::db::*;
-use crate::error::OpenAssignmentErrorExt;
+use crate::error::IkigaiErrorExt;
 use crate::helper::{get_conn_from_ctx, get_user_auth_from_ctx};
 use async_graphql::*;
 

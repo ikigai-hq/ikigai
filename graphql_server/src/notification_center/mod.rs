@@ -8,14 +8,14 @@ use dyn_clone::DynClone;
 
 use crate::connection_pool::get_conn_from_actor;
 use crate::db::*;
-use crate::error::OpenAssignmentError;
+use crate::error::IkigaiError;
 use crate::mailer::Mailer;
 
 pub fn send_notification(
     conn: &PgConnection,
     notification: Notification,
     receiver_ids: Vec<i32>,
-) -> Result<(), OpenAssignmentError> {
+) -> Result<(), IkigaiError> {
     let receivers = receiver_ids
         .iter()
         .map(|receiver_id| NotificationReceiver::new(notification.id, *receiver_id))
@@ -50,7 +50,7 @@ pub fn parse_context(notification: &Notification) -> Option<Box<dyn ContextMessa
 
 #[async_trait]
 pub trait NotificationSender: Debug + DynClone {
-    async fn send(&self, to: &User, notification: &Notification) -> Result<(), OpenAssignmentError>;
+    async fn send(&self, to: &User, notification: &Notification) -> Result<(), IkigaiError>;
 }
 
 dyn_clone::clone_trait_object!(NotificationSender);
@@ -60,7 +60,7 @@ pub struct MailSender;
 
 #[async_trait]
 impl NotificationSender for MailSender {
-    async fn send(&self, user: &User, notification: &Notification) -> Result<(), OpenAssignmentError> {
+    async fn send(&self, user: &User, notification: &Notification) -> Result<(), IkigaiError> {
         if let Some(context) = parse_context(notification) {
             Mailer::send_notification_email(
                 &user.email,
@@ -121,7 +121,7 @@ impl Handler<SendNotification> for NotificationCenter {
         };
 
         wrap_future::<_, Self>(task)
-            .map(|_: Result<(), OpenAssignmentError>, _, _| ())
+            .map(|_: Result<(), IkigaiError>, _, _| ())
             .spawn(ctx)
     }
 }

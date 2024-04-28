@@ -6,7 +6,7 @@ use diesel::Connection;
 use crate::authorization::{DocumentActionPermission, OrganizationActionPermission};
 use crate::background_job::submission_job::CompleteSubmission;
 use crate::db::*;
-use crate::error::{OpenAssignmentError, OpenAssignmentErrorExt};
+use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
 use crate::notification_center::send_notification;
 use crate::util::{get_date_from_ts, get_now_as_secs};
@@ -62,14 +62,14 @@ impl AssignmentMutation {
         .await?;
 
         if submission.user_id != user_id {
-            return Err(OpenAssignmentError::new_bad_request(
+            return Err(IkigaiError::new_bad_request(
                 "Incorrect owner of submission",
             ))
             .format_err();
         }
 
         if !submission.allow_rework {
-            return Err(OpenAssignmentError::new_bad_request("Cannot redo submission")).format_err()?;
+            return Err(IkigaiError::new_bad_request("Cannot redo submission")).format_err()?;
         }
 
         Submission::redo(&conn, submission_id).format_err()?;
@@ -99,7 +99,7 @@ impl AssignmentMutation {
             (&last_submission, assignment.max_number_of_attempt)
         {
             if last_submission.attempt_number + 1 > max_number_of_attempt {
-                return Err(OpenAssignmentError::new_bad_request(
+                return Err(IkigaiError::new_bad_request(
                     "You reach max attempt times for this assignment!",
                 ))
                 .format_err();
@@ -108,7 +108,7 @@ impl AssignmentMutation {
 
         if let Some(last_submission) = &last_submission {
             if last_submission.feedback_at.is_some() {
-                return Err(OpenAssignmentError::new_bad_request(
+                return Err(IkigaiError::new_bad_request(
                     "Your teacher already feedback your last submission, please review it!",
                 ))
                 .format_err();
@@ -119,7 +119,7 @@ impl AssignmentMutation {
             Document::find_by_id(&conn, assignment.document_id).format_err()?;
 
         let submission = conn
-            .transaction::<_, OpenAssignmentError, _>(|| {
+            .transaction::<_, IkigaiError, _>(|| {
                 let document = assignment_document.deep_clone(
                     &conn,
                     user_id,
@@ -188,7 +188,7 @@ impl AssignmentMutation {
             Submission::find_last_submission(&conn, student_id, assignment_id).format_err()?;
 
         if last_submission.is_some() {
-            return Err(OpenAssignmentError::new_bad_request(
+            return Err(IkigaiError::new_bad_request(
                 "Student already submit, please reload!",
             ))
             .format_err()?;
@@ -197,7 +197,7 @@ impl AssignmentMutation {
         let assignment_document =
             Document::find_by_id(&conn, assignment.document_id).format_err()?;
         let submission = conn
-            .transaction::<_, OpenAssignmentError, _>(|| {
+            .transaction::<_, IkigaiError, _>(|| {
                 let document = assignment_document.deep_clone(
                     &conn,
                     student_id,
@@ -240,7 +240,7 @@ impl AssignmentMutation {
         .await?;
 
         if submission.submit_at.is_some() {
-            return Err(OpenAssignmentError::new_bad_request("Cannot submit twice")).format_err()?;
+            return Err(IkigaiError::new_bad_request("Cannot submit twice")).format_err()?;
         }
 
         submit_submission(&conn, &submission, &assignment, false).format_err()?;
@@ -338,7 +338,7 @@ impl AssignmentMutation {
         let conn = get_conn_from_ctx(ctx).await?;
         let band_score = BandScore::find(&conn, band_score_id).format_err()?;
         if band_score.org_id != Some(user_auth.org_id) {
-            return Err(OpenAssignmentError::new_bad_request(
+            return Err(IkigaiError::new_bad_request(
                 "Cannot remove band score of another org",
             ))
             .format_err();
@@ -366,7 +366,7 @@ impl AssignmentMutation {
         let conn = get_conn_from_ctx(ctx).await?;
         let band_score = BandScore::find(&conn, band_score_id).format_err()?;
         if band_score.org_id != Some(user_auth.org_id) {
-            return Err(OpenAssignmentError::new_bad_request(
+            return Err(IkigaiError::new_bad_request(
                 "Cannot remove band score of another org",
             ))
             .format_err();
@@ -393,7 +393,7 @@ impl AssignmentMutation {
 
         let final_grade = data.graded_data.total_rubric_score();
         let item = conn
-            .transaction::<_, OpenAssignmentError, _>(|| {
+            .transaction::<_, IkigaiError, _>(|| {
                 Submission::update_final_grade(&conn, submission.id, final_grade)?;
                 let item = RubricSubmission::upsert(&conn, data)?;
                 Ok(item)

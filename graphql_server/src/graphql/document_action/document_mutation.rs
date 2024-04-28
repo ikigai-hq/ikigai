@@ -5,7 +5,7 @@ use uuid::Uuid;
 
 use crate::authorization::DocumentActionPermission;
 use crate::db::*;
-use crate::error::{OpenAssignmentError, OpenAssignmentErrorExt};
+use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
 use crate::util::get_now_as_secs;
 
@@ -32,7 +32,7 @@ impl DocumentMutation {
 
         let conn = get_conn_from_ctx(ctx).await?;
         let doc = conn
-            .transaction::<_, OpenAssignmentError, _>(|| {
+            .transaction::<_, IkigaiError, _>(|| {
                 let doc = Document::upsert(&conn, data)?;
                 if is_assignment {
                     let new_assignment = NewAssignment::init(doc.id);
@@ -115,7 +115,7 @@ impl DocumentMutation {
 
         let conn = get_conn_from_ctx(ctx).await?;
         let highlight = conn
-            .transaction::<_, OpenAssignmentError, _>(|| {
+            .transaction::<_, IkigaiError, _>(|| {
                 let thread = Thread::insert(
                     &conn,
                     NewThread {
@@ -152,7 +152,7 @@ impl DocumentMutation {
             DocumentActionPermission::EditDocument,
         )
         .await?;
-        conn.transaction::<_, OpenAssignmentError, _>(|| {
+        conn.transaction::<_, IkigaiError, _>(|| {
             DocumentHighlight::remove(&conn, highlight_id)?;
             Thread::remove(&conn, highlight.thread_id)?;
             Ok(())
@@ -212,7 +212,7 @@ impl DocumentMutation {
         if let Some(cloned_page_block) = cloned_page_block {
             Ok(cloned_page_block)
         } else {
-            Err(OpenAssignmentError::new_bad_request("Cannot clone page block")).format_err()
+            Err(IkigaiError::new_bad_request("Cannot clone page block")).format_err()
         }
     }
 

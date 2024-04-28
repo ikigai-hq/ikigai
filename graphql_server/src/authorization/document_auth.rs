@@ -4,7 +4,7 @@ use std::fmt::{Display, Formatter};
 use uuid::Uuid;
 
 use crate::db::*;
-use crate::error::OpenAssignmentError;
+use crate::error::IkigaiError;
 
 #[derive(PolarClass, Clone, Debug)]
 pub struct DocumentAuth {
@@ -27,7 +27,7 @@ pub struct DocumentAuth {
 }
 
 impl DocumentAuth {
-    pub fn try_new(conn: &PgConnection, document_id: Uuid) -> Result<Self, OpenAssignmentError> {
+    pub fn try_new(conn: &PgConnection, document_id: Uuid) -> Result<Self, IkigaiError> {
         let mut allow_for_student_view_answer = false;
         let mut is_doing_submission = false;
         let mut is_doing_open_type_submission = false;

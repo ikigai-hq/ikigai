@@ -1,3 +1,3 @@
-# Open Assignment
+# ikigai
 
 TBD

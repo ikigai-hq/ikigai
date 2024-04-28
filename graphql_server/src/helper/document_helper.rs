@@ -6,7 +6,7 @@ use uuid::Uuid;
 
 use crate::db::Document;
 use crate::db::*;
-use crate::error::OpenAssignmentError;
+use crate::error::IkigaiError;
 use crate::util::get_now_as_secs;
 
 #[derive(Debug, Clone)]
@@ -50,7 +50,7 @@ impl PageBlock {
         document_config: &DocumentCloneConfig,
         check_and_replace_page_block_id: bool,
         new_id: Uuid,
-    ) -> Result<Option<Self>, OpenAssignmentError> {
+    ) -> Result<Option<Self>, IkigaiError> {
         let id = self.id.to_string();
         if check_and_replace_page_block_id && !to_document.body.contains(id.as_str()) {
             return Ok(None);
@@ -104,7 +104,7 @@ impl Quiz {
         conn: &PgConnection,
         to_document: &mut Document,
         clone_new_quiz_structure: bool,
-    ) -> Result<Option<Self>, OpenAssignmentError> {
+    ) -> Result<Option<Self>, IkigaiError> {
         let id = self.id.to_string();
         if !to_document.body.contains(id.as_str()) {
             return Ok(None);
@@ -144,7 +144,7 @@ impl Document {
         clone_children: bool,
         clone_to_document_id: Option<Uuid>,
         clone_document_type: bool,
-    ) -> Result<Self, OpenAssignmentError> {
+    ) -> Result<Self, IkigaiError> {
         let new_body = self.body.clone();
         let new_title = format!("{}{}", config.prefix_title, self.title);
         let new_org_id = config.org_id.unwrap_or(self.org_id);
@@ -254,7 +254,7 @@ impl Document {
 pub fn get_all_documents_by_id(
     conn: &PgConnection,
     document_id: Uuid,
-) -> Result<Vec<Document>, OpenAssignmentError> {
+) -> Result<Vec<Document>, IkigaiError> {
     let mut res: Vec<Document> = vec![];
     let mut child_documents = Document::find_by_parent(conn, document_id)?;
     res.append(&mut child_documents);

@@ -10,7 +10,7 @@ use uuid::Uuid;
 
 use crate::authorization::DocumentActionPermission;
 use crate::db::{File, PublicUser};
-use crate::graphql::data_loader::{FindPublicUserById, OpenAssignmentDataLoader};
+use crate::graphql::data_loader::{FindPublicUserById, IkigaiDataLoader};
 use crate::helper::{document_quick_authorize, generate_download_url};
 
 #[derive(Enum, Debug, Clone, Copy, Eq, PartialEq)]
@@ -38,7 +38,7 @@ impl File {
     }
 
     async fn user(&self, ctx: &Context<'_>) -> Result<PublicUser> {
-        let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
+        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
         let user = loader
             .load_one(FindPublicUserById(self.user_id))
             .await?

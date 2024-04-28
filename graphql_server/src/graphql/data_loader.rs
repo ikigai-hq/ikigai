@@ -8,19 +8,19 @@ use uuid::Uuid;
 use crate::connection_pool::get_conn_from_actor;
 use crate::db::*;
 
-use crate::error::OpenAssignmentError;
+use crate::error::IkigaiError;
 
 #[derive(Clone)]
-pub struct OpenAssignmentDataLoader;
+pub struct IkigaiDataLoader;
 
 /// Load User Info by user id
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct FindPublicUserById(pub i32);
 
 #[async_trait::async_trait]
-impl Loader<FindPublicUserById> for OpenAssignmentDataLoader {
+impl Loader<FindPublicUserById> for IkigaiDataLoader {
     type Value = PublicUser;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -40,9 +40,9 @@ impl Loader<FindPublicUserById> for OpenAssignmentDataLoader {
 pub struct FindUserById(pub i32);
 
 #[async_trait::async_trait]
-impl Loader<FindUserById> for OpenAssignmentDataLoader {
+impl Loader<FindUserById> for IkigaiDataLoader {
     type Value = User;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -63,9 +63,9 @@ impl Loader<FindUserById> for OpenAssignmentDataLoader {
 pub struct FileById(pub Uuid);
 
 #[async_trait::async_trait]
-impl Loader<FileById> for OpenAssignmentDataLoader {
+impl Loader<FileById> for IkigaiDataLoader {
     type Value = File;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(&self, keys: &[FileById]) -> Result<HashMap<FileById, Self::Value>, Self::Error> {
         let conn = get_conn_from_actor().await?;
@@ -79,9 +79,9 @@ impl Loader<FileById> for OpenAssignmentDataLoader {
 pub struct MembersByClassId(pub i32);
 
 #[async_trait::async_trait]
-impl Loader<MembersByClassId> for OpenAssignmentDataLoader {
+impl Loader<MembersByClassId> for IkigaiDataLoader {
     type Value = Vec<SpaceMember>;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -109,9 +109,9 @@ impl Loader<MembersByClassId> for OpenAssignmentDataLoader {
 pub struct SpaceById(pub i32);
 
 #[async_trait::async_trait]
-impl Loader<SpaceById> for OpenAssignmentDataLoader {
+impl Loader<SpaceById> for IkigaiDataLoader {
     type Value = Space;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -128,9 +128,9 @@ impl Loader<SpaceById> for OpenAssignmentDataLoader {
 pub struct SpaceByDocumentId(pub Uuid);
 
 #[async_trait::async_trait]
-impl Loader<SpaceByDocumentId> for OpenAssignmentDataLoader {
+impl Loader<SpaceByDocumentId> for IkigaiDataLoader {
     type Value = Space;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -168,9 +168,9 @@ impl Loader<SpaceByDocumentId> for OpenAssignmentDataLoader {
 pub struct SubmissionById(pub i32);
 
 #[async_trait::async_trait]
-impl Loader<SubmissionById> for OpenAssignmentDataLoader {
+impl Loader<SubmissionById> for IkigaiDataLoader {
     type Value = Submission;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -189,9 +189,9 @@ impl Loader<SubmissionById> for OpenAssignmentDataLoader {
 pub struct SubmissionByAssignmentId(pub i32);
 
 #[async_trait::async_trait]
-impl Loader<SubmissionByAssignmentId> for OpenAssignmentDataLoader {
+impl Loader<SubmissionByAssignmentId> for IkigaiDataLoader {
     type Value = Vec<Submission>;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -218,9 +218,9 @@ impl Loader<SubmissionByAssignmentId> for OpenAssignmentDataLoader {
 pub struct AssignmentById(pub i32);
 
 #[async_trait::async_trait]
-impl Loader<AssignmentById> for OpenAssignmentDataLoader {
+impl Loader<AssignmentById> for IkigaiDataLoader {
     type Value = Assignment;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -240,9 +240,9 @@ impl Loader<AssignmentById> for OpenAssignmentDataLoader {
 pub struct AssignmentByDocumentId(pub Uuid);
 
 #[async_trait::async_trait]
-impl Loader<AssignmentByDocumentId> for OpenAssignmentDataLoader {
+impl Loader<AssignmentByDocumentId> for IkigaiDataLoader {
     type Value = Assignment;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -262,9 +262,9 @@ impl Loader<AssignmentByDocumentId> for OpenAssignmentDataLoader {
 pub struct SubmissionByDocumentId(pub Uuid);
 
 #[async_trait::async_trait]
-impl Loader<SubmissionByDocumentId> for OpenAssignmentDataLoader {
+impl Loader<SubmissionByDocumentId> for IkigaiDataLoader {
     type Value = Submission;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -284,9 +284,9 @@ impl Loader<SubmissionByDocumentId> for OpenAssignmentDataLoader {
 pub struct ThreadById(pub i32);
 
 #[async_trait::async_trait]
-impl Loader<ThreadById> for OpenAssignmentDataLoader {
+impl Loader<ThreadById> for IkigaiDataLoader {
     type Value = Thread;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -306,9 +306,9 @@ impl Loader<ThreadById> for OpenAssignmentDataLoader {
 pub struct DocumentById(pub Uuid);
 
 #[async_trait::async_trait]
-impl Loader<DocumentById> for OpenAssignmentDataLoader {
+impl Loader<DocumentById> for IkigaiDataLoader {
     type Value = Document;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -328,9 +328,9 @@ impl Loader<DocumentById> for OpenAssignmentDataLoader {
 pub struct QuizStructureById(pub Uuid);
 
 #[async_trait::async_trait]
-impl Loader<QuizStructureById> for OpenAssignmentDataLoader {
+impl Loader<QuizStructureById> for IkigaiDataLoader {
     type Value = QuizStructure;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -349,9 +349,9 @@ impl Loader<QuizStructureById> for OpenAssignmentDataLoader {
 pub struct QuizId(pub Uuid);
 
 #[async_trait::async_trait]
-impl Loader<QuizId> for OpenAssignmentDataLoader {
+impl Loader<QuizId> for IkigaiDataLoader {
     type Value = Quiz;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -370,9 +370,9 @@ impl Loader<QuizId> for OpenAssignmentDataLoader {
 pub struct AnswersByQuiz(pub Uuid);
 
 #[async_trait::async_trait]
-impl Loader<AnswersByQuiz> for OpenAssignmentDataLoader {
+impl Loader<AnswersByQuiz> for IkigaiDataLoader {
     type Value = Vec<QuizAnswer>;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -403,9 +403,9 @@ pub struct QuizAnswerByUser {
 }
 
 #[async_trait::async_trait]
-impl Loader<QuizAnswerByUser> for OpenAssignmentDataLoader {
+impl Loader<QuizAnswerByUser> for IkigaiDataLoader {
     type Value = QuizAnswer;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -446,9 +446,9 @@ pub struct FindOrganizationMember {
 }
 
 #[async_trait::async_trait]
-impl Loader<FindOrganizationMember> for OpenAssignmentDataLoader {
+impl Loader<FindOrganizationMember> for IkigaiDataLoader {
     type Value = OrganizationMember;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -482,9 +482,9 @@ impl Loader<FindOrganizationMember> for OpenAssignmentDataLoader {
 pub struct ClassMemberByUserId(pub i32);
 
 #[async_trait::async_trait]
-impl Loader<ClassMemberByUserId> for OpenAssignmentDataLoader {
+impl Loader<ClassMemberByUserId> for IkigaiDataLoader {
     type Value = Vec<SpaceMember>;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -512,9 +512,9 @@ impl Loader<ClassMemberByUserId> for OpenAssignmentDataLoader {
 pub struct FindDocumentType(pub Uuid);
 
 #[async_trait::async_trait]
-impl Loader<FindDocumentType> for OpenAssignmentDataLoader {
+impl Loader<FindDocumentType> for IkigaiDataLoader {
     type Value = DocumentType;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -549,9 +549,9 @@ pub struct FindNestedDocumentsOfPageBlock {
 }
 
 #[async_trait::async_trait]
-impl Loader<FindNestedDocumentsOfPageBlock> for OpenAssignmentDataLoader {
+impl Loader<FindNestedDocumentsOfPageBlock> for IkigaiDataLoader {
     type Value = Vec<PageBlockDocument>;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -589,9 +589,9 @@ pub struct LoadCommentsOfThread {
 }
 
 #[async_trait::async_trait]
-impl Loader<LoadCommentsOfThread> for OpenAssignmentDataLoader {
+impl Loader<LoadCommentsOfThread> for IkigaiDataLoader {
     type Value = Vec<Comment>;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,
@@ -623,9 +623,9 @@ pub struct FindOrgById {
 }
 
 #[async_trait::async_trait]
-impl Loader<FindOrgById> for OpenAssignmentDataLoader {
+impl Loader<FindOrgById> for IkigaiDataLoader {
     type Value = Organization;
-    type Error = OpenAssignmentError;
+    type Error = IkigaiError;
 
     async fn load(
         &self,

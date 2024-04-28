@@ -1,14 +1,14 @@
 {
-  "name": "open-assignment",
+  "name": "ikigai",
   "version": "0.1.0",
   "private": true,
   "license": "AGPL-3.0-only",
   "workspaces": [
-    "apps/open-assigment",
+    "apps/ikigai",
     "packages/*"
   ],
   "scripts": {
-    "dev-client": "cd apps/open-assignment && yarn dev"
+    "dev-client": "cd apps/ikigai && yarn dev"
   },
   "devDependencies": {
     "eslint-config-custom": "*",

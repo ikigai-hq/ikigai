@@ -10,7 +10,7 @@ use crate::graphql::thread_action::ThreadQuery;
 use crate::graphql::user_action::UserQuery;
 
 #[derive(MergedObject, Default)]
-pub struct OpenAssignmentQuery(
+pub struct IkigaiQuery(
     AssignmentQuery,
     UserQuery,
     FileQuery,

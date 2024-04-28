@@ -28,7 +28,7 @@ use crate::authentication_token::{ActiveOrgId, JwtToken};
 use crate::background_job::register_jobs;
 use crate::connection_pool::show_log_connection;
 use crate::graphql::context_caching_data::RequestContextCachingData;
-use crate::graphql::{build_schema, OpenAssignmentSchema};
+use crate::graphql::{build_schema, IkigaiSchema};
 use crate::util::{is_local, log_util};
 
 mod authentication_token;
@@ -60,7 +60,7 @@ fn parse_active_org_id(req: &HttpRequest) -> Option<ActiveOrgId> {
 }
 
 async fn index(
-    schema: web::Data<OpenAssignmentSchema>,
+    schema: web::Data<IkigaiSchema>,
     req: HttpRequest,
     gql_request: GraphQLRequest,
 ) -> GraphQLResponse {
@@ -101,7 +101,7 @@ pub async fn on_connection_init(value: serde_json::Value) -> async_graphql::Resu
 }
 
 async fn index_ws(
-    schema: web::Data<OpenAssignmentSchema>,
+    schema: web::Data<IkigaiSchema>,
     req: HttpRequest,
     payload: web::Payload,
 ) -> Result<HttpResponse> {

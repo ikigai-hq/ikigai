@@ -11,13 +11,13 @@ use async_graphql::*;
 use diesel::{Connection as DieselConnection, PgConnection};
 
 use crate::db::*;
-use crate::error::{OpenAssignmentError, OpenAssignmentErrorExt};
-use crate::graphql::data_loader::{FindPublicUserById, OpenAssignmentDataLoader};
+use crate::error::{IkigaiError, IkigaiErrorExt};
+use crate::graphql::data_loader::{FindPublicUserById, IkigaiDataLoader};
 use crate::service::Storage;
 use crate::util::get_now_as_secs;
 
 pub async fn get_public_user_from_loader(ctx: &Context<'_>, user_id: i32) -> Result<PublicUser> {
-    let loader = ctx.data_unchecked::<DataLoader<OpenAssignmentDataLoader>>();
+    let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
     let user = loader
         .load_one(FindPublicUserById(user_id))
         .await?
@@ -30,11 +30,11 @@ pub fn duplicate_class(
     space_id: i32,
     org_id: i32,
     creator_id: i32,
-) -> Result<Space, OpenAssignmentError> {
+) -> Result<Space, IkigaiError> {
     let space = Space::find_by_id(conn, space_id)?;
     let space_documents = Document::find_all_by_space(conn, space_id)?;
 
-    conn.transaction::<_, OpenAssignmentError, _>(|| {
+    conn.transaction::<_, IkigaiError, _>(|| {
         // Duplicate Class
         let mut new_space = NewSpace::from(space);
         new_space.org_id = org_id;

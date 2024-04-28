@@ -3,7 +3,7 @@ use lazy_static::lazy_static;
 use std::sync::Mutex;
 
 use crate::db::{init_connection_pool, Connection, PostgresPool};
-use crate::error::OpenAssignmentError;
+use crate::error::IkigaiError;
 
 lazy_static! {
     static ref POOL_ADDR: Mutex<Option<Addr<ConnectionPool>>> = Mutex::new(None);
@@ -41,7 +41,7 @@ fn get_address() -> Addr<ConnectionPool> {
     }
 }
 
-pub async fn get_conn_from_actor() -> Result<Connection, OpenAssignmentError> {
+pub async fn get_conn_from_actor() -> Result<Connection, IkigaiError> {
     info!("Actor Connection Pool: Starting Get Connection");
     let conn = get_address().send(GetPostgresConn).await??;
     info!("Actor Connection Pool: Completed Get Connection");
@@ -49,11 +49,11 @@ pub async fn get_conn_from_actor() -> Result<Connection, OpenAssignmentError> {
 }
 
 #[derive(Message)]
-#[rtype(result = "Result<Connection, OpenAssignmentError>")]
+#[rtype(result = "Result<Connection, IkigaiError>")]
 pub struct GetPostgresConn;
 
 impl Handler<GetPostgresConn> for ConnectionPool {
-    type Result = Result<Connection, OpenAssignmentError>;
+    type Result = Result<Connection, IkigaiError>;
 
     fn handle(&mut self, _: GetPostgresConn, _: &mut Self::Context) -> Self::Result {
         info!(

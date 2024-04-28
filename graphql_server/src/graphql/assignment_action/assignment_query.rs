@@ -1,7 +1,7 @@
 use async_graphql::*;
 
 use crate::db::*;
-use crate::error::OpenAssignmentErrorExt;
+use crate::error::IkigaiErrorExt;
 use crate::helper::*;
 
 #[derive(Default)]

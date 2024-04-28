@@ -14,7 +14,7 @@ use aws_sdk_s3::{presigning::config::PresigningConfig, Client, Region};
 use simple_aws_s3::*;
 use urlencoding::encode;
 
-use crate::error::OpenAssignmentError;
+use crate::error::IkigaiError;
 
 #[derive(Debug, Clone, SimpleObject)]
 pub struct UploadInfo {
@@ -82,7 +82,7 @@ impl Storage {
         content_type: &str,
         content_length: i64,
         public: bool,
-    ) -> Result<UploadInfo, OpenAssignmentError> {
+    ) -> Result<UploadInfo, IkigaiError> {
         let acl = if public { Some("public-read") } else { None };
         let expire_on = chrono::Duration::seconds(3600);
         let info =
@@ -100,7 +100,7 @@ impl Storage {
         key: &str,
         expire_in: u64,
         file_name: Option<String>,
-    ) -> Result<String, OpenAssignmentError> {
+    ) -> Result<String, IkigaiError> {
         let client = self.get_client().await;
         let mut req = client.get_object().bucket(&self.s3_bucket).key(key);
 
@@ -116,7 +116,7 @@ impl Storage {
         Ok(download_request.uri().to_string())
     }
 
-    pub async fn get_file_info(&self, key: String) -> Result<Option<FileInfo>, OpenAssignmentError> {
+    pub async fn get_file_info(&self, key: String) -> Result<Option<FileInfo>, IkigaiError> {
         let client = self.get_client().await;
         let head_data = client
             .head_object()
@@ -139,7 +139,7 @@ impl Storage {
         Ok(res)
     }
 
-    pub async fn delete_file(&self, key: &str) -> Result<(), OpenAssignmentError> {
+    pub async fn delete_file(&self, key: &str) -> Result<(), IkigaiError> {
         let client = self.get_client().await;
         client
             .delete_object()
@@ -155,7 +155,7 @@ impl Storage {
         key: &str,
         content_type: &str,
         data: ByteStream,
-    ) -> Result<(), OpenAssignmentError> {
+    ) -> Result<(), IkigaiError> {
         let client = self.get_client().await;
         client
             .put_object()
@@ -173,7 +173,7 @@ impl Storage {
         &self,
         key: &str,
         content_type: &str,
-    ) -> Result<CreateMultipartUploadOutput, OpenAssignmentError> {
+    ) -> Result<CreateMultipartUploadOutput, IkigaiError> {
         let client = self.get_client().await;
         let multipart_upload_res = client
             .create_multipart_upload()
@@ -191,7 +191,7 @@ impl Storage {
         upload_id: &str,
         part_number: i32, // Start from 1
         data: ByteStream,
-    ) -> Result<CompletedPart, OpenAssignmentError> {
+    ) -> Result<CompletedPart, IkigaiError> {
         let client = self.get_client().await;
         let upload_part_res = client
             .upload_part()
@@ -214,7 +214,7 @@ impl Storage {
         key: &str,
         upload_id: &str,
         completed_parts: Vec<CompletedPart>,
-    ) -> Result<CompleteMultipartUploadOutput, OpenAssignmentError> {
+    ) -> Result<CompleteMultipartUploadOutput, IkigaiError> {
         let completed_multipart_upload = CompletedMultipartUpload::builder()
             .set_parts(Some(completed_parts))
             .build();
@@ -235,7 +235,7 @@ impl Storage {
         &self,
         key: &str,
         download_path: &str,
-    ) -> Result<usize, OpenAssignmentError> {
+    ) -> Result<usize, IkigaiError> {
         let mut download_file = File::create(download_path)?;
         let client = self.get_client().await;
         let mut object = client

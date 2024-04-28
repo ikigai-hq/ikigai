@@ -1,11 +1,11 @@
-# Graphql Server
+# ikigai Graphql Server
 Efficient graphql server is written by Rust.
 
 ## Prepare Configuration
 
 ### Make `.env` file
 
-We use dot env to set up environment variables for `open-exam-graphql-server`.
+We use dot env to set up environment variables for `graphql-server`.
 Use the command below to make a `.env` file from sample env.
 
 ```bash

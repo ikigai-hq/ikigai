@@ -2,6 +2,7 @@ import { Badge, Divider, Dropdown, Popover, Space } from "antd";
 import Icon, {
   CommentOutlined,
   FullscreenOutlined,
+  LeftOutlined,
   QuestionCircleOutlined,
   ShareAltOutlined,
   SnippetsOutlined,
@@ -48,7 +49,7 @@ export type DocumentHeaderProps = {
 const DocumentHeader: React.FC<DocumentHeaderProps> = ({ children }) => {
   const router = useRouter();
   const theme = useTheme();
-
+  const { back, replace } = useRouter();
   const documentAllow = useDocumentPermission();
   const masterDocument = useDocumentStore((state) => state.masterDocument);
   const changeRightPanel = useDocumentStore((state) => state.changeRightPanel);
@@ -62,13 +63,11 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({ children }) => {
     (state) => state.setRightPanelHidden,
   );
   const isSaving = useDocumentStore((state) => state.isSaving);
-
   const setFocusMode = useDocumentStore((state) => state.setFocusMode);
-
   const docs = useSpaceStore((state) => state.documents);
-
   const isPublic = masterDocument?.isPublic;
-  const { isDoingSubmission } = useSubmissionStatus(masterDocument);
+  const { isDoingSubmission, isSubmissionDocument } =
+    useSubmissionStatus(masterDocument);
 
   const getMenuList = (
     subBreadcrumb: IDocumentItemList[],
@@ -88,6 +87,14 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({ children }) => {
         </MenuItem>
       ),
     }));
+  };
+
+  const backToPreviousPage = () => {
+    if (history.length >= 1) {
+      back();
+    } else {
+      replace("/");
+    }
   };
 
   if (!masterDocument) {
@@ -209,6 +216,11 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({ children }) => {
         }}
         isSelected={!leftPanelHidden}
       />
+      {isSubmissionDocument && !isDoingSubmission && (
+        <BackBtn onClick={backToPreviousPage}>
+          <LeftOutlined />
+        </BackBtn>
+      )}
       {renderBreadcrumb()}
       <StyledActionContainer>
         <ButtonWithTooltip
@@ -386,6 +398,11 @@ const MenuItem = styled.div`
   gap: 8px;
   color: ${(props) => props.theme.colors.gray[8]};
   font-size: 14px;
+`;
+
+const BackBtn = styled.div`
+  margin: 12px;
+  cursor: pointer;
 `;
 
 export default DocumentHeader;

@@ -26,11 +26,7 @@ export type SubmissionDocumentProps = {
 const DoingSubmissionDocument = ({
   currentDocument,
 }: SubmissionDocumentProps) => {
-  const { modal } = useModal();
-  const activeDocument = useDocumentStore((state) => state.masterDocument);
-  const { loading, onSubmit, deadline, backToPreviousPage } =
-    useSubmitSubmission(currentDocument);
-
+  const { onSubmit, deadline } = useSubmitSubmission(currentDocument);
   const isFocusMode = useDocumentStore((state) => state.isFocusMode);
   const setFocusMode = useDocumentStore((state) => state.setFocusMode);
   const [openTooltip, setOpenTooltip] = useState(false);
@@ -70,40 +66,6 @@ const DoingSubmissionDocument = ({
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [isFocusMode]);
-
-  useSubscription<SubmissionSubscribe>(SUBMISSION_SUBSCRIPTION, {
-    variables: {
-      submissionId: activeDocument.submission?.id,
-    },
-    onData: (options) => {
-      const eventData = options.data.data;
-      if (
-        eventData &&
-        eventData.submissionSubscribe.eventType ===
-          SubmissionEventType.SUBMIT_COMPLETED
-      ) {
-        submitCompleted();
-      }
-    },
-  });
-
-  const submitCompleted = () => {
-    if (loading) return;
-    modal.confirm(
-      ConfirmPopup({
-        title: t`Your submission is completed. We will move you to assignment page!`,
-        okText: t`Submit`,
-        content: "",
-        onOk: async () => {
-          backToPreviousPage();
-        },
-        cancelText: undefined,
-        onCancel: async () => {
-          backToPreviousPage();
-        },
-      }) as any,
-    );
-  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>

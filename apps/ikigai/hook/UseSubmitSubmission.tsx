@@ -42,7 +42,6 @@ const useSubmitSubmission = (
     ? Date.now() + (testDuration - spendingTime) * 1000
     : undefined;
 
-  const cannotSubmitDocument = !submission.allowRework;
   const allowSaveAndExit = submission.allowRework;
 
   const backToPreviousPage = () => {
@@ -54,51 +53,47 @@ const useSubmitSubmission = (
   };
 
   const onSubmit = async () => {
-    if (cannotSubmitDocument) {
-      backToPreviousPage();
-    } else {
-      const unCompleteQuizzes = countUncompletedQuizzes(
-        activeDocument,
-        pageBlocks.filter((pb) =>
-          mapPageBlockData
-            .get(activeDocument.id)
-            ?.some((data) => data.id === pb.id),
-        ),
-      );
-      const leftTime =
-        submission.assignment.testDuration + submission.startAt > getNowAsSec()
-          ? Math.round(
-              (submission.assignment.testDuration +
-                submission.startAt -
-                getNowAsSec()) /
-                60,
-            )
-          : 0;
+    const unCompleteQuizzes = countUncompletedQuizzes(
+      activeDocument,
+      pageBlocks.filter((pb) =>
+        mapPageBlockData
+          .get(activeDocument.id)
+          ?.some((data) => data.id === pb.id),
+      ),
+    );
+    const leftTime =
+      submission.assignment.testDuration + submission.startAt > getNowAsSec()
+        ? Math.round(
+            (submission.assignment.testDuration +
+              submission.startAt -
+              getNowAsSec()) /
+              60,
+          )
+        : 0;
 
-      modal.confirm(
-        ConfirmPopup({
-          title: t`Are your sure to submit the assignment?`,
-          okText: t`Submit`,
-          // eslint-disable-next-line max-len
-          content: t`If you proceed, this exam will be submitted. You have ${leftTime} minutes left on this assignment and ${
-            unCompleteQuizzes.length || 0
-          } non complete quizzes.`,
-          onOk: async () => {
-            setSubmitLoading(true);
-            await submitSubmission();
-            toast.success(t`Submit successfully!`);
+    modal.confirm(
+      ConfirmPopup({
+        title: t`Are your sure to submit the assignment?`,
+        okText: t`Submit`,
+        // eslint-disable-next-line max-len
+        content: t`If you proceed, this exam will be submitted. You have ${leftTime} minutes left on this assignment and ${
+          unCompleteQuizzes.length || 0
+        } non complete quizzes.`,
+        onOk: async () => {
+          setSubmitLoading(true);
+          await submitSubmission();
+          toast.success(t`Submit successfully!`);
+          backToPreviousPage();
+          setSubmitLoading(false);
+        },
+        cancelText: allowSaveAndExit ? t`Save and Exit` : t`Cancel`,
+        onCancel: () => {
+          if (allowSaveAndExit) {
             backToPreviousPage();
-            setSubmitLoading(false);
-          },
-          cancelText: allowSaveAndExit ? t`Save and Exit` : t`Cancel`,
-          onCancel: () => {
-            if (allowSaveAndExit) {
-              backToPreviousPage();
-            }
-          },
-        }) as any,
-      );
-    }
+          }
+        },
+      }) as any,
+    );
   };
 
   return { deadline, loading: submitLoading, onSubmit, backToPreviousPage };

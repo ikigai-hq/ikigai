@@ -1,0 +1,37 @@
+# Ikigai Architecture
+
+Ikigai employs a straightforward internet application architecture.
+
+![Ikigai Components](/architecture.png)
+
+## Ikigai "Infrastructure"
+
+"Infrastructure" refers to the foundational databases or third-party services upon which the Ikigai application is built.
+
+### Postgres
+
+Postgres, an open-source database software, is renowned for its maturity and reliability.
+Ikigai relies on Postgres to store various user data such as emails, quizzes, documents, and more.
+
+### Redis
+
+Redis is an open-source data structure store that assists Ikigai in storing temporary data needed to execute complex logic, such as one-time passwords (OTPs), managing job queues, and etc.
+
+### SeaweedFS
+
+SeaweedFS assists Ikigai in storing various user files such as avatars, files within documents, assignments, and more.
+
+### Agnostic SMTP Server
+
+This component enables Ikigai to send emails using SMTP credentials, which can be configured to use services like Gmail SMTP or others.
+
+## Graphql Server
+
+Our GraphQL server-side is crafted with Rust, async-graphql, and diesel-rs. It serves as the 'brain' of the Ikigai application, managing all the logic.
+This component connects with the underlying infrastructure and provides the necessary functionalities.
+
+It also empowers client applications to select the specific data they require without modify server logic.
+
+## Client (Web app)
+
+This component is the user interface that users interact with via web browsers such as Chrome, Firefox, etc.

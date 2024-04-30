@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-    <a href="https://app.ikigai.li">Ikigai App</a> •
+    <a href="https://app.ikigai.li">Ikigai Application</a> •
     <a href="https://ikigai.li">Documentation</a> • 
     <a href="https://discord.gg/XuYWkn6kUS">Community</a>
 </p>
@@ -21,56 +21,16 @@
 
 ikigai is an Open Assignment Platform for educators that provides seamless access via a single link, embeddable in your website or LMS, featuring rich quiz types and a flexible layout adaptable to your exam format.
 
-# Install
+## Demo and use cases (Coming soon)
 
-## Use Source Code
+TBD
 
-### Step 1: Download Source Code
+## Download & Install
 
-```bash
-git clone https://github.com/ikigai-hq/ikigai.git
-```
+You can find many installation methods in our documentation.
+https://ikigai.li/installation
 
-Jump into source code
-
-```bash
-cd ikigai
-```
-
-### Step 2: Install docker and docker compose
-
-- Docker: https://docs.docker.com/engine/install/
-- Docker Compose: https://docs.docker.com/compose/install/
-
-### Step 3: Install node, yarn, and pm2
-
-```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-nvm install 18
-nvm use 18
-npm install yarn -g
-npm install pm2 -g
-```
-
-### Step 3: Run Server
-
-Run Graphql Server
-```bash
-cd graphql_server
-docker-compose up -d
-cd ..
-```
-
-Run Client Side (Make sure you're in root path)
-
-```bash
-yarn install
-cd apps/ikigai
-yarn build
-pm2 start "yarn start" --name ikigai-client
-```
-
-# 🚀 Sponsors
+## 🚀 Sponsors
 
 🌟 Become a Sponsor! 🌟
 
@@ -78,7 +38,7 @@ pm2 start "yarn start" --name ikigai-client
 
 [Sponsor us](https://ko-fi.com/ikigaihq)
 
-# Join Our Supportive Community! (Need help)
+## Join Our Supportive Community! (Need help)
 
 Looking for knowledgeable assistance from our core team and contributors? Our community offers:
 

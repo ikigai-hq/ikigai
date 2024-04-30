@@ -58,6 +58,7 @@ const Editor = ({
     !documentAllow(DocumentPermission.EditDocument) || isReadOnly;
 
   const onChangeDocument = (value: string) => {
+    if (isReadOnlyFinal) return;
     if (currentDocIdQuery !== documentId && !isNestedDoc) return;
     setFeedback(value);
     update(documentId, { body: value });

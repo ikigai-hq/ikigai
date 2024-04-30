@@ -5,6 +5,7 @@
   "license": "AGPL-3.0-only",
   "workspaces": [
     "apps/ikigai",
+    "apps/docs",
     "packages/*"
   ],
   "scripts": {

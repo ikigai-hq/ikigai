@@ -5,8 +5,8 @@
 </p>
 
 <p align="center">
-    <a href="https://ikigai.li">Ikigai</a> •
-    <a href="https://docs.ikigai.li">Documentation</a> • 
+    <a href="https://app.ikigai.li">Ikigai App</a> •
+    <a href="https://ikigai.li">Documentation</a> • 
     <a href="https://discord.gg/XuYWkn6kUS">Community</a>
 </p>
 

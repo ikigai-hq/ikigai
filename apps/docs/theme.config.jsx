@@ -10,5 +10,7 @@ export default {
     ),
     project: {
         link: 'https://github.com/ikigai-hq/ikigai',
-    }
+    },
+    docsRepositoryBase: "https://github.com/ikigai-hq/ikigai/tree/master/apps/docs",
+    footer: "Copyright @ ikigai"
 }

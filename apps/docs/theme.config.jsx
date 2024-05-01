@@ -41,4 +41,15 @@ export default {
       <span>2024 ©{' '} <a href="https://ikigai.li" target="_blank">Ikigai</a></span>
     )
   },
+  sidebar: {
+    titleComponent({ title, type }) {
+      if (type === 'separator') {
+        return (
+          <div>{title}</div>
+        )
+      }
+      
+      return <>{title}</>
+    }
+  },
 }

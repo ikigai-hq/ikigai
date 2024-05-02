@@ -1,7 +1,6 @@
 use diesel::result::Error;
 use diesel::sql_types::Integer;
 use diesel::{AsChangeset, Connection, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
-use oso::PolarClass;
 use serde_json::json;
 use uuid::Uuid;
 
@@ -42,16 +41,13 @@ pub struct UpdatePositionData {
     pub updated_at: i64,
 }
 
-#[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject, PolarClass)]
+#[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
 #[graphql(complex, input_name = "NewDocument")]
 pub struct Document {
-    #[polar(attribute)]
     #[graphql(skip_input)]
     pub id: Uuid,
-    #[polar(attribute)]
     #[graphql(skip_input)]
     pub creator_id: i32,
-    #[polar(attribute)]
     #[graphql(skip_input)]
     pub org_id: i32,
     pub parent_id: Option<Uuid>,

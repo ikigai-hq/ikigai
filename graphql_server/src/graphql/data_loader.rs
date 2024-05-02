@@ -492,7 +492,7 @@ impl Loader<ClassMemberByUserId> for IkigaiDataLoader {
     ) -> std::result::Result<HashMap<ClassMemberByUserId, Self::Value>, Self::Error> {
         let conn = get_conn_from_actor().await?;
         let user_ids: Vec<i32> = keys.iter().map(|c| c.0).collect();
-        let members = SpaceMember::find_all_by_users(&conn, user_ids)?;
+        let members = SpaceMember::find_all_by_users(&conn, &user_ids)?;
 
         let mut result: HashMap<ClassMemberByUserId, Self::Value> = HashMap::new();
         for member in members {
@@ -638,5 +638,43 @@ impl Loader<FindOrgById> for IkigaiDataLoader {
             .into_iter()
             .map(|o| (FindOrgById { org_id: o.id }, o))
             .collect())
+    }
+}
+
+#[derive(Debug, Clone, Hash, Eq, PartialEq)]
+pub struct FindDocumentAssignedUsers {
+    pub document_id: Uuid,
+}
+
+#[async_trait::async_trait]
+impl Loader<FindDocumentAssignedUsers> for IkigaiDataLoader {
+    type Value = Vec<DocumentAssignedUser>;
+    type Error = IkigaiError;
+
+    async fn load(
+        &self,
+        keys: &[FindDocumentAssignedUsers],
+    ) -> std::result::Result<HashMap<FindDocumentAssignedUsers, Self::Value>, Self::Error> {
+        if keys.is_empty() {
+            return Ok(HashMap::new());
+        }
+
+        let document_ids = keys.iter().map(|key| key.document_id).unique().collect();
+        let conn = get_conn_from_actor().await?;
+        let items = DocumentAssignedUser::find_all_by_documents(&conn, document_ids)?;
+
+        let mut result: HashMap<FindDocumentAssignedUsers, Self::Value> = HashMap::new();
+        for item in items {
+            let key = FindDocumentAssignedUsers {
+                document_id: item.document_id,
+            };
+            if let Some(inner_items) = result.get_mut(&key) {
+                inner_items.push(item);
+            } else {
+                result.insert(key, vec![item]);
+            }
+        }
+
+        Ok(result)
     }
 }

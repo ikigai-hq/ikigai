@@ -97,8 +97,19 @@ impl SpaceMember {
             .get_results(conn)
     }
 
-    pub fn find_all_by_users(conn: &PgConnection, user_ids: Vec<i32>) -> Result<Vec<Self>, Error> {
+    pub fn find_all_by_users(conn: &PgConnection, user_ids: &Vec<i32>) -> Result<Vec<Self>, Error> {
         space_members::table
+            .filter(space_members::user_id.eq_any(user_ids))
+            .get_results(conn)
+    }
+
+    pub fn find_all_by_users_of_space(
+        conn: &PgConnection,
+        space_id: i32,
+        user_ids: &Vec<i32>,
+    ) -> Result<Vec<Self>, Error> {
+        space_members::table
+            .filter(space_members::space_id.eq(space_id))
             .filter(space_members::user_id.eq_any(user_ids))
             .get_results(conn)
     }

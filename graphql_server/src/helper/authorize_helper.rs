@@ -30,10 +30,7 @@ pub async fn get_active_org_id_from_ctx(ctx: &Context<'_>) -> Result<Organizatio
         return Ok(first_org.org_id.into());
     }
 
-    Err(IkigaiError::new_unauthorized(
-        "Cannot found active org id",
-    ))
-    .format_err()
+    Err(IkigaiError::new_unauthorized("Cannot found active org id")).format_err()
 }
 
 pub async fn get_user_id_from_ctx(ctx: &Context<'_>) -> Result<i32> {

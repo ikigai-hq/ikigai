@@ -95,6 +95,17 @@ impl Document {
             None
         }
     }
+
+    async fn assigned_users(&self, ctx: &Context<'_>) -> Vec<DocumentAssignedUser> {
+        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
+        loader
+            .load_one(FindDocumentAssignedUsers {
+                document_id: self.id,
+            })
+            .await
+            .unwrap_or_default()
+            .unwrap_or_default()
+    }
 }
 
 #[ComplexObject]

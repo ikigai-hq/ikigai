@@ -7,6 +7,7 @@ use crate::authorization::DocumentActionPermission;
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
+use crate::notification_center::send_notification;
 use crate::util::get_now_as_secs;
 
 #[derive(Default)]
@@ -287,6 +288,79 @@ impl DocumentMutation {
 
         let conn = get_conn_from_ctx(ctx).await?;
         Document::delete(&conn, document_id).format_err()?;
+
+        Ok(true)
+    }
+
+    async fn document_assign_users(
+        &self,
+        ctx: &Context<'_>,
+        document_id: Uuid,
+        user_ids: Vec<i32>,
+    ) -> Result<Vec<DocumentAssignedUser>> {
+        document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
+            .await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        let document = Document::find_by_id(&conn, document_id).format_err()?;
+
+        if document.space_id.is_none() {
+            return Err(IkigaiError::new_bad_request(
+                "Assign users to document is only available for document in material of spaces",
+            ))
+            .format_err();
+        }
+
+        let user_ids = user_ids.into_iter().unique().collect();
+        let members =
+            SpaceMember::find_all_by_users_of_space(&conn, document.space_id.unwrap(), &user_ids)
+                .format_err()?;
+        if members.len() != user_ids.len() {
+            return Err(IkigaiError::new_bad_request(
+                "One or more users is not member of space",
+            ))
+            .format_err();
+        }
+
+        let items = conn
+            .transaction::<_, IkigaiError, _>(|| {
+                let items = user_ids
+                    .iter()
+                    .map(|user_id| DocumentAssignedUser::new(document_id, *user_id))
+                    .collect();
+                let items = DocumentAssignedUser::insert(&conn, items)?;
+
+                let notification = Notification::new(
+                    NotificationType::AssignToAssignment,
+                    AssignToAssignmentContext {
+                        assignment_document_id: document.id,
+                        assignment_name: document.title,
+                    },
+                );
+                let notification = Notification::insert(&conn, notification)?;
+                send_notification(&conn, notification, user_ids)?;
+
+                Ok(items)
+            })
+            .format_err()?;
+
+        Ok(items)
+    }
+
+    async fn document_remove_assigned_user(
+        &self,
+        ctx: &Context<'_>,
+        assigned_user: DocumentAssignedUser,
+    ) -> Result<bool> {
+        document_quick_authorize(
+            ctx,
+            assigned_user.document_id,
+            DocumentActionPermission::ManageDocument,
+        )
+        .await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        DocumentAssignedUser::remove(&conn, assigned_user).format_err()?;
 
         Ok(true)
     }

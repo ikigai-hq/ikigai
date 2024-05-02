@@ -8,7 +8,7 @@ use async_graphql::dataloader::DataLoader;
 use async_graphql::*;
 
 use crate::db::{Comment, File, PublicUser, Thread};
-use crate::graphql::data_loader::{FileById, LoadCommentsOfThread, IkigaiDataLoader};
+use crate::graphql::data_loader::{FileById, IkigaiDataLoader, LoadCommentsOfThread};
 use crate::helper::get_public_user_from_loader;
 
 #[ComplexObject]

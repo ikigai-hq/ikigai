@@ -5,8 +5,11 @@ use serde_json::Value;
 use uuid::Uuid;
 
 use super::schema::{notification_receivers, notifications};
+use crate::db::User;
 use crate::impl_enum_for_db;
-use crate::util::get_now_as_secs;
+use crate::service::redis::Redis;
+use crate::util::url_util::{document_url, magic_link_for_document_url, space_url};
+use crate::util::{generate_otp, get_now_as_secs};
 
 #[derive(
     Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
@@ -16,6 +19,7 @@ pub enum NotificationType {
     NewSpaceMember,
     SubmitSubmission,
     FeedbackSubmission,
+    AssignToAssignment,
 }
 
 impl_enum_for_db!(NotificationType);
@@ -57,6 +61,10 @@ impl Notification {
         Self::new(NotificationType::FeedbackSubmission, context)
     }
 
+    pub fn new_assign_to_assignment_notification(context: AssignToAssignmentContext) -> Self {
+        Self::new(NotificationType::AssignToAssignment, context)
+    }
+
     pub fn insert(conn: &PgConnection, notification: Self) -> Result<Self, Error> {
         diesel::insert_into(notifications::table)
             .values(&notification)
@@ -69,7 +77,7 @@ impl Notification {
 pub trait ContextMessage {
     fn get_title(&self) -> String;
     fn get_message(&self) -> String;
-    fn get_url_path(&self) -> String;
+    fn get_url_path(&self, receiver: &User) -> String;
     fn get_action_name(&self) -> String {
         "View".to_string()
     }
@@ -95,8 +103,8 @@ impl ContextMessage for NewSpaceMemberContext {
         )
     }
 
-    fn get_url_path(&self) -> String {
-        format!("/spaces/{}", self.space_id)
+    fn get_url_path(&self, _: &User) -> String {
+        space_url(self.space_id)
     }
 }
 
@@ -121,8 +129,8 @@ impl ContextMessage for SubmitSubmissionContext {
         )
     }
 
-    fn get_url_path(&self) -> String {
-        format!("/documents/{}", self.document_submission_id)
+    fn get_url_path(&self, _: &User) -> String {
+        document_url(self.document_submission_id)
     }
 }
 
@@ -146,8 +154,37 @@ Great news! Your teacher has provided feedback on your submission in {submission
         )
     }
 
-    fn get_url_path(&self) -> String {
-        format!("/documents/{}", self.document_submission_id)
+    fn get_url_path(&self, _: &User) -> String {
+        document_url(self.document_submission_id)
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AssignToAssignmentContext {
+    pub assignment_document_id: Uuid,
+    pub assignment_name: String,
+}
+
+impl ContextMessage for AssignToAssignmentContext {
+    fn get_title(&self) -> String {
+        "📝 Assigned to New Assignment! 📝".to_string()
+    }
+
+    fn get_message(&self) -> String {
+        format!(
+            r#"
+Hello there! You've been assigned to a new assignment: {assignment_name}. If you have any questions or need assistance, don't hesitate to reach out. Best of luck! 🚀 "#,
+            assignment_name = self.assignment_name,
+        )
+    }
+
+    fn get_url_path(&self, receiver: &User) -> String {
+        let otp = generate_otp();
+        if Redis::init().set_magic_token(receiver.id, &otp).is_ok() {
+            magic_link_for_document_url(self.assignment_document_id, &otp, receiver.id)
+        } else {
+            document_url(self.assignment_document_id)
+        }
     }
 }
 

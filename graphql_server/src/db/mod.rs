@@ -1,5 +1,6 @@
 pub mod assignments;
 pub mod band_score;
+pub mod document_assigned_users;
 pub mod documents;
 pub mod file;
 pub mod notification;
@@ -15,6 +16,7 @@ pub mod user;
 
 pub use assignments::*;
 pub use band_score::*;
+pub use document_assigned_users::*;
 pub use documents::*;
 pub use file::*;
 pub use notification::*;

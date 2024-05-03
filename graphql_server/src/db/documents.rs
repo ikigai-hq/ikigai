@@ -48,8 +48,6 @@ pub struct Document {
     pub id: Uuid,
     #[graphql(skip_input)]
     pub creator_id: i32,
-    #[graphql(skip_input)]
-    pub org_id: i32,
     pub parent_id: Option<Uuid>,
     pub cover_photo_id: Option<Uuid>,
     pub index: i32,
@@ -77,7 +75,6 @@ impl Document {
         creator_id: i32,
         body: String,
         title: String,
-        org_id: i32,
         parent_id: Option<Uuid>,
         index: i32,
         cover_photo_id: Option<Uuid>,
@@ -89,7 +86,6 @@ impl Document {
             creator_id,
             body,
             title,
-            org_id,
             parent_id,
             index,
             cover_photo_id,
@@ -119,7 +115,6 @@ impl Document {
         conn: &PgConnection,
         user_id: i32,
         space_id: i32,
-        org_id: i32,
         name: String,
     ) -> Result<Self, Error> {
         if let Some(starter_doc) = Document::find_starter_of_space(conn, space_id)? {
@@ -129,7 +124,6 @@ impl Document {
                 user_id,
                 "".into(),
                 name,
-                org_id,
                 None,
                 0,
                 None,
@@ -251,14 +245,6 @@ impl Document {
             Err(Error::NotFound) => Ok(1),
             Err(e) => Err(e),
         }
-    }
-
-    pub fn find_deleted_documents(conn: &PgConnection, org_id: i32) -> Result<Vec<Self>, Error> {
-        let sixty_days_ago = get_now_as_secs() - 5_184_000;
-        documents::table
-            .filter(documents::deleted_at.gt(sixty_days_ago))
-            .filter(documents::org_id.eq(org_id))
-            .get_results(conn)
     }
 
     pub fn delete(conn: &PgConnection, id: Uuid) -> Result<(), Error> {

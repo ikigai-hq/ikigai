@@ -1,7 +1,7 @@
 use diesel::PgConnection;
 use oso::PolarClass;
 
-use crate::db::{OrgRole, OrganizationMember, SpaceMember};
+use crate::db::{SpaceMember};
 use crate::error::IkigaiError;
 
 #[derive(Clone, Debug, PolarClass, SimpleObject)]
@@ -10,30 +10,20 @@ pub struct UserAuth {
     pub id: i32,
     #[polar(attribute)]
     pub org_id: i32,
-    pub org_role: OrgRole,
     #[polar(attribute)]
     pub space_ids: Vec<i32>,
 }
 
 impl UserAuth {
-    pub fn get_role(&self) -> String {
-        match self.org_role {
-            OrgRole::Student => "Student",
-            _ => "Teacher",
-        }
-        .into()
-    }
-
     pub fn init_dummy() -> Self {
         Self {
             id: 0,
             org_id: 0,
-            org_role: OrgRole::Student,
             space_ids: vec![],
         }
     }
 
-    pub fn new(conn: &PgConnection, member: OrganizationMember) -> Result<Self, IkigaiError> {
+    pub fn new(conn: &PgConnection) -> Result<Self, IkigaiError> {
         let space_ids = SpaceMember::find_all_by_user(conn, member.user_id)?
             .into_iter()
             .map(|m| m.space_id)

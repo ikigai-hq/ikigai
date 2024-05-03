@@ -1,10 +1,8 @@
 pub mod document_auth;
-pub mod organization_auth;
 pub mod space_auth;
 pub mod user_auth;
 
 pub use document_auth::*;
-pub use organization_auth::*;
 pub use space_auth::*;
 pub use user_auth::*;
 
@@ -20,9 +18,6 @@ pub fn init_oso() -> Oso {
             .build(),
     )
     .unwrap();
-
-    let org_builder: ClassBuilder<OrganizationAuth> = OrganizationAuth::get_polar_class_builder();
-    oso.register_class(org_builder.build()).unwrap();
 
     let class_builder: ClassBuilder<SpaceAuth> = SpaceAuth::get_polar_class_builder();
     oso.register_class(class_builder.build()).unwrap();

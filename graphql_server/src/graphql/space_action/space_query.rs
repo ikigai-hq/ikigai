@@ -20,38 +20,6 @@ impl SpaceQuery {
         Ok(class)
     }
 
-    async fn space_get_deleted_spaces(&self, ctx: &Context<'_>) -> Result<Vec<Space>> {
-        let user_auth = get_user_auth_from_ctx(ctx).await?;
-        organization_authorize(
-            ctx,
-            user_auth.id,
-            user_auth.org_id,
-            OrganizationActionPermission::AddSpace,
-        )
-        .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let classes = Space::find_all_deleted_spaces(&conn, user_auth.org_id).format_err()?;
-        Ok(classes)
-    }
-
-    // FIXME: Assume that a students and teacher has no more than 100 classes
-    // If there are more than 100 classes -> we should use paginated list
-    async fn space_get_all_org_spaces(&self, ctx: &Context<'_>) -> Result<Vec<Space>> {
-        let user_auth = get_user_auth_from_ctx(ctx).await?;
-        organization_authorize(
-            ctx,
-            user_auth.id,
-            user_auth.org_id,
-            OrganizationActionPermission::AddSpace,
-        )
-        .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let classes = Space::find_all_org_spaces(&conn, user_auth.org_id).format_err()?;
-        Ok(classes)
-    }
-
     async fn space_get_my_spaces(&self, ctx: &Context<'_>) -> Result<Vec<Space>> {
         let user_auth = get_user_auth_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;

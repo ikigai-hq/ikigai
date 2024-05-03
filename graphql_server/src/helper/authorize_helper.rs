@@ -3,9 +3,9 @@ use diesel::PgConnection;
 use oso::Oso;
 use uuid::Uuid;
 
-use crate::authentication_token::{ActiveOrgId, Claims};
+use crate::authentication_token::{Claims};
 use crate::authorization::{
-    DocumentActionPermission, DocumentAuth, OrganizationActionPermission, OrganizationAuth,
+    DocumentActionPermission, DocumentAuth,
     SpaceActionPermission, SpaceAuth, UserAuth,
 };
 use crate::connection_pool::get_conn_from_actor;
@@ -16,21 +16,6 @@ use crate::graphql::context_caching_data::RequestContextCachingData;
 pub async fn get_conn_from_ctx(_ctx: &Context<'_>) -> Result<Connection> {
     let conn = get_conn_from_actor().await?;
     Ok(conn)
-}
-
-pub async fn get_active_org_id_from_ctx(ctx: &Context<'_>) -> Result<OrganizationIdentity> {
-    if let Ok(active_org_id) = ctx.data::<ActiveOrgId>() {
-        return Ok(active_org_id.0.into());
-    }
-
-    let user_id = get_user_id_from_ctx(ctx).await?;
-    let conn = get_conn_from_ctx(ctx).await?;
-    let org = OrganizationMember::find_all_by_user(&conn, user_id).format_err()?;
-    if let Some(first_org) = org.first() {
-        return Ok(first_org.org_id.into());
-    }
-
-    Err(IkigaiError::new_unauthorized("Cannot found active org id")).format_err()
 }
 
 pub async fn get_user_id_from_ctx(ctx: &Context<'_>) -> Result<i32> {
@@ -88,8 +73,6 @@ pub async fn get_user_auth_by_user_id_from_ctx(
     } else {
         let org_id = get_active_org_id_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
-        let org_member = OrganizationMember::find(&conn, org_id, user_id).format_err()?;
-        let user_auth = UserAuth::new(&conn, org_member)?;
         info!("Set cache user auth {:?}", user_auth);
 
         caching_data.add_user_auth(user_auth)
@@ -163,45 +146,6 @@ pub async fn space_is_allow(
     Ok(is_allowed)
 }
 
-pub async fn organization_authorize(
-    ctx: &Context<'_>,
-    user_id: i32,
-    org_id: i32,
-    action: OrganizationActionPermission,
-) -> Result<()> {
-    let is_allowed = organization_is_allowed(ctx, user_id, org_id, action).await?;
-    if !is_allowed {
-        return Err(IkigaiError::new_unauthorized(
-            "You dont' have permission to do this action in organization",
-        ))
-        .format_err()?;
-    }
-
-    Ok(())
-}
-
-pub async fn organization_is_allowed(
-    ctx: &Context<'_>,
-    user_id: i32,
-    org_id: i32,
-    action: OrganizationActionPermission,
-) -> Result<bool> {
-    let oso = ctx.data::<Oso>()?;
-    let current_user_id = get_user_id_from_ctx(ctx).await?;
-    let organization = get_org_from_ctx(ctx, org_id).await?;
-    let conn = get_conn_from_ctx(ctx).await?;
-    let user_auth = if current_user_id == user_id {
-        // Try to fetch org member in caching instead
-        get_user_auth_from_ctx(ctx).await?
-    } else {
-        let org_member = OrganizationMember::find(&conn, org_id, user_id).format_err()?;
-        UserAuth::new(&conn, org_member).format_err()?
-    };
-    let organization_auth = OrganizationAuth::from(organization);
-    let is_allowed = oso.is_allowed(user_auth, action.to_string(), organization_auth)?;
-
-    Ok(is_allowed)
-}
 
 pub async fn document_quick_authorize(
     ctx: &Context<'_>,

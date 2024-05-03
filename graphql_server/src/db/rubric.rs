@@ -118,13 +118,13 @@ where
 #[graphql(input_name = "RubricInput")]
 pub struct Rubric {
     pub id: Uuid,
-    pub org_id: i32,
     pub name: String,
     pub data: RubricTableData,
     #[graphql(skip_input)]
     pub updated_at: i64,
     #[graphql(skip_input)]
     pub created_at: i64,
+    pub user_id: i32,
 }
 
 impl Rubric {
@@ -139,20 +139,12 @@ impl Rubric {
                 rubrics::updated_at.eq(item.updated_at),
                 rubrics::name.eq(&item.name),
                 rubrics::data.eq(&item.data),
-                rubrics::org_id.eq(&item.org_id),
             ))
             .get_result(conn)
     }
 
     pub fn find_by_id(conn: &PgConnection, rubric_id: Uuid) -> Result<Self, Error> {
         rubrics::table.find(rubric_id).first(conn)
-    }
-
-    pub fn find_all_by_org(conn: &PgConnection, org_id: i32) -> Result<Vec<Self>, Error> {
-        rubrics::table
-            .filter(rubrics::org_id.eq(org_id))
-            .order_by(rubrics::created_at.desc())
-            .get_results(conn)
     }
 
     pub fn remove(conn: &PgConnection, rubric_id: Uuid) -> Result<(), Error> {

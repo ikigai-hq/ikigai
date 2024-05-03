@@ -32,19 +32,18 @@ fn create_default_org(conn: &PgConnection, user_id: i32) -> Result<Organization,
 
 fn create_default_space(
     conn: &PgConnection,
-    org_id: i32,
     user_id: i32,
+    role: Role,
 ) -> Result<Space, IkigaiError> {
     let new_space = NewSpace {
         name: "My space".into(),
         updated_at: get_now_as_secs(),
         created_at: get_now_as_secs(),
         banner_id: None,
-        org_id,
         creator_id: user_id,
     };
     let space = Space::insert(conn, new_space)?;
-    let space_member = SpaceMember::new(space.id, user_id, None);
+    let space_member = SpaceMember::new(space.id, user_id, None, role);
     SpaceMember::upsert(conn, space_member)?;
 
     Ok(space)
@@ -77,12 +76,7 @@ impl UserMutation {
                     .format_err()?
                 } else {
                     conn.transaction::<_, IkigaiError, _>(|| {
-                        let org = if let Ok(org) = Organization::find_by_owner(&conn, user.id) {
-                            org
-                        } else {
-                            create_default_org(&conn, user.id)?
-                        };
-                        let space = create_default_space(&conn, org.id, user.id)?;
+                        let space = create_default_space(&conn, org.id, user.id, Role::Teacher)?;
                         let document = Document::get_or_create_starter_doc(
                             &conn, user.id, space.id, org.id, space.name,
                         )?;
@@ -99,7 +93,7 @@ impl UserMutation {
                     let user = NewUser::new(email.clone(), email, "".into());
                     let user = User::insert(&conn, &user)?;
                     let org = create_default_org(&conn, user.id)?;
-                    let space = create_default_space(&conn, org.id, user.id)?;
+                    let space = create_default_space(&conn, org.id, user.id, Role::Teacher)?;
                     let document = Document::get_or_create_starter_doc(
                         &conn, user.id, space.id, org.id, space.name,
                     )?;

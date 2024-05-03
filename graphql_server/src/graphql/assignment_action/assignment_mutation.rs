@@ -257,8 +257,7 @@ impl AssignmentMutation {
         let space_members = SpaceMember::find_all_space_members_by_role_and_class(
             &conn,
             assignment_document.space_id.unwrap_or(-1),
-            assignment_document.org_id,
-            OrgRole::Teacher,
+            Role::Teacher,
         )
         .format_err()?;
         let receivers = space_members

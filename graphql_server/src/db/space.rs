@@ -4,7 +4,6 @@ use uuid::Uuid;
 
 use super::schema::spaces;
 use crate::db::schema::{space_invite_tokens, space_members};
-use crate::db::OrgRole;
 use crate::util::{generate_code, get_now_as_secs};
 
 #[derive(Debug, Clone, Insertable, InputObject)]
@@ -18,8 +17,6 @@ pub struct NewSpace {
     #[graphql(skip)]
     pub banner_id: Option<Uuid>,
     #[graphql(skip)]
-    pub org_id: i32,
-    #[graphql(skip)]
     pub creator_id: i32,
 }
 
@@ -29,7 +26,6 @@ impl From<Space> for NewSpace {
             name: space.name,
             updated_at: get_now_as_secs(),
             created_at: get_now_as_secs(),
-            org_id: space.org_id,
             banner_id: space.banner_id,
             creator_id: space.creator_id,
         }
@@ -60,7 +56,6 @@ pub struct Space {
     pub name: String,
     pub updated_at: i64,
     pub created_at: i64,
-    pub org_id: i32,
     pub banner_id: Option<Uuid>,
     pub creator_id: i32,
     pub deleted_at: Option<i64>,
@@ -95,32 +90,14 @@ impl Space {
             .get_results(conn)
     }
 
-    pub fn find_all_deleted_spaces(conn: &PgConnection, org_id: i32) -> Result<Vec<Self>, Error> {
-        let sixty_days_ago = get_now_as_secs() - 5_184_000;
-        spaces::table
-            .filter(spaces::org_id.eq(org_id))
-            .filter(spaces::deleted_at.gt(sixty_days_ago))
-            .get_results(conn)
-    }
-
-    pub fn find_all_org_spaces(conn: &PgConnection, org_id: i32) -> Result<Vec<Self>, Error> {
-        spaces::table
-            .filter(spaces::org_id.eq(org_id))
-            .filter(spaces::deleted_at.is_null())
-            .order_by(spaces::name.asc())
-            .get_results(conn)
-    }
-
     pub fn find_my_spaces(
         conn: &PgConnection,
-        org_id: i32,
         user_id: i32,
     ) -> Result<Vec<Self>, Error> {
         spaces::table
             .inner_join(space_members::table)
             .select(spaces::all_columns)
             .filter(space_members::user_id.eq(user_id))
-            .filter(spaces::org_id.eq(org_id))
             .order_by(spaces::created_at.desc())
             .get_results(conn)
     }

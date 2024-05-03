@@ -24,7 +24,7 @@ use async_graphql::{Data, Schema};
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse, GraphQLSubscription};
 use dotenv::dotenv;
 
-use crate::authentication_token::{ActiveOrgId, JwtToken};
+use crate::authentication_token::{JwtToken};
 use crate::background_job::register_jobs;
 use crate::connection_pool::show_log_connection;
 use crate::graphql::context_caching_data::RequestContextCachingData;
@@ -52,13 +52,6 @@ fn parse_authorization_token(req: &HttpRequest) -> Option<JwtToken> {
         .and_then(|val| val.to_str().map(|s| JwtToken(s.to_string())).ok())
 }
 
-fn parse_active_org_id(req: &HttpRequest) -> Option<ActiveOrgId> {
-    req.headers()
-        .get("active-org-id")
-        .and_then(|val| val.to_str().map(|s| s.parse::<i32>()).ok())
-        .and_then(|active_org_id| active_org_id.map(ActiveOrgId).ok())
-}
-
 async fn index(
     schema: web::Data<IkigaiSchema>,
     req: HttpRequest,
@@ -71,10 +64,6 @@ async fn index(
             request = request.data(claim);
         }
     };
-
-    if let Some(active_org_id) = parse_active_org_id(&req) {
-        request = request.data(active_org_id);
-    }
 
     request = request.data(RequestContextCachingData::new());
 

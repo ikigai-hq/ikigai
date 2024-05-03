@@ -75,17 +75,10 @@ impl OrganizationMutation {
         Ok(true)
     }
 
-    async fn org_upsert_rubric(&self, ctx: &Context<'_>, rubric: Rubric) -> Result<Rubric> {
+    async fn org_upsert_rubric(&self, ctx: &Context<'_>, mut rubric: Rubric) -> Result<Rubric> {
         let user_id = get_user_id_from_ctx(ctx).await?;
-        organization_authorize(
-            ctx,
-            user_id,
-            rubric.org_id,
-            OrganizationActionPermission::ManageOrgInformation,
-        )
-        .await?;
-
         let conn = get_conn_from_ctx(ctx).await?;
+        rubric.user_id = user_id;
         let rubric = Rubric::upsert(&conn, rubric).format_err()?;
 
         Ok(rubric)

@@ -14,7 +14,7 @@ import { useQuery } from "@apollo/client";
 import {
   GetBandScores,
   GetBandScores_assignmentGetBandScores_range_items as BandScoreItem,
-  GetRubrics_orgGetRubrics as IRubric,
+  GetRubrics_userGetMyRubrics as IRubric,
   GradeMethod,
   GradeType,
   UpdateAssignmentData,
@@ -149,8 +149,8 @@ const AssignmentGradeSettingTab = ({
         <Typography.Text type="secondary">
           {updateData.gradeMethod === GradeMethod.MANUAL && (
             <Trans>
-              ikigai will try to pre-calculate score of submissions. But
-              teacher need to review submission and feedback to student.
+              ikigai will try to pre-calculate score of submissions. But teacher
+              need to review submission and feedback to student.
             </Trans>
           )}
           {updateData.gradeMethod === GradeMethod.AUTO_GRADE && (

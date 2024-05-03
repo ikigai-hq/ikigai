@@ -1,14 +1,4 @@
-import { GetDocumentDetail_documentGet, OrgRole } from "../graphql/types";
-import { t } from "@lingui/macro";
-
-export const getRoleColor = (role: OrgRole) => {
-  switch (role) {
-    case OrgRole.TEACHER:
-      return "green";
-    case OrgRole.STUDENT:
-      return "geekblue";
-  }
-};
+import { GetDocumentDetail_documentGet } from "graphql/types";
 
 export const canDoAssignment = (
   document: GetDocumentDetail_documentGet,
@@ -37,14 +27,4 @@ export const DEFAULT_RIGHT_SIDE_WIDTH = 277;
 
 export const DEFAULT_LEFT_SIDE_WIDTH = 302;
 
-export const getRoleName = (orgRole: OrgRole) => {
-  if (orgRole === OrgRole.TEACHER) return t`Teacher`;
-  return t`Student`;
-};
-
 export const roundRealNumber = (n: number) => Math.round(n * 10000) / 10000;
-
-export const capitalize = (str: string): string => {
-  if (!str) return "";
-  return [...str][0].toUpperCase() + str.slice(1);
-};

@@ -25,7 +25,6 @@ impl DocumentMutation {
         let user_auth = get_user_auth_from_ctx(ctx).await?;
         data.id = Uuid::new_v4();
         data.creator_id = user_auth.id;
-        data.org_id = user_auth.org_id;
         data.updated_by = Some(user_auth.id);
         data.space_id = space_id;
         data.updated_at = get_now_as_secs();
@@ -204,8 +203,7 @@ impl DocumentMutation {
 
         let conn = get_conn_from_ctx(ctx).await?;
         let mut to_document = Document::find_by_id(&conn, to_document_id).format_err()?;
-        let mut clone_config = DocumentCloneConfig::new("", true);
-        clone_config.set_org(to_document.org_id);
+        let clone_config = DocumentCloneConfig::new("", true);
         let cloned_page_block = from_page_block
             .deep_clone(&conn, &mut to_document, &clone_config, false, to_id)
             .format_err()?;
@@ -313,7 +311,6 @@ impl DocumentMutation {
 
         let space_id = document.space_id.unwrap();
         let space = Space::find_by_id(&conn, space_id).format_err()?;
-        let org_id = document.org_id;
         let (items, notification, user_ids) = conn
             .transaction::<_, IkigaiError, _>(|| {
                 let mut current_users = User::find_by_emails(&conn, &emails)?;
@@ -326,14 +323,7 @@ impl DocumentMutation {
                 current_users.append(&mut new_users);
 
                 for user in current_users.iter() {
-                    // Add user into space if it's not space member
-                    if OrganizationMember::find(&conn, org_id, user.id).is_err() {
-                        let new_org_member =
-                            OrganizationMember::new(org_id, user.id, OrgRole::Student);
-                        OrganizationMember::upsert(&conn, new_org_member)?;
-                    }
-
-                    add_space_member(&conn, &space, user.id, None)?;
+                    add_space_member(&conn, &space, user.id, None, Role::Student)?;
                 }
 
                 let user_ids: Vec<i32> = current_users.iter().map(|u| u.id).unique().collect();

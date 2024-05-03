@@ -22,7 +22,6 @@ impl QuizMutation {
         let conn = get_conn_from_ctx(ctx).await?;
 
         data.user_id = user_auth.id;
-        data.org_id = user_auth.org_id;
         let quiz_structure = QuizStructure::upsert(&conn, data).format_err()?;
         Ok(quiz_structure)
     }

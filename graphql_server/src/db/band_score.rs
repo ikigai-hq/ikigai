@@ -101,37 +101,11 @@ impl_jsonb_for_db!(BandScoreRanges);
 pub struct NewBandScore {
     pub name: String,
     pub range: BandScoreRanges,
-    #[graphql(skip)]
-    pub org_id: Option<i32>,
 }
 
 impl NewBandScore {
-    pub fn new(name: String, range: BandScoreRanges, org_id: Option<i32>) -> Self {
-        Self {
-            name,
-            range,
-            org_id,
-        }
-    }
-
-    pub fn seed(org_id: i32) -> Vec<Self> {
-        vec![
-            Self::new(
-                "IELTS Listening".into(),
-                BandScoreRanges::init_ielts_listening(),
-                Some(org_id),
-            ),
-            Self::new(
-                "IELTS Reading (Academic)".into(),
-                BandScoreRanges::init_ielts_reading_academic(),
-                Some(org_id),
-            ),
-            Self::new(
-                "IELTS Reading (General)".into(),
-                BandScoreRanges::init_ielts_reading_general(),
-                Some(org_id),
-            ),
-        ]
+    pub fn new(name: String, range: BandScoreRanges) -> Self {
+        Self { name, range }
     }
 }
 
@@ -140,7 +114,6 @@ pub struct BandScore {
     pub id: i32,
     pub name: String,
     pub range: BandScoreRanges,
-    pub org_id: Option<i32>,
     pub updated_at: i64,
     pub created_at: i64,
 }
@@ -179,17 +152,8 @@ impl BandScore {
         band_scores::table.find(band_score_id).first(conn)
     }
 
-    pub fn find_all_by_org_id(conn: &PgConnection, org_id: i32) -> Result<Vec<Self>, Error> {
-        let mut band_scores: Vec<Self> = band_scores::table
-            .filter(band_scores::org_id.is_null())
-            .get_results(conn)?;
-        let mut org_band_scores: Vec<Self> = band_scores::table
-            .filter(band_scores::org_id.eq(org_id))
-            .get_results(conn)?;
-
-        band_scores.append(&mut org_band_scores);
-
-        Ok(band_scores)
+    pub fn find_all(conn: &PgConnection) -> Result<Vec<Self>, Error> {
+        band_scores::table.get_results(conn)
     }
 
     pub fn remove(conn: &PgConnection, band_score_id: i32) -> Result<(), Error> {

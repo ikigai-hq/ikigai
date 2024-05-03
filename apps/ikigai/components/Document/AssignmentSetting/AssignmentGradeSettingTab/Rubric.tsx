@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 
 import {
-  GetRubrics_orgGetRubrics as IRubric,
+  GetRubrics_userGetMyRubrics as IRubric,
   RubricInput,
   RubricTableDataInput,
   RubricTableItemInput,
@@ -118,7 +118,6 @@ const Rubric = ({ rubric, afterSave, readOnly }: RubricProps) => {
     if (readOnly) return;
     const rubricInput: RubricInput = {
       id: rubric.id,
-      orgId: rubric.orgId,
       name,
       data: getRubricTableDataInput(rubricType, levels, items),
     };

@@ -8,7 +8,6 @@ import {
   GetDocumentDetail_documentGet as IDocument,
   GetDocumentDetail_documentGet_assignment,
   NewDocument,
-  OrgRole,
   TeacherStartSubmission,
   UpdateAssignment,
   UpdateAssignmentData,
@@ -89,8 +88,7 @@ export const getDocumentConfigDefault = (doc: IDocument) => {
   };
 
   const userInfo = useAuthUserStore.getState().currentUser;
-  const isStudent =
-    userInfo?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
+  const isStudent = useAuthUserStore.getState().checkHelper.isStudent;
   const documentType = getDocumentType(doc);
   if (documentType === DocumentType.Submission) {
     if (
@@ -124,7 +122,7 @@ export const getDocumentConfigDefault = (doc: IDocument) => {
   if (documentType === DocumentType.Assignment) {
     config.showAssignmentReport = false;
     config.showQuizSettingReview = true;
-    if (userInfo?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT) {
+    if (isStudent) {
       config.showFeedbackButton = false;
       config.showAssignees = false;
     }

@@ -1,10 +1,28 @@
 use diesel::result::Error;
+use diesel::sql_types::Integer;
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use oso::PolarClass;
 
-use super::schema::{organization_members, space_members};
-use crate::db::{OrgRole, OrganizationMember};
+use super::schema::space_members;
+use crate::impl_enum_for_db;
 use crate::util::get_now_as_secs;
+
+#[derive(
+    Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
+)]
+#[sql_type = "Integer"]
+pub enum Role {
+    Teacher,
+    Student,
+}
+
+impl_enum_for_db!(Role);
+
+impl Default for Role {
+    fn default() -> Self {
+        Self::Teacher
+    }
+}
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, PolarClass, InputObject)]
 #[table_name = "space_members"]
@@ -19,16 +37,18 @@ pub struct SpaceMember {
     pub created_at: i64,
     #[graphql(skip_input)]
     pub join_by_token: Option<String>,
+    pub role: Role,
 }
 
 impl SpaceMember {
-    pub fn new(space_id: i32, user_id: i32, join_by_token: Option<String>) -> Self {
+    pub fn new(space_id: i32, user_id: i32, join_by_token: Option<String>, role: Role) -> Self {
         Self {
             space_id,
             user_id,
             updated_at: get_now_as_secs(),
             created_at: get_now_as_secs(),
             join_by_token,
+            role,
         }
     }
 
@@ -60,25 +80,12 @@ impl SpaceMember {
     pub fn find_all_space_members_by_role_and_class(
         conn: &PgConnection,
         space_id: i32,
-        org_id: i32,
-        role: OrgRole,
+        role: Role,
     ) -> Result<Vec<Self>, Error> {
-        let members: Vec<Self> = space_members::table
+        space_members::table
             .filter(space_members::space_id.eq(space_id))
-            .get_results(conn)?;
-        let user_ids: Vec<i32> = members.iter().map(|member| member.user_id).collect();
-
-        let org_members: Vec<OrganizationMember> = organization_members::table
-            .filter(organization_members::org_id.eq(org_id))
-            .filter(organization_members::user_id.eq_any(user_ids))
-            .filter(organization_members::org_role.eq(role))
-            .get_results(conn)?;
-        let org_member_ids: Vec<i32> = org_members.iter().map(|m| m.user_id).collect();
-
-        Ok(members
-            .into_iter()
-            .filter(|member| org_member_ids.contains(&member.user_id))
-            .collect())
+            .filter(space_members::role.eq(role))
+            .get_results(conn)
     }
 
     pub fn find_all_by_classes(

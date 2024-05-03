@@ -3,9 +3,7 @@ use diesel::Connection;
 use uuid::Uuid;
 
 use crate::authentication_token::Claims;
-use crate::authorization::{
-    DocumentActionPermission, OrganizationActionPermission, SpaceActionPermission,
-};
+use crate::authorization::{DocumentActionPermission, SpaceActionPermission};
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
@@ -23,31 +21,21 @@ pub struct SpaceMutation;
 
 #[Object]
 impl SpaceMutation {
+    // FIXME: Check permission
     async fn space_create(&self, ctx: &Context<'_>, mut data: NewSpace) -> Result<Space> {
         let user = get_user_from_ctx(ctx).await?;
-        let user_auth = get_user_auth_from_ctx(ctx).await?;
-        organization_authorize(
-            ctx,
-            user.id,
-            user_auth.org_id,
-            OrganizationActionPermission::AddSpace,
-        )
-        .await?;
-
         data.creator_id = user.id;
-        data.org_id = user_auth.org_id;
         let conn = get_conn_from_ctx(ctx).await?;
-
         Space::insert(&conn, data).format_err()
     }
 
+    // FIXME: Check permission, maybe only creator can do
     async fn space_duplicate(&self, ctx: &Context<'_>, space_id: i32) -> Result<Space> {
         let user_auth = get_user_auth_from_ctx(ctx).await?;
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceSetting).await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
-        let new_class =
-            duplicate_class(&conn, space_id, user_auth.org_id, user_auth.id).format_err()?;
+        let new_class = duplicate_class(&conn, space_id, user_auth.id).format_err()?;
         Ok(new_class)
     }
 
@@ -110,7 +98,6 @@ impl SpaceMutation {
         let mut config = DocumentCloneConfig::new("Copy of ", true);
         config.set_index(last_index);
         config.set_parent(original_document.parent_id);
-        config.set_org(user_auth.org_id);
 
         let doc = conn
             .transaction::<_, IkigaiError, _>(|| {
@@ -257,35 +244,32 @@ impl SpaceMutation {
             User::insert(&conn, &new_user).format_err()?
         };
 
-        if OrganizationMember::find(&conn, space.org_id, user.id).is_err() {
-            let member =
-                OrganizationMember::new(space.org_id, user.id, space_invite_token.inviting_role);
-            OrganizationMember::upsert(&conn, member).format_err()?;
-        }
-
         SpaceInviteToken::increase_use(&conn, space.id, &token).format_err()?;
-        let space_member = add_space_member(&conn, &space, user.id, Some(token)).format_err()?;
+        let space_member = add_space_member(
+            &conn,
+            &space,
+            user.id,
+            Some(token),
+            space_invite_token.inviting_role,
+        )
+        .format_err()?;
         let claims = Claims::new(space_member.user_id);
         let access_token = claims.encode()?;
         let starter_document = Document::get_or_create_starter_doc(
             &conn,
             space_member.user_id,
             space_id,
-            space.org_id,
             space.name.clone(),
         )
         .format_err()?;
 
-        let organization = Organization::find(&conn, space.org_id).format_err()?;
-        if let Some(owner_id) = organization.owner_id {
-            let notification = Notification::new_space_member_notification(NewSpaceMemberContext {
-                space_name: space.name,
-                space_id: space.id,
-                email: user.email,
-            });
-            let notification = Notification::insert(&conn, notification).format_err()?;
-            send_notification(&conn, notification, vec![owner_id]).format_err()?;
-        }
+        let notification = Notification::new_space_member_notification(NewSpaceMemberContext {
+            space_name: space.name,
+            space_id: space.id,
+            email: user.email,
+        });
+        let notification = Notification::insert(&conn, notification).format_err()?;
+        send_notification(&conn, notification, vec![space.creator_id]).format_err()?;
 
         Ok(SpaceWithAccessToken {
             starter_document,

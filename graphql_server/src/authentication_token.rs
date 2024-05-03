@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use crate::util::get_now_as_secs;
 
 #[derive(Debug)]
-pub struct ActiveOrgId(pub i32);
+pub struct ActiveSpaceId(pub i32);
 
 #[derive(Debug)]
 pub struct JwtToken(pub String);

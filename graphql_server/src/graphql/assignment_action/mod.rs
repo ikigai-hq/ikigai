@@ -137,7 +137,7 @@ impl Submission {
 
     async fn grade(&self, ctx: &Context<'_>) -> Option<f64> {
         let user_auth = get_user_auth_from_ctx(ctx).await.ok()?;
-        if user_auth.org_role != OrgRole::Student {
+        if user_auth.role != Role::Student {
             return self.temp_grade;
         }
 
@@ -150,7 +150,7 @@ impl Submission {
 
     async fn final_grade(&self, ctx: &Context<'_>) -> Option<f64> {
         let user_auth = get_user_auth_from_ctx(ctx).await.ok()?;
-        if user_auth.org_role != OrgRole::Student {
+        if user_auth.role != Role::Student {
             return self.final_grade;
         }
 

@@ -37,8 +37,6 @@ pub struct QuizStructure {
     pub updated_at: i64,
     #[graphql(skip_input)]
     pub created_at: i64,
-    #[graphql(skip_input)]
-    pub org_id: i32,
     #[graphql(default = "", skip_output)]
     pub explanation: String,
 }

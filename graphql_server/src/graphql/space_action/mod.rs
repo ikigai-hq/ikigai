@@ -51,8 +51,7 @@ impl Space {
         space_quick_authorize(ctx, self.id, SpaceActionPermission::ViewSpaceContent).await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
-        Document::get_or_create_starter_doc(&conn, user_id, self.id, self.org_id, self.name.clone())
-            .format_err()
+        Document::get_or_create_starter_doc(&conn, user_id, self.id, self.name.clone()).format_err()
     }
 
     async fn documents(&self, ctx: &Context<'_>) -> Result<Vec<Document>> {

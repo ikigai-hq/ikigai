@@ -1,6 +1,6 @@
 import create from "zustand";
 
-import { OrgRole, UserMe } from "../graphql/types";
+import { Role, UserMe } from "../graphql/types";
 import { cloneDeep } from "lodash";
 
 export type UserCheckHelper = {
@@ -9,9 +9,9 @@ export type UserCheckHelper = {
 };
 
 export type IStore = {
-  role: OrgRole;
-  orgId?: number;
-  setOrgId: (orgId?: number) => void;
+  role: Role;
+  spaceId?: number;
+  setSpaceId: (spaceId?: number) => void;
   currentUser: UserMe | undefined;
   checkHelper: UserCheckHelper;
   setCurrentUser: (currentUser: UserMe | undefined) => void;
@@ -19,9 +19,9 @@ export type IStore = {
 };
 
 const useAuthUserStore = create<IStore>((set, get) => ({
-  orgId: undefined,
-  setOrgId: (orgId) => set({ orgId }),
-  role: OrgRole.STUDENT,
+  spaceId: undefined,
+  setSpaceId: (spaceId) => set({ spaceId }),
+  role: Role.STUDENT,
   currentUser: undefined,
   updateUserData: {},
   checkHelper: {
@@ -31,11 +31,10 @@ const useAuthUserStore = create<IStore>((set, get) => ({
   setCurrentUser: (user: UserMe | undefined) => {
     const currentUser = cloneDeep(user);
     const isStudent =
-      currentUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
+      currentUser?.userMe?.activeUserAuth?.role === Role.STUDENT;
     const isTeacher =
-      currentUser?.userMe?.activeUserAuth?.orgRole === OrgRole.TEACHER;
-    const role =
-      currentUser?.userMe?.activeUserAuth?.orgRole || OrgRole.STUDENT;
+      currentUser?.userMe?.activeUserAuth?.role === Role.TEACHER;
+    const role = currentUser?.userMe?.activeUserAuth?.role || Role.STUDENT;
 
     const checkHelper = {
       isStudent,

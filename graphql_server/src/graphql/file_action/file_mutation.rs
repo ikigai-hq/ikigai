@@ -68,7 +68,6 @@ impl FileMutation {
                     d.file_name,
                     d.content_type,
                     d.content_length,
-                    user_auth.org_id,
                 )
             })
             .collect();
@@ -125,14 +124,7 @@ async fn create_file_upload(
         public,
     } = data;
 
-    let file = File::new(
-        member.id,
-        public,
-        file_name,
-        content_type,
-        content_length,
-        member.org_id,
-    );
+    let file = File::new(member.id, public, file_name, content_type, content_length);
     let file = File::upsert(&conn, &file).format_err()?;
     let upload_info = Storage::from_env_config().generate_upload_info(
         file.key(),

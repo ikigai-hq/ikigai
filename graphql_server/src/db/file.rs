@@ -40,7 +40,6 @@ pub struct File {
     pub download_cached_url: Option<String>,
     #[graphql(skip)]
     pub download_url_expire_in: Option<i64>,
-    pub org_id: i32,
     pub waveform_audio_json_str: Option<String>,
 }
 
@@ -52,7 +51,6 @@ impl File {
         file_name: String,
         content_type: String,
         content_length: i64,
-        org_id: i32,
     ) -> Self {
         Self {
             uuid: Uuid::new_v4(),
@@ -66,20 +64,8 @@ impl File {
             created_at: get_now_as_secs(),
             download_cached_url: None,
             download_url_expire_in: None,
-            org_id,
             waveform_audio_json_str: None,
         }
-    }
-
-    pub fn new_folder(user_id: i32, name: String, org_id: i32) -> Self {
-        Self::new(
-            user_id,
-            false,
-            name,
-            FOLDER_MIME_TYPE.to_string(),
-            0,
-            org_id,
-        )
     }
 
     pub fn key(&self) -> String {

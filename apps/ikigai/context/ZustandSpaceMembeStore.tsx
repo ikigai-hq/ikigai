@@ -2,10 +2,10 @@ import create from "zustand";
 import {
   GetSpaceMembers,
   GetSpaceMembers_spaceGet_members as ISpaceMember,
-  OrgRole,
+  Role,
 } from "graphql/types";
-import { query } from "../graphql/ApolloClient";
-import { GET_SPACE_MEMBERS } from "../graphql/query/SpaceQuery";
+import { query } from "graphql/ApolloClient";
+import { GET_SPACE_MEMBERS } from "graphql/query/SpaceQuery";
 
 // Type hint: Map<Space ID, Map<User ID, ISpaceMember>>
 export type SpaceMembersType = Map<number, Map<number, ISpaceMember>>;
@@ -48,12 +48,12 @@ const useSpaceMemberStore = create<SpaceMemberContext>((set, get) => ({
   },
 }));
 
-export const useGetSpaceMembers = (spaceId?: number, filterRole?: OrgRole) => {
+export const useGetSpaceMembers = (spaceId?: number, filterRole?: Role) => {
   const members = useSpaceMemberStore((state) => state.data.get(spaceId));
   const filteredMembers = members
     ? Array.from(members.values()).filter((member) => {
         if (!filterRole) return true;
-        return member.user.orgMember.orgRole === filterRole;
+        return member.role === filterRole;
       })
     : [];
 

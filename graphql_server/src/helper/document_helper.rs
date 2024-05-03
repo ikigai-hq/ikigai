@@ -15,7 +15,6 @@ pub struct DocumentCloneConfig<'a> {
     pub create_new_quiz_structure: bool,
     pub parent_id: Option<Uuid>,
     pub index: i32,
-    pub org_id: Option<i32>,
 }
 
 impl<'a> DocumentCloneConfig<'a> {
@@ -25,7 +24,6 @@ impl<'a> DocumentCloneConfig<'a> {
             create_new_quiz_structure,
             parent_id: None,
             index: 0,
-            org_id: None,
         }
     }
 
@@ -35,10 +33,6 @@ impl<'a> DocumentCloneConfig<'a> {
 
     pub fn set_index(&mut self, index: i32) {
         self.index = index;
-    }
-
-    pub fn set_org(&mut self, org_id: i32) {
-        self.org_id = Some(org_id);
     }
 }
 
@@ -148,7 +142,6 @@ impl Document {
     ) -> Result<Self, IkigaiError> {
         let new_body = self.body.clone();
         let new_title = format!("{}{}", config.prefix_title, self.title);
-        let new_org_id = config.org_id.unwrap_or(self.org_id);
         let new_editor_config = self.editor_config.clone();
         let new_cover_photo_id = self.cover_photo_id;
 
@@ -156,7 +149,6 @@ impl Document {
             let mut document = Document::find_by_id(conn, clone_to_document_id)?;
             document.title = new_title;
             document.body = new_body;
-            document.org_id = new_org_id;
             document.cover_photo_id = new_cover_photo_id;
             document.editor_config = new_editor_config;
             document.space_id = clone_to_space;
@@ -167,7 +159,6 @@ impl Document {
                 creator_id,
                 new_body,
                 new_title,
-                config.org_id.unwrap_or(self.org_id),
                 config.parent_id,
                 config.index,
                 new_cover_photo_id,

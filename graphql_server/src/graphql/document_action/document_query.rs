@@ -1,4 +1,4 @@
-use crate::authorization::{DocumentActionPermission, OrganizationActionPermission};
+use crate::authorization::DocumentActionPermission;
 use async_graphql::*;
 use uuid::Uuid;
 
@@ -21,23 +21,5 @@ impl DocumentQuery {
         UserActivity::insert(&conn, user_id, document.id).format_err()?;
 
         Ok(document)
-    }
-
-    async fn document_get_deleted_documents(
-        &self,
-        ctx: &Context<'_>,
-    ) -> Result<Vec<Document>, Error> {
-        let user_auth = get_user_auth_from_ctx(ctx).await?;
-        organization_authorize(
-            ctx,
-            user_auth.id,
-            user_auth.org_id,
-            OrganizationActionPermission::ManageTrash,
-        )
-        .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let documents = Document::find_deleted_documents(&conn, user_auth.org_id).format_err()?;
-        Ok(documents)
     }
 }

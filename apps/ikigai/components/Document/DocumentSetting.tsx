@@ -13,10 +13,7 @@ import useDocumentStore from "context/ZustandDocumentStore";
 import useSpaceStore from "../../context/ZustandSpaceStore";
 import styled from "styled-components";
 import { BreakPoints } from "styles/mediaQuery";
-import {
-  GetDocumentDetail_documentGet as IDocument,
-  OrgRole,
-} from "graphql/types";
+import { GetDocumentDetail_documentGet as IDocument } from "graphql/types";
 import type { MenuProps } from "antd";
 import { Dropdown, Popconfirm, Space, Typography } from "antd";
 import FileUpload, { DraggerStyled } from "components/common/FileUpload";
@@ -54,9 +51,7 @@ const DocumentSetting = ({
     (state) => state.updateDocumentTitleLocal,
   );
   const update = useDocumentStore((state) => state.update);
-  const authUser = useAuthUserStore((state) => state.currentUser);
-  const isStudent =
-    authUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
+  const isStudent = useAuthUserStore((state) => state.checkHelper.isStudent);
   const currentDocIdQuery = router.query.documentId as string;
 
   const [documentCoverPhoto, setDocumentCoverPhoto] = useState(

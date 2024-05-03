@@ -32,38 +32,18 @@ export const GET_SPACE_MEMBERS = gql`
         userId
         spaceId
         createdAt
+        role
         user {
           id
           firstName
           lastName
           email
           randomColor
-          orgMember {
-            orgRole
-          }
-          orgPersonalInformation {
-            fullName
-            avatar {
-              publicUrl
-            }
-          }
+          name
           avatar {
             publicUrl
           }
         }
-      }
-    }
-  }
-`;
-
-export const GET_DELETED_SPACES = gql`
-  query GetDeletedSpaces {
-    spaceGetDeletedSpaces {
-      id
-      name
-      deletedAt
-      banner {
-        publicUrl
       }
     }
   }

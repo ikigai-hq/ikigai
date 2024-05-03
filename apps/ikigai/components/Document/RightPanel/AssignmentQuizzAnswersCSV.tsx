@@ -1,8 +1,8 @@
 import {
   GetAnswersOfStructure,
   GetSpaceMembers_spaceGet_members as IMember,
-  OrgRole,
   QuizType,
+  Role,
 } from "graphql/types";
 import { GET_ANSWERS_OF_STRUCTURE } from "graphql/query/QuizQuery";
 
@@ -37,7 +37,7 @@ const AssignmentQuizzAnswers = ({
   );
   const documentQuizzes = useQuizStore((state) => state.quizzes);
   const students = members
-    .filter((member) => member.user.orgMember.orgRole === OrgRole.STUDENT)
+    .filter((member) => member.role === Role.STUDENT)
     .map((member) => member.user);
 
   // Build Headers

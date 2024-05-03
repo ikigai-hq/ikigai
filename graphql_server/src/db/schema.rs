@@ -45,7 +45,6 @@ diesel::table! {
         id -> Int4,
         name -> Varchar,
         range -> Jsonb,
-        org_id -> Nullable<Int4>,
         updated_at -> Int8,
         created_at -> Int8,
     }
@@ -98,7 +97,6 @@ diesel::table! {
     documents (id) {
         id -> Uuid,
         creator_id -> Int4,
-        org_id -> Int4,
         parent_id -> Nullable<Uuid>,
         cover_photo_id -> Nullable<Uuid>,
         index -> Int4,
@@ -128,7 +126,6 @@ diesel::table! {
         created_at -> Int8,
         download_cached_url -> Nullable<Varchar>,
         download_url_expire_in -> Nullable<Int8>,
-        org_id -> Int4,
         waveform_audio_json_str -> Nullable<Text>,
     }
 }
@@ -147,25 +144,6 @@ diesel::table! {
         notification_type -> Int4,
         context -> Jsonb,
         created_at -> Int8,
-    }
-}
-
-diesel::table! {
-    organization_members (org_id, user_id) {
-        org_id -> Int4,
-        user_id -> Int4,
-        org_role -> Int4,
-        created_at -> Int8,
-    }
-}
-
-diesel::table! {
-    organizations (id) {
-        id -> Int4,
-        org_name -> Varchar,
-        updated_at -> Int8,
-        created_at -> Int8,
-        owner_id -> Nullable<Int4>,
     }
 }
 
@@ -190,7 +168,6 @@ diesel::table! {
         quiz_answer -> Jsonb,
         updated_at -> Int8,
         created_at -> Int8,
-        org_id -> Int4,
         explanation -> Text,
     }
 }
@@ -218,11 +195,11 @@ diesel::table! {
 diesel::table! {
     rubrics (id) {
         id -> Uuid,
-        org_id -> Int4,
         name -> Text,
         data -> Jsonb,
         updated_at -> Int8,
         created_at -> Int8,
+        user_id -> Int4,
     }
 }
 
@@ -246,6 +223,7 @@ diesel::table! {
         updated_at -> Int8,
         created_at -> Int8,
         join_by_token -> Nullable<Varchar>,
+        role -> Int4,
     }
 }
 
@@ -255,7 +233,6 @@ diesel::table! {
         name -> Text,
         updated_at -> Int8,
         created_at -> Int8,
-        org_id -> Int4,
         banner_id -> Nullable<Uuid>,
         creator_id -> Int4,
         deleted_at -> Nullable<Int8>,
@@ -310,7 +287,6 @@ diesel::joinable!(assignment_submissions -> users (user_id));
 diesel::joinable!(assignments -> band_scores (band_score_id));
 diesel::joinable!(assignments -> documents (document_id));
 diesel::joinable!(assignments -> rubrics (grade_by_rubric_id));
-diesel::joinable!(band_scores -> organizations (org_id));
 diesel::joinable!(document_assigned_users -> documents (document_id));
 diesel::joinable!(document_assigned_users -> users (assigned_user_id));
 diesel::joinable!(document_highlights -> documents (document_id));
@@ -320,29 +296,22 @@ diesel::joinable!(document_page_block_nested_documents -> document_page_blocks (
 diesel::joinable!(document_page_block_nested_documents -> documents (document_id));
 diesel::joinable!(document_page_blocks -> documents (document_id));
 diesel::joinable!(documents -> files (cover_photo_id));
-diesel::joinable!(documents -> organizations (org_id));
 diesel::joinable!(documents -> spaces (space_id));
-diesel::joinable!(files -> organizations (org_id));
 diesel::joinable!(notification_receivers -> notifications (notification_id));
 diesel::joinable!(notification_receivers -> users (user_id));
-diesel::joinable!(organization_members -> organizations (org_id));
-diesel::joinable!(organization_members -> users (user_id));
-diesel::joinable!(organizations -> users (owner_id));
 diesel::joinable!(quiz_answers -> quizzes (quiz_id));
 diesel::joinable!(quiz_answers -> users (user_id));
-diesel::joinable!(quiz_structures -> organizations (org_id));
 diesel::joinable!(quiz_structures -> users (user_id));
 diesel::joinable!(quizzes -> documents (document_id));
 diesel::joinable!(quizzes -> quiz_structures (quiz_structure_id));
 diesel::joinable!(rubric_submissions -> assignment_submissions (submission_id));
 diesel::joinable!(rubric_submissions -> rubrics (rubric_id));
-diesel::joinable!(rubrics -> organizations (org_id));
+diesel::joinable!(rubrics -> users (user_id));
 diesel::joinable!(space_invite_tokens -> spaces (space_id));
 diesel::joinable!(space_invite_tokens -> users (creator_id));
 diesel::joinable!(space_members -> spaces (space_id));
 diesel::joinable!(space_members -> users (user_id));
 diesel::joinable!(spaces -> files (banner_id));
-diesel::joinable!(spaces -> organizations (org_id));
 diesel::joinable!(spaces -> users (creator_id));
 diesel::joinable!(thread_comments -> files (file_uuid));
 diesel::joinable!(thread_comments -> threads (thread_id));
@@ -363,8 +332,6 @@ diesel::allow_tables_to_appear_in_same_query!(
     files,
     notification_receivers,
     notifications,
-    organization_members,
-    organizations,
     quiz_answers,
     quiz_structures,
     quizzes,

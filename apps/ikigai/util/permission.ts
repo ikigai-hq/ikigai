@@ -3,7 +3,7 @@
 
 import {
   GetDocumentDetail_documentGet as IDocument,
-  OrgRole,
+  Role,
   UserMe,
 } from "graphql/types";
 
@@ -47,16 +47,16 @@ export const TEACHER_PERMISSIONS = [
   Permission.ManageOrgInformation,
 ];
 
-export const getPermissions = (orgRole: OrgRole): Permission[] => {
+export const getPermissions = (orgRole: Role): Permission[] => {
   switch (orgRole) {
-    case OrgRole.STUDENT:
+    case Role.STUDENT:
       return STUDENT_PERMISSIONS;
     default:
       return TEACHER_PERMISSIONS;
   }
 };
 
-export const allow = (orgRole: OrgRole, permission: Permission): boolean => {
+export const allow = (orgRole: Role, permission: Permission): boolean => {
   return getPermissions(orgRole).includes(permission);
 };
 
@@ -106,10 +106,10 @@ export const getDocumentPermissions = (
 ): DocumentPermission[] => {
   if (isPreviewMode) return VIEW_ONLY_PERMISSIONS;
 
-  const role = user?.userMe?.activeUserAuth?.orgRole;
+  const role = user?.userMe?.activeUserAuth?.role;
   const documentType = getDocumentType(doc);
 
-  if (role === OrgRole.TEACHER) return FULL_DOCUMENT_PERMISSIONS;
+  if (role === Role.TEACHER) return FULL_DOCUMENT_PERMISSIONS;
 
   // Student
   switch (documentType) {

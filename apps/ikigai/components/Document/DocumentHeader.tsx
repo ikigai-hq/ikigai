@@ -41,6 +41,7 @@ import DocumentTypeIcon from "./DocumentTypeIcon";
 import useHighlightStore from "context/ZustandHighlightStore";
 import useSubmissionStatus from "hook/UseSubmissionStatus";
 import { isArray } from "lodash";
+import DocumentMoreSetting from "./DocumentMoreSetting";
 
 export type DocumentHeaderProps = {
   children?: React.ReactNode;
@@ -240,6 +241,7 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({ children }) => {
           trigger="click"
           arrow={false}
           getPopupContainer={(trigger: any) => trigger.parentNode}
+          content={<DocumentMoreSetting />}
         >
           <>
             <ButtonWithTooltip

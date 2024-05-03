@@ -89,6 +89,10 @@ pub struct NotificationCenter {
 
 impl Actor for NotificationCenter {
     type Context = Context<Self>;
+
+    fn started(&mut self, _: &mut Self::Context) {
+        self.senders = vec![Box::new(MailSender)];
+    }
 }
 
 impl Supervised for NotificationCenter {}

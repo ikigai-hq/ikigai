@@ -206,6 +206,42 @@ export interface DeleteDocumentPermanentVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: AssignToDocument
+// ====================================================
+
+export interface AssignToDocument_documentAssignUsers_user_avatar {
+  publicUrl: string | null;
+}
+
+export interface AssignToDocument_documentAssignUsers_user {
+  id: number;
+  firstName: string;
+  lastName: string;
+  avatar: AssignToDocument_documentAssignUsers_user_avatar | null;
+  randomColor: string;
+  email: string;
+}
+
+export interface AssignToDocument_documentAssignUsers {
+  assignedUserId: number;
+  user: AssignToDocument_documentAssignUsers_user;
+}
+
+export interface AssignToDocument {
+  documentAssignUsers: AssignToDocument_documentAssignUsers[];
+}
+
+export interface AssignToDocumentVariables {
+  documentId: any;
+  emails: string[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: FileCreate
 // ====================================================
 
@@ -1675,6 +1711,46 @@ export interface GetDeletedDocuments_documentGetDeletedDocuments {
 
 export interface GetDeletedDocuments {
   documentGetDeletedDocuments: GetDeletedDocuments_documentGetDeletedDocuments[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetDocumentAssignedUsers
+// ====================================================
+
+export interface GetDocumentAssignedUsers_documentGet_assignedUsers_user_avatar {
+  publicUrl: string | null;
+}
+
+export interface GetDocumentAssignedUsers_documentGet_assignedUsers_user {
+  id: number;
+  firstName: string;
+  lastName: string;
+  avatar: GetDocumentAssignedUsers_documentGet_assignedUsers_user_avatar | null;
+  randomColor: string;
+  email: string;
+}
+
+export interface GetDocumentAssignedUsers_documentGet_assignedUsers {
+  assignedUserId: number;
+  user: GetDocumentAssignedUsers_documentGet_assignedUsers_user;
+}
+
+export interface GetDocumentAssignedUsers_documentGet {
+  id: any;
+  assignedUsers: GetDocumentAssignedUsers_documentGet_assignedUsers[];
+}
+
+export interface GetDocumentAssignedUsers {
+  documentGet: GetDocumentAssignedUsers_documentGet;
+}
+
+export interface GetDocumentAssignedUsersVariables {
+  documentId: any;
 }
 
 /* tslint:disable */

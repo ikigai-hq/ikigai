@@ -1,5 +1,5 @@
 use async_graphql::*;
-use diesel::{Connection, PgConnection};
+use diesel::Connection;
 use uuid::Uuid;
 
 use crate::authentication_token::Claims;
@@ -264,7 +264,7 @@ impl SpaceMutation {
         }
 
         SpaceInviteToken::increase_use(&conn, space.id, &token).format_err()?;
-        let space_member = add_space_member(&conn, &space, user.id, Some(token))?;
+        let space_member = add_space_member(&conn, &space, user.id, Some(token)).format_err()?;
         let claims = Claims::new(space_member.user_id);
         let access_token = claims.encode()?;
         let starter_document = Document::get_or_create_starter_doc(
@@ -306,17 +306,4 @@ impl SpaceMutation {
 
         Ok(true)
     }
-}
-
-fn add_space_member(
-    conn: &PgConnection,
-    space: &Space,
-    user_id: i32,
-    token: Option<String>,
-) -> Result<SpaceMember> {
-    OrganizationMember::find(conn, space.org_id, user_id).format_err()?;
-    let new_member = SpaceMember::new(space.id, user_id, token);
-    let new_member = SpaceMember::upsert(conn, new_member).format_err()?;
-
-    Ok(new_member)
 }

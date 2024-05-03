@@ -55,7 +55,7 @@ const AssignmentGradeSettingTab = ({
     setInsideRubric(rubric);
   }, [rubric]);
 
-  const bandscoreColumns = [
+  const bandScoreColumns = [
     {
       title: t`Correct answers`,
       dataIndex: "correctAnswer",
@@ -191,7 +191,7 @@ const AssignmentGradeSettingTab = ({
           {selectedBandScore && (
             <Table
               rowKey={"score"}
-              columns={bandscoreColumns}
+              columns={bandScoreColumns}
               dataSource={selectedBandScore.range.items}
               style={{ maxHeight: "270px", overflowY: "auto" }}
               pagination={false}

@@ -234,3 +234,24 @@ export const GET_DELETED_DOCUMENTS = gql`
     }
   }
 `;
+
+export const GET_DOCUMENT_ASSIGNED_USERS = gql`
+  query GetDocumentAssignedUsers($documentId: UUID!) {
+    documentGet(documentId: $documentId) {
+      id
+      assignedUsers {
+        assignedUserId
+        user {
+          id
+          firstName
+          lastName
+          avatar {
+            publicUrl
+          }
+          randomColor
+          email
+        }
+      }
+    }
+  }
+`;

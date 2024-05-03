@@ -99,3 +99,21 @@ export const DELETE_DOCUMENT_PERMANENT = gql`
     documentDelete(documentId: $documentId)
   }
 `;
+
+export const ASSIGN_TO_DOCUMENT = gql`
+  mutation AssignToDocument($documentId: UUID!, $emails: [String!]!) {
+    documentAssignUsers(documentId: $documentId, emails: $emails) {
+      assignedUserId
+      user {
+        id
+        firstName
+        lastName
+        avatar {
+          publicUrl
+        }
+        randomColor
+        email
+      }
+    }
+  }
+`;

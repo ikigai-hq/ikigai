@@ -6,7 +6,7 @@ use super::schema::document_assigned_users;
 use crate::util::get_now_as_secs;
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
-#[graphql(input_name = "NewDocumentAssignedUserInput")]
+#[graphql(complex, input_name = "NewDocumentAssignedUserInput")]
 #[table_name = "document_assigned_users"]
 pub struct DocumentAssignedUser {
     pub document_id: Uuid,

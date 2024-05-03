@@ -1,9 +1,9 @@
-use crate::db::{Document, SpaceMember};
-use diesel::dsl::any;
 use diesel::result::Error;
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use oso::PolarClass;
 use uuid::Uuid;
+
+use crate::db::{Document, SpaceMember};
 
 use super::schema::{user_activities, users};
 
@@ -101,6 +101,12 @@ impl User {
             .get_result(conn)
     }
 
+    pub fn batch_insert(conn: &PgConnection, new_users: Vec<NewUser>) -> Result<Vec<Self>, Error> {
+        diesel::insert_into(users::table)
+            .values(new_users)
+            .get_results(conn)
+    }
+
     pub fn find_by_id(conn: &PgConnection, id: i32) -> Result<Self, Error> {
         users::table.find(id).first(conn)
     }
@@ -109,6 +115,12 @@ impl User {
         users::table
             .filter(users::email.eq(&email.to_lowercase()))
             .first(conn)
+    }
+
+    pub fn find_by_emails(conn: &PgConnection, emails: &Vec<String>) -> Result<Vec<Self>, Error> {
+        users::table
+            .filter(users::email.eq_any(emails))
+            .get_results(conn)
     }
 
     pub fn find_by_email_opt(conn: &PgConnection, email: &str) -> Result<Option<Self>, Error> {
@@ -120,7 +132,7 @@ impl User {
     }
 
     pub fn find_by_ids(conn: &PgConnection, ids: &Vec<i32>) -> Result<Vec<User>, Error> {
-        users::table.filter(users::id.eq(any(ids))).load(conn)
+        users::table.filter(users::id.eq_any(ids)).get_results(conn)
     }
 
     pub fn update_info(conn: &PgConnection, id: i32, info: UpdateUserData) -> Result<(), Error> {

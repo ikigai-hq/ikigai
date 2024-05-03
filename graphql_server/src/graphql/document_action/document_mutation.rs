@@ -296,7 +296,7 @@ impl DocumentMutation {
         &self,
         ctx: &Context<'_>,
         document_id: Uuid,
-        user_ids: Vec<i32>,
+        emails: Vec<String>,
     ) -> Result<Vec<DocumentAssignedUser>> {
         document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
             .await?;
@@ -311,19 +311,32 @@ impl DocumentMutation {
             .format_err();
         }
 
-        let user_ids = user_ids.into_iter().unique().collect();
-        let members =
-            SpaceMember::find_all_by_users_of_space(&conn, document.space_id.unwrap(), &user_ids)
-                .format_err()?;
-        if members.len() != user_ids.len() {
-            return Err(IkigaiError::new_bad_request(
-                "One or more users is not member of space",
-            ))
-            .format_err();
-        }
-
-        let items = conn
+        let space_id = document.space_id.unwrap();
+        let space = Space::find_by_id(&conn, space_id).format_err()?;
+        let org_id = document.org_id;
+        let (items, notification, user_ids) = conn
             .transaction::<_, IkigaiError, _>(|| {
+                let mut current_users = User::find_by_emails(&conn, &emails)?;
+                let new_users: Vec<NewUser> = emails
+                    .into_iter()
+                    .filter(|email| !current_users.iter().map(|c| &c.email).contains(email))
+                    .map(|email| NewUser::new(email.clone(), email, "".into()))
+                    .collect();
+                let mut new_users = User::batch_insert(&conn, new_users)?;
+                current_users.append(&mut new_users);
+
+                for user in current_users.iter() {
+                    // Add user into space if it's not space member
+                    if OrganizationMember::find(&conn, org_id, user.id).is_err() {
+                        let new_org_member =
+                            OrganizationMember::new(org_id, user.id, OrgRole::Student);
+                        OrganizationMember::upsert(&conn, new_org_member)?;
+                    }
+
+                    add_space_member(&conn, &space, user.id, None)?;
+                }
+
+                let user_ids: Vec<i32> = current_users.iter().map(|u| u.id).unique().collect();
                 let items = user_ids
                     .iter()
                     .map(|user_id| DocumentAssignedUser::new(document_id, *user_id))
@@ -338,11 +351,12 @@ impl DocumentMutation {
                     },
                 );
                 let notification = Notification::insert(&conn, notification)?;
-                send_notification(&conn, notification, user_ids)?;
 
-                Ok(items)
+                Ok((items, notification, user_ids))
             })
             .format_err()?;
+
+        send_notification(&conn, notification, user_ids)?;
 
         Ok(items)
     }

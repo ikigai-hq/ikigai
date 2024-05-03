@@ -100,3 +100,16 @@ pub async fn generate_download_url(file: &File, ctx: &Context<'_>) -> Result<Opt
     warn!("We don't support to download folder!");
     Ok(None)
 }
+
+pub fn add_space_member(
+    conn: &PgConnection,
+    space: &Space,
+    user_id: i32,
+    token: Option<String>,
+) -> std::result::Result<SpaceMember, IkigaiError> {
+    OrganizationMember::find(conn, space.org_id, user_id)?;
+    let new_member = SpaceMember::new(space.id, user_id, token);
+    let new_member = SpaceMember::upsert(conn, new_member)?;
+
+    Ok(new_member)
+}

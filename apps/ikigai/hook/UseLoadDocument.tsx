@@ -8,11 +8,16 @@ import useQuizStore from "context/ZustandQuizStore";
 import {
   QuizType,
   GetDocumentDetail_documentGet_quizzes as IDocumentQuiz,
+  GetDocumentAssignedUsers,
 } from "graphql/types";
 import { useEffect, useState } from "react";
 import { Metadata, parsePageBlock } from "util/BlockUtil";
 import useAuthUserStore from "../context/ZustandAuthStore";
 import useHighlightStore from "context/ZustandHighlightStore";
+import { useLazyQuery } from "@apollo/client";
+import { GET_DOCUMENT_ASSIGNED_USERS } from "../graphql/query/DocumentQuery";
+import { handleError } from "../graphql/ApolloClient";
+import { cloneDeep } from "lodash";
 
 type ILoadDocument = {
   loading: boolean;
@@ -56,6 +61,14 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
   const syncHighlights = useHighlightStore((state) => state.syncHighlights);
   const getThreads = useHighlightStore((state) => state.getThreads);
 
+  const addAssignedUsers = useDocumentStore((state) => state.addAssignedUsers);
+  const [fetchDocumentAssignedUsers] = useLazyQuery<GetDocumentAssignedUsers>(
+    GET_DOCUMENT_ASSIGNED_USERS,
+    {
+      onError: handleError,
+    },
+  );
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -95,7 +108,7 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
         fetchDocumentDetail(),
       ]);
       const nestedDocQuizzes = new Map();
-      nestedDocuments.forEach(async (d) => {
+      for (const d of nestedDocuments) {
         updateMapAvailableDocument(d.documentGet.id, d.documentGet);
         syncQuizzes(d.documentGet.body, d.documentGet.id);
         syncHighlights(d.documentGet.body, d.documentGet.id);
@@ -104,7 +117,7 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
           nestedDocQuizzes.set(q.id, q);
         });
         await getThreads(d.documentGet.id);
-      });
+      }
       const initialMasterDocumentQuizzes: Map<string, IDocumentQuiz> = new Map(
         quizzes.map((q) => [q.id, q]),
       );
@@ -140,6 +153,15 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
         };
         updateQuizStore(quiz.id, metadata, quiz.documentId);
       });
+
+      const { data } = await fetchDocumentAssignedUsers({
+        variables: {
+          documentId,
+        },
+      });
+      if (data) {
+        addAssignedUsers(cloneDeep(data.documentGet.assignedUsers));
+      }
     } catch (reason) {
       setError(reason);
     } finally {
@@ -149,7 +171,11 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
 
   useEffect(() => {
     if (documentId && currentUser?.userMe?.id) {
+      // Reset Store
       resetStore();
+      useDocumentStore.setState({ assignedUsers: [] });
+
+      // Load new data
       loadDocumentMaterial();
       updatePageBlockMode(false);
       useDocumentStore.setState({ masterDocumentId: documentId });

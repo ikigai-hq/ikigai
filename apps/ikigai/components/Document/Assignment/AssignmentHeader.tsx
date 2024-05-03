@@ -1,4 +1,4 @@
-import { AuditOutlined } from "@ant-design/icons";
+import {AuditOutlined, SendOutlined, UsergroupAddOutlined} from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 
 import {
@@ -11,6 +11,7 @@ import useDocumentStore from "context/ZustandDocumentStore";
 import { t } from "@lingui/macro";
 import { ButtonWithTooltip } from "components/common/Button";
 import { useGetSpaceMembers } from "../../../context/ZustandSpaceMembeStore";
+import DocumentAssignedList from "../DocumentAssignedList";
 
 export type AdminAssignmentDocumentProps = {
   document: IDocument;
@@ -19,6 +20,7 @@ export type AdminAssignmentDocumentProps = {
 const AssignmentHeader = ({ document }: AdminAssignmentDocumentProps) => {
   const setIsClose = useDocumentStore((state) => state.setIsClose);
   const [openStudentList, setOpenStudentList] = useState(false);
+  const [openAssigneeList, setOpenAssigneeList] = useState(false);
   const { members: students } = useGetSpaceMembers(
     document?.spaceId,
     OrgRole.STUDENT,
@@ -31,6 +33,17 @@ const AssignmentHeader = ({ document }: AdminAssignmentDocumentProps) => {
   return (
     <>
       <StyledRightMenu style={{ gap: 4 }}>
+        <ButtonWithTooltip
+          btnProps={{
+            type: "text",
+            icon: <SendOutlined />,
+            onClick: () => setOpenAssigneeList(true),
+          }}
+          tooltipProps={{
+            title: t`Assign`,
+            destroyTooltipOnHide: true,
+          }}
+        />
         <ButtonWithTooltip
           btnProps={{
             type: "text",
@@ -48,6 +61,10 @@ const AssignmentHeader = ({ document }: AdminAssignmentDocumentProps) => {
         onClose={() => setOpenStudentList(false)}
         members={students}
         submissions={document.assignment.submissions}
+      />
+      <DocumentAssignedList
+        visible={openAssigneeList}
+        onClose={() => setOpenAssigneeList(false)}
       />
     </>
   );

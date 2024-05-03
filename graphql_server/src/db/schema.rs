@@ -52,6 +52,14 @@ diesel::table! {
 }
 
 diesel::table! {
+    document_assigned_users (document_id, assigned_user_id) {
+        document_id -> Uuid,
+        assigned_user_id -> Int4,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
     document_highlights (uuid) {
         document_id -> Uuid,
         creator_id -> Int4,
@@ -303,6 +311,8 @@ diesel::joinable!(assignments -> band_scores (band_score_id));
 diesel::joinable!(assignments -> documents (document_id));
 diesel::joinable!(assignments -> rubrics (grade_by_rubric_id));
 diesel::joinable!(band_scores -> organizations (org_id));
+diesel::joinable!(document_assigned_users -> documents (document_id));
+diesel::joinable!(document_assigned_users -> users (assigned_user_id));
 diesel::joinable!(document_highlights -> documents (document_id));
 diesel::joinable!(document_highlights -> threads (thread_id));
 diesel::joinable!(document_highlights -> users (creator_id));
@@ -345,6 +355,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     assignment_submissions,
     assignments,
     band_scores,
+    document_assigned_users,
     document_highlights,
     document_page_block_nested_documents,
     document_page_blocks,

@@ -20,7 +20,7 @@ pub fn send_notification(
         .iter()
         .map(|receiver_id| NotificationReceiver::new(notification.id, *receiver_id))
         .collect();
-    NotificationReceiver::upsert(&conn, receivers)?;
+    NotificationReceiver::upsert(conn, receivers)?;
     NotificationCenter::from_registry().do_send(SendNotification { notification });
     Ok(())
 }
@@ -42,6 +42,12 @@ pub fn parse_context(notification: &Notification) -> Option<Box<dyn ContextMessa
         NotificationType::FeedbackSubmission => {
             let value =
                 serde_json::from_value::<FeedbackSubmissionContext>(notification.context.clone())
+                    .ok()?;
+            Some(Box::new(value))
+        }
+        NotificationType::AssignToAssignment => {
+            let value =
+                serde_json::from_value::<AssignToAssignmentContext>(notification.context.clone())
                     .ok()?;
             Some(Box::new(value))
         }
@@ -68,7 +74,7 @@ impl NotificationSender for MailSender {
                 context.get_title(),
                 context.get_message(),
                 context.get_action_name(),
-                context.get_url_path(),
+                context.get_url_path(user),
             )?;
         }
 
@@ -83,6 +89,10 @@ pub struct NotificationCenter {
 
 impl Actor for NotificationCenter {
     type Context = Context<Self>;
+
+    fn started(&mut self, _: &mut Self::Context) {
+        self.senders = vec![Box::new(MailSender)];
+    }
 }
 
 impl Supervised for NotificationCenter {}

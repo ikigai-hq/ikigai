@@ -135,6 +135,7 @@ impl Quiz {
 }
 
 impl Document {
+    #[allow(clippy::too_many_arguments)]
     pub fn deep_clone(
         &self,
         conn: &PgConnection,

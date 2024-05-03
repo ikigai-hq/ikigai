@@ -10,7 +10,7 @@ use async_graphql::{ComplexObject, Context, Result};
 use crate::authorization::SpaceActionPermission;
 use crate::db::*;
 use crate::error::IkigaiErrorExt;
-use crate::graphql::data_loader::{FileById, MembersByClassId, IkigaiDataLoader, SpaceById};
+use crate::graphql::data_loader::{FileById, IkigaiDataLoader, MembersByClassId, SpaceById};
 use crate::helper::{
     get_conn_from_ctx, get_public_user_from_loader, get_user_id_from_ctx, space_quick_authorize,
 };

@@ -7,6 +7,7 @@ use crate::authorization::DocumentActionPermission;
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
+use crate::notification_center::send_notification;
 use crate::util::get_now_as_secs;
 
 #[derive(Default)]
@@ -287,6 +288,93 @@ impl DocumentMutation {
 
         let conn = get_conn_from_ctx(ctx).await?;
         Document::delete(&conn, document_id).format_err()?;
+
+        Ok(true)
+    }
+
+    async fn document_assign_users(
+        &self,
+        ctx: &Context<'_>,
+        document_id: Uuid,
+        emails: Vec<String>,
+    ) -> Result<Vec<DocumentAssignedUser>> {
+        document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
+            .await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        let document = Document::find_by_id(&conn, document_id).format_err()?;
+
+        if document.space_id.is_none() {
+            return Err(IkigaiError::new_bad_request(
+                "Assign users to document is only available for document in material of spaces",
+            ))
+            .format_err();
+        }
+
+        let space_id = document.space_id.unwrap();
+        let space = Space::find_by_id(&conn, space_id).format_err()?;
+        let org_id = document.org_id;
+        let (items, notification, user_ids) = conn
+            .transaction::<_, IkigaiError, _>(|| {
+                let mut current_users = User::find_by_emails(&conn, &emails)?;
+                let new_users: Vec<NewUser> = emails
+                    .into_iter()
+                    .filter(|email| !current_users.iter().map(|c| &c.email).contains(email))
+                    .map(|email| NewUser::new(email.clone(), email, "".into()))
+                    .collect();
+                let mut new_users = User::batch_insert(&conn, new_users)?;
+                current_users.append(&mut new_users);
+
+                for user in current_users.iter() {
+                    // Add user into space if it's not space member
+                    if OrganizationMember::find(&conn, org_id, user.id).is_err() {
+                        let new_org_member =
+                            OrganizationMember::new(org_id, user.id, OrgRole::Student);
+                        OrganizationMember::upsert(&conn, new_org_member)?;
+                    }
+
+                    add_space_member(&conn, &space, user.id, None)?;
+                }
+
+                let user_ids: Vec<i32> = current_users.iter().map(|u| u.id).unique().collect();
+                let items = user_ids
+                    .iter()
+                    .map(|user_id| DocumentAssignedUser::new(document_id, *user_id))
+                    .collect();
+                let items = DocumentAssignedUser::insert(&conn, items)?;
+
+                let notification = Notification::new(
+                    NotificationType::AssignToAssignment,
+                    AssignToAssignmentContext {
+                        assignment_document_id: document.id,
+                        assignment_name: document.title,
+                    },
+                );
+                let notification = Notification::insert(&conn, notification)?;
+
+                Ok((items, notification, user_ids))
+            })
+            .format_err()?;
+
+        send_notification(&conn, notification, user_ids)?;
+
+        Ok(items)
+    }
+
+    async fn document_remove_assigned_user(
+        &self,
+        ctx: &Context<'_>,
+        assigned_user: DocumentAssignedUser,
+    ) -> Result<bool> {
+        document_quick_authorize(
+            ctx,
+            assigned_user.document_id,
+            DocumentActionPermission::ManageDocument,
+        )
+        .await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        DocumentAssignedUser::remove(&conn, assigned_user).format_err()?;
 
         Ok(true)
     }

@@ -2,7 +2,8 @@ pub mod template;
 
 use actix::{Actor, Context, Handler, Supervised, SystemService};
 use lettre::message::{Mailbox, SinglePart};
-use lettre::transport::smtp::authentication::Credentials;
+use lettre::transport::smtp::authentication::{Credentials, Mechanism};
+use lettre::transport::smtp::PoolConfig;
 use lettre::{Message, SmtpTransport, Transport};
 
 use crate::error::IkigaiError;
@@ -59,8 +60,23 @@ impl SmtpServerInfo {
     }
 }
 
-#[derive(Default)]
-pub struct Mailer;
+pub struct Mailer {
+    sender: SmtpTransport,
+}
+
+impl Default for Mailer {
+    fn default() -> Self {
+        let smtp = SmtpServerInfo::init();
+        let sender = SmtpTransport::starttls_relay(&smtp.smtp_endpoint)
+            .unwrap()
+            .credentials(Credentials::new(smtp.smtp_username, smtp.smtp_password))
+            .authentication(vec![Mechanism::Plain])
+            .pool_config(PoolConfig::new().max_size(20))
+            .build();
+
+        Self { sender }
+    }
+}
 
 impl Mailer {
     pub fn send_email(
@@ -76,7 +92,7 @@ impl Mailer {
             .to(to)
             .subject(subject)
             .singlepart(SinglePart::html(body_html.to_string()))?;
-        Self::from_registry().do_send(SendEmail(email, smtp));
+        Self::from_registry().do_send(SendEmail(email));
         Ok(())
     }
 
@@ -117,19 +133,15 @@ impl Supervised for Mailer {}
 
 #[derive(Debug, Message)]
 #[rtype(reuslt = "()")]
-pub struct SendEmail(pub Message, pub SmtpServerInfo);
+pub struct SendEmail(pub Message);
 
 impl Handler<SendEmail> for Mailer {
     type Result = ();
 
     fn handle(&mut self, msg: SendEmail, _: &mut Self::Context) {
-        let SendEmail(message, smtp) = msg;
-        let mailer = SmtpTransport::relay(&smtp.smtp_endpoint)
-            .unwrap()
-            .credentials(Credentials::new(smtp.smtp_username, smtp.smtp_password))
-            .build();
+        let SendEmail(message) = msg;
 
-        match mailer.send(&message) {
+        match self.sender.send(&message) {
             Ok(_) => info!("Send email success."),
             Err(e) => error!("Cannot send email {:?} by error {:?}", message.headers(), e),
         }

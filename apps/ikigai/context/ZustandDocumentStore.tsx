@@ -3,6 +3,7 @@ import cloneDeep from "lodash/cloneDeep";
 
 import {
   AddDocumentStandalone,
+  GetDocumentAssignedUsers_documentGet_assignedUsers as IAssignedUser,
   GetDocumentDetail,
   GetDocumentDetail_documentGet as IDocument,
   GetDocumentDetail_documentGet_assignment,
@@ -204,9 +205,14 @@ export type IDocumentStore = {
   ) => void;
   loadingDocumentMaterial?: boolean;
 
-  // Forcus Mode
+  // Focus Mode
   setFocusMode: (isFocusMode: boolean) => void;
   isFocusMode: boolean;
+
+  // Assigned Users
+  assignedUsers: IAssignedUser[];
+  addAssignedUsers: (assignedUsers: IAssignedUser[]) => void;
+  removeAssignedUsers: (assignedUsers: IAssignedUser[]) => void;
 };
 
 const useDocumentStore = create<IDocumentStore>((set, get) => ({
@@ -497,6 +503,34 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
   },
   setFocusMode: (isFocusMode: boolean) => {
     set({ isFocusMode });
+  },
+  assignedUsers: [],
+  addAssignedUsers: (assignedUsers) => {
+    const currentAssignedUsers = get().assignedUsers;
+    assignedUsers.forEach((assignedUser) => {
+      if (
+        !currentAssignedUsers.some(
+          (c) => c.assignedUserId === assignedUser.assignedUserId,
+        )
+      ) {
+        currentAssignedUsers.push(assignedUser);
+      }
+    });
+
+    set({ assignedUsers: [...currentAssignedUsers] });
+  },
+  removeAssignedUsers: (assignedUsers) => {
+    const currentAssignedUsers = get().assignedUsers;
+    assignedUsers.forEach((assignedUser) => {
+      const index = currentAssignedUsers.findIndex(
+        (c) => c.assignedUserId === assignedUser.assignedUserId,
+      );
+      if (index > -1) {
+        currentAssignedUsers.splice(index, 1);
+      }
+    });
+
+    set({ assignedUsers: [...currentAssignedUsers] });
   },
 }));
 

@@ -95,6 +95,17 @@ impl Document {
             None
         }
     }
+
+    async fn assigned_users(&self, ctx: &Context<'_>) -> Vec<DocumentAssignedUser> {
+        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
+        loader
+            .load_one(FindDocumentAssignedUsers {
+                document_id: self.id,
+            })
+            .await
+            .unwrap_or_default()
+            .unwrap_or_default()
+    }
 }
 
 #[ComplexObject]
@@ -137,5 +148,12 @@ impl PageBlockDocument {
             .await?
             .ok_or(format!("Not found document {}", self.document_id))?;
         Ok(document)
+    }
+}
+
+#[ComplexObject]
+impl DocumentAssignedUser {
+    async fn user(&self, ctx: &Context<'_>) -> Result<PublicUser> {
+        get_public_user_from_loader(ctx, self.assigned_user_id).await
     }
 }

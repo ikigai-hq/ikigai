@@ -3,14 +3,14 @@ import React, { useEffect, useState } from "react";
 
 import {
   GetDocumentDetail_documentGet as IDocument,
-  OrgRole,
+  Role,
 } from "graphql/types";
 import AssignmentStudentList from "../AssignmentStudentList";
 import { StyledRightMenu } from "../common";
 import useDocumentStore from "context/ZustandDocumentStore";
 import { t } from "@lingui/macro";
 import { ButtonWithTooltip } from "components/common/Button";
-import { useGetSpaceMembers } from "../../../context/ZustandSpaceMembeStore";
+import { useGetSpaceMembers } from "context/ZustandSpaceMembeStore";
 import DocumentAssignedList from "../DocumentAssignedList";
 
 export type AdminAssignmentDocumentProps = {
@@ -23,7 +23,7 @@ const AssignmentHeader = ({ document }: AdminAssignmentDocumentProps) => {
   const [openAssigneeList, setOpenAssigneeList] = useState(false);
   const { members: students } = useGetSpaceMembers(
     document?.spaceId,
-    OrgRole.STUDENT,
+    Role.STUDENT,
   );
 
   useEffect(() => {

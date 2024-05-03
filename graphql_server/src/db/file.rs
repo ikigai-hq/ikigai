@@ -68,7 +68,6 @@ impl File {
         }
     }
 
-
     pub fn key(&self) -> String {
         format!("user_{}/{}", self.user_id, self.uuid)
     }

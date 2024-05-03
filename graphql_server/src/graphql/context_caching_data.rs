@@ -3,7 +3,7 @@ use std::sync::{Arc, RwLock};
 use uuid::Uuid;
 
 use crate::authorization::{DocumentAuth, SpaceAuth, UserAuth};
-use crate::db::{Organization, User};
+use crate::db::User;
 
 // Shared User info to avoid query it again
 #[derive(Default)]
@@ -13,7 +13,6 @@ pub struct RequestContextCachingData {
     // (space_id, user_id) - ClassAuth
     space_auth: Arc<RwLock<HashMap<(i32, i32), SpaceAuth>>>,
     user_auth: Arc<RwLock<HashMap<i32, UserAuth>>>,
-    org_auth: Arc<RwLock<HashMap<i32, Organization>>>,
 }
 
 impl RequestContextCachingData {
@@ -85,22 +84,6 @@ impl RequestContextCachingData {
     pub fn get_space_auth(&self, space_id: i32, user_id: i32) -> Option<SpaceAuth> {
         if let Ok(guard_classes) = self.space_auth.try_read() {
             guard_classes.get(&(space_id, user_id)).cloned()
-        } else {
-            None
-        }
-    }
-
-    pub fn add_org_auth(&self, org: Organization) -> Organization {
-        if let Ok(mut org_auth) = self.org_auth.try_write() {
-            org_auth.insert(org.id, org.clone());
-        }
-
-        org
-    }
-
-    pub fn get_org_auth(&self, org_id: i32) -> Option<Organization> {
-        if let Ok(org_auth) = self.org_auth.try_read() {
-            org_auth.get(&org_id).cloned()
         } else {
             None
         }

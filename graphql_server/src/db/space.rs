@@ -4,6 +4,7 @@ use uuid::Uuid;
 
 use super::schema::spaces;
 use crate::db::schema::{space_invite_tokens, space_members};
+use crate::db::Role;
 use crate::util::{generate_code, get_now_as_secs};
 
 #[derive(Debug, Clone, Insertable, InputObject)]
@@ -90,10 +91,7 @@ impl Space {
             .get_results(conn)
     }
 
-    pub fn find_my_spaces(
-        conn: &PgConnection,
-        user_id: i32,
-    ) -> Result<Vec<Self>, Error> {
+    pub fn find_my_spaces(conn: &PgConnection, user_id: i32) -> Result<Vec<Self>, Error> {
         spaces::table
             .inner_join(space_members::table)
             .select(spaces::all_columns)
@@ -143,7 +141,7 @@ pub struct SpaceInviteToken {
     pub token: String,
     #[graphql(skip_input)]
     pub creator_id: i32,
-    pub inviting_role: OrgRole,
+    pub inviting_role: Role,
     pub expire_at: Option<i64>,
     #[graphql(skip_input)]
     pub uses: i32,

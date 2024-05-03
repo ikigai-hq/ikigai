@@ -1,17 +1,21 @@
 import Modal from "../common/Modal";
-import {t, Trans} from "@lingui/macro";
-import {Button, Divider, Input, Select, Typography} from "antd";
-import {useMutation} from "@apollo/client";
-import {useState} from "react";
+import { t, Trans } from "@lingui/macro";
+import { Button, Divider, Input, Select, Typography } from "antd";
+import { useMutation } from "@apollo/client";
+import { useState } from "react";
 
-import {GenerateSpaceInviteToken, OrgRole, SpaceInviteTokenInput} from "graphql/types";
-import {GENERATE_SPACE_INVITE_TOKEN} from "graphql/mutation/SpaceMutation";
-import {handleError} from "graphql/ApolloClient";
+import {
+  GenerateSpaceInviteToken,
+  Role,
+  SpaceInviteTokenInput,
+} from "graphql/types";
+import { GENERATE_SPACE_INVITE_TOKEN } from "graphql/mutation/SpaceMutation";
+import { handleError } from "graphql/ApolloClient";
 import useSpaceStore from "context/ZustandSpaceStore";
-import {getNowAsSec} from "../../util/Time";
-import {formatPreJoinSpaceUrl} from "../../config/Routes";
+import { getNowAsSec } from "../../util/Time";
+import { formatPreJoinSpaceUrl } from "../../config/Routes";
 import copy from "copy-to-clipboard";
-import {toast} from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 const THIRTY_MINS = 1800;
 const SIX_HOURS = 21600;
@@ -23,13 +27,16 @@ export type CreateSpaceInviteProps = {
 };
 
 const CreateSpaceInvite = ({ visible, onClose }: CreateSpaceInviteProps) => {
-  const spaceId = useSpaceStore(state => state.spaceId);
-  const [role, setRole] = useState(OrgRole.STUDENT);
-  const [expireAfter, setExpireAfter] = useState<number | undefined>(SEVEN_DAYS);
-  const [generateSpaceInviteToken, { data, loading }] = useMutation<GenerateSpaceInviteToken>(GENERATE_SPACE_INVITE_TOKEN, {
-    onError: handleError,
-  });
-  
+  const spaceId = useSpaceStore((state) => state.spaceId);
+  const [role, setRole] = useState(Role.STUDENT);
+  const [expireAfter, setExpireAfter] = useState<number | undefined>(
+    SEVEN_DAYS,
+  );
+  const [generateSpaceInviteToken, { data, loading }] =
+    useMutation<GenerateSpaceInviteToken>(GENERATE_SPACE_INVITE_TOKEN, {
+      onError: handleError,
+    });
+
   const onGenerate = async () => {
     const expireAt = expireAfter ? getNowAsSec() + expireAfter : undefined;
     const dataInput: SpaceInviteTokenInput = {
@@ -37,26 +44,22 @@ const CreateSpaceInvite = ({ visible, onClose }: CreateSpaceInviteProps) => {
       invitingRole: role,
       expireAt,
     };
-    
+
     await generateSpaceInviteToken({
       variables: {
         data: dataInput,
       },
     });
-  }
-  
+  };
+
   return (
-    <Modal
-      visible={visible}
-      onClose={onClose}
-      title={t`Space invite link`}
-    >
+    <Modal visible={visible} onClose={onClose} title={t`Space invite link`}>
       <div>
         <div>
           <Typography.Text strong>
             <Trans>Expire after</Trans>
           </Typography.Text>
-          <br/>
+          <br />
           <Select
             style={{ width: "100%" }}
             value={expireAfter}
@@ -72,14 +75,14 @@ const CreateSpaceInvite = ({ visible, onClose }: CreateSpaceInviteProps) => {
           <Typography.Text strong>
             <Trans>Inviting role</Trans>
           </Typography.Text>
-          <br/>
-          <Select
-            style={{ width: "100%" }}
-            value={role}
-            onChange={setRole}
-          >
-            <Select.Option value={OrgRole.STUDENT}><Trans>Student</Trans></Select.Option>
-            <Select.Option value={OrgRole.TEACHER}><Trans>Teacher</Trans></Select.Option>
+          <br />
+          <Select style={{ width: "100%" }} value={role} onChange={setRole}>
+            <Select.Option value={Role.STUDENT}>
+              <Trans>Student</Trans>
+            </Select.Option>
+            <Select.Option value={Role.TEACHER}>
+              <Trans>Teacher</Trans>
+            </Select.Option>
           </Select>
         </div>
         <Divider />
@@ -91,39 +94,33 @@ const CreateSpaceInvite = ({ visible, onClose }: CreateSpaceInviteProps) => {
         >
           <Trans>Generate</Trans>
         </Button>
-        {
-          data && (
-            <div>
-              <Divider />
-              <Input
-                readOnly
-                value={
-                  formatPreJoinSpaceUrl(
-                    data.spaceGenerateInviteToken.spaceId,
-                    data.spaceGenerateInviteToken.token,
-                  )
-                }
-                suffix={(
-                  <Button
-                    onClick={() => {
-                      copy(
-                        formatPreJoinSpaceUrl(
-                          data.spaceGenerateInviteToken.spaceId,
-                          data.spaceGenerateInviteToken.token,
-                        )
-                      );
-                      toast.success(t`Copied!`);
-                    }}
-                  >
-                    <Trans>
-                      Copy
-                    </Trans>
-                  </Button>
-                )}
-              />
-            </div>
-          )
-        }
+        {data && (
+          <div>
+            <Divider />
+            <Input
+              readOnly
+              value={formatPreJoinSpaceUrl(
+                data.spaceGenerateInviteToken.spaceId,
+                data.spaceGenerateInviteToken.token,
+              )}
+              suffix={
+                <Button
+                  onClick={() => {
+                    copy(
+                      formatPreJoinSpaceUrl(
+                        data.spaceGenerateInviteToken.spaceId,
+                        data.spaceGenerateInviteToken.token,
+                      ),
+                    );
+                    toast.success(t`Copied!`);
+                  }}
+                >
+                  <Trans>Copy</Trans>
+                </Button>
+              }
+            />
+          </div>
+        )}
       </div>
     </Modal>
   );

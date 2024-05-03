@@ -20,12 +20,8 @@ export const GET_HIGHLIGHT_DOCUMENT = gql`
             }
             firstName
             lastName
-            orgPersonalInformation {
-              fullName
-              avatar {
-                publicUrl
-              }
-            }
+            name
+            randomColor
           }
           comments {
             id
@@ -39,12 +35,8 @@ export const GET_HIGHLIGHT_DOCUMENT = gql`
               }
               firstName
               lastName
-              orgPersonalInformation {
-                fullName
-                avatar {
-                  publicUrl
-                }
-              }
+              name
+              randomColor
             }
           }
         }

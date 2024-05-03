@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { OrgRole } from "graphql/types";
+import { Role } from "graphql/types";
 import useAuthUserStore from "context/ZustandAuthStore";
 import { DocumentType, getDocumentType } from "util/permission";
 import ReviewAssignmentDocument from "./Assignment/ReviewAssignmentDocument";
@@ -20,12 +20,11 @@ import useSubmissionStatus from "hook/UseSubmissionStatus";
 
 const DocumentDetail = () => {
   const authUser = useAuthUserStore((state) => state.currentUser);
-  const isStudent =
-    authUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
+  const isStudent = authUser?.userMe?.activeUserAuth?.role === Role.STUDENT;
   const docs = useSpaceStore((state) =>
     (state.documents || [])
       .filter((doc) => !doc.deletedAt)
-      .filter(doc => !doc.submission),
+      .filter((doc) => !doc.submission),
   );
   const pageBlockMode = usePageBlockStore((state) => state.pageBlockMode);
   const mapPageBlockData = usePageBlockStore((state) => state.mapPageBlockData);

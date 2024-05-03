@@ -1,15 +1,12 @@
-import { Avatar, Tag, Typography } from "antd";
-import { OrgRole } from "../graphql/types";
-import { getRoleColor, getRoleName } from "../util";
+import { Avatar, Typography } from "antd";
 import React from "react";
-import {AvatarSize} from "antd/es/avatar/AvatarContext";
+import { AvatarSize } from "antd/es/avatar/AvatarContext";
 
 export type AvatarWithNameProps = {
   name: string;
   avtUrl: string | null;
   strong?: boolean;
   color?: string;
-  role?: OrgRole;
   inline?: boolean;
   avatarSize?: AvatarSize;
   icon?: React.ReactNode;
@@ -20,11 +17,6 @@ const AvatarWithName = (props: AvatarWithNameProps) => {
   return (
     <div style={{ display: props.inline ? "inline-block" : undefined }}>
       <div style={{ display: "flex", alignItems: "center" }}>
-        {props.role && (
-          <Tag style={{ marginRight: "5px" }} color={getRoleColor(props.role)}>
-            {getRoleName(props.role)}
-          </Tag>
-        )}
         <span>
           <Avatar
             style={{ backgroundColor: props.color }}

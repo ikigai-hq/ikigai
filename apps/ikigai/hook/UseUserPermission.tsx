@@ -7,7 +7,7 @@ const useUserPermission = () => {
   return (permission: Permission) => {
     if (!user) return false;
 
-    return allow(user.userMe?.activeUserAuth?.orgRole, permission);
+    return allow(user.userMe?.activeUserAuth?.role, permission);
   };
 };
 

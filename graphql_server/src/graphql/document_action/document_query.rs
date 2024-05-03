@@ -1,4 +1,4 @@
-use crate::authorization::{DocumentActionPermission};
+use crate::authorization::DocumentActionPermission;
 use async_graphql::*;
 use uuid::Uuid;
 

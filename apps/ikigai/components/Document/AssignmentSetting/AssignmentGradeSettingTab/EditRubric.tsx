@@ -1,4 +1,4 @@
-import { GetRubrics_orgGetRubrics as IRubric } from "graphql/types";
+import { GetRubrics_userGetMyRubrics as IRubric } from "graphql/types";
 import { Drawer } from "components/common/Drawer";
 import Rubric from "./Rubric";
 import useUserPermission from "hook/UseUserPermission";

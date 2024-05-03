@@ -28,7 +28,6 @@ pub async fn get_public_user_from_loader(ctx: &Context<'_>, user_id: i32) -> Res
 pub fn duplicate_class(
     conn: &PgConnection,
     space_id: i32,
-    org_id: i32,
     creator_id: i32,
 ) -> Result<Space, IkigaiError> {
     let space = Space::find_by_id(conn, space_id)?;
@@ -37,7 +36,6 @@ pub fn duplicate_class(
     conn.transaction::<_, IkigaiError, _>(|| {
         // Duplicate Class
         let mut new_space = NewSpace::from(space);
-        new_space.org_id = org_id;
         new_space.creator_id = creator_id;
         let new_class = Space::insert(conn, new_space)?;
 
@@ -46,7 +44,6 @@ pub fn duplicate_class(
             // Only process head of materials
             if space_document.parent_id.is_none() && space_document.deleted_at.is_none() {
                 let mut config = DocumentCloneConfig::new("", true);
-                config.set_org(org_id);
                 config.set_index(space_document.index);
                 space_document.deep_clone(
                     conn,
@@ -106,9 +103,9 @@ pub fn add_space_member(
     space: &Space,
     user_id: i32,
     token: Option<String>,
+    role: Role,
 ) -> std::result::Result<SpaceMember, IkigaiError> {
-    OrganizationMember::find(conn, space.org_id, user_id)?;
-    let new_member = SpaceMember::new(space.id, user_id, token);
+    let new_member = SpaceMember::new(space.id, user_id, token, role);
     let new_member = SpaceMember::upsert(conn, new_member)?;
 
     Ok(new_member)

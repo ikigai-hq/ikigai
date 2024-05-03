@@ -34,13 +34,23 @@ impl UserQuery {
         UserActivity::find(&conn, user_id).format_err()
     }
 
+    async fn user_get_my_rubrics(&self, ctx: &Context<'_>) -> Result<Vec<Rubric>> {
+        let user_id = get_user_id_from_ctx(ctx).await?;
+        let conn = get_conn_from_ctx(ctx).await?;
+        Rubric::find_all_by_user(&conn, user_id).format_err()
+    }
+
     // FIXME: Replace this step by using new authorization logic
     // Currently, ikigai use active org id, so this step is necessary to get org id before do any action
     // However, it can be replaced by authorization logic and not rely on active org id
-    async fn user_check_document(&self, ctx: &Context<'_>, document_id: Uuid) -> Result<i32> {
+    async fn user_check_document(
+        &self,
+        ctx: &Context<'_>,
+        document_id: Uuid,
+    ) -> Result<Option<i32>> {
         get_user_id_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
         let document = Document::find_by_id(&conn, document_id).format_err()?;
-        Ok(document.org_id)
+        Ok(document.space_id)
     }
 }

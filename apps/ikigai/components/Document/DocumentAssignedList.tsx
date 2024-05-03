@@ -21,7 +21,6 @@ import { handleError } from "graphql/ApolloClient";
 import { TextButtonWithHover } from "../common/Button";
 import useDocumentStore from "context/ZustandDocumentStore";
 import Modal from "../common/Modal";
-import shallow from "zustand/shallow";
 
 export type AssigneeListProps = {
   visible: boolean;

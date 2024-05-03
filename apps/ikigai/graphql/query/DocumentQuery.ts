@@ -68,16 +68,11 @@ export const GET_DOCUMENT_DETAIL = gql`
           id
           firstName
           lastName
+          name
           avatar {
             publicUrl
           }
           randomColor
-          orgPersonalInformation {
-            fullName
-            avatar {
-              publicUrl
-            }
-          }
         }
         assignment {
           id
@@ -121,7 +116,6 @@ export const GET_DOCUMENT_DETAIL = gql`
         weightingIntoFinalGrade
         rubric {
           id
-          orgId
           name
           data {
             rubricType
@@ -224,17 +218,6 @@ export const GET_DOCUMENT_DETAIL_BY_UUID = gql`
   }
 `;
 
-export const GET_DELETED_DOCUMENTS = gql`
-  query GetDeletedDocuments {
-    documentGetDeletedDocuments {
-      id
-      title
-      deletedAt
-      coverPhotoUrl
-    }
-  }
-`;
-
 export const GET_DOCUMENT_ASSIGNED_USERS = gql`
   query GetDocumentAssignedUsers($documentId: UUID!) {
     documentGet(documentId: $documentId) {
@@ -245,6 +228,7 @@ export const GET_DOCUMENT_ASSIGNED_USERS = gql`
           id
           firstName
           lastName
+          name
           avatar {
             publicUrl
           }

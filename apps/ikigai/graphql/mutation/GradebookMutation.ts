@@ -63,7 +63,6 @@ export const UPSERT_RUBRIC = gql`
   mutation UpsertRubric($rubric: RubricInput!) {
     orgUpsertRubric(rubric: $rubric) {
       id
-      orgId
       name
       data {
         rubricType

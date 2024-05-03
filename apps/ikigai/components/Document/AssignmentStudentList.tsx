@@ -12,7 +12,7 @@ import { formatDate, FormatType } from "util/Time";
 import {
   GetDocumentDetail_documentGet_assignment_submissions as ISubmission,
   GetSpaceMembers_spaceGet_members as IMember,
-  OrgRole,
+  Role,
 } from "graphql/types";
 import { formatDocumentRoute } from "config/Routes";
 import useDocumentStore from "context/ZustandDocumentStore";
@@ -88,7 +88,7 @@ export const AssignmentList = ({
   };
 
   const students = members.filter(
-    (member) => member.user.orgMember?.orgRole === OrgRole.STUDENT,
+    (member) => member.role === Role.STUDENT,
   );
   const getSubmission = (userId: number): ISubmission | undefined => {
     return submissions.find((submission) => submission.userId === userId);
@@ -111,8 +111,8 @@ export const AssignmentList = ({
           style={{ cursor: "pointer" }}
         >
           <AvatarWithName
-            name={student.user.orgPersonalInformation?.fullName}
-            avtUrl={student.user.orgPersonalInformation?.avatar?.publicUrl}
+            name={student.user.firstName}
+            avtUrl={student.user.avatar?.publicUrl}
             color={student.user.randomColor}
           />
         </div>

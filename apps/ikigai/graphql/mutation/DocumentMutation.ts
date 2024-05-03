@@ -108,6 +108,7 @@ export const ASSIGN_TO_DOCUMENT = gql`
         id
         firstName
         lastName
+        name
         avatar {
           publicUrl
         }

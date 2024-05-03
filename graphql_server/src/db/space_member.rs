@@ -1,14 +1,14 @@
 use diesel::result::Error;
+use diesel::sql_types::Integer;
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use oso::PolarClass;
-use diesel::sql_types::Integer;
 
+use super::schema::space_members;
 use crate::impl_enum_for_db;
-use super::schema::{space_members};
 use crate::util::get_now_as_secs;
 
 #[derive(
-Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
+    Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
 )]
 #[sql_type = "Integer"]
 pub enum Role {
@@ -41,12 +41,7 @@ pub struct SpaceMember {
 }
 
 impl SpaceMember {
-    pub fn new(
-        space_id: i32,
-        user_id: i32,
-        join_by_token: Option<String>,
-        role: Role,
-    ) -> Self {
+    pub fn new(space_id: i32, user_id: i32, join_by_token: Option<String>, role: Role) -> Self {
         Self {
             space_id,
             user_id,

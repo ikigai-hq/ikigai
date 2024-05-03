@@ -124,6 +124,7 @@ pub struct Rubric {
     pub updated_at: i64,
     #[graphql(skip_input)]
     pub created_at: i64,
+    #[graphql(skip_input)]
     pub user_id: i32,
 }
 
@@ -145,6 +146,12 @@ impl Rubric {
 
     pub fn find_by_id(conn: &PgConnection, rubric_id: Uuid) -> Result<Self, Error> {
         rubrics::table.find(rubric_id).first(conn)
+    }
+
+    pub fn find_all_by_user(conn: &PgConnection, user_id: i32) -> Result<Vec<Self>, Error> {
+        rubrics::table
+            .filter(rubrics::user_id.eq(user_id))
+            .get_results(conn)
     }
 
     pub fn remove(conn: &PgConnection, rubric_id: Uuid) -> Result<(), Error> {

@@ -18,7 +18,7 @@ import { GET_RUBRICS } from "graphql/query/AssignmentQuery";
 import { handleError } from "graphql/ApolloClient";
 import {
   GetRubrics,
-  GetRubrics_orgGetRubrics as IRubric,
+  GetRubrics_userGetMyRubrics as IRubric,
   RubricInput,
   RubricType,
   UpsertRubric,
@@ -46,7 +46,6 @@ const RubricManagement = ({
 }: BandScoresDrawerProps) => {
   const allow = useUserPermission();
   const theme = useTheme();
-  const orgId = useAuthUserStore((state) => state.orgId);
   const { data: rubricsData, refetch } = useQuery<GetRubrics>(GET_RUBRICS, {
     onError: handleError,
   });
@@ -70,7 +69,6 @@ const RubricManagement = ({
     const now = getNowAsSec();
     const defaultRubricData: RubricInput = {
       id: v4().toString(),
-      orgId,
       name: `Rubric ${formatDate(now, FormatType.DateFormat)}`,
       data: {
         rubricType: RubricType.POINT_BASED,
@@ -93,7 +91,7 @@ const RubricManagement = ({
     }
   };
 
-  const rubrics = rubricsData?.orgGetRubrics || [];
+  const rubrics = rubricsData?.userGetMyRubrics || [];
   return (
     <Drawer
       title={t`Rubric Management`}

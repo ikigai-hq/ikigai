@@ -8,17 +8,14 @@ pub struct SpaceAuth {
     #[polar(attribute)]
     pub id: i32,
     #[polar(attribute)]
-    pub allow_student_self_enroll: bool,
-    #[polar(attribute)]
-    pub org_id: i32,
+    pub creator_id: i32,
 }
 
 impl SpaceAuth {
     pub fn new(space: &Space) -> Self {
         Self {
             id: space.id,
-            org_id: space.org_id,
-            allow_student_self_enroll: false,
+            creator_id: space.creator_id,
         }
     }
 }

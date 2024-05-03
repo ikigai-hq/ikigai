@@ -1,7 +1,7 @@
-use crate::authentication_token::Claims;
 use async_graphql::*;
 use diesel::{Connection, PgConnection};
 
+use crate::authentication_token::Claims;
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::graphql::validator::Email;
@@ -15,19 +15,6 @@ use crate::util::{generate_otp, get_now_as_secs};
 pub struct UserToken {
     pub user: User,
     pub access_token: String,
-}
-
-fn create_default_org(conn: &PgConnection, user_id: i32) -> Result<Organization, IkigaiError> {
-    let new_org = NewOrganization {
-        owner_id: Some(user_id),
-        org_name: "My organization".into(),
-    };
-    let org = Organization::insert(conn, new_org)?;
-
-    let org_member = OrganizationMember::new(org.id, user_id, OrgRole::Teacher);
-    OrganizationMember::upsert(conn, org_member)?;
-
-    Ok(org)
 }
 
 fn create_default_space(
@@ -70,15 +57,14 @@ impl UserMutation {
                         &conn,
                         space.creator_id,
                         space_member.space_id,
-                        space.org_id,
                         space.name,
                     )
                     .format_err()?
                 } else {
                     conn.transaction::<_, IkigaiError, _>(|| {
-                        let space = create_default_space(&conn, org.id, user.id, Role::Teacher)?;
+                        let space = create_default_space(&conn, user.id, Role::Teacher)?;
                         let document = Document::get_or_create_starter_doc(
-                            &conn, user.id, space.id, org.id, space.name,
+                            &conn, user.id, space.id, space.name,
                         )?;
                         Ok(document)
                     })
@@ -92,11 +78,9 @@ impl UserMutation {
                 conn.transaction::<_, IkigaiError, _>(|| {
                     let user = NewUser::new(email.clone(), email, "".into());
                     let user = User::insert(&conn, &user)?;
-                    let org = create_default_org(&conn, user.id)?;
-                    let space = create_default_space(&conn, org.id, user.id, Role::Teacher)?;
-                    let document = Document::get_or_create_starter_doc(
-                        &conn, user.id, space.id, org.id, space.name,
-                    )?;
+                    let space = create_default_space(&conn, user.id, Role::Teacher)?;
+                    let document =
+                        Document::get_or_create_starter_doc(&conn, user.id, space.id, space.name)?;
 
                     Ok((user, document))
                 })

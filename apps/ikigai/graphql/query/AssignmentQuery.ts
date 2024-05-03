@@ -12,7 +12,6 @@ export const GET_BAND_SCORES = gql`
           score
         }
       }
-      orgId
       updatedAt
       createdAt
     }
@@ -57,9 +56,8 @@ export const GET_SUBMISSIONS_OF_ASSIGNMENT = gql`
 
 export const GET_RUBRICS = gql`
   query GetRubrics {
-    orgGetRubrics {
+    userGetMyRubrics {
       id
-      orgId
       name
       data {
         rubricType

@@ -35,19 +35,8 @@ export const USER_ME = gql`
       avatar {
         publicUrl
       }
-      members {
-        userId
-        orgId
-        orgRole
-        organization {
-          id
-          orgName
-          ownerId
-        }
-      }
       activeUserAuth {
-        orgId
-        orgRole
+        role
       }
     }
   }

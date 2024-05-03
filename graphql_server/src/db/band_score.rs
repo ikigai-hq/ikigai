@@ -105,10 +105,7 @@ pub struct NewBandScore {
 
 impl NewBandScore {
     pub fn new(name: String, range: BandScoreRanges) -> Self {
-        Self {
-            name,
-            range,
-        }
+        Self { name, range }
     }
 }
 

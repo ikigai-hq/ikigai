@@ -438,76 +438,6 @@ impl Loader<QuizAnswerByUser> for IkigaiDataLoader {
     }
 }
 
-// WARN: Only support one org_id
-#[derive(Debug, Clone, Hash, Eq, PartialEq)]
-pub struct FindOrganizationMember {
-    pub org_id: OrganizationIdentity,
-    pub user_id: i32,
-}
-
-#[async_trait::async_trait]
-impl Loader<FindOrganizationMember> for IkigaiDataLoader {
-    type Value = OrganizationMember;
-    type Error = IkigaiError;
-
-    async fn load(
-        &self,
-        keys: &[FindOrganizationMember],
-    ) -> Result<HashMap<FindOrganizationMember, Self::Value>, Self::Error> {
-        if keys.is_empty() {
-            return Ok(HashMap::new());
-        }
-
-        let org_id = keys[0].org_id;
-        let user_ids = keys.iter().map(|key| key.user_id).collect();
-        let conn = get_conn_from_actor().await?;
-        let org_members = OrganizationMember::find_all_org_users(&conn, org_id, &user_ids)?;
-
-        Ok(org_members
-            .into_iter()
-            .map(|org_member| {
-                (
-                    FindOrganizationMember {
-                        org_id,
-                        user_id: org_member.user_id,
-                    },
-                    org_member,
-                )
-            })
-            .collect())
-    }
-}
-
-#[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
-pub struct ClassMemberByUserId(pub i32);
-
-#[async_trait::async_trait]
-impl Loader<ClassMemberByUserId> for IkigaiDataLoader {
-    type Value = Vec<SpaceMember>;
-    type Error = IkigaiError;
-
-    async fn load(
-        &self,
-        keys: &[ClassMemberByUserId],
-    ) -> std::result::Result<HashMap<ClassMemberByUserId, Self::Value>, Self::Error> {
-        let conn = get_conn_from_actor().await?;
-        let user_ids: Vec<i32> = keys.iter().map(|c| c.0).collect();
-        let members = SpaceMember::find_all_by_users(&conn, &user_ids)?;
-
-        let mut result: HashMap<ClassMemberByUserId, Self::Value> = HashMap::new();
-        for member in members {
-            let key = ClassMemberByUserId(member.user_id);
-            if let Some(inside_members) = result.get_mut(&key) {
-                inside_members.push(member);
-            } else {
-                result.insert(key, vec![member]);
-            }
-        }
-
-        Ok(result)
-    }
-}
-
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct FindDocumentType(pub Uuid);
 
@@ -614,30 +544,6 @@ impl Loader<LoadCommentsOfThread> for IkigaiDataLoader {
         }
 
         Ok(result)
-    }
-}
-
-#[derive(Debug, Clone, Hash, Eq, PartialEq)]
-pub struct FindOrgById {
-    pub org_id: i32,
-}
-
-#[async_trait::async_trait]
-impl Loader<FindOrgById> for IkigaiDataLoader {
-    type Value = Organization;
-    type Error = IkigaiError;
-
-    async fn load(
-        &self,
-        keys: &[FindOrgById],
-    ) -> std::result::Result<HashMap<FindOrgById, Self::Value>, Self::Error> {
-        let org_ids = keys.iter().map(|key| key.org_id).collect();
-        let conn = get_conn_from_actor().await?;
-        let organizations = Organization::find_all_by_ids(&conn, org_ids)?;
-        Ok(organizations
-            .into_iter()
-            .map(|o| (FindOrgById { org_id: o.id }, o))
-            .collect())
     }
 }
 

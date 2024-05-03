@@ -33,12 +33,14 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
   const router = useRouter();
   const [completeCheck, setCompleteCheck] = useState(false);
   const [hasError, setHasError] = useState();
-  const setOrgId = useAuthUserStore((state) => state.setOrgId);
+  const setSpaceId = useAuthUserStore((state) => state.setSpaceId);
   const setUserAuth = useAuthUserStore((state) => state.setCurrentUser);
 
   const [checkToken] = useLazyQuery<CheckToken>(CHECK_TOKEN);
   const [checkDocument] = useLazyQuery<CheckDocument>(CHECK_DOCUMENT);
-  const [getMe] = useLazyQuery<UserMe>(USER_ME);
+  const [getMe] = useLazyQuery<UserMe>(USER_ME, {
+    fetchPolicy: "network-only",
+  });
   const [getLastActivity] = useLazyQuery<MyLastActivity>(MY_LAST_ACTIVITY);
   const [checkMagicLink] = useMutation<VerifyMagicLink>(VERIFY_MAGIC_LINK);
 
@@ -95,15 +97,7 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
 
     if (!token || !isDocumentRoute) return true;
 
-    const { data } = await checkDocument({ variables: { documentId } });
-    if (data) {
-      setOrgId(data.userCheckDocument);
-    } else {
-      await router.push(Routes.Home);
-      return false;
-    }
-
-    return true;
+    return await checkDocumentSpace(documentId);
   };
 
   const verifyLastActivity = async (): Promise<boolean> => {
@@ -112,6 +106,9 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
     if (isHome && token) {
       const { data } = await getLastActivity();
       if (data) {
+        // Found Last activity. Recheck auth user
+        await checkDocumentSpace(data.userLastActivity.lastDocumentId);
+        await verifyUserAuth();
         await router.push(
           formatDocumentRoute(data.userLastActivity.lastDocumentId),
         );
@@ -161,6 +158,16 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
       setUserAuth(data);
       return true;
     }
+    return false;
+  };
+
+  const checkDocumentSpace = async (documentId: string): Promise<boolean> => {
+    const { data } = await checkDocument({ variables: { documentId } });
+    if (data) {
+      setSpaceId(data.userCheckDocument);
+      return true;
+    }
+    await router.push(Routes.Home);
     return false;
   };
 

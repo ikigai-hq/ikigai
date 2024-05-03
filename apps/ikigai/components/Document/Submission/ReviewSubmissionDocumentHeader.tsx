@@ -7,7 +7,7 @@ import {
   GetDocumentDetail_documentGet as IDocument,
   GetSubmissionsOfAssignment,
   GetSubmissionsOfAssignment_documentGet_assignment_submissions as SubmissionAssignment,
-  OrgRole,
+  Role,
 } from "graphql/types";
 import { StyledLeftMenu } from "../common";
 import AvatarWithName from "../../AvatarWithName";
@@ -18,8 +18,8 @@ import { Permission } from "util/permission";
 import { useQuery } from "@apollo/client";
 import { GET_SUBMISSIONS_OF_ASSIGNMENT } from "graphql/query/AssignmentQuery";
 import { AssignmentList } from "../AssignmentStudentList";
-import { useGetSpaceMembers } from "../../../context/ZustandSpaceMembeStore";
-import useSpaceStore from "../../../context/ZustandSpaceStore";
+import { useGetSpaceMembers } from "context/ZustandSpaceMembeStore";
+import useSpaceStore from "context/ZustandSpaceStore";
 
 export type DocumentDetailProps = {
   document: IDocument;
@@ -33,7 +33,7 @@ const ReviewSubmissionDocumentHeader = ({ document }: DocumentDetailProps) => {
   const user = submission?.user;
   const assignmentDocumentId = submission?.assignment?.documentId;
   const spaceId = useSpaceStore((state) => state.spaceId);
-  const { members: students } = useGetSpaceMembers(spaceId, OrgRole.STUDENT);
+  const { members: students } = useGetSpaceMembers(spaceId, Role.STUDENT);
 
   const { data } = useQuery<GetSubmissionsOfAssignment>(
     GET_SUBMISSIONS_OF_ASSIGNMENT,
@@ -81,8 +81,8 @@ const ReviewSubmissionDocumentHeader = ({ document }: DocumentDetailProps) => {
           >
             <ReviewContainer>
               <AvatarWithName
-                name={user?.orgPersonalInformation?.fullName}
-                avtUrl={user?.orgPersonalInformation?.avatar?.publicUrl}
+                name={user?.name}
+                avtUrl={user?.avatar?.publicUrl}
                 color={user?.randomColor}
                 avatarSize={"small"}
               />
@@ -97,8 +97,8 @@ const ReviewSubmissionDocumentHeader = ({ document }: DocumentDetailProps) => {
         {!allow(Permission.ManageSpaceContent) && (
           <ReviewContainer>
             <AvatarWithName
-              name={user?.orgPersonalInformation?.fullName}
-              avtUrl={user?.orgPersonalInformation?.avatar?.publicUrl}
+              name={user?.name}
+              avtUrl={user?.avatar?.publicUrl}
               color={user?.randomColor}
               avatarSize={"small"}
             />

@@ -1,8 +1,5 @@
 import useAuthUserStore from "context/ZustandAuthStore";
-import {
-  GetDocumentDetail_documentGet as IDocument,
-  OrgRole,
-} from "graphql/types";
+import { GetDocumentDetail_documentGet as IDocument } from "graphql/types";
 import { DocumentType, getDocumentType } from "util/permission";
 
 const useSubmissionStatus = (
@@ -13,9 +10,7 @@ const useSubmissionStatus = (
   submission: IDocument;
   isStudent: boolean;
 } => {
-  const authUser = useAuthUserStore((state) => state.currentUser);
-  const isStudent =
-    authUser?.userMe?.activeUserAuth?.orgRole === OrgRole.STUDENT;
+  const isStudent = useAuthUserStore((state) => state.checkHelper.isStudent);
 
   const docType = getDocumentType(document);
   const isSubmissionDocument = docType === DocumentType.Submission;

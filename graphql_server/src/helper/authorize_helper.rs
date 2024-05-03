@@ -3,10 +3,9 @@ use diesel::PgConnection;
 use oso::Oso;
 use uuid::Uuid;
 
-use crate::authentication_token::{Claims};
+use crate::authentication_token::{ActiveSpaceId, Claims};
 use crate::authorization::{
-    DocumentActionPermission, DocumentAuth,
-    SpaceActionPermission, SpaceAuth, UserAuth,
+    DocumentActionPermission, DocumentAuth, SpaceActionPermission, SpaceAuth, UserAuth,
 };
 use crate::connection_pool::get_conn_from_actor;
 use crate::db::*;
@@ -29,6 +28,17 @@ pub async fn get_user_id_from_ctx(ctx: &Context<'_>) -> Result<i32> {
     .format_err()
 }
 
+pub async fn get_active_space_id_from_ctx(ctx: &Context<'_>) -> Result<i32> {
+    if let Ok(active_space_id) = ctx.data::<ActiveSpaceId>() {
+        return Ok(active_space_id.0);
+    }
+
+    Err(IkigaiError::new_unauthorized(
+        "Your request needs to provide active space id",
+    ))
+    .format_err()
+}
+
 pub async fn get_user_from_ctx(ctx: &Context<'_>) -> Result<User> {
     let caching_data = ctx.data::<RequestContextCachingData>()?;
     let user = if let Some(user) = caching_data.get_user() {
@@ -46,22 +56,6 @@ pub async fn get_user_from_ctx(ctx: &Context<'_>) -> Result<User> {
     Ok(user)
 }
 
-pub async fn get_org_from_ctx(ctx: &Context<'_>, org_id: i32) -> Result<Organization> {
-    let caching_data = ctx.data::<RequestContextCachingData>()?;
-
-    let org = if let Some(org) = caching_data.get_org_auth(org_id) {
-        info!("Use caching data of request info organization {}", org.id);
-        org
-    } else {
-        let conn = get_conn_from_ctx(ctx).await?;
-        let org = Organization::find(&conn, org_id).format_err()?;
-        info!("Set caching data of request info org {}", org.id);
-        caching_data.add_org_auth(org)
-    };
-
-    Ok(org)
-}
-
 pub async fn get_user_auth_by_user_id_from_ctx(
     ctx: &Context<'_>,
     user_id: i32,
@@ -71,8 +65,10 @@ pub async fn get_user_auth_by_user_id_from_ctx(
         info!("Using cache user auth {:?}", user_auth);
         user_auth
     } else {
-        let org_id = get_active_org_id_from_ctx(ctx).await?;
+        let space_id = get_active_space_id_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
+        let space_member = SpaceMember::find(&conn, user_id, space_id).format_err()?;
+        let user_auth = UserAuth::new(space_member);
         info!("Set cache user auth {:?}", user_auth);
 
         caching_data.add_user_auth(user_auth)
@@ -145,7 +141,6 @@ pub async fn space_is_allow(
 
     Ok(is_allowed)
 }
-
 
 pub async fn document_quick_authorize(
     ctx: &Context<'_>,

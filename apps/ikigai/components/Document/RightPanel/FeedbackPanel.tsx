@@ -231,7 +231,6 @@ const Highlight = ({
       label: (
         <div
           onClick={(e) => {
-            console.log("heyy");
             e.stopPropagation();
             removeComment(selectedComment, highlight.id);
           }}
@@ -251,8 +250,8 @@ const Highlight = ({
           <Space size={8} align="center">
             <AvatarWithName
               avatarSize={25}
-              name={thread.creator.orgPersonalInformation?.fullName}
-              avtUrl={thread.creator.orgPersonalInformation?.avatar?.publicUrl}
+              name={thread.creator.name}
+              avtUrl={thread.creator.avatar?.publicUrl}
             />
           </Space>
           <div
@@ -300,10 +299,8 @@ const Highlight = ({
               <Space size={8} align="center">
                 <AvatarWithName
                   avatarSize={25}
-                  name={comment.sender.orgPersonalInformation?.fullName}
-                  avtUrl={
-                    comment.sender.orgPersonalInformation?.avatar?.publicUrl
-                  }
+                  name={comment.sender.name}
+                  avtUrl={comment.sender.avatar?.publicUrl}
                 />
               </Space>
             )}

@@ -11,14 +11,10 @@ export const CREATE_COMMENT = gql`
         id
         firstName
         lastName
+        name
+        randomColor
         avatar {
           publicUrl
-        }
-        orgPersonalInformation {
-          fullName
-          avatar {
-            publicUrl
-          }
         }
       }
     }
@@ -50,12 +46,8 @@ export const ADD_HIGHLIGHT_DOC = gql`
           }
           firstName
           lastName
-          orgPersonalInformation {
-            fullName
-            avatar {
-              publicUrl
-            }
-          }
+          name
+          randomColor
         }
         comments {
           id
@@ -67,14 +59,10 @@ export const ADD_HIGHLIGHT_DOC = gql`
             id
             firstName
             lastName
+            name
+            randomColor
             avatar {
               publicUrl
-            }
-            orgPersonalInformation {
-              fullName
-              avatar {
-                publicUrl
-              }
             }
           }
         }

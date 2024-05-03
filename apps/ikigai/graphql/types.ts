@@ -217,6 +217,7 @@ export interface AssignToDocument_documentAssignUsers_user {
   id: number;
   firstName: string;
   lastName: string;
+  name: string;
   avatar: AssignToDocument_documentAssignUsers_user_avatar | null;
   randomColor: string;
   email: string;
@@ -234,6 +235,23 @@ export interface AssignToDocument {
 export interface AssignToDocumentVariables {
   documentId: any;
   emails: string[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: RemoveDocumentAssigned
+// ====================================================
+
+export interface RemoveDocumentAssigned {
+  documentRemoveAssignedUser: boolean;
+}
+
+export interface RemoveDocumentAssignedVariables {
+  assignedUser: NewDocumentAssignedUserInput;
 }
 
 /* tslint:disable */
@@ -499,7 +517,6 @@ export interface UpsertRubric_orgUpsertRubric_data {
 
 export interface UpsertRubric_orgUpsertRubric {
   id: any;
-  orgId: number;
   name: string;
   data: UpsertRubric_orgUpsertRubric_data;
   createdAt: number;
@@ -850,71 +867,6 @@ export interface UpdateSpaceVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: CreateSpace
-// ====================================================
-
-export interface CreateSpace_spaceCreate_starterDocument {
-  id: any;
-}
-
-export interface CreateSpace_spaceCreate {
-  id: number;
-  orgId: number;
-  starterDocument: CreateSpace_spaceCreate_starterDocument;
-}
-
-export interface CreateSpace {
-  spaceCreate: CreateSpace_spaceCreate;
-}
-
-export interface CreateSpaceVariables {
-  data: NewSpace;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: DuplicateSpace
-// ====================================================
-
-export interface DuplicateSpace_spaceDuplicate {
-  id: number;
-}
-
-export interface DuplicateSpace {
-  spaceDuplicate: DuplicateSpace_spaceDuplicate;
-}
-
-export interface DuplicateSpaceVariables {
-  spaceId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: SoftDeleteSpace
-// ====================================================
-
-export interface SoftDeleteSpace {
-  spaceSoftDelete: boolean;
-}
-
-export interface SoftDeleteSpaceVariables {
-  spaceId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL mutation operation: RestoreSpace
 // ====================================================
 
@@ -1028,21 +980,13 @@ export interface CreateComment_addComment_sender_avatar {
   publicUrl: string | null;
 }
 
-export interface CreateComment_addComment_sender_orgPersonalInformation_avatar {
-  publicUrl: string | null;
-}
-
-export interface CreateComment_addComment_sender_orgPersonalInformation {
-  fullName: string;
-  avatar: CreateComment_addComment_sender_orgPersonalInformation_avatar | null;
-}
-
 export interface CreateComment_addComment_sender {
   id: number;
   firstName: string;
   lastName: string;
+  name: string;
+  randomColor: string;
   avatar: CreateComment_addComment_sender_avatar | null;
-  orgPersonalInformation: CreateComment_addComment_sender_orgPersonalInformation | null;
 }
 
 export interface CreateComment_addComment {
@@ -1091,42 +1035,26 @@ export interface AddHighlightDoc_documentAddHighlight_thread_creator_avatar {
   publicUrl: string | null;
 }
 
-export interface AddHighlightDoc_documentAddHighlight_thread_creator_orgPersonalInformation_avatar {
-  publicUrl: string | null;
-}
-
-export interface AddHighlightDoc_documentAddHighlight_thread_creator_orgPersonalInformation {
-  fullName: string;
-  avatar: AddHighlightDoc_documentAddHighlight_thread_creator_orgPersonalInformation_avatar | null;
-}
-
 export interface AddHighlightDoc_documentAddHighlight_thread_creator {
   id: number;
   avatar: AddHighlightDoc_documentAddHighlight_thread_creator_avatar | null;
   firstName: string;
   lastName: string;
-  orgPersonalInformation: AddHighlightDoc_documentAddHighlight_thread_creator_orgPersonalInformation | null;
+  name: string;
+  randomColor: string;
 }
 
 export interface AddHighlightDoc_documentAddHighlight_thread_comments_sender_avatar {
   publicUrl: string | null;
 }
 
-export interface AddHighlightDoc_documentAddHighlight_thread_comments_sender_orgPersonalInformation_avatar {
-  publicUrl: string | null;
-}
-
-export interface AddHighlightDoc_documentAddHighlight_thread_comments_sender_orgPersonalInformation {
-  fullName: string;
-  avatar: AddHighlightDoc_documentAddHighlight_thread_comments_sender_orgPersonalInformation_avatar | null;
-}
-
 export interface AddHighlightDoc_documentAddHighlight_thread_comments_sender {
   id: number;
   firstName: string;
   lastName: string;
+  name: string;
+  randomColor: string;
   avatar: AddHighlightDoc_documentAddHighlight_thread_comments_sender_avatar | null;
-  orgPersonalInformation: AddHighlightDoc_documentAddHighlight_thread_comments_sender_orgPersonalInformation | null;
 }
 
 export interface AddHighlightDoc_documentAddHighlight_thread_comments {
@@ -1264,7 +1192,6 @@ export interface GetBandScores_assignmentGetBandScores {
   id: number;
   name: string;
   range: GetBandScores_assignmentGetBandScores_range;
-  orgId: number | null;
   updatedAt: number;
   createdAt: number;
 }
@@ -1338,37 +1265,36 @@ export interface GetSubmissionsOfAssignmentVariables {
 // GraphQL query operation: GetRubrics
 // ====================================================
 
-export interface GetRubrics_orgGetRubrics_data_items_userPick {
+export interface GetRubrics_userGetMyRubrics_data_items_userPick {
   selected: boolean;
   score: number;
   comment: string;
 }
 
-export interface GetRubrics_orgGetRubrics_data_items {
+export interface GetRubrics_userGetMyRubrics_data_items {
   explanation: string;
   score: number;
   toScore: number;
-  userPick: GetRubrics_orgGetRubrics_data_items_userPick;
+  userPick: GetRubrics_userGetMyRubrics_data_items_userPick;
 }
 
-export interface GetRubrics_orgGetRubrics_data {
+export interface GetRubrics_userGetMyRubrics_data {
   rubricType: RubricType;
   criteria: string[];
   weightingCriteria: (number | null)[];
   level: string[];
-  items: GetRubrics_orgGetRubrics_data_items[][];
+  items: GetRubrics_userGetMyRubrics_data_items[][];
 }
 
-export interface GetRubrics_orgGetRubrics {
+export interface GetRubrics_userGetMyRubrics {
   id: any;
-  orgId: number;
   name: string;
-  data: GetRubrics_orgGetRubrics_data;
+  data: GetRubrics_userGetMyRubrics_data;
   createdAt: number;
 }
 
 export interface GetRubrics {
-  orgGetRubrics: GetRubrics_orgGetRubrics[];
+  userGetMyRubrics: GetRubrics_userGetMyRubrics[];
 }
 
 /* tslint:disable */
@@ -1432,22 +1358,13 @@ export interface GetDocumentDetail_documentGet_submission_user_avatar {
   publicUrl: string | null;
 }
 
-export interface GetDocumentDetail_documentGet_submission_user_orgPersonalInformation_avatar {
-  publicUrl: string | null;
-}
-
-export interface GetDocumentDetail_documentGet_submission_user_orgPersonalInformation {
-  fullName: string;
-  avatar: GetDocumentDetail_documentGet_submission_user_orgPersonalInformation_avatar | null;
-}
-
 export interface GetDocumentDetail_documentGet_submission_user {
   id: number;
   firstName: string;
   lastName: string;
+  name: string;
   avatar: GetDocumentDetail_documentGet_submission_user_avatar | null;
   randomColor: string;
-  orgPersonalInformation: GetDocumentDetail_documentGet_submission_user_orgPersonalInformation | null;
 }
 
 export interface GetDocumentDetail_documentGet_submission_assignment {
@@ -1528,7 +1445,6 @@ export interface GetDocumentDetail_documentGet_assignment_rubric_data {
 
 export interface GetDocumentDetail_documentGet_assignment_rubric {
   id: any;
-  orgId: number;
   name: string;
   data: GetDocumentDetail_documentGet_assignment_rubric_data;
   createdAt: number;
@@ -1699,26 +1615,6 @@ export interface GetDocumentDetailByUUIDVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetDeletedDocuments
-// ====================================================
-
-export interface GetDeletedDocuments_documentGetDeletedDocuments {
-  id: any;
-  title: string;
-  deletedAt: number | null;
-  coverPhotoUrl: string | null;
-}
-
-export interface GetDeletedDocuments {
-  documentGetDeletedDocuments: GetDeletedDocuments_documentGetDeletedDocuments[];
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL query operation: GetDocumentAssignedUsers
 // ====================================================
 
@@ -1730,6 +1626,7 @@ export interface GetDocumentAssignedUsers_documentGet_assignedUsers_user {
   id: number;
   firstName: string;
   lastName: string;
+  name: string;
   avatar: GetDocumentAssignedUsers_documentGet_assignedUsers_user_avatar | null;
   randomColor: string;
   email: string;
@@ -1893,19 +1790,6 @@ export interface GetDocumentsVariables {
 // GraphQL query operation: GetSpaceMembers
 // ====================================================
 
-export interface GetSpaceMembers_spaceGet_members_user_orgMember {
-  orgRole: OrgRole;
-}
-
-export interface GetSpaceMembers_spaceGet_members_user_orgPersonalInformation_avatar {
-  publicUrl: string | null;
-}
-
-export interface GetSpaceMembers_spaceGet_members_user_orgPersonalInformation {
-  fullName: string;
-  avatar: GetSpaceMembers_spaceGet_members_user_orgPersonalInformation_avatar | null;
-}
-
 export interface GetSpaceMembers_spaceGet_members_user_avatar {
   publicUrl: string | null;
 }
@@ -1916,8 +1800,7 @@ export interface GetSpaceMembers_spaceGet_members_user {
   lastName: string;
   email: string;
   randomColor: string;
-  orgMember: GetSpaceMembers_spaceGet_members_user_orgMember | null;
-  orgPersonalInformation: GetSpaceMembers_spaceGet_members_user_orgPersonalInformation | null;
+  name: string;
   avatar: GetSpaceMembers_spaceGet_members_user_avatar | null;
 }
 
@@ -1925,6 +1808,7 @@ export interface GetSpaceMembers_spaceGet_members {
   userId: number;
   spaceId: number;
   createdAt: number;
+  role: Role;
   user: GetSpaceMembers_spaceGet_members_user;
 }
 
@@ -1939,30 +1823,6 @@ export interface GetSpaceMembers {
 
 export interface GetSpaceMembersVariables {
   spaceId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GetDeletedSpaces
-// ====================================================
-
-export interface GetDeletedSpaces_spaceGetDeletedSpaces_banner {
-  publicUrl: string | null;
-}
-
-export interface GetDeletedSpaces_spaceGetDeletedSpaces {
-  id: number;
-  name: string;
-  deletedAt: number | null;
-  banner: GetDeletedSpaces_spaceGetDeletedSpaces_banner | null;
-}
-
-export interface GetDeletedSpaces {
-  spaceGetDeletedSpaces: GetDeletedSpaces_spaceGetDeletedSpaces[];
 }
 
 /* tslint:disable */
@@ -1991,7 +1851,7 @@ export interface GetSpaceInviteTokens_spaceGetInviteTokens {
   spaceId: number;
   creator: GetSpaceInviteTokens_spaceGetInviteTokens_creator;
   token: string;
-  invitingRole: OrgRole;
+  invitingRole: Role;
   uses: number;
   expireAt: number | null;
   createdAt: number;
@@ -2018,34 +1878,17 @@ export interface GetHighlightDocument_documentGet_highlights_thread_creator_avat
   publicUrl: string | null;
 }
 
-export interface GetHighlightDocument_documentGet_highlights_thread_creator_orgPersonalInformation_avatar {
-  publicUrl: string | null;
-}
-
-export interface GetHighlightDocument_documentGet_highlights_thread_creator_orgPersonalInformation {
-  fullName: string;
-  avatar: GetHighlightDocument_documentGet_highlights_thread_creator_orgPersonalInformation_avatar | null;
-}
-
 export interface GetHighlightDocument_documentGet_highlights_thread_creator {
   id: number;
   avatar: GetHighlightDocument_documentGet_highlights_thread_creator_avatar | null;
   firstName: string;
   lastName: string;
-  orgPersonalInformation: GetHighlightDocument_documentGet_highlights_thread_creator_orgPersonalInformation | null;
+  name: string;
+  randomColor: string;
 }
 
 export interface GetHighlightDocument_documentGet_highlights_thread_comments_sender_avatar {
   publicUrl: string | null;
-}
-
-export interface GetHighlightDocument_documentGet_highlights_thread_comments_sender_orgPersonalInformation_avatar {
-  publicUrl: string | null;
-}
-
-export interface GetHighlightDocument_documentGet_highlights_thread_comments_sender_orgPersonalInformation {
-  fullName: string;
-  avatar: GetHighlightDocument_documentGet_highlights_thread_comments_sender_orgPersonalInformation_avatar | null;
 }
 
 export interface GetHighlightDocument_documentGet_highlights_thread_comments_sender {
@@ -2053,7 +1896,8 @@ export interface GetHighlightDocument_documentGet_highlights_thread_comments_sen
   avatar: GetHighlightDocument_documentGet_highlights_thread_comments_sender_avatar | null;
   firstName: string;
   lastName: string;
-  orgPersonalInformation: GetHighlightDocument_documentGet_highlights_thread_comments_sender_orgPersonalInformation | null;
+  name: string;
+  randomColor: string;
 }
 
 export interface GetHighlightDocument_documentGet_highlights_thread_comments {
@@ -2120,7 +1964,7 @@ export interface CheckToken {
 // ====================================================
 
 export interface CheckDocument {
-  userCheckDocument: number;
+  userCheckDocument: number | null;
 }
 
 export interface CheckDocumentVariables {
@@ -2157,22 +2001,8 @@ export interface UserMe_userMe_avatar {
   publicUrl: string | null;
 }
 
-export interface UserMe_userMe_members_organization {
-  id: number;
-  orgName: string;
-  ownerId: number | null;
-}
-
-export interface UserMe_userMe_members {
-  userId: number;
-  orgId: number;
-  orgRole: OrgRole;
-  organization: UserMe_userMe_members_organization;
-}
-
 export interface UserMe_userMe_activeUserAuth {
-  orgId: number;
-  orgRole: OrgRole;
+  role: Role;
 }
 
 export interface UserMe_userMe {
@@ -2184,7 +2014,6 @@ export interface UserMe_userMe {
   randomColor: string;
   avatarFileId: any | null;
   avatar: UserMe_userMe_avatar | null;
-  members: UserMe_userMe_members[];
   activeUserAuth: UserMe_userMe_activeUserAuth | null;
 }
 
@@ -2244,11 +2073,6 @@ export enum HighlightType {
   REPLACE = "REPLACE",
 }
 
-export enum OrgRole {
-  STUDENT = "STUDENT",
-  TEACHER = "TEACHER",
-}
-
 export enum PageViewMode {
   SINGLE = "SINGLE",
   SPLIT = "SPLIT",
@@ -2259,6 +2083,11 @@ export enum QuizType {
   MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
   SELECT_OPTION = "SELECT_OPTION",
   SINGLE_CHOICE = "SINGLE_CHOICE",
+}
+
+export enum Role {
+  STUDENT = "STUDENT",
+  TEACHER = "TEACHER",
 }
 
 export enum RubricType {
@@ -2305,6 +2134,11 @@ export interface NewDocument {
   spaceId?: number | null;
 }
 
+export interface NewDocumentAssignedUserInput {
+  documentId: any;
+  assignedUserId: number;
+}
+
 export interface NewDocumentHighlight {
   documentId: any;
   fromPos: number;
@@ -2312,10 +2146,6 @@ export interface NewDocumentHighlight {
   uuid: any;
   highlightType: HighlightType;
   originalText: string;
-}
-
-export interface NewSpace {
-  name: string;
 }
 
 export interface PageBlockDocumentInput {
@@ -2354,7 +2184,6 @@ export interface QuizStructureInput {
 
 export interface RubricInput {
   id: any;
-  orgId: number;
   name: string;
   data: RubricTableDataInput;
 }
@@ -2388,7 +2217,7 @@ export interface RubricUserPickedInput {
 
 export interface SpaceInviteTokenInput {
   spaceId: number;
-  invitingRole: OrgRole;
+  invitingRole: Role;
   expireAt?: number | null;
 }
 

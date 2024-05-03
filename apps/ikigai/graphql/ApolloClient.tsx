@@ -19,6 +19,7 @@ import { QueryOptions } from "@apollo/client/core/watchQueryOptions";
 
 import Config from "config/Config";
 import TokenStorage from "storage/TokenStorage";
+import useAuthUserStore from "context/ZustandAuthStore";
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
@@ -33,6 +34,11 @@ const authLink = setContext((_, { headers }) => {
 
   if (token) {
     finalHeaders.headers.authorization = token;
+  }
+
+  const activeSpaceId = useAuthUserStore.getState().spaceId;
+  if (activeSpaceId) {
+    finalHeaders.headers["active-space-id"] = activeSpaceId;
   }
 
   return finalHeaders;

@@ -3,7 +3,7 @@ use aj::AJ;
 use async_graphql::*;
 use diesel::Connection;
 
-use crate::authorization::{DocumentActionPermission, OrganizationActionPermission};
+use crate::authorization::DocumentActionPermission;
 use crate::background_job::submission_job::CompleteSubmission;
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
@@ -300,76 +300,36 @@ impl AssignmentMutation {
         Ok(true)
     }
 
+    // FIXME: Need authorization
     async fn assignment_add_band_score(
         &self,
         ctx: &Context<'_>,
-        mut new_band_score: NewBandScore,
+        new_band_score: NewBandScore,
     ) -> Result<BandScore> {
-        let user_auth = get_user_auth_from_ctx(ctx).await?;
-        organization_authorize(
-            ctx,
-            user_auth.id,
-            user_auth.org_id,
-            OrganizationActionPermission::AddSpace,
-        )
-        .await?;
-
-        new_band_score.org_id = Some(user_auth.org_id);
         let conn = get_conn_from_ctx(ctx).await?;
         let band_score = BandScore::insert(&conn, new_band_score).format_err()?;
         Ok(band_score)
     }
 
+    // FIXME: Need authorization
     async fn assignment_remove_band_score(
         &self,
         ctx: &Context<'_>,
         band_score_id: i32,
     ) -> Result<bool, Error> {
-        let user_auth = get_user_auth_from_ctx(ctx).await?;
-        organization_authorize(
-            ctx,
-            user_auth.id,
-            user_auth.org_id,
-            OrganizationActionPermission::AddSpace,
-        )
-        .await?;
-
         let conn = get_conn_from_ctx(ctx).await?;
-        let band_score = BandScore::find(&conn, band_score_id).format_err()?;
-        if band_score.org_id != Some(user_auth.org_id) {
-            return Err(IkigaiError::new_bad_request(
-                "Cannot remove band score of another org",
-            ))
-            .format_err();
-        }
-
         BandScore::remove(&conn, band_score_id).format_err()?;
         Ok(true)
     }
 
+    // FIXME: Need authorization
     async fn assignment_update_band_score(
         &self,
         ctx: &Context<'_>,
         band_score_id: i32,
         range: BandScoreRanges,
     ) -> Result<bool, Error> {
-        let user_auth = get_user_auth_from_ctx(ctx).await?;
-        organization_authorize(
-            ctx,
-            user_auth.id,
-            user_auth.org_id,
-            OrganizationActionPermission::AddSpace,
-        )
-        .await?;
-
         let conn = get_conn_from_ctx(ctx).await?;
-        let band_score = BandScore::find(&conn, band_score_id).format_err()?;
-        if band_score.org_id != Some(user_auth.org_id) {
-            return Err(IkigaiError::new_bad_request(
-                "Cannot remove band score of another org",
-            ))
-            .format_err();
-        }
 
         BandScore::update(&conn, band_score_id, range).format_err()?;
         Ok(true)

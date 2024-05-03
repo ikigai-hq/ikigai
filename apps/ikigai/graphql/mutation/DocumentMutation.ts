@@ -117,3 +117,11 @@ export const ASSIGN_TO_DOCUMENT = gql`
     }
   }
 `;
+
+export const REMOVE_DOCUMENT_ASSIGNED = gql`
+  mutation RemoveDocumentAssigned(
+    $assignedUser: NewDocumentAssignedUserInput!
+  ) {
+    documentRemoveAssignedUser(assignedUser: $assignedUser)
+  }
+`;

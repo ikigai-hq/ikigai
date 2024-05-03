@@ -517,7 +517,7 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
       }
     });
 
-    set({ assignedUsers: currentAssignedUsers });
+    set({ assignedUsers: [...currentAssignedUsers] });
   },
   removeAssignedUsers: (assignedUsers) => {
     const currentAssignedUsers = get().assignedUsers;
@@ -530,7 +530,7 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
       }
     });
 
-    set({ assignedUsers: currentAssignedUsers });
+    set({ assignedUsers: [...currentAssignedUsers] });
   },
 }));
 

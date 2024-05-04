@@ -9,9 +9,9 @@
   "self-hosting": "Self Hosting",
   "architecture_separator": {
     "type": "separator",
-    "title": "Architecture"
+    "title": "Documentation"
   },
-  "architecture": "Architecture",
+  "architecture": "Ikigai Architecture",
   "ikigai_team": {
     "type": "separator",
     "title": "Ikigai Team & Other Information"

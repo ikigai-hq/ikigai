@@ -6,9 +6,9 @@ services:
     volumes:
       - ./postgres_data:/var/lib/postgresql
     environment:
-     POSTGRES_PASSWORD: openexam
-     POSTGRES_USER: openexam
-     POSTGRES_DB: openexam
+     POSTGRES_PASSWORD: ikigai
+     POSTGRES_USER: ikigai
+     POSTGRES_DB: ikigai
     ports:
       - "5432:5432"
     healthcheck:
@@ -27,7 +27,7 @@ services:
     build:
       dockerfile: Migration.Dockerfile
     environment:
-      DATABASE_URL: postgres://openexam:openexam@postgres:5432/openexam
+      DATABASE_URL: postgres://ikigai:ikigai@postgres:5432/ikigai
     depends_on:
       postgres:
         condition: service_healthy

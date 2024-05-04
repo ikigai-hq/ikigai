@@ -1,0 +1,31 @@
+name: Check Graphql Server
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "graphql_server/**"
+  push:
+    branches:
+      - master
+    paths:
+      - "graphql_server/**"
+
+defaults:
+  run:
+    working-directory: ./graphql_server
+
+jobs:
+  check_clippy:
+    name: cargo test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: 1.71.1
+          override: true
+          components: rustfmt, clippy
+        run: cargo clippy --all-features -- -D warnings

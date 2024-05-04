@@ -1,0 +1,39 @@
+name: Check Web Client
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "apps/ikigai/**"
+  push:
+    branches:
+      - master
+    paths:
+      - "apps/ikigai/**"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+
+      - name: Run Lint
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: lint
+
+      - name: Run Build
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: build

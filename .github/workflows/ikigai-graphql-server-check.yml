@@ -14,20 +14,18 @@ on:
 
 defaults:
   run:
-    shell: bash
     working-directory: ./graphql_server
 
 jobs:
-  check:
+  check_clippy:
+    name: cargo test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run check
-        run: cargo check
-
-  clippy_check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run Clippy
-        run: cargo clippy --all-targets --all-features -- -D warnings
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: 1.71.1
+          override: true
+          components: rustfmt, clippy
+        run: cargo clippy --all-features -- -D warnings

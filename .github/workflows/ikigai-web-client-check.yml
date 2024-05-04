@@ -4,19 +4,9 @@ on:
   pull_request:
     branches:
       - master
-    paths:
-      - "apps/ikigai/**"
   push:
     branches:
       - master
-    paths:
-      - "apps/ikigai/**"
-
-
-defaults:
-  run:
-    shell: bash
-    working-directory: apps/ikigai
 
 jobs:
   lint:
@@ -38,8 +28,4 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: lint
-
-      - name: Run Build
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: build
+          dir: "apps/ikigai"

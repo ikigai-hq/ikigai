@@ -30,6 +30,12 @@ jobs:
           cmd: lint
           dir: "apps/ikigai"
 
+      - name: Run Build Editor
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: build
+          dir: "packages/rich-markdown-editor"
+
       - name: Run Build
         uses: borales/actions-yarn@v4
         with:

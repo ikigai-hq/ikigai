@@ -1,4 +1,4 @@
-name: Lint Code
+name: Check Web Client
 
 on:
   pull_request:

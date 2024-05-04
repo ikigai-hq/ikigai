@@ -1,0 +1,33 @@
+name: Check Graphql Server
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "graphql_server/**"
+  push:
+    branches:
+      - master
+    paths:
+      - "graphql_server/**"
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./graphql_server
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run check
+        run: cargo check
+
+  clippy_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings

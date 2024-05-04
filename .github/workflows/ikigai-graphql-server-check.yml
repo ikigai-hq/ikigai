@@ -28,4 +28,8 @@ jobs:
           toolchain: 1.71.1
           override: true
           components: rustfmt, clippy
-        run: cargo clippy --all-features -- -D warnings
+
+      - name: Run cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check

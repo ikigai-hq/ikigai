@@ -41,7 +41,7 @@ impl Redis {
 
     pub fn set_magic_token(&self, user_id: i32, otp: &str) -> RedisResult<()> {
         let key = format_magic_token(user_id);
-        self.set_value(&key, otp, Some(300))?;
+        self.set_value(&key, otp, Some(600))?;
         Ok(())
     }
 

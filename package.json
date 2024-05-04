@@ -9,10 +9,13 @@
     "packages/*"
   ],
   "scripts": {
-    "dev-client": "cd apps/ikigai && yarn dev"
+    "dev-client": "cd apps/ikigai && yarn dev",
+    "prepare": "husky",
+    "pre-commit": "cd apps/ikigai && yarn pre-commit"
   },
   "devDependencies": {
     "eslint-config-custom": "*",
+    "husky": "^9.0.11",
     "prettier": "latest",
     "turbo": "latest"
   },

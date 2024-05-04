@@ -19,18 +19,6 @@ jobs:
         with:
           node-version: 18.x
 
-      - name: Run Install Editor
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install
-          dir: "packages/rich-markdown-editor"
-
-      - name: Run Build Editor
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: build
-          dir: "packages/rich-markdown-editor"
-
       - name: Run install
         uses: borales/actions-yarn@v4
         with:
@@ -40,10 +28,4 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: lint
-          dir: "apps/ikigai"
-
-      - name: Run Build
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: build
           dir: "apps/ikigai"

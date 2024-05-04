@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode, useEffect } from "react";
+import React, { ReactElement, ReactNode } from "react";
 import { ApolloProvider } from "@apollo/client";
 import type { AppProps } from "next/app";
 import type { NextPage } from "next";
@@ -7,12 +7,10 @@ import Head from "next/head";
 import { useApollo } from "../graphql/ApolloClient";
 import OpenExamToaster from "components/Toaster";
 import ErrorBoundary from "../components/ErrorBoundary";
-import GrowthBookWrapper from "components/GrowthBookProvider";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { messages as enMessages } from "../locales/en/messages";
 import withTheme from "styles/theme";
-import { initMixpanel } from "../util/track";
 import { Initializing } from "../components/Initializing";
 import SpaceSetting from "../components/SpaceSetting";
 
@@ -40,10 +38,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const client = useApollo(pageProps.initialApolloState);
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  useEffect(() => {
-    initMixpanel();
-  }, []);
-
   return withTheme(
     <>
       <Head>
@@ -59,14 +53,12 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <OpenExamToaster />
       <ApolloProvider client={client}>
         <I18nProvider i18n={i18n}>
-          <GrowthBookWrapper>
-            <ErrorBoundary>
-              <Initializing>
-                {getLayout(<Component {...pageProps} />)}
-                <SpaceSetting />
-              </Initializing>
-            </ErrorBoundary>
-          </GrowthBookWrapper>
+          <ErrorBoundary>
+            <Initializing>
+              {getLayout(<Component {...pageProps} />)}
+              <SpaceSetting />
+            </Initializing>
+          </ErrorBoundary>
         </I18nProvider>
       </ApolloProvider>
     </>,

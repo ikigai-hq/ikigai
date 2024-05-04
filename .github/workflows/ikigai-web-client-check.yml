@@ -1,7 +1,14 @@
 name: Lint Code
 
 on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "apps/ikigai/**"
   push:
+    branches:
+      - master
     paths:
       - "apps/ikigai/**"
 

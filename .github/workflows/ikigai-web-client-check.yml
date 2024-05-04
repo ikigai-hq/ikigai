@@ -14,6 +14,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Run Install Editor
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+          dir: "packages/rich-markdown-editor"
+
+      - name: Run Build Editor
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: build
+          dir: "packages/rich-markdown-editor"
+
       - name: Set Node.js 18.x
         uses: actions/setup-node@v3
         with:
@@ -29,22 +46,6 @@ jobs:
         with:
           cmd: lint
           dir: "apps/ikigai"
-
-      - name: Set Node.js 16.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-
-      - name: Run Build Editor
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: build
-          dir: "packages/rich-markdown-editor"
-
-      - name: Set Node.js 18.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
 
       - name: Run Build
         uses: borales/actions-yarn@v4

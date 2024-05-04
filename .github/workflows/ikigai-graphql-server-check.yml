@@ -4,9 +4,13 @@ on:
   pull_request:
     branches:
       - master
+    paths:
+      - "graphql-server/**"
   push:
     branches:
       - master
+    paths:
+      - "graphql-server/**"
 
 defaults:
   run:

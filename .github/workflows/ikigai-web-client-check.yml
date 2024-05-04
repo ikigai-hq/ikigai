@@ -12,6 +12,12 @@ on:
     paths:
       - "apps/ikigai/**"
 
+
+defaults:
+  run:
+    shell: bash
+    working-directory: apps/ikigai
+
 jobs:
   lint:
     runs-on: ubuntu-latest

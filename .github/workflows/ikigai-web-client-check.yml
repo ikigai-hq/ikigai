@@ -31,9 +31,9 @@ jobs:
       - name: Run Lint
         uses: borales/actions-yarn@v4
         with:
-          cmd: yarn lint
+          cmd: lint
 
       - name: Run Build
         uses: borales/actions-yarn@v4
         with:
-          cmd: yarn build
+          cmd: build

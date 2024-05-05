@@ -8,14 +8,14 @@ import {
   GetDocumentDetail_documentGet_submission_rubricGrade as IRubricGrade,
   GradeRubricSubmission,
   RubricType,
+  SpaceActionPermission,
 } from "graphql/types";
-import { Permission } from "util/permission";
-import useUserPermission from "hook/UseUserPermission";
 import { useMutation } from "@apollo/client";
 import { GRADE_RUBRIC_SUBMISSION } from "graphql/mutation";
 import { handleError } from "graphql/ApolloClient";
 import { cloneDeep } from "lodash";
-import { roundRealNumber } from "../../../util";
+import { roundRealNumber } from "util/index";
+import usePermission from "hook/UsePermission";
 
 export type RubricSectionProps = {
   rubric: IRubricGrade;
@@ -23,8 +23,8 @@ export type RubricSectionProps = {
 };
 
 const RubricSection = ({ rubric, onChangeFinalScore }: RubricSectionProps) => {
-  const allow = useUserPermission();
-  const canGrade = allow(Permission.ManageSpaceContent);
+  const allow = usePermission();
+  const canGrade = allow(SpaceActionPermission.MANAGE_SPACE_CONTENT);
   const [insideRubric, setInsideRubric] = useState(cloneDeep(rubric));
   const [gradeRubric] = useMutation<GradeRubricSubmission>(
     GRADE_RUBRIC_SUBMISSION,
@@ -95,9 +95,7 @@ const RubricSection = ({ rubric, onChangeFinalScore }: RubricSectionProps) => {
       <Tooltip
         arrow={false}
         title={!readOnly ? t`Edit score` : undefined}
-        open={
-          insideRubric.gradedData.rubricType !== RubricType.POINT_BASED
-        }
+        open={insideRubric.gradedData.rubricType !== RubricType.POINT_BASED}
       >
         <InputNumber
           size="small"

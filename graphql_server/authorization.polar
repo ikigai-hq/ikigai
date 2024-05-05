@@ -50,7 +50,7 @@ allow(actor: UserAuth, "interactive_with_tool", doc: DocumentAuth) if
 
 allow(actor: UserAuth, "interactive_with_tool", doc: DocumentAuth) if
 	not doc.is_doing_submission and
-	actor.org_role = "teacher";
+	actor.role = "teacher";
 
 allow(actor: UserAuth, "edit_document", doc: DocumentAuth) if
 	(doc.is_doing_open_type_submission and doc.space_id = actor.space_id and doc.creator_id = actor.id) and

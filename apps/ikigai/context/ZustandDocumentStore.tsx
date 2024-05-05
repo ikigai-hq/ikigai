@@ -87,7 +87,6 @@ export const getDocumentConfigDefault = (doc: IDocument) => {
     showQuizReview: false,
   };
 
-  const userInfo = useAuthUserStore.getState().currentUser;
   const isStudent = useAuthUserStore.getState().checkHelper.isStudent;
   const documentType = getDocumentType(doc);
   if (documentType === DocumentType.Submission) {

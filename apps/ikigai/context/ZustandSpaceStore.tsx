@@ -52,13 +52,13 @@ const useSpaceStore = create<ISpaceContext>((set, get) => ({
   setSpaceName: (spaceName) => {
     const currentSpace = get().space;
     if (!currentSpace) return;
-    
+
     set({
       space: {
         ...currentSpace,
         name: spaceName,
-      }
-    })
+      },
+    });
   },
   spaceSettingVisible: false,
   setSpaceSettingVisible: (visible) => set({ spaceSettingVisible: visible }),

@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import {
-  GetDocuments_spaceGet_documents as IDocumentItemList,
+  GetDocuments_spaceGet_documents as IDocumentItemList, SpaceActionPermission,
   UpdatePositionData,
 } from "graphql/types";
 import {
@@ -10,9 +10,7 @@ import {
 } from "../SortableTree/types";
 import { debounce } from "lodash";
 import useSpaceStore from "../../../context/ZustandSpaceStore";
-import useUserPermission from "hook/UseUserPermission";
 import { useEffect, useState } from "react";
-import { Permission } from "util/permission";
 import { LearningItemType, LearningModuleItemTypeWrapper } from "./types";
 import { isEqual } from "lodash";
 import { flattenTree, SortableTree } from "../SortableTree";
@@ -21,6 +19,7 @@ import {
   findItemDeep,
   getFullPathFromNode,
 } from "../SortableTree/utilities";
+import usePermission from "../../../hook/UsePermission";
 
 export type LearningModuleDndProps = {
   docs: IDocumentItemList[];
@@ -40,13 +39,13 @@ export const LearningModuleDnd = ({
   TreeItemComponent,
   defaultCollapsed,
 }: LearningModuleDndProps) => {
-  const userAllow = useUserPermission();
+  const allow = usePermission();
   const cacheFlattenTrees = useSpaceStore((state) => state.flattenTreeItems);
   const setCacheFlattenTrees = useSpaceStore((state) => state.setTreeItems);
   const [convertedItems, setConvertedItems] = useState([]);
   const router = useRouter();
 
-  const canDnd = !keyword && userAllow(Permission.ManageSpaceContent);
+  const canDnd = !keyword && allow(SpaceActionPermission.MANAGE_SPACE_CONTENT);
   useEffect(() => {
     const items = convertToTreeItems(
       docs.filter((doc) => !doc.deletedAt),
@@ -69,7 +68,7 @@ export const LearningModuleDnd = ({
     const oldItems = convertToUpdatePositionData(convertedItems);
     const newItems = convertToUpdatePositionData(items);
     if (
-      userAllow(Permission.ManageSpaceContent) &&
+      allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) &&
       !isEqual(oldItems, newItems)
     ) {
       debounceUpdatePositions(convertToUpdatePositionData(items));

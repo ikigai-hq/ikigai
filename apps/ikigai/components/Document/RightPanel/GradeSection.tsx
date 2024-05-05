@@ -4,13 +4,12 @@ import styled from "styled-components";
 import toast from "react-hot-toast";
 
 import useDocumentStore from "context/ZustandDocumentStore";
-import useUserPermission from "hook/UseUserPermission";
-import { Permission } from "util/permission";
 import { Button } from "components/common/Button";
 import { Text } from "components/common/Text";
 import { Input } from "components/common/Input";
 import { useEffect, useState } from "react";
 import {
+  SpaceActionPermission,
   TeacherRequestRedo,
   TeacherRequestRedoVariables,
   TeacherReviewSubmission,
@@ -23,6 +22,7 @@ import {
 import { handleError } from "graphql/ApolloClient";
 import { t, Trans } from "@lingui/macro";
 import { useCorrectAnswers } from "hook/UseCorrectAnswers";
+import usePermission from "hook/UsePermission";
 
 export type GradeSectionProps = {
   rubricFinalScore: number;
@@ -41,7 +41,7 @@ const GradeSection = ({ rubricFinalScore }: GradeSectionProps) => {
     });
   const activeDocument = useDocumentStore((state) => state.masterDocument);
   const correctAnswers = useCorrectAnswers();
-  const userAllow = useUserPermission();
+  const userAllow = usePermission();
 
   const [finalGrade, setFinalGrade] = useState(
     activeDocument?.submission?.finalGrade || rubricFinalScore,
@@ -90,17 +90,17 @@ const GradeSection = ({ rubricFinalScore }: GradeSectionProps) => {
           <RightTextWrapper>
             <InputNumber
               size={"small"}
-              readOnly={!userAllow(Permission.ManageSpaceContent)}
+              readOnly={!userAllow(SpaceActionPermission.MANAGE_SPACE_CONTENT)}
               value={finalGrade}
               onChange={(value) => setFinalGrade(value)}
             />
           </RightTextWrapper>
         </TextWrapper>
         <div style={{ marginTop: "15px" }}>
-          {userAllow(Permission.ManageSpaceContent) ? (
+          {userAllow(SpaceActionPermission.MANAGE_SPACE_CONTENT) ? (
             <Input.TextArea
               placeholder={t`Type your feedback`}
-              readOnly={!userAllow(Permission.ManageSpaceContent)}
+              readOnly={!userAllow(SpaceActionPermission.MANAGE_SPACE_CONTENT)}
               value={feedback}
               onChange={(e) => setFeedback(e.currentTarget.value)}
               rows={7}
@@ -110,7 +110,7 @@ const GradeSection = ({ rubricFinalScore }: GradeSectionProps) => {
           )}
         </div>
       </Section>
-      {userAllow(Permission.ManageSpaceContent) && (
+      {userAllow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
         <Button
           customWidth={"100%"}
           style={{ marginTop: "15px" }}
@@ -122,7 +122,7 @@ const GradeSection = ({ rubricFinalScore }: GradeSectionProps) => {
           <Trans>Grade</Trans>
         </Button>
       )}
-      {userAllow(Permission.ManageSpaceContent) && (
+      {userAllow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
         <Button
           customWidth={"100%"}
           style={{ marginTop: "15px" }}

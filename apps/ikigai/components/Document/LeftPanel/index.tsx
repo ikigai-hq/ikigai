@@ -1,25 +1,27 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import shallow from "zustand/shallow";
-import {Divider, Tooltip, Typography} from "antd";
-import {SettingOutlined} from "@ant-design/icons";
-import {t, Trans} from "@lingui/macro";
-import styled, {useTheme} from "styled-components";
+import { Divider, Tooltip, Typography } from "antd";
+import { SettingOutlined } from "@ant-design/icons";
+import { t, Trans } from "@lingui/macro";
+import styled, { useTheme } from "styled-components";
 
 import useDocumentStore from "context/ZustandDocumentStore";
-import useUserPermission from "hook/UseUserPermission";
-import {GetDocuments_spaceGet_documents} from "graphql/types";
-import {Text, TextWeight} from "components/common/Text";
-import {Permission} from "util/permission";
+import {
+  GetDocuments_spaceGet_documents,
+  SpaceActionPermission,
+} from "graphql/types";
+import { Text, TextWeight } from "components/common/Text";
 import CreateContentButton from "./CreateContentButton";
-import {ListModule, TitlePanel} from "./common";
-import {RightBodyContainer} from "../common";
+import { ListModule, TitlePanel } from "./common";
+import { RightBodyContainer } from "../common";
 import LearningModuleDnd from "components/common/LearningModuleDnd";
 import LessonItemDnd from "./LessonItemDnd";
 import useSpaceStore from "context/ZustandSpaceStore";
-import {TextButtonWithHover} from "components/common/Button";
+import { TextButtonWithHover } from "components/common/Button";
 import useAuthUserStore from "context/ZustandAuthStore";
 import EditProfileModal from "../../UserCredential/EditProfileModal";
 import UserBasicInformation from "../../UserBasicInformation";
+import usePermission from "hook/UsePermission";
 
 interface Props {
   docs: GetDocuments_spaceGet_documents[];
@@ -27,7 +29,7 @@ interface Props {
 
 const LeftPanel: React.FC<Props> = ({ docs }) => {
   const theme = useTheme();
-  const allow = useUserPermission();
+  const allow = usePermission();
   const leftPanelHidden = useDocumentStore(
     (state) => state.leftPanelHidden,
     shallow,
@@ -35,8 +37,10 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
   const space = useSpaceStore((state) => state.space);
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
   const [openProfile, setOpenProfile] = useState(false);
-  const setSpaceSettingVisible = useSpaceStore(state => state.setSpaceSettingVisible);
-  
+  const setSpaceSettingVisible = useSpaceStore(
+    (state) => state.setSpaceSettingVisible,
+  );
+
   const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
   return (
     <RightBodyContainer $hide={leftPanelHidden} $leftPanel={true}>
@@ -57,22 +61,19 @@ const LeftPanel: React.FC<Props> = ({ docs }) => {
             >
               {space?.name}
             </Typography.Paragraph>
-            {
-              allow(Permission.ManageSpaceSetting) &&
-              (
-                <div>
-                  <TextButtonWithHover
-                    type="text"
-                    icon={<SettingOutlined />}
-                    onClick={() => setSpaceSettingVisible(true)}
-                  />
-                </div>
-              )
-            }
+            {allow(SpaceActionPermission.MANAGE_SPACE_SETTING) && (
+              <div>
+                <TextButtonWithHover
+                  type="text"
+                  icon={<SettingOutlined />}
+                  onClick={() => setSpaceSettingVisible(true)}
+                />
+              </div>
+            )}
           </SpaceInformation>
         </SpaceInfoContainer>
         <NoMarginDivider $margin={0} />
-        {allow(Permission.ManageSpaceContent) && (
+        {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
           <TitlePanel>
             <Text
               color={theme.colors.gray[6]}

@@ -21,14 +21,14 @@ import {
   GetRubrics_userGetMyRubrics as IRubric,
   RubricInput,
   RubricType,
+  SpaceActionPermission,
   UpsertRubric,
 } from "graphql/types";
 import { formatDate, FormatType, getNowAsSec } from "util/Time";
 import { REMOVE_RUBRIC, UPSERT_RUBRIC } from "graphql/mutation";
 import { useState } from "react";
 import EditRubric from "./EditRubric";
-import useUserPermission from "hook/UseUserPermission";
-import { Permission } from "util/permission";
+import usePermission from "hook/UsePermission";
 
 export type BandScoresDrawerProps = {
   visible: boolean;
@@ -43,7 +43,7 @@ const RubricManagement = ({
   visible,
   onClose,
 }: BandScoresDrawerProps) => {
-  const allow = useUserPermission();
+  const allow = usePermission();
   const theme = useTheme();
   const { data: rubricsData, refetch } = useQuery<GetRubrics>(GET_RUBRICS, {
     onError: handleError,
@@ -106,7 +106,7 @@ const RubricManagement = ({
             describes each criterion.
           </Trans>
         </Typography.Text>
-        {allow(Permission.ManageSpaceContent) && (
+        {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
           <Button
             type="primary"
             style={{
@@ -152,7 +152,7 @@ const RubricManagement = ({
                   </Tooltip>
                   <Tooltip
                     title={
-                      allow(Permission.ManageSpaceContent)
+                      allow(SpaceActionPermission.MANAGE_SPACE_CONTENT)
                         ? t`View and Edit`
                         : t`View`
                     }
@@ -161,7 +161,7 @@ const RubricManagement = ({
                     <TextButtonWithHover
                       type="text"
                       icon={
-                        allow(Permission.ManageSpaceContent) ? (
+                        allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) ? (
                           <EditOutlined />
                         ) : (
                           <EyeOutlined />
@@ -170,7 +170,7 @@ const RubricManagement = ({
                       onClick={() => setEditingRubric(rubric)}
                     />
                   </Tooltip>
-                  {allow(Permission.ManageSpaceContent) && (
+                  {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
                     <Popconfirm
                       title={t`Do you want to remove ${rubric.name}?`}
                       onConfirm={() => onRemoveRubric(rubric.id)}

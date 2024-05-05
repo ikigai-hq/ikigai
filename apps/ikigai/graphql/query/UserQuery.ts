@@ -41,3 +41,15 @@ export const USER_ME = gql`
     }
   }
 `;
+
+export const GET_DOCUMENT_PERMISSIONS = gql`
+  query GetDocumentPermissions($documentId: UUID!) {
+    documentMyPermissions(documentId: $documentId)
+  }
+`;
+
+export const GET_SPACE_PERMISSIONS = gql`
+  query GetSpacePermissions($spaceId: Int!) {
+    spaceMyPermissions(spaceId: $spaceId)
+  }
+`;

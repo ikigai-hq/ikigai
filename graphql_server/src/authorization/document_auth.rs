@@ -1,6 +1,6 @@
 use diesel::PgConnection;
 use oso::PolarClass;
-use std::fmt::{Display, Formatter};
+use strum_macros::{Display, EnumString};
 use uuid::Uuid;
 
 use crate::db::*;
@@ -51,24 +51,12 @@ impl DocumentAuth {
     }
 }
 
-#[derive(Enum, Debug, Copy, Clone, Eq, PartialEq)]
+#[derive(Enum, Debug, Copy, Clone, Eq, PartialEq, EnumString, Display)]
+#[strum(serialize_all = "snake_case")]
 pub enum DocumentActionPermission {
     ViewDocument,
     InteractiveWithTool,
     ViewAnswer,
     EditDocument,
     ManageDocument,
-}
-
-impl Display for DocumentActionPermission {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let permission = match self {
-            Self::ViewDocument => "view_document",
-            Self::InteractiveWithTool => "interactive_with_tool",
-            Self::ViewAnswer => "view_answer",
-            Self::EditDocument => "edit_document",
-            Self::ManageDocument => "manage_document",
-        };
-        write!(f, "{permission}")
-    }
 }

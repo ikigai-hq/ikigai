@@ -4,8 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { RecordBlockAttrs } from "./type";
 import { Dropdown, Space, Typography } from "antd";
 import { uploadRecordingFile } from "util/FileUtil";
-import { DocumentPermission } from "util/permission";
-import useDocumentPermission from "hook/UseDocumentPermission";
 import { Text, TextWeight } from "components/common/Text";
 import { RecordAudio, RecordVideo } from "components/common/IconSvg";
 import { RecordBlockContainer, RecordBox, TogglePlay } from "./recordStyles";
@@ -24,6 +22,8 @@ import Bowser from "bowser";
 import { useTheme } from "styled-components";
 import { t, Trans } from "@lingui/macro";
 import VideoPlayerWithFileId from "./RecordPlayer/VideoPlayerWithFileId";
+import usePermission from "hook/UsePermission";
+import { DocumentActionPermission } from "graphql/types";
 
 const RECORDING_SUPPORTED_TYPES = [
   {
@@ -67,7 +67,7 @@ const RecordBlock = ({
   const currentStream = useRef<MediaStream>();
   const recordedChunks = useRef<Blob[]>([]);
   const [uploading, setUploading] = useState(false);
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
   const [modal, setModal] = useState(null);
   const browser = Bowser.getParser(window.navigator.userAgent);
   const browserName = browser.getBrowserName();
@@ -148,7 +148,7 @@ const RecordBlock = ({
   };
 
   const startRecording = async () => {
-    if (!documentAllow(DocumentPermission.InteractiveWithTool)) return;
+    if (!allow(DocumentActionPermission.INTERACTIVE_WITH_TOOL)) return;
 
     if (!recorder.current) {
       if (!isGranted) {
@@ -274,7 +274,7 @@ const RecordBlock = ({
   }, [currentStream.current]);
 
   const items: MenuProps["items"] = [];
-  if (documentAllow(DocumentPermission.InteractiveWithTool)) {
+  if (allow(DocumentActionPermission.INTERACTIVE_WITH_TOOL)) {
     items.push({
       key: "1",
       onClick: startRecording,
@@ -285,7 +285,7 @@ const RecordBlock = ({
       ),
     });
   }
-  if (documentAllow(DocumentPermission.ManageDocument)) {
+  if (allow(DocumentActionPermission.MANAGE_DOCUMENT)) {
     items.push({
       key: "2",
       onClick: deleteRecord,
@@ -309,7 +309,7 @@ const RecordBlock = ({
         margin: "10px auto",
       }}
     >
-      {isEmpty && documentAllow(DocumentPermission.InteractiveWithTool) && (
+      {isEmpty && allow(DocumentActionPermission.INTERACTIVE_WITH_TOOL) && (
         <>
           {recordMode && stream ? (
             recordType === "audio" ? (

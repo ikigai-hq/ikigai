@@ -12,8 +12,6 @@ import {
   ZoomOutOutlined,
 } from "@ant-design/icons";
 import { FileAttrs, FileNodeAttrs } from "./type";
-import useDocumentPermission from "hook/UseDocumentPermission";
-import { DocumentPermission } from "util/permission";
 import { isAudio, isFileSupport, isImage, isPdf } from "util/FileType";
 import { t, Trans } from "@lingui/macro";
 import {
@@ -24,6 +22,8 @@ import { BlockDropdownMenu } from "../../BlockComponents";
 import { Text } from "../../../Text";
 import { DEFAULT_FILE_ID } from "./utils";
 import { ConfirmPopup } from "util/ConfirmPopup";
+import usePermission from "hook/UsePermission";
+import { DocumentActionPermission } from "graphql/types";
 
 interface FileBlockHeaderProps {
   name: string;
@@ -55,7 +55,7 @@ export const FileBlockHeader: React.FC<FileBlockHeaderProps> = (props) => {
     handleZoom,
     audioSubmissionReplay,
   } = props;
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
   const [modal, contextHolder] = Modal.useModal();
 
   const pressDown = (e: KeyboardEvent) => {
@@ -108,7 +108,7 @@ export const FileBlockHeader: React.FC<FileBlockHeaderProps> = (props) => {
   };
 
   const canDownload =
-    documentAllow(DocumentPermission.EditDocument) || selectedFile.downloadable;
+    allow(DocumentActionPermission.EDIT_DOCUMENT) || selectedFile.downloadable;
 
   return (
     <FileHeaderContainer>
@@ -166,7 +166,7 @@ export const FileBlockHeader: React.FC<FileBlockHeaderProps> = (props) => {
           />
         </Tooltip>
       )}
-      {documentAllow(DocumentPermission.EditDocument) && (
+      {allow(DocumentActionPermission.EDIT_DOCUMENT) && (
         <Tooltip title={<Trans>Reset</Trans>}>
           <Button
             icon={<RetweetOutlined />}
@@ -175,7 +175,7 @@ export const FileBlockHeader: React.FC<FileBlockHeaderProps> = (props) => {
           />
         </Tooltip>
       )}
-      {documentAllow(DocumentPermission.EditDocument) && (
+      {allow(DocumentActionPermission.EDIT_DOCUMENT) && (
         <BlockDropdownMenu
           handleSelect={handleSelectBlock}
           handleDelete={handleDelete}

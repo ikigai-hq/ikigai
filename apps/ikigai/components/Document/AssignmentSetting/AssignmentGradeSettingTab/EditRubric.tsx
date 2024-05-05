@@ -1,8 +1,10 @@
-import { GetRubrics_userGetMyRubrics as IRubric } from "graphql/types";
-import { Drawer } from "components/common/Drawer";
 import Rubric from "./Rubric";
-import useUserPermission from "hook/UseUserPermission";
-import { Permission } from "util/permission";
+import usePermission from "hook/UsePermission";
+import { Drawer } from "components/common/Drawer";
+import {
+  GetRubrics_userGetMyRubrics as IRubric,
+  SpaceActionPermission,
+} from "graphql/types";
 
 export type EditRubricProps = {
   visible: boolean;
@@ -11,8 +13,8 @@ export type EditRubricProps = {
 };
 
 const EditRubric = ({ visible, onClose, rubric }: EditRubricProps) => {
-  const allow = useUserPermission();
-  const canEditRubric = allow(Permission.ManageSpaceSetting);
+  const allow = usePermission();
+  const canEditRubric = allow(SpaceActionPermission.MANAGE_SPACE_SETTING);
   return (
     <Drawer open={visible} onClose={onClose} width="90vw">
       <Rubric rubric={rubric} afterSave={onClose} readOnly={!canEditRubric} />

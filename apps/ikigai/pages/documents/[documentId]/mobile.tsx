@@ -6,7 +6,7 @@ import {
   ListQuestion,
   QuestionNumber,
 } from "components/Document/RightPanel/SubmissionPanel";
-import { DocumentType, getDocumentType } from "util/permission";
+import { DocumentType, getDocumentType } from "../../../util/DocumentHelper";
 import { Container } from "components/Document/common";
 import ServerDocumentFetchError from "components/Document/ServerDocumentFetchError";
 import useQuizStore from "context/ZustandQuizStore";

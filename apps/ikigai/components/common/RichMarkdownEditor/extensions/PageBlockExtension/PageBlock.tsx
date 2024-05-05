@@ -6,14 +6,15 @@ import {
   DOCUMENT_CLONE_PAGE_BLOCK,
 } from "graphql/mutation/DocumentMutation";
 import {
+  DocumentActionPermission,
   DocumentAddPageBlock,
-  DocumentAddPageBlockVariables,
-  PageViewMode,
   DocumentAddPageBlockDocument,
   DocumentAddPageBlockDocumentVariables,
+  DocumentAddPageBlockVariables,
   documentClonePageBlock,
   documentClonePageBlockVariables,
   GetPageBlocks_documentGet_pageBlocks_nestedDocuments as DocumentPageBlock,
+  PageViewMode,
 } from "graphql/types";
 import { v4 } from "uuid";
 import React, { useEffect, useMemo, useState } from "react";
@@ -25,11 +26,9 @@ import { InputWrapper } from "../../BlockComponents";
 import { getNowAsSec } from "util/Time";
 import useDocumentStore from "context/ZustandDocumentStore";
 import { DEFAULT_DOCUMENT_TITLE } from "components/Document/common";
-import { DocumentPermission } from "util/permission";
-import useDocumentPermission from "hook/UseDocumentPermission";
 import { Divider, Dropdown, MenuProps, Modal, Typography } from "antd";
 import { EllipsisOutlined } from "@ant-design/icons";
-import { Trans, t } from "@lingui/macro";
+import { t, Trans } from "@lingui/macro";
 import { ConfirmPopup } from "util/ConfirmPopup";
 import { debounce } from "lodash";
 import useQuizStore from "context/ZustandQuizStore";
@@ -48,6 +47,7 @@ import FillInBlankNode from "../QuizExtension/FillInBlank/FillInBlankNode";
 import { CommonEmbedNode } from "../CommonEmbedExtension/CommonEmbedNode";
 import FeedbackTextNode from "../FeedbackText/FeedbackTextNode";
 import { PageBlockNode } from "./PageBlockNode";
+import usePermission from "hook/UsePermission";
 
 export type PageBlock = {
   attrs: PageBlockAttrs;
@@ -64,7 +64,7 @@ export const PageBlock: React.FC<PageBlock> = ({
   handleDelete,
   handleSelectAndCopy,
 }) => {
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
   const [isShowMoreActionBtn, setIsShowMoreActionBtn] = useState(false);
   const [modal, contextHolder] = Modal.useModal();
 
@@ -312,15 +312,15 @@ export const PageBlock: React.FC<PageBlock> = ({
   return (
     <PageBlockContainer
       onMouseEnter={() => {
-        documentAllow(DocumentPermission.EditDocument) &&
+        allow(DocumentActionPermission.EDIT_DOCUMENT) &&
           setIsShowMoreActionBtn(true);
       }}
       onMouseLeave={() => {
-        documentAllow(DocumentPermission.EditDocument) &&
+        allow(DocumentActionPermission.EDIT_DOCUMENT) &&
           setIsShowMoreActionBtn(false);
       }}
     >
-      {documentAllow(DocumentPermission.ManageDocument) && (
+      {allow(DocumentActionPermission.EDIT_DOCUMENT) && (
         <Dropdown arrow={false} trigger={["click"]} menu={{ items }}>
           <MoreAction $show={isShowMoreActionBtn}>
             <EllipsisOutlined />
@@ -376,7 +376,7 @@ export const PageBlock: React.FC<PageBlock> = ({
           style={{ margin: "4px 0", fontWeight: 600 }}
           autoSize
           bordered={false}
-          disabled={!documentAllow(DocumentPermission.EditDocument)}
+          disabled={!allow(DocumentActionPermission.MANAGE_DOCUMENT)}
           defaultValue={
             pageBlocks.find((pb) => pb.id === attrs.pageBlockId)?.title
           }

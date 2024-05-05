@@ -28,7 +28,7 @@ import {
   ADD_DOCUMENT_STANDALONE,
   DOCUMENT_UPDATE_PUBLIC,
 } from "graphql/mutation/DocumentMutation";
-import { DocumentType, getDocumentType } from "util/permission";
+import { DocumentType, getDocumentType } from "../util/DocumentHelper";
 import useAuthUserStore from "./ZustandAuthStore";
 import { DEFAULT_LEFT_SIDE_WIDTH } from "../util";
 import { debounce } from "lodash";
@@ -87,7 +87,6 @@ export const getDocumentConfigDefault = (doc: IDocument) => {
     showQuizReview: false,
   };
 
-  const userInfo = useAuthUserStore.getState().currentUser;
   const isStudent = useAuthUserStore.getState().checkHelper.isStudent;
   const documentType = getDocumentType(doc);
   if (documentType === DocumentType.Submission) {

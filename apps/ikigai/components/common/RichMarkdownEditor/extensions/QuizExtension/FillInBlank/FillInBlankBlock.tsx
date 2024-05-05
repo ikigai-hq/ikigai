@@ -4,15 +4,12 @@ import { SettingOutlined } from "@ant-design/icons";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { cloneDeep, debounce } from "lodash";
-
-import { TextButton } from "components/common/Button";
-import useDocumentPermission from "hook/UseDocumentPermission";
-import { DocumentPermission } from "util/permission";
 import {
   AnswerQuiz,
   CloneQuiz,
   CreateQuiz,
   CreateQuizStructure,
+  DocumentActionPermission,
   QuizType,
 } from "graphql/types";
 import FillInBlankSetting from "./FillInBlankSetting";
@@ -31,6 +28,7 @@ import useDocumentStore from "context/ZustandDocumentStore";
 import { v4 } from "uuid";
 import FillInBlankReview from "./FillInBlankReview";
 import { useQuizzesInOrder } from "hook/UseQuizInOrder";
+import usePermission from "hook/UsePermission";
 
 export type FillInBlankProps = {
   documentId: string;
@@ -62,7 +60,7 @@ const FillInBlankBlock = ({
   const quizzes = useQuizStore((state) => state.quizzes);
 
   const config = useDocumentStore((state) => state.documentConfig);
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
 
   const orderingQuizzes = useQuizzesInOrder();
 
@@ -223,8 +221,8 @@ const FillInBlankBlock = ({
         </QuizTitle>
         <InputFillInBlank
           $hasValue={!!inputFillInBlank}
-          contentEditable={documentAllow(
-            DocumentPermission.InteractiveWithTool,
+          contentEditable={allow(
+            DocumentActionPermission.INTERACTIVE_WITH_TOOL,
           )}
           onInput={(e) => onChangeAnswer(e.currentTarget.innerText)}
           suppressContentEditableWarning={true}
@@ -232,7 +230,7 @@ const FillInBlankBlock = ({
         >
           {fillInBlankAnswer.current.replace(/(?:\r\n|\r|\n)/g, " ")}
         </InputFillInBlank>
-        {documentAllow(DocumentPermission.ManageDocument) && (
+        {allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
           <span style={{ display: "inline-grid" }}>
             <Button
               icon={<SettingOutlined />}

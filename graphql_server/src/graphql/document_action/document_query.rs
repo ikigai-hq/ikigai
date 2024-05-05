@@ -11,6 +11,14 @@ pub struct DocumentQuery;
 
 #[Object]
 impl DocumentQuery {
+    async fn document_my_permissions(
+        &self,
+        ctx: &Context<'_>,
+        document_id: Uuid,
+    ) -> Result<Vec<DocumentActionPermission>> {
+        get_document_allowed_permissions(ctx, document_id).await
+    }
+
     async fn document_get(&self, ctx: &Context<'_>, document_id: Uuid) -> Result<Document> {
         document_quick_authorize(ctx, document_id, DocumentActionPermission::ViewDocument).await?;
 

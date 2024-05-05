@@ -1,5 +1,11 @@
 import { t, Trans } from "@lingui/macro";
 import { Space } from "antd";
+import { useRouter } from "next/router";
+import React from "react";
+import styled, { useTheme } from "styled-components";
+import toast from "react-hot-toast";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+
 import { Button } from "components/common/Button";
 import {
   CopyIcon,
@@ -11,17 +17,12 @@ import { Text, TextWeight } from "components/common/Text";
 import useDocumentStore, {
   EditorConfigType,
 } from "context/ZustandDocumentStore";
-import React from "react";
-import styled, { useTheme } from "styled-components";
-import toast from "react-hot-toast";
 import { quickConfirmModal, useModal } from "hook/UseModal";
-import { ExclamationCircleFilled } from "@ant-design/icons";
-import useSpaceStore from "../../context/ZustandSpaceStore";
-import { useRouter } from "next/router";
+import useSpaceStore from "context/ZustandSpaceStore";
 import { formatDocumentRoute } from "config/Routes";
 import { formatDate, FormatType } from "util/Time";
-import { DocumentPermission } from "util/permission";
-import useDocumentPermission from "hook/UseDocumentPermission";
+import usePermission from "hook/UsePermission";
+import { DocumentActionPermission } from "graphql/types";
 
 const DocumentMoreSetting = () => {
   const theme = useTheme();
@@ -29,7 +30,7 @@ const DocumentMoreSetting = () => {
   const router = useRouter();
 
   const activeDocument = useDocumentStore((state) => state.masterDocument);
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
 
   const editorConfig = {
     size: activeDocument.editorConfig.size || EditorConfigType.DEFAULT,
@@ -113,7 +114,7 @@ const DocumentMoreSetting = () => {
       .update(
         activeDocument.id,
         { editorConfig: { ...activeDocument.editorConfig, ...editorConfig } },
-        !documentAllow(DocumentPermission.ManageDocument),
+        !allow(DocumentActionPermission.MANAGE_DOCUMENT),
       );
   };
 
@@ -223,7 +224,7 @@ const DocumentMoreSetting = () => {
         </GroupButton>
       </SettingContainer>
       <div>
-        {documentAllow(DocumentPermission.ManageDocument) && (
+        {allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
           <>
             <SettingContainer $gap={0} $padding="8px 0">
               <SettingButton

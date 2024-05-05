@@ -8,18 +8,18 @@ import {
   GetSubmissionsOfAssignment,
   GetSubmissionsOfAssignment_documentGet_assignment_submissions as SubmissionAssignment,
   Role,
+  SpaceActionPermission,
 } from "graphql/types";
 import { StyledLeftMenu } from "../common";
 import AvatarWithName from "../../AvatarWithName";
 import useDocumentStore from "context/ZustandDocumentStore";
 import { DownOutlined } from "@ant-design/icons";
-import useUserPermission from "hook/UseUserPermission";
-import { Permission } from "util/permission";
 import { useQuery } from "@apollo/client";
 import { GET_SUBMISSIONS_OF_ASSIGNMENT } from "graphql/query/AssignmentQuery";
 import { AssignmentList } from "../AssignmentStudentList";
 import { useGetSpaceMembers } from "context/ZustandSpaceMembeStore";
 import useSpaceStore from "context/ZustandSpaceStore";
+import usePermission from "hook/UsePermission";
 
 export type DocumentDetailProps = {
   document: IDocument;
@@ -27,7 +27,7 @@ export type DocumentDetailProps = {
 
 const ReviewSubmissionDocumentHeader = ({ document }: DocumentDetailProps) => {
   const { token } = theme.useToken();
-  const allow = useUserPermission();
+  const allow = usePermission();
   const setIsClose = useDocumentStore((state) => state.setIsClose);
   const submission = document?.submission;
   const user = submission?.user;
@@ -65,7 +65,7 @@ const ReviewSubmissionDocumentHeader = ({ document }: DocumentDetailProps) => {
     <>
       <div style={{ flex: 1 }} />
       <StyledLeftMenu>
-        {allow(Permission.ManageSpaceContent) && (
+        {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
           <Dropdown
             trigger={["click"]}
             placement="bottomLeft"
@@ -94,7 +94,7 @@ const ReviewSubmissionDocumentHeader = ({ document }: DocumentDetailProps) => {
             </ReviewContainer>
           </Dropdown>
         )}
-        {!allow(Permission.ManageSpaceContent) && (
+        {!allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
           <ReviewContainer>
             <AvatarWithName
               name={user?.name}

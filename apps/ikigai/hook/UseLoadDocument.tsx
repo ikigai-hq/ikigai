@@ -35,6 +35,12 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
   const updateMapAvailableDocument = useDocumentStore(
     (state) => state.updateMapAvailableDocument,
   );
+  const fetchDocumentPermissions = useAuthUserStore(
+    (state) => state.fetchDocumentPermissions,
+  );
+  const fetchSpacePermissions = useAuthUserStore(
+    (state) => state.fetchSpacePermissions,
+  );
 
   const spaceId = useSpaceStore((state) => state.spaceId);
 
@@ -76,6 +82,7 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
     const masterDocument = await fetchAndSetDocument(documentId);
     const spaceId = getSpaceIdFromDocument(masterDocument);
     setMasterDocument(masterDocument);
+    fetchSpacePermissions(spaceId);
     useSpaceStore.setState({ spaceId });
 
     // set initial current page block id.
@@ -176,6 +183,7 @@ export const useLoadDocument = (documentId?: string): ILoadDocument => {
       useDocumentStore.setState({ assignedUsers: [] });
 
       // Load new data
+      fetchDocumentPermissions(documentId);
       loadDocumentMaterial();
       updatePageBlockMode(false);
       useDocumentStore.setState({ masterDocumentId: documentId });

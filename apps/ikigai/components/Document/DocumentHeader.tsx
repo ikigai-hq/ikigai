@@ -13,35 +13,34 @@ import styled, { useTheme } from "styled-components";
 import { t, Trans } from "@lingui/macro";
 
 import { Text, TextWeight } from "../common/Text";
-import {
-  DocumentPermission,
-  DocumentType,
-  getDocumentType,
-} from "../../util/permission";
+import { DocumentType, getDocumentType } from "../../util/DocumentHelper";
 import { DEFAULT_DOCUMENT_TITLE, DocumentHeaderWrapper } from "./common";
 import useDocumentStore, {
   PanelContentType,
 } from "context/ZustandDocumentStore";
 import DocumentSharing from "./DocumentSharing";
 import { ButtonWithTooltip } from "../common/Button";
-import useDocumentPermission from "hook/UseDocumentPermission";
 import { isMobileView } from "hook/UseSupportMobile";
 import { formatDocumentRoute } from "config/Routes";
 import { getFullPathFromNode } from "components/common/SortableTree/utilities";
-import useSpaceStore from "../../context/ZustandSpaceStore";
+import useSpaceStore from "context/ZustandSpaceStore";
 import {
-  CollapsedLeftIcon,
   ArrowDocument,
+  CollapsedLeftIcon,
   MoreDocument,
   SettingIcon,
 } from "components/common/IconSvg";
 import { MenuProps } from "antd/lib";
-import { GetDocuments_spaceGet_documents as IDocumentItemList } from "graphql/types";
+import {
+  DocumentActionPermission,
+  GetDocuments_spaceGet_documents as IDocumentItemList,
+} from "graphql/types";
 import DocumentTypeIcon from "./DocumentTypeIcon";
 import useHighlightStore from "context/ZustandHighlightStore";
 import useSubmissionStatus from "hook/UseSubmissionStatus";
 import { isArray } from "lodash";
 import DocumentMoreSetting from "./DocumentMoreSetting";
+import usePermission from "../../hook/UsePermission";
 
 export type DocumentHeaderProps = {
   children?: React.ReactNode;
@@ -51,7 +50,7 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({ children }) => {
   const router = useRouter();
   const theme = useTheme();
   const { back, replace } = useRouter();
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
   const masterDocument = useDocumentStore((state) => state.masterDocument);
   const changeRightPanel = useDocumentStore((state) => state.changeRightPanel);
   const documentConfig = useDocumentStore((state) => state.documentConfig);
@@ -254,7 +253,7 @@ const DocumentHeader: React.FC<DocumentHeaderProps> = ({ children }) => {
             />
           </>
         </Popover>
-        {documentAllow(DocumentPermission.ManageDocument) && (
+        {allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
           <Popover
             content={<DocumentSharing />}
             placement="bottomRight"

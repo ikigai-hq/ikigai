@@ -3,13 +3,23 @@ use async_graphql::*;
 
 use crate::db::*;
 use crate::error::IkigaiErrorExt;
-use crate::helper::{get_conn_from_ctx, get_user_auth_from_ctx, space_quick_authorize};
+use crate::helper::{
+    get_conn_from_ctx, get_space_allowed_permissions, get_user_auth_from_ctx, space_quick_authorize,
+};
 
 #[derive(Default)]
 pub struct SpaceQuery;
 
 #[Object]
 impl SpaceQuery {
+    async fn space_my_permissions(
+        &self,
+        ctx: &Context<'_>,
+        space_id: i32,
+    ) -> Result<Vec<SpaceActionPermission>> {
+        get_space_allowed_permissions(ctx, space_id).await
+    }
+
     async fn space_get(&self, ctx: &Context<'_>, space_id: i32) -> Result<Space> {
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ViewSpaceContent).await?;
 

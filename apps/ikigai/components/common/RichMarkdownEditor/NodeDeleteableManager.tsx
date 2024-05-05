@@ -4,7 +4,8 @@ import { QUIZ_BLOCK_NAME } from "./extensions/QuizExtension/QuizNode";
 import { FILL_IN_BLANK_NAME } from "./extensions/QuizExtension/FillInBlank/FillInBlankNode";
 import useDocumentStore from "context/ZustandDocumentStore";
 import useAuthUserStore from "context/ZustandAuthStore";
-import { documentAllow, DocumentPermission } from "util/permission";
+import { allow } from "hook/UsePermission";
+import { DocumentActionPermission } from "graphql/types";
 
 const QuizBlockName = [QUIZ_BLOCK_NAME, FILL_IN_BLANK_NAME];
 
@@ -22,10 +23,7 @@ export default class QuizDeletableManager extends Extension {
           const user = useAuthUserStore.getState().currentUser;
           // If we don't have user and document. Reject transaction
           if (!activeDocument || !user) return false;
-          if (
-            documentAllow(activeDocument, user, DocumentPermission.EditDocument)
-          )
-            return true;
+          if (allow(DocumentActionPermission.EDIT_DOCUMENT)) return true;
 
           let result = true;
           const replaceSteps: number[] = [];

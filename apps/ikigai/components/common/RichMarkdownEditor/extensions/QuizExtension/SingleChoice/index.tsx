@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Radio, Space } from "antd";
 
 import { QuizAttrs, ViewMode } from "../type";
-import useDocumentPermission from "hook/UseDocumentPermission";
-import { DocumentPermission } from "util/permission";
 import SingleChoiceReview from "./SingleChoiceReview";
 import QuizReport from "../QuizReport";
 import useDocumentStore from "context/ZustandDocumentStore";
 import useQuizStore from "context/ZustandQuizStore";
 import { Metadata } from "util/BlockUtil";
+import usePermission from "hook/UsePermission";
+import { DocumentActionPermission } from "graphql/types";
 
 export type SingleChoiceOption = {
   viewMode: ViewMode;
@@ -23,7 +23,7 @@ const SingleChoice = ({
   answer,
   viewMode,
 }: SingleChoiceOption) => {
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
   const config = useDocumentStore((state) => state.documentConfig);
   const mapQuizBlockData = useQuizStore((state) => state.mapQuizBlockData);
   const quizzes = useQuizStore((state) => state.quizzes);
@@ -61,7 +61,7 @@ const SingleChoice = ({
           key={attrs.quizId}
           onChange={(e) => onChangeAnswer(e.target.value)}
           value={answerIndex}
-          disabled={!documentAllow(DocumentPermission.InteractiveWithTool)}
+          disabled={!allow(DocumentActionPermission.INTERACTIVE_WITH_TOOL)}
           name={attrs.quizId}
         >
           <Space direction="vertical">

@@ -1,6 +1,6 @@
 import useAuthUserStore from "context/ZustandAuthStore";
 import { GetDocumentDetail_documentGet as IDocument } from "graphql/types";
-import { DocumentType, getDocumentType } from "util/permission";
+import { DocumentType, getDocumentType } from "../util/DocumentHelper";
 
 const useSubmissionStatus = (
   document: IDocument,

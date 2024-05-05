@@ -2027,6 +2027,40 @@ export interface UserMe {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetDocumentPermissions
+// ====================================================
+
+export interface GetDocumentPermissions {
+  documentMyPermissions: DocumentActionPermission[];
+}
+
+export interface GetDocumentPermissionsVariables {
+  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetSpacePermissions
+// ====================================================
+
+export interface GetSpacePermissions {
+  spaceMyPermissions: SpaceActionPermission[];
+}
+
+export interface GetSpacePermissionsVariables {
+  spaceId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL subscription operation: SubmissionSubscribe
 // ====================================================
 
@@ -2051,6 +2085,14 @@ export interface SubmissionSubscribeVariables {
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
+
+export enum DocumentActionPermission {
+  EDIT_DOCUMENT = "EDIT_DOCUMENT",
+  INTERACTIVE_WITH_TOOL = "INTERACTIVE_WITH_TOOL",
+  MANAGE_DOCUMENT = "MANAGE_DOCUMENT",
+  VIEW_ANSWER = "VIEW_ANSWER",
+  VIEW_DOCUMENT = "VIEW_DOCUMENT",
+}
 
 export enum DocumentType {
   ASSIGNMENT = "ASSIGNMENT",
@@ -2093,6 +2135,13 @@ export enum Role {
 export enum RubricType {
   POINT_BASED = "POINT_BASED",
   POINT_RANGE = "POINT_RANGE",
+}
+
+export enum SpaceActionPermission {
+  MANAGE_SPACE_CONTENT = "MANAGE_SPACE_CONTENT",
+  MANAGE_SPACE_MEMBER = "MANAGE_SPACE_MEMBER",
+  MANAGE_SPACE_SETTING = "MANAGE_SPACE_SETTING",
+  VIEW_SPACE_CONTENT = "VIEW_SPACE_CONTENT",
 }
 
 export enum SubmissionEventType {

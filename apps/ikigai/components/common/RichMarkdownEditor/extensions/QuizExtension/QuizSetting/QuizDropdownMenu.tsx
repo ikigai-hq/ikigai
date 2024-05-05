@@ -1,23 +1,22 @@
 import {
   CreateQuizStructure,
-  QuizType,
-  GetDocumentDetail_documentGet_quizzes as IDocumentQuiz,
   CreateQuizStructure_quizCreateStructure as ICreateQuizStructure,
+  DocumentActionPermission,
+  GetDocumentDetail_documentGet_quizzes as IDocumentQuiz,
+  QuizType,
 } from "graphql/types";
 import { Dropdown, MenuProps, Modal, Typography } from "antd";
+import { ReactNode } from "react";
+import { t, Trans } from "@lingui/macro";
+import { useMutation } from "@apollo/client";
 
 import { ConfirmPopup } from "util/ConfirmPopup";
-import useDocumentPermission from "hook/UseDocumentPermission";
-import { DocumentPermission } from "util/permission";
-import { useMutation } from "@apollo/client";
 import { CREATE_QUIZ_STRUCTURE } from "graphql/mutation";
 import { handleError } from "graphql/ApolloClient";
-
 import { QuizAttrs } from "../type";
 import QuizSetting from "./index";
-import { ReactNode } from "react";
-import { Trans, t } from "@lingui/macro";
 import ModalComponent from "components/common/Modal";
+import usePermission from "hook/UsePermission";
 
 export type QuizDropdownMenu = {
   documentId: string;
@@ -61,7 +60,7 @@ const QuizDropdownMenu: React.FC<QuizDropdownMenu> = (props) => {
     },
   );
 
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
 
   const save = async (
     quizType: QuizType,
@@ -70,7 +69,7 @@ const QuizDropdownMenu: React.FC<QuizDropdownMenu> = (props) => {
     structureAnswer: any,
     structureExplanation: string,
   ) => {
-    if (!documentAllow(DocumentPermission.ManageDocument)) return;
+    if (!allow(DocumentActionPermission.MANAGE_DOCUMENT)) return;
 
     if (!documentId) return;
 

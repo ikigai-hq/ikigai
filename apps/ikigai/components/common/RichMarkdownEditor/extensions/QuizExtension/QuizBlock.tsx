@@ -1,4 +1,4 @@
-import { Empty, Tooltip, Segmented, Space } from "antd";
+import { Empty, Segmented, Space, Tooltip } from "antd";
 import React, {
   useCallback,
   useEffect,
@@ -28,14 +28,13 @@ import {
   CloneQuiz,
   CreateQuiz,
   CreateQuizStructure,
-  QuizType,
+  DocumentActionPermission,
   GetDocumentDetail_documentGet_quizzes as IDocumentQuiz,
+  QuizType,
 } from "graphql/types";
 import { debounce } from "lodash";
 import { EditorView } from "prosemirror-view";
 import { copyBlock } from "@ikigai/editor/dist/util/copyBlock";
-import useDocumentPermission from "hook/UseDocumentPermission";
-import { DocumentPermission } from "util/permission";
 import { Trans } from "@lingui/macro";
 
 import Loading from "components/Loading";
@@ -53,6 +52,7 @@ import {
 import useQuizStore from "context/ZustandQuizStore";
 import { Metadata } from "util/BlockUtil";
 import { useQuizzesInOrder } from "hook/UseQuizInOrder";
+import usePermission from "hook/UsePermission";
 
 export type QuizBlockProps = {
   documentId: string;
@@ -89,7 +89,7 @@ const QuizBlock = ({
   const updateQuizStore = useQuizStore((state) => state.updateStore);
   const updateQuizzes = useQuizStore((state) => state.updateQuizzes);
 
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
   const orderingQuizzes = useQuizzesInOrder();
 
   const [createQuizStructure] = useMutation<CreateQuizStructure>(
@@ -310,7 +310,7 @@ const QuizBlock = ({
       <BlockHeaderWrapper>
         <QuizTitle>{`Q${quizIndex + 1}. ${title}`}</QuizTitle>
         <Space size={0}>
-          {documentAllow(DocumentPermission.ManageDocument) && (
+          {allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
             <Segmented
               options={[
                 {
@@ -328,7 +328,7 @@ const QuizBlock = ({
           )}
           {!isZeroUUIDString(attrs.quizId) &&
             currentQuiz &&
-            documentAllow(DocumentPermission.ManageDocument) && (
+            allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
               <Tooltip title={<Trans>Quiz Settings</Trans>}>
                 <TextButtonBlock
                   margin="0"
@@ -340,7 +340,7 @@ const QuizBlock = ({
             )}
           {!isZeroUUIDString(attrs.quizId) &&
             currentQuiz &&
-            documentAllow(DocumentPermission.ManageDocument) && (
+            allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
               <QuizDropdownMenu
                 documentId={documentId}
                 attrs={attrs}

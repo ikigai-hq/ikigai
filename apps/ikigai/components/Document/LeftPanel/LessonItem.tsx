@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import styled, { useTheme } from "styled-components";
 import {
   ExclamationCircleFilled,
@@ -9,25 +9,28 @@ import { Typography } from "antd";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { t } from "@lingui/macro";
 
-import useUserPermission from "hook/UseUserPermission";
-import { Permission } from "util/permission";
 import { LearningItemType } from "components/common/LearningModuleDnd/types";
 import { TextButtonWithHover } from "components/common/Button";
 import { formatDocumentRoute } from "config/Routes";
-import useSpaceStore from "../../../context/ZustandSpaceStore";
-import { ActionMenuDropdown, IMenuItem } from "../../common/ActionMenuDropdown";
+import useSpaceStore from "context/ZustandSpaceStore";
+import {
+  ActionMenuDropdown,
+  IMenuItem,
+} from "components/common/ActionMenuDropdown";
 import CreateContentButton from "./CreateContentButton";
 import useDocumentStore from "context/ZustandDocumentStore";
 import DocumentTypeIcon from "../DocumentTypeIcon";
 import { DEFAULT_DOCUMENT_TITLE } from "../common";
-import { t } from "@lingui/macro";
 import { ArrowDocument } from "components/common/IconSvg";
 import { useModal } from "hook/UseModal";
 import usePageBlockStore from "context/ZustandPageBlockStore";
 import useQuizStore from "context/ZustandQuizStore";
 import useHighlightStore from "context/ZustandHighlightStore";
 import useEditorActionStore from "context/ZustandEditorAction";
+import usePermission from "hook/UsePermission";
+import { SpaceActionPermission } from "graphql/types";
 
 export type DocumentItemProps = {
   item: LearningItemType;
@@ -47,12 +50,9 @@ const LessonItem = ({
   const ref = useRef<HTMLDivElement>(null);
   const theme = useTheme();
   const router = useRouter();
-  const allow = useUserPermission();
+  const allow = usePermission();
   const { modal } = useModal();
 
-  const [selectedMoveDocumentId, setSelectedMoveDocumentId] = useState<
-    string | undefined
-  >();
   const activeDocument = useDocumentStore((state) => state.masterDocument);
   const changeRightPanel = useDocumentStore((state) => state.changeRightPanel);
   const { duplicateDocument, deleteDocument, docs } = useSpaceStore((state) => {
@@ -110,7 +110,7 @@ const LessonItem = ({
   const menuList: IMenuItem<LearningItemType>[] = [
     {
       title: t`Duplicate`,
-      hide: !allow(Permission.ManageSpaceContent),
+      hide: !allow(SpaceActionPermission.MANAGE_SPACE_CONTENT),
       callback: (item: LearningItemType) => {
         onDuplicate(item);
       },
@@ -118,7 +118,7 @@ const LessonItem = ({
     {
       title: t`Delete`,
       color: theme.colors.red[4],
-      hide: !allow(Permission.ManageSpaceContent),
+      hide: !allow(SpaceActionPermission.MANAGE_SPACE_CONTENT),
       callback: (item: LearningItemType) => {
         modal.confirm({
           title: t`Are you sure you want to delete this ?`,
@@ -171,7 +171,7 @@ const LessonItem = ({
               </StyledText>
             )}
           </div>
-          {allow(Permission.ManageSpaceContent) && !dragging && (
+          {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && !dragging && (
             <ButtonGroup>
               <ActionMenuDropdown
                 item={item}

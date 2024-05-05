@@ -1,25 +1,28 @@
 import styled from "styled-components";
 import Head from "next/head";
 import React, { useState } from "react";
+import { Skeleton } from "antd";
+import { useRouter } from "next/router";
+
 import CustomRichMarkdownEditor from "../common/RichMarkdownEditor/RichMarkdownEditor";
-import useDocumentPermission from "hook/UseDocumentPermission";
 import useDocumentStore from "context/ZustandDocumentStore";
-import { GetDocumentDetail_documentGet as IDocument } from "graphql/types";
+import {
+  DocumentActionPermission,
+  GetDocumentDetail_documentGet as IDocument,
+} from "graphql/types";
+import { DEFAULT_LEFT_SIDE_WIDTH, DEFAULT_RIGHT_SIDE_WIDTH } from "../../util";
+import useSupportMobile from "hook/UseSupportMobile";
+import useQuizStore from "context/ZustandQuizStore";
+import usePageBlockStore from "context/ZustandPageBlockStore";
+import DocumentSetting from "./DocumentSetting";
+import useHighlightStore from "context/ZustandHighlightStore";
+import usePermission from "hook/UsePermission";
 import {
   DividerDocument,
   DocumentBody,
   EDITOR_ID,
   ExportDocument,
 } from "./common";
-import { DocumentPermission } from "util/permission";
-import { useRouter } from "next/router";
-import { DEFAULT_RIGHT_SIDE_WIDTH, DEFAULT_LEFT_SIDE_WIDTH } from "../../util";
-import useSupportMobile from "hook/UseSupportMobile";
-import useQuizStore from "context/ZustandQuizStore";
-import usePageBlockStore from "context/ZustandPageBlockStore";
-import DocumentSetting from "./DocumentSetting";
-import useHighlightStore from "context/ZustandHighlightStore";
-import { Skeleton } from "antd";
 
 export type EditorBodyProps = {
   document: IDocument;
@@ -40,7 +43,7 @@ const Editor = ({
   const currentDocIdQuery = router.query.documentId as string;
   const documentId = document.id;
   const update = useDocumentStore((state) => state.update);
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
   const syncPageBlocks = usePageBlockStore((state) => state.syncPageBlocks);
   const syncQuizzes = useQuizStore((state) => state.syncQuizzes);
   const leftPanelHidden = useDocumentStore((state) => state.leftPanelHidden);
@@ -55,7 +58,7 @@ const Editor = ({
   const [isFocusAtStart, setIsFocusAtStart] = useState(false);
 
   const isReadOnlyFinal =
-    !documentAllow(DocumentPermission.EditDocument) || isReadOnly;
+    !allow(DocumentActionPermission.EDIT_DOCUMENT) || isReadOnly;
 
   const onChangeDocument = (value: string) => {
     if (isReadOnlyFinal) return;

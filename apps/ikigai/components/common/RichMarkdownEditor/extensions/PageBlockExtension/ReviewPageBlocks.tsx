@@ -4,19 +4,18 @@ import styled from "styled-components";
 import { BlockTitleMemo } from "../../BlockComponents";
 import { Divider } from "antd";
 import {
-  GetPageBlocks_documentGet_pageBlocks as IPageBlock,
+  DocumentActionPermission,
   GetDocumentDetail_documentGet as IDocument,
+  GetPageBlocks_documentGet_pageBlocks as IPageBlock,
 } from "graphql/types";
 import Editor from "components/Document/Editor";
 import { QuestionBoxes } from "./QuestionBoxes";
 import useDocumentStore from "context/ZustandDocumentStore";
 import useSupportMobile from "hook/UseSupportMobile";
-import { DEFAULT_RIGHT_SIDE_WIDTH, DEFAULT_LEFT_SIDE_WIDTH } from "util/index";
-import { CountdownMobile } from "components/Document/common";
+import { DEFAULT_LEFT_SIDE_WIDTH, DEFAULT_RIGHT_SIDE_WIDTH } from "util/index";
 import { BreakPoints } from "styles/mediaQuery";
-import useDocumentPermission from "hook/UseDocumentPermission";
-import { DocumentPermission } from "util/permission";
 import { debounce } from "lodash";
+import usePermission from "hook/UsePermission";
 
 export const ReviewPageBlocks: React.FC<{
   isPresentationMode?: boolean;
@@ -25,7 +24,7 @@ export const ReviewPageBlocks: React.FC<{
 }> = ({ isPresentationMode, isViewInMobileApp }) => {
   const pageBlockRef = useRef<HTMLDivElement>(null);
   const [maxWidthPageBlock, setMaxWidthPageBlock] = useState(0);
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
   const { isMobileView } = useSupportMobile();
 
   const leftPanelHidden = useDocumentStore((state) => state.leftPanelHidden);
@@ -120,7 +119,7 @@ export const ReviewPageBlocks: React.FC<{
           key={pageBlockInfo?.id}
           isSetValue={false}
           defaultTitle={pageBlockInfo?.title}
-          readonly={!documentAllow(DocumentPermission.EditDocument)}
+          readonly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
           onChangeTitle={onChangeTitle}
         />
         <TitleDivider />

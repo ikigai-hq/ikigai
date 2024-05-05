@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Checkbox, Space } from "antd";
 
-import useDocumentPermission from "hook/UseDocumentPermission";
-import { DocumentPermission } from "util/permission";
 import { QuizAttrs, ViewMode } from "../type";
 import MultipleChoiceReview from "./MultipleChoiceReview";
 import QuizReport from "../QuizReport";
 import useDocumentStore from "context/ZustandDocumentStore";
 import useQuizStore from "context/ZustandQuizStore";
+import usePermission from "hook/UsePermission";
+import { DocumentActionPermission } from "graphql/types";
 
 export type MultipleChoiceOption = {
   viewMode: ViewMode;
@@ -22,7 +22,7 @@ const MultipleChoice: React.FC<MultipleChoiceOption> = ({
   answer,
   documentId,
 }) => {
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
   const config = useDocumentStore((state) => state.documentConfig);
   const quizzes = useQuizStore((state) => state.quizzes);
   const mapQuizBlockData = useQuizStore((state) => state.mapQuizBlockData);
@@ -66,7 +66,7 @@ const MultipleChoice: React.FC<MultipleChoiceOption> = ({
         <Checkbox.Group
           onChange={(values) => onChangeAnswer(values as number[])}
           value={answerIndex}
-          disabled={!documentAllow(DocumentPermission.InteractiveWithTool)}
+          disabled={!allow(DocumentActionPermission.INTERACTIVE_WITH_TOOL)}
         >
           <Space direction="vertical">
             {options.map((option, index) => (

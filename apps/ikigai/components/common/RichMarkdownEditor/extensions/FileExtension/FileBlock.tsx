@@ -1,16 +1,18 @@
 import React, { memo, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { CarouselRef } from "antd/lib/carousel";
 import dynamic from "next/dynamic";
 import { EditorView } from "prosemirror-view";
 import { copyBlock } from "@ikigai/editor/dist/util/copyBlock";
 import { useQuery } from "@apollo/client";
+import { Badge } from "antd";
+import { t } from "@lingui/macro";
 
 import { FileUploadResponse } from "components/common/AddResourceModal";
 import { FileAttrs, FileNodeAttrs, Size } from "./type";
 import FileUpload from "../../../FileUpload";
 import { isZeroUUIDString } from "../../utils";
-import { GetFullFileInfo } from "graphql/types";
+import { DocumentActionPermission, GetFullFileInfo } from "graphql/types";
 import { GET_FULL_FILE_INFO } from "graphql/query";
 import { handleError } from "graphql/ApolloClient";
 import Loading from "components/Loading";
@@ -25,12 +27,8 @@ import {
   BlockContainer,
 } from "../../BlockComponents/styles";
 import { BlockTitleMemo } from "../../BlockComponents";
-import { DocumentPermission } from "util/permission";
-import useDocumentPermission from "hook/UseDocumentPermission";
 import useSupportMobile from "hook/UseSupportMobile";
-import { Badge } from "antd";
-import { t } from "@lingui/macro";
-import { useTheme } from "styled-components";
+import usePermission from "hook/UsePermission";
 
 const FilePreview = dynamic(() => import("components/common/FilePreview"), {
   ssr: false,
@@ -86,7 +84,7 @@ const FileBlock = ({
 
   const [showPreview, setShowPreview] = useState(true);
   const [zoom, setZoom] = useState(1);
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
   const { isMobileView } = useSupportMobile();
 
   // Previous version: Just support single uploaded file => need to keep the old version to prevent mismatch logic.
@@ -342,7 +340,7 @@ const FileBlock = ({
                 name: val,
               });
             }}
-            readonly={!documentAllow(DocumentPermission.EditDocument)}
+            readonly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
           />
         </div>
       </div>

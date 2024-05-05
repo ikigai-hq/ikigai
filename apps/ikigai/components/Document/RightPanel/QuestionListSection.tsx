@@ -10,7 +10,7 @@ import usePageBlockStore from "context/ZustandPageBlockStore";
 import { BlockData } from "util/BlockUtil";
 import { useQuizzesInOrder } from "hook/UseQuizInOrder";
 import useFillAnswer from "hook/UseFillAnswer";
-import { DocumentType, getDocumentType } from "util/permission";
+import { DocumentType, getDocumentType } from "../../../util/DocumentHelper";
 import { ColorLegend } from "./ColorLegend";
 
 const QuestionListPanel: React.FC = () => {

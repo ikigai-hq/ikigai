@@ -2,32 +2,32 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
 import { StyledTitle } from "./common";
 import { t, Trans } from "@lingui/macro";
-import useDocumentPermission from "hook/UseDocumentPermission";
-import {
-  DocumentPermission,
-  DocumentType,
-  getDocumentType,
-} from "util/permission";
 import { useRouter } from "next/router";
-import useDocumentStore from "context/ZustandDocumentStore";
-import useSpaceStore from "../../context/ZustandSpaceStore";
 import styled from "styled-components";
-import { BreakPoints } from "styles/mediaQuery";
-import { GetDocumentDetail_documentGet as IDocument } from "graphql/types";
+import { useMutation } from "@apollo/client";
 import type { MenuProps } from "antd";
 import { Dropdown, Popconfirm, Space, Typography } from "antd";
+
+import { DocumentType, getDocumentType } from "../../util/DocumentHelper";
+import { BreakPoints } from "styles/mediaQuery";
+import {
+  DocumentActionPermission,
+  GetDocumentDetail_documentGet as IDocument,
+} from "graphql/types";
 import FileUpload, { DraggerStyled } from "components/common/FileUpload";
 import { FileUploadResponse } from "components/common/AddResourceModal";
 import AssignmentSettingWrapper from "./AssignmentSetting";
 import { PictureIcon, SettingIcon, TrashIcon } from "components/common/IconSvg";
 import { Button } from "components/common/Button";
 import useAuthUserStore from "context/ZustandAuthStore";
-import { useMutation } from "@apollo/client";
 import {
   DELETE_DOCUMENT_PERMANENT,
   RESTORE_DOCUMENT,
-} from "../../graphql/mutation/DocumentMutation";
-import { handleError } from "../../graphql/ApolloClient";
+} from "graphql/mutation/DocumentMutation";
+import { handleError } from "graphql/ApolloClient";
+import usePermission from "hook/UsePermission";
+import useDocumentStore from "context/ZustandDocumentStore";
+import useSpaceStore from "context/ZustandSpaceStore";
 
 interface DocumentSettingProps {
   isNestedDoc: boolean;
@@ -46,7 +46,7 @@ const DocumentSetting = ({
 }: DocumentSettingProps) => {
   const documentId = document.id;
   const router = useRouter();
-  const documentAllow = useDocumentPermission();
+  const allow = usePermission();
   const updateDocumentLocal = useSpaceStore(
     (state) => state.updateDocumentTitleLocal,
   );
@@ -108,7 +108,7 @@ const DocumentSetting = ({
   };
 
   const isReadOnlyFinal =
-    !documentAllow(DocumentPermission.EditDocument) || isReadOnly;
+    !allow(DocumentActionPermission.EDIT_DOCUMENT) || isReadOnly;
 
   // Permission check
   const docType = getDocumentType(document);
@@ -201,7 +201,7 @@ const DocumentSetting = ({
       <DocumentTitle>
         {!isPublishedPage &&
           !isReadOnlyFinal &&
-          documentAllow(DocumentPermission.ManageDocument) &&
+          allow(DocumentActionPermission.MANAGE_DOCUMENT) &&
           !documentCoverPhoto && (
             <AddCoverButton>
               <FileUpload

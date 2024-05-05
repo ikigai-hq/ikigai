@@ -1,7 +1,7 @@
 import useDocumentStore from "context/ZustandDocumentStore";
 import useQuizStore from "context/ZustandQuizStore";
 import useSubmissionStatus from "./UseSubmissionStatus";
-import { DocumentType, getDocumentType } from "util/permission";
+import { DocumentType, getDocumentType } from "../util/DocumentHelper";
 import { QuizType } from "graphql/types";
 import {
   StatusAnswer,

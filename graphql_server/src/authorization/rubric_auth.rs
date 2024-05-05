@@ -1,5 +1,5 @@
 use oso::PolarClass;
-use std::fmt::{Display, Formatter};
+use strum_macros::{Display, EnumString};
 use uuid::Uuid;
 
 use crate::db::Rubric;
@@ -21,16 +21,8 @@ impl RubricAuth {
     }
 }
 
-#[derive(Enum, Debug, Copy, Clone, Eq, PartialEq)]
+#[derive(Enum, Debug, Copy, Clone, Eq, PartialEq, EnumString, Display)]
+#[strum(serialize_all = "snake_case")]
 pub enum RubricActionPermission {
     ManageRubric,
-}
-
-impl Display for RubricActionPermission {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let permission = match self {
-            Self::ManageRubric => "manage_rubric",
-        };
-        write!(f, "{permission}")
-    }
 }

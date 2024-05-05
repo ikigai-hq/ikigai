@@ -1,6 +1,9 @@
+use crate::authorization::RubricActionPermission;
 use crate::db::*;
 use crate::error::IkigaiErrorExt;
-use crate::helper::{get_conn_from_ctx, get_user_from_ctx, get_user_id_from_ctx};
+use crate::helper::{
+    get_conn_from_ctx, get_rubric_allowed_permissions, get_user_from_ctx, get_user_id_from_ctx,
+};
 use crate::util::get_now_as_secs;
 use async_graphql::*;
 use uuid::Uuid;
@@ -38,6 +41,14 @@ impl UserQuery {
         let user_id = get_user_id_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
         Rubric::find_all_by_user(&conn, user_id).format_err()
+    }
+
+    async fn rubric_my_permissions(
+        &self,
+        ctx: &Context<'_>,
+        rubric_id: Uuid,
+    ) -> Result<Vec<RubricActionPermission>> {
+        get_rubric_allowed_permissions(ctx, rubric_id).await
     }
 
     // FIXME: Replace this step by using new authorization logic

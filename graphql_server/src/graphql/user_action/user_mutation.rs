@@ -135,8 +135,7 @@ impl UserMutation {
     async fn user_upsert_rubric(&self, ctx: &Context<'_>, mut rubric: Rubric) -> Result<Rubric> {
         let existing_rubric = {
             let conn = get_conn_from_ctx(ctx).await?;
-            let rubric = Rubric::find_by_id(&conn, rubric.id);
-            rubric
+            Rubric::find_by_id(&conn, rubric.id)
         };
 
         if let Ok(existing_rubric) = existing_rubric {

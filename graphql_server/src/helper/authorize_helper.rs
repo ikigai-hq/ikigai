@@ -1,6 +1,8 @@
 use async_graphql::*;
 use diesel::PgConnection;
 use oso::Oso;
+use std::collections::HashSet;
+use std::str::FromStr;
 use uuid::Uuid;
 
 use crate::authentication_token::{ActiveSpaceId, Claims};
@@ -125,7 +127,7 @@ pub async fn space_is_allow(
     let oso = ctx.data::<Oso>()?;
     let user_id = user_auth.id;
     let caching_data = ctx.data::<RequestContextCachingData>()?;
-    let class_auth = if let Some(space_auth) = caching_data.get_space_auth(space_id, user_id) {
+    let space_auth = if let Some(space_auth) = caching_data.get_space_auth(space_id, user_id) {
         info!(
             "Use caching data of request info space auth {:?}",
             space_auth
@@ -134,13 +136,31 @@ pub async fn space_is_allow(
     } else {
         let conn = get_conn_from_ctx(ctx).await?;
         let class = Space::find_by_id(&conn, space_id).format_err()?;
-        let class_auth = SpaceAuth::new(&class);
-        info!("Set caching data of request info space {:?}", class_auth);
-        caching_data.add_space_auth(space_id, user_id, class_auth)
+        let space_auth = SpaceAuth::new(&class);
+        info!("Set caching data of request info space {:?}", space_auth);
+        caching_data.add_space_auth(space_id, user_id, space_auth)
     };
-    let is_allowed = oso.is_allowed(user_auth, action.to_string(), class_auth)?;
+    let is_allowed = oso.is_allowed(user_auth, action.to_string(), space_auth)?;
 
     Ok(is_allowed)
+}
+
+pub async fn get_space_allowed_permissions(
+    ctx: &Context<'_>,
+    space_id: i32,
+) -> Result<Vec<SpaceActionPermission>> {
+    let user_auth = get_user_auth_from_ctx(ctx).await?;
+    let conn = get_conn_from_ctx(ctx).await?;
+    let class = Space::find_by_id(&conn, space_id).format_err()?;
+    let space_auth = SpaceAuth::new(&class);
+
+    let oso = ctx.data::<Oso>()?;
+    let actions: HashSet<String> = oso.get_allowed_actions(user_auth, space_auth)?;
+    Ok(actions
+        .into_iter()
+        .map(|action| SpaceActionPermission::from_str(&action))
+        .filter_map(|action| action.ok())
+        .collect())
 }
 
 pub async fn document_quick_authorize(
@@ -208,6 +228,23 @@ pub async fn document_is_allowed(
     Ok(is_allowed)
 }
 
+pub async fn get_document_allowed_permissions(
+    ctx: &Context<'_>,
+    document_id: Uuid,
+) -> Result<Vec<DocumentActionPermission>> {
+    let user_auth = get_user_auth_from_ctx(ctx).await?;
+    let conn = get_conn_from_ctx(ctx).await?;
+    let document_auth = DocumentAuth::try_new(&conn, document_id).format_err()?;
+
+    let oso = ctx.data::<Oso>()?;
+    let actions: HashSet<String> = oso.get_allowed_actions(user_auth, document_auth)?;
+    Ok(actions
+        .into_iter()
+        .map(|action| DocumentActionPermission::from_str(&action))
+        .filter_map(|action| action.ok())
+        .collect())
+}
+
 pub async fn rubric_quick_authorize(
     ctx: &Context<'_>,
     rubric_id: Uuid,
@@ -240,4 +277,22 @@ pub async fn rubric_is_allowed(
     let is_allowed = oso.is_allowed(user_auth, action.to_string(), rubric_auth)?;
 
     Ok(is_allowed)
+}
+
+pub async fn get_rubric_allowed_permissions(
+    ctx: &Context<'_>,
+    rubric_id: Uuid,
+) -> Result<Vec<RubricActionPermission>> {
+    let user_auth = get_user_auth_from_ctx(ctx).await?;
+    let conn = get_conn_from_ctx(ctx).await?;
+    let rubric = Rubric::find_by_id(&conn, rubric_id)?;
+    let rubric_auth = RubricAuth::new(&rubric);
+
+    let oso = ctx.data::<Oso>()?;
+    let actions: HashSet<String> = oso.get_allowed_actions(user_auth, rubric_auth)?;
+    Ok(actions
+        .into_iter()
+        .map(|action| RubricActionPermission::from_str(&action))
+        .filter_map(|action| action.ok())
+        .collect())
 }

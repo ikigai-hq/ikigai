@@ -1,5 +1,5 @@
 use oso::PolarClass;
-use std::fmt::{Display, Formatter};
+use strum_macros::{Display, EnumString};
 
 use crate::db::Space;
 
@@ -20,22 +20,11 @@ impl SpaceAuth {
     }
 }
 
-#[derive(Enum, Debug, Copy, Clone, Eq, PartialEq)]
+#[derive(Enum, Debug, Copy, Clone, Eq, PartialEq, EnumString, Display)]
+#[strum(serialize_all = "snake_case")]
 pub enum SpaceActionPermission {
     ViewSpaceContent,
     ManageSpaceContent,
     ManageSpaceMember,
     ManageSpaceSetting,
-}
-
-impl Display for SpaceActionPermission {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let permission = match self {
-            Self::ViewSpaceContent => "view_space_content",
-            Self::ManageSpaceContent => "manage_space_content",
-            Self::ManageSpaceMember => "manage_space_member",
-            Self::ManageSpaceSetting => "manage_space_setting",
-        };
-        write!(f, "{permission}")
-    }
 }

@@ -5,7 +5,8 @@ use uuid::Uuid;
 
 use crate::authentication_token::{ActiveSpaceId, Claims};
 use crate::authorization::{
-    DocumentActionPermission, DocumentAuth, SpaceActionPermission, SpaceAuth, UserAuth,
+    DocumentActionPermission, DocumentAuth, RubricActionPermission, RubricAuth,
+    SpaceActionPermission, SpaceAuth, UserAuth,
 };
 use crate::connection_pool::get_conn_from_actor;
 use crate::db::*;
@@ -203,6 +204,40 @@ pub async fn document_is_allowed(
         doc
     };
     let is_allowed = oso.is_allowed(user, action.to_string(), doc)?;
+
+    Ok(is_allowed)
+}
+
+pub async fn rubric_quick_authorize(
+    ctx: &Context<'_>,
+    rubric_id: Uuid,
+    action: RubricActionPermission,
+) -> Result<()> {
+    let user_id = get_user_id_from_ctx(ctx).await?;
+    let is_allow = rubric_is_allowed(ctx, user_id, rubric_id, action).await?;
+
+    if !is_allow {
+        return Err(IkigaiError::new_unauthorized(
+            "You don't have permission to do action in this rubric",
+        ))
+        .format_err();
+    }
+
+    Ok(())
+}
+
+pub async fn rubric_is_allowed(
+    ctx: &Context<'_>,
+    user_id: i32,
+    rubric_id: Uuid,
+    action: RubricActionPermission,
+) -> Result<bool> {
+    let oso = ctx.data::<Oso>()?;
+    let user_auth = get_user_auth_by_user_id_from_ctx(ctx, user_id).await?;
+    let conn = get_conn_from_ctx(ctx).await?;
+    let rubric = Rubric::find_by_id(&conn, rubric_id)?;
+    let rubric_auth = RubricAuth::new(&rubric);
+    let is_allowed = oso.is_allowed(user_auth, action.to_string(), rubric_auth)?;
 
     Ok(is_allowed)
 }

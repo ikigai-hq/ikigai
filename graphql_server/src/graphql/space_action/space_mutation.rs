@@ -29,7 +29,6 @@ impl SpaceMutation {
         Space::insert(&conn, data).format_err()
     }
 
-    // FIXME: Check permission, maybe only creator can do
     async fn space_duplicate(&self, ctx: &Context<'_>, space_id: i32) -> Result<Space> {
         let user_auth = get_user_auth_from_ctx(ctx).await?;
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceSetting).await?;

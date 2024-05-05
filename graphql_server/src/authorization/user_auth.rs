@@ -22,8 +22,8 @@ impl UserAuth {
 
     pub fn get_role(&self) -> String {
         match self.role {
-            Role::Teacher => "Teacher",
-            Role::Student => "Student",
+            Role::Teacher => "teacher",
+            Role::Student => "student",
         }
         .to_string()
     }

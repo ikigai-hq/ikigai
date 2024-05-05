@@ -61,7 +61,7 @@ export const TEACHER_REQUEST_REDO = gql`
 
 export const UPSERT_RUBRIC = gql`
   mutation UpsertRubric($rubric: RubricInput!) {
-    orgUpsertRubric(rubric: $rubric) {
+    userUpsertRubric(rubric: $rubric) {
       id
       name
       data {
@@ -87,7 +87,7 @@ export const UPSERT_RUBRIC = gql`
 
 export const REMOVE_RUBRIC = gql`
   mutation RemoveRubric($rubricId: UUID!) {
-    orgRemoveRubric(rubricId: $rubricId)
+    userRemoveRubric(rubricId: $rubricId)
   }
 `;
 

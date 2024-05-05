@@ -494,36 +494,36 @@ export interface TeacherRequestRedoVariables {
 // GraphQL mutation operation: UpsertRubric
 // ====================================================
 
-export interface UpsertRubric_orgUpsertRubric_data_items_userPick {
+export interface UpsertRubric_userUpsertRubric_data_items_userPick {
   selected: boolean;
   score: number;
   comment: string;
 }
 
-export interface UpsertRubric_orgUpsertRubric_data_items {
+export interface UpsertRubric_userUpsertRubric_data_items {
   explanation: string;
   score: number;
   toScore: number;
-  userPick: UpsertRubric_orgUpsertRubric_data_items_userPick;
+  userPick: UpsertRubric_userUpsertRubric_data_items_userPick;
 }
 
-export interface UpsertRubric_orgUpsertRubric_data {
+export interface UpsertRubric_userUpsertRubric_data {
   rubricType: RubricType;
   criteria: string[];
   weightingCriteria: (number | null)[];
   level: string[];
-  items: UpsertRubric_orgUpsertRubric_data_items[][];
+  items: UpsertRubric_userUpsertRubric_data_items[][];
 }
 
-export interface UpsertRubric_orgUpsertRubric {
+export interface UpsertRubric_userUpsertRubric {
   id: any;
   name: string;
-  data: UpsertRubric_orgUpsertRubric_data;
+  data: UpsertRubric_userUpsertRubric_data;
   createdAt: number;
 }
 
 export interface UpsertRubric {
-  orgUpsertRubric: UpsertRubric_orgUpsertRubric;
+  userUpsertRubric: UpsertRubric_userUpsertRubric;
 }
 
 export interface UpsertRubricVariables {
@@ -540,7 +540,7 @@ export interface UpsertRubricVariables {
 // ====================================================
 
 export interface RemoveRubric {
-  orgRemoveRubric: boolean;
+  userRemoveRubric: boolean;
 }
 
 export interface RemoveRubricVariables {

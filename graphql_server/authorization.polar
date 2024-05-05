@@ -4,7 +4,7 @@ allow(user: UserAuth, action, space: SpaceAuth) if
     has_permission(user, action, space);
 
 resource SpaceAuth {
-    roles = ["Student", "Teacher", "Creator"];
+    roles = ["student", "teacher", "creator"];
     permissions = [
 		"view_space_content",
 		"manage_space_content",
@@ -12,24 +12,24 @@ resource SpaceAuth {
 		"manage_space_setting",
     ];
 
-	"view_space_content" if "Student";
+	"view_space_content" if "student";
 
-	"Student" if "Teacher";
-	"manage_space_content" if "Teacher";
+	"student" if "teacher";
+	"manage_space_content" if "teacher";
 
-	"Teacher" if "Creator";
-	"manage_space_member" if "Teacher";
-	"manage_space_setting" if "Teacher";
+	"teacher" if "creator";
+	"manage_space_member" if "teacher";
+	"manage_space_setting" if "teacher";
 }
 
-has_role(user: UserAuth, "Creator", space: SpaceAuth) if
+has_role(user: UserAuth, "creator", space: SpaceAuth) if
     space.id = user.space_id and
-    user.role = "Teacher" and
+    user.role = "teacher" and
     space.creator_id = user.id;
 
-has_role(user: UserAuth, "Teacher", space: SpaceAuth) if
+has_role(user: UserAuth, "teacher", space: SpaceAuth) if
     space.id = user.space_id and
-    user.role = "Teacher";
+    user.role = "teacher";
 
 has_role(user: UserAuth, role: String, space: SpaceAuth) if
     space.id = user.space_id and
@@ -46,18 +46,18 @@ allow(actor: UserAuth, "view_answer", doc: DocumentAuth) if
 allow(actor: UserAuth, "interactive_with_tool", doc: DocumentAuth) if
 	doc.is_doing_submission and
 	doc.creator_id = actor.id and
-	actor.role = "Student";
+	actor.role = "student";
 
 allow(actor: UserAuth, "interactive_with_tool", doc: DocumentAuth) if
 	not doc.is_doing_submission and
-	actor.org_role = "Teacher";
+	actor.org_role = "teacher";
 
 allow(actor: UserAuth, "edit_document", doc: DocumentAuth) if
 	(doc.is_doing_open_type_submission and doc.space_id = actor.space_id and doc.creator_id = actor.id) and
     has_permission(actor, "edit_document", doc);
 
 resource DocumentAuth {
-    roles = ["Reader", "Writer"];
+    roles = ["reader", "writer"];
     permissions = [
         "view_document",
         "interactive_with_tool",
@@ -66,23 +66,39 @@ resource DocumentAuth {
         "manage_document",
     ];
 
-    "view_document" if "Reader";
+    "view_document" if "reader";
 
-    "Reader" if "Writer";
-    "view_answer" if "Writer";
-    "edit_document" if "Writer";
-    "manage_document" if "Writer";
+    "reader" if "writer";
+    "view_answer" if "writer";
+    "edit_document" if "writer";
+    "manage_document" if "writer";
 }
 
-has_role(user: UserAuth, "Writer", doc: DocumentAuth) if
+has_role(user: UserAuth, "writer", doc: DocumentAuth) if
     user.space_id = doc.space_id and user.id = doc.creator_id;
 
-has_role(user: UserAuth, "Writer", doc: DocumentAuth) if
+has_role(user: UserAuth, "writer", doc: DocumentAuth) if
     user.space_id = doc.space_id and
-    user.role = "Teacher";
+    user.role = "teacher";
 
-has_role(user: UserAuth, "Reader", doc: DocumentAuth) if
+has_role(user: UserAuth, "reader", doc: DocumentAuth) if
     doc.space_id = user.space_id;
 
-has_role(_: UserAuth, "Reader", doc: DocumentAuth) if
+has_role(_: UserAuth, "reader", doc: DocumentAuth) if
     doc.is_public;
+
+# RUBRIC AUTH SPACE
+allow(actor: UserAuth, action, doc: DocumentAuth) if
+    has_permission(actor, action, doc);
+
+resource RubricAuth {
+    roles = ["creator"];
+    permissions = [
+        "manage_rubric",
+    ];
+
+    "manage_rubric" if "creator";
+}
+
+has_role(user: UserAuth, "creator", rubric: DocumentAuth) if
+	user.id = rubric.user_id;

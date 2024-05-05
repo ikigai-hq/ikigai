@@ -5369,7 +5369,7 @@
             "deprecationReason": null
           },
           {
-            "name": "orgUpsertRubric",
+            "name": "userUpsertRubric",
             "description": null,
             "args": [
               {
@@ -5400,7 +5400,7 @@
             "deprecationReason": null
           },
           {
-            "name": "orgRemoveRubric",
+            "name": "userRemoveRubric",
             "description": null,
             "args": [
               {

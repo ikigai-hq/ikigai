@@ -3,10 +3,13 @@ use diesel::{Connection, PgConnection};
 use uuid::Uuid;
 
 use crate::authentication_token::Claims;
+use crate::authorization::RubricActionPermission;
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::graphql::validator::Email;
-use crate::helper::{get_conn_from_ctx, get_user_from_ctx, get_user_id_from_ctx};
+use crate::helper::{
+    get_conn_from_ctx, get_user_from_ctx, get_user_id_from_ctx, rubric_quick_authorize,
+};
 use crate::mailer::Mailer;
 use crate::service::redis::Redis;
 use crate::util::url_util::magic_link_for_document_url;
@@ -129,7 +132,22 @@ impl UserMutation {
         Ok(true)
     }
 
-    async fn org_upsert_rubric(&self, ctx: &Context<'_>, mut rubric: Rubric) -> Result<Rubric> {
+    async fn user_upsert_rubric(&self, ctx: &Context<'_>, mut rubric: Rubric) -> Result<Rubric> {
+        let existing_rubric = {
+            let conn = get_conn_from_ctx(ctx).await?;
+            let rubric = Rubric::find_by_id(&conn, rubric.id);
+            rubric
+        };
+
+        if let Ok(existing_rubric) = existing_rubric {
+            rubric_quick_authorize(
+                ctx,
+                existing_rubric.id,
+                RubricActionPermission::ManageRubric,
+            )
+            .await?;
+        }
+
         let user_id = get_user_id_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
         rubric.user_id = user_id;
@@ -138,8 +156,9 @@ impl UserMutation {
         Ok(rubric)
     }
 
-    async fn org_remove_rubric(&self, ctx: &Context<'_>, rubric_id: Uuid) -> Result<bool> {
-        // FIXME: Should check authorization
+    async fn user_remove_rubric(&self, ctx: &Context<'_>, rubric_id: Uuid) -> Result<bool> {
+        rubric_quick_authorize(ctx, rubric_id, RubricActionPermission::ManageRubric).await?;
+
         let conn = get_conn_from_ctx(ctx).await?;
         Rubric::remove(&conn, rubric_id).format_err()?;
 

@@ -29,7 +29,6 @@ import { useState } from "react";
 import EditRubric from "./EditRubric";
 import useUserPermission from "hook/UseUserPermission";
 import { Permission } from "util/permission";
-import useAuthUserStore from "../../../../context/ZustandAuthStore";
 
 export type BandScoresDrawerProps = {
   visible: boolean;
@@ -86,7 +85,7 @@ const RubricManagement = ({
 
     if (data) {
       toast.success(t`Created!`);
-      setEditingRubric(data.orgUpsertRubric);
+      setEditingRubric(data.userUpsertRubric);
       refetch();
     }
   };

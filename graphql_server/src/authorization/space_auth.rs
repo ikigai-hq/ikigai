@@ -23,7 +23,6 @@ impl SpaceAuth {
 #[derive(Enum, Debug, Copy, Clone, Eq, PartialEq)]
 pub enum SpaceActionPermission {
     ViewSpaceContent,
-    SelfEnroll,
     ManageSpaceContent,
     ManageSpaceMember,
     ManageSpaceSetting,
@@ -33,7 +32,6 @@ impl Display for SpaceActionPermission {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         let permission = match self {
             Self::ViewSpaceContent => "view_space_content",
-            Self::SelfEnroll => "self_enroll",
             Self::ManageSpaceContent => "manage_space_content",
             Self::ManageSpaceMember => "manage_space_member",
             Self::ManageSpaceSetting => "manage_space_setting",

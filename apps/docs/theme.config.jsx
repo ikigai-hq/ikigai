@@ -29,16 +29,11 @@ export default {
     </>
   ),
   banner: {
-    key: '2.0-release',
+    key: 'v0.1.1-release',
     text: (
-      <a href="https:https://github.com/ikigai-hq/ikigai/releases/tag/v0.1" target="_blank">
-        🎉 Ikigai 0.1 is released. Read more →
+      <a href="https://github.com/ikigai-hq/ikigai/releases/tag/v0.1.1" target="_blank">
+        🎉 Ikigai 0.1.1 is released. Read more →
       </a>
-    )
-  },
-  footer: {
-    text: (
-      <span>2024 ©{' '} <a href="https://ikigai.li" target="_blank">Ikigai</a></span>
     )
   },
   sidebar: {

@@ -3,7 +3,6 @@ use async_graphql::*;
 use crate::graphql::assignment_action::AssignmentMutation;
 use crate::graphql::document_action::DocumentMutation;
 use crate::graphql::file_action::FileMutation;
-use crate::graphql::organization_action::OrganizationMutation;
 use crate::graphql::quiz_action::QuizMutation;
 use crate::graphql::space_action::SpaceMutation;
 use crate::graphql::thread_action::ThreadMutation;
@@ -18,5 +17,4 @@ pub struct IkigaiMutation(
     ThreadMutation,
     DocumentMutation,
     QuizMutation,
-    OrganizationMutation,
 );

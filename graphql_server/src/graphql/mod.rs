@@ -4,9 +4,9 @@ use async_graphql::Schema;
 
 use crate::authorization::init_oso;
 use crate::graphql::data_loader::IkigaiDataLoader;
-use crate::graphql::open_exam_mutation::IkigaiMutation;
-use crate::graphql::open_exam_query::IkigaiQuery;
-use crate::graphql::open_exam_subscription::Subscription;
+use crate::graphql::ikigai_mutation::IkigaiMutation;
+use crate::graphql::ikigai_query::IkigaiQuery;
+use crate::graphql::ikigai_subscription::Subscription;
 use crate::service::redis::Redis;
 use crate::util::log_util::Logger;
 
@@ -15,11 +15,10 @@ pub mod context_caching_data;
 pub mod data_loader;
 pub mod document_action;
 pub mod file_action;
+pub mod ikigai_mutation;
+pub mod ikigai_query;
+pub mod ikigai_subscription;
 pub mod notification_center;
-pub mod open_exam_mutation;
-pub mod open_exam_query;
-pub mod open_exam_subscription;
-pub mod organization_action;
 pub mod quiz_action;
 pub mod space_action;
 pub mod thread_action;

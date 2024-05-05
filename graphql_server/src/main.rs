@@ -17,8 +17,7 @@ extern crate thiserror;
 
 use actix_cors::Cors;
 use actix_web::middleware::Logger;
-use actix_web::{dev::Service, guard, web, App, HttpRequest, HttpResponse, HttpServer, Result};
-use async_graphql::futures_util::FutureExt;
+use actix_web::{guard, web, App, HttpRequest, HttpResponse, HttpServer, Result};
 use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
 use async_graphql::{Data, Schema};
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse, GraphQLSubscription};
@@ -26,10 +25,9 @@ use dotenv::dotenv;
 
 use crate::authentication_token::{ActiveSpaceId, JwtToken};
 use crate::background_job::register_jobs;
-use crate::connection_pool::show_log_connection;
 use crate::graphql::context_caching_data::RequestContextCachingData;
 use crate::graphql::{build_schema, IkigaiSchema};
-use crate::util::{is_local, log_util};
+use crate::util::log_util;
 
 mod authentication_token;
 mod authorization;
@@ -56,7 +54,8 @@ fn parse_active_space_id(req: &HttpRequest) -> Option<ActiveSpaceId> {
     req.headers()
         .get("active-space-id")
         .and_then(|val| val.to_str().ok())
-        .and_then(|val| val.parse::<i32>().ok()).map(ActiveSpaceId)
+        .and_then(|val| val.parse::<i32>().ok())
+        .map(ActiveSpaceId)
 }
 
 async fn index(
@@ -141,51 +140,26 @@ async fn main() -> std::io::Result<()> {
     let addr = format!("127.0.0.1:{}", std::env::var("PORT").unwrap());
     info!("Graphql Server will run at {addr}");
     let schema = build_schema();
-    if is_local() {
-        HttpServer::new(move || {
-            let cors = Cors::default()
-                .allow_any_origin()
-                .allow_any_header()
-                .allow_any_method();
+    HttpServer::new(move || {
+        let cors = Cors::default()
+            .allow_any_origin()
+            .allow_any_header()
+            .allow_any_method();
 
-            App::new()
-                .wrap(cors)
-                .wrap(Logger::default())
-                .app_data(web::Data::new(schema.clone()))
-                .service(web::resource("/").guard(guard::Post()).to(index))
-                .service(
-                    web::resource("/")
-                        .guard(guard::Get())
-                        .guard(guard::Header("upgrade", "websocket"))
-                        .to(index_ws),
-                )
-                .service(web::resource("/").guard(guard::Get()).to(index_playground))
-        })
-        .bind(addr)?
-        .run()
-        .await
-    } else {
-        HttpServer::new(move || {
-            App::new()
-                .wrap(Logger::default())
-                .wrap_fn(|req, srv| {
-                    srv.call(req).map(|res| {
-                        show_log_connection();
-                        res
-                    })
-                })
-                .app_data(web::Data::new(schema.clone()))
-                .service(web::resource("/").guard(guard::Post()).to(index))
-                .service(
-                    web::resource("/")
-                        .guard(guard::Get())
-                        .guard(guard::Header("upgrade", "websocket"))
-                        .to(index_ws),
-                )
-                .service(web::resource("/").guard(guard::Get()).to(index_playground))
-        })
-        .bind(addr)?
-        .run()
-        .await
-    }
+        App::new()
+            .wrap(cors)
+            .wrap(Logger::default())
+            .app_data(web::Data::new(schema.clone()))
+            .service(web::resource("/").guard(guard::Post()).to(index))
+            .service(
+                web::resource("/")
+                    .guard(guard::Get())
+                    .guard(guard::Header("upgrade", "websocket"))
+                    .to(index_ws),
+            )
+            .service(web::resource("/").guard(guard::Get()).to(index_playground))
+    })
+    .bind(addr)?
+    .run()
+    .await
 }

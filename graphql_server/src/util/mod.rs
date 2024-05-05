@@ -1,5 +1,4 @@
 #![allow(dead_code)]
-use crate::constant::{FIRST_MONDAY_TIMESTAMP, TOTAL_SECONDS_OF_A_WEEK};
 use chrono::{DateTime, Datelike, TimeZone, Timelike, Utc, Weekday};
 use pbkdf2::{
     password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
@@ -10,8 +9,8 @@ use rand_core::OsRng;
 
 pub mod log_util;
 pub mod markdown_util;
-pub mod time_util;
 pub mod url_util;
+use crate::constant::{FIRST_MONDAY_TIMESTAMP, TOTAL_SECONDS_OF_A_WEEK};
 
 pub fn get_now_as_secs() -> i64 {
     Utc::now().timestamp()

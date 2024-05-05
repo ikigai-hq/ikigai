@@ -1,10 +1,9 @@
 use diesel::result::Error;
 use diesel::sql_types::Jsonb;
-use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
+use diesel::{PgConnection, QueryDsl, RunQueryDsl};
 
 use super::schema::band_scores;
 use crate::impl_jsonb_for_db;
-use crate::util::get_now_as_secs;
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject, InputObject)]
 #[graphql(input_name = "BandScoreRangeInput")]
@@ -128,36 +127,11 @@ impl BandScore {
         item.map_or(grade, |range| range.score)
     }
 
-    pub fn insert(conn: &PgConnection, new_band_score: NewBandScore) -> Result<Self, Error> {
-        diesel::insert_into(band_scores::table)
-            .values(new_band_score)
-            .get_result(conn)
-    }
-
-    pub fn update(
-        conn: &PgConnection,
-        band_score_id: i32,
-        range: BandScoreRanges,
-    ) -> Result<(), Error> {
-        diesel::update(band_scores::table.find(band_score_id))
-            .set((
-                band_scores::range.eq(range),
-                band_scores::updated_at.eq(get_now_as_secs()),
-            ))
-            .execute(conn)?;
-        Ok(())
-    }
-
     pub fn find(conn: &PgConnection, band_score_id: i32) -> Result<Self, Error> {
         band_scores::table.find(band_score_id).first(conn)
     }
 
     pub fn find_all(conn: &PgConnection) -> Result<Vec<Self>, Error> {
         band_scores::table.get_results(conn)
-    }
-
-    pub fn remove(conn: &PgConnection, band_score_id: i32) -> Result<(), Error> {
-        diesel::delete(band_scores::table.find(band_score_id)).execute(conn)?;
-        Ok(())
     }
 }

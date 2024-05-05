@@ -64,22 +64,3 @@ impl Handler<GetPostgresConn> for ConnectionPool {
         Ok(conn)
     }
 }
-
-#[derive(Message)]
-#[rtype(result = "()")]
-pub struct LogConnection;
-
-impl Handler<LogConnection> for ConnectionPool {
-    type Result = ();
-
-    fn handle(&mut self, _: LogConnection, _: &mut Self::Context) -> Self::Result {
-        info!(
-            "Show Actor Connection Pool: {:?}",
-            self.postgres_pool.state()
-        );
-    }
-}
-
-pub fn show_log_connection() {
-    get_address().do_send(LogConnection);
-}

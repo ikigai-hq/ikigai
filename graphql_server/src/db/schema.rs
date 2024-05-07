@@ -148,6 +148,31 @@ diesel::table! {
 }
 
 diesel::table! {
+    page_contents (id) {
+        id -> Uuid,
+        page_id -> Uuid,
+        index -> Int4,
+        body -> Text,
+        updated_at -> Int8,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
+    pages (id) {
+        id -> Uuid,
+        document_id -> Uuid,
+        index -> Int4,
+        title -> Text,
+        layout -> Int4,
+        created_by_id -> Int4,
+        deleted_at -> Nullable<Int8>,
+        updated_at -> Int8,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
     quiz_answers (quiz_id, user_id) {
         quiz_id -> Uuid,
         user_id -> Int4,
@@ -299,6 +324,9 @@ diesel::joinable!(documents -> files (cover_photo_id));
 diesel::joinable!(documents -> spaces (space_id));
 diesel::joinable!(notification_receivers -> notifications (notification_id));
 diesel::joinable!(notification_receivers -> users (user_id));
+diesel::joinable!(page_contents -> pages (page_id));
+diesel::joinable!(pages -> documents (document_id));
+diesel::joinable!(pages -> users (created_by_id));
 diesel::joinable!(quiz_answers -> quizzes (quiz_id));
 diesel::joinable!(quiz_answers -> users (user_id));
 diesel::joinable!(quiz_structures -> users (user_id));
@@ -332,6 +360,8 @@ diesel::allow_tables_to_appear_in_same_query!(
     files,
     notification_receivers,
     notifications,
+    page_contents,
+    pages,
     quiz_answers,
     quiz_structures,
     quizzes,

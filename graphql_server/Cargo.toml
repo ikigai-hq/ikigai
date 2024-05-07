@@ -31,14 +31,13 @@ simple-aws-s3 = "0.2.3"
 lazy_static = "1.4.0"
 futures-core = "0.3.15"
 tokio = { version = "1.9.0", features = ["sync"] }
-validator = { version = "0.13.0", features = ["unic", "phone"] }
+validator = { version = "0.18.0", features = ["unic"] }
 thiserror = "1.0.25"
 aws-config = "0.11.0"
 aws-sdk-s3 = "0.11.0"
 aws-sdk-sns = "0.11.0"
 aws-sdk-mediaconvert = "0.11.0"
 async-recursion = "1.0.0"
-zip = "0.6.2"
 itertools = "0.10.3"
 anyhow = "1.0.58"
 lettre = "0.10.1"

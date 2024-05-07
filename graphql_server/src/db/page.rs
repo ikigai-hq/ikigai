@@ -60,6 +60,10 @@ impl Page {
             .get_result(conn)
     }
 
+    pub fn find(conn: &PgConnection, id: Uuid) -> Result<Self, Error> {
+        pages::table.find(id).first(conn)
+    }
+
     pub fn find_all_by_document_ids(
         conn: &PgConnection,
         document_ids: Vec<Uuid>,
@@ -114,6 +118,10 @@ impl PageContent {
                 page_contents::updated_at.eq(&page_content.updated_at),
             ))
             .get_result(conn)
+    }
+
+    pub fn find(conn: &PgConnection, id: Uuid) -> Result<Self, Error> {
+        page_contents::table.find(id).first(conn)
     }
 
     pub fn find_all_by_pages(conn: &PgConnection, page_ids: Vec<Uuid>) -> Result<Vec<Self>, Error> {

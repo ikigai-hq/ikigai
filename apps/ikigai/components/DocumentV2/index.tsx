@@ -1,12 +1,30 @@
 import React from "react";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 import { BreakPoints } from "styles/mediaQuery";
 import LeftSide from "./LeftSide";
 import DocumentBody from "./DocumentBody";
 import RightSide from "./RightSide";
+import useDocumentStore from "context/DocumentV2Store";
+import { useLoadDocument } from "context/DocumentV2Store";
+import Loading from "../Loading";
 
 const Document = () => {
+  const router = useRouter();
+  const documentId = router.query.documentId as string;
+
+  const activeDocument = useDocumentStore((state) => state.activeDocument);
+  const { loading } = useLoadDocument(documentId);
+
+  if (loading || !activeDocument) {
+    return (
+      <Container>
+        <Loading />;
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <DocumentHeaderWrapper>

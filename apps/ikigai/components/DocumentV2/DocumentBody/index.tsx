@@ -34,7 +34,6 @@ const Body = styled.div<{
   background: #ffff;
   border: 1px solid var(--gray-4, #eaecef);
   box-sizing: border-box;
-  padding: 20px;
 
   ${BreakPoints.tablet} {
     margin: 0;

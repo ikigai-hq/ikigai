@@ -1656,6 +1656,36 @@ export interface GetDocumentAssignedUsersVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetDocumentV2
+// ====================================================
+
+export interface GetDocumentV2_documentGet {
+  id: any;
+  body: string;
+  title: string;
+  isPublic: boolean;
+  coverPhotoId: any | null;
+  coverPhotoUrl: string | null;
+  editorConfig: any;
+  updatedAt: number;
+  deletedAt: number | null;
+  spaceId: number | null;
+}
+
+export interface GetDocumentV2 {
+  documentGet: GetDocumentV2_documentGet;
+}
+
+export interface GetDocumentV2Variables {
+  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetFullFileInfo
 // ====================================================
 

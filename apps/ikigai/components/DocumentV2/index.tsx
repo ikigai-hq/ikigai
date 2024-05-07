@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 import { BreakPoints } from "styles/mediaQuery";
 import LeftSide from "./LeftSide";
+import DocumentBody from "./DocumentBody";
+import RightSide from "./RightSide";
 
 const Document = () => {
   return (
@@ -15,7 +17,8 @@ const Document = () => {
       <DocumentBodyContainer>
         <BodyWrapper>
           <LeftSide docs={[]} />
-          Body Space
+          <DocumentBody />
+          <RightSide />
         </BodyWrapper>
       </DocumentBodyContainer>
     </Container>

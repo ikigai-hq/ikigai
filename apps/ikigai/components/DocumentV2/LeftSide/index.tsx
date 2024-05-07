@@ -62,8 +62,8 @@ const NoMarginDivider = styled(Divider)<{ $margin: number }>`
 const Container = styled.div<{
   $hide: boolean;
 }>`
-  min-width: 277px;
-  width: 277px;
+  min-width: 250px;
+  width: 250px;
   display: ${({ $hide }) => ($hide ? "none" : "flex")};
   border-radius: 8px;
   backdrop-filter: blur(12px);

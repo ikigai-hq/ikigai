@@ -25,7 +25,7 @@ impl Default for PageLayout {
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
-#[graphql(input_name = "PageInput")]
+#[graphql(input_name = "PageInput", complex)]
 #[table_name = "pages"]
 pub struct Page {
     pub id: Uuid,

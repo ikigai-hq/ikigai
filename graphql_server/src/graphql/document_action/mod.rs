@@ -106,6 +106,16 @@ impl Document {
             .unwrap_or_default()
             .unwrap_or_default()
     }
+
+    async fn pages(&self, ctx: &Context<'_>) -> Result<Vec<Page>> {
+        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
+        Ok(loader
+            .load_one(FindPageByDocumentId {
+                document_id: self.id,
+            })
+            .await?
+            .unwrap_or_default())
+    }
 }
 
 #[ComplexObject]
@@ -155,5 +165,17 @@ impl PageBlockDocument {
 impl DocumentAssignedUser {
     async fn user(&self, ctx: &Context<'_>) -> Result<PublicUser> {
         get_public_user_from_loader(ctx, self.assigned_user_id).await
+    }
+}
+
+#[ComplexObject]
+impl Page {
+    async fn page_contents(&self, ctx: &Context<'_>) -> Result<Vec<PageContent>> {
+        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
+        let page_contents = loader
+            .load_one(FindPageContentByPageId { page_id: self.id })
+            .await?
+            .unwrap_or_default();
+        Ok(page_contents)
     }
 }

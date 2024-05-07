@@ -368,4 +368,92 @@ impl DocumentMutation {
 
         Ok(true)
     }
+
+    async fn document_add_or_update_page(&self, ctx: &Context<'_>, mut page: Page) -> Result<Page> {
+        document_quick_authorize(
+            ctx,
+            page.document_id,
+            DocumentActionPermission::EditDocument,
+        )
+        .await?;
+        let user_id = get_user_id_from_ctx(ctx).await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        let existing_page = Page::find(&conn, page.id);
+        if existing_page.map(|page| page.document_id) != Ok(page.document_id) {
+            return Err(IkigaiError::new_bad_request(
+                "Cannot update page of other document",
+            ))
+            .format_err()?;
+        }
+
+        page.created_by_id = user_id;
+        let page = Page::upsert(&conn, page).format_err()?;
+        Ok(page)
+    }
+
+    async fn document_remove_page(&self, ctx: &Context<'_>, page_id: Uuid) -> Result<bool> {
+        let page = {
+            let conn = get_conn_from_ctx(ctx).await?;
+            Page::find(&conn, page_id).format_err()?
+        };
+        document_quick_authorize(
+            ctx,
+            page.document_id,
+            DocumentActionPermission::EditDocument,
+        )
+        .await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        Page::soft_delete(&conn, page_id).format_err()?;
+
+        Ok(true)
+    }
+
+    async fn document_restore_page(&self, ctx: &Context<'_>, page_id: Uuid) -> Result<Page> {
+        let page = {
+            let conn = get_conn_from_ctx(ctx).await?;
+            Page::find(&conn, page_id).format_err()?
+        };
+        document_quick_authorize(
+            ctx,
+            page.document_id,
+            DocumentActionPermission::EditDocument,
+        )
+        .await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        let page = Page::restore(&conn, page_id).format_err()?;
+
+        Ok(page)
+    }
+
+    async fn document_add_or_update_page_content(
+        &self,
+        ctx: &Context<'_>,
+        page_content: PageContent,
+    ) -> Result<PageContent> {
+        let page = {
+            let conn = get_conn_from_ctx(ctx).await?;
+            Page::find(&conn, page_content.page_id).format_err()?
+        };
+        document_quick_authorize(
+            ctx,
+            page.document_id,
+            DocumentActionPermission::EditDocument,
+        )
+        .await?;
+
+        let conn = get_conn_from_ctx(ctx).await?;
+        let existing_page_content = PageContent::find(&conn, page_content.id);
+        if existing_page_content.map(|content| content.page_id) != Ok(page.id) {
+            return Err(IkigaiError::new_bad_request(
+                "Cannot update content of other page",
+            ))
+            .format_err();
+        }
+
+        let content = PageContent::upsert(&conn, page_content).format_err()?;
+        Ok(content)
+    }
 }

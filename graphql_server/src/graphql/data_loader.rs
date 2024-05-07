@@ -584,3 +584,79 @@ impl Loader<FindDocumentAssignedUsers> for IkigaiDataLoader {
         Ok(result)
     }
 }
+
+#[derive(Debug, Clone, Hash, Eq, PartialEq)]
+pub struct FindPageByDocumentId {
+    pub document_id: Uuid,
+}
+
+#[async_trait::async_trait]
+impl Loader<FindPageByDocumentId> for IkigaiDataLoader {
+    type Value = Vec<Page>;
+    type Error = IkigaiError;
+
+    async fn load(
+        &self,
+        keys: &[FindPageByDocumentId],
+    ) -> std::result::Result<HashMap<FindPageByDocumentId, Self::Value>, Self::Error> {
+        if keys.is_empty() {
+            return Ok(HashMap::new());
+        }
+
+        let document_ids = keys.iter().map(|key| key.document_id).unique().collect();
+        let conn = get_conn_from_actor().await?;
+        let pages = Page::find_all_by_document_ids(&conn, document_ids)?;
+
+        let mut result: HashMap<FindPageByDocumentId, Self::Value> = HashMap::new();
+        for page in pages {
+            let key = FindPageByDocumentId {
+                document_id: page.document_id,
+            };
+            if let Some(inner_pages) = result.get_mut(&key) {
+                inner_pages.push(page);
+            } else {
+                result.insert(key, vec![page]);
+            }
+        }
+
+        Ok(result)
+    }
+}
+
+#[derive(Debug, Clone, Hash, Eq, PartialEq)]
+pub struct FindPageContentByPageId {
+    pub page_id: Uuid,
+}
+
+#[async_trait::async_trait]
+impl Loader<FindPageContentByPageId> for IkigaiDataLoader {
+    type Value = Vec<PageContent>;
+    type Error = IkigaiError;
+
+    async fn load(
+        &self,
+        keys: &[FindPageContentByPageId],
+    ) -> std::result::Result<HashMap<FindPageContentByPageId, Self::Value>, Self::Error> {
+        if keys.is_empty() {
+            return Ok(HashMap::new());
+        }
+
+        let page_ids = keys.iter().map(|key| key.page_id).unique().collect();
+        let conn = get_conn_from_actor().await?;
+        let page_contents = PageContent::find_all_by_pages(&conn, page_ids)?;
+
+        let mut result: HashMap<FindPageContentByPageId, Self::Value> = HashMap::new();
+        for page_content in page_contents {
+            let key = FindPageContentByPageId {
+                page_id: page_content.page_id,
+            };
+            if let Some(inner_pages) = result.get_mut(&key) {
+                inner_pages.push(page_content);
+            } else {
+                result.insert(key, vec![page_content]);
+            }
+        }
+
+        Ok(result)
+    }
+}

@@ -36,7 +36,7 @@ https://ikigai.li/installation
 
 🚀 Help us keep `Ikigai` thriving! By sponsoring, you directly support ongoing development, ensuring more features, better maintenance, and a stronger community.
 
-[Sponsor us](https://ko-fi.com/ikigaihq)
+[Sponsor us](https://github.com/sponsors/ikigai-hq)
 
 ## Join Our Supportive Community! (Need help)
 

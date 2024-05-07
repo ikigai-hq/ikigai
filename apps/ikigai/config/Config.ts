@@ -2,8 +2,7 @@ const LOCAL_CONFIG = {
   graphQlEndpoint: "http://localhost:8000/",
   graphQlSubscription: "ws://localhost:8000",
   wsEndpoint: "ws://localhost:8000/ws",
-  growthBookClientId: "sdk-cIxIgrLvle1ok9TC",
-  growthBookUApiHost: "https://cdn.growthbook.io",
+  enableDocumentV2: false,
 };
 
 export const getConfig = () => {

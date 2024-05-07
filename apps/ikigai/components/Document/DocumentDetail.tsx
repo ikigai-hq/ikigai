@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Role } from "graphql/types";
 import useAuthUserStore from "context/ZustandAuthStore";
-import { DocumentType, getDocumentType } from "../../util/DocumentHelper";
+import { DocumentType, getDocumentType } from "util/DocumentHelper";
 import ReviewAssignmentDocument from "./Assignment/ReviewAssignmentDocument";
 import { BodyWrapper, Container, DocumentBodyContainer } from "./common";
 import Editor from "./Editor";

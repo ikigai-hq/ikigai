@@ -4,13 +4,15 @@ import DocumentDetail from "components/Document/DocumentDetail";
 import userMediaPermission from "../../../hook/UserMediaPermission";
 import useDocumentStore from "context/ZustandDocumentStore";
 import { NextPageWithLayout } from "pages/_app";
-import useSpaceStore from "../../../context/ZustandSpaceStore";
+import useSpaceStore from "context/ZustandSpaceStore";
 import Loading from "components/Loading";
 import { useRouter } from "next/router";
 import ServerDocumentFetchError from "components/Document/ServerDocumentFetchError";
 import { useLoadDocument } from "hook/UseLoadDocument";
+import Config from "config/Config";
+import DocumentPageV2 from "components/DocumentV2";
 
-const DocumentPage: NextPageWithLayout = () => {
+const DocumentPageV1 = () => {
   useDocumentStore.setState({ isPreviewMode: false });
   const router = useRouter();
   const {
@@ -39,6 +41,11 @@ const DocumentPage: NextPageWithLayout = () => {
   if (!masterDocument || !spaceId) return <Loading />;
 
   return <DocumentDetail />;
+};
+const DocumentPage: NextPageWithLayout = () => {
+  if (Config.enableDocumentV2) return <DocumentPageV2 />;
+
+  return <DocumentPageV1 />;
 };
 
 export default DocumentPage;

@@ -2,72 +2,57 @@ import create from "zustand";
 import { cloneDeep } from "lodash";
 
 import {
-  GetDocumentV2,
   GetDocumentV2_documentGet as IDocument,
+  GetDocuments_spaceGet_documents as ISpaceDocument,
 } from "graphql/types";
-import { useLazyQuery } from "@apollo/client";
-import { GET_DOCUMENT_V2 } from "../graphql/query/DocumentQuery";
-import { useEffect, useState } from "react";
+
+export type IUpdateSpaceDocument = Partial<
+  Omit<
+    ISpaceDocument,
+    "id" | "createdAt" | "assignment" | "submission" | "documentType"
+  >
+>;
+
+export type IUpdateActiveDocument = Partial<Pick<IDocument, "title">>;
 
 type IDocumentStore = {
   activeDocumentId?: string;
   activeDocument?: IDocument;
+  spaceDocuments: ISpaceDocument[];
   setActiveDocument: (activeDocument: IDocument) => void;
+  updateActiveDocument: (data: IUpdateActiveDocument) => void;
+  setSpaceDocuments: (documents: ISpaceDocument[]) => void;
+  updateSpaceDocument: (id: string, data: IUpdateSpaceDocument) => void;
 };
 
-const useDocumentStore = create<IDocumentStore>((set, _get) => ({
+const useDocumentStore = create<IDocumentStore>((set, get) => ({
   activeDocumentId: undefined,
   activeDocument: undefined,
+  spaceDocuments: [],
   setActiveDocument: (activeDocument) => {
     set({
       activeDocumentId: activeDocument.id,
       activeDocument: cloneDeep(activeDocument),
     });
   },
+  updateActiveDocument: (data: IUpdateActiveDocument) => {
+    const activeDocument = get().activeDocument;
+    if (activeDocument) {
+      Object.assign(activeDocument, data);
+      set({ activeDocument });
+    }
+  },
+  setSpaceDocuments: (documents: ISpaceDocument[]) => {
+    set({ spaceDocuments: cloneDeep(documents) });
+  },
+  updateSpaceDocument: (id: string, data: IUpdateSpaceDocument) => {
+    const currentSpaceDocuments = get().spaceDocuments;
+    const spaceDocument = currentSpaceDocuments.find(
+      (spaceDocument) => spaceDocument.id === id,
+    );
+    Object.assign(spaceDocument, data);
+    set({ spaceDocuments: currentSpaceDocuments });
+  },
 }));
-
-export const useLoadDocument = (documentId: string) => {
-  const [loading, setLoading] = useState(true);
-  const [loadingError, setLoadingError] = useState<string | undefined>();
-
-  const activeDocument = useDocumentStore((state) => state.activeDocument);
-  const setActiveDocument = useDocumentStore(
-    (state) => state.setActiveDocument,
-  );
-
-  const [fetchDocument] = useLazyQuery<GetDocumentV2>(GET_DOCUMENT_V2, {
-    fetchPolicy: "network-only",
-  });
-
-  useEffect(() => {
-    if (activeDocument?.id != documentId) {
-      load();
-    }
-  }, [documentId]);
-
-  const load = async () => {
-    setLoading(true);
-    const { data, error } = await fetchDocument({
-      variables: {
-        documentId,
-      },
-    });
-
-    if (data) {
-      setActiveDocument(data.documentGet);
-    }
-
-    if (error) {
-      setLoadingError(error.message);
-    }
-    setLoading(false);
-  };
-
-  return {
-    loading,
-    loadingError,
-    activeDocument,
-  };
-};
 
 export default useDocumentStore;

@@ -1,31 +1,24 @@
 import React, { useState } from "react";
-import shallow from "zustand/shallow";
 import { Divider } from "antd";
 import { t } from "@lingui/macro";
 import styled from "styled-components";
 
-import useDocumentStore from "context/ZustandDocumentStore";
-import { GetDocuments_spaceGet_documents } from "graphql/types";
 import useAuthUserStore from "context/ZustandAuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
 import UserBasicInformation from "components/UserBasicInformation";
 import { BreakPoints } from "styles/mediaQuery";
+import LearningModuleDnd from "components/common/LearningModuleDnd";
+import LessonItemDnd from "components/common/LearningModuleDnd/LessonItemDnd";
+import useDocumentStore from "context/DocumentV2Store";
 
-interface Props {
-  docs: GetDocuments_spaceGet_documents[];
-}
-
-const LeftSide: React.FC<Props> = () => {
-  const leftPanelHidden = useDocumentStore(
-    (state) => state.leftPanelHidden,
-    shallow,
-  );
+const LeftSide = () => {
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
+  const spaceDocuments = useDocumentStore((state) => state.spaceDocuments);
   const [openProfile, setOpenProfile] = useState(false);
 
   const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
   return (
-    <Container $hide={leftPanelHidden}>
+    <Container $hide={false}>
       <div style={{ width: "100%" }}>
         <SpaceInfoContainer>
           <UserBasicInformation
@@ -37,6 +30,14 @@ const LeftSide: React.FC<Props> = () => {
           />
         </SpaceInfoContainer>
         <NoMarginDivider $margin={0} />
+        <ListModule style={{ height: "80%", overflow: "auto" }}>
+          <LearningModuleDnd
+            docs={spaceDocuments}
+            keyword={""}
+            TreeItemComponent={LessonItemDnd}
+            defaultCollapsed={true}
+          />
+        </ListModule>
       </div>
       {openProfile && (
         <EditProfileModal
@@ -78,4 +79,12 @@ const Container = styled.div<{
     width: 100%;
     height: auto;
   }
+`;
+
+const ListModule = styled.div`
+  padding: 10px 20px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;

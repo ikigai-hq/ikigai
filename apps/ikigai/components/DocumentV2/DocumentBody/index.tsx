@@ -3,13 +3,21 @@ import { BreakPoints } from "styles/mediaQuery";
 
 import CoverPage from "./CoverPage";
 import { useState } from "react";
+import { Skeleton } from "antd";
 
-const DocumentBody = () => {
+export type DocumentBodyProps = {
+  loading: boolean;
+};
+
+const DocumentBody = ({ loading }: DocumentBodyProps) => {
   const [activePageId] = useState<string | undefined>();
 
   return (
     <Container>
-      <Body>{!activePageId && <CoverPage />}</Body>
+      <Body>
+        {loading && <Skeleton />}
+        {!loading && !activePageId && <CoverPage />}
+      </Body>
     </Container>
   );
 };

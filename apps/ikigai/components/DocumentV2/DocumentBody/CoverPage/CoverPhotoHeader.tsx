@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Trans } from "@lingui/macro";
 import React from "react";
+import Image from "next/image";
 
 import { Button } from "components/common/Button";
 import FileUpload, { DraggerStyled } from "components/common/FileUpload";
@@ -9,9 +10,11 @@ import useDocumentStore from "context/DocumentV2Store";
 import { Dropdown, MenuProps } from "antd";
 import { FileUploadResponse } from "components/common/AddResourceModal";
 import useUpdateDocument from "hook/UseUpdateDocument";
-import Image from "next/image";
+import usePermission from "hook/UsePermission";
+import { DocumentActionPermission } from "graphql/types";
 
 const CoverPhotoHeader = () => {
+  const allow = usePermission();
   const updateActiveDocumentServer = useUpdateDocument();
   const coverPhotoUrl = useDocumentStore(
     (state) => state.activeDocument?.coverPhotoUrl,
@@ -71,15 +74,17 @@ const CoverPhotoHeader = () => {
             layout="fill"
           />
         )}
-        <Dropdown
-          placement="bottomRight"
-          menu={{ items }}
-          getPopupContainer={(trigger: any) => trigger.parentNode}
-        >
-          <EditCoverButton size="large" icon={<PictureIcon />}>
-            <Trans>Edit Cover</Trans>
-          </EditCoverButton>
-        </Dropdown>
+        {allow(DocumentActionPermission.EDIT_DOCUMENT) && (
+          <Dropdown
+            placement="bottomRight"
+            menu={{ items }}
+            getPopupContainer={(trigger: any) => trigger.parentNode}
+          >
+            <EditCoverButton size="large" icon={<PictureIcon />}>
+              <Trans>Edit Cover</Trans>
+            </EditCoverButton>
+          </Dropdown>
+        )}
       </DocumentPhotoCover>
     </Container>
   );

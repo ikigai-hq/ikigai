@@ -8,8 +8,11 @@ import { BreakPoints } from "styles/mediaQuery";
 import useDocumentStore from "context/DocumentV2Store";
 import CoverPhotoHeader from "./CoverPhotoHeader";
 import UseUpdateDocument from "hook/UseUpdateDocument";
+import usePermission from "hook/UsePermission";
+import { DocumentActionPermission } from "graphql/types";
 
 const CoverPage = () => {
+  const allow = usePermission();
   const updateActiveDocumentServer = UseUpdateDocument();
   const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
   const activeDocumentTitle = useDocumentStore(
@@ -45,6 +48,7 @@ const CoverPage = () => {
           value={activeDocumentTitle}
           onChange={(e) => changeTitle(e.currentTarget.value)}
           placeholder={t`Untitled`}
+          readOnly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
         />
         <Divider />
       </div>

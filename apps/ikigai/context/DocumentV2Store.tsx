@@ -13,7 +13,9 @@ export type IUpdateSpaceDocument = Partial<
   >
 >;
 
-export type IUpdateActiveDocument = Partial<Pick<IDocument, "title">>;
+export type IUpdateActiveDocument = Partial<
+  Pick<IDocument, "title" | "coverPhotoUrl" | "coverPhotoId">
+>;
 
 type IDocumentStore = {
   activeDocumentId?: string;

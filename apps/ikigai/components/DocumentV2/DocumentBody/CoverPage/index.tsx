@@ -3,24 +3,18 @@ import { Divider, Input } from "antd";
 import { t } from "@lingui/macro";
 import styled from "styled-components";
 import { useDebounce } from "ahooks";
-import { useMutation } from "@apollo/client";
 
 import { BreakPoints } from "styles/mediaQuery";
 import useDocumentStore from "context/DocumentV2Store";
-import CoverHeader from "./CoverHeader";
-import { UPDATE_DOCUMENT } from "graphql/mutation/SpaceMutation";
-import { handleError } from "graphql/ApolloClient";
-import { UpdateDocumentData } from "graphql/types";
+import CoverPhotoHeader from "./CoverPhotoHeader";
+import UseUpdateDocument from "hook/UseUpdateDocument";
 
 const CoverPage = () => {
-  const [updateDocumentServer] = useMutation(UPDATE_DOCUMENT, {
-    onError: handleError,
-  });
+  const updateActiveDocumentServer = UseUpdateDocument();
   const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
   const activeDocumentTitle = useDocumentStore(
     (state) => state.activeDocument?.title,
   );
-  const activeDocument = useDocumentStore((state) => state.activeDocument);
   const updateActiveDocument = useDocumentStore(
     (state) => state.updateActiveDocument,
   );
@@ -30,18 +24,9 @@ const CoverPage = () => {
   const debouncedTitle = useDebounce(activeDocumentTitle, { wait: 500 });
 
   useEffect(() => {
-    const updateDocumentData: UpdateDocumentData = {
-      title: debouncedTitle || "",
-      coverPhotoId: activeDocument.coverPhotoId,
-      editorConfig: activeDocument.editorConfig,
-      body: activeDocument.body,
-    };
-    updateDocumentServer({
-      variables: {
-        documentId: activeDocumentId,
-        data: updateDocumentData,
-      },
-    });
+    if (debouncedTitle) {
+      updateActiveDocumentServer({ title: debouncedTitle });
+    }
   }, [debouncedTitle]);
 
   const changeTitle = (value: string) => {
@@ -51,7 +36,7 @@ const CoverPage = () => {
 
   return (
     <div>
-      <CoverHeader />
+      <CoverPhotoHeader />
       <div style={{ padding: 20 }}>
         <DocumentTitle
           autoSize

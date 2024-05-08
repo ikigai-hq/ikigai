@@ -239,3 +239,20 @@ export const GET_DOCUMENT_ASSIGNED_USERS = gql`
     }
   }
 `;
+
+export const GET_DOCUMENT_V2 = gql`
+  query GetDocumentV2($documentId: UUID!) {
+    documentGet(documentId: $documentId) {
+      id
+      body
+      title
+      isPublic
+      coverPhotoId
+      coverPhotoUrl
+      editorConfig
+      updatedAt
+      deletedAt
+      spaceId
+    }
+  }
+`;

@@ -3,13 +3,21 @@ import { BreakPoints } from "styles/mediaQuery";
 
 import CoverPage from "./CoverPage";
 import { useState } from "react";
+import { Skeleton } from "antd";
 
-const DocumentBody = () => {
+export type DocumentBodyProps = {
+  loading: boolean;
+};
+
+const DocumentBody = ({ loading }: DocumentBodyProps) => {
   const [activePageId] = useState<string | undefined>();
 
   return (
     <Container>
-      <Body>{!activePageId && <CoverPage />}</Body>
+      <Body>
+        {loading && <Skeleton />}
+        {!loading && !activePageId && <CoverPage />}
+      </Body>
     </Container>
   );
 };
@@ -34,7 +42,6 @@ const Body = styled.div<{
   background: #ffff;
   border: 1px solid var(--gray-4, #eaecef);
   box-sizing: border-box;
-  padding: 20px;
 
   ${BreakPoints.tablet} {
     margin: 0;

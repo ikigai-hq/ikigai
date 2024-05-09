@@ -4,7 +4,6 @@ import { t } from "@lingui/macro";
 import styled from "styled-components";
 import { useDebounce } from "ahooks";
 
-import { BreakPoints } from "styles/mediaQuery";
 import useDocumentStore from "context/DocumentV2Store";
 import CoverPhotoHeader from "./CoverPhotoHeader";
 import UseUpdateDocument from "hook/UseUpdateDocument";
@@ -57,7 +56,7 @@ const CoverPage = () => {
           />
         </div>
       </div>
-      <Divider />
+      <Divider style={{ margin: 0 }} />
     </div>
   );
 };

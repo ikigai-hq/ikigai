@@ -28,6 +28,7 @@ interface Props {
   acceptType?: string;
   showProgress?: boolean;
   onProgress?: (progress: number) => void;
+  disableDrag?: boolean;
 }
 
 const { Dragger } = Upload;
@@ -70,6 +71,7 @@ const FileUpload: React.FC<Props> = ({
   acceptType,
   showProgress,
   onProgress,
+  disableDrag,
 }) => {
   const theme = useTheme();
   const [progress, setProgress] = useState(0);
@@ -159,6 +161,21 @@ const FileUpload: React.FC<Props> = ({
 
   const shouldShowProgress =
     progress && showProgress === undefined ? true : showProgress;
+
+  if (disableDrag && children) {
+    return (
+      <Upload
+        name="file"
+        multiple={multiple === undefined ? true : multiple}
+        onChange={handleOnChange}
+        customRequest={customRequest}
+        showUploadList={false}
+        accept={acceptType}
+      >
+        {children}
+      </Upload>
+    );
+  }
 
   return (
     <>

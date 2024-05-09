@@ -27,8 +27,8 @@ const LeftSide = () => {
     (state) => state.setSpaceSettingVisible,
   );
   const spaceName = useSpaceStore((state) => state.space?.name);
-
   const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
+
   return (
     <Container $hide={false}>
       <div style={{ width: "100%" }}>

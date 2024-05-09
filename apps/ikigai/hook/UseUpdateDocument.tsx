@@ -17,6 +17,8 @@ const UseUpdateDocument = () => {
       coverPhotoId: activeDocument.coverPhotoId,
       editorConfig: activeDocument.editorConfig,
       body: activeDocument.body,
+      iconType: activeDocument.iconType,
+      iconValue: activeDocument.iconValue,
       ...data,
     };
 

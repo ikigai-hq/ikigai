@@ -13,6 +13,8 @@ export const GET_SPACE_INFORMATION = gql`
         index
         documentType
         deletedAt
+        iconType
+        iconValue
         assignment {
           id
         }

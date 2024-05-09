@@ -164,6 +164,8 @@ impl Document {
                 new_cover_photo_id,
                 new_editor_config,
                 clone_to_space,
+                self.icon_type,
+                self.icon_value.clone(),
             );
             Document::upsert(conn, new_doc)?
         };
@@ -198,6 +200,8 @@ impl Document {
                 updated_at: get_now_as_secs(),
                 updated_by: None,
                 last_edited_content_at: get_now_as_secs(),
+                icon_type: self.icon_type,
+                icon_value: self.icon_value.clone(),
             },
         )?;
 

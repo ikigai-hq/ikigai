@@ -110,6 +110,8 @@ diesel::table! {
         updated_at -> Int8,
         created_at -> Int8,
         space_id -> Nullable<Int4>,
+        icon_type -> Nullable<Int4>,
+        icon_value -> Nullable<Varchar>,
     }
 }
 

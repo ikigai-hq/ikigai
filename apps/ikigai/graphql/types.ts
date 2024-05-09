@@ -1670,6 +1670,8 @@ export interface GetDocumentV2_documentGet {
   updatedAt: number;
   deletedAt: number | null;
   spaceId: number | null;
+  iconType: IconType | null;
+  iconValue: string | null;
 }
 
 export interface GetDocumentV2 {
@@ -1793,6 +1795,8 @@ export interface GetDocuments_spaceGet_documents {
   index: number;
   documentType: DocumentType;
   deletedAt: number | null;
+  iconType: IconType | null;
+  iconValue: string | null;
   assignment: GetDocuments_spaceGet_documents_assignment | null;
   submission: GetDocuments_spaceGet_documents_submission | null;
 }
@@ -2145,6 +2149,11 @@ export enum HighlightType {
   REPLACE = "REPLACE",
 }
 
+export enum IconType {
+  EMOJI = "EMOJI",
+  IMAGE = "IMAGE",
+}
+
 export enum PageViewMode {
   SINGLE = "SINGLE",
   SPLIT = "SPLIT",
@@ -2318,6 +2327,8 @@ export interface UpdateDocumentData {
   body: string;
   coverPhotoId?: any | null;
   editorConfig: any;
+  iconType?: IconType | null;
+  iconValue?: string | null;
 }
 
 export interface UpdatePositionData {

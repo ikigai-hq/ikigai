@@ -13,10 +13,8 @@ import {
   IMenuItem,
 } from "components/common/ActionMenuDropdown";
 import useDocumentStore from "context/DocumentV2Store";
-import { ArrowDocument } from "components/common/IconSvg";
 import usePermission from "hook/UsePermission";
 import { SpaceActionPermission } from "graphql/types";
-import DocumentTypeIcon from "./DocumentTypeIcon";
 import CreateContentButton from "./CreateContentButton";
 
 export const DEFAULT_DOCUMENT_TITLE = "Untitled";
@@ -30,11 +28,9 @@ export type DocumentItemProps = {
 };
 
 const LessonItem = ({
-  collapsed,
   item,
   dragging,
   onChangeCollapsed,
-  hasChildren,
 }: DocumentItemProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -44,31 +40,21 @@ const LessonItem = ({
     (state) =>
       state.spaceDocuments.find((spaceDoc) => spaceDoc.id === item.id)?.title,
   );
+  const documentIconValue = useDocumentStore(
+    (state) =>
+      state.spaceDocuments.find((spaceDoc) => spaceDoc.id === item.id)
+        ?.iconValue || "✏️",
+  );
 
-  const onClickCollapse = (e: MouseEvent) => {
-    e.stopPropagation();
+  const onClickCollapse = () => {
     if (onChangeCollapsed) onChangeCollapsed();
   };
 
-  const menuList: IMenuItem<LearningItemType>[] = [];
-
   const active = router.query.documentId === item.id;
-  const icon = !hasChildren ? (
-    <MinusDocument />
-  ) : (
-    <ArrowDocument
-      style={{ transform: `rotate(${collapsed ? 180 : 270}deg)` }}
-      onClick={onClickCollapse}
-    />
-  );
-
   return (
     <Link href={formatDocumentRoute(item.id)} passHref>
-      <LessonItemContainer ref={ref} $active={active}>
-        {icon}
-        <span style={{ display: "flex" }}>
-          <DocumentTypeIcon documentType={item.documentType} />
-        </span>
+      <LessonItemContainer onClick={onClickCollapse} ref={ref} $active={active}>
+        <span style={{ display: "flex" }}>{documentIconValue}</span>
         <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
           <div style={{ flex: "1", display: "inline-grid" }}>
             {item.parentId ? (
@@ -85,7 +71,7 @@ const LessonItem = ({
             <ButtonGroup>
               <ActionMenuDropdown
                 item={item}
-                menuList={menuList}
+                menuList={[]}
                 hasPermission={true}
               >
                 <StyledButton
@@ -171,23 +157,6 @@ const LessonItemContainer = styled.div<{
     ${ButtonGroup} {
       display: flex;
     }
-  }
-`;
-
-const MinusDocument = styled.div`
-  width: 20px;
-  height: 20px;
-  position: relative;
-
-  &::before {
-    content: "";
-    width: 6px;
-    height: 0.5px;
-    background: #272f3e;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
   }
 `;
 

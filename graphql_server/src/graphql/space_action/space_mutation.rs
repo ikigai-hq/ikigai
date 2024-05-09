@@ -254,13 +254,9 @@ impl SpaceMutation {
         .format_err()?;
         let claims = Claims::new(space_member.user_id);
         let access_token = claims.encode()?;
-        let starter_document = Document::get_or_create_starter_doc(
-            &conn,
-            space_member.user_id,
-            space_id,
-            space.name.clone(),
-        )
-        .format_err()?;
+        let starter_document =
+            Document::get_or_create_starter_doc(&conn, space_member.user_id, space_id)
+                .format_err()?;
 
         let notification = Notification::new_space_member_notification(NewSpaceMemberContext {
             space_name: space.name,

@@ -61,15 +61,13 @@ impl UserMutation {
                         &conn,
                         space.creator_id,
                         space_member.space_id,
-                        space.name,
                     )
                     .format_err()?
                 } else {
                     conn.transaction::<_, IkigaiError, _>(|| {
                         let space = create_default_space(&conn, user.id, Role::Teacher)?;
-                        let document = Document::get_or_create_starter_doc(
-                            &conn, user.id, space.id, space.name,
-                        )?;
+                        let document =
+                            Document::get_or_create_starter_doc(&conn, user.id, space.id)?;
                         Ok(document)
                     })
                     .format_err()?
@@ -83,8 +81,7 @@ impl UserMutation {
                     let user = NewUser::new(email.clone(), email, "".into());
                     let user = User::insert(&conn, &user)?;
                     let space = create_default_space(&conn, user.id, Role::Teacher)?;
-                    let document =
-                        Document::get_or_create_starter_doc(&conn, user.id, space.id, space.name)?;
+                    let document = Document::get_or_create_starter_doc(&conn, user.id, space.id)?;
 
                     Ok((user, document))
                 })

@@ -14,6 +14,23 @@ pub enum DocumentType {
     Assignment,
 }
 
+#[derive(
+    Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
+)]
+#[sql_type = "Integer"]
+pub enum IconType {
+    Emoji,
+    Image,
+}
+
+impl_enum_for_db!(IconType);
+
+impl Default for IconType {
+    fn default() -> Self {
+        Self::Emoji
+    }
+}
+
 #[derive(Debug, Clone, AsChangeset, InputObject)]
 #[table_name = "documents"]
 #[changeset_options(treat_none_as_null = "true")]
@@ -28,6 +45,8 @@ pub struct UpdateDocumentData {
     pub updated_by: Option<i32>,
     #[graphql(skip)]
     pub last_edited_content_at: i64,
+    pub icon_type: Option<IconType>,
+    pub icon_value: Option<String>,
 }
 
 #[derive(Debug, Clone, AsChangeset, InputObject)]
@@ -67,6 +86,10 @@ pub struct Document {
     #[graphql(skip_input)]
     pub created_at: i64,
     pub space_id: Option<i32>,
+    #[graphql(skip_input)]
+    pub icon_type: Option<IconType>,
+    #[graphql(skip_input)]
+    pub icon_value: Option<String>,
 }
 
 impl Document {
@@ -80,6 +103,8 @@ impl Document {
         cover_photo_id: Option<Uuid>,
         editor_config: serde_json::Value,
         space_id: Option<i32>,
+        icon_type: Option<IconType>,
+        icon_value: Option<String>,
     ) -> Self {
         Self {
             id: Uuid::new_v4(),
@@ -97,6 +122,8 @@ impl Document {
             is_public: false,
             created_at: get_now_as_secs(),
             space_id,
+            icon_type,
+            icon_value,
         }
     }
 
@@ -115,7 +142,6 @@ impl Document {
         conn: &PgConnection,
         user_id: i32,
         space_id: i32,
-        name: String,
     ) -> Result<Self, Error> {
         if let Some(starter_doc) = Document::find_starter_of_space(conn, space_id)? {
             Ok(starter_doc)
@@ -123,7 +149,7 @@ impl Document {
             let starter_doc = Self::new(
                 user_id,
                 "".into(),
-                name,
+                "First Document".into(),
                 None,
                 0,
                 None,
@@ -133,6 +159,8 @@ impl Document {
                     "width": "Standard",
                 }),
                 Some(space_id),
+                None,
+                None,
             );
 
             Document::upsert(conn, starter_doc)

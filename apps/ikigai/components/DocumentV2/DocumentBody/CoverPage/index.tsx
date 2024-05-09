@@ -10,6 +10,7 @@ import CoverPhotoHeader from "./CoverPhotoHeader";
 import UseUpdateDocument from "hook/UseUpdateDocument";
 import usePermission from "hook/UsePermission";
 import { DocumentActionPermission } from "graphql/types";
+import DocumentIconHeader from "./DocumentIconHeader";
 
 const CoverPage = () => {
   const allow = usePermission();
@@ -40,18 +41,23 @@ const CoverPage = () => {
   return (
     <div>
       <CoverPhotoHeader />
-      <div style={{ padding: 20 }}>
-        <DocumentTitle
-          autoSize
-          variant="borderless"
-          maxLength={255}
-          value={activeDocumentTitle}
-          onChange={(e) => changeTitle(e.currentTarget.value)}
-          placeholder={t`Untitled`}
-          readOnly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
-        />
-        <Divider />
+      <div style={{ padding: 20, display: "flex", alignItems: "center" }}>
+        <div>
+          <DocumentIconHeader />
+        </div>
+        <div>
+          <DocumentTitle
+            autoSize
+            variant="borderless"
+            maxLength={255}
+            value={activeDocumentTitle}
+            onChange={(e) => changeTitle(e.currentTarget.value)}
+            placeholder={t`Untitled`}
+            readOnly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
+          />
+        </div>
       </div>
+      <Divider />
     </div>
   );
 };
@@ -68,10 +74,6 @@ export const DocumentTitle = styled(Input.TextArea)`
       outline: none !important;
       box-shadow: none !important;
       border-color: transparent !important;
-    }
-
-    ${BreakPoints.tablet} {
-      font-size: 32px;
     }
   }
 `;

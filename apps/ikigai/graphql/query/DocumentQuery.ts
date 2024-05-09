@@ -253,6 +253,8 @@ export const GET_DOCUMENT_V2 = gql`
       updatedAt
       deletedAt
       spaceId
+      iconType
+      iconValue
     }
   }
 `;

@@ -457,7 +457,7 @@ impl Loader<FindDocumentType> for IkigaiDataLoader {
 
         let mut result: HashMap<FindDocumentType, Self::Value> = HashMap::new();
         for key in keys {
-            let mut document_type = DocumentType::Normal;
+            let mut document_type = DocumentType::Folder;
 
             if assignments
                 .iter()

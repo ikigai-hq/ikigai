@@ -59,7 +59,7 @@ const ContentIcon = ({ size = 17 }: { size?: number }) => {
 const DocumentTypeIcon = ({ documentType, size }: DocumentTypeIconProps) => {
   return (
     <>
-      {documentType === DocumentType.NORMAL && (
+      {documentType === DocumentType.FOLDER && (
         <ContentIcon size={size || 16} />
       )}
       {documentType === DocumentType.ASSIGNMENT && (

@@ -70,7 +70,7 @@ const CreateContentButton = ({
     {
       key: "1",
       label: t`Document`,
-      onClick: () => clickCreateDocument(DocumentType.NORMAL),
+      onClick: () => clickCreateDocument(DocumentType.FOLDER),
     },
     {
       key: "2",

@@ -3859,7 +3859,7 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "NORMAL",
+            "name": "FOLDER",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -8879,6 +8879,26 @@
             "type": {
               "kind": "SCALAR",
               "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "iconType",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "IconType",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "iconValue",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "defaultValue": null

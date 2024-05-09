@@ -8,14 +8,12 @@ import Link from "next/link";
 import { LearningItemType } from "components/common/LearningModuleDnd/types";
 import { TextButtonWithHover } from "components/common/Button";
 import { formatDocumentRoute } from "config/Routes";
-import {
-  ActionMenuDropdown,
-  IMenuItem,
-} from "components/common/ActionMenuDropdown";
+import { ActionMenuDropdown } from "components/common/ActionMenuDropdown";
 import useDocumentStore from "context/DocumentV2Store";
 import usePermission from "hook/UsePermission";
-import { SpaceActionPermission } from "graphql/types";
+import { DocumentType, SpaceActionPermission } from "graphql/types";
 import CreateContentButton from "./CreateContentButton";
+import { ArrowDocument } from "../IconSvg";
 
 export const DEFAULT_DOCUMENT_TITLE = "Untitled";
 
@@ -31,6 +29,7 @@ const LessonItem = ({
   item,
   dragging,
   onChangeCollapsed,
+  collapsed,
 }: DocumentItemProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -45,24 +44,32 @@ const LessonItem = ({
       state.spaceDocuments.find((spaceDoc) => spaceDoc.id === item.id)
         ?.iconValue || "✏️",
   );
+  const isFolder = item.documentType === DocumentType.FOLDER;
 
   const onClickCollapse = () => {
-    if (onChangeCollapsed) onChangeCollapsed();
+    if (onChangeCollapsed && isFolder) onChangeCollapsed();
   };
+  const icon = (
+    <ArrowDocument
+      style={{ transform: `rotate(${collapsed ? 180 : 270}deg)` }}
+      onClick={onClickCollapse}
+    />
+  );
 
   const active = router.query.documentId === item.id;
   return (
     <Link href={formatDocumentRoute(item.id)} passHref>
-      <LessonItemContainer onClick={onClickCollapse} ref={ref} $active={active}>
+      <LessonItemContainer ref={ref} $active={active}>
+        <div>{isFolder && icon}</div>
         <span style={{ display: "flex" }}>{documentIconValue}</span>
         <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
           <div style={{ flex: "1", display: "inline-grid" }}>
             {item.parentId ? (
-              <StyledText ellipsis $active={active}>
+              <StyledText ellipsis $active={active} $isFolder={isFolder}>
                 {documentTitle || DEFAULT_DOCUMENT_TITLE}
               </StyledText>
             ) : (
-              <StyledText ellipsis>
+              <StyledText ellipsis $isFolder={isFolder}>
                 {documentTitle || DEFAULT_DOCUMENT_TITLE}
               </StyledText>
             )}
@@ -81,14 +88,16 @@ const LessonItem = ({
                   onClick={(e) => e.stopPropagation()}
                 />
               </ActionMenuDropdown>
-              <CreateContentButton parentId={item.id}>
-                <StyledButton
-                  icon={<PlusOutlined />}
-                  type="text"
-                  size={"small"}
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </CreateContentButton>
+              {isFolder && (
+                <CreateContentButton parentId={item.id}>
+                  <StyledButton
+                    icon={<PlusOutlined />}
+                    type="text"
+                    size={"small"}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </CreateContentButton>
+              )}
             </ButtonGroup>
           )}
         </div>
@@ -100,12 +109,14 @@ const LessonItem = ({
 const StyledText = styled(Typography.Text)<{
   $active?: boolean;
   $weight?: number;
+  $isFolder?: boolean;
 }>`
-  color: ${(props) => props.theme.colors.gray[7]};
+  color: ${(props) =>
+    props.$isFolder ? props.theme.colors.gray[7] : props.theme.colors.gray[6]};
   font-family: Inter;
   font-size: 14px;
   font-style: normal;
-  font-weight: ${(props) => props.$weight || 500};
+  font-weight: 500;
   line-height: normal;
   letter-spacing: -0.014px;
 `;

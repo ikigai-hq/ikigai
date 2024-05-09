@@ -1,25 +1,27 @@
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import {
-  GetDocuments_spaceGet_documents as IDocumentItemList, SpaceActionPermission,
+  DocumentType,
+  GetDocuments_spaceGet_documents as IDocumentItemList,
+  SpaceActionPermission,
   UpdatePositionData,
 } from "graphql/types";
+
 import {
   FlattenedItem,
   TreeItemComponentType,
   TreeItems,
 } from "../SortableTree/types";
-import { debounce } from "lodash";
-import useSpaceStore from "../../../context/ZustandSpaceStore";
-import { useEffect, useState } from "react";
+import { debounce, isEqual } from "lodash";
+import useSpaceStore from "context/ZustandSpaceStore";
 import { LearningItemType, LearningModuleItemTypeWrapper } from "./types";
-import { isEqual } from "lodash";
 import { flattenTree, SortableTree } from "../SortableTree";
 import {
   buildTree,
   findItemDeep,
   getFullPathFromNode,
 } from "../SortableTree/utilities";
-import usePermission from "../../../hook/UsePermission";
+import usePermission from "hook/UsePermission";
 
 export type LearningModuleDndProps = {
   docs: IDocumentItemList[];
@@ -97,6 +99,7 @@ const convertToTreeItems = (
     .filter((doc) => doc.parentId === parentId)
     .sort((docA, docB) => docA.index - docB.index)
     .map((doc) => {
+      const isFolder = doc.documentType === DocumentType.FOLDER;
       let collapsed = !listCollapsed.includes(doc.id);
       if (previousItems && previousItems.length > 0) {
         const item = findItemDeep(previousItems, doc.id);
@@ -104,6 +107,8 @@ const convertToTreeItems = (
       } else if (cacheFlattenTree && cacheFlattenTree.length > 0) {
         const item = cacheFlattenTree.find((item) => item.id === doc.id);
         if (item) collapsed = item.collapsed;
+      } else if (isFolder) {
+        collapsed = false;
       }
 
       const children = convertToTreeItems(
@@ -124,6 +129,7 @@ const convertToTreeItems = (
           ...convertDocumentToLearningItemType(doc, childrenTitle),
         },
         collapsed,
+        canHaveChildren: isFolder,
       };
     });
 };

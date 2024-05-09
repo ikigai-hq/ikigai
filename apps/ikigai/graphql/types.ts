@@ -2171,7 +2171,7 @@ export enum DocumentActionPermission {
 
 export enum DocumentType {
   ASSIGNMENT = "ASSIGNMENT",
-  NORMAL = "NORMAL",
+  FOLDER = "FOLDER",
 }
 
 export enum GradeMethod {
@@ -2261,6 +2261,8 @@ export interface NewDocument {
   body: string;
   editorConfig: any;
   spaceId?: number | null;
+  iconType?: IconType | null;
+  iconValue?: string | null;
 }
 
 export interface NewDocumentAssignedUserInput {

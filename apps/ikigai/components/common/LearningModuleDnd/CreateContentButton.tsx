@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { useMutation } from "@apollo/client";
 
 import { TextButton } from "components/common/Button";
-import { AddDocumentStandaloneV2, DocumentType } from "graphql/types";
+import { AddDocumentStandaloneV2, DocumentType, IconType } from "graphql/types";
 import { Text, TextWeight } from "components/common/Text";
 import { DEFAULT_DOCUMENT_TITLE } from "../../Document/common";
 import { formatDocumentRoute } from "config/Routes";
@@ -49,6 +49,8 @@ const CreateContentButton = ({
       .filter((doc) => doc.parentId === parentId)
       .map((doc) => doc.index);
     const index = indexes.length ? Math.max(...indexes) + 1 : 1;
+
+    const isAssignment = docType === DocumentType.ASSIGNMENT;
     const { data } = await createStandaloneDocument({
       variables: {
         data: {
@@ -61,9 +63,11 @@ const CreateContentButton = ({
             style: EditorConfigType.DEFAULT,
             width: EditorConfigType.WIDTH_STANDARD,
           },
+          iconType: IconType.EMOJI,
+          iconValue: isAssignment ? "✏️" : "📂",
         },
         spaceId,
-        isAssignment: docType === DocumentType.ASSIGNMENT,
+        isAssignment,
       },
     });
 
@@ -87,8 +91,8 @@ const CreateContentButton = ({
   const menuCreate: MenuProps["items"] = [
     {
       key: "1",
-      label: t`Document`,
-      onClick: () => clickCreateDocument(DocumentType.NORMAL),
+      label: t`Folder`,
+      onClick: () => clickCreateDocument(DocumentType.FOLDER),
     },
     {
       key: "2",

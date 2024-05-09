@@ -10,7 +10,7 @@ use crate::util::get_now_as_secs;
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Enum)]
 pub enum DocumentType {
-    Normal,
+    Folder,
     Assignment,
 }
 
@@ -86,9 +86,7 @@ pub struct Document {
     #[graphql(skip_input)]
     pub created_at: i64,
     pub space_id: Option<i32>,
-    #[graphql(skip_input)]
     pub icon_type: Option<IconType>,
-    #[graphql(skip_input)]
     pub icon_value: Option<String>,
 }
 

@@ -70,7 +70,7 @@ impl Document {
         Ok(loader
             .load_one(FindDocumentType(self.id))
             .await?
-            .unwrap_or(DocumentType::Normal))
+            .unwrap_or(DocumentType::Folder))
     }
 
     async fn page_blocks(&self, ctx: &Context<'_>) -> Result<Vec<PageBlock>> {

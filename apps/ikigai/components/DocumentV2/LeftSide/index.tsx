@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Divider, Typography } from "antd";
+import { Divider, Tooltip, Typography } from "antd";
 import { t, Trans } from "@lingui/macro";
 import styled, { useTheme } from "styled-components";
-import { SettingOutlined } from "@ant-design/icons";
+import { PlusOutlined, SettingOutlined } from "@ant-design/icons";
 
 import useAuthUserStore from "context/ZustandAuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
@@ -16,6 +16,7 @@ import { SpaceActionPermission } from "graphql/types";
 import { TextButtonWithHover } from "components/common/Button";
 import usePermission from "hook/UsePermission";
 import useSpaceStore from "context/ZustandSpaceStore";
+import CreateContentButton from "components/common/LearningModuleDnd/CreateContentButton";
 
 const LeftSide = () => {
   const allow = usePermission();
@@ -60,14 +61,26 @@ const LeftSide = () => {
           </SpaceInformation>
         </SpaceInfoContainer>
         <NoMarginDivider $margin={0} />
-        <div style={{ padding: "10px" }}>
-          <Text
-            color={theme.colors.gray[6]}
-            weight={TextWeight.medium}
-            level={2}
-          >
-            <Trans>Material</Trans>
-          </Text>
+        <div style={{ padding: "10px", display: "flex" }}>
+          <div style={{ flex: 1 }}>
+            <Text
+              color={theme.colors.gray[6]}
+              weight={TextWeight.medium}
+              level={2}
+            >
+              <Trans>Content</Trans>
+            </Text>
+          </div>
+          <CreateContentButton parentId={null}>
+            <Tooltip title={t`Add content`} arrow={false}>
+              <StyledButton
+                icon={<PlusOutlined />}
+                type="text"
+                size={"small"}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </Tooltip>
+          </CreateContentButton>
         </div>
         <ListModule style={{ height: "80%", overflow: "auto" }}>
           <LearningModuleDnd
@@ -128,6 +141,11 @@ const ListModule = styled.div`
 
 const SpaceInformation = styled.div`
   display: flex;
-  padding: 0 10px 0 15px;
+  padding: 0 2px 0 10px;
   align-items: baseline;
+`;
+
+const StyledButton = styled(TextButtonWithHover)`
+  margin: unset;
+  color: #888e9c;
 `;

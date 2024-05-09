@@ -60,7 +60,7 @@ const LessonItem = ({
   return (
     <Link href={formatDocumentRoute(item.id)} passHref>
       <LessonItemContainer ref={ref} $active={active}>
-        <div>{isFolder && icon}</div>
+        <div style={{ marginTop: 5 }}>{isFolder && icon}</div>
         <span style={{ display: "flex" }}>{documentIconValue}</span>
         <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
           <div style={{ flex: "1", display: "inline-grid" }}>
@@ -111,12 +111,11 @@ const StyledText = styled(Typography.Text)<{
   $weight?: number;
   $isFolder?: boolean;
 }>`
-  color: ${(props) =>
-    props.$isFolder ? props.theme.colors.gray[7] : props.theme.colors.gray[6]};
+  color: ${(props) => props.theme.colors.gray[7]};
   font-family: Inter;
   font-size: 14px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: ${(props) => (props.$isFolder ? 600 : 400)};
   line-height: normal;
   letter-spacing: -0.014px;
 `;

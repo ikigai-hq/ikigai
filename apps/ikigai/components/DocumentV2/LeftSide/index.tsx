@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Divider } from "antd";
-import { t } from "@lingui/macro";
-import styled from "styled-components";
+import { Divider, Typography } from "antd";
+import { t, Trans } from "@lingui/macro";
+import styled, { useTheme } from "styled-components";
+import { SettingOutlined } from "@ant-design/icons";
 
 import useAuthUserStore from "context/ZustandAuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
@@ -10,11 +11,22 @@ import { BreakPoints } from "styles/mediaQuery";
 import LearningModuleDnd from "components/common/LearningModuleDnd";
 import LessonItemDnd from "components/common/LearningModuleDnd/LessonItemDnd";
 import useDocumentStore from "context/DocumentV2Store";
+import { Text, TextWeight } from "components/common/Text";
+import { SpaceActionPermission } from "graphql/types";
+import { TextButtonWithHover } from "components/common/Button";
+import usePermission from "hook/UsePermission";
+import useSpaceStore from "context/ZustandSpaceStore";
 
 const LeftSide = () => {
+  const allow = usePermission();
+  const theme = useTheme();
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
   const spaceDocuments = useDocumentStore((state) => state.spaceDocuments);
   const [openProfile, setOpenProfile] = useState(false);
+  const setSpaceSettingVisible = useSpaceStore(
+    (state) => state.setSpaceSettingVisible,
+  );
+  const spaceName = useSpaceStore((state) => state.space?.name);
 
   const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
   return (
@@ -28,8 +40,35 @@ const LeftSide = () => {
             randomColor={me?.randomColor}
             email={me?.email}
           />
+          <SpaceInformation>
+            <Typography.Paragraph
+              style={{ marginTop: 10, flex: 1 }}
+              ellipsis={{ rows: 2 }}
+              strong
+            >
+              {spaceName}
+            </Typography.Paragraph>
+            {allow(SpaceActionPermission.MANAGE_SPACE_SETTING) && (
+              <div>
+                <TextButtonWithHover
+                  type="text"
+                  icon={<SettingOutlined />}
+                  onClick={() => setSpaceSettingVisible(true)}
+                />
+              </div>
+            )}
+          </SpaceInformation>
         </SpaceInfoContainer>
         <NoMarginDivider $margin={0} />
+        <div style={{ padding: "10px" }}>
+          <Text
+            color={theme.colors.gray[6]}
+            weight={TextWeight.medium}
+            level={2}
+          >
+            <Trans>Material</Trans>
+          </Text>
+        </div>
         <ListModule style={{ height: "80%", overflow: "auto" }}>
           <LearningModuleDnd
             docs={spaceDocuments}
@@ -51,9 +90,7 @@ const LeftSide = () => {
 
 export default LeftSide;
 
-const SpaceInfoContainer = styled.div`
-  padding: 5px;
-`;
+const SpaceInfoContainer = styled.div``;
 
 const NoMarginDivider = styled(Divider)<{ $margin: number }>`
   margin-top: ${(props) => props.$margin}px;
@@ -82,9 +119,15 @@ const Container = styled.div<{
 `;
 
 const ListModule = styled.div`
-  padding: 10px 20px;
+  padding: 2px 5px;
   overflow: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
+`;
+
+const SpaceInformation = styled.div`
+  display: flex;
+  padding: 0 10px 0 15px;
+  align-items: baseline;
 `;

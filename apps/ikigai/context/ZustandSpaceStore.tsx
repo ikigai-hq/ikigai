@@ -25,6 +25,7 @@ export type ISpaceDetail = GetDocuments_spaceGet;
 export type ISpaceContext = {
   spaceId?: number;
   space?: ISpaceDetail;
+  setSpace: (space: ISpaceDetail) => void;
   spaceSettingVisible: boolean;
   setSpaceSettingVisible: (visible: boolean) => void;
   setSpaceName: (spaceName: string) => void;
@@ -129,10 +130,13 @@ const useSpaceStore = create<ISpaceContext>((set, get) => ({
     });
 
     get().setDocuments(cloneDeep(data?.spaceGet?.documents) || []);
-    set({
-      space: cloneDeep(data?.spaceGet),
-    });
+    if (data) get().setSpace(data.spaceGet);
   },
+  setSpace: (space) =>
+    set({
+      space: cloneDeep(space),
+      spaceId: space.id,
+    }),
   updateDocumentPositions: async (items) => {
     const res = await mutate<UpdateDocumentPositions>({
       mutation: UPDATE_DOCUMENT_POSITIONS,

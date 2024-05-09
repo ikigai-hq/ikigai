@@ -3,10 +3,19 @@ import { PlusOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import styled, { useTheme } from "styled-components";
 import { t, Trans } from "@lingui/macro";
+import { useRouter } from "next/router";
+import { useMutation } from "@apollo/client";
 
 import { TextButton } from "components/common/Button";
-import { DocumentType } from "graphql/types";
+import { AddDocumentStandaloneV2, DocumentType } from "graphql/types";
 import { Text, TextWeight } from "components/common/Text";
+import { DEFAULT_DOCUMENT_TITLE } from "../../Document/common";
+import { formatDocumentRoute } from "config/Routes";
+import useDocumentStore from "context/DocumentV2Store";
+import { handleError } from "graphql/ApolloClient";
+import { ADD_DOCUMENT_STANDALONE_V2 } from "graphql/mutation/DocumentMutation";
+import { EditorConfigType } from "context/ZustandDocumentStore";
+import useSpaceStore from "context/ZustandSpaceStore";
 
 export type CreateContentButtonProps = {
   parentId: string | null;
@@ -19,13 +28,60 @@ const CreateContentButton = ({
   children,
   onlyIcon = false,
 }: CreateContentButtonProps) => {
+  const router = useRouter();
   const theme = useTheme();
+  const [createStandaloneDocument] = useMutation<AddDocumentStandaloneV2>(
+    ADD_DOCUMENT_STANDALONE_V2,
+    {
+      onError: handleError,
+    },
+  );
   const [loading, setLoading] = useState(false);
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
+  const documents = useDocumentStore((state) => state.spaceDocuments);
+  const addSpaceDocument = useDocumentStore((state) => state.addSpaceDocument);
+  const spaceId = useSpaceStore((state) => state.spaceId);
   const color = theme.colors.gray[5];
+
+  const onCreate = async (docType: DocumentType) => {
+    const indexes = documents
+      .filter((doc) => !doc.deletedAt)
+      .filter((doc) => doc.parentId === parentId)
+      .map((doc) => doc.index);
+    const index = indexes.length ? Math.max(...indexes) + 1 : 1;
+    const { data } = await createStandaloneDocument({
+      variables: {
+        data: {
+          title: DEFAULT_DOCUMENT_TITLE,
+          body: "",
+          index,
+          parentId,
+          editorConfig: {
+            size: EditorConfigType.DEFAULT,
+            style: EditorConfigType.DEFAULT,
+            width: EditorConfigType.WIDTH_STANDARD,
+          },
+        },
+        spaceId,
+        isAssignment: docType === DocumentType.ASSIGNMENT,
+      },
+    });
+
+    if (data) {
+      addSpaceDocument(data.documentCreate);
+    }
+
+    return data;
+  };
 
   const clickCreateDocument = async (docType: DocumentType) => {
     setLoading(true);
+    const res = await onCreate(docType);
+    setIsOpenDropdown(false);
+    if (res) {
+      router.push(formatDocumentRoute(res.documentCreate.id));
+      setLoading(false);
+    }
   };
 
   const menuCreate: MenuProps["items"] = [

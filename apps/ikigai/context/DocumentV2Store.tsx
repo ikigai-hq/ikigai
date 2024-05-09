@@ -27,6 +27,7 @@ type IDocumentStore = {
   setActiveDocument: (activeDocument: IDocument) => void;
   updateActiveDocument: (data: IUpdateActiveDocument) => void;
   setSpaceDocuments: (documents: ISpaceDocument[]) => void;
+  addSpaceDocument: (document: ISpaceDocument) => void;
   updateSpaceDocument: (id: string, data: IUpdateSpaceDocument) => void;
 };
 
@@ -49,6 +50,11 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
   },
   setSpaceDocuments: (documents: ISpaceDocument[]) => {
     set({ spaceDocuments: cloneDeep(documents) });
+  },
+  addSpaceDocument: (document: ISpaceDocument) => {
+    const spaceDocuments = get().spaceDocuments;
+    spaceDocuments.push(cloneDeep(document));
+    set({ spaceDocuments });
   },
   updateSpaceDocument: (id: string, data: IUpdateSpaceDocument) => {
     const currentSpaceDocuments = get().spaceDocuments;

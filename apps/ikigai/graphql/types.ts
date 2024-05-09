@@ -63,6 +63,47 @@ export interface AddDocumentStandaloneVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: AddDocumentStandaloneV2
+// ====================================================
+
+export interface AddDocumentStandaloneV2_documentCreate_assignment {
+  id: number;
+}
+
+export interface AddDocumentStandaloneV2_documentCreate_submission {
+  id: number;
+}
+
+export interface AddDocumentStandaloneV2_documentCreate {
+  id: any;
+  title: string;
+  createdAt: number;
+  parentId: any | null;
+  index: number;
+  documentType: DocumentType;
+  deletedAt: number | null;
+  iconType: IconType | null;
+  iconValue: string | null;
+  assignment: AddDocumentStandaloneV2_documentCreate_assignment | null;
+  submission: AddDocumentStandaloneV2_documentCreate_submission | null;
+}
+
+export interface AddDocumentStandaloneV2 {
+  documentCreate: AddDocumentStandaloneV2_documentCreate;
+}
+
+export interface AddDocumentStandaloneV2Variables {
+  data: NewDocument;
+  spaceId?: number | null;
+  isAssignment: boolean;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: UpdateDocumentPositions
 // ====================================================
 

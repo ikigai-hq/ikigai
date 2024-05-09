@@ -28,6 +28,36 @@ export const ADD_DOCUMENT_STANDALONE = gql`
   }
 `;
 
+export const ADD_DOCUMENT_STANDALONE_V2 = gql`
+  mutation AddDocumentStandaloneV2(
+    $data: NewDocument!
+    $spaceId: Int
+    $isAssignment: Boolean!
+  ) {
+    documentCreate(
+      data: $data
+      spaceId: $spaceId
+      isAssignment: $isAssignment
+    ) {
+      id
+      title
+      createdAt
+      parentId
+      index
+      documentType
+      deletedAt
+      iconType
+      iconValue
+      assignment {
+        id
+      }
+      submission {
+        id
+      }
+    }
+  }
+`;
+
 export const UPDATE_DOCUMENT_POSITIONS = gql`
   mutation UpdateDocumentPositions($items: [UpdatePositionData!]!) {
     documentUpdatePositions(items: $items)

@@ -255,6 +255,7 @@ export const GET_DOCUMENT_V2 = gql`
       spaceId
       iconType
       iconValue
+      documentType
     }
   }
 `;

@@ -1713,6 +1713,7 @@ export interface GetDocumentV2_documentGet {
   spaceId: number | null;
   iconType: IconType | null;
   iconValue: string | null;
+  documentType: DocumentType;
 }
 
 export interface GetDocumentV2 {

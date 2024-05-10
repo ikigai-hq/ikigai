@@ -61,7 +61,9 @@ const LessonItem = ({
     <Link href={formatDocumentRoute(item.id)} passHref>
       <LessonItemContainer ref={ref} $active={active}>
         <div style={{ marginTop: 5 }}>{isFolder && icon}</div>
-        <span style={{ display: "flex" }}>{documentIconValue}</span>
+        {!isFolder && (
+          <span style={{ display: "flex" }}>{documentIconValue}</span>
+        )}
         <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
           <div style={{ flex: "1", display: "inline-grid" }}>
             {item.parentId ? (

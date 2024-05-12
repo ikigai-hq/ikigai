@@ -6,10 +6,10 @@ use uuid::Uuid;
 
 use super::schema::{notification_receivers, notifications};
 use crate::db::User;
+use crate::helper::generate_magic_link;
 use crate::impl_enum_for_db;
-use crate::service::redis::Redis;
-use crate::util::url_util::{document_url, magic_link_for_document_url, space_url};
-use crate::util::{generate_otp, get_now_as_secs};
+use crate::util::get_now_as_secs;
+use crate::util::url_util::{format_document_url, format_space_url};
 
 #[derive(
     Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
@@ -104,7 +104,7 @@ impl ContextMessage for NewSpaceMemberContext {
     }
 
     fn get_url_path(&self, _: &User) -> String {
-        space_url(self.space_id)
+        format_space_url(self.space_id)
     }
 }
 
@@ -130,7 +130,7 @@ impl ContextMessage for SubmitSubmissionContext {
     }
 
     fn get_url_path(&self, _: &User) -> String {
-        document_url(self.document_submission_id)
+        format_document_url(self.document_submission_id)
     }
 }
 
@@ -155,7 +155,7 @@ Great news! Your teacher has provided feedback on your submission in {submission
     }
 
     fn get_url_path(&self, _: &User) -> String {
-        document_url(self.document_submission_id)
+        format_document_url(self.document_submission_id)
     }
 }
 
@@ -179,12 +179,8 @@ Hello there! You've been assigned to a new assignment: {assignment_name}. If you
     }
 
     fn get_url_path(&self, receiver: &User) -> String {
-        let otp = generate_otp();
-        if Redis::init().set_magic_token(receiver.id, &otp).is_ok() {
-            magic_link_for_document_url(self.assignment_document_id, &otp, receiver.id)
-        } else {
-            document_url(self.assignment_document_id)
-        }
+        generate_magic_link(receiver.id, self.assignment_document_id)
+            .unwrap_or(format_document_url(self.assignment_document_id))
     }
 }
 

@@ -2,19 +2,12 @@ use async_graphql::*;
 use diesel::Connection;
 use uuid::Uuid;
 
-use crate::authentication_token::Claims;
 use crate::authorization::{DocumentActionPermission, SpaceActionPermission};
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
 use crate::notification_center::send_notification;
 use crate::util::get_now_as_secs;
-
-#[derive(SimpleObject)]
-pub struct SpaceWithAccessToken {
-    pub starter_document: Document,
-    pub access_token: String,
-}
 
 #[derive(Default)]
 pub struct SpaceMutation;
@@ -220,7 +213,7 @@ impl SpaceMutation {
         email: String,
         space_id: i32,
         token: String,
-    ) -> Result<SpaceWithAccessToken> {
+    ) -> Result<bool> {
         let conn = get_conn_from_ctx(ctx).await?;
         let space = Space::find_by_id(&conn, space_id).format_err()?;
         let space_invite_token = SpaceInviteToken::find(&conn, space_id, &token).format_err()?;
@@ -243,33 +236,38 @@ impl SpaceMutation {
             User::insert(&conn, &new_user).format_err()?
         };
 
-        SpaceInviteToken::increase_use(&conn, space.id, &token).format_err()?;
-        let space_member = add_space_member(
-            &conn,
-            &space,
-            user.id,
-            Some(token),
-            space_invite_token.inviting_role,
-        )
-        .format_err()?;
-        let claims = Claims::new(space_member.user_id);
-        let access_token = claims.encode()?;
+        let current_space_member = SpaceMember::find(&conn, space.id, user.id);
+        let is_new_space_member = current_space_member.is_err();
+        let space_member = if let Ok(current_space_member) = current_space_member {
+            current_space_member
+        } else {
+            SpaceInviteToken::increase_use(&conn, space.id, &token).format_err()?;
+            add_space_member(
+                &conn,
+                &space,
+                user.id,
+                Some(token),
+                space_invite_token.inviting_role,
+            )
+            .format_err()?
+        };
         let starter_document =
             Document::get_or_create_starter_doc(&conn, space_member.user_id, space_id)
                 .format_err()?;
+        let res = send_space_magic_link(&user, starter_document.id);
 
-        let notification = Notification::new_space_member_notification(NewSpaceMemberContext {
-            space_name: space.name,
-            space_id: space.id,
-            email: user.email,
-        });
-        let notification = Notification::insert(&conn, notification).format_err()?;
-        send_notification(&conn, notification, vec![space.creator_id]).format_err()?;
+        // Notify space owner
+        if is_new_space_member {
+            let notification = Notification::new_space_member_notification(NewSpaceMemberContext {
+                space_name: space.name,
+                space_id: space.id,
+                email: user.email,
+            });
+            let notification = Notification::insert(&conn, notification).format_err()?;
+            send_notification(&conn, notification, vec![space.creator_id]).format_err()?;
+        }
 
-        Ok(SpaceWithAccessToken {
-            starter_document,
-            access_token,
-        })
+        res
     }
 
     async fn space_remove_invite_token(

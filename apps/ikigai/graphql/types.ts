@@ -908,44 +908,6 @@ export interface UpdateSpaceVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: RestoreSpace
-// ====================================================
-
-export interface RestoreSpace_spaceRestore {
-  id: number;
-}
-
-export interface RestoreSpace {
-  spaceRestore: RestoreSpace_spaceRestore;
-}
-
-export interface RestoreSpaceVariables {
-  spaceId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: DeleteSpace
-// ====================================================
-
-export interface DeleteSpace {
-  spaceDelete: boolean;
-}
-
-export interface DeleteSpaceVariables {
-  spaceId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL mutation operation: GenerateSpaceInviteToken
 // ====================================================
 
@@ -989,17 +951,8 @@ export interface DeleteSpaceInviteTokenVariables {
 // GraphQL mutation operation: JoinSpaceByInviteToken
 // ====================================================
 
-export interface JoinSpaceByInviteToken_spaceJoinByInviteToken_starterDocument {
-  id: any;
-}
-
-export interface JoinSpaceByInviteToken_spaceJoinByInviteToken {
-  starterDocument: JoinSpaceByInviteToken_spaceJoinByInviteToken_starterDocument;
-  accessToken: string;
-}
-
 export interface JoinSpaceByInviteToken {
-  spaceJoinByInviteToken: JoinSpaceByInviteToken_spaceJoinByInviteToken;
+  spaceJoinByInviteToken: boolean;
 }
 
 export interface JoinSpaceByInviteTokenVariables {

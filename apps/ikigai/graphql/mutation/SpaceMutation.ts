@@ -27,20 +27,6 @@ export const UPDATE_SPACE = gql`
   }
 `;
 
-export const RESTORE_SPACE = gql`
-  mutation RestoreSpace($spaceId: Int!) {
-    spaceRestore(spaceId: $spaceId) {
-      id
-    }
-  }
-`;
-
-export const DELETE_SPACE = gql`
-  mutation DeleteSpace($spaceId: Int!) {
-    spaceDelete(spaceId: $spaceId)
-  }
-`;
-
 export const GENERATE_SPACE_INVITE_TOKEN = gql`
   mutation GenerateSpaceInviteToken($data: SpaceInviteTokenInput!) {
     spaceGenerateInviteToken(data: $data) {
@@ -62,11 +48,6 @@ export const JOIN_SPACE_BY_INVITE_TOKEN = gql`
     $spaceId: Int!
     $token: String!
   ) {
-    spaceJoinByInviteToken(email: $email, spaceId: $spaceId, token: $token) {
-      starterDocument {
-        id
-      }
-      accessToken
-    }
+    spaceJoinByInviteToken(email: $email, spaceId: $spaceId, token: $token)
   }
 `;

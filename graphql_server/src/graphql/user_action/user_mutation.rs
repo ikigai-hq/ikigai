@@ -9,11 +9,10 @@ use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::graphql::validator::Email;
 use crate::helper::{
     get_conn_from_ctx, get_user_from_ctx, get_user_id_from_ctx, rubric_quick_authorize,
+    send_space_magic_link,
 };
-use crate::mailer::Mailer;
 use crate::service::redis::Redis;
-use crate::util::url_util::magic_link_for_document_url;
-use crate::util::{generate_otp, get_now_as_secs};
+use crate::util::get_now_as_secs;
 
 #[derive(SimpleObject)]
 pub struct UserToken {
@@ -89,15 +88,7 @@ impl UserMutation {
             }
         };
 
-        let otp = generate_otp();
-        Redis::init().set_magic_token(user.id, &otp).format_err()?;
-        let magic_link = magic_link_for_document_url(document.id, &otp, user.id);
-        if let Err(reason) = Mailer::send_magic_link_email(&user.email, magic_link) {
-            error!("Cannot send magic link to {}: {:?}", user.email, reason);
-            Ok(false)
-        } else {
-            Ok(true)
-        }
+        send_space_magic_link(&user, document.id)
     }
 
     async fn user_check_magic_link(

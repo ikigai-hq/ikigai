@@ -70,7 +70,7 @@ pub async fn get_user_auth_by_user_id_from_ctx(
     } else {
         let space_id = get_active_space_id_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
-        let space_member = SpaceMember::find(&conn, user_id, space_id).format_err()?;
+        let space_member = SpaceMember::find(&conn, space_id, user_id).format_err()?;
         let user_auth = UserAuth::new(space_member);
         info!("Set cache user auth {:?}", user_auth);
 
@@ -236,6 +236,7 @@ pub async fn get_document_allowed_permissions(
     let conn = get_conn_from_ctx(ctx).await?;
     let document_auth = DocumentAuth::try_new(&conn, document_id).format_err()?;
 
+    info!("Hello {} {:?}", document_id, user_auth);
     let oso = ctx.data::<Oso>()?;
     let actions: HashSet<String> = oso.get_allowed_actions(user_auth, document_auth)?;
     Ok(actions

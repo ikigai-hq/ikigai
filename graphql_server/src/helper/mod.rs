@@ -9,12 +9,16 @@ pub use submission_helper::*;
 use async_graphql::dataloader::DataLoader;
 use async_graphql::*;
 use diesel::{Connection as DieselConnection, PgConnection};
+use uuid::Uuid;
 
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::graphql::data_loader::{FindPublicUserById, IkigaiDataLoader};
+use crate::mailer::Mailer;
+use crate::service::redis::Redis;
 use crate::service::Storage;
-use crate::util::get_now_as_secs;
+use crate::util::url_util::format_magic_link;
+use crate::util::{generate_otp, get_now_as_secs};
 
 pub async fn get_public_user_from_loader(ctx: &Context<'_>, user_id: i32) -> Result<PublicUser> {
     let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
@@ -109,4 +113,20 @@ pub fn add_space_member(
     let new_member = SpaceMember::upsert(conn, new_member)?;
 
     Ok(new_member)
+}
+
+pub fn generate_magic_link(user_id: i32, document_id: Uuid) -> Result<String, IkigaiError> {
+    let otp = generate_otp();
+    Redis::init().set_magic_token(user_id, &otp)?;
+    Ok(format_magic_link(document_id, &otp, user_id))
+}
+
+pub fn send_space_magic_link(user: &User, document_id: Uuid) -> Result<bool> {
+    let magic_link = generate_magic_link(user.id, document_id).format_err()?;
+    if let Err(reason) = Mailer::send_magic_link_email(&user.email, magic_link) {
+        error!("Cannot send magic link to {}: {:?}", user.email, reason);
+        Ok(false)
+    } else {
+        Ok(true)
+    }
 }

@@ -1,5 +1,5 @@
 class TokenStorage {
-  key: string = "openexam_token";
+  key: string = "ikigai_token";
 
   public get(): string | null {
     if (typeof window === "undefined") {

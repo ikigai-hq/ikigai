@@ -147,7 +147,7 @@ impl Document {
             let starter_doc = Self::new(
                 user_id,
                 "".into(),
-                "First Document".into(),
+                "My Folder".into(),
                 None,
                 0,
                 None,

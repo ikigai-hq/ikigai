@@ -130,3 +130,18 @@ pub fn send_space_magic_link(user: &User, document_id: Uuid) -> Result<bool> {
         Ok(true)
     }
 }
+
+pub fn create_default_space(conn: &PgConnection, user_id: i32) -> Result<Space, IkigaiError> {
+    let new_space = NewSpace {
+        name: "My space".into(),
+        updated_at: get_now_as_secs(),
+        created_at: get_now_as_secs(),
+        banner_id: None,
+        creator_id: user_id,
+    };
+    let space = Space::insert(conn, new_space)?;
+    let space_member = SpaceMember::new(space.id, user_id, None, Role::Teacher);
+    SpaceMember::upsert(conn, space_member)?;
+
+    Ok(space)
+}

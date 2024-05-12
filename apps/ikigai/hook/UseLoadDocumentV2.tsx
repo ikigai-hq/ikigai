@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 import { useLazyQuery } from "@apollo/client";
+import toast from "react-hot-toast";
+import { t } from "@lingui/macro";
 
-import { GetDocuments, GetDocumentV2 } from "graphql/types";
+import {
+  DocumentActionPermission,
+  GetDocuments,
+  GetDocumentV2,
+} from "graphql/types";
 import { GET_DOCUMENT_V2 } from "graphql/query/DocumentQuery";
 import useDocumentStore from "context/DocumentV2Store";
 import { GET_SPACE_INFORMATION } from "graphql/query/SpaceQuery";
 import useAuthUserStore from "context/ZustandAuthStore";
-import useSpaceStore from "../context/ZustandSpaceStore";
-import useSpaceMemberStore from "../context/ZustandSpaceMembeStore";
+import useSpaceStore from "context/ZustandSpaceStore";
+import useSpaceMemberStore from "context/ZustandSpaceMembeStore";
 
 export const useLoadDocument = (documentId: string) => {
   const [loading, setLoading] = useState(true);
@@ -49,7 +55,16 @@ export const useLoadDocument = (documentId: string) => {
 
   const load = async () => {
     setLoading(true);
-    await fetchDocumentPermissions(documentId);
+    const permissions = await fetchDocumentPermissions(documentId);
+    if (!permissions.includes(DocumentActionPermission.VIEW_DOCUMENT)) {
+      // Move to sign-in page
+      toast.error(
+        t`You don't have access to this document, redirecting to home page...`,
+      );
+      window.location.replace("/");
+      return;
+    }
+
     const { data, error } = await fetchDocument({
       variables: {
         documentId,

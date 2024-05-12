@@ -236,7 +236,6 @@ pub async fn get_document_allowed_permissions(
     let conn = get_conn_from_ctx(ctx).await?;
     let document_auth = DocumentAuth::try_new(&conn, document_id).format_err()?;
 
-    info!("Hello {} {:?}", document_id, user_auth);
     let oso = ctx.data::<Oso>()?;
     let actions: HashSet<String> = oso.get_allowed_actions(user_auth, document_auth)?;
     Ok(actions

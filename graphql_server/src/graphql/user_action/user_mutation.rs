@@ -1,5 +1,5 @@
 use async_graphql::*;
-use diesel::{Connection, PgConnection};
+use diesel::Connection;
 use uuid::Uuid;
 
 use crate::authentication_token::Claims;
@@ -8,35 +8,15 @@ use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::graphql::validator::Email;
 use crate::helper::{
-    get_conn_from_ctx, get_user_from_ctx, get_user_id_from_ctx, rubric_quick_authorize,
-    send_space_magic_link,
+    create_default_space, get_conn_from_ctx, get_user_from_ctx, get_user_id_from_ctx,
+    rubric_quick_authorize, send_space_magic_link,
 };
 use crate::service::redis::Redis;
-use crate::util::get_now_as_secs;
 
 #[derive(SimpleObject)]
 pub struct UserToken {
     pub user: User,
     pub access_token: String,
-}
-
-fn create_default_space(
-    conn: &PgConnection,
-    user_id: i32,
-    role: Role,
-) -> Result<Space, IkigaiError> {
-    let new_space = NewSpace {
-        name: "My space".into(),
-        updated_at: get_now_as_secs(),
-        created_at: get_now_as_secs(),
-        banner_id: None,
-        creator_id: user_id,
-    };
-    let space = Space::insert(conn, new_space)?;
-    let space_member = SpaceMember::new(space.id, user_id, None, role);
-    SpaceMember::upsert(conn, space_member)?;
-
-    Ok(space)
 }
 
 #[derive(Default)]
@@ -64,7 +44,7 @@ impl UserMutation {
                     .format_err()?
                 } else {
                     conn.transaction::<_, IkigaiError, _>(|| {
-                        let space = create_default_space(&conn, user.id, Role::Teacher)?;
+                        let space = create_default_space(&conn, user.id)?;
                         let document =
                             Document::get_or_create_starter_doc(&conn, user.id, space.id)?;
                         Ok(document)
@@ -79,7 +59,7 @@ impl UserMutation {
                 conn.transaction::<_, IkigaiError, _>(|| {
                     let user = NewUser::new(email.clone(), email, "".into());
                     let user = User::insert(&conn, &user)?;
-                    let space = create_default_space(&conn, user.id, Role::Teacher)?;
+                    let space = create_default_space(&conn, user.id)?;
                     let document = Document::get_or_create_starter_doc(&conn, user.id, space.id)?;
 
                     Ok((user, document))

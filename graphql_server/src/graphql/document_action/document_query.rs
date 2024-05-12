@@ -15,8 +15,10 @@ impl DocumentQuery {
         &self,
         ctx: &Context<'_>,
         document_id: Uuid,
-    ) -> Result<Vec<DocumentActionPermission>> {
-        get_document_allowed_permissions(ctx, document_id).await
+    ) -> Vec<DocumentActionPermission> {
+        get_document_allowed_permissions(ctx, document_id)
+            .await
+            .unwrap_or_default()
     }
 
     async fn document_get(&self, ctx: &Context<'_>, document_id: Uuid) -> Result<Document> {

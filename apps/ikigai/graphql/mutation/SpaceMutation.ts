@@ -57,3 +57,14 @@ export const REMOVE_SPACE_MEMBER = gql`
     spaceRemoveMember(spaceId: $spaceId, userId: $userId)
   }
 `;
+
+export const CREATE_SPACE = gql`
+  mutation CreateSpace($data: NewSpace!) {
+    spaceCreate(data: $data) {
+      id
+      starterDocument {
+        id
+      }
+    }
+  }
+`;

@@ -139,9 +139,11 @@ pub fn create_default_space(conn: &PgConnection, user_id: i32) -> Result<Space, 
         banner_id: None,
         creator_id: user_id,
     };
-    let space = Space::insert(conn, new_space)?;
-    let space_member = SpaceMember::new(space.id, user_id, None, Role::Teacher);
-    SpaceMember::upsert(conn, space_member)?;
+    conn.transaction::<_, IkigaiError, _>(|| {
+        let space = Space::insert(conn, new_space)?;
+        let space_member = SpaceMember::new(space.id, user_id, None, Role::Teacher);
+        SpaceMember::upsert(conn, space_member)?;
 
-    Ok(space)
+        Ok(space)
+    })
 }

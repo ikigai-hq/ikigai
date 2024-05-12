@@ -1,14 +1,16 @@
 import { t, Trans } from "@lingui/macro";
-import { Typography } from "antd";
+import { Button, Divider, Typography } from "antd";
 import styled from "styled-components";
 
 import Modal from "./common/Modal";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_MY_SPACES } from "graphql/query/SpaceQuery";
 import { handleError } from "graphql/ApolloClient";
-import { GetMySpaces, GetMySpaces_spaceMine } from "graphql/types";
+import { CreateSpace, GetMySpaces, GetMySpaces_spaceMine } from "graphql/types";
 import { formatDocumentRoute } from "config/Routes";
 import useSpaceStore from "context/ZustandSpaceStore";
+import { CREATE_SPACE } from "../graphql/mutation/SpaceMutation";
+import toast from "react-hot-toast";
 
 export type SwitchSpaceProps = {
   visible: boolean;
@@ -20,11 +22,32 @@ const SwitchSpace = ({ visible, onClose }: SwitchSpaceProps) => {
   const { data } = useQuery<GetMySpaces>(GET_MY_SPACES, {
     onError: handleError,
   });
+  const [createSpace, { loading }] = useMutation<CreateSpace>(CREATE_SPACE, {
+    onError: handleError,
+  });
 
-  const onClick = (space: GetMySpaces_spaceMine) => {
+  const onSwitch = (space: GetMySpaces_spaceMine) => {
     if (space.id === currentSpaceId) return;
     const documentPath = formatDocumentRoute(space.starterDocument.id);
     window.location.replace(documentPath);
+  };
+
+  const onCreateSpace = async () => {
+    const { data } = await createSpace({
+      variables: {
+        data: {
+          name: "New space",
+        },
+      },
+    });
+
+    if (data) {
+      toast.success(t`Created! We're moving you to your new space`);
+      const documentPath = formatDocumentRoute(
+        data.spaceCreate.starterDocument.id,
+      );
+      window.location.replace(documentPath);
+    }
   };
 
   const spaces = data?.spaceMine || [];
@@ -43,11 +66,21 @@ const SwitchSpace = ({ visible, onClose }: SwitchSpaceProps) => {
           <SpaceItemContainer
             key={space.id}
             $active={space.id === currentSpaceId}
-            onClick={() => onClick(space)}
+            onClick={() => onSwitch(space)}
           >
             <Typography.Text strong>{space.name}</Typography.Text>
           </SpaceItemContainer>
         ))}
+        <Divider />
+        <Button
+          type="primary"
+          onClick={onCreateSpace}
+          loading={loading}
+          disabled={loading}
+          style={{ width: "100%" }}
+        >
+          <Trans>Create space</Trans>
+        </Button>
       </div>
     </Modal>
   );
@@ -64,6 +97,7 @@ const SpaceItemContainer = styled.div<{ $active: boolean }>`
   &:hover {
     cursor: pointer;
     background: ${(props) => props.theme.colors.primary[4]};
+    color: white;
   }
 `;
 

@@ -73,7 +73,7 @@ msgstr "Activation"
 
 #: components/common/LearningModuleDnd/CreateContentButton.tsx:130
 #: components/Document/LeftPanel/CreateContentButton.tsx:108
-#: components/DocumentV2/LeftSide/index.tsx:75
+#: components/DocumentV2/LeftSide/index.tsx:85
 msgid "Add content"
 msgstr "Add content"
 
@@ -312,6 +312,10 @@ msgstr "Choose another student"
 #~ msgid "Classes"
 #~ msgstr "Classes"
 
+#: components/SwitchSpace.tsx:63
+msgid "Click a space to switch"
+msgstr "Click a space to switch"
+
 #: components/common/FileUpload.tsx:198
 #: components/common/ManualFileUpload.tsx:50
 msgid "Click or drag file to this area to upload"
@@ -361,7 +365,7 @@ msgstr "COMMENTS"
 #~ msgid "Contact Media"
 #~ msgstr "Contact Media"
 
-#: components/DocumentV2/LeftSide/index.tsx:71
+#: components/DocumentV2/LeftSide/index.tsx:81
 msgid "Content"
 msgstr "Content"
 
@@ -432,9 +436,17 @@ msgstr "Correct. Explain:"
 msgid "Create new rubric"
 msgstr "Create new rubric"
 
+#: components/SwitchSpace.tsx:82
+msgid "Create space"
+msgstr "Create space"
+
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:87
 msgid "Created!"
 msgstr "Created!"
+
+#: components/SwitchSpace.tsx:45
+msgid "Created! We're moving you to your new space"
+msgstr "Created! We're moving you to your new space"
 
 #: components/DocumentTemplate/LeftTemplateSide/CategoryList.tsx:64
 #~ msgid "Creating..."
@@ -1384,6 +1396,7 @@ msgstr "Space invite link"
 msgid "Space name"
 msgstr "Space name"
 
+#: components/DocumentV2/LeftSide/index.tsx:58
 #: components/SpaceSetting/index.tsx:56
 msgid "Space settings"
 msgstr "Space settings"
@@ -1458,6 +1471,14 @@ msgstr "Successfully!"
 #: components/Document/RightPanel/SummarySection.tsx:25
 msgid "SUMMARY"
 msgstr "SUMMARY"
+
+#: components/SwitchSpace.tsx:58
+msgid "Switch space"
+msgstr "Switch space"
+
+#: components/DocumentV2/LeftSide/index.tsx:48
+msgid "Switch spaces"
+msgstr "Switch spaces"
 
 #: components/Document/AssignmentSetting/index.tsx:40
 msgid "Tag"
@@ -1629,7 +1650,7 @@ msgid "Ungraded"
 msgstr "Ungraded"
 
 #: components/Document/LeftPanel/index.tsx:44
-#: components/DocumentV2/LeftSide/index.tsx:31
+#: components/DocumentV2/LeftSide/index.tsx:33
 msgid "Unknown"
 msgstr "Unknown"
 

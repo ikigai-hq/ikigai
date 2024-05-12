@@ -47,11 +47,10 @@ impl Space {
     }
 
     async fn starter_document(&self, ctx: &Context<'_>) -> Result<Document> {
-        let user_id = get_user_id_from_ctx(ctx).await?;
-        space_quick_authorize(ctx, self.id, SpaceActionPermission::ViewSpaceContent).await?;
+        get_user_id_from_ctx(ctx).await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
-        Document::get_or_create_starter_doc(&conn, user_id, self.id).format_err()
+        Document::get_or_create_starter_doc(&conn, self.creator_id, self.id).format_err()
     }
 
     async fn documents(&self, ctx: &Context<'_>) -> Result<Vec<Document>> {

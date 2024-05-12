@@ -74,3 +74,15 @@ export const GET_SPACE_INVITE_TOKENS = gql`
     }
   }
 `;
+
+export const GET_MY_SPACES = gql`
+  query GetMySpaces {
+    spaceMine {
+      id
+      name
+      starterDocument {
+        id
+      }
+    }
+  }
+`;

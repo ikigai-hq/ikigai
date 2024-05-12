@@ -26,6 +26,7 @@ const addMember = (data: SpaceMembersType, member: ISpaceMember) => {
 export type SpaceMemberContext = {
   data: SpaceMembersType;
   fetchMembersOfSpace: (spaceId: number) => Promise<void>;
+  removeSpaceMember: (member: ISpaceMember) => void;
 };
 
 const useSpaceMemberStore = create<SpaceMemberContext>((set, get) => ({
@@ -44,6 +45,14 @@ const useSpaceMemberStore = create<SpaceMemberContext>((set, get) => ({
         addMember(currentData, member);
       });
       set({ data: currentData });
+    }
+  },
+  removeSpaceMember: (member: ISpaceMember) => {
+    const members = get().data;
+    const spaceMembers = members.get(member.spaceId);
+    if (spaceMembers) {
+      spaceMembers.delete(member.userId);
+      set({ data: members });
     }
   },
 }));

@@ -551,6 +551,10 @@ msgstr "Do you want to remove {0}?"
 msgid "Do you want to remove {level}?"
 msgstr "Do you want to remove {level}?"
 
+#: components/SpaceSetting/MemberSpaceSetting.tsx:85
+msgid "Do you want to remove this member?"
+msgstr "Do you want to remove this member?"
+
 #: components/common/RichMarkdownEditor/extensions/FileExtension/FileBlockHeader.tsx:97
 msgid "Do you want to reset this file upload?"
 msgstr "Do you want to reset this file upload?"
@@ -916,7 +920,7 @@ msgstr "Limit the number of times to take the assignment"
 msgid "Manual"
 msgstr "Manual"
 
-#: components/SpaceSetting/MemberSpaceSetting.tsx:35
+#: components/SpaceSetting/MemberSpaceSetting.tsx:67
 msgid "Member since"
 msgstr "Member since"
 
@@ -958,7 +962,7 @@ msgstr "Multiple Choice"
 #~ msgstr "My Profile"
 
 #: components/Document/DocumentAssignedList.tsx:101
-#: components/SpaceSetting/MemberSpaceSetting.tsx:16
+#: components/SpaceSetting/MemberSpaceSetting.tsx:43
 msgid "Name"
 msgstr "Name"
 
@@ -1173,6 +1177,10 @@ msgstr "Remove assigned user"
 msgid "Remove Cover"
 msgstr "Remove Cover"
 
+#: components/SpaceSetting/MemberSpaceSetting.tsx:88
+msgid "Remove member"
+msgstr "Remove member"
+
 #: components/Organization/OrganizationMembersTab.tsx:211
 #~ msgid "Remove Member"
 #~ msgstr "Remove Member"
@@ -1180,6 +1188,10 @@ msgstr "Remove Cover"
 #: components/Organization/OrganizationMembersTab.tsx:104
 #~ msgid "Remove member successfully!"
 #~ msgstr "Remove member successfully!"
+
+#: components/SpaceSetting/MemberSpaceSetting.tsx:36
+msgid "Removed!"
+msgstr "Removed!"
 
 #: components/common/RichMarkdownEditor/extensions/RecordExtension/RecordBlock.tsx:283
 msgid "Replace record"
@@ -1239,7 +1251,7 @@ msgstr "Review last submission"
 msgid "Review setting quizzes"
 msgstr "Review setting quizzes"
 
-#: components/SpaceSetting/MemberSpaceSetting.tsx:29
+#: components/SpaceSetting/MemberSpaceSetting.tsx:56
 msgid "Role"
 msgstr "Role"
 

@@ -7,6 +7,7 @@ import useDocumentStore from "context/DocumentV2Store";
 import { GET_SPACE_INFORMATION } from "graphql/query/SpaceQuery";
 import useAuthUserStore from "context/ZustandAuthStore";
 import useSpaceStore from "../context/ZustandSpaceStore";
+import useSpaceMemberStore from "../context/ZustandSpaceMembeStore";
 
 export const useLoadDocument = (documentId: string) => {
   const [loading, setLoading] = useState(true);
@@ -26,6 +27,9 @@ export const useLoadDocument = (documentId: string) => {
     (state) => state.fetchSpacePermissions,
   );
   const setSpace = useSpaceStore((state) => state.setSpace);
+  const fetchSpaceMembers = useSpaceMemberStore(
+    (state) => state.fetchMembersOfSpace,
+  );
 
   const [fetchDocument] = useLazyQuery<GetDocumentV2>(GET_DOCUMENT_V2, {
     fetchPolicy: "network-only",
@@ -75,6 +79,7 @@ export const useLoadDocument = (documentId: string) => {
     if (data) {
       setSpace(data.spaceGet);
       setSpaceDocuments(data.spaceGet.documents);
+      await fetchSpaceMembers(data.spaceGet.id);
     }
   };
 

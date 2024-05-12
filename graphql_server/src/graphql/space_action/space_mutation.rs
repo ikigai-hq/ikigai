@@ -14,12 +14,11 @@ pub struct SpaceMutation;
 
 #[Object]
 impl SpaceMutation {
-    // FIXME: Check permission
     async fn space_create(&self, ctx: &Context<'_>, mut data: NewSpace) -> Result<Space> {
         let user = get_user_from_ctx(ctx).await?;
         data.creator_id = user.id;
         let conn = get_conn_from_ctx(ctx).await?;
-        Space::insert(&conn, data).format_err()
+        create_default_space(&conn, user.id).format_err()
     }
 
     async fn space_duplicate(&self, ctx: &Context<'_>, space_id: i32) -> Result<Space> {

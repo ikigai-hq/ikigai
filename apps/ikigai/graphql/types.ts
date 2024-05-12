@@ -985,6 +985,32 @@ export interface RemoveSpaceMemberVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: CreateSpace
+// ====================================================
+
+export interface CreateSpace_spaceCreate_starterDocument {
+  id: any;
+}
+
+export interface CreateSpace_spaceCreate {
+  id: number;
+  starterDocument: CreateSpace_spaceCreate_starterDocument;
+}
+
+export interface CreateSpace {
+  spaceCreate: CreateSpace_spaceCreate;
+}
+
+export interface CreateSpaceVariables {
+  data: NewSpace;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: CreateComment
 // ====================================================
 
@@ -2273,6 +2299,10 @@ export interface NewDocumentHighlight {
   uuid: any;
   highlightType: HighlightType;
   originalText: string;
+}
+
+export interface NewSpace {
+  name: string;
 }
 
 export interface PageBlockDocumentInput {

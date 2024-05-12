@@ -967,6 +967,24 @@ export interface JoinSpaceByInviteTokenVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: RemoveSpaceMember
+// ====================================================
+
+export interface RemoveSpaceMember {
+  spaceRemoveMember: boolean;
+}
+
+export interface RemoveSpaceMemberVariables {
+  spaceId: number;
+  userId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: CreateComment
 // ====================================================
 
@@ -1799,6 +1817,7 @@ export interface GetDocuments_spaceGet_documents {
 export interface GetDocuments_spaceGet {
   id: number;
   name: string;
+  creatorId: number;
   documents: GetDocuments_spaceGet_documents[];
 }
 

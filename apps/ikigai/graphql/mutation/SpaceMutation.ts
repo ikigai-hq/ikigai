@@ -51,3 +51,9 @@ export const JOIN_SPACE_BY_INVITE_TOKEN = gql`
     spaceJoinByInviteToken(email: $email, spaceId: $spaceId, token: $token)
   }
 `;
+
+export const REMOVE_SPACE_MEMBER = gql`
+  mutation RemoveSpaceMember($spaceId: Int!, $userId: Int!) {
+    spaceRemoveMember(spaceId: $spaceId, userId: $userId)
+  }
+`;

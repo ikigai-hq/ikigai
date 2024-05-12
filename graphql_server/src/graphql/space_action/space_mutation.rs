@@ -170,8 +170,16 @@ impl SpaceMutation {
         user_id: i32,
     ) -> Result<bool> {
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceMember).await?;
+        let current_user_id = get_user_id_from_ctx(ctx).await?;
+        if current_user_id == user_id {
+            return Err(IkigaiError::new_bad_request("Cannot remove your self")).format_err();
+        }
 
         let conn = get_conn_from_ctx(ctx).await?;
+        let space = Space::find_by_id(&conn, space_id).format_err()?;
+        if space.creator_id == user_id {
+            return Err(IkigaiError::new_bad_request("Cannot remove owner of space")).format_err();
+        }
         SpaceMember::find(&conn, space_id, user_id).format_err()?;
         SpaceMember::remove(&conn, space_id, user_id).format_err()?;
 

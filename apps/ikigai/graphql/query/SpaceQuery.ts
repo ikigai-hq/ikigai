@@ -5,6 +5,7 @@ export const GET_SPACE_INFORMATION = gql`
     spaceGet(spaceId: $spaceId) {
       id
       name
+      creatorId
       documents {
         id
         title

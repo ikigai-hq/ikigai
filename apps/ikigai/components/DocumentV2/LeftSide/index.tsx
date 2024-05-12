@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Divider, Tooltip, Typography } from "antd";
 import { t, Trans } from "@lingui/macro";
 import styled, { useTheme } from "styled-components";
-import { PlusOutlined, SettingOutlined } from "@ant-design/icons";
+import { PlusOutlined, SettingOutlined, SwapOutlined } from "@ant-design/icons";
 
 import useAuthUserStore from "context/ZustandAuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
@@ -17,6 +17,7 @@ import { TextButtonWithHover } from "components/common/Button";
 import usePermission from "hook/UsePermission";
 import useSpaceStore from "context/ZustandSpaceStore";
 import CreateContentButton from "components/common/LearningModuleDnd/CreateContentButton";
+import SwitchSpace from "components/SwitchSpace";
 
 const LeftSide = () => {
   const allow = usePermission();
@@ -24,6 +25,7 @@ const LeftSide = () => {
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
   const spaceDocuments = useDocumentStore((state) => state.spaceDocuments);
   const [openProfile, setOpenProfile] = useState(false);
+  const [openSwitchSpace, setOpenSwitchSpace] = useState(false);
   const setSpaceSettingVisible = useSpaceStore(
     (state) => state.setSpaceSettingVisible,
   );
@@ -32,35 +34,43 @@ const LeftSide = () => {
 
   return (
     <Container $hide={false}>
-      <div style={{ width: "100%" }}>
+      <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
         <SpaceInfoContainer>
-          <UserBasicInformation
-            onClick={() => setOpenProfile(true)}
-            name={myName}
-            avatar={me?.randomColor}
-            randomColor={me?.randomColor}
-            email={me?.email}
-          />
           <SpaceInformation>
             <Typography.Paragraph
-              style={{ marginTop: 10, flex: 1 }}
+              style={{ marginTop: 10, flex: 1, fontSize: 18, marginBottom: 0 }}
               ellipsis={{ rows: 2 }}
               strong
             >
               {spaceName}
             </Typography.Paragraph>
-            {allow(SpaceActionPermission.MANAGE_SPACE_SETTING) && (
-              <div>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <Tooltip arrow={false} title={t`Switch spaces`}>
                 <TextButtonWithHover
                   type="text"
-                  icon={<SettingOutlined />}
-                  onClick={() => setSpaceSettingVisible(true)}
+                  icon={
+                    <SwapOutlined style={{ color: theme.colors.gray[7] }} />
+                  }
+                  onClick={() => setOpenSwitchSpace(true)}
                 />
-              </div>
-            )}
+              </Tooltip>
+              {allow(SpaceActionPermission.MANAGE_SPACE_SETTING) && (
+                <Tooltip arrow={false} title={t`Space settings`}>
+                  <TextButtonWithHover
+                    type="text"
+                    icon={
+                      <SettingOutlined
+                        style={{ color: theme.colors.gray[7] }}
+                      />
+                    }
+                    onClick={() => setSpaceSettingVisible(true)}
+                  />
+                </Tooltip>
+              )}
+            </div>
           </SpaceInformation>
         </SpaceInfoContainer>
-        <NoMarginDivider $margin={0} />
+        <NoMarginDivider $margin={5} />
         <div style={{ padding: "10px", display: "flex" }}>
           <div style={{ flex: 1 }}>
             <Text
@@ -82,7 +92,7 @@ const LeftSide = () => {
             </Tooltip>
           </CreateContentButton>
         </div>
-        <ListModule style={{ height: "80%", overflow: "auto" }}>
+        <ListModule>
           <LearningModuleDnd
             docs={spaceDocuments}
             keyword={""}
@@ -90,6 +100,13 @@ const LeftSide = () => {
             defaultCollapsed={true}
           />
         </ListModule>
+        <UserBasicInformation
+          onClick={() => setOpenProfile(true)}
+          name={myName}
+          avatar={me?.randomColor}
+          randomColor={me?.randomColor}
+          email={me?.email}
+        />
       </div>
       {openProfile && (
         <EditProfileModal
@@ -97,6 +114,10 @@ const LeftSide = () => {
           onClose={() => setOpenProfile(false)}
         />
       )}
+      <SwitchSpace
+        visible={openSwitchSpace}
+        onClose={() => setOpenSwitchSpace(false)}
+      />
     </Container>
   );
 };
@@ -137,10 +158,10 @@ const ListModule = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
+  flex: 1;
 `;
 
 const SpaceInformation = styled.div`
-  display: flex;
   padding: 0 2px 0 10px;
   align-items: baseline;
 `;

@@ -28,7 +28,7 @@ impl SpaceQuery {
         Ok(class)
     }
 
-    async fn space_get_my_spaces(&self, ctx: &Context<'_>) -> Result<Vec<Space>> {
+    async fn space_mine(&self, ctx: &Context<'_>) -> Result<Vec<Space>> {
         let user_auth = get_user_auth_from_ctx(ctx).await?;
         let conn = get_conn_from_ctx(ctx).await?;
         Space::find_my_spaces(&conn, user_auth.id).format_err()

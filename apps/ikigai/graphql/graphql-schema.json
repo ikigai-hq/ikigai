@@ -376,7 +376,7 @@
             "deprecationReason": null
           },
           {
-            "name": "spaceGetMySpaces",
+            "name": "spaceMine",
             "description": null,
             "args": [],
             "type": {

@@ -1919,6 +1919,29 @@ export interface GetSpaceInviteTokensVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetMySpaces
+// ====================================================
+
+export interface GetMySpaces_spaceMine_starterDocument {
+  id: any;
+}
+
+export interface GetMySpaces_spaceMine {
+  id: number;
+  name: string;
+  starterDocument: GetMySpaces_spaceMine_starterDocument;
+}
+
+export interface GetMySpaces {
+  spaceMine: GetMySpaces_spaceMine[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetHighlightDocument
 // ====================================================
 

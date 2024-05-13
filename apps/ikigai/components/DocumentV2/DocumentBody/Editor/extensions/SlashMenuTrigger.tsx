@@ -1,5 +1,5 @@
 import { Extension, InputRule } from "@tiptap/core";
-import { Plugin, PluginKey } from "@tiptap/pm/state";
+import { Plugin, PluginKey } from "prosemirror-state";
 
 const OPEN_REGEX = /\/(\w+)?$/;
 const CLOSE_REGEX = /\/(\s|\w+\s{2}|\w+\.)/;

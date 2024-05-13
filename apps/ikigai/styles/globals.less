@@ -7,7 +7,8 @@ body {
   font-family: "Inter", sans-serif !important;
 }
 
-html, body * {
+html,
+body * {
   // Chromium
   ::-webkit-scrollbar {
     width: 4px;
@@ -281,4 +282,16 @@ html, body * {
   border: transparent;
   background: transparent;
   cursor: pointer;
+}
+
+.ProseMirror-focused {
+  outline: none;
+}
+
+.tiptap p.is-empty::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }

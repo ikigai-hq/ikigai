@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Skeleton } from "antd";
 import { useRouter } from "next/router";
 
-import CustomRichMarkdownEditor from "../common/RichMarkdownEditor/RichMarkdownEditor";
 import useDocumentStore from "context/ZustandDocumentStore";
 import {
   DocumentActionPermission,
@@ -124,16 +123,6 @@ const Editor = ({
               )}
             </>
           )}
-          <CustomRichMarkdownEditor
-            isViewInMobileApp={isViewInMobileApp || isPreviewMode}
-            documentId={documentId}
-            defaultVal={document.body}
-            handleOnChange={onChangeDocument}
-            isFocusAtStart={isFocusAtStart}
-            readOnly={isReadOnlyFinal}
-            onSave={onSave}
-            isNestedDoc={isNestedDoc}
-          />
         </ExportDocument>
       </DocumentBody>
     </DocumentContainer>

@@ -19,11 +19,6 @@ import {
   REMOVE_HIGHLIGHT_DOC,
 } from "graphql/mutation/ThreadMutation";
 import useDocumentStore, { PanelContentType } from "./ZustandDocumentStore";
-import {
-  extractOriginalText,
-  extractUUIDAndText,
-  parseMarkdown,
-} from "@ikigai/editor/dist/util/regex";
 import { HIGHLIGHT_RULE_REGEX } from "util/RegexMatch";
 
 export type HighlightData = {
@@ -78,23 +73,23 @@ const useHighlightStore = create<IHighlightStore>((set, get) => ({
     }
   },
   syncHighlights: (documentBody, documentId) => {
-    const parsedHighlights = parseHighlightsBlock(documentId, documentBody);
-    const currentHighlights = Array.from(get().highlights.values()).filter(
-      (h) => h.documentId === documentId,
-    );
-    if (checkTwoHighlights(parsedHighlights, currentHighlights)) {
-      set(({ highlights }) => {
-        const instanceHighlights = new Map(
-          Array.from(highlights).filter(
-            ([_, value]) => value.documentId !== documentId,
-          ),
-        );
-        parsedHighlights.map((hl) => instanceHighlights.set(hl.id, hl));
-        return {
-          highlights: instanceHighlights,
-        };
-      });
-    }
+    // const parsedHighlights = parseHighlightsBlock(documentId, documentBody);
+    // const currentHighlights = Array.from(get().highlights.values()).filter(
+    //   (h) => h.documentId === documentId,
+    // );
+    // if (checkTwoHighlights(parsedHighlights, currentHighlights)) {
+    //   set(({ highlights }) => {
+    //     const instanceHighlights = new Map(
+    //       Array.from(highlights).filter(
+    //         ([_, value]) => value.documentId !== documentId,
+    //       ),
+    //     );
+    //     parsedHighlights.map((hl) => instanceHighlights.set(hl.id, hl));
+    //     return {
+    //       highlights: instanceHighlights,
+    //     };
+    //   });
+    // }
   },
   addHighlight: async (newHighlight: AddHighlightDocVariables) => {
     const { documentAddHighlight } = await mutate<AddHighlightDoc>({
@@ -172,39 +167,6 @@ const checkTwoHighlights = (
       (secondHighlights[index].content !== hl.content ||
         secondHighlights[index].originalText !== hl.originalText),
   );
-};
-
-const parseHighlightsBlock = (
-  documentId: string,
-  documentBody: string,
-): HighlightData[] => {
-  const matchingBlocks = documentBody?.match(HIGHLIGHT_RULE_REGEX);
-  if (!matchingBlocks) return [];
-  const highlightData: HighlightData[] = [];
-  matchingBlocks.forEach((matchingBlock) => {
-    const content = matchingBlock.replace("&&", "").replace("&&", "");
-    if (content.includes(";#;")) {
-      const [id, highlight] = content.split(";#;");
-      const extractData = extractUUIDAndText(id);
-      const highlightType = extractData?.remainingText;
-      let highlightContent = highlight;
-      let originalText = "";
-      if (highlightType === "replace") {
-        originalText = extractOriginalText(highlight);
-        highlightContent = highlight.replace(`~~${originalText}~~`, "");
-      }
-
-      highlightData.push({
-        id: extractData?.uuid,
-        documentId,
-        content: parseMarkdown(highlightContent),
-        type: highlightType,
-        originalText: parseMarkdown(originalText),
-      });
-    }
-  });
-
-  return highlightData;
 };
 
 export default useHighlightStore;

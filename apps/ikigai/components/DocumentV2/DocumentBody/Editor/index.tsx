@@ -1,11 +1,14 @@
-"use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, MutableRefObject } from "react";
 import { useEditor, EditorContent, JSONContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import { SlashMenuTrigger } from "./extensions/SlashMenuTrigger";
 
-export default function TiptapEditor() {
+interface EditorProps {
+  parentRef: MutableRefObject<HTMLDivElement>;
+}
+
+export default function TiptapEditor({ parentRef }: EditorProps) {
   const [editorContent, setEditorContent] = useState<JSONContent>();
   const [toggleSlashMenu, setToggleSlashMenu] = useState(false);
   const [matchingWord, setMatchingWord] = useState<string | undefined>(
@@ -23,7 +26,6 @@ export default function TiptapEditor() {
   }>();
 
   const floatingMenuRef = useRef<HTMLDivElement>(null);
-  const editorBodyRef = useRef<HTMLDivElement>(null);
 
   const editor = useEditor({
     extensions: [
@@ -51,7 +53,7 @@ export default function TiptapEditor() {
     if (toggleSlashMenu && editor) {
       const currentParagraph = editor.state.selection.$from.parent;
       const rectCurrentParagraph = editor.view.coordsAtPos(slashRange.from);
-      const editorBodyClientHeight = editorBodyRef.current?.clientHeight;
+      const editorBodyClientHeight = parentRef.current?.clientHeight;
       const scrollY = window.scrollY;
       const floatingMenuRect = floatingMenuRef.current?.getBoundingClientRect();
       if (floatingMenuRect && editorBodyClientHeight) {
@@ -82,7 +84,7 @@ export default function TiptapEditor() {
   }, [toggleSlashMenu, matchingWord, editor]);
 
   return (
-    <main ref={editorBodyRef} style={{ margin: "2rem" }}>
+    <main style={{ margin: "2rem" }}>
       <EditorContent style={{ width: "100%" }} editor={editor} />
       <div
         ref={floatingMenuRef}
@@ -94,7 +96,7 @@ export default function TiptapEditor() {
           borderRadius: 4,
           padding: 12,
           top: menuPosition ? menuPosition?.top : 0,
-          left: menuPosition ? menuPosition?.left : 0,
+          left: 0,
         }}
       >
         <div>Bold</div>

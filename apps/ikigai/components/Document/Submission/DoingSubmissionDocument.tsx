@@ -14,7 +14,6 @@ import { SUBMISSION_SUBSCRIPTION } from "graphql/subscription";
 import DocumentHeader from "../DocumentHeader";
 import { useModal } from "hook/UseModal";
 import useSubmitSubmission from "hook/UseSubmitSubmission";
-import { PresentationMode } from "components/common/RichMarkdownEditor/PresentationMode";
 import SubmitSubmission from "./SubmitSubmission";
 import styled from "styled-components";
 import { Tooltip } from "antd";
@@ -81,10 +80,6 @@ const DoingSubmissionDocument = ({
           <DocumentHeader>
             <SubmitSubmission deadline={deadline} onSubmit={onSubmit} />
           </DocumentHeader>
-          <PresentationMode
-            isDoingSubmission
-            currentDocument={currentDocument}
-          />
         </Container>
       </Tooltip>
     </div>

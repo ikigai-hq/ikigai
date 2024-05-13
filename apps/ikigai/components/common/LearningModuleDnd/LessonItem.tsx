@@ -134,7 +134,6 @@ const ButtonGroup = styled.div`
 
 const LessonItemContainer = styled.div<{
   $active?: boolean;
-  $editing?: boolean;
 }>`
   width: 100%;
   display: flex;
@@ -144,28 +143,15 @@ const LessonItemContainer = styled.div<{
   gap: 8px;
   cursor: pointer;
   background-color: ${(props) => {
-    if (props.$editing) {
-      return props.theme.colors.gray[0];
-    }
     if (props.$active) {
       return props.theme.colors.gray[2];
     }
     return "unset";
   }};
-  box-shadow: ${(props) => {
-    if (props.$editing) {
-      return `
-        0px 9px 28px 8px rgba(0, 0, 0, 0.05), 
-        0px 3px 6px -4px rgba(0, 0, 0, 0.12), 
-        0px 6px 16px 0px rgba(0, 0, 0, 0.08)
-      `;
-    }
-  }};
   border-radius: 8px;
 
   &:hover {
-    background-color: ${(props) =>
-      props.theme.colors.gray[props.$editing ? 0 : 2]};
+    background-color: ${(props) => props.theme.colors.gray[2]};
     ${ButtonGroup} {
       display: flex;
     }

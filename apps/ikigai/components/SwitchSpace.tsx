@@ -59,9 +59,7 @@ const SwitchSpace = ({ visible, onClose }: SwitchSpaceProps) => {
       width="400px"
     >
       <div>
-        <Typography.Text type="secondary">
-          <Trans>Click a space to switch</Trans>
-        </Typography.Text>
+        <Divider />
         {spaces.map((space) => (
           <SpaceItemContainer
             key={space.id}
@@ -79,7 +77,7 @@ const SwitchSpace = ({ visible, onClose }: SwitchSpaceProps) => {
           disabled={loading}
           style={{ width: "100%" }}
         >
-          <Trans>Create space</Trans>
+          <Trans>Create new space</Trans>
         </Button>
       </div>
     </Modal>

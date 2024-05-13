@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import { Divider, Tooltip, Typography } from "antd";
+import { Button, Divider, Tooltip, Typography } from "antd";
 import { t, Trans } from "@lingui/macro";
 import styled, { useTheme } from "styled-components";
-import { PlusOutlined, SettingOutlined, SwapOutlined } from "@ant-design/icons";
+import Icon, {
+  PlusOutlined,
+  SettingOutlined,
+  SwapOutlined,
+} from "@ant-design/icons";
 
 import useAuthUserStore from "context/ZustandAuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
@@ -18,6 +22,9 @@ import usePermission from "hook/UsePermission";
 import useSpaceStore from "context/ZustandSpaceStore";
 import CreateContentButton from "components/common/LearningModuleDnd/CreateContentButton";
 import SwitchSpace from "components/SwitchSpace";
+import Image from "next/image";
+import ButtonGroup from "antd/es/button/button-group";
+import { SettingIcon } from "../../common/IconSvg";
 
 const LeftSide = () => {
   const allow = usePermission();
@@ -44,29 +51,34 @@ const LeftSide = () => {
             >
               {spaceName}
             </Typography.Paragraph>
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <Tooltip arrow={false} title={t`Switch spaces`}>
-                <TextButtonWithHover
-                  type="text"
-                  icon={
-                    <SwapOutlined style={{ color: theme.colors.gray[7] }} />
-                  }
-                  onClick={() => setOpenSwitchSpace(true)}
-                />
-              </Tooltip>
+            <NoMarginDivider $margin={5} />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                paddingRight: 20,
+              }}
+            >
               {allow(SpaceActionPermission.MANAGE_SPACE_SETTING) && (
                 <Tooltip arrow={false} title={t`Space settings`}>
-                  <TextButtonWithHover
-                    type="text"
-                    icon={
-                      <SettingOutlined
-                        style={{ color: theme.colors.gray[7] }}
-                      />
-                    }
+                  <LessonItemContainer
                     onClick={() => setSpaceSettingVisible(true)}
-                  />
+                  >
+                    <SettingIcon style={{ color: theme.colors.gray[7] }} />
+                    <Typography.Text type="secondary" strong>
+                      <Trans>Space Settings</Trans>
+                    </Typography.Text>
+                  </LessonItemContainer>
                 </Tooltip>
               )}
+              <Tooltip arrow={false} title={t`Switch spaces`}>
+                <LessonItemContainer onClick={() => setOpenSwitchSpace(true)}>
+                  <SwapOutlined style={{ color: theme.colors.gray[7] }} />
+                  <Typography.Text type="secondary" strong>
+                    <Trans>Switch Space</Trans>
+                  </Typography.Text>
+                </LessonItemContainer>
+              </Tooltip>
             </div>
           </SpaceInformation>
         </SpaceInfoContainer>
@@ -169,4 +181,27 @@ const SpaceInformation = styled.div`
 const StyledButton = styled(TextButtonWithHover)`
   margin: unset;
   color: #888e9c;
+`;
+
+const LessonItemContainer = styled.div<{
+  $active?: boolean;
+}>`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 5px 0 10px;
+  height: 38px;
+  gap: 8px;
+  cursor: pointer;
+  background-color: ${(props) => {
+    if (props.$active) {
+      return props.theme.colors.gray[2];
+    }
+    return "unset";
+  }};
+  border-radius: 8px;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.gray[2]};
+  }
 `;

@@ -3,6 +3,8 @@ import { useEditor, EditorContent, JSONContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import { SlashMenuTrigger } from "./extensions/SlashMenuTrigger";
+import SlashMenu from "./menus/SlashMenu";
+import { Position } from "./types";
 
 interface EditorProps {
   parentRef: MutableRefObject<HTMLDivElement>;
@@ -18,12 +20,7 @@ export default function TiptapEditor({ parentRef }: EditorProps) {
     from: 0,
     to: 0,
   });
-  const [menuPosition, setMenuPosition] = useState<{
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
-  }>();
+  const [menuPosition, setMenuPosition] = useState<Position>();
 
   const floatingMenuRef = useRef<HTMLDivElement>(null);
 
@@ -52,57 +49,47 @@ export default function TiptapEditor({ parentRef }: EditorProps) {
 
     if (toggleSlashMenu && editor) {
       const currentParagraph = editor.state.selection.$from.parent;
-      const rectCurrentParagraph = editor.view.coordsAtPos(slashRange.from);
-      const editorBodyClientHeight = parentRef.current?.clientHeight;
+      const currentParagraphRect = editor.view.coordsAtPos(slashRange.from);
+      const documentBodyClientHeight = parentRef.current?.clientHeight;
+      const documentBodyRect = parentRef.current.getBoundingClientRect();
       const scrollY = window.scrollY;
       const floatingMenuRect = floatingMenuRef.current?.getBoundingClientRect();
-      if (floatingMenuRect && editorBodyClientHeight) {
+      if (floatingMenuRect && documentBodyClientHeight) {
         if (
-          rectCurrentParagraph.top + floatingMenuRect.height >
-          editorBodyClientHeight / 2
+          currentParagraphRect.top + floatingMenuRect.height >
+          documentBodyClientHeight
         ) {
-          rectCurrentParagraph.top =
-            rectCurrentParagraph.top + scrollY - floatingMenuRect.height;
+          currentParagraphRect.top =
+            currentParagraphRect.top +
+            scrollY -
+            floatingMenuRect.height -
+            documentBodyRect.y -
+            8;
         } else {
-          rectCurrentParagraph.top = rectCurrentParagraph.bottom + scrollY;
+          currentParagraphRect.top =
+            currentParagraphRect.bottom + scrollY - documentBodyRect.y + 8;
         }
       }
-      setMenuPosition(rectCurrentParagraph);
+      currentParagraphRect.left =
+        currentParagraphRect.left - documentBodyRect.x;
+      setMenuPosition(currentParagraphRect);
       const SLASH_WORDS_REGEX = /\/\w+(\s+\w+)*\s*/;
       if (currentParagraph) {
         const textQuery = SLASH_WORDS_REGEX.exec(currentParagraph?.textContent);
         // console.log({ textQuery });
       }
-      // console.log(
-      //   "floating menu",
-      //   floatingMenuRef.current?.getBoundingClientRect()
-      // );
-      // console.log("rect current paragraph", rectCurrentParagraph);
-      // console.log("window coordinates", window.scrollY);
-      // console.log("editor body ref", editorBodyRef.current?.clientHeight);
     }
   }, [toggleSlashMenu, matchingWord, editor]);
 
   return (
     <main style={{ margin: "2rem" }}>
       <EditorContent style={{ width: "100%" }} editor={editor} />
-      <div
+      <SlashMenu
         ref={floatingMenuRef}
-        style={{
-          display: toggleSlashMenu ? "block" : "none",
-          color: "red",
-          background: "beige",
-          position: "absolute",
-          borderRadius: 4,
-          padding: 12,
-          top: menuPosition ? menuPosition?.top : 0,
-          left: 0,
-        }}
-      >
-        <div>Bold</div>
-        <div>Italic</div>
-        <div>Underline</div>
-      </div>
+        editor={editor}
+        open={toggleSlashMenu}
+        position={menuPosition}
+      />
     </main>
   );
 }

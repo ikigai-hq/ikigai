@@ -1,9 +1,0 @@
-src
-.test.js
-example
-.circleci
-.github
-.eslintignore
-.eslintrc
-.map
-dist/stories

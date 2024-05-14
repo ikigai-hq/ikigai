@@ -73,7 +73,7 @@ msgstr "Activation"
 
 #: components/common/LearningModuleDnd/CreateContentButton.tsx:130
 #: components/Document/LeftPanel/CreateContentButton.tsx:108
-#: components/DocumentV2/LeftSide/index.tsx:85
+#: components/DocumentV2/LeftSide/index.tsx:66
 msgid "Add content"
 msgstr "Add content"
 
@@ -313,8 +313,8 @@ msgstr "Choose another student"
 #~ msgstr "Classes"
 
 #: components/SwitchSpace.tsx:63
-msgid "Click a space to switch"
-msgstr "Click a space to switch"
+#~ msgid "Click a space to switch"
+#~ msgstr "Click a space to switch"
 
 #: components/common/FileUpload.tsx:198
 #: components/common/ManualFileUpload.tsx:50
@@ -365,7 +365,7 @@ msgstr "COMMENTS"
 #~ msgid "Contact Media"
 #~ msgstr "Contact Media"
 
-#: components/DocumentV2/LeftSide/index.tsx:81
+#: components/DocumentV2/LeftSide/index.tsx:62
 msgid "Content"
 msgstr "Content"
 
@@ -437,14 +437,14 @@ msgid "Create new rubric"
 msgstr "Create new rubric"
 
 #: components/SwitchSpace.tsx:82
-msgid "Create space"
-msgstr "Create space"
+#~ msgid "Create space"
+#~ msgstr "Create space"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:87
 msgid "Created!"
 msgstr "Created!"
 
-#: components/SwitchSpace.tsx:45
+#: components/DocumentV2/LeftSide/ManageSpace.tsx:44
 msgid "Created! We're moving you to your new space"
 msgstr "Created! We're moving you to your new space"
 
@@ -513,6 +513,10 @@ msgstr "Description"
 #: components/Document/AssignmentSetting/index.tsx:138
 msgid "Description will show before your students start the submission"
 msgstr "Description will show before your students start the submission"
+
+#: components/SpaceSetting/index.tsx:31
+msgid "Details"
+msgstr "Details"
 
 #: components/UserCredential/ResetPasswordForm.tsx:102
 #~ msgid "Did not receive the email?"
@@ -789,8 +793,8 @@ msgid "Full Screen"
 msgstr "Full Screen"
 
 #: components/SpaceSetting/index.tsx:31
-msgid "General"
-msgstr "General"
+#~ msgid "General"
+#~ msgstr "General"
 
 #: components/SpaceSetting/CreateSpaceInvite.tsx:95
 msgid "Generate"
@@ -1004,6 +1008,10 @@ msgstr "New Option"
 #: components/UserCredential/ResetPasswordForm.tsx:75
 #~ msgid "New password:"
 #~ msgstr "New password:"
+
+#: components/DocumentV2/LeftSide/ManageSpace.tsx:83
+msgid "New space"
+msgstr "New space"
 
 #: components/PreviewDocument.tsx:17
 msgid "No document"
@@ -1392,11 +1400,14 @@ msgstr "Size"
 msgid "Space invite link"
 msgstr "Space invite link"
 
-#: components/SpaceSetting/GeneralSpaceSetting.tsx:42
+#: components/SpaceSetting/GeneralSpaceSetting.tsx:47
 msgid "Space name"
 msgstr "Space name"
 
-#: components/DocumentV2/LeftSide/index.tsx:58
+#: components/DocumentV2/LeftSide/ManageSpace.tsx:58
+msgid "Space Setting"
+msgstr "Space Setting"
+
 #: components/SpaceSetting/index.tsx:56
 msgid "Space settings"
 msgstr "Space settings"
@@ -1473,12 +1484,12 @@ msgid "SUMMARY"
 msgstr "SUMMARY"
 
 #: components/SwitchSpace.tsx:58
-msgid "Switch space"
-msgstr "Switch space"
+#~ msgid "Switch space"
+#~ msgstr "Switch space"
 
 #: components/DocumentV2/LeftSide/index.tsx:48
-msgid "Switch spaces"
-msgstr "Switch spaces"
+#~ msgid "Switch spaces"
+#~ msgstr "Switch spaces"
 
 #: components/Document/AssignmentSetting/index.tsx:40
 msgid "Tag"
@@ -1578,7 +1589,7 @@ msgstr "Try to reload!"
 msgid "Type"
 msgstr "Type"
 
-#: components/SpaceSetting/GeneralSpaceSetting.tsx:47
+#: components/SpaceSetting/GeneralSpaceSetting.tsx:52
 msgid "Type space name..."
 msgstr "Type space name..."
 
@@ -1650,7 +1661,7 @@ msgid "Ungraded"
 msgstr "Ungraded"
 
 #: components/Document/LeftPanel/index.tsx:44
-#: components/DocumentV2/LeftSide/index.tsx:33
+#: components/DocumentV2/LeftSide/index.tsx:30
 msgid "Unknown"
 msgstr "Unknown"
 
@@ -1668,7 +1679,7 @@ msgstr "Unlimited time"
 msgid "Untitled"
 msgstr "Untitled"
 
-#: components/SpaceSetting/GeneralSpaceSetting.tsx:55
+#: components/SpaceSetting/GeneralSpaceSetting.tsx:63
 #: components/UserCredential/EditProfileModal.tsx:76
 msgid "Update"
 msgstr "Update"
@@ -1681,7 +1692,7 @@ msgstr "Update assignment successfully"
 #~ msgid "Update password successfully"
 #~ msgstr "Update password successfully"
 
-#: components/SpaceSetting/GeneralSpaceSetting.tsx:34
+#: components/SpaceSetting/GeneralSpaceSetting.tsx:36
 #: components/UserCredential/EditProfileModal.tsx:38
 msgid "Updated!"
 msgstr "Updated!"

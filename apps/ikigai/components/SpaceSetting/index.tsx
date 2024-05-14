@@ -28,7 +28,7 @@ const SpaceSetting = () => {
   const tabs = [];
   if (allow(SpaceActionPermission.MANAGE_SPACE_SETTING)) {
     tabs.push({
-      label: t`General`,
+      label: t`Details`,
       key: SpaceSettingTabKeys.General,
       children: <GeneralSpaceSetting />,
     });

@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, MutableRefObject } from "react";
 import { useEditor, EditorContent, JSONContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
+import TaskItem from "@tiptap/extension-task-item";
+import TaskList from "@tiptap/extension-task-list";
 import { SlashMenuTrigger } from "./extensions/SlashMenuTrigger";
 import SlashMenu from "./menus/SlashMenu";
 import { Position } from "./types";
@@ -27,6 +29,10 @@ export default function TiptapEditor({ parentRef }: EditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
       Placeholder.configure({
         placeholder: 'Writing something, or press "/" for commands...',
       }),

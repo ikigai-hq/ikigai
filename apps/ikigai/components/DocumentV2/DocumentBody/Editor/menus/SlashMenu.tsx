@@ -3,7 +3,6 @@ import { MenuOption, Position } from "../types";
 import styled from "styled-components";
 import { Editor } from "@tiptap/react";
 import Image from "next/image";
-import { Typography } from "antd";
 import { Text, TextWeight } from "components/common/Text";
 import { getSlashMenuOptions, mappingGroupTitle } from "./SlashMenuOptions";
 
@@ -15,7 +14,6 @@ interface SlashMenuProps {
 
 const SlashMenu = forwardRef<HTMLDivElement, SlashMenuProps>((props, ref) => {
   const { open, position, editor } = props;
-
   const menuOptions = getSlashMenuOptions(editor);
 
   return (
@@ -31,7 +29,7 @@ const SlashMenu = forwardRef<HTMLDivElement, SlashMenuProps>((props, ref) => {
             </GroupTitle>
             {menuItemValue.map((v) => {
               return (
-                <MenuItem key={v.title}>
+                <MenuItem key={v.title} onClick={() => v.command.run()}>
                   <MenuItemImage>
                     <Image
                       alt={v.title}
@@ -71,6 +69,11 @@ const SlashMenuContainer = styled.div<{
   border-radius: 4px;
   padding: 8px;
   max-width: calc(-24px + 100vw);
+  width: 324px;
+  min-width: 180px;
+  height: 100%;
+  max-height: 40vh;
+  overflow: auto;
   box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px,
     rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
   top: ${({ $position }) => ($position?.top ? $position.top : 0)}px;

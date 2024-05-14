@@ -26,7 +26,7 @@ export const getSlashMenuOptions = (
         urlImage: "/slash-menu-options/bulleted-list.png",
         title: "Bulleted list",
         descriptions: "Create a simple bulleted list.",
-        command: editor?.chain()?.focus()?.toggleBlockquote(),
+        command: editor?.chain()?.focus()?.toggleBulletList(),
       },
       {
         urlImage: "/slash-menu-options/numbered-list.png",
@@ -51,6 +51,12 @@ export const getSlashMenuOptions = (
         title: "Heading 3",
         descriptions: "Small section heading.",
         command: editor?.chain()?.focus()?.toggleHeading({ level: 3 }),
+      },
+      {
+        urlImage: "/slash-menu-options/to-do.png",
+        title: "To-do list",
+        descriptions: "Track tasks with a to-do list.",
+        command: editor?.chain()?.focus()?.toggleTaskList(),
       },
     ],
   };

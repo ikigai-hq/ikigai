@@ -1,4 +1,3 @@
-import { ExtensionName } from "@ikigai/editor/dist/types/extensions.enum";
 import {
   QUIZ_CONTENT_RULE_REGEX,
   PAGE_BLOCK_CONTENT_RULE,
@@ -82,30 +81,30 @@ export const isOnlyPageBlocks = (markdownText: string) => {
 };
 
 // Get quizBlock and pageBlock in order from markdown text.
-export const getZenBlocksInOrder = (markdownText: string) => {
-  const combinedMatches: string[] = [];
-  let match: RegExpExecArray;
-  while ((match = MIXES_PAGEBLOCK_QUIZ_REGEX.exec(markdownText)) !== null) {
-    combinedMatches.push(match[0]);
-  }
+// export const getZenBlocksInOrder = (markdownText: string) => {
+//   const combinedMatches: string[] = [];
+//   let match: RegExpExecArray;
+//   while ((match = MIXES_PAGEBLOCK_QUIZ_REGEX.exec(markdownText)) !== null) {
+//     combinedMatches.push(match[0]);
+//   }
 
-  const blocks: { id: string; type: string }[] = [];
-  combinedMatches.forEach((matchingBlock) => {
-    const idMatches = matchingBlock.match(QUERY_ID_REGEX);
-    if (idMatches && matchingBlock) {
-      const [id] = idMatches;
-      blocks.push({
-        id,
-        type:
-          matchingBlock.includes("&&&") || matchingBlock.includes("{bl%")
-            ? ExtensionName.Quizz
-            : ExtensionName.PageBlock,
-      });
-    }
-  });
+//   const blocks: { id: string; type: string }[] = [];
+//   combinedMatches.forEach((matchingBlock) => {
+//     const idMatches = matchingBlock.match(QUERY_ID_REGEX);
+//     if (idMatches && matchingBlock) {
+//       const [id] = idMatches;
+//       blocks.push({
+//         id,
+//         type:
+//           matchingBlock.includes("&&&") || matchingBlock.includes("{bl%")
+//             ? ExtensionName.Quizz
+//             : ExtensionName.PageBlock,
+//       });
+//     }
+//   });
 
-  return blocks;
-};
+//   return blocks;
+// };
 
 export type QuizAnswerType = {
   isAnswered: boolean;

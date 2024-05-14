@@ -11,10 +11,7 @@ import AssignmentHeader from "./Assignment/AssignmentHeader";
 import DocumentHeader from "./DocumentHeader";
 import LeftPanel from "./LeftPanel";
 import useSpaceStore from "../../context/ZustandSpaceStore";
-import { RightPanel } from "./RightPanel";
 import usePageBlockStore from "context/ZustandPageBlockStore";
-import { ReviewPageBlocks } from "components/common/RichMarkdownEditor/extensions/PageBlockExtension/ReviewPageBlocks";
-import { PresentationMode } from "components/common/RichMarkdownEditor/PresentationMode";
 import useDocumentStore from "context/ZustandDocumentStore";
 import useSubmissionStatus from "hook/UseSubmissionStatus";
 
@@ -94,7 +91,7 @@ const DocumentDetail = () => {
       </DocumentHeader>
 
       {isSubmissionDocument ? (
-        <PresentationMode isReviewSubmission currentDocument={masterDocument} />
+        <div>Presentation Mode</div>
       ) : (
         <DocumentBodyContainer>
           <BodyWrapper>
@@ -109,14 +106,13 @@ const DocumentDetail = () => {
                 <>
                   {pageBlockMode &&
                   mapPageBlockData.get(masterDocument.id)?.length ? (
-                    <ReviewPageBlocks masterDocumentId={masterDocument.id} />
+                    <div>Review Page Blocks</div>
                   ) : (
                     <Editor document={masterDocument} />
                   )}
                 </>
               )}
             </div>
-            {!isReviewAssignmentBeforeDoing && <RightPanel />}
           </BodyWrapper>
         </DocumentBodyContainer>
       )}

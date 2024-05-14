@@ -7,7 +7,8 @@ body {
   font-family: "Inter", sans-serif !important;
 }
 
-html, body * {
+html,
+body * {
   // Chromium
   ::-webkit-scrollbar {
     width: 4px;
@@ -281,4 +282,64 @@ html, body * {
   border: transparent;
   background: transparent;
   cursor: pointer;
+}
+
+.ProseMirror-focused {
+  outline: none;
+}
+
+.tiptap {
+  > * + * {
+    margin-top: 0.75em;
+  }
+
+  blockquote {
+    border-left: 3px solid rgba(#0d0d0d, 0.1);
+    padding-left: 1rem;
+  }
+
+  p.is-empty::before {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
+
+  ul[data-type="taskList"] {
+    list-style: none;
+    padding: 0;
+
+    p {
+      margin: 0;
+    }
+
+    li {
+      display: flex;
+
+      > label {
+        flex: 0 0 auto;
+        margin-right: 0.5rem;
+        user-select: none;
+      }
+
+      > div {
+        flex: 1 1 auto;
+      }
+
+      ul li,
+      ol li {
+        display: list-item;
+      }
+
+      ul[data-type="taskList"] > li {
+        display: flex;
+      }
+    }
+  }
+
+  ul,
+  ol {
+    padding: 0 1rem;
+  }
 }

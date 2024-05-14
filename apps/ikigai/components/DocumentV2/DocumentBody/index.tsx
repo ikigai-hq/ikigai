@@ -2,8 +2,9 @@ import styled from "styled-components";
 import { BreakPoints } from "styles/mediaQuery";
 
 import CoverPage from "./CoverPage";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Skeleton } from "antd";
+import TiptapEditor from "./Editor";
 
 export type DocumentBodyProps = {
   loading: boolean;
@@ -11,12 +12,14 @@ export type DocumentBodyProps = {
 
 const DocumentBody = ({ loading }: DocumentBodyProps) => {
   const [activePageId] = useState<string | undefined>();
+  const documentBodyRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Container>
+    <Container ref={documentBodyRef}>
       <Body>
         {loading && <Skeleton />}
         {!loading && !activePageId && <CoverPage />}
+        <TiptapEditor parentRef={documentBodyRef} />
       </Body>
     </Container>
   );

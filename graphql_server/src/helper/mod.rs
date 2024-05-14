@@ -29,7 +29,7 @@ pub async fn get_public_user_from_loader(ctx: &Context<'_>, user_id: i32) -> Res
     Ok(user)
 }
 
-pub fn duplicate_class(
+pub fn duplicate_space(
     conn: &PgConnection,
     space_id: i32,
     creator_id: i32,
@@ -41,11 +41,9 @@ pub fn duplicate_class(
         // Duplicate Class
         let mut new_space = NewSpace::from(space);
         new_space.creator_id = creator_id;
-        let new_class = Space::insert(conn, new_space)?;
+        let new_space = Space::insert(conn, new_space)?;
 
-        // Duplicate Class Contents
         for space_document in space_documents.into_iter() {
-            // Only process head of materials
             if space_document.parent_id.is_none() && space_document.deleted_at.is_none() {
                 let mut config = DocumentCloneConfig::new("", true);
                 config.set_index(space_document.index);
@@ -53,7 +51,7 @@ pub fn duplicate_class(
                     conn,
                     creator_id,
                     config,
-                    Some(new_class.id),
+                    Some(new_space.id),
                     true,
                     None,
                     true,
@@ -61,7 +59,7 @@ pub fn duplicate_class(
             }
         }
 
-        Ok(new_class)
+        Ok(new_space)
     })
 }
 

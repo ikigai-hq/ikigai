@@ -26,7 +26,7 @@ impl SpaceMutation {
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceSetting).await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
-        let new_class = duplicate_class(&conn, space_id, user_auth.id).format_err()?;
+        let new_class = duplicate_space(&conn, space_id, user_auth.id).format_err()?;
         Ok(new_class)
     }
 

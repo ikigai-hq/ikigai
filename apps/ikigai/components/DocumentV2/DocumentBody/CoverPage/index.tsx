@@ -8,7 +8,7 @@ import useDocumentStore from "context/DocumentV2Store";
 import CoverPhotoHeader from "./CoverPhotoHeader";
 import UseUpdateDocument from "hook/UseUpdateDocument";
 import usePermission from "hook/UsePermission";
-import { DocumentActionPermission, DocumentType } from "graphql/types";
+import { DocumentActionPermission } from "graphql/types";
 import DocumentIconHeader from "./DocumentIconHeader";
 
 const CoverPage = () => {
@@ -25,9 +25,7 @@ const CoverPage = () => {
     (state) => state.updateSpaceDocument,
   );
   const debouncedTitle = useDebounce(activeDocumentTitle, { wait: 500 });
-  const isFolder = useDocumentStore(
-    (state) => state.activeDocument?.documentType === DocumentType.FOLDER,
-  );
+  const isFolder = useDocumentStore((state) => state.isFolder);
 
   useEffect(() => {
     if (debouncedTitle) {
@@ -42,7 +40,7 @@ const CoverPage = () => {
 
   return (
     <div>
-      <CoverPhotoHeader />
+      {!isFolder && <CoverPhotoHeader />}
       <div style={{ padding: 20, display: "flex", alignItems: "center" }}>
         {!isFolder && (
           <div>

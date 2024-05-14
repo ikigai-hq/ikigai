@@ -2,8 +2,9 @@ import create from "zustand";
 import { cloneDeep } from "lodash";
 
 import {
-  GetDocumentV2_documentGet as IDocument,
+  DocumentType,
   GetDocuments_spaceGet_documents as ISpaceDocument,
+  GetDocumentV2_documentGet as IDocument,
 } from "graphql/types";
 
 export type IUpdateSpaceDocument = Partial<
@@ -21,6 +22,7 @@ export type IUpdateActiveDocument = Partial<
 >;
 
 type IDocumentStore = {
+  isFolder: boolean;
   activeDocumentId?: string;
   activeDocument?: IDocument;
   spaceDocuments: ISpaceDocument[];
@@ -32,6 +34,7 @@ type IDocumentStore = {
 };
 
 const useDocumentStore = create<IDocumentStore>((set, get) => ({
+  isFolder: false,
   activeDocumentId: undefined,
   activeDocument: undefined,
   spaceDocuments: [],
@@ -39,6 +42,7 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
     set({
       activeDocumentId: activeDocument.id,
       activeDocument: cloneDeep(activeDocument),
+      isFolder: activeDocument.documentType === DocumentType.FOLDER,
     });
   },
   updateActiveDocument: (data: IUpdateActiveDocument) => {

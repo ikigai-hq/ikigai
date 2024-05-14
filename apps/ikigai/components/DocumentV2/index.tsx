@@ -7,10 +7,12 @@ import LeftSide from "./LeftSide";
 import DocumentBody from "./DocumentBody";
 import RightSide from "./RightSide";
 import { useLoadDocument } from "hook/UseLoadDocumentV2";
+import useDocumentStore from "context/DocumentV2Store";
 
 const Document = () => {
   const router = useRouter();
   const documentId = router.query.documentId as string;
+  const isFolder = useDocumentStore((state) => state.isFolder);
 
   const { loading } = useLoadDocument(documentId);
 
@@ -25,7 +27,7 @@ const Document = () => {
         <BodyWrapper>
           <LeftSide />
           <DocumentBody loading={loading} />
-          <RightSide />
+          {!isFolder && <RightSide />}
         </BodyWrapper>
       </DocumentBodyContainer>
     </Container>

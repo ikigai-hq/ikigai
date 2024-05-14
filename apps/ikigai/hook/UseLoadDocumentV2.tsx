@@ -7,13 +7,15 @@ import {
   DocumentActionPermission,
   GetDocuments,
   GetDocumentV2,
+  GetPages,
 } from "graphql/types";
-import { GET_DOCUMENT_V2 } from "graphql/query/DocumentQuery";
+import { GET_DOCUMENT_V2, GET_PAGES } from "graphql/query/DocumentQuery";
 import useDocumentStore from "context/DocumentV2Store";
 import { GET_SPACE_INFORMATION } from "graphql/query/SpaceQuery";
 import useAuthUserStore from "context/ZustandAuthStore";
 import useSpaceStore from "context/ZustandSpaceStore";
 import useSpaceMemberStore from "context/ZustandSpaceMembeStore";
+import usePageStore from "../context/PageStore";
 
 export const useLoadDocument = (documentId: string) => {
   const [loading, setLoading] = useState(true);
@@ -36,6 +38,7 @@ export const useLoadDocument = (documentId: string) => {
   const fetchSpaceMembers = useSpaceMemberStore(
     (state) => state.fetchMembersOfSpace,
   );
+  const setPages = usePageStore((state) => state.setPages);
 
   const [fetchDocument] = useLazyQuery<GetDocumentV2>(GET_DOCUMENT_V2, {
     fetchPolicy: "network-only",
@@ -46,6 +49,9 @@ export const useLoadDocument = (documentId: string) => {
       fetchPolicy: "network-only",
     },
   );
+  const [fetchPages] = useLazyQuery<GetPages>(GET_PAGES, {
+    fetchPolicy: "network-only",
+  });
 
   useEffect(() => {
     if (activeDocument?.id != documentId) {
@@ -73,14 +79,26 @@ export const useLoadDocument = (documentId: string) => {
 
     if (data) {
       const spaceId = data.documentGet.spaceId;
-      setActiveDocument(data.documentGet);
       if (spaceId) await fetchSpaceInformation(spaceId);
+      await loadAdditionalDocumentInformation(documentId);
+
+      setActiveDocument(data.documentGet);
     }
 
     if (error) {
       setLoadingError(error.message);
     }
     setLoading(false);
+  };
+
+  const loadAdditionalDocumentInformation = async (documentId: string) => {
+    const { data } = await fetchPages({
+      variables: {
+        documentId,
+      },
+    });
+
+    if (data) setPages(data.documentGet.pages);
   };
 
   const fetchSpaceInformation = async (spaceId: number) => {

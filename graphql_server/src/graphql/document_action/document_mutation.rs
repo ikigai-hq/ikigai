@@ -380,7 +380,7 @@ impl DocumentMutation {
 
         let conn = get_conn_from_ctx(ctx).await?;
         let existing_page = Page::find(&conn, page.id);
-        if existing_page.map(|page| page.document_id) != Ok(page.document_id) {
+        if existing_page.is_ok() && existing_page.map(|page| page.document_id) != Ok(page.document_id) {
             return Err(IkigaiError::new_bad_request(
                 "Cannot update page of other document",
             ))
@@ -388,7 +388,20 @@ impl DocumentMutation {
         }
 
         page.created_by_id = user_id;
-        let page = Page::upsert(&conn, page).format_err()?;
+
+        let page = conn.transaction::<_, IkigaiError, _>(|| {
+            let page = Page::upsert(&conn, page)?;
+            let page_content = PageContent {
+                id: Uuid::new_v4(),
+                page_id: page.id,
+                index: 1,
+                body: "".into(),
+                updated_at: get_now_as_secs(),
+                created_at: get_now_as_secs(),
+            };
+            PageContent::upsert(&conn, page_content)?;
+            Ok(page)
+        }).format_err()?;
         Ok(page)
     }
 

@@ -144,75 +144,6 @@ export interface DocumentAddPageBlockVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: DocumentAddPageBlockDocument
-// ====================================================
-
-export interface DocumentAddPageBlockDocument_documentAddPageBlockDocument_document {
-  id: any;
-  body: string;
-}
-
-export interface DocumentAddPageBlockDocument_documentAddPageBlockDocument {
-  pageBlockId: any;
-  documentId: any;
-  index: number;
-  createdAt: number;
-  document: DocumentAddPageBlockDocument_documentAddPageBlockDocument_document;
-}
-
-export interface DocumentAddPageBlockDocument {
-  documentAddPageBlockDocument: DocumentAddPageBlockDocument_documentAddPageBlockDocument;
-}
-
-export interface DocumentAddPageBlockDocumentVariables {
-  data: PageBlockDocumentInput;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: documentClonePageBlock
-// ====================================================
-
-export interface documentClonePageBlock_documentClonePageBlock_nestedDocuments_document {
-  id: any;
-  body: string;
-}
-
-export interface documentClonePageBlock_documentClonePageBlock_nestedDocuments {
-  pageBlockId: any;
-  documentId: any;
-  index: number;
-  createdAt: number;
-  document: documentClonePageBlock_documentClonePageBlock_nestedDocuments_document;
-}
-
-export interface documentClonePageBlock_documentClonePageBlock {
-  id: any;
-  documentId: any;
-  title: string;
-  nestedDocuments: documentClonePageBlock_documentClonePageBlock_nestedDocuments[];
-}
-
-export interface documentClonePageBlock {
-  documentClonePageBlock: documentClonePageBlock_documentClonePageBlock;
-}
-
-export interface documentClonePageBlockVariables {
-  fromId: any;
-  toId: any;
-  toDocumentId: any;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL mutation operation: RestoreDocument
 // ====================================================
 
@@ -293,6 +224,39 @@ export interface RemoveDocumentAssigned {
 
 export interface RemoveDocumentAssignedVariables {
   assignedUser: NewDocumentAssignedUserInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: AddOrUpdatePage
+// ====================================================
+
+export interface AddOrUpdatePage_documentAddOrUpdatePage_pageContents {
+  id: any;
+  pageId: any;
+  index: number;
+  body: string;
+}
+
+export interface AddOrUpdatePage_documentAddOrUpdatePage {
+  id: any;
+  documentId: any;
+  index: number;
+  title: string;
+  layout: PageLayout;
+  pageContents: AddOrUpdatePage_documentAddOrUpdatePage_pageContents[];
+}
+
+export interface AddOrUpdatePage {
+  documentAddOrUpdatePage: AddOrUpdatePage_documentAddOrUpdatePage;
+}
+
+export interface AddOrUpdatePageVariables {
+  page: PageInput;
 }
 
 /* tslint:disable */
@@ -1727,6 +1691,44 @@ export interface GetDocumentV2Variables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetPages
+// ====================================================
+
+export interface GetPages_documentGet_pages_pageContents {
+  id: any;
+  pageId: any;
+  index: number;
+  body: string;
+}
+
+export interface GetPages_documentGet_pages {
+  id: any;
+  documentId: any;
+  index: number;
+  title: string;
+  layout: PageLayout;
+  pageContents: GetPages_documentGet_pages_pageContents[];
+}
+
+export interface GetPages_documentGet {
+  id: any;
+  pages: GetPages_documentGet_pages[];
+}
+
+export interface GetPages {
+  documentGet: GetPages_documentGet;
+}
+
+export interface GetPagesVariables {
+  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetFullFileInfo
 // ====================================================
 
@@ -2217,6 +2219,11 @@ export enum IconType {
   IMAGE = "IMAGE",
 }
 
+export enum PageLayout {
+  HORIZONTAL = "HORIZONTAL",
+  VERTICAL = "VERTICAL",
+}
+
 export enum PageViewMode {
   SINGLE = "SINGLE",
   SPLIT = "SPLIT",
@@ -2305,18 +2312,19 @@ export interface NewSpace {
   name: string;
 }
 
-export interface PageBlockDocumentInput {
-  pageBlockId: any;
-  documentId: any;
-  index: number;
-  createdAt: number;
-}
-
 export interface PageBlockInput {
   id: any;
   documentId: any;
   title: string;
   viewMode: PageViewMode;
+}
+
+export interface PageInput {
+  id: any;
+  documentId: any;
+  index: number;
+  title: string;
+  layout: PageLayout;
 }
 
 export interface QuizAnswerInput {

@@ -259,3 +259,24 @@ export const GET_DOCUMENT_V2 = gql`
     }
   }
 `;
+
+export const GET_PAGES = gql`
+  query GetPages($documentId: UUID!) {
+    documentGet(documentId: $documentId) {
+      id
+      pages {
+        id
+        documentId
+        index
+        title
+        layout
+        pageContents {
+          id
+          pageId
+          index
+          body
+        }
+      }
+    }
+  }
+`;

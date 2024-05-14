@@ -75,49 +75,6 @@ export const DOCUMENT_ADD_PAGE_BLOCK = gql`
   }
 `;
 
-export const DOCUMENT_ADD_PAGE_BLOCK_DOCUMENT = gql`
-  mutation DocumentAddPageBlockDocument($data: PageBlockDocumentInput!) {
-    documentAddPageBlockDocument(data: $data) {
-      pageBlockId
-      documentId
-      index
-      createdAt
-      document {
-        id
-        body
-      }
-    }
-  }
-`;
-
-export const DOCUMENT_CLONE_PAGE_BLOCK = gql`
-  mutation documentClonePageBlock(
-    $fromId: UUID!
-    $toId: UUID!
-    $toDocumentId: UUID!
-  ) {
-    documentClonePageBlock(
-      fromId: $fromId
-      toId: $toId
-      toDocumentId: $toDocumentId
-    ) {
-      id
-      documentId
-      title
-      nestedDocuments {
-        pageBlockId
-        documentId
-        index
-        createdAt
-        document {
-          id
-          body
-        }
-      }
-    }
-  }
-`;
-
 export const RESTORE_DOCUMENT = gql`
   mutation RestoreDocument($documentId: UUID!) {
     documentRestore(documentId: $documentId)
@@ -154,5 +111,23 @@ export const REMOVE_DOCUMENT_ASSIGNED = gql`
     $assignedUser: NewDocumentAssignedUserInput!
   ) {
     documentRemoveAssignedUser(assignedUser: $assignedUser)
+  }
+`;
+
+export const ADD_OR_UPDATE_PAGE = gql`
+  mutation AddOrUpdatePage($page: PageInput!) {
+    documentAddOrUpdatePage(page: $page) {
+      id
+      documentId
+      index
+      title
+      layout
+      pageContents {
+        id
+        pageId
+        index
+        body
+      }
+    }
   }
 `;

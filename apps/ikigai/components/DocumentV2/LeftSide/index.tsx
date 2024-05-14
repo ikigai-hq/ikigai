@@ -1,12 +1,8 @@
 import React, { useState } from "react";
-import { Button, Divider, Tooltip, Typography } from "antd";
+import { Divider, Popover, Tooltip, Typography } from "antd";
 import { t, Trans } from "@lingui/macro";
 import styled, { useTheme } from "styled-components";
-import Icon, {
-  PlusOutlined,
-  SettingOutlined,
-  SwapOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 
 import useAuthUserStore from "context/ZustandAuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
@@ -16,23 +12,17 @@ import LearningModuleDnd from "components/common/LearningModuleDnd";
 import LessonItemDnd from "components/common/LearningModuleDnd/LessonItemDnd";
 import useDocumentStore from "context/DocumentV2Store";
 import { Text, TextWeight } from "components/common/Text";
-import { SpaceActionPermission } from "graphql/types";
 import { TextButtonWithHover } from "components/common/Button";
-import usePermission from "hook/UsePermission";
 import useSpaceStore from "context/ZustandSpaceStore";
 import CreateContentButton from "components/common/LearningModuleDnd/CreateContentButton";
-import SwitchSpace from "components/SwitchSpace";
-import Image from "next/image";
-import ButtonGroup from "antd/es/button/button-group";
-import { SettingIcon } from "../../common/IconSvg";
+import { ArrowDocument } from "../../common/IconSvg";
+import ManageSpace from "./ManageSpace";
 
 const LeftSide = () => {
-  const allow = usePermission();
   const theme = useTheme();
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
   const spaceDocuments = useDocumentStore((state) => state.spaceDocuments);
   const [openProfile, setOpenProfile] = useState(false);
-  const [openSwitchSpace, setOpenSwitchSpace] = useState(false);
   const setSpaceSettingVisible = useSpaceStore(
     (state) => state.setSpaceSettingVisible,
   );
@@ -43,46 +33,25 @@ const LeftSide = () => {
     <Container $hide={false}>
       <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
         <SpaceInfoContainer>
-          <SpaceInformation>
-            <Typography.Paragraph
-              style={{ marginTop: 10, flex: 1, fontSize: 18, marginBottom: 0 }}
-              ellipsis={{ rows: 2 }}
-              strong
-            >
-              {spaceName}
-            </Typography.Paragraph>
-            <NoMarginDivider $margin={5} />
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                paddingRight: 20,
-              }}
-            >
-              {allow(SpaceActionPermission.MANAGE_SPACE_SETTING) && (
-                <Tooltip arrow={false} title={t`Space settings`}>
-                  <LessonItemContainer
-                    onClick={() => setSpaceSettingVisible(true)}
-                  >
-                    <SettingIcon style={{ color: theme.colors.gray[7] }} />
-                    <Typography.Text type="secondary" strong>
-                      <Trans>Space Settings</Trans>
-                    </Typography.Text>
-                  </LessonItemContainer>
-                </Tooltip>
-              )}
-              <Tooltip arrow={false} title={t`Switch spaces`}>
-                <LessonItemContainer onClick={() => setOpenSwitchSpace(true)}>
-                  <SwapOutlined style={{ color: theme.colors.gray[7] }} />
-                  <Typography.Text type="secondary" strong>
-                    <Trans>Switch Space</Trans>
-                  </Typography.Text>
-                </LessonItemContainer>
-              </Tooltip>
-            </div>
-          </SpaceInformation>
+          <Popover
+            trigger={"click"}
+            content={
+              <ManageSpace
+                onClickSpaceSetting={() => setSpaceSettingVisible(true)}
+              />
+            }
+            placement="bottomRight"
+            arrow={false}
+          >
+            <SpaceContainer>
+              <Typography.Text ellipsis strong style={{ fontWeight: 700 }}>
+                {spaceName}
+              </Typography.Text>
+              <ArrowDocument style={{ transform: `rotate(270deg)` }} />
+            </SpaceContainer>
+          </Popover>
         </SpaceInfoContainer>
-        <NoMarginDivider $margin={5} />
+        <NoMarginDivider $margin={0} />
         <div style={{ padding: "10px", display: "flex" }}>
           <div style={{ flex: 1 }}>
             <Text
@@ -126,10 +95,6 @@ const LeftSide = () => {
           onClose={() => setOpenProfile(false)}
         />
       )}
-      <SwitchSpace
-        visible={openSwitchSpace}
-        onClose={() => setOpenSwitchSpace(false)}
-      />
     </Container>
   );
 };
@@ -173,33 +138,22 @@ const ListModule = styled.div`
   flex: 1;
 `;
 
-const SpaceInformation = styled.div`
-  padding: 0 2px 0 10px;
-  align-items: baseline;
-`;
-
 const StyledButton = styled(TextButtonWithHover)`
   margin: unset;
   color: #888e9c;
 `;
 
-const LessonItemContainer = styled.div<{
-  $active?: boolean;
-}>`
-  width: 100%;
+const SpaceContainer = styled.div`
   display: flex;
   align-items: center;
-  padding: 0 5px 0 10px;
+  padding: 0 10px 0 10px;
   height: 38px;
   gap: 8px;
   cursor: pointer;
-  background-color: ${(props) => {
-    if (props.$active) {
-      return props.theme.colors.gray[2];
-    }
-    return "unset";
-  }};
-  border-radius: 8px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  justify-content: space-between;
+  text-align: left;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.gray[2]};

@@ -25,7 +25,7 @@ const Document = () => {
         <BodyWrapper>
           <LeftSide />
           <DocumentBody loading={loading} />
-          {/* <RightSide /> */}
+          <RightSide />
         </BodyWrapper>
       </DocumentBodyContainer>
     </Container>

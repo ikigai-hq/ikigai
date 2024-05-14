@@ -1,14 +1,24 @@
 import React from "react";
 import styled from "styled-components";
+import { Divider, Typography } from "antd";
 
 import { BreakPoints } from "styles/mediaQuery";
+import { PageLayoutIcon } from "components/common/IconSvg";
+import PageTabContent from "./PageTabContent";
 
 const RightSide = () => {
   return (
     <Container $hide={false}>
-      <div style={{ width: "100%" }}>
+      <div style={{ width: "100%", overflow: "auto" }}>
         <SpaceInfoContainer>
-          Right Side
+          <MenuContainer>
+            <MenuItemContainer>
+              <PageLayoutIcon />
+              <Typography.Text>Pages</Typography.Text>
+            </MenuItemContainer>
+          </MenuContainer>
+          <Divider style={{ margin: 0 }} />
+          <PageTabContent />
         </SpaceInfoContainer>
       </div>
     </Container>
@@ -16,6 +26,28 @@ const RightSide = () => {
 };
 
 export default RightSide;
+
+const MenuItemContainer = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  gap: 8px;
+  cursor: pointer;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+
+  &:hover {
+    background: ${(props) => props.theme.colors.gray[4]};
+  }
+`;
+
+const MenuContainer = styled.div`
+  width: 100%;
+  display: flex;
+`;
 
 const SpaceInfoContainer = styled.div`
   padding: 5px;

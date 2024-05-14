@@ -265,6 +265,23 @@ export interface AddOrUpdatePageVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: RemovePage
+// ====================================================
+
+export interface RemovePage {
+  documentRemovePage: boolean;
+}
+
+export interface RemovePageVariables {
+  pageId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: FileCreate
 // ====================================================
 

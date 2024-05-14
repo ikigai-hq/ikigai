@@ -11,6 +11,7 @@ type IPageStore = {
   pages: IPage[];
   setPages: (pages: IPage[]) => void;
   addPage: (pages: IPage) => void;
+  removePage: (pageId: string) => void;
 };
 
 const usePageStore = create<IPageStore>((set, get) => ({
@@ -25,6 +26,15 @@ const usePageStore = create<IPageStore>((set, get) => ({
     pages.push(cloneDeep(page));
 
     set({ pages });
+  },
+  removePage: (pageId) => {
+    const pages = get().pages;
+    const index = pages.findIndex((page) => page.id === pageId);
+    if (index > -1) {
+      pages.splice(index, 1);
+    }
+
+    set({ pages: [...pages] });
   },
 }));
 

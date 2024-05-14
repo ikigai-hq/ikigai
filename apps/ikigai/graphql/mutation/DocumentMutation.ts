@@ -131,3 +131,9 @@ export const ADD_OR_UPDATE_PAGE = gql`
     }
   }
 `;
+
+export const REMOVE_PAGE = gql`
+  mutation RemovePage($pageId: UUID!) {
+    documentRemovePage(pageId: $pageId)
+  }
+`;

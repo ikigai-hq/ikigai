@@ -9,12 +9,10 @@ import { useMutation } from "@apollo/client";
 import { TextButton } from "components/common/Button";
 import { AddDocumentStandaloneV2, DocumentType, IconType } from "graphql/types";
 import { Text, TextWeight } from "components/common/Text";
-import { DEFAULT_DOCUMENT_TITLE } from "../../Document/common";
 import { formatDocumentRoute } from "config/Routes";
 import useDocumentStore from "context/DocumentV2Store";
 import { handleError } from "graphql/ApolloClient";
 import { ADD_DOCUMENT_STANDALONE_V2 } from "graphql/mutation/DocumentMutation";
-import { EditorConfigType } from "context/ZustandDocumentStore";
 import useSpaceStore from "context/ZustandSpaceStore";
 
 export type CreateContentButtonProps = {
@@ -54,15 +52,11 @@ const CreateContentButton = ({
     const { data } = await createStandaloneDocument({
       variables: {
         data: {
-          title: DEFAULT_DOCUMENT_TITLE,
+          title: "Untitled",
           body: "",
           index,
           parentId,
-          editorConfig: {
-            size: EditorConfigType.DEFAULT,
-            style: EditorConfigType.DEFAULT,
-            width: EditorConfigType.WIDTH_STANDARD,
-          },
+          editorConfig: {},
           iconType: IconType.EMOJI,
           iconValue: isAssignment ? "✏️" : "📂",
         },

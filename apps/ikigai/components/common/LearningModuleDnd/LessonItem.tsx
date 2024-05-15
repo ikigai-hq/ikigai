@@ -115,9 +115,9 @@ const StyledText = styled(Typography.Text)<{
 }>`
   color: ${(props) => props.theme.colors.gray[7]};
   font-family: Inter;
-  font-size: 14px;
+  font-size: 13px;
   font-style: normal;
-  font-weight: ${(props) => (props.$isFolder ? 600 : 400)};
+  font-weight: ${(props) => (props.$isFolder ? 500 : 400)};
   line-height: normal;
   letter-spacing: -0.014px;
 `;
@@ -139,7 +139,7 @@ const LessonItemContainer = styled.div<{
   display: flex;
   align-items: center;
   padding: 0 5px 0 10px;
-  height: 38px;
+  height: 28px;
   gap: 8px;
   cursor: pointer;
   background-color: ${(props) => {

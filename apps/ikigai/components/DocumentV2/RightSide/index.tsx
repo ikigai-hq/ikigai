@@ -11,13 +11,6 @@ const RightSide = () => {
     <Container $hide={false}>
       <div style={{ width: "100%", overflow: "auto" }}>
         <SpaceInfoContainer>
-          <MenuContainer>
-            <MenuItemContainer>
-              <PageLayoutIcon />
-              <Typography.Text>Pages</Typography.Text>
-            </MenuItemContainer>
-          </MenuContainer>
-          <Divider style={{ margin: 0 }} />
           <PageTabContent />
         </SpaceInfoContainer>
       </div>
@@ -26,28 +19,6 @@ const RightSide = () => {
 };
 
 export default RightSide;
-
-const MenuItemContainer = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  height: 56px;
-  gap: 8px;
-  cursor: pointer;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-
-  &:hover {
-    background: ${(props) => props.theme.colors.gray[4]};
-  }
-`;
-
-const MenuContainer = styled.div`
-  width: 100%;
-  display: flex;
-`;
 
 const SpaceInfoContainer = styled.div`
   padding: 5px;

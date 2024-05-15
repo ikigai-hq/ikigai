@@ -2263,14 +2263,6 @@
     legacy-swc-helpers "npm:@swc/helpers@=0.4.14"
     tslib "^2.4.0"
 
-"@szhsin/react-menu@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@szhsin/react-menu/-/react-menu-4.1.0.tgz#9a5fd3029356ae7a15122e2b378924b1989f8afd"
-  integrity sha512-lYYGUxqJxM2b/jD2Cn5a9RVOvHl9VBMX8qOnHZuX1w08cO2jslykpz5P75D7WnqudLnXsJ4k4+tI+q2U8XIFYw==
-  dependencies:
-    prop-types "^15.7.2"
-    react-transition-state "^2.1.0"
-
 "@tanstack/react-virtual@^3.0.0-beta.60":
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/@tanstack/react-virtual/-/react-virtual-3.5.0.tgz#873b5b77cf78af563a4a11e6251ed51ee8868132"
@@ -9422,11 +9414,6 @@ react-timer-hook@2.0.7:
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/react-timer-hook/-/react-timer-hook-2.0.7.tgz#49d998d92cf83fa5d874a1d94116766336666487"
   integrity sha512-kCuCgXLS736lc7hocvHsGzmBdOh3uv1Al9ynIgxmV690nA73UqgYLoGNIxoo6CUoEcyNVARiveBlCRKDQbZIbQ==
-
-react-transition-state@^2.1.0:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/react-transition-state/-/react-transition-state-2.1.1.tgz#1601a6177926b647041b7d598bf124321ab8d25b"
-  integrity sha512-kQx5g1FVu9knoz1T1WkapjUgFz08qQ/g1OmuWGi3/AoEFfS0kStxrPlZx81urjCXdz2d+1DqLpU6TyLW/Ro04Q==
 
 react@^18.2.0, react@^18.3.1:
   version "18.3.1"

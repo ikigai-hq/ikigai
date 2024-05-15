@@ -4,17 +4,9 @@ import { useMutation } from "@apollo/client";
 import { v4 } from "uuid";
 
 import usePageStore from "context/PageStore";
-import {
-  ADD_OR_UPDATE_PAGE,
-  REMOVE_PAGE,
-} from "graphql/mutation/DocumentMutation";
+import { ADD_OR_UPDATE_PAGE } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
-import {
-  AddOrUpdatePage,
-  PageInput,
-  PageLayout,
-  RemovePage,
-} from "graphql/types";
+import { AddOrUpdatePage, PageInput, PageLayout } from "graphql/types";
 import useDocumentStore from "context/DocumentV2Store";
 import PageContentItem from "./PageContentItem";
 
@@ -54,7 +46,7 @@ const PageTabContent = () => {
   return (
     <div>
       <Button
-        style={{ width: "100%", marginTop: "10px" }}
+        style={{ width: "100%" }}
         onClick={onAddPage}
         loading={loading}
         disabled={loading}

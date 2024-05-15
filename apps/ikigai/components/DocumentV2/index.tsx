@@ -8,6 +8,7 @@ import DocumentBody from "./DocumentBody";
 import RightSide from "./RightSide";
 import { useLoadDocument } from "hook/UseLoadDocumentV2";
 import useDocumentStore from "context/DocumentV2Store";
+import DocumentHeader from "./DocumentHeader";
 
 const Document = () => {
   const router = useRouter();
@@ -18,11 +19,7 @@ const Document = () => {
 
   return (
     <Container>
-      <DocumentHeaderWrapper>
-        <StyledActionContainer>
-          Header Space, Update later
-        </StyledActionContainer>
-      </DocumentHeaderWrapper>
+      <DocumentHeader />
       <DocumentBodyContainer>
         <BodyWrapper>
           <LeftSide />
@@ -40,24 +37,6 @@ export const Container = styled.div`
   height: 100vh;
   overflow: hidden;
   background-color: #fcfaf4;
-`;
-
-export const DocumentHeaderWrapper = styled.div`
-  padding: 16px 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 4px;
-  width: 100%;
-  box-sizing: border-box;
-`;
-
-const StyledActionContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex: 1;
-  min-height: 28px;
-  gap: 4px;
 `;
 
 export const DocumentBodyContainer = styled.div<{
@@ -82,7 +61,7 @@ export const BodyWrapper = styled.div`
   max-width: 100vw;
   width: 100%;
   height: 100%;
-  padding: 0 16px;
+  padding: 0 8px;
   box-sizing: border-box;
   gap: 8px;
 

@@ -61,13 +61,13 @@ const DocumentIconHeader = () => {
 
 const PickIconButton = styled.div`
   width: fit-content;
-  font-size: 40px;
+  font-size: 28px;
   cursor: pointer;
   padding-right: 10px;
   padding-left: 10px;
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.gray[6]};
+    background-color: ${(props) => props.theme.colors.gray[4]};
     border-radius: 8px;
   }
 `;

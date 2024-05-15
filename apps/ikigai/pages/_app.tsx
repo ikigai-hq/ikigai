@@ -41,7 +41,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return withTheme(
     <>
       <Head>
-        <title>ikigai - Your Test System!</title>
+        <title>ikigai - Open Assignment Platform!</title>
         <meta charSet="utf-8" />
         <meta
           name="viewport"

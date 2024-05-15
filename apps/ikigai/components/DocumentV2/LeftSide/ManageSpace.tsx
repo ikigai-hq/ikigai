@@ -51,7 +51,7 @@ const ManageSpace = ({ onClickSpaceSetting }: ManageSpaceProps) => {
 
   const spaces = data?.spaceMine || [];
   return (
-    <div style={{ width: "250px" }}>
+    <div style={{ width: "225px" }}>
       <ItemContainer onClick={onClickSpaceSetting}>
         <SettingIcon />
         <Typography.Text>

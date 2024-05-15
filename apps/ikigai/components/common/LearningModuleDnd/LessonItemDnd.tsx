@@ -16,7 +16,7 @@ const LessonItemDnd = React.forwardRef<
     <StyledTree
       ref={ref}
       {...props}
-      indentationWidth={25}
+      indentationWidth={20}
       hideCollapseButton
       collapsed={props.collapsed}
       disableCollapseOnItemClick

@@ -66,7 +66,7 @@ const CoverPage = () => {
 
 export const DocumentTitle = styled(Input.TextArea)`
   &&& {
-    font-size: 40px;
+    font-size: 28px;
     font-weight: 700;
     padding-left: 0;
     overflow: hidden;

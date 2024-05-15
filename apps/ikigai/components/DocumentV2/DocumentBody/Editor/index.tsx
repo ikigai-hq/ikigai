@@ -42,7 +42,6 @@ export default function TiptapEditor({ parentRef }: EditorProps) {
         setSlashRange,
       }),
     ],
-    content: "Hello World!",
     onUpdate: ({ editor }) => {
       setEditorContent(editor.getJSON());
     },
@@ -88,7 +87,7 @@ export default function TiptapEditor({ parentRef }: EditorProps) {
   }, [toggleSlashMenu, matchingWord, editor]);
 
   return (
-    <main style={{ margin: "2rem" }}>
+    <main style={{ margin: 20 }}>
       <EditorContent style={{ width: "100%" }} editor={editor} />
       <SlashMenu
         ref={floatingMenuRef}

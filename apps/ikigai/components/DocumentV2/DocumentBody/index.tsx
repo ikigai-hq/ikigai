@@ -3,9 +3,8 @@ import { BreakPoints } from "styles/mediaQuery";
 import { Skeleton } from "antd";
 
 import CoverPage from "./CoverPage";
-import { useRef } from "react";
-import TiptapEditor from "./Editor";
 import usePageStore from "context/PageStore";
+import ContentPage from "./ContentPage";
 
 export type DocumentBodyProps = {
   loading: boolean;
@@ -13,16 +12,13 @@ export type DocumentBodyProps = {
 
 const DocumentBody = ({ loading }: DocumentBodyProps) => {
   const activePageId = usePageStore((state) => state.activePageId);
-  const documentBodyRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Container ref={documentBodyRef}>
+    <Container>
       <Body>
         {loading && <Skeleton />}
         {!loading && !activePageId && <CoverPage />}
-        {!loading && activePageId && (
-          <TiptapEditor parentRef={documentBodyRef} />
-        )}
+        {!loading && activePageId && <ContentPage />}
       </Body>
     </Container>
   );

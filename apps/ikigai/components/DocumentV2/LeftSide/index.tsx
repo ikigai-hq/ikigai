@@ -150,12 +150,9 @@ const SpaceContainer = styled.div`
   height: 38px;
   gap: 8px;
   cursor: pointer;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
   justify-content: space-between;
   text-align: left;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.gray[2]};
-  }
+  background-color: ${(props) => props.theme.colors.gray[3]};
 `;

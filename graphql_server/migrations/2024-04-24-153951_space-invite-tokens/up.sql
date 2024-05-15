@@ -1,8 +1,8 @@
 -- Your SQL goes here
 CREATE TABLE space_invite_tokens (
-    space_id INT NOT NULL REFERENCES spaces(id),
+    space_id INT NOT NULL REFERENCES spaces(id) ON DELETE CASCADE,
     token VARCHAR(32) NOT NULL,
-    creator_id INT NOT NULL REFERENCES users(id),
+    creator_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     inviting_role INT NOT NULL,
     expire_at BIGINT,
     uses INT NOT NULL,

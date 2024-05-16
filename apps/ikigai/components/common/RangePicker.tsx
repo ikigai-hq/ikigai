@@ -3,7 +3,7 @@ import React from "react";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { DatePicker } from "antd";
 import styled from "styled-components";
-import { Moment } from "moment";
+import { Dayjs } from "dayjs";
 
 const AntdRangePicker: any = DatePicker.RangePicker;
 
@@ -16,8 +16,8 @@ export const StyledRangePicker = styled(AntdRangePicker)`
 
 interface Props {
   format: string;
-  value?: Moment[];
-  onChange?: (dates: Moment[]) => void;
+  value?: Dayjs[];
+  onChange?: (dates: Dayjs[]) => void;
 }
 
 export const RangePicker: React.FC<Props> = ({ format, value, onChange }) => {

@@ -1,91 +1,47 @@
-import moment, { Moment } from "moment";
+import * as dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { Dayjs } from "dayjs";
+
+dayjs.locale("en", {
+  weekStart: 1,
+});
+dayjs.extend(utc);
+dayjs.extend(relativeTime);
 
 export enum FormatType {
-  DateFormat = "DD/MM/YYYY",
-  DateReadableFormat = "DD MMM, YYYY",
+  DateFormat = "DD MMM, YYYY",
   DateTimeFormat = "DD/MM/YYYY HH:mm",
-  UpdatedType = "HH:mm DD/MM/YYYY",
 }
 
-moment.locale("en", {
-  week: {
-    dow: 1,
-  },
-});
-
-export const extractSecondDuration = (time: moment.Moment): number => {
-  const hour = time.hour();
-  const minute = time.minute();
-  const seconds = time.seconds();
-
-  return hour * 3600 + minute * 60 + seconds;
-};
-
-export const secondDurationToMoment = (seconds: number): moment.Moment => {
-  const hour = Math.floor(seconds / 3600);
-  const minute = Math.floor((seconds % 3600) / 60);
-  const second = seconds % 60;
-
-  return getNow().hour(hour).minute(minute).second(second);
+export const formatTimestamp = (
+  timestamp: number,
+  format = FormatType.DateFormat,
+): string => {
+  const d = dayjs.unix(timestamp);
+  return d.format(format);
 };
 
 export const getNowAsSec = (): number => {
-  return moment().unix();
+  return dayjs.utc().unix();
 };
 
-export const getNow = (): moment.Moment => {
-  return moment();
+export const getNow = (): Dayjs => {
+  return dayjs.utc();
 };
 
-export const convertTsToDate = (timestamp: number): moment.Moment => {
+export const convertTsToDate = (timestamp: number): Dayjs => {
   // Sometimes, the world change the timezone of space
-  const m = moment.unix(timestamp);
+  const m = dayjs.unix(timestamp);
   if (m.year() == 1970) {
     // Just return correct day (of week), hour, minutes
     // 31449600 = 52 weeks in seconds ~ 1 year. But we can keep correct date
-    return moment.unix(timestamp + (getNow().year() - 1970) * 31449600);
+    return dayjs.unix(timestamp + (getNow().year() - 1970) * 31449600);
   }
   return m;
 };
 
-export const getDateAsSec = (date: moment.Moment): number => {
-  return date.unix();
-};
-
 export const fromNow = (timestamp: number): string => {
-  const moment = convertTsToDate(timestamp);
-  return moment.fromNow();
-};
-
-export const formatMoment = (m: Moment, formatType?: FormatType) => {
-  const format = formatType ? formatType : FormatType.DateFormat;
-  return m.format(format);
-};
-
-export const formatDate = (
-  timestamp: number,
-  formatType?: FormatType,
-): string => {
-  const parseMoment = convertTsToDate(timestamp);
-  return formatMoment(parseMoment, formatType);
-};
-
-export interface ComboBoxItem {
-  value: string | number;
-  name: string;
-}
-
-export const secondsToTimestamp = (seconds: number) => {
-  seconds = Math.floor(seconds);
-  let m: any = Math.floor(seconds / 60);
-  let s: any = seconds - m * 60;
-
-  m = m < 10 ? `0${m}` : m;
-  s = s < 10 ? `0${s}` : s;
-
-  return `${m}:${s}`;
-};
-
-export const getMomentByStr = (dateStr: string) => {
-  return moment(dateStr);
+  const d = convertTsToDate(timestamp);
+  return d.fromNow(true);
 };

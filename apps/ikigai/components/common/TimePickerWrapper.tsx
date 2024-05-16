@@ -1,13 +1,13 @@
-import type { Moment } from "moment";
+import { Dayjs } from "dayjs";
 import * as React from "react";
 import DatePickerWrapper, { DateRangePicker } from "./DatePickerWrapper";
-import {PickerTimeProps, RangePickerTimeProps} from "antd/es/time-picker";
+import { PickerTimeProps, RangePickerTimeProps } from "antd/es/time-picker";
 
 export interface TimePickerProps
-  extends Omit<PickerTimeProps<Moment>, "picker"> {}
+  extends Omit<PickerTimeProps<Dayjs>, "picker"> {}
 
 export interface TimeRangePickerProps
-  extends Omit<RangePickerTimeProps<Moment>, "picker"> {}
+  extends Omit<RangePickerTimeProps<Dayjs>, "picker"> {}
 
 const TimePicker = React.forwardRef<any, TimePickerProps>((props, ref) => (
   //@ts-ignore

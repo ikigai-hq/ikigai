@@ -15,8 +15,6 @@ pub struct DocumentAuth {
     #[polar(attribute)]
     pub allow_for_student_view_answer: bool,
     #[polar(attribute)]
-    pub is_public: bool,
-    #[polar(attribute)]
     pub is_doing_submission: bool,
     #[polar(attribute)]
     pub is_doing_open_type_submission: bool,
@@ -42,7 +40,6 @@ impl DocumentAuth {
         Ok(Self {
             id: document_id,
             creator_id: document.creator_id,
-            is_public: document.is_public,
             allow_for_student_view_answer,
             is_doing_submission,
             is_doing_open_type_submission,

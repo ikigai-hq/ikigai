@@ -59,41 +59,6 @@ diesel::table! {
 }
 
 diesel::table! {
-    document_highlights (uuid) {
-        document_id -> Uuid,
-        creator_id -> Int4,
-        thread_id -> Int4,
-        from_pos -> Int4,
-        to_pos -> Int4,
-        updated_at -> Int8,
-        created_at -> Int8,
-        uuid -> Uuid,
-        highlight_type -> Int4,
-        original_text -> Text,
-    }
-}
-
-diesel::table! {
-    document_page_block_nested_documents (page_block_id, document_id) {
-        page_block_id -> Uuid,
-        document_id -> Uuid,
-        index -> Int4,
-        created_at -> Int8,
-    }
-}
-
-diesel::table! {
-    document_page_blocks (id) {
-        id -> Uuid,
-        document_id -> Uuid,
-        title -> Text,
-        view_mode -> Int4,
-        updated_at -> Int8,
-        created_at -> Int8,
-    }
-}
-
-diesel::table! {
     documents (id) {
         id -> Uuid,
         creator_id -> Int4,
@@ -101,9 +66,6 @@ diesel::table! {
         cover_photo_id -> Nullable<Uuid>,
         index -> Int4,
         title -> Text,
-        body -> Text,
-        is_public -> Bool,
-        editor_config -> Jsonb,
         deleted_at -> Nullable<Int8>,
         updated_by -> Nullable<Int4>,
         last_edited_content_at -> Int8,
@@ -175,41 +137,6 @@ diesel::table! {
 }
 
 diesel::table! {
-    quiz_answers (quiz_id, user_id) {
-        quiz_id -> Uuid,
-        user_id -> Int4,
-        answer -> Jsonb,
-        score -> Float8,
-        updated_at -> Int8,
-        created_at -> Int8,
-    }
-}
-
-diesel::table! {
-    quiz_structures (id) {
-        id -> Uuid,
-        user_id -> Int4,
-        quiz_type -> Int4,
-        quiz_title -> Text,
-        quiz_body -> Jsonb,
-        quiz_answer -> Jsonb,
-        updated_at -> Int8,
-        created_at -> Int8,
-        explanation -> Text,
-    }
-}
-
-diesel::table! {
-    quizzes (id) {
-        id -> Uuid,
-        document_id -> Uuid,
-        quiz_structure_id -> Uuid,
-        created_at -> Int8,
-        deleted_at -> Nullable<Int8>,
-    }
-}
-
-diesel::table! {
     rubric_submissions (submission_id) {
         submission_id -> Int4,
         rubric_id -> Nullable<Uuid>,
@@ -267,29 +194,6 @@ diesel::table! {
 }
 
 diesel::table! {
-    thread_comments (id) {
-        id -> Int8,
-        thread_id -> Int4,
-        sender_id -> Int4,
-        content -> Text,
-        updated_at -> Int8,
-        created_at -> Int8,
-        comment_type -> Int4,
-        file_uuid -> Nullable<Uuid>,
-    }
-}
-
-diesel::table! {
-    threads (id) {
-        id -> Int4,
-        creator_id -> Int4,
-        title -> Varchar,
-        updated_at -> Int8,
-        created_at -> Int8,
-    }
-}
-
-diesel::table! {
     user_activities (user_id) {
         user_id -> Int4,
         last_document_id -> Nullable<Uuid>,
@@ -316,12 +220,6 @@ diesel::joinable!(assignments -> documents (document_id));
 diesel::joinable!(assignments -> rubrics (grade_by_rubric_id));
 diesel::joinable!(document_assigned_users -> documents (document_id));
 diesel::joinable!(document_assigned_users -> users (assigned_user_id));
-diesel::joinable!(document_highlights -> documents (document_id));
-diesel::joinable!(document_highlights -> threads (thread_id));
-diesel::joinable!(document_highlights -> users (creator_id));
-diesel::joinable!(document_page_block_nested_documents -> document_page_blocks (page_block_id));
-diesel::joinable!(document_page_block_nested_documents -> documents (document_id));
-diesel::joinable!(document_page_blocks -> documents (document_id));
 diesel::joinable!(documents -> files (cover_photo_id));
 diesel::joinable!(documents -> spaces (space_id));
 diesel::joinable!(notification_receivers -> notifications (notification_id));
@@ -329,11 +227,6 @@ diesel::joinable!(notification_receivers -> users (user_id));
 diesel::joinable!(page_contents -> pages (page_id));
 diesel::joinable!(pages -> documents (document_id));
 diesel::joinable!(pages -> users (created_by_id));
-diesel::joinable!(quiz_answers -> quizzes (quiz_id));
-diesel::joinable!(quiz_answers -> users (user_id));
-diesel::joinable!(quiz_structures -> users (user_id));
-diesel::joinable!(quizzes -> documents (document_id));
-diesel::joinable!(quizzes -> quiz_structures (quiz_structure_id));
 diesel::joinable!(rubric_submissions -> assignment_submissions (submission_id));
 diesel::joinable!(rubric_submissions -> rubrics (rubric_id));
 diesel::joinable!(rubrics -> users (user_id));
@@ -343,10 +236,6 @@ diesel::joinable!(space_members -> spaces (space_id));
 diesel::joinable!(space_members -> users (user_id));
 diesel::joinable!(spaces -> files (banner_id));
 diesel::joinable!(spaces -> users (creator_id));
-diesel::joinable!(thread_comments -> files (file_uuid));
-diesel::joinable!(thread_comments -> threads (thread_id));
-diesel::joinable!(thread_comments -> users (sender_id));
-diesel::joinable!(threads -> users (creator_id));
 diesel::joinable!(user_activities -> documents (last_document_id));
 diesel::joinable!(user_activities -> users (user_id));
 
@@ -355,25 +244,17 @@ diesel::allow_tables_to_appear_in_same_query!(
     assignments,
     band_scores,
     document_assigned_users,
-    document_highlights,
-    document_page_block_nested_documents,
-    document_page_blocks,
     documents,
     files,
     notification_receivers,
     notifications,
     page_contents,
     pages,
-    quiz_answers,
-    quiz_structures,
-    quizzes,
     rubric_submissions,
     rubrics,
     space_invite_tokens,
     space_members,
     spaces,
-    thread_comments,
-    threads,
     user_activities,
     users,
 );

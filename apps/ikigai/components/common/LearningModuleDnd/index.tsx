@@ -13,7 +13,7 @@ import {
   TreeItems,
 } from "../SortableTree/types";
 import { debounce, isEqual } from "lodash";
-import useSpaceStore from "context/ZustandSpaceStore";
+import useSpaceStore from "../../../context/SpaceStore";
 import { LearningItemType, LearningModuleItemTypeWrapper } from "./types";
 import { flattenTree, SortableTree } from "../SortableTree";
 import {

@@ -10,11 +10,11 @@ import {
   GetPages,
 } from "graphql/types";
 import { GET_DOCUMENT_V2, GET_PAGES } from "graphql/query/DocumentQuery";
-import useDocumentStore from "context/DocumentV2Store";
+import useDocumentStore from "../context/DocumentStore";
 import { GET_SPACE_INFORMATION } from "graphql/query/SpaceQuery";
-import useAuthUserStore from "context/ZustandAuthStore";
-import useSpaceStore from "context/ZustandSpaceStore";
-import useSpaceMemberStore from "context/ZustandSpaceMembeStore";
+import useAuthUserStore from "../context/AuthStore";
+import useSpaceStore from "../context/SpaceStore";
+import useSpaceMemberStore from "../context/SpaceMembeStore";
 import usePageStore from "../context/PageStore";
 
 export const useLoadDocument = (documentId: string) => {

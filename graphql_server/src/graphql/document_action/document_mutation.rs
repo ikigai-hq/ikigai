@@ -78,172 +78,6 @@ impl DocumentMutation {
         Ok(true)
     }
 
-    async fn document_update_public(
-        &self,
-        ctx: &Context<'_>,
-        document_id: Uuid,
-        is_public: bool,
-    ) -> Result<bool> {
-        let user = get_user_from_ctx(ctx).await?;
-        document_authorize(
-            ctx,
-            user.id,
-            document_id,
-            DocumentActionPermission::ManageDocument,
-        )
-        .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        Document::update_public(&conn, document_id, is_public).format_err()?;
-
-        Ok(true)
-    }
-
-    async fn document_add_highlight(
-        &self,
-        ctx: &Context<'_>,
-        mut new_highlight: NewDocumentHighlight,
-    ) -> Result<DocumentHighlight> {
-        let user = get_user_from_ctx(ctx).await?;
-        document_authorize(
-            ctx,
-            user.id,
-            new_highlight.document_id,
-            DocumentActionPermission::EditDocument,
-        )
-        .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let highlight = conn
-            .transaction::<_, IkigaiError, _>(|| {
-                let thread = Thread::insert(
-                    &conn,
-                    NewThread {
-                        creator_id: user.id,
-                        title: "Document Highlight".into(),
-                        updated_at: get_now_as_secs(),
-                        created_at: get_now_as_secs(),
-                    },
-                )?;
-
-                new_highlight.creator_id = user.id;
-                new_highlight.thread_id = thread.id;
-                let highlight = DocumentHighlight::insert(&conn, new_highlight)?;
-                Ok(highlight)
-            })
-            .format_err()?;
-
-        Ok(highlight)
-    }
-
-    async fn document_remove_highlight(
-        &self,
-        ctx: &Context<'_>,
-        highlight_id: Uuid,
-    ) -> Result<bool> {
-        let user = get_user_from_ctx(ctx).await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let highlight = DocumentHighlight::find_by_id(&conn, highlight_id).format_err()?;
-        document_authorize(
-            ctx,
-            user.id,
-            highlight.document_id,
-            DocumentActionPermission::EditDocument,
-        )
-        .await?;
-        conn.transaction::<_, IkigaiError, _>(|| {
-            DocumentHighlight::remove(&conn, highlight_id)?;
-            Thread::remove(&conn, highlight.thread_id)?;
-            Ok(())
-        })
-        .format_err()?;
-
-        Ok(true)
-    }
-
-    async fn document_add_page_block(
-        &self,
-        ctx: &Context<'_>,
-        data: PageBlock,
-    ) -> Result<PageBlock> {
-        document_quick_authorize(
-            ctx,
-            data.document_id,
-            DocumentActionPermission::EditDocument,
-        )
-        .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let page_block = PageBlock::upsert(&conn, data).format_err()?;
-
-        Ok(page_block)
-    }
-
-    async fn document_clone_page_block(
-        &self,
-        ctx: &Context<'_>,
-        from_id: Uuid,
-        to_id: Uuid,
-        to_document_id: Uuid,
-    ) -> Result<PageBlock> {
-        let from_page_block = {
-            let conn = get_conn_from_ctx(ctx).await?;
-            PageBlock::find(&conn, from_id).format_err()?
-        };
-
-        document_quick_authorize(ctx, to_document_id, DocumentActionPermission::EditDocument)
-            .await?;
-        document_quick_authorize(
-            ctx,
-            from_page_block.document_id,
-            DocumentActionPermission::EditDocument,
-        )
-        .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let mut to_document = Document::find_by_id(&conn, to_document_id).format_err()?;
-        let clone_config = DocumentCloneConfig::new("", true);
-        let cloned_page_block = from_page_block
-            .deep_clone(&conn, &mut to_document, &clone_config, false, to_id)
-            .format_err()?;
-
-        if let Some(cloned_page_block) = cloned_page_block {
-            Ok(cloned_page_block)
-        } else {
-            Err(IkigaiError::new_bad_request("Cannot clone page block")).format_err()
-        }
-    }
-
-    async fn document_add_page_block_document(
-        &self,
-        ctx: &Context<'_>,
-        data: PageBlockDocument,
-    ) -> Result<PageBlockDocument> {
-        let page_block = {
-            let conn = get_conn_from_ctx(ctx).await?;
-            PageBlock::find(&conn, data.page_block_id).format_err()?
-        };
-
-        document_quick_authorize(
-            ctx,
-            data.document_id,
-            DocumentActionPermission::EditDocument,
-        )
-        .await?;
-        document_quick_authorize(
-            ctx,
-            page_block.document_id,
-            DocumentActionPermission::EditDocument,
-        )
-        .await?;
-
-        let conn = get_conn_from_ctx(ctx).await?;
-        let page_block_document = PageBlockDocument::upsert(&conn, data).format_err()?;
-
-        Ok(page_block_document)
-    }
-
     async fn document_restore(&self, ctx: &Context<'_>, document_id: Uuid) -> Result<bool> {
         document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
             .await?;
@@ -380,7 +214,9 @@ impl DocumentMutation {
 
         let conn = get_conn_from_ctx(ctx).await?;
         let existing_page = Page::find(&conn, page.id);
-        if existing_page.is_ok() && existing_page.map(|page| page.document_id) != Ok(page.document_id) {
+        if existing_page.is_ok()
+            && existing_page.map(|page| page.document_id) != Ok(page.document_id)
+        {
             return Err(IkigaiError::new_bad_request(
                 "Cannot update page of other document",
             ))
@@ -389,19 +225,21 @@ impl DocumentMutation {
 
         page.created_by_id = user_id;
 
-        let page = conn.transaction::<_, IkigaiError, _>(|| {
-            let page = Page::upsert(&conn, page)?;
-            let page_content = PageContent {
-                id: Uuid::new_v4(),
-                page_id: page.id,
-                index: 1,
-                body: "".into(),
-                updated_at: get_now_as_secs(),
-                created_at: get_now_as_secs(),
-            };
-            PageContent::upsert(&conn, page_content)?;
-            Ok(page)
-        }).format_err()?;
+        let page = conn
+            .transaction::<_, IkigaiError, _>(|| {
+                let page = Page::upsert(&conn, page)?;
+                let page_content = PageContent {
+                    id: Uuid::new_v4(),
+                    page_id: page.id,
+                    index: 1,
+                    body: "".into(),
+                    updated_at: get_now_as_secs(),
+                    created_at: get_now_as_secs(),
+                };
+                PageContent::upsert(&conn, page_content)?;
+                Ok(page)
+            })
+            .format_err()?;
         Ok(page)
     }
 

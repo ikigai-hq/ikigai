@@ -4,7 +4,7 @@ import { t, Trans } from "@lingui/macro";
 import toast from "react-hot-toast";
 
 import { SettingIcon } from "components/common/IconSvg";
-import useSpaceStore from "context/ZustandSpaceStore";
+import useSpaceStore from "../../../context/SpaceStore";
 import { useMutation, useQuery } from "@apollo/client";
 import { CreateSpace, GetMySpaces, GetMySpaces_spaceMine } from "graphql/types";
 import { GET_MY_SPACES } from "graphql/query/SpaceQuery";

@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import styled from "styled-components";
 import { useMutation } from "@apollo/client";
 
-import useSpaceStore from "context/ZustandSpaceStore";
+import useSpaceStore from "../../context/SpaceStore";
 import { UPDATE_SPACE } from "graphql/mutation/SpaceMutation";
 import { handleError } from "graphql/ApolloClient";
 import { UpdateSpace } from "graphql/types";

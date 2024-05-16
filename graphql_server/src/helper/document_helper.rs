@@ -1,13 +1,9 @@
-use std::collections::HashMap;
-
 use diesel::PgConnection;
-use regex::Regex;
 use uuid::Uuid;
 
 use crate::db::Document;
 use crate::db::*;
 use crate::error::IkigaiError;
-use crate::util::get_now_as_secs;
 
 #[derive(Debug, Clone)]
 pub struct DocumentCloneConfig<'a> {
@@ -36,98 +32,6 @@ impl<'a> DocumentCloneConfig<'a> {
     }
 }
 
-impl PageBlock {
-    pub fn deep_clone(
-        &self,
-        conn: &PgConnection,
-        to_document: &mut Document,
-        document_config: &DocumentCloneConfig,
-        check_and_replace_page_block_id: bool,
-        new_id: Uuid,
-    ) -> Result<Option<Self>, IkigaiError> {
-        let id = self.id.to_string();
-        if check_and_replace_page_block_id && !to_document.body.contains(id.as_str()) {
-            return Ok(None);
-        }
-
-        // Clone Page Block
-        let mut page_block = self.clone();
-        page_block.id = new_id;
-        page_block.document_id = to_document.id;
-        let page_block = PageBlock::upsert(conn, page_block)?;
-
-        // Clone Nested Document of Page Block
-        let page_block_documents: HashMap<Uuid, PageBlockDocument> =
-            PageBlockDocument::find_all_by_page_block(conn, self.id)?
-                .into_iter()
-                .map(|pb_document| (pb_document.document_id, pb_document))
-                .collect();
-        let document_ids = page_block_documents.iter().map(|p| *p.0).collect();
-        for document in Document::find_by_ids(conn, document_ids)? {
-            if let Some(pb_document) = page_block_documents.get(&document.id) {
-                let mut config = document_config.clone();
-                config.prefix_title = "";
-                config.parent_id = None;
-                config.index = 0;
-                let new_document = document.deep_clone(
-                    conn,
-                    to_document.creator_id,
-                    config,
-                    None,
-                    false,
-                    None,
-                    false,
-                )?;
-                let page_block_nested_document =
-                    PageBlockDocument::new(page_block.id, new_document.id, pb_document.index);
-                PageBlockDocument::upsert(conn, page_block_nested_document)?;
-            }
-        }
-
-        to_document.body = to_document
-            .body
-            .replace(id.as_str(), page_block.id.to_string().as_str());
-
-        Ok(Some(page_block))
-    }
-}
-
-impl Quiz {
-    pub fn deep_clone(
-        &self,
-        conn: &PgConnection,
-        to_document: &mut Document,
-        clone_new_quiz_structure: bool,
-    ) -> Result<Option<Self>, IkigaiError> {
-        let id = self.id.to_string();
-        if !to_document.body.contains(id.as_str()) {
-            return Ok(None);
-        }
-
-        // Clone Quiz Structure if needed
-        let quiz_structure_id = if clone_new_quiz_structure {
-            let mut quiz_structure = QuizStructure::find(conn, self.quiz_structure_id)?;
-            quiz_structure.id = Uuid::new_v4();
-            let quiz_structure = QuizStructure::upsert(conn, quiz_structure)?;
-            quiz_structure.id
-        } else {
-            self.quiz_structure_id
-        };
-
-        // Clone Quiz
-        let mut new_quiz = self.clone();
-        new_quiz.id = Uuid::new_v4();
-        new_quiz.document_id = to_document.id;
-        new_quiz.quiz_structure_id = quiz_structure_id;
-        let quiz = Quiz::upsert(conn, new_quiz)?;
-
-        to_document.body = to_document
-            .body
-            .replace(id.as_str(), quiz.id.to_string().as_str());
-        Ok(Some(quiz))
-    }
-}
-
 impl Document {
     #[allow(clippy::too_many_arguments)]
     pub fn deep_clone(
@@ -140,70 +44,30 @@ impl Document {
         clone_to_document_id: Option<Uuid>,
         clone_document_type: bool,
     ) -> Result<Self, IkigaiError> {
-        let new_body = self.body.clone();
         let new_title = format!("{}{}", config.prefix_title, self.title);
-        let new_editor_config = self.editor_config.clone();
         let new_cover_photo_id = self.cover_photo_id;
 
-        let mut document = if let Some(clone_to_document_id) = clone_to_document_id {
+        let document = if let Some(clone_to_document_id) = clone_to_document_id {
             let mut document = Document::find_by_id(conn, clone_to_document_id)?;
             document.title = new_title;
-            document.body = new_body;
             document.cover_photo_id = new_cover_photo_id;
-            document.editor_config = new_editor_config;
             document.space_id = clone_to_space;
 
             document
         } else {
             let new_doc = Document::new(
                 creator_id,
-                new_body,
                 new_title,
                 config.parent_id,
                 config.index,
                 new_cover_photo_id,
-                new_editor_config,
                 clone_to_space,
                 self.icon_type,
                 self.icon_value.clone(),
             );
             Document::upsert(conn, new_doc)?
         };
-
-        // Clean Comments
-        let comment_regex = Regex::new(
-            r"(&&[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12};#;(?P<content>.*?)&&)",
-        ).unwrap();
-        document.body = comment_regex
-            .replace_all(&document.body, "$content")
-            .to_string();
-
         // Step 1: Change body of document
-        //  1.1 Quizzes, 1.2 Rate, 1.3 Chart, 1.4 Page Block
-        let quizzes = Quiz::find_all_by_document_id(conn, self.id)?;
-        for quiz in quizzes {
-            quiz.deep_clone(conn, &mut document, config.create_new_quiz_structure)?;
-        }
-
-        for page_block in PageBlock::find_all_by_document(conn, self.id)? {
-            page_block.deep_clone(conn, &mut document, &config, true, Uuid::new_v4())?;
-        }
-
-        Document::update(
-            conn,
-            document.id,
-            UpdateDocumentData {
-                title: document.title.clone(),
-                body: document.body.clone(),
-                cover_photo_id: document.cover_photo_id,
-                editor_config: document.editor_config.clone(),
-                updated_at: get_now_as_secs(),
-                updated_by: None,
-                last_edited_content_at: get_now_as_secs(),
-                icon_type: self.icon_type,
-                icon_value: self.icon_value.clone(),
-            },
-        )?;
 
         // Step 3: Document Type
         if clone_document_type {

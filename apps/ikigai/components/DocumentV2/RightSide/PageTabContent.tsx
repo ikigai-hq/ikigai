@@ -7,7 +7,7 @@ import usePageStore from "context/PageStore";
 import { ADD_OR_UPDATE_PAGE } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
 import { AddOrUpdatePage, PageInput, PageLayout } from "graphql/types";
-import useDocumentStore from "context/DocumentV2Store";
+import useDocumentStore from "../../../context/DocumentStore";
 import PageContentItem from "./PageContentItem";
 
 const PageTabContent = () => {

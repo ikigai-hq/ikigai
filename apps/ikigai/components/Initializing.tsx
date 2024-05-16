@@ -18,7 +18,7 @@ import {
   USER_ME,
 } from "../graphql/query";
 import UserStorage from "../storage/UserStorage";
-import useAuthUserStore from "../context/ZustandAuthStore";
+import useAuthUserStore from "../context/AuthStore";
 import { formatDocumentRoute, Routes } from "../config/Routes";
 import LayoutManagement from "./UserCredential/AuthLayout";
 import Loading from "./Loading";

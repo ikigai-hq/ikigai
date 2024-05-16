@@ -4,7 +4,7 @@ import { t } from "@lingui/macro";
 import styled from "styled-components";
 import { useDebounce } from "ahooks";
 
-import useDocumentStore from "context/DocumentV2Store";
+import useDocumentStore from "../../../../context/DocumentStore";
 import CoverPhotoHeader from "./CoverPhotoHeader";
 import UseUpdateDocument from "hook/UseUpdateDocument";
 import usePermission from "hook/UsePermission";

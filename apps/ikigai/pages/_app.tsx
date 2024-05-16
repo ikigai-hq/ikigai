@@ -13,6 +13,7 @@ import { messages as enMessages } from "../locales/en/messages";
 import withTheme from "styles/theme";
 import { Initializing } from "../components/Initializing";
 import SpaceSetting from "../components/SpaceSetting";
+import useDocumentStore from "../context/DocumentV2Store";
 
 require("../styles/globals.less");
 
@@ -34,21 +35,33 @@ type AppPropsWithLayout = AppProps & {
   pageProps: PageProps;
 };
 
+const formatFavicon = (icon: string) =>
+  `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>${icon}</text></svg>`;
+
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const client = useApollo(pageProps.initialApolloState);
   const getLayout = Component.getLayout ?? ((page) => page);
 
+  const activeDocumentTitle = useDocumentStore(
+    (state) => state.activeDocument?.title,
+  );
+  const iconValue = useDocumentStore(
+    (state) => state.activeDocument?.iconValue,
+  );
+  const isFolder = useDocumentStore((state) => state.isFolder);
+  const icon = !isFolder ? iconValue || "✏️" : "📁";
+
   return withTheme(
     <>
       <Head>
-        <title>ikigai - Open Assignment Platform!</title>
+        <title>{activeDocumentTitle || ""} - Powered by Ikigai!</title>
         <meta charSet="utf-8" />
         <meta
           name="viewport"
           content="initial-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no"
         />
         <meta name="theme-color" content="#ffffff" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href={formatFavicon(icon)} />
       </Head>
       <OpenExamToaster />
       <ApolloProvider client={client}>

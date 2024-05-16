@@ -2,10 +2,8 @@ import styled from "styled-components";
 import { Typography } from "antd";
 
 import useDocumentStore from "context/DocumentV2Store";
-import useSpaceStore from "context/ZustandSpaceStore";
 
 const DocumentHeader = () => {
-  const spaceName = useSpaceStore((state) => state.space?.name);
   const activeDocumentTitle = useDocumentStore(
     (state) => state.activeDocument?.title,
   );
@@ -14,16 +12,25 @@ const DocumentHeader = () => {
   );
   const isFolder = useDocumentStore((state) => state.isFolder);
   const icon = !isFolder ? iconValue || "✏️" : "📁";
+
   return (
     <DocumentHeaderWrapper>
       <StyledActionContainer>
-        <Typography.Text type="secondary">
-          {spaceName} / {icon} {activeDocumentTitle || "Untitled"}
-        </Typography.Text>
+        <StyledHeaderText ellipsis>
+          {icon} {activeDocumentTitle || "Untitled"}
+        </StyledHeaderText>
       </StyledActionContainer>
+      <StyledActionContainer>Center of Header</StyledActionContainer>
+      <StyledActionContainer>Right Part of Header</StyledActionContainer>
     </DocumentHeaderWrapper>
   );
 };
+
+const StyledHeaderText = styled(Typography.Text)`
+  font-weight: 400;
+  font-size: 16px;
+  margin: 0;
+`;
 
 export const DocumentHeaderWrapper = styled.div`
   padding: 8px 8px;

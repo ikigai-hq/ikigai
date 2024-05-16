@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Divider, Popover, Tooltip, Typography } from "antd";
+import { Avatar, Divider, Popover, Tooltip, Typography } from "antd";
 import { t, Trans } from "@lingui/macro";
 import styled, { useTheme } from "styled-components";
 import { PlusOutlined } from "@ant-design/icons";
@@ -44,6 +44,12 @@ const LeftSide = () => {
             arrow={false}
           >
             <SpaceContainer>
+              <Avatar
+                shape="square"
+                style={{ backgroundColor: theme.colors.primary[5] }}
+              >
+                {spaceName ? spaceName.charAt(0) : "I"}
+              </Avatar>
               <Typography.Text ellipsis strong style={{ fontWeight: 700 }}>
                 {spaceName}
               </Typography.Text>
@@ -51,7 +57,6 @@ const LeftSide = () => {
             </SpaceContainer>
           </Popover>
         </SpaceInfoContainer>
-        <NoMarginDivider $margin={0} />
         <div style={{ padding: "10px", display: "flex" }}>
           <div style={{ flex: 1 }}>
             <Text
@@ -81,6 +86,7 @@ const LeftSide = () => {
             defaultCollapsed={true}
           />
         </ListModule>
+        <NoMarginDivider $margin={0} />
         <UserBasicInformation
           onClick={() => setOpenProfile(true)}
           name={myName}

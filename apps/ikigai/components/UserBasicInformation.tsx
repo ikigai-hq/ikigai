@@ -1,5 +1,5 @@
-import {Avatar, Typography} from "antd";
-import {UserOutlined} from "@ant-design/icons";
+import { Avatar, Typography } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import React from "react";
 import styled from "styled-components";
 
@@ -9,13 +9,13 @@ export type UserNameProps = {
   randomColor: string;
   avatar?: string;
   onClick?: () => void;
-}
+};
 
 const UserBasicInformation = (props: UserNameProps) => {
   const onClick = () => {
     if (props.onClick) props.onClick();
   };
-  
+
   return (
     <UserInformation onClick={onClick}>
       <div>
@@ -38,7 +38,8 @@ const UserBasicInformation = (props: UserNameProps) => {
 
 const UserInformation = styled.div`
   padding: 0 15px 0 15px;
-  border-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   display: flex;
   gap: 10px;
   align-items: center;

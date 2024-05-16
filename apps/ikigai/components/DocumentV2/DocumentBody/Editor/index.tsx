@@ -45,6 +45,7 @@ export default function TiptapEditor({ parentRef }: EditorProps) {
     onUpdate: ({ editor }) => {
       setEditorContent(editor.getJSON());
     },
+    autofocus: false,
   });
 
   useEffect(() => {

@@ -12,13 +12,16 @@ export type DocumentBodyProps = {
 
 const DocumentBody = ({ loading }: DocumentBodyProps) => {
   const activePageId = usePageStore((state) => state.activePageId);
+  const page = usePageStore((state) =>
+    state.pages.find((p) => p.id === state.activePageId),
+  );
 
   return (
     <Container>
       <Body>
         {loading && <Skeleton />}
         {!loading && !activePageId && <CoverPage />}
-        {!loading && activePageId && <ContentPage />}
+        {!loading && activePageId && <ContentPage key={page.id} page={page} />}
       </Body>
     </Container>
   );

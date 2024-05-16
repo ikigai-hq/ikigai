@@ -54,9 +54,11 @@ const PageTabContent = () => {
         <Trans>Add page</Trans>
       </Button>
       <PageContentItem index={1} />
-      {pages.map((page, index) => (
-        <PageContentItem index={index + 2} key={page.id} page={page} />
-      ))}
+      {pages
+        .sort((a, b) => a.index - b.index)
+        .map((page, index) => (
+          <PageContentItem index={index + 2} key={page.id} page={page} />
+        ))}
     </div>
   );
 };

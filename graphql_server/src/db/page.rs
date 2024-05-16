@@ -96,11 +96,11 @@ pub struct PageContent {
     pub id: Uuid,
     pub page_id: Uuid,
     pub index: i32,
-    pub body: String,
     #[graphql(skip_input)]
     pub updated_at: i64,
     #[graphql(skip_input)]
     pub created_at: i64,
+    pub body: serde_json::Value,
 }
 
 impl PageContent {

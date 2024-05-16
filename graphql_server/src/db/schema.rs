@@ -116,9 +116,9 @@ diesel::table! {
         id -> Uuid,
         page_id -> Uuid,
         index -> Int4,
-        body -> Text,
         updated_at -> Int8,
         created_at -> Int8,
+        body -> Jsonb,
     }
 }
 

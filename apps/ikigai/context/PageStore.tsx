@@ -23,7 +23,12 @@ const usePageStore = create<IPageStore>((set, get) => ({
   setPages: (pages) => set({ pages: cloneDeep(pages) }),
   addPage: (page) => {
     const pages = get().pages;
-    pages.push(cloneDeep(page));
+    const checkingPage = pages.find((p) => p.id === page.id);
+    if (checkingPage) {
+      Object.assign(checkingPage, cloneDeep(page));
+    } else {
+      pages.push(cloneDeep(page));
+    }
 
     set({ pages });
   },

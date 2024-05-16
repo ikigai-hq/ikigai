@@ -5,13 +5,10 @@ pub mod documents;
 pub mod file;
 pub mod notification;
 pub mod page;
-pub mod page_block;
-pub mod quiz;
 pub mod rubric;
 pub mod schema;
 pub mod space;
 pub mod space_member;
-pub mod threads;
 pub mod user;
 
 pub use assignments::*;
@@ -21,12 +18,9 @@ pub use documents::*;
 pub use file::*;
 pub use notification::*;
 pub use page::*;
-pub use page_block::*;
-pub use quiz::*;
 pub use rubric::*;
 pub use space::*;
 pub use space_member::*;
-pub use threads::*;
 pub use user::*;
 
 use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};

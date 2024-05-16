@@ -6,7 +6,6 @@ pub use document_query::*;
 
 use async_graphql::dataloader::DataLoader;
 use async_graphql::*;
-use itertools::Itertools;
 
 use crate::db::*;
 use crate::error::IkigaiErrorExt;
@@ -17,18 +16,6 @@ use crate::helper::{
 
 #[ComplexObject]
 impl Document {
-    async fn quizzes(&self, ctx: &Context<'_>) -> Result<Vec<Quiz>> {
-        let conn = get_conn_from_ctx(ctx).await?;
-        let quizzes = Quiz::find_all_by_document_id(&conn, self.id).format_err()?;
-        Ok(quizzes)
-    }
-
-    async fn highlights(&self, ctx: &Context<'_>) -> Result<Vec<DocumentHighlight>> {
-        let conn = get_conn_from_ctx(ctx).await?;
-        let items = DocumentHighlight::find_all_by_document(&conn, self.id).format_err()?;
-        Ok(items)
-    }
-
     async fn assignment(&self, ctx: &Context<'_>) -> Result<Option<Assignment>> {
         if get_user_id_from_ctx(ctx).await.is_err() {
             return Ok(None);
@@ -73,11 +60,6 @@ impl Document {
             .unwrap_or(DocumentType::Folder))
     }
 
-    async fn page_blocks(&self, ctx: &Context<'_>) -> Result<Vec<PageBlock>> {
-        let conn = get_conn_from_ctx(ctx).await?;
-        PageBlock::find_all_by_document(&conn, self.id).format_err()
-    }
-
     async fn cover_photo_url(&self, ctx: &Context<'_>) -> Option<String> {
         if let Some(cover_photo_id) = self.cover_photo_id {
             let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
@@ -115,49 +97,6 @@ impl Document {
             })
             .await?
             .unwrap_or_default())
-    }
-}
-
-#[ComplexObject]
-impl DocumentHighlight {
-    async fn thread(&self, ctx: &Context<'_>) -> Result<Thread> {
-        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
-        let thread = loader
-            .load_one(ThreadById(self.thread_id))
-            .await?
-            .ok_or(format!("Not found thread {}", self.thread_id))?;
-
-        Ok(thread)
-    }
-}
-
-#[ComplexObject]
-impl PageBlock {
-    async fn nested_documents(&self, ctx: &Context<'_>) -> Result<Vec<PageBlockDocument>> {
-        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
-        let nested_documents = loader
-            .load_one(FindNestedDocumentsOfPageBlock {
-                page_block_id: self.id,
-            })
-            .await?
-            .unwrap_or_default();
-
-        Ok(nested_documents
-            .into_iter()
-            .sorted_by(|a, b| Ord::cmp(&a.index, &b.index))
-            .collect())
-    }
-}
-
-#[ComplexObject]
-impl PageBlockDocument {
-    async fn document(&self, ctx: &Context<'_>) -> Result<Document> {
-        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
-        let document = loader
-            .load_one(DocumentById(self.document_id))
-            .await?
-            .ok_or(format!("Not found document {}", self.document_id))?;
-        Ok(document)
     }
 }
 

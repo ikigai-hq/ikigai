@@ -19,9 +19,7 @@ pub mod ikigai_mutation;
 pub mod ikigai_query;
 pub mod ikigai_subscription;
 pub mod notification_center;
-pub mod quiz_action;
 pub mod space_action;
-pub mod thread_action;
 pub mod user_action;
 pub mod validator;
 

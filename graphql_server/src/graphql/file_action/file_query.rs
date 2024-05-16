@@ -4,7 +4,6 @@ use async_graphql::*;
 use uuid::Uuid;
 
 use crate::db::file::File;
-use crate::db::Document;
 use crate::error::IkigaiErrorExt;
 use crate::helper::{document_quick_authorize, get_conn_from_ctx};
 
@@ -28,10 +27,7 @@ impl FileQuery {
         document_quick_authorize(ctx, document_id, DocumentActionPermission::ViewDocument).await?;
 
         let conn = get_conn_from_ctx(ctx).await?;
-        let document = Document::find_by_id(&conn, document_id).format_err()?;
-        if !document.body.contains(&file_id.to_string()) {
-            return Ok(None);
-        }
+        // FIXME: Check file is existing in document
 
         let file = File::find_by_id(&conn, file_id).format_err()?;
         let is_mp3_file = file.content_type == "audio/mpeg";

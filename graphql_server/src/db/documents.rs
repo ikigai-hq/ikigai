@@ -1,10 +1,9 @@
 use diesel::result::Error;
 use diesel::sql_types::Integer;
 use diesel::{AsChangeset, Connection, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
-use serde_json::json;
 use uuid::Uuid;
 
-use super::schema::{document_highlights, documents};
+use super::schema::documents;
 use crate::impl_enum_for_db;
 use crate::util::get_now_as_secs;
 
@@ -36,9 +35,7 @@ impl Default for IconType {
 #[changeset_options(treat_none_as_null = "true")]
 pub struct UpdateDocumentData {
     pub title: String,
-    pub body: String,
     pub cover_photo_id: Option<Uuid>,
-    pub editor_config: serde_json::Value,
     #[graphql(skip)]
     pub updated_at: i64,
     #[graphql(skip)]
@@ -71,10 +68,6 @@ pub struct Document {
     pub cover_photo_id: Option<Uuid>,
     pub index: i32,
     pub title: String,
-    pub body: String,
-    #[graphql(skip_input)]
-    pub is_public: bool,
-    pub editor_config: serde_json::Value,
     #[graphql(skip_input)]
     pub deleted_at: Option<i64>,
     #[graphql(skip)]
@@ -94,12 +87,10 @@ impl Document {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         creator_id: i32,
-        body: String,
         title: String,
         parent_id: Option<Uuid>,
         index: i32,
         cover_photo_id: Option<Uuid>,
-        editor_config: serde_json::Value,
         space_id: Option<i32>,
         icon_type: Option<IconType>,
         icon_value: Option<String>,
@@ -107,17 +98,14 @@ impl Document {
         Self {
             id: Uuid::new_v4(),
             creator_id,
-            body,
             title,
             parent_id,
             index,
             cover_photo_id,
-            editor_config,
             deleted_at: None,
             updated_by: None,
             last_edited_content_at: get_now_as_secs(),
             updated_at: get_now_as_secs(),
-            is_public: false,
             created_at: get_now_as_secs(),
             space_id,
             icon_type,
@@ -146,16 +134,10 @@ impl Document {
         } else {
             let starter_doc = Self::new(
                 user_id,
-                "".into(),
                 "My Folder".into(),
                 None,
                 0,
                 None,
-                json!({
-                    "style": "Default",
-                    "size": "Default",
-                    "width": "Standard",
-                }),
                 Some(space_id),
                 None,
                 None,
@@ -201,15 +183,6 @@ impl Document {
             }
             Ok(result)
         })
-    }
-
-    pub fn update_public(conn: &PgConnection, id: Uuid, is_public: bool) -> Result<Self, Error> {
-        diesel::update(documents::table.find(id))
-            .set((
-                documents::is_public.eq(is_public),
-                documents::updated_at.eq(get_now_as_secs()),
-            ))
-            .get_result(conn)
     }
 
     pub fn find_by_id(conn: &PgConnection, id: Uuid) -> Result<Self, Error> {
@@ -301,81 +274,5 @@ impl Document {
             .set(deleted_at)
             .execute(conn)?;
         Ok(())
-    }
-}
-
-#[derive(
-    Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
-)]
-#[sql_type = "Integer"]
-pub enum HighlightType {
-    Normal,
-    Replace,
-}
-
-impl_enum_for_db!(HighlightType);
-
-impl Default for HighlightType {
-    fn default() -> Self {
-        Self::Normal
-    }
-}
-
-#[derive(Debug, Clone, InputObject, Insertable)]
-#[table_name = "document_highlights"]
-pub struct NewDocumentHighlight {
-    pub document_id: Uuid,
-    #[graphql(skip)]
-    pub creator_id: i32,
-    #[graphql(skip)]
-    pub thread_id: i32,
-    pub from_pos: i32,
-    pub to_pos: i32,
-    pub uuid: Uuid,
-    pub highlight_type: HighlightType,
-    pub original_text: String,
-}
-
-#[derive(Debug, Clone, SimpleObject, Queryable)]
-#[graphql(complex)]
-pub struct DocumentHighlight {
-    pub document_id: Uuid,
-    pub creator_id: i32,
-    pub thread_id: i32,
-    pub from_pos: i32,
-    pub to_pos: i32,
-    pub updated_at: i64,
-    pub created_at: i64,
-    pub uuid: Uuid,
-    pub highlight_type: HighlightType,
-    pub original_text: String,
-}
-
-impl DocumentHighlight {
-    pub fn insert(conn: &PgConnection, new_highlight: NewDocumentHighlight) -> Result<Self, Error> {
-        diesel::insert_into(document_highlights::table)
-            .values(new_highlight)
-            .on_conflict(document_highlights::uuid)
-            .do_update()
-            .set(document_highlights::updated_at.eq(get_now_as_secs()))
-            .get_result(conn)
-    }
-
-    pub fn remove(conn: &PgConnection, id: Uuid) -> Result<(), Error> {
-        diesel::delete(document_highlights::table.find(id)).execute(conn)?;
-        Ok(())
-    }
-
-    pub fn find_by_id(conn: &PgConnection, id: Uuid) -> Result<Self, Error> {
-        document_highlights::table.find(id).first(conn)
-    }
-
-    pub fn find_all_by_document(
-        conn: &PgConnection,
-        document_id: Uuid,
-    ) -> Result<Vec<Self>, Error> {
-        document_highlights::table
-            .filter(document_highlights::document_id.eq(document_id))
-            .get_results(conn)
     }
 }

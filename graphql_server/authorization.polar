@@ -84,9 +84,6 @@ has_role(user: UserAuth, "writer", doc: DocumentAuth) if
 has_role(user: UserAuth, "reader", doc: DocumentAuth) if
     doc.space_id = user.space_id;
 
-has_role(_: UserAuth, "reader", doc: DocumentAuth) if
-    doc.is_public;
-
 # RUBRIC AUTH SPACE
 allow(actor: UserAuth, action, doc: DocumentAuth) if
     has_permission(actor, action, doc);

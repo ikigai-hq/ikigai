@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Typography } from "antd";
 
-import useDocumentStore from "context/DocumentV2Store";
+import useDocumentStore from "../../../context/DocumentStore";
 
 const DocumentHeader = () => {
   const activeDocumentTitle = useDocumentStore(

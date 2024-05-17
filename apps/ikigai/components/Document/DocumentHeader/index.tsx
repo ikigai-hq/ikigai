@@ -24,15 +24,15 @@ const DocumentHeader = () => {
           {icon} {activeDocumentTitle || "Untitled"}
         </StyledHeaderText>
       </StyledActionContainer>
-      <StyledActionContainer>Center of Header</StyledActionContainer>
-      <StyledActionContainer>Right Part of Header</StyledActionContainer>
+      <StyledActionContainer />
+      <StyledActionContainer />
     </DocumentHeaderWrapper>
   );
 };
 
 const StyledHeaderText = styled(Typography.Text)`
-  font-weight: 400;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 13px;
   margin: 0;
 `;
 

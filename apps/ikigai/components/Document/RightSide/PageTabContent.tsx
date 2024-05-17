@@ -2,6 +2,7 @@ import { Button, Dropdown } from "antd";
 import { t, Trans } from "@lingui/macro";
 import { useMutation } from "@apollo/client";
 import { v4 } from "uuid";
+import { useTheme } from "styled-components";
 
 import usePageStore from "context/PageStore";
 import { ADD_OR_UPDATE_PAGE } from "graphql/mutation/DocumentMutation";
@@ -11,8 +12,11 @@ import useDocumentStore from "context/DocumentStore";
 import PageContentItem from "./PageContentItem";
 import { IconColumns1, IconColumns2 } from "@tabler/icons-react";
 import usePageContentStore from "context/PageContentStore";
+import { Text, TextWeight } from "components/common/Text";
+import React from "react";
 
 const PageTabContent = () => {
+  const theme = useTheme();
   const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
   const pages = usePageStore((state) => state.pages);
   const addPage = usePageStore((state) => state.addPage);
@@ -53,6 +57,11 @@ const PageTabContent = () => {
 
   return (
     <div>
+      <div style={{ marginBottom: 5 }}>
+        <Text color={theme.colors.gray[6]} weight={TextWeight.medium} level={2}>
+          <Trans>Pages</Trans>
+        </Text>
+      </div>
       <Dropdown
         disabled={loading}
         trigger={["click"]}

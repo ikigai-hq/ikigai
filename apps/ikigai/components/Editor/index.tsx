@@ -9,15 +9,13 @@ import { useDebounce } from "ahooks";
 
 import { IPageContent } from "context/PageContentStore";
 import useAddOrUpdatePageContent from "hook/UseUpsertPageContent";
-import usePermission from "hook/UsePermission";
-import { DocumentActionPermission } from "graphql/types";
 
 export type EditorProps = {
+  readOnly: boolean;
   pageContent: IPageContent;
 };
 
-const Editor = ({ pageContent }: EditorProps) => {
-  const allow = usePermission();
+const Editor = ({ pageContent, readOnly }: EditorProps) => {
   const [innerContent, setInnerContent] = useState<JSONContent>(
     pageContent.body,
   );
@@ -54,7 +52,7 @@ const Editor = ({ pageContent }: EditorProps) => {
       <EditorContent
         style={{ width: "100%" }}
         editor={editor}
-        readOnly={allow(DocumentActionPermission.EDIT_DOCUMENT)}
+        readOnly={readOnly}
       />
     </main>
   );

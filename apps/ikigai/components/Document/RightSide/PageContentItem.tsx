@@ -6,7 +6,11 @@ import usePageStore, { IPage } from "context/PageStore";
 import { RemovePage } from "graphql/types";
 import { REMOVE_PAGE } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
-import { Dropdown, MenuProps } from "antd";
+import { Dropdown, MenuProps, Typography } from "antd";
+import Image from "next/image";
+import useDocumentStore from "context/DocumentStore";
+import usePageContentStore from "context/PageContentStore";
+import { IconColumns1, IconColumns2 } from "@tabler/icons-react";
 
 export type PageContentItemProps = {
   index: number;
@@ -14,10 +18,16 @@ export type PageContentItemProps = {
 };
 
 const PageContentItem = ({ page, index }: PageContentItemProps) => {
+  const activeDocumentPhoto = useDocumentStore(
+    (state) => state.activeDocument?.coverPhotoUrl,
+  );
   const activePageId = usePageStore((state) => state.activePageId);
   const pages = usePageStore((state) => state.pages);
   const setActivePageId = usePageStore((state) => state.setActivePageId);
   const removePageInStore = usePageStore((state) => state.removePage);
+  const pageContents = usePageContentStore((state) =>
+    state.pageContents.filter((content) => content.pageId === page?.id),
+  );
 
   const [removePage] = useMutation<RemovePage>(REMOVE_PAGE, {
     onError: handleError,
@@ -54,7 +64,17 @@ const PageContentItem = ({ page, index }: PageContentItemProps) => {
       <Dropdown trigger={["contextMenu"]} menu={{ items: [] }}>
         <PageContainer onClick={() => setActivePageId(undefined)}>
           <PageIndexContainer $active={!activePageId}>1</PageIndexContainer>
-          <PagePreview $active={!activePageId} />
+          <PagePreview $active={!activePageId} style={{ position: "relative" }}>
+            {activeDocumentPhoto && (
+              <Image
+                alt="cover-page-photo"
+                src={activeDocumentPhoto}
+                layout="fill"
+                objectFit="cover"
+                style={{ borderRadius: "6px" }}
+              />
+            )}
+          </PagePreview>
         </PageContainer>
       </Dropdown>
     );
@@ -66,14 +86,29 @@ const PageContentItem = ({ page, index }: PageContentItemProps) => {
         <PageIndexContainer $active={activePageId === page.id}>
           {index}
         </PageIndexContainer>
-        <PagePreview $active={activePageId === page.id} />
+        <PagePreview $active={activePageId === page.id}>
+          <PagePreviewTitleContainer>
+            <Typography.Text type="secondary" strong>
+              {page.title}
+            </Typography.Text>
+            {pageContents.length === 1 && <IconColumns1 size={16} />}
+            {pageContents.length > 1 && <IconColumns2 size={16} />}
+          </PagePreviewTitleContainer>
+        </PagePreview>
       </PageContainer>
     </Dropdown>
   );
 };
 
+const PagePreviewTitleContainer = styled.div`
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const PageIndexContainer = styled.div<{ $active?: boolean }>`
-  width: 38px;
+  width: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -86,9 +121,10 @@ const PagePreview = styled.div<{ $active?: boolean }>`
   flex: 1;
   border-radius: 8px;
   height: 90px;
-  background: ${(props) => props.theme.colors.primary[3]};
+  background: ${(props) => props.theme.colors.gray[2]};
   border: 2px solid
     ${(props) => (props.$active ? props.theme.colors.primary[5] : "white")};
+  overflow: hidden;
 `;
 
 const PageContainer = styled.div`

@@ -1,10 +1,10 @@
 import React from "react";
 
 import { NextPageWithLayout } from "pages/_app";
-import DocumentPageV2 from "components/DocumentV2";
+import Document from "components/Document";
 
 const DocumentPage: NextPageWithLayout = () => {
-  return <DocumentPageV2 />;
+  return <Document />;
 };
 
 export default DocumentPage;

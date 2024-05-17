@@ -214,6 +214,7 @@ impl DocumentMutation {
 
         let conn = get_conn_from_ctx(ctx).await?;
         let existing_page = Page::find(&conn, page.id);
+        let page_is_existing = existing_page.is_ok();
         if existing_page.is_ok()
             && existing_page.map(|page| page.document_id) != Ok(page.document_id)
         {
@@ -228,15 +229,27 @@ impl DocumentMutation {
         let page = conn
             .transaction::<_, IkigaiError, _>(|| {
                 let page = Page::upsert(&conn, page)?;
-                let page_content = PageContent {
-                    id: Uuid::new_v4(),
-                    page_id: page.id,
-                    index: 1,
-                    body: "".into(),
-                    updated_at: get_now_as_secs(),
-                    created_at: get_now_as_secs(),
-                };
-                PageContent::upsert(&conn, page_content)?;
+                if !page_is_existing {
+                    let page_content = PageContent {
+                        id: Uuid::new_v4(),
+                        page_id: page.id,
+                        index: 1,
+                        body: "".into(),
+                        updated_at: get_now_as_secs(),
+                        created_at: get_now_as_secs(),
+                    };
+                    PageContent::upsert(&conn, page_content)?;
+
+                    let page_content = PageContent {
+                        id: Uuid::new_v4(),
+                        page_id: page.id,
+                        index: 2,
+                        body: "".into(),
+                        updated_at: get_now_as_secs(),
+                        created_at: get_now_as_secs(),
+                    };
+                    PageContent::upsert(&conn, page_content)?;
+                }
                 Ok(page)
             })
             .format_err()?;

@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { Typography } from "antd";
+import { useTitle } from "ahooks";
 
-import useDocumentStore from "../../../context/DocumentStore";
+import useDocumentStore from "context/DocumentStore";
 
 const DocumentHeader = () => {
   const activeDocumentTitle = useDocumentStore(
@@ -12,6 +13,9 @@ const DocumentHeader = () => {
   );
   const isFolder = useDocumentStore((state) => state.isFolder);
   const icon = !isFolder ? iconValue || "✏️" : "📁";
+
+  const title = `${activeDocumentTitle || "Untitled"} - Powered by Ikigai!`;
+  useTitle(title);
 
   return (
     <DocumentHeaderWrapper>

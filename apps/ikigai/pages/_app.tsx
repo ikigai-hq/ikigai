@@ -42,9 +42,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const client = useApollo(pageProps.initialApolloState);
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  const activeDocumentTitle = useDocumentStore(
-    (state) => state.activeDocument?.title,
-  );
   const iconValue = useDocumentStore(
     (state) => state.activeDocument?.iconValue,
   );
@@ -54,7 +51,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return withTheme(
     <>
       <Head>
-        <title>{activeDocumentTitle || ""} - Powered by Ikigai!</title>
+        <title>Ikigai - AI powered Open Assignment Platform!</title>
         <meta charSet="utf-8" />
         <meta
           name="viewport"

@@ -1,9 +1,8 @@
 import { DatePicker } from "antd";
-import type { Moment } from "moment";
-import momentGenerateConfig from "rc-picker/lib/generate/moment";
+import dayjsGenerateConfig from "rc-picker/lib/generate/dayjs";
+import { Dayjs } from "dayjs";
 
-const DatePickerWrapper =
-  DatePicker.generatePicker<Moment>(momentGenerateConfig);
+const DatePickerWrapper = DatePicker.generatePicker<Dayjs>(dayjsGenerateConfig);
 
 export const DateRangePicker = DatePickerWrapper.RangePicker;
 

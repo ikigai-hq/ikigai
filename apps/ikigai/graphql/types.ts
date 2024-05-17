@@ -87,7 +87,7 @@ export interface AddOrUpdatePage_documentAddOrUpdatePage_pageContents {
   id: any;
   pageId: any;
   index: number;
-  body: string;
+  body: any;
 }
 
 export interface AddOrUpdatePage_documentAddOrUpdatePage {
@@ -122,6 +122,30 @@ export interface RemovePage {
 
 export interface RemovePageVariables {
   pageId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: AddOrUpdatePageContent
+// ====================================================
+
+export interface AddOrUpdatePageContent_documentAddOrUpdatePageContent {
+  id: any;
+  pageId: any;
+  index: number;
+  body: any;
+}
+
+export interface AddOrUpdatePageContent {
+  documentAddOrUpdatePageContent: AddOrUpdatePageContent_documentAddOrUpdatePageContent;
+}
+
+export interface AddOrUpdatePageContentVariables {
+  pageContent: PageContentInput;
 }
 
 /* tslint:disable */
@@ -858,20 +882,12 @@ export interface GetDocumentV2Variables {
 // GraphQL query operation: GetPages
 // ====================================================
 
-export interface GetPages_documentGet_pages_pageContents {
-  id: any;
-  pageId: any;
-  index: number;
-  body: string;
-}
-
 export interface GetPages_documentGet_pages {
   id: any;
   documentId: any;
   index: number;
   title: string;
   layout: PageLayout;
-  pageContents: GetPages_documentGet_pages_pageContents[];
 }
 
 export interface GetPages_documentGet {
@@ -884,6 +900,42 @@ export interface GetPages {
 }
 
 export interface GetPagesVariables {
+  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetDocumentPageContents
+// ====================================================
+
+export interface GetDocumentPageContents_documentGet_pages_pageContents {
+  id: any;
+  pageId: any;
+  index: number;
+  body: any;
+  updatedAt: number;
+  createdAt: number;
+}
+
+export interface GetDocumentPageContents_documentGet_pages {
+  id: any;
+  pageContents: GetDocumentPageContents_documentGet_pages_pageContents[];
+}
+
+export interface GetDocumentPageContents_documentGet {
+  id: any;
+  pages: GetDocumentPageContents_documentGet_pages[];
+}
+
+export interface GetDocumentPageContents {
+  documentGet: GetDocumentPageContents_documentGet;
+}
+
+export interface GetDocumentPageContentsVariables {
   documentId: any;
 }
 
@@ -1312,6 +1364,13 @@ export interface NewDocument {
 
 export interface NewSpace {
   name: string;
+}
+
+export interface PageContentInput {
+  id: any;
+  pageId: any;
+  index: number;
+  body: any;
 }
 
 export interface PageInput {

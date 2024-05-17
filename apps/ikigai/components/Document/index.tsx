@@ -6,7 +6,7 @@ import { BreakPoints } from "styles/mediaQuery";
 import LeftSide from "./LeftSide";
 import DocumentBody from "./DocumentBody";
 import RightSide from "./RightSide";
-import { useLoadDocument } from "hook/UseLoadDocumentV2";
+import { useLoadDocument } from "../../hook/UseLoadDocument";
 import useDocumentStore from "../../context/DocumentStore";
 import DocumentHeader from "./DocumentHeader";
 

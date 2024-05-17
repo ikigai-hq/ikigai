@@ -45,6 +45,7 @@
     "@lingui/react": "^4.3.0",
     "@next/bundle-analyzer": "^11.1.2",
     "@react-pdf/renderer": "^3.1.9",
+    "@tabler/icons": "^3.4.0",
     "@tiptap/extension-placeholder": "^2.3.2",
     "@tiptap/extension-task-item": "^2.3.2",
     "@tiptap/extension-task-list": "^2.3.2",
@@ -59,6 +60,7 @@
     "bowser": "^2.11.0",
     "cookie": "^0.4.1",
     "cron-time-generator": "^2.0.0",
+    "dayjs": "^1.11.11",
     "emoji-mart": "^5.6.0",
     "graphql": "^15.5.1",
     "i": "^0.3.7",
@@ -66,7 +68,6 @@
     "less": "^4.1.1",
     "libphonenumber-js": "1.10.37",
     "lodash": "^4.17.21",
-    "moment": "^2.29.1",
     "next": "^12",
     "next-compose-plugins": "2.2.1",
     "next-plugin-antd-less": "^1.8.0",
@@ -92,7 +93,6 @@
     "wavesurfer.js": "^6.4.0"
   },
   "devDependencies": {
-    "@ant-design/moment-webpack-plugin": "^0.0.3",
     "@lingui/cli": "^4.3.0",
     "@lingui/macro": "^4.3.0",
     "@svgr/webpack": "^5.5.0",

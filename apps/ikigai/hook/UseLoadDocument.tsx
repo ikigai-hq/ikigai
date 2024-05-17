@@ -5,17 +5,23 @@ import { t } from "@lingui/macro";
 
 import {
   DocumentActionPermission,
+  GetDocumentPageContents,
   GetDocuments,
   GetDocumentV2,
   GetPages,
 } from "graphql/types";
-import { GET_DOCUMENT_V2, GET_PAGES } from "graphql/query/DocumentQuery";
+import {
+  GET_DOCUMENT_PAGE_CONTENT,
+  GET_DOCUMENT_V2,
+  GET_PAGES,
+} from "graphql/query/DocumentQuery";
 import useDocumentStore from "../context/DocumentStore";
 import { GET_SPACE_INFORMATION } from "graphql/query/SpaceQuery";
 import useAuthUserStore from "../context/AuthStore";
 import useSpaceStore from "../context/SpaceStore";
 import useSpaceMemberStore from "../context/SpaceMembeStore";
 import usePageStore from "../context/PageStore";
+import usePageContentStore from "../context/PageContentStore";
 
 export const useLoadDocument = (documentId: string) => {
   const [loading, setLoading] = useState(true);
@@ -39,6 +45,7 @@ export const useLoadDocument = (documentId: string) => {
     (state) => state.fetchMembersOfSpace,
   );
   const setPages = usePageStore((state) => state.setPages);
+  const setPageContents = usePageContentStore((state) => state.setPageContents);
 
   const [fetchDocument] = useLazyQuery<GetDocumentV2>(GET_DOCUMENT_V2, {
     fetchPolicy: "network-only",
@@ -52,6 +59,12 @@ export const useLoadDocument = (documentId: string) => {
   const [fetchPages] = useLazyQuery<GetPages>(GET_PAGES, {
     fetchPolicy: "network-only",
   });
+  const [fetchPageContents] = useLazyQuery<GetDocumentPageContents>(
+    GET_DOCUMENT_PAGE_CONTENT,
+    {
+      fetchPolicy: "network-only",
+    },
+  );
 
   useEffect(() => {
     if (activeDocument?.id != documentId) {
@@ -97,8 +110,20 @@ export const useLoadDocument = (documentId: string) => {
         documentId,
       },
     });
-
     if (data) setPages(data.documentGet.pages);
+
+    const { data: pageContentsData } = await fetchPageContents({
+      variables: {
+        documentId,
+      },
+    });
+
+    if (data) {
+      const pageContents = pageContentsData.documentGet.pages.flatMap(
+        (page) => page.pageContents,
+      );
+      setPageContents(pageContents);
+    }
   };
 
   const fetchSpaceInformation = async (spaceId: number) => {

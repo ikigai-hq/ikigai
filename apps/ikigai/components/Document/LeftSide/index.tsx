@@ -4,18 +4,18 @@ import { t, Trans } from "@lingui/macro";
 import styled, { useTheme } from "styled-components";
 import { PlusOutlined } from "@ant-design/icons";
 
-import useAuthUserStore from "../../../context/AuthStore";
+import useAuthUserStore from "context/AuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
 import UserBasicInformation from "components/UserBasicInformation";
 import { BreakPoints } from "styles/mediaQuery";
 import LearningModuleDnd from "components/common/LearningModuleDnd";
 import LessonItemDnd from "components/common/LearningModuleDnd/LessonItemDnd";
-import useDocumentStore from "../../../context/DocumentStore";
+import useDocumentStore from "context/DocumentStore";
 import { Text, TextWeight } from "components/common/Text";
 import { TextButtonWithHover } from "components/common/Button";
-import useSpaceStore from "../../../context/SpaceStore";
+import useSpaceStore from "context/SpaceStore";
 import CreateContentButton from "components/common/LearningModuleDnd/CreateContentButton";
-import { ArrowDocument } from "../../common/IconSvg";
+import { ArrowDocument } from "components/common/IconSvg";
 import ManageSpace from "./ManageSpace";
 
 const LeftSide = () => {

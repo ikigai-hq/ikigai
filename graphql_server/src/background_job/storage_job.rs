@@ -33,8 +33,8 @@ impl Executable for GenerateWaveform {
     async fn execute(&self) -> Self::Output {
         info!("Start generate waveform {}", self.file_id);
         let file = {
-            let conn = get_conn_from_actor().await?;
-            File::find_by_id(&conn, self.file_id)?
+            let mut conn = get_conn_from_actor().await?;
+            File::find_by_id(&mut conn, self.file_id)?
         };
 
         let res = if file.content_type.contains("audio/mpeg") {
@@ -42,8 +42,8 @@ impl Executable for GenerateWaveform {
                 AudioWaveform::generate_waveform_json(file.uuid, &file.key(), "mp3").await?;
 
             info!("Save waveform {}", self.file_id);
-            let conn = get_conn_from_actor().await?;
-            File::update_waveform(&conn, file.uuid, &waveform_json_str)?;
+            let mut conn = get_conn_from_actor().await?;
+            File::update_waveform(&mut conn, file.uuid, &waveform_json_str)?;
             true
         } else {
             false

@@ -16,8 +16,8 @@ async fn handle_complete_submission(msg: &CompleteSubmission) -> Result<(), Ikig
     info!("Start complete submission by background_job job {:?}", msg);
     let submission_id = msg.submission_id;
 
-    let conn = get_conn_from_actor().await?;
-    let submission = Submission::find_by_id(&conn, submission_id)?;
+    let mut conn = get_conn_from_actor().await?;
+    let submission = Submission::find_by_id(&mut conn, submission_id)?;
 
     // Student doing another session, skip
     if submission.attempt_number != msg.attempt_number {
@@ -30,8 +30,8 @@ async fn handle_complete_submission(msg: &CompleteSubmission) -> Result<(), Ikig
     }
 
     // Should close the submission
-    let assignment = Assignment::find_by_id(&conn, submission.assignment_id)?;
-    submit_submission(&conn, &submission, &assignment, true)?;
+    let assignment = Assignment::find_by_id(&mut conn, submission.assignment_id)?;
+    submit_submission(&mut conn, &submission, &assignment, true)?;
 
     Ok(())
 }

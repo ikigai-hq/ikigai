@@ -31,7 +31,7 @@ impl BandScoreRange {
     FromSqlRow,
 )]
 #[graphql(input_name = "BandScoreRangesInput")]
-#[sql_type = "Jsonb"]
+#[diesel(sql_type = Jsonb)]
 pub struct BandScoreRanges {
     pub items: Vec<BandScoreRange>,
 }
@@ -96,7 +96,7 @@ impl BandScoreRanges {
 impl_jsonb_for_db!(BandScoreRanges);
 
 #[derive(Debug, Clone, Insertable, InputObject)]
-#[table_name = "band_scores"]
+#[diesel(table_name = band_scores)]
 pub struct NewBandScore {
     pub name: String,
     pub range: BandScoreRanges,
@@ -127,11 +127,11 @@ impl BandScore {
         item.map_or(grade, |range| range.score)
     }
 
-    pub fn find(conn: &PgConnection, band_score_id: i32) -> Result<Self, Error> {
+    pub fn find(conn: &mut PgConnection, band_score_id: i32) -> Result<Self, Error> {
         band_scores::table.find(band_score_id).first(conn)
     }
 
-    pub fn find_all(conn: &PgConnection) -> Result<Vec<Self>, Error> {
+    pub fn find_all(conn: &mut PgConnection) -> Result<Vec<Self>, Error> {
         band_scores::table.get_results(conn)
     }
 }

@@ -1,11 +1,11 @@
-use async_graphql::CustomValidator;
+use async_graphql::{CustomValidator, InputValueError};
 use validator::ValidateEmail;
 
 pub struct Email;
 
 impl CustomValidator<String> for Email {
-    fn check(&self, s: &String) -> Result<(), String> {
-        check_email(s)
+    fn check(&self, s: &String) -> Result<(), InputValueError<String>> {
+        check_email(s).map_err(InputValueError::custom)
     }
 }
 

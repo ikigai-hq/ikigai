@@ -42,7 +42,7 @@ docker-compse stop
 ##  Run by source code (local dev - developer only)
 
 ```shell
-rust >= 1.71
+rust >= 1.75
 postgres@14
 redis >= 5
 ```

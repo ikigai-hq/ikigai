@@ -57,7 +57,7 @@ impl FileMutation {
         data: Vec<CreateFileData>,
     ) -> Result<Vec<CreateFileResponse>> {
         let user_auth = get_user_auth_from_ctx(ctx).await?;
-        let conn = get_conn_from_ctx(ctx).await?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
         let user_id = user_auth.id;
         let files = data
             .into_iter()
@@ -71,7 +71,7 @@ impl FileMutation {
                 )
             })
             .collect();
-        let files = File::batch_insert(&conn, files).format_err()?;
+        let files = File::batch_insert(&mut conn, files).format_err()?;
         let mut result = vec![];
         for file in files {
             let upload_info = Storage::from_env_config().generate_upload_info(
@@ -90,13 +90,13 @@ impl FileMutation {
         let user = get_user_from_ctx(ctx).await?;
         is_owner_of_file(ctx, user.id, file_id).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        let mut file = File::find_by_id(&conn, file_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let mut file = File::find_by_id(&mut conn, file_id).format_err()?;
         if let Some(file_info) = Storage::from_env_config().get_file_info(file.key()).await? {
             file.content_length = file_info.content_length;
             file.content_type = file_info.content_type;
             file.status = FileStatus::Success;
-            let file = File::upsert(&conn, &file)?;
+            let file = File::upsert(&mut conn, &file)?;
 
             // Generate waveform in case file is mp3 file
             if file.content_type == "audio/mpeg" {
@@ -106,14 +106,14 @@ impl FileMutation {
             Ok(true)
         } else {
             file.status = FileStatus::Failed;
-            File::upsert(&conn, &file)?;
+            File::upsert(&mut conn, &file)?;
             Err(IkigaiError::new_bad_request("File does not exist")).format_err()
         }
     }
 }
 
 async fn create_file_upload(
-    conn: Connection,
+    mut conn: Connection,
     member: &UserAuth,
     data: CreateFileData,
 ) -> Result<CreateFileResponse> {
@@ -125,7 +125,7 @@ async fn create_file_upload(
     } = data;
 
     let file = File::new(member.id, public, file_name, content_type, content_length);
-    let file = File::upsert(&conn, &file).format_err()?;
+    let file = File::upsert(&mut conn, &file).format_err()?;
     let upload_info = Storage::from_env_config().generate_upload_info(
         file.key(),
         &file.content_type,

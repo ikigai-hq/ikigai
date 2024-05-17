@@ -12,20 +12,20 @@ actix = "0.13.0"
 actix-web = "4.0.1"
 actix-web-actors = "4.1.0"
 dotenv = "0.15.0"
-async-graphql = { version = "3.0.38", features = ["log", "uuid", "dataloader", "apollo_tracing"] }
-async-graphql-actix-web = "3.0.38"
-diesel = { version = "1.4.7", features = ["postgres", "chrono", "uuidv07", "serde_json", "r2d2"] }
+async-graphql = { version = "7.0.3", features = ["log", "uuid", "dataloader", "apollo_tracing"] }
+async-graphql-actix-web = "7.0.3"
+diesel = { version = "2.1.5", features = ["postgres", "chrono", "uuid", "serde_json", "r2d2"] }
 chrono = "0.4"
 pbkdf2 = { version = "0.7", features = ["simple"] }
 log = "0.4"
-fern = { version = "0.5", features = ["colored"] }
-jsonwebtoken = "7"
+fern = { version = "0.6.2", features = ["colored"] }
+jsonwebtoken = "9.3.0"
 rand_core = { version = "0.6" }
-reqwest = { version = "0.11.10", features = ["json", "stream"] }
+reqwest = { version = "0.12.3", features = ["json", "stream"] }
 num-traits = "0.2"
 num-derive = "0.3"
 rand = "0.8.3"
-uuid = { version = "0.8", features = ["serde", "v4"] }
+uuid = { version = "1.8", features = ["serde", "v4"] }
 hmac = "0.11.0"
 simple-aws-s3 = "0.2.3"
 lazy_static = "1.4.0"
@@ -42,7 +42,7 @@ itertools = "0.10.3"
 anyhow = "1.0.58"
 lettre = "0.10.1"
 regex = "1"
-oso = { version = "0.26.3", features = ["uuid-07"]}
+oso = { version = "0.27.3", features = ["uuid-10"]}
 actix-cors = "0.6.4"
 tera = "1.17.1"
 csv = "1.1.6"

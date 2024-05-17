@@ -14,7 +14,7 @@ use crate::util::url_util::{format_document_url, format_space_url};
 #[derive(
     Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
 )]
-#[sql_type = "Integer"]
+#[diesel(sql_type = Integer)]
 pub enum NotificationType {
     NewSpaceMember,
     SubmitSubmission,
@@ -31,7 +31,7 @@ impl Default for NotificationType {
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject)]
-#[table_name = "notifications"]
+#[diesel(table_name = notifications)]
 pub struct Notification {
     pub id: Uuid,
     pub notification_type: NotificationType,
@@ -65,7 +65,7 @@ impl Notification {
         Self::new(NotificationType::AssignToAssignment, context)
     }
 
-    pub fn insert(conn: &PgConnection, notification: Self) -> Result<Self, Error> {
+    pub fn insert(conn: &mut PgConnection, notification: Self) -> Result<Self, Error> {
         diesel::insert_into(notifications::table)
             .values(&notification)
             .on_conflict_do_nothing()
@@ -185,7 +185,7 @@ Hello there! You've been assigned to a new assignment: {assignment_name}. If you
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject)]
-#[table_name = "notification_receivers"]
+#[diesel(table_name = notification_receivers)]
 pub struct NotificationReceiver {
     pub notification_id: Uuid,
     pub user_id: i32,
@@ -202,7 +202,7 @@ impl NotificationReceiver {
     }
 
     pub fn upsert(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         items: Vec<NotificationReceiver>,
     ) -> Result<Vec<Self>, Error> {
         diesel::insert_into(notification_receivers::table)
@@ -212,7 +212,7 @@ impl NotificationReceiver {
     }
 
     pub fn find_all_by_notification(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         notification_id: Uuid,
     ) -> Result<Vec<Self>, Error> {
         notification_receivers::table

@@ -35,8 +35,8 @@ impl User {
 
     async fn avatar(&self, ctx: &Context<'_>) -> Result<Option<File>> {
         Ok(if let Some(avatar_file_id) = self.avatar_file_id {
-            let conn = get_conn_from_ctx(ctx).await?;
-            Some(File::find_by_id(&conn, avatar_file_id).format_err()?)
+            let mut conn = get_conn_from_ctx(ctx).await?;
+            Some(File::find_by_id(&mut conn, avatar_file_id).format_err()?)
         } else {
             None
         })

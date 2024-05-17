@@ -11,7 +11,7 @@ use crate::util::get_now_as_secs;
 #[derive(
     Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
 )]
-#[sql_type = "Integer"]
+#[diesel(sql_type = Integer)]
 pub enum GradeType {
     Grade,
     NonGrade,
@@ -28,7 +28,7 @@ impl Default for GradeType {
 #[derive(
     Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
 )]
-#[sql_type = "Integer"]
+#[diesel(sql_type = Integer)]
 pub enum GradeMethod {
     Manual,
     AutoGrade,
@@ -44,7 +44,7 @@ impl Default for GradeMethod {
 }
 
 #[derive(Debug, Clone, Insertable, Default)]
-#[table_name = "assignments"]
+#[diesel(table_name = assignments)]
 pub struct NewAssignment {
     pub updated_at: i64,
     pub created_at: i64,
@@ -97,8 +97,7 @@ impl NewAssignment {
 }
 
 #[derive(Debug, Clone, Insertable, InputObject, AsChangeset)]
-#[table_name = "assignments"]
-#[changeset_options(treat_none_as_null = "true")]
+#[diesel(table_name = assignments, treat_none_as_null = true)]
 pub struct UpdateAssignmentData {
     pub graded_type: GradeType,
     pub max_number_of_attempt: Option<i32>,
@@ -134,7 +133,10 @@ pub struct Assignment {
 }
 
 impl Assignment {
-    pub fn insert(conn: &PgConnection, mut new_assignment: NewAssignment) -> Result<Self, Error> {
+    pub fn insert(
+        conn: &mut PgConnection,
+        mut new_assignment: NewAssignment,
+    ) -> Result<Self, Error> {
         new_assignment.update_time();
         diesel::insert_into(assignments::table)
             .values(new_assignment)
@@ -142,7 +144,7 @@ impl Assignment {
     }
 
     pub fn batch_insert(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         new_assignments: Vec<NewAssignment>,
     ) -> Result<Vec<Self>, Error> {
         diesel::insert_into(assignments::table)
@@ -151,7 +153,7 @@ impl Assignment {
     }
 
     pub fn update(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         assignment_id: i32,
         mut update_data: UpdateAssignmentData,
     ) -> Result<Self, Error> {
@@ -161,11 +163,14 @@ impl Assignment {
             .get_result(conn)
     }
 
-    pub fn find_by_id(conn: &PgConnection, assignment_id: i32) -> Result<Self, Error> {
+    pub fn find_by_id(conn: &mut PgConnection, assignment_id: i32) -> Result<Self, Error> {
         assignments::table.find(assignment_id).first(conn)
     }
 
-    pub fn find_by_document(conn: &PgConnection, document_id: Uuid) -> Result<Option<Self>, Error> {
+    pub fn find_by_document(
+        conn: &mut PgConnection,
+        document_id: Uuid,
+    ) -> Result<Option<Self>, Error> {
         match assignments::table
             .filter(assignments::document_id.eq(document_id))
             .first(conn)
@@ -177,7 +182,7 @@ impl Assignment {
     }
 
     pub fn find_all_by_documents(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         document_ids: &Vec<Uuid>,
     ) -> Result<Vec<Self>, Error> {
         assignments::table
@@ -186,7 +191,7 @@ impl Assignment {
     }
 
     pub fn find_all_by_ids(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         assignment_ids: Vec<i32>,
     ) -> Result<Vec<Self>, Error> {
         assignments::table
@@ -196,7 +201,7 @@ impl Assignment {
 }
 
 #[derive(Debug, Clone, Insertable)]
-#[table_name = "assignment_submissions"]
+#[diesel(table_name = assignment_submissions)]
 pub struct NewSubmission {
     pub assignment_id: i32,
     pub user_id: i32,
@@ -262,8 +267,7 @@ impl NewSubmission {
 }
 
 #[derive(Debug, Clone, InputObject, AsChangeset)]
-#[changeset_options(treat_none_as_null = "true")]
-#[table_name = "assignment_submissions"]
+#[diesel(table_name = assignment_submissions, treat_none_as_null = true)]
 pub struct GradeSubmissionData {
     pub temp_grade: Option<f64>,
     pub final_grade: Option<f64>,
@@ -319,7 +323,10 @@ impl Submission {
         SubmissionStatus::InDoing
     }
 
-    pub fn insert(conn: &PgConnection, mut new_submission: NewSubmission) -> Result<Self, Error> {
+    pub fn insert(
+        conn: &mut PgConnection,
+        mut new_submission: NewSubmission,
+    ) -> Result<Self, Error> {
         new_submission.update_time();
         diesel::insert_into(assignment_submissions::table)
             .values(new_submission)
@@ -327,7 +334,7 @@ impl Submission {
     }
 
     pub fn grade_submission(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         submission_id: i32,
         mut grade_data: GradeSubmissionData,
     ) -> Result<Self, Error> {
@@ -339,7 +346,7 @@ impl Submission {
             .get_result(conn)
     }
 
-    pub fn redo(conn: &PgConnection, submission_id: i32) -> Result<Self, Error> {
+    pub fn redo(conn: &mut PgConnection, submission_id: i32) -> Result<Self, Error> {
         diesel::update(assignment_submissions::table.find(submission_id))
             .set((
                 assignment_submissions::start_at.eq(get_now_as_secs()),
@@ -351,7 +358,7 @@ impl Submission {
             .get_result(conn)
     }
 
-    pub fn request_redo(conn: &PgConnection, submission_id: i32) -> Result<Self, Error> {
+    pub fn request_redo(conn: &mut PgConnection, submission_id: i32) -> Result<Self, Error> {
         diesel::update(assignment_submissions::table.find(submission_id))
             .set((
                 assignment_submissions::allow_for_student_view_answer.eq(false),
@@ -363,7 +370,7 @@ impl Submission {
     }
 
     pub fn reset_attempt(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         submission_id: i32,
         attempt_number: i32,
         document_id: Uuid,
@@ -388,7 +395,7 @@ impl Submission {
     }
 
     pub fn submit(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         submission_id: i32,
         grade: f64,
         final_grade: f64,
@@ -409,7 +416,7 @@ impl Submission {
     }
 
     pub fn update_final_grade(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         submission_id: i32,
         final_grade: f64,
     ) -> Result<(), Error> {
@@ -422,14 +429,14 @@ impl Submission {
         Ok(())
     }
 
-    pub fn find_by_id(conn: &PgConnection, submission_id: i32) -> Result<Submission, Error> {
+    pub fn find_by_id(conn: &mut PgConnection, submission_id: i32) -> Result<Submission, Error> {
         assignment_submissions::table
             .find(submission_id)
             .first(conn)
     }
 
     pub fn find_last_submission(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         user_id: i32,
         assignment_id: i32,
     ) -> Result<Option<Submission>, Error> {
@@ -444,7 +451,10 @@ impl Submission {
         Ok(items.pop())
     }
 
-    pub fn find_by_document(conn: &PgConnection, document_id: Uuid) -> Result<Option<Self>, Error> {
+    pub fn find_by_document(
+        conn: &mut PgConnection,
+        document_id: Uuid,
+    ) -> Result<Option<Self>, Error> {
         match assignment_submissions::table
             .filter(assignment_submissions::document_id.eq(document_id))
             .first(conn)
@@ -456,7 +466,7 @@ impl Submission {
     }
 
     pub fn find_by_documents(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         document_ids: Vec<Uuid>,
     ) -> Result<Vec<Self>, Error> {
         assignment_submissions::table
@@ -465,7 +475,7 @@ impl Submission {
     }
 
     pub fn find_all_by_assignment(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         assignment_id: i32,
     ) -> Result<Vec<Self>, Error> {
         assignment_submissions::table
@@ -474,7 +484,7 @@ impl Submission {
     }
 
     pub fn find_all_by_assignments(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         assignment_ids: Vec<i32>,
     ) -> Result<Vec<Self>, Error> {
         assignment_submissions::table
@@ -482,14 +492,14 @@ impl Submission {
             .get_results(conn)
     }
 
-    pub fn find_all_by_ids(conn: &PgConnection, ids: Vec<i32>) -> Result<Vec<Self>, Error> {
+    pub fn find_all_by_ids(conn: &mut PgConnection, ids: Vec<i32>) -> Result<Vec<Self>, Error> {
         assignment_submissions::table
             .filter(assignment_submissions::id.eq_any(ids))
             .get_results(conn)
     }
 
     pub fn find_all_by_user(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         user_id: i32,
         submit_from: i64,
         submit_to: i64,

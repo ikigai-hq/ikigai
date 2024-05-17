@@ -36,7 +36,7 @@ impl Document {
     #[allow(clippy::too_many_arguments)]
     pub fn deep_clone(
         &self,
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         creator_id: i32,
         config: DocumentCloneConfig,
         clone_to_space: Option<i32>,
@@ -112,7 +112,7 @@ impl Document {
 }
 
 pub fn get_all_documents_by_id(
-    conn: &PgConnection,
+    conn: &mut PgConnection,
     document_id: Uuid,
 ) -> Result<Vec<Document>, IkigaiError> {
     let mut res: Vec<Document> = vec![];

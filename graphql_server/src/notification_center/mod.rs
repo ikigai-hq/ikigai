@@ -12,7 +12,7 @@ use crate::error::IkigaiError;
 use crate::mailer::Mailer;
 
 pub fn send_notification(
-    conn: &PgConnection,
+    conn: &mut PgConnection,
     notification: Notification,
     receiver_ids: Vec<i32>,
 ) -> Result<(), IkigaiError> {
@@ -111,11 +111,11 @@ impl Handler<SendNotification> for NotificationCenter {
         // Safe because sender is Box.
         let senders = self.senders.clone();
         let task = async move {
-            let conn = get_conn_from_actor().await?;
+            let mut conn = get_conn_from_actor().await?;
             let notification_receivers =
-                NotificationReceiver::find_all_by_notification(&conn, msg.notification.id)?;
+                NotificationReceiver::find_all_by_notification(&mut conn, msg.notification.id)?;
             let users = User::find_by_ids(
-                &conn,
+                &mut conn,
                 &notification_receivers.iter().map(|n| n.user_id).collect(),
             )?;
             for sender in senders {
@@ -132,6 +132,6 @@ impl Handler<SendNotification> for NotificationCenter {
 
         wrap_future::<_, Self>(task)
             .map(|_: Result<(), IkigaiError>, _, _| ())
-            .spawn(ctx)
+            .spawn(ctx);
     }
 }

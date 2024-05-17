@@ -16,7 +16,7 @@ pub enum DocumentType {
 #[derive(
     Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
 )]
-#[sql_type = "Integer"]
+#[diesel(sql_type = Integer)]
 pub enum IconType {
     Emoji,
     Image,
@@ -31,8 +31,7 @@ impl Default for IconType {
 }
 
 #[derive(Debug, Clone, AsChangeset, InputObject)]
-#[table_name = "documents"]
-#[changeset_options(treat_none_as_null = "true")]
+#[diesel(table_name = documents, treat_none_as_null = true)]
 pub struct UpdateDocumentData {
     pub title: String,
     pub cover_photo_id: Option<Uuid>,
@@ -47,8 +46,7 @@ pub struct UpdateDocumentData {
 }
 
 #[derive(Debug, Clone, AsChangeset, InputObject)]
-#[table_name = "documents"]
-#[changeset_options(treat_none_as_null = "true")]
+#[diesel(table_name = documents, treat_none_as_null = true)]
 pub struct UpdatePositionData {
     pub id: Uuid,
     pub parent_id: Option<Uuid>,
@@ -113,7 +111,7 @@ impl Document {
         }
     }
 
-    pub fn upsert(conn: &PgConnection, mut new_document: Self) -> Result<Self, Error> {
+    pub fn upsert(conn: &mut PgConnection, mut new_document: Self) -> Result<Self, Error> {
         new_document.updated_at = get_now_as_secs();
         new_document.created_at = get_now_as_secs();
         diesel::insert_into(documents::table)
@@ -125,7 +123,7 @@ impl Document {
     }
 
     pub fn get_or_create_starter_doc(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         user_id: i32,
         space_id: i32,
     ) -> Result<Self, Error> {
@@ -148,7 +146,7 @@ impl Document {
     }
 
     pub fn update(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         id: Uuid,
         mut data: UpdateDocumentData,
     ) -> Result<Self, Error> {
@@ -159,7 +157,11 @@ impl Document {
             .get_result(conn)
     }
 
-    pub fn update_space_id(conn: &PgConnection, id: Uuid, space_id: i32) -> Result<Self, Error> {
+    pub fn update_space_id(
+        conn: &mut PgConnection,
+        id: Uuid,
+        space_id: i32,
+    ) -> Result<Self, Error> {
         diesel::update(documents::table.find(id))
             .set((
                 documents::space_id.eq(space_id),
@@ -169,10 +171,10 @@ impl Document {
     }
 
     pub fn update_positions(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         items: Vec<UpdatePositionData>,
     ) -> Result<Vec<Self>, Error> {
-        conn.transaction::<_, Error, _>(|| {
+        conn.transaction::<_, Error, _>(|conn| {
             let mut result: Vec<Self> = vec![];
             for item in items {
                 result.push(
@@ -185,24 +187,30 @@ impl Document {
         })
     }
 
-    pub fn find_by_id(conn: &PgConnection, id: Uuid) -> Result<Self, Error> {
+    pub fn find_by_id(conn: &mut PgConnection, id: Uuid) -> Result<Self, Error> {
         documents::table.find(id).first(conn)
     }
 
-    pub fn find_by_ids(conn: &PgConnection, ids: Vec<Uuid>) -> Result<Vec<Self>, Error> {
+    pub fn find_by_ids(conn: &mut PgConnection, ids: Vec<Uuid>) -> Result<Vec<Self>, Error> {
         documents::table
             .filter(documents::id.eq_any(ids))
             .get_results(conn)
     }
 
-    pub fn find_by_parent(conn: &PgConnection, parent_id: Uuid) -> Result<Vec<Document>, Error> {
+    pub fn find_by_parent(
+        conn: &mut PgConnection,
+        parent_id: Uuid,
+    ) -> Result<Vec<Document>, Error> {
         documents::table
             .filter(documents::parent_id.eq(parent_id))
             .order_by(documents::index.asc())
             .get_results(conn)
     }
 
-    pub fn find_all_by_space(conn: &PgConnection, space_id: i32) -> Result<Vec<Document>, Error> {
+    pub fn find_all_by_space(
+        conn: &mut PgConnection,
+        space_id: i32,
+    ) -> Result<Vec<Document>, Error> {
         documents::table
             .filter(documents::space_id.eq(space_id))
             .filter(documents::deleted_at.is_null())
@@ -210,7 +218,7 @@ impl Document {
     }
 
     pub fn find_starter_of_space(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         space_id: i32,
     ) -> Result<Option<Document>, Error> {
         match documents::table
@@ -226,7 +234,7 @@ impl Document {
     }
 
     pub fn find_last_index(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         space_id: i32,
         parent_id: Option<Uuid>,
     ) -> Result<i32, Error> {
@@ -246,12 +254,12 @@ impl Document {
         }
     }
 
-    pub fn delete(conn: &PgConnection, id: Uuid) -> Result<(), Error> {
+    pub fn delete(conn: &mut PgConnection, id: Uuid) -> Result<(), Error> {
         diesel::delete(documents::table.find(id)).execute(conn)?;
         Ok(())
     }
 
-    pub fn soft_delete(conn: &PgConnection, id: Uuid) -> Result<(), Error> {
+    pub fn soft_delete(conn: &mut PgConnection, id: Uuid) -> Result<(), Error> {
         diesel::update(documents::table.find(id))
             .set(documents::deleted_at.eq(get_now_as_secs()))
             .execute(conn)?;
@@ -259,13 +267,12 @@ impl Document {
     }
 
     pub fn soft_delete_by_ids(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         ids: Vec<Uuid>,
         deleted_at: Option<i64>,
     ) -> Result<(), Error> {
         #[derive(AsChangeset)]
-        #[changeset_options(treat_none_as_null = "true")]
-        #[table_name = "documents"]
+        #[diesel(table_name = documents, treat_none_as_null = true)]
         pub struct DeletedAt {
             deleted_at: Option<i64>,
         }

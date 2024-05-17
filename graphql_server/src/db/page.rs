@@ -10,7 +10,7 @@ use crate::util::get_now_as_secs;
 #[derive(
     Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
 )]
-#[sql_type = "Integer"]
+#[diesel(sql_type = Integer)]
 pub enum PageLayout {
     Horizontal,
     Vertical,
@@ -26,7 +26,7 @@ impl Default for PageLayout {
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
 #[graphql(input_name = "PageInput", complex)]
-#[table_name = "pages"]
+#[diesel(table_name = pages)]
 pub struct Page {
     pub id: Uuid,
     pub document_id: Uuid,
@@ -44,7 +44,7 @@ pub struct Page {
 }
 
 impl Page {
-    pub fn upsert(conn: &PgConnection, mut page: Self) -> Result<Self, Error> {
+    pub fn upsert(conn: &mut PgConnection, mut page: Self) -> Result<Self, Error> {
         page.updated_at = get_now_as_secs();
         page.created_at = get_now_as_secs();
         diesel::insert_into(pages::table)
@@ -60,12 +60,12 @@ impl Page {
             .get_result(conn)
     }
 
-    pub fn find(conn: &PgConnection, id: Uuid) -> Result<Self, Error> {
+    pub fn find(conn: &mut PgConnection, id: Uuid) -> Result<Self, Error> {
         pages::table.find(id).first(conn)
     }
 
     pub fn find_all_by_document_ids(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         document_ids: Vec<Uuid>,
     ) -> Result<Vec<Self>, Error> {
         pages::table
@@ -74,7 +74,7 @@ impl Page {
             .get_results(conn)
     }
 
-    pub fn soft_delete(conn: &PgConnection, id: Uuid) -> Result<(), Error> {
+    pub fn soft_delete(conn: &mut PgConnection, id: Uuid) -> Result<(), Error> {
         diesel::update(pages::table.find(id))
             .set(pages::deleted_at.eq(get_now_as_secs()))
             .execute(conn)?;
@@ -82,7 +82,7 @@ impl Page {
         Ok(())
     }
 
-    pub fn restore(conn: &PgConnection, id: Uuid) -> Result<Self, Error> {
+    pub fn restore(conn: &mut PgConnection, id: Uuid) -> Result<Self, Error> {
         diesel::update(pages::table.find(id))
             .set(pages::deleted_at.eq(None::<i64>))
             .get_result(conn)
@@ -91,7 +91,7 @@ impl Page {
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
 #[graphql(input_name = "PageContentInput")]
-#[table_name = "page_contents"]
+#[diesel(table_name = page_contents)]
 pub struct PageContent {
     pub id: Uuid,
     pub page_id: Uuid,
@@ -104,7 +104,7 @@ pub struct PageContent {
 }
 
 impl PageContent {
-    pub fn upsert(conn: &PgConnection, mut page_content: Self) -> Result<Self, Error> {
+    pub fn upsert(conn: &mut PgConnection, mut page_content: Self) -> Result<Self, Error> {
         page_content.updated_at = get_now_as_secs();
         page_content.created_at = get_now_as_secs();
 
@@ -120,11 +120,14 @@ impl PageContent {
             .get_result(conn)
     }
 
-    pub fn find(conn: &PgConnection, id: Uuid) -> Result<Self, Error> {
+    pub fn find(conn: &mut PgConnection, id: Uuid) -> Result<Self, Error> {
         page_contents::table.find(id).first(conn)
     }
 
-    pub fn find_all_by_pages(conn: &PgConnection, page_ids: Vec<Uuid>) -> Result<Vec<Self>, Error> {
+    pub fn find_all_by_pages(
+        conn: &mut PgConnection,
+        page_ids: Vec<Uuid>,
+    ) -> Result<Vec<Self>, Error> {
         page_contents::table
             .filter(page_contents::page_id.eq_any(page_ids))
             .get_results(conn)

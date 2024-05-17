@@ -8,7 +8,7 @@ use crate::db::{Document, SpaceMember};
 use super::schema::{user_activities, users};
 
 #[derive(Debug, Insertable)]
-#[table_name = "users"]
+#[diesel(table_name = users)]
 pub struct NewUser {
     pub email: String,
     pub first_name: String,
@@ -28,8 +28,7 @@ impl NewUser {
 }
 
 #[derive(Debug, Clone, InputObject, AsChangeset)]
-#[table_name = "users"]
-#[changeset_options(treat_none_as_null = "true")]
+#[diesel(table_name = users, treat_none_as_null = true)]
 pub struct UpdateUserData {
     #[graphql(validator(max_length = 256))]
     pub first_name: String,
@@ -95,35 +94,41 @@ pub struct User {
 }
 
 impl User {
-    pub fn insert(conn: &PgConnection, user: &NewUser) -> Result<Self, Error> {
+    pub fn insert(conn: &mut PgConnection, user: &NewUser) -> Result<Self, Error> {
         diesel::insert_into(users::table)
             .values(user)
             .get_result(conn)
     }
 
-    pub fn batch_insert(conn: &PgConnection, new_users: Vec<NewUser>) -> Result<Vec<Self>, Error> {
+    pub fn batch_insert(
+        conn: &mut PgConnection,
+        new_users: Vec<NewUser>,
+    ) -> Result<Vec<Self>, Error> {
         diesel::insert_into(users::table)
             .values(new_users)
             .get_results(conn)
     }
 
-    pub fn find_by_id(conn: &PgConnection, id: i32) -> Result<Self, Error> {
+    pub fn find_by_id(conn: &mut PgConnection, id: i32) -> Result<Self, Error> {
         users::table.find(id).first(conn)
     }
 
-    pub fn find_by_email(conn: &PgConnection, email: &str) -> Result<Self, Error> {
+    pub fn find_by_email(conn: &mut PgConnection, email: &str) -> Result<Self, Error> {
         users::table
             .filter(users::email.eq(&email.to_lowercase()))
             .first(conn)
     }
 
-    pub fn find_by_emails(conn: &PgConnection, emails: &Vec<String>) -> Result<Vec<Self>, Error> {
+    pub fn find_by_emails(
+        conn: &mut PgConnection,
+        emails: &Vec<String>,
+    ) -> Result<Vec<Self>, Error> {
         users::table
             .filter(users::email.eq_any(emails))
             .get_results(conn)
     }
 
-    pub fn find_by_email_opt(conn: &PgConnection, email: &str) -> Result<Option<Self>, Error> {
+    pub fn find_by_email_opt(conn: &mut PgConnection, email: &str) -> Result<Option<Self>, Error> {
         match Self::find_by_email(conn, email) {
             Ok(user) => Ok(Some(user)),
             Err(Error::NotFound) => Ok(None),
@@ -131,11 +136,15 @@ impl User {
         }
     }
 
-    pub fn find_by_ids(conn: &PgConnection, ids: &Vec<i32>) -> Result<Vec<User>, Error> {
+    pub fn find_by_ids(conn: &mut PgConnection, ids: &Vec<i32>) -> Result<Vec<User>, Error> {
         users::table.filter(users::id.eq_any(ids)).get_results(conn)
     }
 
-    pub fn update_info(conn: &PgConnection, id: i32, info: UpdateUserData) -> Result<(), Error> {
+    pub fn update_info(
+        conn: &mut PgConnection,
+        id: i32,
+        info: UpdateUserData,
+    ) -> Result<(), Error> {
         diesel::update(users::table.find(id))
             .set(info)
             .execute(conn)?;
@@ -149,14 +158,14 @@ impl User {
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject)]
-#[table_name = "user_activities"]
+#[diesel(table_name = user_activities)]
 pub struct UserActivity {
     pub user_id: i32,
     pub last_document_id: Option<Uuid>,
 }
 
 impl UserActivity {
-    pub fn insert(conn: &PgConnection, user_id: i32, document_id: Uuid) -> Result<Self, Error> {
+    pub fn insert(conn: &mut PgConnection, user_id: i32, document_id: Uuid) -> Result<Self, Error> {
         let item = Self {
             user_id,
             last_document_id: Some(document_id),
@@ -169,11 +178,11 @@ impl UserActivity {
             .get_result(conn)
     }
 
-    pub fn find(conn: &PgConnection, user_id: i32) -> Result<Self, Error> {
+    pub fn find(conn: &mut PgConnection, user_id: i32) -> Result<Self, Error> {
         user_activities::table.find(user_id).first(conn)
     }
 
-    pub fn find_or_insert(conn: &PgConnection, user_id: i32) -> Result<Self, Error> {
+    pub fn find_or_insert(conn: &mut PgConnection, user_id: i32) -> Result<Self, Error> {
         if let Ok(activity) = Self::find(conn, user_id) {
             Ok(activity)
         } else {

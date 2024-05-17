@@ -1,14 +1,10 @@
-use diesel::backend::Backend;
 use diesel::result::Error;
-use diesel::serialize::{self, Output, ToSql};
 use diesel::sql_types::Jsonb;
-use diesel::{
-    deserialize, deserialize::FromSql, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl,
-};
-use std::io::Write;
+use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use uuid::Uuid;
 
 use super::schema::{rubric_submissions, rubrics};
+use crate::impl_jsonb_for_db;
 use crate::util::get_now_as_secs;
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Serialize, Deserialize, Enum)]
@@ -55,7 +51,7 @@ pub struct RubricTableItem {
     AsExpression,
     FromSqlRow,
 )]
-#[sql_type = "Jsonb"]
+#[diesel(sql_type = Jsonb)]
 #[graphql(input_name = "RubricTableDataInput", complex)]
 pub struct RubricTableData {
     #[serde(default)]
@@ -89,32 +85,10 @@ impl RubricTableData {
     }
 }
 
-impl<DB> FromSql<Jsonb, DB> for RubricTableData
-where
-    DB: Backend,
-    serde_json::Value: FromSql<Jsonb, DB>,
-{
-    fn from_sql(bytes: Option<&DB::RawValue>) -> deserialize::Result<Self> {
-        let value = serde_json::Value::from_sql(bytes)?;
-        let result = serde_json::from_value::<RubricTableData>(value).unwrap_or_default();
-        Ok(result)
-    }
-}
-
-impl<DB> ToSql<Jsonb, DB> for RubricTableData
-where
-    DB: Backend,
-    serde_json::Value: ToSql<Jsonb, DB>,
-{
-    fn to_sql<W: Write>(&self, out: &mut Output<W, DB>) -> serialize::Result {
-        let value = serde_json::to_value(self)
-            .map_err(|_| format!("Cannot convert RubricTableData to JSON: {:?}", self))?;
-        value.to_sql(out)
-    }
-}
+impl_jsonb_for_db!(RubricTableData);
 
 #[derive(Debug, Clone, Insertable, Queryable, InputObject, SimpleObject)]
-#[table_name = "rubrics"]
+#[diesel(table_name = rubrics)]
 #[graphql(input_name = "RubricInput")]
 pub struct Rubric {
     pub id: Uuid,
@@ -129,7 +103,7 @@ pub struct Rubric {
 }
 
 impl Rubric {
-    pub fn upsert(conn: &PgConnection, mut item: Self) -> Result<Self, Error> {
+    pub fn upsert(conn: &mut PgConnection, mut item: Self) -> Result<Self, Error> {
         item.updated_at = get_now_as_secs();
         item.created_at = get_now_as_secs();
         diesel::insert_into(rubrics::table)
@@ -144,24 +118,24 @@ impl Rubric {
             .get_result(conn)
     }
 
-    pub fn find_by_id(conn: &PgConnection, rubric_id: Uuid) -> Result<Self, Error> {
+    pub fn find_by_id(conn: &mut PgConnection, rubric_id: Uuid) -> Result<Self, Error> {
         rubrics::table.find(rubric_id).first(conn)
     }
 
-    pub fn find_all_by_user(conn: &PgConnection, user_id: i32) -> Result<Vec<Self>, Error> {
+    pub fn find_all_by_user(conn: &mut PgConnection, user_id: i32) -> Result<Vec<Self>, Error> {
         rubrics::table
             .filter(rubrics::user_id.eq(user_id))
             .get_results(conn)
     }
 
-    pub fn remove(conn: &PgConnection, rubric_id: Uuid) -> Result<(), Error> {
+    pub fn remove(conn: &mut PgConnection, rubric_id: Uuid) -> Result<(), Error> {
         diesel::delete(rubrics::table.find(rubric_id)).execute(conn)?;
         Ok(())
     }
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, InputObject, SimpleObject)]
-#[table_name = "rubric_submissions"]
+#[diesel(table_name = rubric_submissions)]
 #[graphql(input_name = "RubricSubmissionInput")]
 pub struct RubricSubmission {
     pub submission_id: i32,
@@ -184,7 +158,7 @@ impl RubricSubmission {
         }
     }
 
-    pub fn upsert(conn: &PgConnection, mut item: Self) -> Result<Self, Error> {
+    pub fn upsert(conn: &mut PgConnection, mut item: Self) -> Result<Self, Error> {
         item.updated_at = get_now_as_secs();
         item.created_at = get_now_as_secs();
         diesel::insert_into(rubric_submissions::table)
@@ -198,12 +172,12 @@ impl RubricSubmission {
             .get_result(conn)
     }
 
-    pub fn find_by_submission(conn: &PgConnection, submission_id: i32) -> Result<Self, Error> {
+    pub fn find_by_submission(conn: &mut PgConnection, submission_id: i32) -> Result<Self, Error> {
         rubric_submissions::table.find(submission_id).first(conn)
     }
 
     pub fn find_by_submission_opt(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         submission_id: i32,
     ) -> Result<Option<Self>, Error> {
         match Self::find_by_submission(conn, submission_id) {

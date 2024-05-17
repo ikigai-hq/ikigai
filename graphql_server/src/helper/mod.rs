@@ -30,14 +30,14 @@ pub async fn get_public_user_from_loader(ctx: &Context<'_>, user_id: i32) -> Res
 }
 
 pub fn duplicate_space(
-    conn: &PgConnection,
+    conn: &mut PgConnection,
     space_id: i32,
     creator_id: i32,
 ) -> Result<Space, IkigaiError> {
     let space = Space::find_by_id(conn, space_id)?;
     let space_documents = Document::find_all_by_space(conn, space_id)?;
 
-    conn.transaction::<_, IkigaiError, _>(|| {
+    conn.transaction::<_, IkigaiError, _>(|conn| {
         // Duplicate Class
         let mut new_space = NewSpace::from(space);
         new_space.creator_id = creator_id;
@@ -85,9 +85,9 @@ pub async fn generate_download_url(file: &File, ctx: &Context<'_>) -> Result<Opt
             .await
             .format_err()?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
         File::insert_download_url(
-            &conn,
+            &mut conn,
             file.uuid,
             download_url.as_str(),
             expire_in_next as i64,
@@ -101,7 +101,7 @@ pub async fn generate_download_url(file: &File, ctx: &Context<'_>) -> Result<Opt
 }
 
 pub fn add_space_member(
-    conn: &PgConnection,
+    conn: &mut PgConnection,
     space: &Space,
     user_id: i32,
     token: Option<String>,
@@ -129,7 +129,7 @@ pub fn send_space_magic_link(user: &User, document_id: Uuid) -> Result<bool> {
     }
 }
 
-pub fn create_default_space(conn: &PgConnection, user_id: i32) -> Result<Space, IkigaiError> {
+pub fn create_default_space(conn: &mut PgConnection, user_id: i32) -> Result<Space, IkigaiError> {
     let new_space = NewSpace {
         name: "My space".into(),
         updated_at: get_now_as_secs(),
@@ -137,7 +137,7 @@ pub fn create_default_space(conn: &PgConnection, user_id: i32) -> Result<Space, 
         banner_id: None,
         creator_id: user_id,
     };
-    conn.transaction::<_, IkigaiError, _>(|| {
+    conn.transaction::<_, IkigaiError, _>(|conn| {
         let space = Space::insert(conn, new_space)?;
         let space_member = SpaceMember::new(space.id, user_id, None, Role::Teacher);
         SpaceMember::upsert(conn, space_member)?;

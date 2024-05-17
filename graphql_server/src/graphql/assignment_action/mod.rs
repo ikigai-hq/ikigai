@@ -80,8 +80,8 @@ impl Assignment {
 
     async fn band_score(&self, ctx: &Context<'_>) -> Result<Option<BandScore>> {
         if let Some(band_score_id) = self.band_score_id {
-            let conn = get_conn_from_ctx(ctx).await?;
-            let band_score = BandScore::find(&conn, band_score_id).format_err()?;
+            let mut conn = get_conn_from_ctx(ctx).await?;
+            let band_score = BandScore::find(&mut conn, band_score_id).format_err()?;
             Ok(Some(band_score))
         } else {
             Ok(None)
@@ -94,8 +94,8 @@ impl Assignment {
         }
 
         if let Some(rubric_id) = self.grade_by_rubric_id {
-            let conn = get_conn_from_ctx(ctx).await?;
-            let rubric = Rubric::find_by_id(&conn, rubric_id).format_err()?;
+            let mut conn = get_conn_from_ctx(ctx).await?;
+            let rubric = Rubric::find_by_id(&mut conn, rubric_id).format_err()?;
             Ok(Some(rubric))
         } else {
             Ok(None)
@@ -131,8 +131,8 @@ impl Submission {
     }
 
     async fn rubric_grade(&self, ctx: &Context<'_>) -> Result<Option<RubricSubmission>> {
-        let conn = get_conn_from_ctx(ctx).await?;
-        RubricSubmission::find_by_submission_opt(&conn, self.id).format_err()
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        RubricSubmission::find_by_submission_opt(&mut conn, self.id).format_err()
     }
 
     async fn grade(&self, ctx: &Context<'_>) -> Option<f64> {

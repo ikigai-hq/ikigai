@@ -49,8 +49,8 @@ pub async fn get_user_from_ctx(ctx: &Context<'_>) -> Result<User> {
         user
     } else {
         let user_id = get_user_id_from_ctx(ctx).await?;
-        let conn = get_conn_from_ctx(ctx).await?;
-        let user = User::find_by_id(&conn, user_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let user = User::find_by_id(&mut conn, user_id).format_err()?;
         caching_data.add_user(user.clone());
         info!("Set caching data of request info user {}", user.id);
         user
@@ -69,8 +69,8 @@ pub async fn get_user_auth_by_user_id_from_ctx(
         user_auth
     } else {
         let space_id = get_active_space_id_from_ctx(ctx).await?;
-        let conn = get_conn_from_ctx(ctx).await?;
-        let space_member = SpaceMember::find(&conn, space_id, user_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let space_member = SpaceMember::find(&mut conn, space_id, user_id).format_err()?;
         let user_auth = UserAuth::new(space_member);
         info!("Set cache user auth {:?}", user_auth);
 
@@ -86,11 +86,11 @@ pub async fn get_user_auth_from_ctx(ctx: &Context<'_>) -> Result<UserAuth> {
 }
 
 pub async fn is_owner_of_file(ctx: &Context<'_>, user_id: i32, file_id: Uuid) -> Result<File> {
-    let conn = get_conn_from_ctx(ctx).await?;
-    user_is_owner_of_file(&conn, user_id, file_id)
+    let mut conn = get_conn_from_ctx(ctx).await?;
+    user_is_owner_of_file(&mut conn, user_id, file_id)
 }
 
-pub fn user_is_owner_of_file(conn: &PgConnection, user_id: i32, file_id: Uuid) -> Result<File> {
+pub fn user_is_owner_of_file(conn: &mut PgConnection, user_id: i32, file_id: Uuid) -> Result<File> {
     let file = File::find_by_id(conn, file_id).format_err()?;
     if file.user_id != user_id {
         return Err(IkigaiError::new_bad_request(
@@ -134,8 +134,8 @@ pub async fn space_is_allow(
         );
         space_auth
     } else {
-        let conn = get_conn_from_ctx(ctx).await?;
-        let class = Space::find_by_id(&conn, space_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let class = Space::find_by_id(&mut conn, space_id).format_err()?;
         let space_auth = SpaceAuth::new(&class);
         info!("Set caching data of request info space {:?}", space_auth);
         caching_data.add_space_auth(space_id, user_id, space_auth)
@@ -150,8 +150,8 @@ pub async fn get_space_allowed_permissions(
     space_id: i32,
 ) -> Result<Vec<SpaceActionPermission>> {
     let user_auth = get_user_auth_from_ctx(ctx).await?;
-    let conn = get_conn_from_ctx(ctx).await?;
-    let class = Space::find_by_id(&conn, space_id).format_err()?;
+    let mut conn = get_conn_from_ctx(ctx).await?;
+    let class = Space::find_by_id(&mut conn, space_id).format_err()?;
     let space_auth = SpaceAuth::new(&class);
 
     let oso = ctx.data::<Oso>()?;
@@ -217,8 +217,8 @@ pub async fn document_is_allowed(
         info!("Using cache document {}", doc.id);
         doc
     } else {
-        let conn = get_conn_from_ctx(ctx).await?;
-        let doc = DocumentAuth::try_new(&conn, document_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let doc = DocumentAuth::try_new(&mut conn, document_id).format_err()?;
         caching_data.add_document_auth(document_id, doc.clone());
         info!("Set cache document {}", doc.id);
         doc
@@ -233,8 +233,8 @@ pub async fn get_document_allowed_permissions(
     document_id: Uuid,
 ) -> Result<Vec<DocumentActionPermission>> {
     let user_auth = get_user_auth_from_ctx(ctx).await?;
-    let conn = get_conn_from_ctx(ctx).await?;
-    let document_auth = DocumentAuth::try_new(&conn, document_id).format_err()?;
+    let mut conn = get_conn_from_ctx(ctx).await?;
+    let document_auth = DocumentAuth::try_new(&mut conn, document_id).format_err()?;
 
     let oso = ctx.data::<Oso>()?;
     let actions: HashSet<String> = oso.get_allowed_actions(user_auth, document_auth)?;
@@ -271,8 +271,8 @@ pub async fn rubric_is_allowed(
 ) -> Result<bool> {
     let oso = ctx.data::<Oso>()?;
     let user_auth = get_user_auth_by_user_id_from_ctx(ctx, user_id).await?;
-    let conn = get_conn_from_ctx(ctx).await?;
-    let rubric = Rubric::find_by_id(&conn, rubric_id)?;
+    let mut conn = get_conn_from_ctx(ctx).await?;
+    let rubric = Rubric::find_by_id(&mut conn, rubric_id)?;
     let rubric_auth = RubricAuth::new(&rubric);
     let is_allowed = oso.is_allowed(user_auth, action.to_string(), rubric_auth)?;
 
@@ -284,8 +284,8 @@ pub async fn get_rubric_allowed_permissions(
     rubric_id: Uuid,
 ) -> Result<Vec<RubricActionPermission>> {
     let user_auth = get_user_auth_from_ctx(ctx).await?;
-    let conn = get_conn_from_ctx(ctx).await?;
-    let rubric = Rubric::find_by_id(&conn, rubric_id)?;
+    let mut conn = get_conn_from_ctx(ctx).await?;
+    let rubric = Rubric::find_by_id(&mut conn, rubric_id)?;
     let rubric_auth = RubricAuth::new(&rubric);
 
     let oso = ctx.data::<Oso>()?;

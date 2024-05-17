@@ -49,15 +49,15 @@ impl Space {
     async fn starter_document(&self, ctx: &Context<'_>) -> Result<Document> {
         get_user_id_from_ctx(ctx).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        Document::get_or_create_starter_doc(&conn, self.creator_id, self.id).format_err()
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Document::get_or_create_starter_doc(&mut conn, self.creator_id, self.id).format_err()
     }
 
     async fn documents(&self, ctx: &Context<'_>) -> Result<Vec<Document>> {
         space_quick_authorize(ctx, self.id, SpaceActionPermission::ViewSpaceContent).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        let documents = Document::find_all_by_space(&conn, self.id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let documents = Document::find_all_by_space(&mut conn, self.id).format_err()?;
         Ok(documents)
     }
 }

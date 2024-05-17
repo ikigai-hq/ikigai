@@ -17,16 +17,16 @@ impl SpaceMutation {
     async fn space_create(&self, ctx: &Context<'_>, mut data: NewSpace) -> Result<Space> {
         let user = get_user_from_ctx(ctx).await?;
         data.creator_id = user.id;
-        let conn = get_conn_from_ctx(ctx).await?;
-        create_default_space(&conn, user.id).format_err()
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        create_default_space(&mut conn, user.id).format_err()
     }
 
     async fn space_duplicate(&self, ctx: &Context<'_>, space_id: i32) -> Result<Space> {
         let user_auth = get_user_auth_from_ctx(ctx).await?;
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceSetting).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        let new_class = duplicate_space(&conn, space_id, user_auth.id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let new_class = duplicate_space(&mut conn, space_id, user_auth.id).format_err()?;
         Ok(new_class)
     }
 
@@ -38,32 +38,32 @@ impl SpaceMutation {
     ) -> Result<bool> {
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceSetting).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        Space::update(&conn, space_id, data).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Space::update(&mut conn, space_id, data).format_err()?;
         Ok(true)
     }
 
     async fn space_restore(&self, ctx: &Context<'_>, space_id: i32) -> Result<Space> {
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceSetting).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        let class = Space::restore(&conn, space_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let class = Space::restore(&mut conn, space_id).format_err()?;
         Ok(class)
     }
 
     async fn space_soft_delete(&self, ctx: &Context<'_>, space_id: i32) -> Result<bool> {
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceSetting).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        Space::soft_remove(&conn, space_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Space::soft_remove(&mut conn, space_id).format_err()?;
         Ok(true)
     }
 
     async fn space_delete(&self, ctx: &Context<'_>, space_id: i32) -> Result<bool> {
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceSetting).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        Space::remove(&conn, space_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Space::remove(&mut conn, space_id).format_err()?;
         Ok(true)
     }
 
@@ -76,24 +76,25 @@ impl SpaceMutation {
         let user_auth = get_user_auth_from_ctx(ctx).await?;
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceContent).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
 
-        let original_document = Document::find_by_id(&conn, document_id).format_err()?;
+        let original_document = Document::find_by_id(&mut conn, document_id).format_err()?;
         if original_document.deleted_at.is_some() {
             return Err(IkigaiError::new_bad_request(
                 "Cannot duplicate deleted document!",
             ))
             .format_err();
         }
-        let last_index = Document::find_last_index(&conn, space_id, original_document.parent_id)?;
+        let last_index =
+            Document::find_last_index(&mut conn, space_id, original_document.parent_id)?;
         let mut config = DocumentCloneConfig::new("Copy of ", true);
         config.set_index(last_index);
         config.set_parent(original_document.parent_id);
 
         let doc = conn
-            .transaction::<_, IkigaiError, _>(|| {
+            .transaction::<_, IkigaiError, _>(|conn| {
                 original_document.deep_clone(
-                    &conn,
+                    conn,
                     user_auth.id,
                     config,
                     Some(space_id),
@@ -105,7 +106,7 @@ impl SpaceMutation {
             .format_err()?;
 
         let mut res: Vec<Document> = vec![];
-        res.append(&mut get_all_documents_by_id(&conn, doc.id).format_err()?);
+        res.append(&mut get_all_documents_by_id(&mut conn, doc.id).format_err()?);
         res.push(doc);
         Ok(res)
     }
@@ -114,8 +115,8 @@ impl SpaceMutation {
         document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
             .await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        Document::delete(&conn, document_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Document::delete(&mut conn, document_id).format_err()?;
 
         Ok(true)
     }
@@ -128,8 +129,8 @@ impl SpaceMutation {
     ) -> Result<bool> {
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceContent).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        Document::soft_delete(&conn, document_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Document::soft_delete(&mut conn, document_id).format_err()?;
 
         Ok(true)
     }
@@ -142,9 +143,9 @@ impl SpaceMutation {
     ) -> Result<bool> {
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceContent).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
         let now = get_now_as_secs();
-        Document::soft_delete_by_ids(&conn, document_ids, Some(now)).format_err()?;
+        Document::soft_delete_by_ids(&mut conn, document_ids, Some(now)).format_err()?;
 
         Ok(true)
     }
@@ -157,8 +158,8 @@ impl SpaceMutation {
     ) -> Result<bool> {
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceContent).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        Document::soft_delete_by_ids(&conn, document_ids, None).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Document::soft_delete_by_ids(&mut conn, document_ids, None).format_err()?;
         Ok(true)
     }
 
@@ -174,13 +175,13 @@ impl SpaceMutation {
             return Err(IkigaiError::new_bad_request("Cannot remove your self")).format_err();
         }
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        let space = Space::find_by_id(&conn, space_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let space = Space::find_by_id(&mut conn, space_id).format_err()?;
         if space.creator_id == user_id {
             return Err(IkigaiError::new_bad_request("Cannot remove owner of space")).format_err();
         }
-        SpaceMember::find(&conn, space_id, user_id).format_err()?;
-        SpaceMember::remove(&conn, space_id, user_id).format_err()?;
+        SpaceMember::find(&mut conn, space_id, user_id).format_err()?;
+        SpaceMember::remove(&mut conn, space_id, user_id).format_err()?;
 
         Ok(true)
     }
@@ -192,9 +193,9 @@ impl SpaceMutation {
     ) -> Result<SpaceInviteToken> {
         space_quick_authorize(ctx, data.space_id, SpaceActionPermission::ManageSpaceMember).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
         data.creator_id = get_user_id_from_ctx(ctx).await?;
-        let item = SpaceInviteToken::upsert(&conn, data).format_err()?;
+        let item = SpaceInviteToken::upsert(&mut conn, data).format_err()?;
 
         Ok(item)
     }
@@ -208,8 +209,9 @@ impl SpaceMutation {
     ) -> Result<SpaceInviteToken> {
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceMember).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        let item = SpaceInviteToken::set_active(&conn, space_id, token, is_active).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let item =
+            SpaceInviteToken::set_active(&mut conn, space_id, token, is_active).format_err()?;
 
         Ok(item)
     }
@@ -221,9 +223,10 @@ impl SpaceMutation {
         space_id: i32,
         token: String,
     ) -> Result<bool> {
-        let conn = get_conn_from_ctx(ctx).await?;
-        let space = Space::find_by_id(&conn, space_id).format_err()?;
-        let space_invite_token = SpaceInviteToken::find(&conn, space_id, &token).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let space = Space::find_by_id(&mut conn, space_id).format_err()?;
+        let space_invite_token =
+            SpaceInviteToken::find(&mut conn, space_id, &token).format_err()?;
 
         if !space_invite_token.is_active {
             return Err(IkigaiError::new_bad_request("Link is inactive!")).format_err();
@@ -236,21 +239,21 @@ impl SpaceMutation {
             }
         }
 
-        let user = if let Some(user) = User::find_by_email_opt(&conn, &email)? {
+        let user = if let Some(user) = User::find_by_email_opt(&mut conn, &email)? {
             user
         } else {
             let new_user = NewUser::new(email.clone(), email, "".into());
-            User::insert(&conn, &new_user).format_err()?
+            User::insert(&mut conn, &new_user).format_err()?
         };
 
-        let current_space_member = SpaceMember::find(&conn, space.id, user.id);
+        let current_space_member = SpaceMember::find(&mut conn, space.id, user.id);
         let is_new_space_member = current_space_member.is_err();
         let space_member = if let Ok(current_space_member) = current_space_member {
             current_space_member
         } else {
-            SpaceInviteToken::increase_use(&conn, space.id, &token).format_err()?;
+            SpaceInviteToken::increase_use(&mut conn, space.id, &token).format_err()?;
             add_space_member(
-                &conn,
+                &mut conn,
                 &space,
                 user.id,
                 Some(token),
@@ -259,7 +262,7 @@ impl SpaceMutation {
             .format_err()?
         };
         let starter_document =
-            Document::get_or_create_starter_doc(&conn, space_member.user_id, space_id)
+            Document::get_or_create_starter_doc(&mut conn, space_member.user_id, space_id)
                 .format_err()?;
         let res = send_space_magic_link(&user, starter_document.id);
 
@@ -270,8 +273,8 @@ impl SpaceMutation {
                 space_id: space.id,
                 email: user.email,
             });
-            let notification = Notification::insert(&conn, notification).format_err()?;
-            send_notification(&conn, notification, vec![space.creator_id]).format_err()?;
+            let notification = Notification::insert(&mut conn, notification).format_err()?;
+            send_notification(&mut conn, notification, vec![space.creator_id]).format_err()?;
         }
 
         res
@@ -285,8 +288,8 @@ impl SpaceMutation {
     ) -> Result<bool> {
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceMember).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        SpaceInviteToken::remove(&conn, space_id, invite_token).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        SpaceInviteToken::remove(&mut conn, space_id, invite_token).format_err()?;
 
         Ok(true)
     }

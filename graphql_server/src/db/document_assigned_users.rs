@@ -7,7 +7,7 @@ use crate::util::get_now_as_secs;
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
 #[graphql(complex, input_name = "NewDocumentAssignedUserInput")]
-#[table_name = "document_assigned_users"]
+#[diesel(table_name = document_assigned_users)]
 pub struct DocumentAssignedUser {
     pub document_id: Uuid,
     pub assigned_user_id: i32,
@@ -24,7 +24,7 @@ impl DocumentAssignedUser {
         }
     }
 
-    pub fn insert(conn: &PgConnection, mut items: Vec<Self>) -> Result<Vec<Self>, Error> {
+    pub fn insert(conn: &mut PgConnection, mut items: Vec<Self>) -> Result<Vec<Self>, Error> {
         let now = get_now_as_secs();
         items.iter_mut().for_each(|item| item.created_at = now);
         diesel::insert_into(document_assigned_users::table)
@@ -35,7 +35,7 @@ impl DocumentAssignedUser {
     }
 
     pub fn find_all_by_documents(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         document_ids: Vec<Uuid>,
     ) -> Result<Vec<Self>, Error> {
         document_assigned_users::table
@@ -44,7 +44,7 @@ impl DocumentAssignedUser {
             .get_results(conn)
     }
 
-    pub fn remove(conn: &PgConnection, item: Self) -> Result<(), Error> {
+    pub fn remove(conn: &mut PgConnection, item: Self) -> Result<(), Error> {
         diesel::delete(
             document_assigned_users::table.find((item.document_id, item.assigned_user_id)),
         )

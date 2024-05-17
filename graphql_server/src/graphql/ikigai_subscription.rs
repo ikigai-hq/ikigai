@@ -24,8 +24,8 @@ impl Subscription {
         {
             // I want release conn when this scope released.
             // Ensure that this document is existing
-            let conn = get_conn_from_ctx(ctx).await?;
-            let submission = Submission::find_by_id(&conn, submission_id).format_err()?;
+            let mut conn = get_conn_from_ctx(ctx).await?;
+            let submission = Submission::find_by_id(&mut conn, submission_id).format_err()?;
             document_quick_authorize(
                 ctx,
                 submission.document_id,

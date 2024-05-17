@@ -1,4 +1,3 @@
-use diesel::dsl::any;
 use diesel::result::Error;
 use diesel::sql_types::Integer;
 use diesel::{ExpressionMethods, PgConnection, PgTextExpressionMethods, QueryDsl, RunQueryDsl};
@@ -14,7 +13,7 @@ pub const FOLDER_MIME_TYPE: &str = "folder";
 #[derive(
     Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
 )]
-#[sql_type = "Integer"]
+#[diesel(sql_type = Integer)]
 pub enum FileStatus {
     Pending,
     Failed,
@@ -24,7 +23,7 @@ pub enum FileStatus {
 impl_enum_for_db!(FileStatus);
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject)]
-#[table_name = "files"]
+#[diesel(table_name = files)]
 #[graphql(complex)]
 pub struct File {
     pub uuid: Uuid,
@@ -79,7 +78,7 @@ impl File {
         self
     }
 
-    pub fn batch_insert(conn: &PgConnection, files: Vec<File>) -> Result<Vec<Self>, Error> {
+    pub fn batch_insert(conn: &mut PgConnection, files: Vec<File>) -> Result<Vec<Self>, Error> {
         if files.is_empty() {
             return Ok(vec![]);
         }
@@ -89,7 +88,7 @@ impl File {
             .get_results(conn)
     }
 
-    pub fn upsert(conn: &PgConnection, file: &File) -> Result<Self, Error> {
+    pub fn upsert(conn: &mut PgConnection, file: &File) -> Result<Self, Error> {
         diesel::insert_into(files::table)
             .values(file)
             .on_conflict(files::uuid)
@@ -104,7 +103,7 @@ impl File {
     }
 
     pub fn update_waveform(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         file_id: Uuid,
         waveform_audio_json_str: &str,
     ) -> Result<(), Error> {
@@ -117,24 +116,24 @@ impl File {
         Ok(())
     }
 
-    pub fn remove(conn: &PgConnection, id: Uuid) -> Result<(), Error> {
+    pub fn remove(conn: &mut PgConnection, id: Uuid) -> Result<(), Error> {
         diesel::delete(files::table.find(id)).execute(conn)?;
         Ok(())
     }
 
-    pub fn remove_by_ids(conn: &PgConnection, file_ids: &[Uuid]) -> Result<(), Error> {
+    pub fn remove_by_ids(conn: &mut PgConnection, file_ids: &[Uuid]) -> Result<(), Error> {
         diesel::delete(files::table.filter(files::uuid.eq_any(file_ids)))
             .execute(conn)
             .map(|_| ())
     }
 
-    pub fn find_by_id(conn: &PgConnection, id: Uuid) -> Result<Self, Error> {
+    pub fn find_by_id(conn: &mut PgConnection, id: Uuid) -> Result<Self, Error> {
         files::table.find(id).first(conn)
     }
 
     #[allow(clippy::too_many_arguments)]
     pub fn find_all_by_user(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         user_id: i32,
         is_folder: bool,
         keyword: Option<String>,
@@ -166,10 +165,8 @@ impl File {
         Ok((items, total))
     }
 
-    pub fn find_all_by_ids(conn: &PgConnection, file_ids: &[Uuid]) -> Result<Vec<File>, Error> {
-        files::table
-            .filter(files::uuid.eq(any(file_ids)))
-            .load(conn)
+    pub fn find_all_by_ids(conn: &mut PgConnection, file_ids: &[Uuid]) -> Result<Vec<File>, Error> {
+        files::table.filter(files::uuid.eq_any(file_ids)).load(conn)
     }
 
     pub fn get_public_url(&self) -> Option<String> {
@@ -182,7 +179,7 @@ impl File {
     }
 
     pub fn insert_download_url(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         file_id: Uuid,
         download_url: &str,
         expire_in_next: i64,

@@ -8,7 +8,7 @@ use crate::db::Role;
 use crate::util::{generate_code, get_now_as_secs};
 
 #[derive(Debug, Clone, Insertable, InputObject)]
-#[table_name = "spaces"]
+#[diesel(table_name = spaces)]
 pub struct NewSpace {
     pub name: String,
     #[graphql(skip)]
@@ -41,8 +41,7 @@ impl NewSpace {
 }
 
 #[derive(Debug, Clone, AsChangeset, InputObject)]
-#[table_name = "spaces"]
-#[changeset_options(treat_none_as_null = "true")]
+#[diesel(table_name = spaces, treat_none_as_null = true)]
 pub struct UpdateSpaceData {
     pub name: String,
     pub banner_id: Option<Uuid>,
@@ -63,7 +62,7 @@ pub struct Space {
 }
 
 impl Space {
-    pub fn insert(conn: &PgConnection, mut new_space: NewSpace) -> Result<Self, Error> {
+    pub fn insert(conn: &mut PgConnection, mut new_space: NewSpace) -> Result<Self, Error> {
         new_space.update_time();
         diesel::insert_into(spaces::table)
             .values(new_space)
@@ -71,7 +70,7 @@ impl Space {
     }
 
     pub fn update(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         space_id: i32,
         mut data: UpdateSpaceData,
     ) -> Result<Self, Error> {
@@ -81,17 +80,20 @@ impl Space {
             .get_result(conn)
     }
 
-    pub fn find_by_id(conn: &PgConnection, space_id: i32) -> Result<Self, Error> {
+    pub fn find_by_id(conn: &mut PgConnection, space_id: i32) -> Result<Self, Error> {
         spaces::table.find(space_id).first(conn)
     }
 
-    pub fn find_all_by_ids(conn: &PgConnection, space_ids: Vec<i32>) -> Result<Vec<Self>, Error> {
+    pub fn find_all_by_ids(
+        conn: &mut PgConnection,
+        space_ids: Vec<i32>,
+    ) -> Result<Vec<Self>, Error> {
         spaces::table
             .filter(spaces::id.eq_any(space_ids))
             .get_results(conn)
     }
 
-    pub fn find_my_spaces(conn: &PgConnection, user_id: i32) -> Result<Vec<Self>, Error> {
+    pub fn find_my_spaces(conn: &mut PgConnection, user_id: i32) -> Result<Vec<Self>, Error> {
         spaces::table
             .inner_join(space_members::table)
             .select(spaces::all_columns)
@@ -100,13 +102,13 @@ impl Space {
             .get_results(conn)
     }
 
-    pub fn find_all_by_owner(conn: &PgConnection, user_id: i32) -> Result<Vec<Self>, Error> {
+    pub fn find_all_by_owner(conn: &mut PgConnection, user_id: i32) -> Result<Vec<Self>, Error> {
         spaces::table
             .filter(spaces::creator_id.eq(user_id))
             .get_results(conn)
     }
 
-    pub fn soft_remove(conn: &PgConnection, space_id: i32) -> Result<(), Error> {
+    pub fn soft_remove(conn: &mut PgConnection, space_id: i32) -> Result<(), Error> {
         diesel::update(spaces::table.find(space_id))
             .set((
                 spaces::deleted_at.eq(get_now_as_secs()),
@@ -116,7 +118,7 @@ impl Space {
         Ok(())
     }
 
-    pub fn restore(conn: &PgConnection, space_id: i32) -> Result<Self, Error> {
+    pub fn restore(conn: &mut PgConnection, space_id: i32) -> Result<Self, Error> {
         let item = diesel::update(spaces::table.find(space_id))
             .set((
                 spaces::deleted_at.eq(None::<i64>),
@@ -126,14 +128,14 @@ impl Space {
         Ok(item)
     }
 
-    pub fn remove(conn: &PgConnection, space_id: i32) -> Result<(), Error> {
+    pub fn remove(conn: &mut PgConnection, space_id: i32) -> Result<(), Error> {
         diesel::delete(spaces::table.find(space_id)).execute(conn)?;
         Ok(())
     }
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
-#[table_name = "space_invite_tokens"]
+#[diesel(table_name = space_invite_tokens)]
 #[graphql(input_name = "SpaceInviteTokenInput", complex)]
 pub struct SpaceInviteToken {
     pub space_id: i32,
@@ -152,7 +154,7 @@ pub struct SpaceInviteToken {
 }
 
 impl SpaceInviteToken {
-    pub fn upsert(conn: &PgConnection, mut item: Self) -> Result<Self, Error> {
+    pub fn upsert(conn: &mut PgConnection, mut item: Self) -> Result<Self, Error> {
         item.is_active = true;
         item.created_at = get_now_as_secs();
         item.token = generate_code();
@@ -165,14 +167,18 @@ impl SpaceInviteToken {
         Ok(item)
     }
 
-    pub fn increase_use(conn: &PgConnection, space_id: i32, token: &str) -> Result<Self, Error> {
+    pub fn increase_use(
+        conn: &mut PgConnection,
+        space_id: i32,
+        token: &str,
+    ) -> Result<Self, Error> {
         diesel::update(space_invite_tokens::table.find((space_id, token)))
             .set(space_invite_tokens::uses.eq(space_invite_tokens::uses + 1))
             .get_result(conn)
     }
 
     pub fn set_active(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         space_id: i32,
         token: String,
         is_active: bool,
@@ -182,20 +188,20 @@ impl SpaceInviteToken {
             .get_result(conn)
     }
 
-    pub fn find(conn: &PgConnection, space_id: i32, token: &str) -> Result<Self, Error> {
+    pub fn find(conn: &mut PgConnection, space_id: i32, token: &str) -> Result<Self, Error> {
         space_invite_tokens::table
             .find((space_id, token))
             .get_result(conn)
     }
 
-    pub fn find_all_by_spaces(conn: &PgConnection, space_id: i32) -> Result<Vec<Self>, Error> {
+    pub fn find_all_by_spaces(conn: &mut PgConnection, space_id: i32) -> Result<Vec<Self>, Error> {
         space_invite_tokens::table
             .filter(space_invite_tokens::space_id.eq(space_id))
             .order_by(space_invite_tokens::created_at.desc())
             .get_results(conn)
     }
 
-    pub fn remove(conn: &PgConnection, space_id: i32, token: String) -> Result<(), Error> {
+    pub fn remove(conn: &mut PgConnection, space_id: i32, token: String) -> Result<(), Error> {
         diesel::delete(space_invite_tokens::table.find((space_id, token))).execute(conn)?;
         Ok(())
     }

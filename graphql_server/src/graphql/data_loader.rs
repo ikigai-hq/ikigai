@@ -17,7 +17,6 @@ pub struct IkigaiDataLoader;
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct FindPublicUserById(pub i32);
 
-#[async_trait::async_trait]
 impl Loader<FindPublicUserById> for IkigaiDataLoader {
     type Value = PublicUser;
     type Error = IkigaiError;
@@ -26,9 +25,9 @@ impl Loader<FindPublicUserById> for IkigaiDataLoader {
         &self,
         keys: &[FindPublicUserById],
     ) -> Result<HashMap<FindPublicUserById, PublicUser>, Self::Error> {
-        let conn = get_conn_from_actor().await?;
+        let mut conn = get_conn_from_actor().await?;
         let ids = keys.iter().map(|u| u.0).collect();
-        let users = User::find_by_ids(&conn, &ids)?;
+        let users = User::find_by_ids(&mut conn, &ids)?;
         Ok(users
             .into_iter()
             .map(|user| (FindPublicUserById(user.id), PublicUser::from(user)))
@@ -39,7 +38,6 @@ impl Loader<FindPublicUserById> for IkigaiDataLoader {
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct FindUserById(pub i32);
 
-#[async_trait::async_trait]
 impl Loader<FindUserById> for IkigaiDataLoader {
     type Value = User;
     type Error = IkigaiError;
@@ -48,9 +46,9 @@ impl Loader<FindUserById> for IkigaiDataLoader {
         &self,
         keys: &[FindUserById],
     ) -> Result<HashMap<FindUserById, Self::Value>, Self::Error> {
-        let conn = get_conn_from_actor().await?;
+        let mut conn = get_conn_from_actor().await?;
         let ids = keys.iter().map(|u| u.0).collect();
-        let users = User::find_by_ids(&conn, &ids)?;
+        let users = User::find_by_ids(&mut conn, &ids)?;
         Ok(users
             .into_iter()
             .map(|user| (FindUserById(user.id), user))
@@ -62,15 +60,14 @@ impl Loader<FindUserById> for IkigaiDataLoader {
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct FileById(pub Uuid);
 
-#[async_trait::async_trait]
 impl Loader<FileById> for IkigaiDataLoader {
     type Value = File;
     type Error = IkigaiError;
 
     async fn load(&self, keys: &[FileById]) -> Result<HashMap<FileById, Self::Value>, Self::Error> {
-        let conn = get_conn_from_actor().await?;
+        let mut conn = get_conn_from_actor().await?;
         let file_ids = keys.iter().map(|k| k.0).collect::<Vec<Uuid>>();
-        let res = File::find_all_by_ids(&conn, &file_ids)?;
+        let res = File::find_all_by_ids(&mut conn, &file_ids)?;
         Ok(res.into_iter().map(|f| (FileById(f.uuid), f)).collect())
     }
 }
@@ -78,7 +75,6 @@ impl Loader<FileById> for IkigaiDataLoader {
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct MembersByClassId(pub i32);
 
-#[async_trait::async_trait]
 impl Loader<MembersByClassId> for IkigaiDataLoader {
     type Value = Vec<SpaceMember>;
     type Error = IkigaiError;
@@ -87,9 +83,9 @@ impl Loader<MembersByClassId> for IkigaiDataLoader {
         &self,
         keys: &[MembersByClassId],
     ) -> Result<HashMap<MembersByClassId, Self::Value>, Self::Error> {
-        let conn = get_conn_from_actor().await?;
+        let mut conn = get_conn_from_actor().await?;
         let class_ids = keys.iter().map(|c| c.0).collect::<Vec<i32>>();
-        let members = SpaceMember::find_all_by_classes(&conn, class_ids)?;
+        let members = SpaceMember::find_all_by_classes(&mut conn, class_ids)?;
 
         let mut result: HashMap<MembersByClassId, Self::Value> = HashMap::new();
         for member in members {
@@ -108,7 +104,6 @@ impl Loader<MembersByClassId> for IkigaiDataLoader {
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct SpaceById(pub i32);
 
-#[async_trait::async_trait]
 impl Loader<SpaceById> for IkigaiDataLoader {
     type Value = Space;
     type Error = IkigaiError;
@@ -117,9 +112,9 @@ impl Loader<SpaceById> for IkigaiDataLoader {
         &self,
         keys: &[SpaceById],
     ) -> Result<HashMap<SpaceById, Self::Value>, Self::Error> {
-        let conn = get_conn_from_actor().await?;
+        let mut conn = get_conn_from_actor().await?;
         let class_ids = keys.iter().map(|c| c.0).unique().collect::<Vec<i32>>();
-        let res = Space::find_all_by_ids(&conn, class_ids)?;
+        let res = Space::find_all_by_ids(&mut conn, class_ids)?;
         Ok(res.into_iter().map(|p| (SpaceById(p.id), p)).collect())
     }
 }
@@ -127,7 +122,6 @@ impl Loader<SpaceById> for IkigaiDataLoader {
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct SpaceByDocumentId(pub Uuid);
 
-#[async_trait::async_trait]
 impl Loader<SpaceByDocumentId> for IkigaiDataLoader {
     type Value = Space;
     type Error = IkigaiError;
@@ -137,15 +131,15 @@ impl Loader<SpaceByDocumentId> for IkigaiDataLoader {
         keys: &[SpaceByDocumentId],
     ) -> std::result::Result<HashMap<SpaceByDocumentId, Self::Value>, Self::Error> {
         let document_ids = keys.iter().map(|i| i.0).unique().collect::<Vec<Uuid>>();
-        let conn = get_conn_from_actor().await?;
-        let documents = Document::find_by_ids(&conn, document_ids)?;
+        let mut conn = get_conn_from_actor().await?;
+        let documents = Document::find_by_ids(&mut conn, document_ids)?;
         let space_ids: Vec<i32> = documents
             .iter()
             .filter_map(|d| d.space_id)
             .unique()
             .collect();
 
-        let spaces: HashMap<i32, Space> = Space::find_all_by_ids(&conn, space_ids)?
+        let spaces: HashMap<i32, Space> = Space::find_all_by_ids(&mut conn, space_ids)?
             .into_iter()
             .map(|c| (c.id, c))
             .collect();
@@ -167,7 +161,6 @@ impl Loader<SpaceByDocumentId> for IkigaiDataLoader {
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct SubmissionById(pub i32);
 
-#[async_trait::async_trait]
 impl Loader<SubmissionById> for IkigaiDataLoader {
     type Value = Submission;
     type Error = IkigaiError;
@@ -176,9 +169,9 @@ impl Loader<SubmissionById> for IkigaiDataLoader {
         &self,
         keys: &[SubmissionById],
     ) -> std::result::Result<HashMap<SubmissionById, Self::Value>, Self::Error> {
-        let conn = get_conn_from_actor().await?;
+        let mut conn = get_conn_from_actor().await?;
         let submission_ids = keys.iter().map(|c| c.0).collect();
-        Ok(Submission::find_all_by_ids(&conn, submission_ids)?
+        Ok(Submission::find_all_by_ids(&mut conn, submission_ids)?
             .into_iter()
             .map(|submission| (SubmissionById(submission.id), submission))
             .collect())
@@ -188,7 +181,6 @@ impl Loader<SubmissionById> for IkigaiDataLoader {
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct SubmissionByAssignmentId(pub i32);
 
-#[async_trait::async_trait]
 impl Loader<SubmissionByAssignmentId> for IkigaiDataLoader {
     type Value = Vec<Submission>;
     type Error = IkigaiError;
@@ -197,11 +189,11 @@ impl Loader<SubmissionByAssignmentId> for IkigaiDataLoader {
         &self,
         keys: &[SubmissionByAssignmentId],
     ) -> Result<HashMap<SubmissionByAssignmentId, Self::Value>, Self::Error> {
-        let conn = get_conn_from_actor().await?;
+        let mut conn = get_conn_from_actor().await?;
         let assignment_ids = keys.iter().map(|c| c.0).collect();
 
         let mut result: HashMap<SubmissionByAssignmentId, Self::Value> = HashMap::new();
-        for item in Submission::find_all_by_assignments(&conn, assignment_ids)? {
+        for item in Submission::find_all_by_assignments(&mut conn, assignment_ids)? {
             let id = SubmissionByAssignmentId(item.assignment_id);
             if let Some(items) = result.get_mut(&id) {
                 items.push(item);
@@ -217,7 +209,6 @@ impl Loader<SubmissionByAssignmentId> for IkigaiDataLoader {
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct AssignmentById(pub i32);
 
-#[async_trait::async_trait]
 impl Loader<AssignmentById> for IkigaiDataLoader {
     type Value = Assignment;
     type Error = IkigaiError;
@@ -226,10 +217,10 @@ impl Loader<AssignmentById> for IkigaiDataLoader {
         &self,
         keys: &[AssignmentById],
     ) -> Result<HashMap<AssignmentById, Self::Value>, Self::Error> {
-        let conn = get_conn_from_actor().await?;
+        let mut conn = get_conn_from_actor().await?;
         let assignment_ids = keys.iter().map(|c| c.0).collect();
 
-        Ok(Assignment::find_all_by_ids(&conn, assignment_ids)?
+        Ok(Assignment::find_all_by_ids(&mut conn, assignment_ids)?
             .into_iter()
             .map(|i| (AssignmentById(i.id), i))
             .collect())
@@ -239,7 +230,6 @@ impl Loader<AssignmentById> for IkigaiDataLoader {
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct AssignmentByDocumentId(pub Uuid);
 
-#[async_trait::async_trait]
 impl Loader<AssignmentByDocumentId> for IkigaiDataLoader {
     type Value = Assignment;
     type Error = IkigaiError;
@@ -248,10 +238,10 @@ impl Loader<AssignmentByDocumentId> for IkigaiDataLoader {
         &self,
         keys: &[AssignmentByDocumentId],
     ) -> Result<HashMap<AssignmentByDocumentId, Self::Value>, Self::Error> {
-        let conn = get_conn_from_actor().await?;
+        let mut conn = get_conn_from_actor().await?;
         let document_ids = keys.iter().map(|c| c.0).collect();
 
-        Ok(Assignment::find_all_by_documents(&conn, &document_ids)?
+        Ok(Assignment::find_all_by_documents(&mut conn, &document_ids)?
             .into_iter()
             .map(|i| (AssignmentByDocumentId(i.document_id), i))
             .collect())
@@ -261,7 +251,6 @@ impl Loader<AssignmentByDocumentId> for IkigaiDataLoader {
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct SubmissionByDocumentId(pub Uuid);
 
-#[async_trait::async_trait]
 impl Loader<SubmissionByDocumentId> for IkigaiDataLoader {
     type Value = Submission;
     type Error = IkigaiError;
@@ -270,10 +259,10 @@ impl Loader<SubmissionByDocumentId> for IkigaiDataLoader {
         &self,
         keys: &[SubmissionByDocumentId],
     ) -> Result<HashMap<SubmissionByDocumentId, Self::Value>, Self::Error> {
-        let conn = get_conn_from_actor().await?;
+        let mut conn = get_conn_from_actor().await?;
         let document_ids = keys.iter().map(|c| c.0).collect();
 
-        Ok(Submission::find_by_documents(&conn, document_ids)?
+        Ok(Submission::find_by_documents(&mut conn, document_ids)?
             .into_iter()
             .map(|i| (SubmissionByDocumentId(i.document_id), i))
             .collect())
@@ -283,7 +272,6 @@ impl Loader<SubmissionByDocumentId> for IkigaiDataLoader {
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct DocumentById(pub Uuid);
 
-#[async_trait::async_trait]
 impl Loader<DocumentById> for IkigaiDataLoader {
     type Value = Document;
     type Error = IkigaiError;
@@ -292,10 +280,10 @@ impl Loader<DocumentById> for IkigaiDataLoader {
         &self,
         keys: &[DocumentById],
     ) -> Result<HashMap<DocumentById, Self::Value>, Self::Error> {
-        let conn = get_conn_from_actor().await?;
+        let mut conn = get_conn_from_actor().await?;
         let document_ids = keys.iter().map(|c| c.0).collect();
 
-        Ok(Document::find_by_ids(&conn, document_ids)?
+        Ok(Document::find_by_ids(&mut conn, document_ids)?
             .into_iter()
             .map(|i| (DocumentById(i.id), i))
             .collect())
@@ -305,7 +293,6 @@ impl Loader<DocumentById> for IkigaiDataLoader {
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub struct FindDocumentType(pub Uuid);
 
-#[async_trait::async_trait]
 impl Loader<FindDocumentType> for IkigaiDataLoader {
     type Value = DocumentType;
     type Error = IkigaiError;
@@ -315,9 +302,9 @@ impl Loader<FindDocumentType> for IkigaiDataLoader {
         keys: &[FindDocumentType],
     ) -> std::result::Result<HashMap<FindDocumentType, Self::Value>, Self::Error> {
         let document_ids: Vec<Uuid> = keys.iter().map(|k| k.0).collect();
-        let conn = get_conn_from_actor().await?;
+        let mut conn = get_conn_from_actor().await?;
 
-        let assignments = Assignment::find_all_by_documents(&conn, &document_ids)?;
+        let assignments = Assignment::find_all_by_documents(&mut conn, &document_ids)?;
 
         let mut result: HashMap<FindDocumentType, Self::Value> = HashMap::new();
         for key in keys {
@@ -342,7 +329,6 @@ pub struct FindDocumentAssignedUsers {
     pub document_id: Uuid,
 }
 
-#[async_trait::async_trait]
 impl Loader<FindDocumentAssignedUsers> for IkigaiDataLoader {
     type Value = Vec<DocumentAssignedUser>;
     type Error = IkigaiError;
@@ -356,8 +342,8 @@ impl Loader<FindDocumentAssignedUsers> for IkigaiDataLoader {
         }
 
         let document_ids = keys.iter().map(|key| key.document_id).unique().collect();
-        let conn = get_conn_from_actor().await?;
-        let items = DocumentAssignedUser::find_all_by_documents(&conn, document_ids)?;
+        let mut conn = get_conn_from_actor().await?;
+        let items = DocumentAssignedUser::find_all_by_documents(&mut conn, document_ids)?;
 
         let mut result: HashMap<FindDocumentAssignedUsers, Self::Value> = HashMap::new();
         for item in items {
@@ -380,7 +366,6 @@ pub struct FindPageByDocumentId {
     pub document_id: Uuid,
 }
 
-#[async_trait::async_trait]
 impl Loader<FindPageByDocumentId> for IkigaiDataLoader {
     type Value = Vec<Page>;
     type Error = IkigaiError;
@@ -394,8 +379,8 @@ impl Loader<FindPageByDocumentId> for IkigaiDataLoader {
         }
 
         let document_ids = keys.iter().map(|key| key.document_id).unique().collect();
-        let conn = get_conn_from_actor().await?;
-        let pages = Page::find_all_by_document_ids(&conn, document_ids)?;
+        let mut conn = get_conn_from_actor().await?;
+        let pages = Page::find_all_by_document_ids(&mut conn, document_ids)?;
 
         let mut result: HashMap<FindPageByDocumentId, Self::Value> = HashMap::new();
         for page in pages {
@@ -418,7 +403,6 @@ pub struct FindPageContentByPageId {
     pub page_id: Uuid,
 }
 
-#[async_trait::async_trait]
 impl Loader<FindPageContentByPageId> for IkigaiDataLoader {
     type Value = Vec<PageContent>;
     type Error = IkigaiError;
@@ -432,8 +416,8 @@ impl Loader<FindPageContentByPageId> for IkigaiDataLoader {
         }
 
         let page_ids = keys.iter().map(|key| key.page_id).unique().collect();
-        let conn = get_conn_from_actor().await?;
-        let page_contents = PageContent::find_all_by_pages(&conn, page_ids)?;
+        let mut conn = get_conn_from_actor().await?;
+        let page_contents = PageContent::find_all_by_pages(&mut conn, page_ids)?;
 
         let mut result: HashMap<FindPageContentByPageId, Self::Value> = HashMap::new();
         for page_content in page_contents {

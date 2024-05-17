@@ -23,7 +23,7 @@ pub struct DocumentAuth {
 }
 
 impl DocumentAuth {
-    pub fn try_new(conn: &PgConnection, document_id: Uuid) -> Result<Self, IkigaiError> {
+    pub fn try_new(conn: &mut PgConnection, document_id: Uuid) -> Result<Self, IkigaiError> {
         let mut allow_for_student_view_answer = false;
         let mut is_doing_submission = false;
         let mut is_doing_open_type_submission = false;

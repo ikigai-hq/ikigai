@@ -47,8 +47,8 @@ impl Document {
     }
 
     async fn children(&self, ctx: &Context<'_>) -> Result<Vec<Document>> {
-        let conn = get_conn_from_ctx(ctx).await?;
-        let documents = Document::find_by_parent(&conn, self.id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let documents = Document::find_by_parent(&mut conn, self.id).format_err()?;
         Ok(documents)
     }
 

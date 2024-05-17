@@ -1,7 +1,6 @@
 use diesel::result::Error;
 use diesel::sql_types::Integer;
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
-use oso::PolarClass;
 
 use super::schema::space_members;
 use crate::impl_enum_for_db;
@@ -10,7 +9,7 @@ use crate::util::get_now_as_secs;
 #[derive(
     Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
 )]
-#[sql_type = "Integer"]
+#[diesel(sql_type = Integer)]
 pub enum Role {
     Teacher,
     Student,
@@ -24,12 +23,11 @@ impl Default for Role {
     }
 }
 
-#[derive(Debug, Clone, Insertable, Queryable, SimpleObject, PolarClass, InputObject)]
-#[table_name = "space_members"]
+#[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
+#[diesel(table_name = space_members)]
 #[graphql(complex, input_name = "AddSpaceMemberInput")]
 pub struct SpaceMember {
     pub space_id: i32,
-    #[polar(attribute)]
     pub user_id: i32,
     #[graphql(skip_input)]
     pub updated_at: i64,
@@ -52,7 +50,7 @@ impl SpaceMember {
         }
     }
 
-    pub fn upsert(conn: &PgConnection, member: SpaceMember) -> Result<Self, Error> {
+    pub fn upsert(conn: &mut PgConnection, member: SpaceMember) -> Result<Self, Error> {
         diesel::insert_into(space_members::table)
             .values(&member)
             .on_conflict((space_members::space_id, space_members::user_id))
@@ -62,7 +60,7 @@ impl SpaceMember {
     }
 
     pub fn find_opt(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         space_id: i32,
         user_id: i32,
     ) -> Result<Option<Self>, Error> {
@@ -73,12 +71,12 @@ impl SpaceMember {
         }
     }
 
-    pub fn find(conn: &PgConnection, space_id: i32, user_id: i32) -> Result<Self, Error> {
+    pub fn find(conn: &mut PgConnection, space_id: i32, user_id: i32) -> Result<Self, Error> {
         space_members::table.find((space_id, user_id)).first(conn)
     }
 
     pub fn find_all_space_members_by_role_and_class(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         space_id: i32,
         role: Role,
     ) -> Result<Vec<Self>, Error> {
@@ -89,7 +87,7 @@ impl SpaceMember {
     }
 
     pub fn find_all_by_classes(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         space_ids: Vec<i32>,
     ) -> Result<Vec<Self>, Error> {
         space_members::table
@@ -98,20 +96,23 @@ impl SpaceMember {
             .get_results(conn)
     }
 
-    pub fn find_all_by_user(conn: &PgConnection, user_id: i32) -> Result<Vec<Self>, Error> {
+    pub fn find_all_by_user(conn: &mut PgConnection, user_id: i32) -> Result<Vec<Self>, Error> {
         space_members::table
             .filter(space_members::user_id.eq(user_id))
             .get_results(conn)
     }
 
-    pub fn find_all_by_users(conn: &PgConnection, user_ids: &Vec<i32>) -> Result<Vec<Self>, Error> {
+    pub fn find_all_by_users(
+        conn: &mut PgConnection,
+        user_ids: &Vec<i32>,
+    ) -> Result<Vec<Self>, Error> {
         space_members::table
             .filter(space_members::user_id.eq_any(user_ids))
             .get_results(conn)
     }
 
     pub fn find_all_by_users_of_space(
-        conn: &PgConnection,
+        conn: &mut PgConnection,
         space_id: i32,
         user_ids: &Vec<i32>,
     ) -> Result<Vec<Self>, Error> {
@@ -121,13 +122,13 @@ impl SpaceMember {
             .get_results(conn)
     }
 
-    pub fn remove_by_user(conn: &PgConnection, user_id: i32) -> Result<(), Error> {
+    pub fn remove_by_user(conn: &mut PgConnection, user_id: i32) -> Result<(), Error> {
         diesel::delete(space_members::table.filter(space_members::user_id.eq(user_id)))
             .execute(conn)?;
         Ok(())
     }
 
-    pub fn remove(conn: &PgConnection, space_id: i32, user_id: i32) -> Result<(), Error> {
+    pub fn remove(conn: &mut PgConnection, space_id: i32, user_id: i32) -> Result<(), Error> {
         diesel::delete(space_members::table.find((space_id, user_id))).execute(conn)?;
         Ok(())
     }

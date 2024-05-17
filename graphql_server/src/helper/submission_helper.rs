@@ -7,7 +7,7 @@ use crate::error::IkigaiError;
 use crate::graphql::notification_center::{NotificationCenter, SubmitCompleted};
 
 pub fn submit_submission(
-    conn: &PgConnection,
+    conn: &mut PgConnection,
     submission: &Submission,
     assignment: &Assignment,
     notify_student: bool,
@@ -34,7 +34,7 @@ pub fn submit_submission(
 }
 
 pub fn try_add_rubric_submission(
-    conn: &PgConnection,
+    conn: &mut PgConnection,
     assignment: &Assignment,
     submission: &Submission,
 ) -> Result<(), IkigaiError> {

@@ -27,16 +27,16 @@ impl UserQuery {
         submit_to: Option<i64>,
     ) -> Result<Vec<Submission>> {
         let user_id = get_user_id_from_ctx(ctx).await?;
-        let conn = get_conn_from_ctx(ctx).await?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
         let submit_to = submit_to.unwrap_or(get_now_as_secs());
         let submit_from = submit_from.unwrap_or(submit_to - 2_592_000); // 30 days in secs
-        Submission::find_all_by_user(&conn, user_id, submit_from, submit_to).format_err()
+        Submission::find_all_by_user(&mut conn, user_id, submit_from, submit_to).format_err()
     }
 
     async fn user_last_activity(&self, ctx: &Context<'_>) -> Result<UserActivity> {
         let user_id = get_user_id_from_ctx(ctx).await?;
-        let conn = get_conn_from_ctx(ctx).await?;
-        let last_activity = UserActivity::find(&conn, user_id).format_err();
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let last_activity = UserActivity::find(&mut conn, user_id).format_err();
         drop(conn);
 
         if let Ok(Some(last_document_id)) = last_activity
@@ -52,18 +52,18 @@ impl UserQuery {
             .await
             .is_ok();
             if !is_ok {
-                let conn = get_conn_from_ctx(ctx).await?;
-                let spaces = Space::find_all_by_owner(&conn, user_id).format_err()?;
+                let mut conn = get_conn_from_ctx(ctx).await?;
+                let spaces = Space::find_all_by_owner(&mut conn, user_id).format_err()?;
                 let activity = conn
-                    .transaction::<_, IkigaiError, _>(|| {
+                    .transaction::<_, IkigaiError, _>(|conn| {
                         let document = if let Some(space) = spaces.first() {
-                            Document::get_or_create_starter_doc(&conn, user_id, space.id)?
+                            Document::get_or_create_starter_doc(conn, user_id, space.id)?
                         } else {
-                            let space = create_default_space(&conn, user_id)?;
-                            Document::get_or_create_starter_doc(&conn, user_id, space.id)?
+                            let space = create_default_space(conn, user_id)?;
+                            Document::get_or_create_starter_doc(conn, user_id, space.id)?
                         };
 
-                        let activity = UserActivity::insert(&conn, user_id, document.id)?;
+                        let activity = UserActivity::insert(conn, user_id, document.id)?;
                         Ok(activity)
                     })
                     .format_err()?;
@@ -77,8 +77,8 @@ impl UserQuery {
 
     async fn user_get_my_rubrics(&self, ctx: &Context<'_>) -> Result<Vec<Rubric>> {
         let user_id = get_user_id_from_ctx(ctx).await?;
-        let conn = get_conn_from_ctx(ctx).await?;
-        Rubric::find_all_by_user(&conn, user_id).format_err()
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Rubric::find_all_by_user(&mut conn, user_id).format_err()
     }
 
     async fn rubric_my_permissions(
@@ -98,8 +98,8 @@ impl UserQuery {
         document_id: Uuid,
     ) -> Result<Option<i32>> {
         get_user_id_from_ctx(ctx).await?;
-        let conn = get_conn_from_ctx(ctx).await?;
-        let document = Document::find_by_id(&conn, document_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let document = Document::find_by_id(&mut conn, document_id).format_err()?;
         Ok(document.space_id)
     }
 }

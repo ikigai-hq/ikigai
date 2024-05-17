@@ -30,13 +30,13 @@ impl DocumentMutation {
         data.updated_at = get_now_as_secs();
         data.created_at = get_now_as_secs();
 
-        let conn = get_conn_from_ctx(ctx).await?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
         let doc = conn
-            .transaction::<_, IkigaiError, _>(|| {
-                let doc = Document::upsert(&conn, data)?;
+            .transaction::<_, IkigaiError, _>(|conn| {
+                let doc = Document::upsert(conn, data)?;
                 if is_assignment {
                     let new_assignment = NewAssignment::init(doc.id);
-                    Assignment::insert(&conn, new_assignment)?;
+                    Assignment::insert(conn, new_assignment)?;
                 }
 
                 Ok(doc)
@@ -55,8 +55,8 @@ impl DocumentMutation {
 
         let user_id = get_user_id_from_ctx(ctx).await?;
         data.updated_by = Some(user_id);
-        let conn = get_conn_from_ctx(ctx).await?;
-        Document::update(&conn, document_id, data).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Document::update(&mut conn, document_id, data).format_err()?;
 
         Ok(true)
     }
@@ -72,8 +72,8 @@ impl DocumentMutation {
             document_quick_authorize(ctx, item.id, DocumentActionPermission::EditDocument).await?;
         }
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        Document::update_positions(&conn, items).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Document::update_positions(&mut conn, items).format_err()?;
 
         Ok(true)
     }
@@ -82,8 +82,8 @@ impl DocumentMutation {
         document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
             .await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        Document::soft_delete_by_ids(&conn, vec![document_id], None).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Document::soft_delete_by_ids(&mut conn, vec![document_id], None).format_err()?;
 
         Ok(true)
     }
@@ -92,8 +92,8 @@ impl DocumentMutation {
         document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
             .await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        Document::soft_delete(&conn, document_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Document::soft_delete(&mut conn, document_id).format_err()?;
 
         Ok(true)
     }
@@ -108,8 +108,9 @@ impl DocumentMutation {
                 .await?;
         }
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        Document::soft_delete_by_ids(&conn, document_ids, Some(get_now_as_secs())).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Document::soft_delete_by_ids(&mut conn, document_ids, Some(get_now_as_secs()))
+            .format_err()?;
 
         Ok(true)
     }
@@ -118,8 +119,8 @@ impl DocumentMutation {
         document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
             .await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        Document::delete(&conn, document_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Document::delete(&mut conn, document_id).format_err()?;
 
         Ok(true)
     }
@@ -133,8 +134,8 @@ impl DocumentMutation {
         document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
             .await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        let document = Document::find_by_id(&conn, document_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let document = Document::find_by_id(&mut conn, document_id).format_err()?;
 
         if document.space_id.is_none() {
             return Err(IkigaiError::new_bad_request(
@@ -144,20 +145,20 @@ impl DocumentMutation {
         }
 
         let space_id = document.space_id.unwrap();
-        let space = Space::find_by_id(&conn, space_id).format_err()?;
+        let space = Space::find_by_id(&mut conn, space_id).format_err()?;
         let (items, notification, user_ids) = conn
-            .transaction::<_, IkigaiError, _>(|| {
-                let mut current_users = User::find_by_emails(&conn, &emails)?;
+            .transaction::<_, IkigaiError, _>(|conn| {
+                let mut current_users = User::find_by_emails(conn, &emails)?;
                 let new_users: Vec<NewUser> = emails
                     .into_iter()
                     .filter(|email| !current_users.iter().map(|c| &c.email).contains(email))
                     .map(|email| NewUser::new(email.clone(), email, "".into()))
                     .collect();
-                let mut new_users = User::batch_insert(&conn, new_users)?;
+                let mut new_users = User::batch_insert(conn, new_users)?;
                 current_users.append(&mut new_users);
 
                 for user in current_users.iter() {
-                    add_space_member(&conn, &space, user.id, None, Role::Student)?;
+                    add_space_member(conn, &space, user.id, None, Role::Student)?;
                 }
 
                 let user_ids: Vec<i32> = current_users.iter().map(|u| u.id).unique().collect();
@@ -165,7 +166,7 @@ impl DocumentMutation {
                     .iter()
                     .map(|user_id| DocumentAssignedUser::new(document_id, *user_id))
                     .collect();
-                let items = DocumentAssignedUser::insert(&conn, items)?;
+                let items = DocumentAssignedUser::insert(conn, items)?;
 
                 let notification = Notification::new(
                     NotificationType::AssignToAssignment,
@@ -174,13 +175,13 @@ impl DocumentMutation {
                         assignment_name: document.title,
                     },
                 );
-                let notification = Notification::insert(&conn, notification)?;
+                let notification = Notification::insert(conn, notification)?;
 
                 Ok((items, notification, user_ids))
             })
             .format_err()?;
 
-        send_notification(&conn, notification, user_ids)?;
+        send_notification(&mut conn, notification, user_ids)?;
 
         Ok(items)
     }
@@ -197,8 +198,8 @@ impl DocumentMutation {
         )
         .await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        DocumentAssignedUser::remove(&conn, assigned_user).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        DocumentAssignedUser::remove(&mut conn, assigned_user).format_err()?;
 
         Ok(true)
     }
@@ -217,8 +218,8 @@ impl DocumentMutation {
         .await?;
         let user_id = get_user_id_from_ctx(ctx).await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        let existing_page = Page::find(&conn, page.id);
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let existing_page = Page::find(&mut conn, page.id);
         let page_is_existing = existing_page.is_ok();
         if existing_page.is_ok()
             && existing_page.map(|page| page.document_id) != Ok(page.document_id)
@@ -232,18 +233,18 @@ impl DocumentMutation {
         page.created_by_id = user_id;
 
         let page = conn
-            .transaction::<_, IkigaiError, _>(|| {
-                let page = Page::upsert(&conn, page)?;
+            .transaction::<_, IkigaiError, _>(|conn| {
+                let page = Page::upsert(conn, page)?;
                 if !page_is_existing {
-                        let page_content = PageContent {
-                            id: Uuid::new_v4(),
-                            page_id: page.id,
-                            index: 1,
-                            body: "".into(),
-                            updated_at: get_now_as_secs(),
-                            created_at: get_now_as_secs(),
-                        };
-                        PageContent::upsert(&conn, page_content)?;
+                    let page_content = PageContent {
+                        id: Uuid::new_v4(),
+                        page_id: page.id,
+                        index: 1,
+                        body: "".into(),
+                        updated_at: get_now_as_secs(),
+                        created_at: get_now_as_secs(),
+                    };
+                    PageContent::upsert(conn, page_content)?;
 
                     if is_single_page != Some(true) {
                         let page_content = PageContent {
@@ -254,7 +255,7 @@ impl DocumentMutation {
                             updated_at: get_now_as_secs(),
                             created_at: get_now_as_secs(),
                         };
-                        PageContent::upsert(&conn, page_content)?;
+                        PageContent::upsert(conn, page_content)?;
                     }
                 }
                 Ok(page)
@@ -265,8 +266,8 @@ impl DocumentMutation {
 
     async fn document_remove_page(&self, ctx: &Context<'_>, page_id: Uuid) -> Result<bool> {
         let page = {
-            let conn = get_conn_from_ctx(ctx).await?;
-            Page::find(&conn, page_id).format_err()?
+            let mut conn = get_conn_from_ctx(ctx).await?;
+            Page::find(&mut conn, page_id).format_err()?
         };
         document_quick_authorize(
             ctx,
@@ -275,16 +276,16 @@ impl DocumentMutation {
         )
         .await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        Page::soft_delete(&conn, page_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        Page::soft_delete(&mut conn, page_id).format_err()?;
 
         Ok(true)
     }
 
     async fn document_restore_page(&self, ctx: &Context<'_>, page_id: Uuid) -> Result<Page> {
         let page = {
-            let conn = get_conn_from_ctx(ctx).await?;
-            Page::find(&conn, page_id).format_err()?
+            let mut conn = get_conn_from_ctx(ctx).await?;
+            Page::find(&mut conn, page_id).format_err()?
         };
         document_quick_authorize(
             ctx,
@@ -293,8 +294,8 @@ impl DocumentMutation {
         )
         .await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        let page = Page::restore(&conn, page_id).format_err()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let page = Page::restore(&mut conn, page_id).format_err()?;
 
         Ok(page)
     }
@@ -305,8 +306,8 @@ impl DocumentMutation {
         page_content: PageContent,
     ) -> Result<PageContent> {
         let page = {
-            let conn = get_conn_from_ctx(ctx).await?;
-            Page::find(&conn, page_content.page_id).format_err()?
+            let mut conn = get_conn_from_ctx(ctx).await?;
+            Page::find(&mut conn, page_content.page_id).format_err()?
         };
         document_quick_authorize(
             ctx,
@@ -315,8 +316,8 @@ impl DocumentMutation {
         )
         .await?;
 
-        let conn = get_conn_from_ctx(ctx).await?;
-        let existing_page_content = PageContent::find(&conn, page_content.id);
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let existing_page_content = PageContent::find(&mut conn, page_content.id);
         if existing_page_content.map(|content| content.page_id) != Ok(page.id) {
             return Err(IkigaiError::new_bad_request(
                 "Cannot update content of other page",
@@ -324,7 +325,7 @@ impl DocumentMutation {
             .format_err();
         }
 
-        let content = PageContent::upsert(&conn, page_content).format_err()?;
+        let content = PageContent::upsert(&mut conn, page_content).format_err()?;
         Ok(content)
     }
 }

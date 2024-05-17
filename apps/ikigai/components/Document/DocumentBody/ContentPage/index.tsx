@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { Divider, Input } from "antd";
 import { t } from "@lingui/macro";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
@@ -17,6 +17,7 @@ export type ContentPageProps = {
 };
 
 const ContentPage = ({ page }: ContentPageProps) => {
+  const theme = useTheme();
   const allow = usePermission();
   const pageContents = usePageContentStore((state) =>
     state.pageContents.filter((content) => content.pageId === page.id),
@@ -45,14 +46,21 @@ const ContentPage = ({ page }: ContentPageProps) => {
         />
       </div>
       <Divider style={{ margin: 0 }} />
-      <div>
+      <div style={{ width: "calc(100vw - 530px)" }}>
         <PanelGroup direction="horizontal">
           {pageContents.map((pageContent, index) => (
             <>
               <Panel key={pageContent.id} minSize={30}>
                 <Editor pageContent={pageContent} />
               </Panel>
-              {index !== pageContents.length - 1 && <PanelResizeHandle />}
+              {index !== pageContents.length - 1 && (
+                <PanelResizeHandle
+                  style={{
+                    width: "1px",
+                    backgroundColor: theme.colors.gray[4],
+                  }}
+                />
+              )}
             </>
           ))}
         </PanelGroup>

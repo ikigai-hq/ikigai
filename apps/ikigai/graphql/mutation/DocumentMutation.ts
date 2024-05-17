@@ -65,3 +65,16 @@ export const REMOVE_PAGE = gql`
     documentRemovePage(pageId: $pageId)
   }
 `;
+
+export const ADD_ORG_UPDATE_PAGE_CONTENT = gql`
+  mutation AddOrUpdatePageContent($pageContent: PageContentInput!) {
+    documentAddOrUpdatePageContent(pageContent: $pageContent) {
+      id
+      pageId
+      index
+      body
+      updatedAt
+      createdAt
+    }
+  }
+`;

@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Divider, Input } from "antd";
 import { t } from "@lingui/macro";
+import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
 
 import { DocumentActionPermission } from "graphql/types";
 import usePermission from "hook/UsePermission";
@@ -9,6 +10,7 @@ import Editor from "../Editor";
 import { IPage } from "context/PageStore";
 import { useDebounce } from "ahooks";
 import useUpdatePage from "hook/UseUpdatePage";
+import usePageContentStore from "context/PageContentStore";
 
 export type ContentPageProps = {
   page: IPage;
@@ -16,7 +18,9 @@ export type ContentPageProps = {
 
 const ContentPage = ({ page }: ContentPageProps) => {
   const allow = usePermission();
-  const documentBodyRef = useRef<HTMLDivElement>(null);
+  const pageContents = usePageContentStore((state) =>
+    state.pageContents.filter((content) => content.pageId === page.id),
+  ).sort((a, b) => a.index - b.index);
   const [title, setTitle] = useState(page.title);
   const debouncedTitle = useDebounce(title, { wait: 500 });
   const { upsert } = useUpdatePage(page.id);
@@ -41,8 +45,17 @@ const ContentPage = ({ page }: ContentPageProps) => {
         />
       </div>
       <Divider style={{ margin: 0 }} />
-      <div ref={documentBodyRef}>
-        <Editor />
+      <div>
+        <PanelGroup direction="horizontal">
+          {pageContents.map((pageContent, index) => (
+            <>
+              <Panel key={pageContent.id} minSize={30}>
+                <Editor pageContent={pageContent} />
+              </Panel>
+              {index !== pageContents.length - 1 && <PanelResizeHandle />}
+            </>
+          ))}
+        </PanelGroup>
       </div>
     </div>
   );

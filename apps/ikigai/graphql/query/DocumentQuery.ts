@@ -27,11 +27,24 @@ export const GET_PAGES = gql`
         index
         title
         layout
+      }
+    }
+  }
+`;
+
+export const GET_DOCUMENT_PAGE_CONTENT = gql`
+  query GetDocumentPageContents($documentId: UUID!) {
+    documentGet(documentId: $documentId) {
+      id
+      pages {
+        id
         pageContents {
           id
           pageId
           index
           body
+          updatedAt
+          createdAt
         }
       }
     }

@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { ADD_OR_UPDATE_PAGE } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
-import { DocumentActionPermission, PageInput, PageLayout } from "graphql/types";
+import { DocumentActionPermission, PageInput } from "graphql/types";
 import usePageStore from "../context/PageStore";
 import usePermission from "./UsePermission";
 
@@ -20,16 +20,18 @@ const useUpdatePage = (pageId: string) => {
   ) => {
     if (!allow(DocumentActionPermission.EDIT_DOCUMENT)) return;
 
+    const pageInput: PageInput = {
+      id: pageId,
+      documentId: page.documentId,
+      index: page.index,
+      title: page.title,
+      layout: page.layout,
+      ...data,
+    };
+
     addOrUpdatePage({
       variables: {
-        page: {
-          id: pageId,
-          documentId: page.documentId,
-          index: page.index,
-          title: page.title,
-          layout: PageLayout.HORIZONTAL,
-          ...data,
-        },
+        page: pageInput,
       },
     });
 

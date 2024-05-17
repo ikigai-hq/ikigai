@@ -21,7 +21,7 @@ const DocumentBody = ({ loading }: DocumentBodyProps) => {
       <Body>
         {loading && <Skeleton />}
         {!loading && !activePageId && <CoverPage />}
-        {!loading && activePageId && <ContentPage key={page.id} page={page} />}
+        {!loading && activePageId && <ContentPage key={page?.id} page={page} />}
       </Body>
     </Container>
   );

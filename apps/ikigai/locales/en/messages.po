@@ -14,8 +14,8 @@ msgstr ""
 "Plural-Forms: \n"
 
 #: components/Document/RightPanel/BlockMenu/defaultMenu.config.tsx:147
-msgid "\"{0}\""
-msgstr "\"{0}\""
+#~ msgid "\"{0}\""
+#~ msgstr "\"{0}\""
 
 #: components/Document/DocumentMoreSetting.tsx:178
 #: components/Document/DocumentMoreSetting.tsx:188
@@ -27,41 +27,41 @@ msgstr "\"{0}\""
 #: components/Document/RightPanel/BlockMenu/defaultMenu.config.tsx:123
 #: components/Document/RightPanel/BlockMenu/defaultMenu.config.tsx:134
 #: components/Document/RightPanel/BlockMenu/TextStyles.tsx:85
-msgid "{0}"
-msgstr "{0}"
+#~ msgid "{0}"
+#~ msgstr "{0}"
 
 #: components/common/RichMarkdownEditor/extensions/RecordExtension/RecordBlock.tsx:124
 #: components/common/RichMarkdownEditor/extensions/RecordExtension/RecordBlock.tsx:140
-msgid "{devices} needs to be enabled"
-msgstr "{devices} needs to be enabled"
+#~ msgid "{devices} needs to be enabled"
+#~ msgstr "{devices} needs to be enabled"
 
 #: components/Document/RightPanel/BlockMenu/BlockGroupItem.tsx:118
-msgid "{groupName}"
-msgstr "{groupName}"
+#~ msgid "{groupName}"
+#~ msgstr "{groupName}"
 
 #: components/Document/RightPanel/BlockMenu/TextStyles.tsx:114
-msgid "{m}"
-msgstr "{m}"
+#~ msgid "{m}"
+#~ msgstr "{m}"
 
 #: components/Document/RightPanel/BlockMenu/BlockItem.tsx:29
-msgid "{name}"
-msgstr "{name}"
+#~ msgid "{name}"
+#~ msgstr "{name}"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:115
-msgid "% of final grade"
-msgstr "% of final grade"
+#~ msgid "% of final grade"
+#~ msgstr "% of final grade"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:214
-msgid "% of total grade"
-msgstr "% of total grade"
+#~ msgid "% of total grade"
+#~ msgstr "% of total grade"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:454
-msgid "<0>{0}%</0> of grade"
-msgstr "<0>{0}%</0> of grade"
+#~ msgid "<0>{0}%</0> of grade"
+#~ msgstr "<0>{0}%</0> of grade"
 
 #: components/Document/AssignmentSetting/index.tsx:34
-msgid "Activation"
-msgstr "Activation"
+#~ msgid "Activation"
+#~ msgstr "Activation"
 
 #: components/AddMember.tsx:161
 #~ msgid "Add"
@@ -71,24 +71,22 @@ msgstr "Activation"
 #~ msgid "Add category"
 #~ msgstr "Add category"
 
-#: components/common/LearningModuleDnd/CreateContentButton.tsx:130
-#: components/Document/LeftPanel/CreateContentButton.tsx:108
-#: components/DocumentV2/LeftSide/index.tsx:66
+#: components/common/LearningModuleDnd/CreateContentButton.tsx:124
+#: components/Document/LeftSide/index.tsx:72
 msgid "Add content"
 msgstr "Add content"
 
-#: components/Document/DocumentSetting.tsx:219
-#: components/DocumentV2/DocumentBody/CoverPage/CoverPhotoHeader.tsx:100
+#: components/Document/DocumentBody/CoverPage/CoverPhotoHeader.tsx:100
 msgid "Add Cover"
 msgstr "Add Cover"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:473
-msgid "Add criteria"
-msgstr "Add criteria"
+#~ msgid "Add criteria"
+#~ msgstr "Add criteria"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:442
-msgid "Add level"
-msgstr "Add level"
+#~ msgid "Add level"
+#~ msgstr "Add level"
 
 #: components/Organization/index.tsx:67
 #~ msgid "Add member"
@@ -102,8 +100,11 @@ msgstr "Add level"
 #~ msgid "Add Organization Member"
 #~ msgstr "Add Organization Member"
 
-#: components/common/LearningModuleDnd/CreateContentButton.tsx:128
-#: components/Document/LeftPanel/CreateContentButton.tsx:106
+#: components/Document/RightSide/PageTabContent.tsx:77
+msgid "Add page"
+msgstr "Add page"
+
+#: components/common/LearningModuleDnd/CreateContentButton.tsx:122
 msgid "Add sub content"
 msgstr "Add sub content"
 
@@ -120,42 +121,42 @@ msgstr "Add sub content"
 #~ msgstr "Added at"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/SingleChoiceSetting.tsx:91
-msgid "After providing possible answers, select the correct one."
-msgstr "After providing possible answers, select the correct one."
+#~ msgid "After providing possible answers, select the correct one."
+#~ msgstr "After providing possible answers, select the correct one."
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/MultipleChoiceSetting.tsx:75
-msgid "After providing possible answers, select the correct options."
-msgstr "After providing possible answers, select the correct options."
+#~ msgid "After providing possible answers, select the correct options."
+#~ msgstr "After providing possible answers, select the correct options."
 
 #: components/Document/RightPanel/QuestionListSection.tsx:86
-msgid "ALL QUESTIONS"
-msgstr "ALL QUESTIONS"
+#~ msgid "ALL QUESTIONS"
+#~ msgstr "ALL QUESTIONS"
 
 #: components/common/RichMarkdownEditor/extensions/FileExtension/FileBlockHeader.tsx:210
-msgid "Allow download"
-msgstr "Allow download"
+#~ msgid "Allow download"
+#~ msgstr "Allow download"
 
 #: components/common/RichMarkdownEditor/extensions/FileExtension/FileBlockHeader.tsx:193
-msgid "Allow replay in submission"
-msgstr "Allow replay in submission"
+#~ msgid "Allow replay in submission"
+#~ msgstr "Allow replay in submission"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/MultipleChoiceSetting.tsx:72
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/SingleChoiceSetting.tsx:88
-msgid "Answer"
-msgstr "Answer"
+#~ msgid "Answer"
+#~ msgstr "Answer"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/FillInBlank/FillInBlankSetting.tsx:134
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/index.tsx:134
-msgid "Answer explanation"
-msgstr "Answer explanation"
+#~ msgid "Answer explanation"
+#~ msgstr "Answer explanation"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/index.tsx:113
-msgid "Answer type"
-msgstr "Answer type"
+#~ msgid "Answer type"
+#~ msgstr "Answer type"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/FillInBlank/FillInBlankSetting.tsx:95
-msgid "Answers"
-msgstr "Answers"
+#~ msgid "Answers"
+#~ msgstr "Answers"
 
 #: components/Trash/DeletedItem.tsx:54
 #~ msgid "Are you sure to delete {title} permanently?"
@@ -174,54 +175,52 @@ msgstr "Answers"
 #~ msgstr "Are you sure to restore {title}?"
 
 #: components/Document/DocumentSetting.tsx:176
-msgid "Are you sure want to delete this document permanently?"
-msgstr "Are you sure want to delete this document permanently?"
+#~ msgid "Are you sure want to delete this document permanently?"
+#~ msgstr "Are you sure want to delete this document permanently?"
 
 #: components/Document/DocumentMoreSetting.tsx:69
 #: components/Document/LeftPanel/LessonItem.tsx:124
-msgid "Are you sure you want to delete this ?"
-msgstr "Are you sure you want to delete this ?"
+#~ msgid "Are you sure you want to delete this ?"
+#~ msgstr "Are you sure you want to delete this ?"
 
 #: components/Document/Assignment/AssignmentHeader.tsx:43
 #: components/Document/DocumentAssignedList.tsx:131
 #: components/Document/DocumentAssignedList.tsx:162
-msgid "Assign"
-msgstr "Assign"
+#~ msgid "Assign"
+#~ msgstr "Assign"
 
 #: components/Document/DocumentAssignedList.tsx:77
-msgid "Assigned!"
-msgstr "Assigned!"
+#~ msgid "Assigned!"
+#~ msgstr "Assigned!"
 
-#: components/common/LearningModuleDnd/CreateContentButton.tsx:99
-#: components/Document/LeftPanel/CreateContentButton.tsx:77
+#: components/common/LearningModuleDnd/CreateContentButton.tsx:93
 msgid "Assignment"
 msgstr "Assignment"
 
 #: components/Document/DocumentSetting.tsx:244
-msgid "Assignment Settings"
-msgstr "Assignment Settings"
+#~ msgid "Assignment Settings"
+#~ msgstr "Assignment Settings"
 
 #: components/Document/AssignmentSetting/index.tsx:165
-msgid "Assignment type"
-msgstr "Assignment type"
+#~ msgid "Assignment type"
+#~ msgstr "Assignment type"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:166
-msgid "Attempt rules"
-msgstr "Attempt rules"
+#~ msgid "Attempt rules"
+#~ msgstr "Attempt rules"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:168
-msgid "Attempt times"
-msgstr "Attempt times"
+#~ msgid "Attempt times"
+#~ msgstr "Attempt times"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:141
-msgid "Auto"
-msgstr "Auto"
+#~ msgid "Auto"
+#~ msgstr "Auto"
 
 #: components/Document/DocumentHeader.tsx:157
 #~ msgid "Back"
 #~ msgstr "Back"
 
-#: components/Document/ServerDocumentFetchError.tsx:30
 #: components/ErrorBoundary.tsx:52
 #: components/Initializing.tsx:223
 #: pages/404.tsx:23
@@ -233,36 +232,34 @@ msgstr "Back to home"
 #~ msgstr "Back to templates"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:70
-msgid "Band score"
-msgstr "Band score"
+#~ msgid "Band score"
+#~ msgstr "Band score"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:172
-msgid "Band Score"
-msgstr "Band Score"
+#~ msgid "Band Score"
+#~ msgstr "Band Score"
 
 #: components/Document/AssignmentSetting/index.tsx:36
-msgid "Basic"
-msgstr "Basic"
+#~ msgid "Basic"
+#~ msgstr "Basic"
 
 #: components/ProfileSetting/BasicInformation.tsx:96
 #~ msgid "Basic Information"
 #~ msgstr "Basic Information"
 
 #: components/Document/RightPanel/BlockMenu/InsertBlocks.tsx:75
-msgid "Blocks"
-msgstr "Blocks"
+#~ msgid "Blocks"
+#~ msgstr "Blocks"
 
 #: components/Organization/index.tsx:51
 #~ msgid "Branding"
 #~ msgstr "Branding"
 
 #: components/Document/PreviewDocument.tsx:55
-msgid "Can not view this document"
-msgstr "Can not view this document"
+#~ msgid "Can not view this document"
+#~ msgstr "Can not view this document"
 
 #: components/common/AddResourceModal.tsx:121
-#: components/Document/DocumentMoreSetting.tsx:75
-#: components/Document/LeftPanel/LessonItem.tsx:130
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -275,8 +272,8 @@ msgstr "Cancel"
 #~ msgstr "Cannot duplicate course"
 
 #: components/common/RichMarkdownEditor/RichMarkdownEditor.tsx:212
-msgid "Cannot process file"
-msgstr "Cannot process file"
+#~ msgid "Cannot process file"
+#~ msgstr "Cannot process file"
 
 #: components/ProfileSetting/BasicInformation.tsx:119
 #~ msgid "Change Avatar"
@@ -287,8 +284,8 @@ msgstr "Cannot process file"
 #~ msgstr "Change Email"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:221
-msgid "Change or Edit"
-msgstr "Change or Edit"
+#~ msgid "Change or Edit"
+#~ msgstr "Change or Edit"
 
 #: components/UserCredential/ResetPasswordForm.tsx:56
 #~ msgid "Check Your Email"
@@ -299,8 +296,8 @@ msgstr "Change or Edit"
 #~ msgstr "Check your spam filter, or"
 
 #: components/Document/Submission/ReviewSubmissionDocumentHeader.tsx:89
-msgid "Choose another student"
-msgstr "Choose another student"
+#~ msgid "Choose another student"
+#~ msgstr "Choose another student"
 
 #: components/Trash/index.tsx:25
 #~ msgid "Class"
@@ -322,20 +319,20 @@ msgid "Click or drag file to this area to upload"
 msgstr "Click or drag file to this area to upload"
 
 #: components/Document/DocumentHeader.tsx:214
-msgid "Collapse/Expand Left Side"
-msgstr "Collapse/Expand Left Side"
+#~ msgid "Collapse/Expand Left Side"
+#~ msgstr "Collapse/Expand Left Side"
 
 #: components/Document/DocumentHeader.tsx:233
-msgid "Collapse/Expand Right Side"
-msgstr "Collapse/Expand Right Side"
+#~ msgid "Collapse/Expand Right Side"
+#~ msgstr "Collapse/Expand Right Side"
 
 #: components/Document/RightPanel/BlockMenu/TextStyles.tsx:127
-msgid "Color"
-msgstr "Color"
+#~ msgid "Color"
+#~ msgstr "Color"
 
 #: components/Document/RightPanel/FeedbackPanel.tsx:410
-msgid "COMMENTS"
-msgstr "COMMENTS"
+#~ msgid "COMMENTS"
+#~ msgstr "COMMENTS"
 
 #: components/ClassListManagement/MenuActions.tsx:65
 #~ msgid "Confirm Delete Class"
@@ -365,7 +362,7 @@ msgstr "COMMENTS"
 #~ msgid "Contact Media"
 #~ msgstr "Contact Media"
 
-#: components/DocumentV2/LeftSide/index.tsx:62
+#: components/Document/LeftSide/index.tsx:68
 msgid "Content"
 msgstr "Content"
 
@@ -374,12 +371,11 @@ msgstr "Content"
 #~ msgstr "Continue"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:204
-msgid "Continue on last submission"
-msgstr "Continue on last submission"
+#~ msgid "Continue on last submission"
+#~ msgstr "Continue on last submission"
 
-#: components/Document/DocumentSharing.tsx:32
 #: components/SpaceSetting/CreateSpaceInvite.tsx:115
-#: components/SpaceSetting/InviteSpaceSetting.tsx:118
+#: components/SpaceSetting/InviteSpaceSetting.tsx:137
 msgid "Copied!"
 msgstr "Copied!"
 
@@ -387,13 +383,13 @@ msgstr "Copied!"
 msgid "Copy"
 msgstr "Copy"
 
-#: components/SpaceSetting/InviteSpaceSetting.tsx:110
+#: components/SpaceSetting/InviteSpaceSetting.tsx:131
 msgid "Copy invite link"
 msgstr "Copy invite link"
 
 #: components/Document/DocumentSharing.tsx:63
-msgid "Copy public url"
-msgstr "Copy public url"
+#~ msgid "Copy public url"
+#~ msgstr "Copy public url"
 
 #: components/Document/LeftPanel/LessonItem.tsx:128
 #~ msgid "Copy to class"
@@ -401,28 +397,28 @@ msgstr "Copy public url"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/SingleChoice/SingleChoiceReview.tsx:49
 #: components/Document/RightPanel/SummarySection.tsx:32
-msgid "Correct"
-msgstr "Correct"
+#~ msgid "Correct"
+#~ msgstr "Correct"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/FillInBlank/FillInBlankReview.tsx:34
-msgid "Correct answer is"
-msgstr "Correct answer is"
+#~ msgid "Correct answer is"
+#~ msgstr "Correct answer is"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:60
-msgid "Correct answers"
-msgstr "Correct answers"
+#~ msgid "Correct answers"
+#~ msgstr "Correct answers"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/MultipleChoice/MultipleChoiceReview.tsx:54
-msgid "Correct."
-msgstr "Correct."
+#~ msgid "Correct."
+#~ msgstr "Correct."
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/MultipleChoice/MultipleChoiceReview.tsx:54
-msgid "Correct. Explain"
-msgstr "Correct. Explain"
+#~ msgid "Correct. Explain"
+#~ msgstr "Correct. Explain"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/SingleChoice/SingleChoiceReview.tsx:49
-msgid "Correct. Explain:"
-msgstr "Correct. Explain:"
+#~ msgid "Correct. Explain:"
+#~ msgstr "Correct. Explain:"
 
 #: components/ClassListManagement/ClassList.tsx:35
 #~ msgid "Create Class"
@@ -433,18 +429,18 @@ msgstr "Correct. Explain:"
 #~ msgstr "Create New Class"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:120
-msgid "Create new rubric"
-msgstr "Create new rubric"
+#~ msgid "Create new rubric"
+#~ msgstr "Create new rubric"
 
 #: components/SwitchSpace.tsx:82
 #~ msgid "Create space"
 #~ msgstr "Create space"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:87
-msgid "Created!"
-msgstr "Created!"
+#~ msgid "Created!"
+#~ msgstr "Created!"
 
-#: components/DocumentV2/LeftSide/ManageSpace.tsx:44
+#: components/Document/LeftSide/ManageSpace.tsx:44
 msgid "Created! We're moving you to your new space"
 msgstr "Created! We're moving you to your new space"
 
@@ -453,16 +449,16 @@ msgstr "Created! We're moving you to your new space"
 #~ msgstr "Creating..."
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:203
-msgid "Criteria"
-msgstr "Criteria"
+#~ msgid "Criteria"
+#~ msgstr "Criteria"
 
 #: components/ProfileSetting/SecuritySettings.tsx:112
 #~ msgid "Current Password"
 #~ msgstr "Current Password"
 
 #: components/Document/DocumentMoreSetting.tsx:137
-msgid "Default"
-msgstr "Default"
+#~ msgid "Default"
+#~ msgstr "Default"
 
 #: components/common/RichMarkdownEditor/BlockComponents/index.tsx:148
 #: components/common/RichMarkdownEditor/extensions/CommonEmbedExtension/CommonEmbedDropdownMenu.tsx:20
@@ -471,48 +467,45 @@ msgstr "Default"
 #: components/common/RichMarkdownEditor/extensions/RecordExtension/RecordBlock.tsx:294
 #: components/Document/DocumentMoreSetting.tsx:243
 #: components/Document/LeftPanel/LessonItem.tsx:119
-msgid "Delete"
-msgstr "Delete"
+#~ msgid "Delete"
+#~ msgstr "Delete"
 
 #: components/ProfileSetting/BasicInformation.tsx:125
 #~ msgid "Delete Avatar"
 #~ msgstr "Delete Avatar"
 
 #: components/Document/RightPanel/FeedbackPanel.tsx:238
-msgid "Delete Comment"
-msgstr "Delete Comment"
+#~ msgid "Delete Comment"
+#~ msgstr "Delete Comment"
 
 #: components/Document/DocumentMoreSetting.tsx:79
-msgid "Delete content successfully!"
-msgstr "Delete content successfully!"
+#~ msgid "Delete content successfully!"
+#~ msgstr "Delete content successfully!"
 
 #: components/Document/RightPanel/FeedbackPanel.tsx:221
-msgid "Delete Highlight"
-msgstr "Delete Highlight"
+#~ msgid "Delete Highlight"
+#~ msgstr "Delete Highlight"
 
 #: components/Document/DocumentSetting.tsx:180
-msgid "Delete permanently"
-msgstr "Delete permanently"
+#~ msgid "Delete permanently"
+#~ msgstr "Delete permanently"
 
 #: components/ClassListManagement/MenuActions.tsx:37
 #~ msgid "Deleted successfully!"
 #~ msgstr "Deleted successfully!"
 
-#: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:63
-#: components/Document/DocumentAssignedList.tsx:94
-#: components/Document/LeftPanel/LessonItem.tsx:76
-#: components/SpaceSetting/InviteSpaceSetting.tsx:48
+#: components/SpaceSetting/InviteSpaceSetting.tsx:58
 msgid "Deleted!"
 msgstr "Deleted!"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:176
 #: components/Document/AssignmentSetting/index.tsx:130
-msgid "Description"
-msgstr "Description"
+#~ msgid "Description"
+#~ msgstr "Description"
 
 #: components/Document/AssignmentSetting/index.tsx:138
-msgid "Description will show before your students start the submission"
-msgstr "Description will show before your students start the submission"
+#~ msgid "Description will show before your students start the submission"
+#~ msgstr "Description will show before your students start the submission"
 
 #: components/SpaceSetting/index.tsx:31
 msgid "Details"
@@ -523,12 +516,12 @@ msgstr "Details"
 #~ msgstr "Did not receive the email?"
 
 #: components/common/RichMarkdownEditor/extensions/PageBlockExtension/PageBlock.tsx:270
-msgid "Do you want delete this page block?"
-msgstr "Do you want delete this page block?"
+#~ msgid "Do you want delete this page block?"
+#~ msgstr "Do you want delete this page block?"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/QuizDropdownMenu.tsx:107
-msgid "Do you want delete this quiz?"
-msgstr "Do you want delete this quiz?"
+#~ msgid "Do you want delete this quiz?"
+#~ msgstr "Do you want delete this quiz?"
 
 #: components/DocumentTemplate/PreviewTemplate/index.tsx:51
 #~ msgid "Do you want to apply this template to current document?"
@@ -539,8 +532,8 @@ msgstr "Do you want delete this quiz?"
 #~ msgstr "Do you want to delete member?"
 
 #: components/common/RichMarkdownEditor/BlockComponents/index.tsx:120
-msgid "Do you want to delete this block?"
-msgstr "Do you want to delete this block?"
+#~ msgid "Do you want to delete this block?"
+#~ msgstr "Do you want to delete this block?"
 
 #: components/DocumentTemplate/EditCategoryModal.tsx:122
 #~ msgid "Do you want to delete this category?"
@@ -550,30 +543,30 @@ msgstr "Do you want to delete this block?"
 #~ msgid "Do you want to delete this document template?"
 #~ msgstr "Do you want to delete this document template?"
 
-#: components/SpaceSetting/InviteSpaceSetting.tsx:124
+#: components/SpaceSetting/InviteSpaceSetting.tsx:143
 msgid "Do you want to delete this invite link"
 msgstr "Do you want to delete this invite link"
 
 #: components/Document/DocumentMoreSetting.tsx:56
-msgid "Do you want to duplicate this document?"
-msgstr "Do you want to duplicate this document?"
+#~ msgid "Do you want to duplicate this document?"
+#~ msgstr "Do you want to duplicate this document?"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:353
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:175
-msgid "Do you want to remove {0}?"
-msgstr "Do you want to remove {0}?"
+#~ msgid "Do you want to remove {0}?"
+#~ msgstr "Do you want to remove {0}?"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:248
-msgid "Do you want to remove {level}?"
-msgstr "Do you want to remove {level}?"
+#~ msgid "Do you want to remove {level}?"
+#~ msgstr "Do you want to remove {level}?"
 
 #: components/SpaceSetting/MemberSpaceSetting.tsx:85
 msgid "Do you want to remove this member?"
 msgstr "Do you want to remove this member?"
 
 #: components/common/RichMarkdownEditor/extensions/FileExtension/FileBlockHeader.tsx:97
-msgid "Do you want to reset this file upload?"
-msgstr "Do you want to reset this file upload?"
+#~ msgid "Do you want to reset this file upload?"
+#~ msgstr "Do you want to reset this file upload?"
 
 #: components/DocumentVersionHistory/DocumentHistoryList.tsx:53
 #~ msgid "Do you want to restore this version?"
@@ -584,33 +577,33 @@ msgstr "Do you want to reset this file upload?"
 #~ msgstr "Do you want to save this document as template?"
 
 #: components/Document/LeftPanel/CreateContentButton.tsx:72
-msgid "Document"
-msgstr "Document"
+#~ msgid "Document"
+#~ msgstr "Document"
 
 #: components/Document/LeftPanel/index.tsx:83
-msgid "Documents"
-msgstr "Documents"
+#~ msgid "Documents"
+#~ msgstr "Documents"
 
 #: components/UserCredential/SignIn.tsx:163
 #~ msgid "Don't have an account"
 #~ msgstr "Don't have an account"
 
 #: components/common/RichMarkdownEditor/extensions/FileExtension/FileBlockHeader.tsx:161
-msgid "Download"
-msgstr "Download"
+#~ msgid "Download"
+#~ msgstr "Download"
 
 #: components/Document/RightPanel/AssignmentQuizzAnswersCSV.tsx:168
-msgid "Download (.csv)"
-msgstr "Download (.csv)"
+#~ msgid "Download (.csv)"
+#~ msgstr "Download (.csv)"
 
 #: components/common/RichMarkdownEditor/extensions/FileExtension/FileBlock.tsx:293
-msgid "Downloadable"
-msgstr "Downloadable"
+#~ msgid "Downloadable"
+#~ msgstr "Downloadable"
 
 #: components/Document/DocumentMoreSetting.tsx:235
 #: components/Document/LeftPanel/LessonItem.tsx:112
-msgid "Duplicate"
-msgstr "Duplicate"
+#~ msgid "Duplicate"
+#~ msgstr "Duplicate"
 
 #: components/Document/LeftPanel/CopyDocumentToClass.tsx:76
 #~ msgid "Duplicate to class"
@@ -618,8 +611,8 @@ msgstr "Duplicate"
 
 #: components/Document/DocumentMoreSetting.tsx:60
 #: components/Document/LeftPanel/LessonItem.tsx:69
-msgid "Duplicated!"
-msgstr "Duplicated!"
+#~ msgid "Duplicated!"
+#~ msgstr "Duplicated!"
 
 #: components/ClassListManagement/MenuActions.tsx:54
 #~ msgid "Duplicating..."
@@ -629,8 +622,7 @@ msgstr "Duplicated!"
 #~ msgid "Edit category"
 #~ msgstr "Edit category"
 
-#: components/Document/DocumentSetting.tsx:196
-#: components/DocumentV2/DocumentBody/CoverPage/CoverPhotoHeader.tsx:84
+#: components/Document/DocumentBody/CoverPage/CoverPhotoHeader.tsx:84
 msgid "Edit Cover"
 msgstr "Edit Cover"
 
@@ -643,8 +635,8 @@ msgstr "Edit Cover"
 #~ msgstr "Edit name"
 
 #: components/Document/RightPanel/RubricSection.tsx:97
-msgid "Edit score"
-msgstr "Edit score"
+#~ msgid "Edit score"
+#~ msgstr "Edit score"
 
 #: components/DocumentTemplate/EditTemplateModal.tsx:141
 #~ msgid "Edit template"
@@ -704,10 +696,10 @@ msgstr "Email"
 #~ msgstr "Enter your password"
 
 #: components/common/RichMarkdownEditor/extensions/FileExtension/FileBlockHeader.tsx:139
-msgid "Exit Full Screen"
-msgstr "Exit Full Screen"
+#~ msgid "Exit Full Screen"
+#~ msgstr "Exit Full Screen"
 
-#: components/SpaceSetting/InviteSpaceSetting.tsx:78
+#: components/SpaceSetting/InviteSpaceSetting.tsx:89
 msgid "Expire"
 msgstr "Expire"
 
@@ -715,22 +707,22 @@ msgstr "Expire"
 msgid "Expire after"
 msgstr "Expire after"
 
-#: components/SpaceSetting/InviteSpaceSetting.tsx:85
+#: components/SpaceSetting/InviteSpaceSetting.tsx:98
 msgid "Expired"
 msgstr "Expired"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/FillInBlank/FillInBlankReview.tsx:36
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/SingleChoice/SingleChoiceReview.tsx:59
-msgid "Explain"
-msgstr "Explain"
+#~ msgid "Explain"
+#~ msgstr "Explain"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/index.tsx:139
-msgid "Explain the answer"
-msgstr "Explain the answer"
+#~ msgid "Explain the answer"
+#~ msgstr "Explain the answer"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/FillInBlank/FillInBlankSetting.tsx:137
-msgid "Explain your answer"
-msgstr "Explain your answer"
+#~ msgid "Explain your answer"
+#~ msgstr "Explain your answer"
 
 #: components/DocumentVersionHistory/DocumentHistoryList.tsx:63
 #~ msgid "Failed to restore"
@@ -745,16 +737,16 @@ msgid "Failed! Please try again."
 msgstr "Failed! Please try again."
 
 #: components/common/RichMarkdownEditor/extensions/FeedbackText/FeedbackTextBlock.tsx:65
-msgid "feedback"
-msgstr "feedback"
+#~ msgid "feedback"
+#~ msgstr "feedback"
 
 #: components/Document/DocumentHeader.tsx:306
-msgid "Feedback"
-msgstr "Feedback"
+#~ msgid "Feedback"
+#~ msgstr "Feedback"
 
 #: components/Document/AssignmentStudentList.tsx:138
-msgid "Feedback at"
-msgstr "Feedback at"
+#~ msgid "Feedback at"
+#~ msgstr "Feedback at"
 
 #: components/Organization/OrganizationMembersTab.tsx:297
 #~ msgid "Filter by added at"
@@ -773,10 +765,10 @@ msgstr "First name"
 #~ msgstr "First Name"
 
 #: components/Document/DocumentHeader.tsx:291
-msgid "Focus Mode"
-msgstr "Focus Mode"
+#~ msgid "Focus Mode"
+#~ msgstr "Focus Mode"
 
-#: components/common/LearningModuleDnd/CreateContentButton.tsx:94
+#: components/common/LearningModuleDnd/CreateContentButton.tsx:88
 msgid "Folder"
 msgstr "Folder"
 
@@ -785,12 +777,12 @@ msgstr "Folder"
 #~ msgstr "Forgot password"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:306
-msgid "From point"
-msgstr "From point"
+#~ msgid "From point"
+#~ msgstr "From point"
 
 #: components/common/RichMarkdownEditor/extensions/FileExtension/FileBlockHeader.tsx:141
-msgid "Full Screen"
-msgstr "Full Screen"
+#~ msgid "Full Screen"
+#~ msgstr "Full Screen"
 
 #: components/SpaceSetting/index.tsx:31
 #~ msgid "General"
@@ -800,7 +792,7 @@ msgstr "Full Screen"
 msgid "Generate"
 msgstr "Generate"
 
-#: components/SpaceSetting/InviteSpaceSetting.tsx:145
+#: components/SpaceSetting/InviteSpaceSetting.tsx:161
 msgid "Generate Invite Link"
 msgstr "Generate Invite Link"
 
@@ -810,55 +802,55 @@ msgstr "Generate Invite Link"
 #: components/Document/DocumentHeader.tsx:335
 #: components/Document/RightPanel/GradeSection.tsx:87
 #: components/Document/RightPanel/GradeSection.tsx:122
-msgid "Grade"
-msgstr "Grade"
+#~ msgid "Grade"
+#~ msgstr "Grade"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:105
 #: components/Document/AssignmentStudentList.tsx:38
-msgid "Graded"
-msgstr "Graded"
+#~ msgid "Graded"
+#~ msgstr "Graded"
 
 #: components/Document/RightPanel/GradeSection.tsx:69
-msgid "Graded!"
-msgstr "Graded!"
+#~ msgid "Graded!"
+#~ msgstr "Graded!"
 
 #: components/Document/AssignmentSetting/index.tsx:156
-msgid "Hour : Minute : Second"
-msgstr "Hour : Minute : Second"
+#~ msgid "Hour : Minute : Second"
+#~ msgstr "Hour : Minute : Second"
 
 #: components/ClassListManagement/CreateClassModal.tsx:84
 #~ msgid "How about class title?"
 #~ msgstr "How about class title?"
 
 #: components/Document/AssignmentSetting/index.tsx:184
-msgid "ikigai"
-msgstr "ikigai"
+#~ msgid "ikigai"
+#~ msgstr "ikigai"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:157
-msgid "ikigai will auto calculate score and release to student."
-msgstr "ikigai will auto calculate score and release to student."
+#~ msgid "ikigai will auto calculate score and release to student."
+#~ msgstr "ikigai will auto calculate score and release to student."
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:151
-msgid "ikigai will try to pre-calculate score of submissions. But teacher need to review submission and feedback to student."
-msgstr "ikigai will try to pre-calculate score of submissions. But teacher need to review submission and feedback to student."
+#~ msgid "ikigai will try to pre-calculate score of submissions. But teacher need to review submission and feedback to student."
+#~ msgstr "ikigai will try to pre-calculate score of submissions. But teacher need to review submission and feedback to student."
 
 #: components/Document/AssignmentStudentList.tsx:39
-msgid "In Doing"
-msgstr "In Doing"
+#~ msgid "In Doing"
+#~ msgstr "In Doing"
 
 #: components/Document/RightPanel/BlockMenu/index.tsx:11
-msgid "Insert Blocks"
-msgstr "Insert Blocks"
+#~ msgid "Insert Blocks"
+#~ msgstr "Insert Blocks"
 
 #: components/IdentityInput/index.tsx:42
 msgid "Invalid email"
 msgstr "Invalid email"
 
-#: components/SpaceSetting/InviteSpaceSetting.tsx:66
+#: components/SpaceSetting/InviteSpaceSetting.tsx:77
 msgid "Invite token"
 msgstr "Invite token"
 
-#: components/SpaceSetting/InviteSpaceSetting.tsx:54
+#: components/SpaceSetting/InviteSpaceSetting.tsx:64
 msgid "Inviter"
 msgstr "Inviter"
 
@@ -867,7 +859,7 @@ msgid "Invites"
 msgstr "Invites"
 
 #: components/SpaceSetting/CreateSpaceInvite.tsx:76
-#: components/SpaceSetting/InviteSpaceSetting.tsx:72
+#: components/SpaceSetting/InviteSpaceSetting.tsx:83
 msgid "Inviting role"
 msgstr "Inviting role"
 
@@ -908,12 +900,12 @@ msgstr "Last name"
 #~ msgstr "Library"
 
 #: components/Document/AssignmentSetting/index.tsx:209
-msgid "Limit"
-msgstr "Limit"
+#~ msgid "Limit"
+#~ msgstr "Limit"
 
 #: components/Document/AssignmentSetting/index.tsx:196
-msgid "Limit the number of times to take the assignment"
-msgstr "Limit the number of times to take the assignment"
+#~ msgid "Limit the number of times to take the assignment"
+#~ msgstr "Limit the number of times to take the assignment"
 
 #: components/UserCredential/SignIn.tsx:136
 #~ msgid "Login"
@@ -933,8 +925,8 @@ msgstr "Limit the number of times to take the assignment"
 #~ msgstr "Logout"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:138
-msgid "Manual"
-msgstr "Manual"
+#~ msgid "Manual"
+#~ msgstr "Manual"
 
 #: components/SpaceSetting/MemberSpaceSetting.tsx:67
 msgid "Member since"
@@ -945,8 +937,8 @@ msgid "Members"
 msgstr "Members"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:130
-msgid "Method"
-msgstr "Method"
+#~ msgid "Method"
+#~ msgstr "Method"
 
 #: components/Organization/BrandingSetting.tsx:64
 #~ msgid "Minimum length of organization name is 3. Maximum length of organization name is 100."
@@ -954,20 +946,20 @@ msgstr "Method"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:61
 #: components/Document/RightPanel/SummarySection.tsx:61
-msgid "minutes"
-msgstr "minutes"
+#~ msgid "minutes"
+#~ msgstr "minutes"
 
 #: components/Document/DocumentMoreSetting.tsx:161
-msgid "Mono"
-msgstr "Mono"
+#~ msgid "Mono"
+#~ msgstr "Mono"
 
 #: components/Document/RightPanel/BlockMenu/TextColorPicker.tsx:101
-msgid "More colors"
-msgstr "More colors"
+#~ msgid "More colors"
+#~ msgstr "More colors"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/index.tsx:124
-msgid "Multiple Choice"
-msgstr "Multiple Choice"
+#~ msgid "Multiple Choice"
+#~ msgstr "Multiple Choice"
 
 #: components/ProfileSetting/ProfileLeftMenu.tsx:54
 #~ msgid "My Account"
@@ -977,29 +969,28 @@ msgstr "Multiple Choice"
 #~ msgid "My Profile"
 #~ msgstr "My Profile"
 
-#: components/Document/DocumentAssignedList.tsx:101
 #: components/SpaceSetting/MemberSpaceSetting.tsx:43
 msgid "Name"
 msgstr "Name"
 
-#: components/SpaceSetting/InviteSpaceSetting.tsx:91
+#: components/SpaceSetting/InviteSpaceSetting.tsx:108
 msgid "Never"
 msgstr "Never"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:110
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:195
-msgid "New attempt"
-msgstr "New attempt"
+#~ msgid "New attempt"
+#~ msgstr "New attempt"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:111
-msgid "New Attempt will remove answers in previous submission"
-msgstr "New Attempt will remove answers in previous submission"
+#~ msgid "New Attempt will remove answers in previous submission"
+#~ msgstr "New Attempt will remove answers in previous submission"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/FillInBlank/FillInBlankSetting.tsx:129
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/MultipleChoiceSetting.tsx:113
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/SingleChoiceSetting.tsx:127
-msgid "New Option"
-msgstr "New Option"
+#~ msgid "New Option"
+#~ msgstr "New Option"
 
 #: components/ProfileSetting/SecuritySettings.tsx:126
 #~ msgid "New Password"
@@ -1009,7 +1000,7 @@ msgstr "New Option"
 #~ msgid "New password:"
 #~ msgstr "New password:"
 
-#: components/DocumentV2/LeftSide/ManageSpace.tsx:83
+#: components/Document/LeftSide/ManageSpace.tsx:83
 msgid "New space"
 msgstr "New space"
 
@@ -1018,28 +1009,28 @@ msgid "No document"
 msgstr "No document"
 
 #: components/Document/AssignmentSetting/index.tsx:206
-msgid "No limit"
-msgstr "No limit"
+#~ msgid "No limit"
+#~ msgstr "No limit"
 
 #: components/Document/DocumentMoreSetting.tsx:335
 #~ msgid "No students can access."
 #~ msgstr "No students can access."
 
 #: components/Document/AssignmentStudentList.tsx:37
-msgid "Not Submitted"
-msgstr "Not Submitted"
+#~ msgid "Not Submitted"
+#~ msgstr "Not Submitted"
 
 #: components/common/RichMarkdownEditor/extensions/RecordExtension/RecordBlock.tsx:388
-msgid "OK"
-msgstr "OK"
+#~ msgid "OK"
+#~ msgstr "OK"
 
 #: components/ErrorBoundary.tsx:45
 msgid "Oops! We found a error."
 msgstr "Oops! We found a error."
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/QuizDropdownMenu.tsx:129
-msgid "Open settings"
-msgstr "Open settings"
+#~ msgid "Open settings"
+#~ msgstr "Open settings"
 
 #: components/ClassListManagement/MenuActions.tsx:96
 #~ msgid "Options"
@@ -1073,6 +1064,10 @@ msgstr "Open settings"
 #~ msgid "Page History"
 #~ msgstr "Page History"
 
+#: components/Document/RightSide/index.tsx:30
+msgid "Pages"
+msgstr "Pages"
+
 #: components/AddMember.tsx:118
 #: components/UserCredential/SignIn.tsx:99
 #~ msgid "Password"
@@ -1095,16 +1090,16 @@ msgstr "Open settings"
 #~ msgstr "Password must be 8 chars or longer"
 
 #: components/common/RichMarkdownEditor/RichMarkdownEditor.tsx:210
-msgid "Pasted file processing"
-msgstr "Pasted file processing"
+#~ msgid "Pasted file processing"
+#~ msgstr "Pasted file processing"
 
 #: components/Document/DocumentSharing.tsx:45
-msgid "People can access this page via the address below."
-msgstr "People can access this page via the address below."
+#~ msgid "People can access this page via the address below."
+#~ msgstr "People can access this page via the address below."
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/index.tsx:54
-msgid "Please choose the correct answer and save again!"
-msgstr "Please choose the correct answer and save again!"
+#~ msgid "Please choose the correct answer and save again!"
+#~ msgstr "Please choose the correct answer and save again!"
 
 #: components/UserCredential/SignUp.tsx:163
 #~ msgid "Please enter your email"
@@ -1117,16 +1112,16 @@ msgstr "Please choose the correct answer and save again!"
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:275
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:297
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:312
-msgid "point"
-msgstr "point"
+#~ msgid "point"
+#~ msgstr "point"
 
 #: components/UserCredential/AuthLayout.tsx:86
 msgid "Powered by ikigai"
 msgstr "Powered by ikigai"
 
 #: components/Document/AssignmentSetting/index.tsx:134
-msgid "Pre-Assignment Descriptions"
-msgstr "Pre-Assignment Descriptions"
+#~ msgid "Pre-Assignment Descriptions"
+#~ msgstr "Pre-Assignment Descriptions"
 
 #: components/UserCredential/NewAuthLayout.tsx:78
 #~ msgid "Privacy & Terms"
@@ -1149,51 +1144,50 @@ msgstr "Profile"
 #~ msgstr "Public"
 
 #: components/Document/DocumentSharing.tsx:41
-msgid "Publish document"
-msgstr "Publish document"
+#~ msgid "Publish document"
+#~ msgstr "Publish document"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/index.tsx:104
-msgid "Question"
-msgstr "Question"
+#~ msgid "Question"
+#~ msgstr "Question"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:161
-msgid "questions"
-msgstr "questions"
+#~ msgid "questions"
+#~ msgstr "questions"
 
 #: components/Document/DocumentHeader.tsx:335
-msgid "Questions"
-msgstr "Questions"
+#~ msgid "Questions"
+#~ msgstr "Questions"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/SingleChoiceSetting.tsx:62
-msgid "Quick create"
-msgstr "Quick create"
+#~ msgid "Quick create"
+#~ msgstr "Quick create"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizBlock.tsx:332
-msgid "Quiz Settings"
-msgstr "Quiz Settings"
+#~ msgid "Quiz Settings"
+#~ msgstr "Quiz Settings"
 
 #: components/Trash/index.tsx:14
 #~ msgid "Recently Deleted"
 #~ msgstr "Recently Deleted"
 
 #: components/common/RichMarkdownEditor/extensions/RecordExtension/RecordBlock.tsx:132
-msgid "Recording Failed"
-msgstr "Recording Failed"
+#~ msgid "Recording Failed"
+#~ msgstr "Recording Failed"
 
 #: components/Document/ServerDocumentFetchError.tsx:26
-msgid "Reload"
-msgstr "Reload"
+#~ msgid "Reload"
+#~ msgstr "Reload"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:66
-msgid "Remaining"
-msgstr "Remaining"
+#~ msgid "Remaining"
+#~ msgstr "Remaining"
 
 #: components/Document/DocumentAssignedList.tsx:118
-msgid "Remove assigned user"
-msgstr "Remove assigned user"
+#~ msgid "Remove assigned user"
+#~ msgstr "Remove assigned user"
 
-#: components/Document/DocumentSetting.tsx:141
-#: components/DocumentV2/DocumentBody/CoverPage/CoverPhotoHeader.tsx:55
+#: components/Document/DocumentBody/CoverPage/CoverPhotoHeader.tsx:55
 msgid "Remove Cover"
 msgstr "Remove Cover"
 
@@ -1209,29 +1203,33 @@ msgstr "Remove member"
 #~ msgid "Remove member successfully!"
 #~ msgstr "Remove member successfully!"
 
+#: components/Document/RightSide/PageContentItem.tsx:46
+msgid "Remove page"
+msgstr "Remove page"
+
 #: components/SpaceSetting/MemberSpaceSetting.tsx:36
 msgid "Removed!"
 msgstr "Removed!"
 
 #: components/common/RichMarkdownEditor/extensions/RecordExtension/RecordBlock.tsx:283
-msgid "Replace record"
-msgstr "Replace record"
+#~ msgid "Replace record"
+#~ msgstr "Replace record"
 
 #: components/Document/RightPanel/GradeSection.tsx:77
-msgid "Request student redo successfully!"
-msgstr "Request student redo successfully!"
+#~ msgid "Request student redo successfully!"
+#~ msgstr "Request student redo successfully!"
 
 #: components/Document/RightPanel/GradeSection.tsx:133
-msgid "Request to redo"
-msgstr "Request to redo"
+#~ msgid "Request to redo"
+#~ msgstr "Request to redo"
 
 #: components/UserCredential/SignUp.tsx:215
 #~ msgid "Required field"
 #~ msgstr "Required field"
 
 #: components/common/RichMarkdownEditor/extensions/FileExtension/FileBlockHeader.tsx:170
-msgid "Reset"
-msgstr "Reset"
+#~ msgid "Reset"
+#~ msgstr "Reset"
 
 #: components/UserCredential/ForgotPassForm.tsx:51
 #: components/UserCredential/ForgotPassForm.tsx:76
@@ -1247,8 +1245,8 @@ msgstr "Reset"
 #~ msgstr "Reset your password"
 
 #: components/Document/DocumentSetting.tsx:173
-msgid "Restore"
-msgstr "Restore"
+#~ msgid "Restore"
+#~ msgstr "Restore"
 
 #: components/Trash/DeletedDocumentList.tsx:34
 #: components/Trash/DeletedSpaceList.tsx:34
@@ -1260,51 +1258,51 @@ msgstr "Restore"
 #~ msgstr "Restoring"
 
 #: components/Document/AssignmentStudentList.tsx:209
-msgid "Review & Grade"
-msgstr "Review & Grade"
+#~ msgid "Review & Grade"
+#~ msgstr "Review & Grade"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:205
-msgid "Review last submission"
-msgstr "Review last submission"
+#~ msgid "Review last submission"
+#~ msgstr "Review last submission"
 
 #: components/Document/DocumentHeader.tsx:321
-msgid "Review setting quizzes"
-msgstr "Review setting quizzes"
+#~ msgid "Review setting quizzes"
+#~ msgstr "Review setting quizzes"
 
 #: components/SpaceSetting/MemberSpaceSetting.tsx:56
 msgid "Role"
 msgstr "Role"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:144
-msgid "Rubric"
-msgstr "Rubric"
+#~ msgid "Rubric"
+#~ msgstr "Rubric"
 
 #: components/Document/RightPanel/RubricSection.tsx:120
-msgid "RUBRIC"
-msgstr "RUBRIC"
+#~ msgid "RUBRIC"
+#~ msgstr "RUBRIC"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:205
-msgid "Rubric Config"
-msgstr "Rubric Config"
+#~ msgid "Rubric Config"
+#~ msgstr "Rubric Config"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:96
-msgid "Rubric Management"
-msgstr "Rubric Management"
+#~ msgid "Rubric Management"
+#~ msgstr "Rubric Management"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:405
-msgid "Rubric Type"
-msgstr "Rubric Type"
+#~ msgid "Rubric Type"
+#~ msgstr "Rubric Type"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:103
-msgid "Rubrics consist of rows and columns. The rows correspond to the criteria. The columns correspond to the level of achievement that describes each criterion."
-msgstr "Rubrics consist of rows and columns. The rows correspond to the criteria. The columns correspond to the level of achievement that describes each criterion."
+#~ msgid "Rubrics consist of rows and columns. The rows correspond to the criteria. The columns correspond to the level of achievement that describes each criterion."
+#~ msgstr "Rubrics consist of rows and columns. The rows correspond to the criteria. The columns correspond to the level of achievement that describes each criterion."
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/FillInBlank/FillInBlankSetting.tsx:148
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/index.tsx:152
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:399
 #: components/Document/AssignmentSetting/index.tsx:247
-msgid "Save"
-msgstr "Save"
+#~ msgid "Save"
+#~ msgstr "Save"
 
 #: components/Document/DocumentMoreSetting.tsx:266
 #~ msgid "Save as Template"
@@ -1319,12 +1317,12 @@ msgstr "Save"
 #~ msgstr "Saved!"
 
 #: components/Document/DocumentHeader.tsx:159
-msgid "Saving"
-msgstr "Saving"
+#~ msgid "Saving"
+#~ msgstr "Saving"
 
 #: components/Document/RightPanel/BlockMenu/InsertBlocks.tsx:72
-msgid "Search"
-msgstr "Search"
+#~ msgid "Search"
+#~ msgstr "Search"
 
 #: components/ProfileSetting/ProfileLeftMenu.tsx:58
 #: components/ProfileSetting/SecuritySettings.tsx:94
@@ -1332,17 +1330,17 @@ msgstr "Search"
 #~ msgstr "Security Settings"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:181
-msgid "Select a bandscore"
-msgstr "Select a bandscore"
+#~ msgid "Select a bandscore"
+#~ msgstr "Select a bandscore"
 
 #: components/common/RichMarkdownEditor/extensions/PageBlockExtension/PageBlock.tsx:283
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/QuizDropdownMenu.tsx:120
-msgid "Select and copy"
-msgstr "Select and copy"
+#~ msgid "Select and copy"
+#~ msgstr "Select and copy"
 
 #: components/common/RichMarkdownEditor/BlockComponents/index.tsx:136
-msgid "Select and Copy"
-msgstr "Select and Copy"
+#~ msgid "Select and Copy"
+#~ msgstr "Select and Copy"
 
 #: components/Organization/OrganizationMembersTab.tsx:285
 #~ msgid "Select Role"
@@ -1361,36 +1359,40 @@ msgid "Sent. Please check your email inbox!"
 msgstr "Sent. Please check your email inbox!"
 
 #: components/Document/DocumentAssignedList.tsx:142
-msgid "Seperated by commas or space"
-msgstr "Seperated by commas or space"
+#~ msgid "Seperated by commas or space"
+#~ msgstr "Seperated by commas or space"
 
 #: components/Document/DocumentMoreSetting.tsx:149
-msgid "Serif"
-msgstr "Serif"
+#~ msgid "Serif"
+#~ msgstr "Serif"
 
 #: components/Document/RightPanel/SettingQuizzes.tsx:11
-msgid "Setting quizzes review"
-msgstr "Setting quizzes review"
+#~ msgid "Setting quizzes review"
+#~ msgstr "Setting quizzes review"
 
 #: components/Document/DocumentHeader.tsx:252
-msgid "Settings"
-msgstr "Settings"
+#~ msgid "Settings"
+#~ msgstr "Settings"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:162
-msgid "Setup the rubric for this assignment. Teacher will grade submissions by following the rubric criteria."
-msgstr "Setup the rubric for this assignment. Teacher will grade submissions by following the rubric criteria."
+#~ msgid "Setup the rubric for this assignment. Teacher will grade submissions by following the rubric criteria."
+#~ msgstr "Setup the rubric for this assignment. Teacher will grade submissions by following the rubric criteria."
 
 #: components/Document/DocumentHeader.tsx:277
-msgid "Share"
-msgstr "Share"
+#~ msgid "Share"
+#~ msgstr "Share"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/index.tsx:121
-msgid "Single Choice"
-msgstr "Single Choice"
+#~ msgid "Single Choice"
+#~ msgstr "Single Choice"
+
+#: components/Document/RightSide/PageTabContent.tsx:63
+msgid "Single page"
+msgstr "Single page"
 
 #: components/Document/DocumentMoreSetting.tsx:168
-msgid "Size"
-msgstr "Size"
+#~ msgid "Size"
+#~ msgstr "Size"
 
 #: components/Trash/index.tsx:25
 #~ msgid "Space"
@@ -1404,7 +1406,7 @@ msgstr "Space invite link"
 msgid "Space name"
 msgstr "Space name"
 
-#: components/DocumentV2/LeftSide/ManageSpace.tsx:58
+#: components/Document/LeftSide/ManageSpace.tsx:58
 msgid "Space Setting"
 msgstr "Space Setting"
 
@@ -1412,55 +1414,58 @@ msgstr "Space Setting"
 msgid "Space settings"
 msgstr "Space settings"
 
+#: components/Document/RightSide/PageTabContent.tsx:69
+msgid "Split page"
+msgstr "Split page"
+
 #: components/Document/RightPanel/SummarySection.tsx:68
-msgid "Start at"
-msgstr "Start at"
+#~ msgid "Start at"
+#~ msgstr "Start at"
 
 #: components/common/RichMarkdownEditor/extensions/RecordExtension/RecordBlock.tsx:348
-msgid "Start audio recording"
-msgstr "Start audio recording"
+#~ msgid "Start audio recording"
+#~ msgstr "Start audio recording"
 
 #: components/common/RichMarkdownEditor/extensions/RecordExtension/RecordBlock.tsx:349
-msgid "Start video recording"
-msgstr "Start video recording"
+#~ msgid "Start video recording"
+#~ msgstr "Start video recording"
 
 #: components/Document/AssignmentStudentList.tsx:154
-msgid "Status"
-msgstr "Status"
+#~ msgid "Status"
+#~ msgstr "Status"
 
 #: components/Document/AssignmentSetting/index.tsx:177
-msgid "Structured Assignment"
-msgstr "Structured Assignment"
+#~ msgid "Structured Assignment"
+#~ msgstr "Structured Assignment"
 
-#: components/Document/AssignmentStudentList.tsx:104
 #: components/SpaceSetting/CreateSpaceInvite.tsx:81
 msgid "Student"
 msgstr "Student"
 
 #: components/Document/AssignmentSetting/index.tsx:187
-msgid "Student can do anything, included setup of teacher."
-msgstr "Student can do anything, included setup of teacher."
+#~ msgid "Student can do anything, included setup of teacher."
+#~ msgstr "Student can do anything, included setup of teacher."
 
 #: components/Document/AssignmentSetting/index.tsx:180
-msgid "Student will follow setup of teacher."
-msgstr "Student will follow setup of teacher."
+#~ msgid "Student will follow setup of teacher."
+#~ msgstr "Student will follow setup of teacher."
 
 #: components/Document/DocumentMoreSetting.tsx:341
 #~ msgid "Students can access."
 #~ msgstr "Students can access."
 
 #: components/Document/DocumentMoreSetting.tsx:125
-msgid "Style"
-msgstr "Style"
+#~ msgid "Style"
+#~ msgstr "Style"
 
 #: components/Document/RightPanel/BlockMenu/TextStyles.tsx:77
-msgid "Styles"
-msgstr "Styles"
+#~ msgid "Styles"
+#~ msgstr "Styles"
 
 #: components/Document/Assignment/AssignmentHeader.tsx:54
 #: components/Document/AssignmentStudentList.tsx:251
-msgid "Submission List"
-msgstr "Submission List"
+#~ msgid "Submission List"
+#~ msgstr "Submission List"
 
 #: components/Document/Submission/DoingSubmissionDocument.tsx:95
 #~ msgid "Submit"
@@ -1468,20 +1473,20 @@ msgstr "Submission List"
 
 #: components/Document/AssignmentStudentList.tsx:122
 #: components/Document/RightPanel/SummarySection.tsx:78
-msgid "Submit at"
-msgstr "Submit at"
+#~ msgid "Submit at"
+#~ msgstr "Submit at"
 
 #: components/Document/AssignmentStudentList.tsx:36
-msgid "Submitted"
-msgstr "Submitted"
+#~ msgid "Submitted"
+#~ msgstr "Submitted"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:127
-msgid "Successfully!"
-msgstr "Successfully!"
+#~ msgid "Successfully!"
+#~ msgstr "Successfully!"
 
 #: components/Document/RightPanel/SummarySection.tsx:25
-msgid "SUMMARY"
-msgstr "SUMMARY"
+#~ msgid "SUMMARY"
+#~ msgstr "SUMMARY"
 
 #: components/SwitchSpace.tsx:58
 #~ msgid "Switch space"
@@ -1492,8 +1497,8 @@ msgstr "SUMMARY"
 #~ msgstr "Switch spaces"
 
 #: components/Document/AssignmentSetting/index.tsx:40
-msgid "Tag"
-msgstr "Tag"
+#~ msgid "Tag"
+#~ msgstr "Tag"
 
 #: components/DocumentTemplate/EditCategoryModal.tsx:162
 #: components/DocumentTemplate/EditTemplateModal.tsx:155
@@ -1509,73 +1514,77 @@ msgstr "Teacher"
 #~ msgstr "Templates"
 
 #: components/Document/RightPanel/SummarySection.tsx:42
-msgid "Temporary Grade"
-msgstr "Temporary Grade"
+#~ msgid "Temporary Grade"
+#~ msgstr "Temporary Grade"
 
 #: components/Document/AssignmentSetting/index.tsx:152
-msgid "Test Duration"
-msgstr "Test Duration"
+#~ msgid "Test Duration"
+#~ msgstr "Test Duration"
 
 #: components/Document/RightPanel/BlockMenu/TextStyles.tsx:105
-msgid "Text"
-msgstr "Text"
+#~ msgid "Text"
+#~ msgstr "Text"
 
 #: components/Document/RightPanel/BlockMenu/index.tsx:16
-msgid "Text Styles"
-msgstr "Text Styles"
+#~ msgid "Text Styles"
+#~ msgstr "Text Styles"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/FillInBlank/FillInBlankSetting.tsx:101
-msgid "The option that accepts input with sensitive (uppercase and lowercase) characters and trims leading and trailing spaces."
-msgstr "The option that accepts input with sensitive (uppercase and lowercase) characters and trims leading and trailing spaces."
+#~ msgid "The option that accepts input with sensitive (uppercase and lowercase) characters and trims leading and trailing spaces."
+#~ msgstr "The option that accepts input with sensitive (uppercase and lowercase) characters and trims leading and trailing spaces."
 
 #: components/Document/ServerDocumentFetchError.tsx:18
-msgid "There are some problems with this document. {fetchError}"
-msgstr "There are some problems with this document. {fetchError}"
+#~ msgid "There are some problems with this document. {fetchError}"
+#~ msgstr "There are some problems with this document. {fetchError}"
 
 #: components/Document/DocumentMoreSetting.tsx:71
 #: components/Document/LeftPanel/LessonItem.tsx:126
-msgid ""
-"This action cannot be undone. Once you delete this, \n"
-"you will lose all the content and settings associated with it."
-msgstr ""
-"This action cannot be undone. Once you delete this, \n"
-"you will lose all the content and settings associated with it."
+#~ msgid ""
+#~ "This action cannot be undone. Once you delete this, \n"
+#~ "you will lose all the content and settings associated with it."
+#~ msgstr ""
+#~ "This action cannot be undone. Once you delete this, \n"
+#~ "you will lose all the content and settings associated with it."
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:92
-msgid "This assignment will be counted into final grade."
-msgstr "This assignment will be counted into final grade."
+#~ msgid "This assignment will be counted into final grade."
+#~ msgstr "This assignment will be counted into final grade."
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:87
-msgid "This assignment will not be counted into final grade."
-msgstr "This assignment will not be counted into final grade."
+#~ msgid "This assignment will not be counted into final grade."
+#~ msgstr "This assignment will not be counted into final grade."
 
 #: components/Document/DocumentSetting.tsx:166
-msgid "This document is in the trash."
-msgstr "This document is in the trash."
+#~ msgid "This document is in the trash."
+#~ msgstr "This document is in the trash."
 
 #: components/Document/RightPanel/SummarySection.tsx:56
-msgid "Time complete"
-msgstr "Time complete"
+#~ msgid "Time complete"
+#~ msgstr "Time complete"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:321
-msgid "To point"
-msgstr "To point"
+#~ msgid "To point"
+#~ msgstr "To point"
 
 #: components/common/RichMarkdownEditor/extensions/RecordExtension/RecordBlock.tsx:141
-msgid ""
-"To start recording your {0}, please allow us to access your {1} by clicking 'Allow Access' button.\n"
-"This will allow your voice to be captured and used as part of your education experience"
-msgstr ""
-"To start recording your {0}, please allow us to access your {1} by clicking 'Allow Access' button.\n"
-"This will allow your voice to be captured and used as part of your education experience"
+#~ msgid ""
+#~ "To start recording your {0}, please allow us to access your {1} by clicking 'Allow Access' button.\n"
+#~ "This will allow your voice to be captured and used as part of your education experience"
+#~ msgstr ""
+#~ "To start recording your {0}, please allow us to access your {1} by clicking 'Allow Access' button.\n"
+#~ "This will allow your voice to be captured and used as part of your education experience"
+
+#: components/Document/RightSide/index.tsx:46
+msgid "Tools"
+msgstr "Tools"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/SingleChoiceSetting.tsx:72
-msgid "True, False, Not Given"
-msgstr "True, False, Not Given"
+#~ msgid "True, False, Not Given"
+#~ msgstr "True, False, Not Given"
 
 #: components/Document/DocumentMoreSetting.tsx:100
-msgid "Try again!"
-msgstr "Try again!"
+#~ msgid "Try again!"
+#~ msgstr "Try again!"
 
 #: components/UserCredential/ResetPasswordForm.tsx:114
 #~ msgid "try another email again!"
@@ -1586,16 +1595,16 @@ msgid "Try to reload!"
 msgstr "Try to reload!"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:82
-msgid "Type"
-msgstr "Type"
+#~ msgid "Type"
+#~ msgstr "Type"
 
 #: components/SpaceSetting/GeneralSpaceSetting.tsx:52
 msgid "Type space name..."
 msgstr "Type space name..."
 
 #: components/Document/AssignmentSetting/index.tsx:217
-msgid "Type the limitation number"
-msgstr "Type the limitation number"
+#~ msgid "Type the limitation number"
+#~ msgstr "Type the limitation number"
 
 #: components/Organization/OrganizationMembersTab.tsx:271
 #~ msgid "Type to search"
@@ -1612,12 +1621,12 @@ msgstr "Type the limitation number"
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/FillInBlank/FillInBlankSetting.tsx:111
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/MultipleChoiceSetting.tsx:93
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/SingleChoiceSetting.tsx:107
-msgid "Type your answer option"
-msgstr "Type your answer option"
+#~ msgid "Type your answer option"
+#~ msgstr "Type your answer option"
 
 #: components/Document/AssignmentSetting/index.tsx:144
-msgid "Type your assignment description"
-msgstr "Type your assignment description"
+#~ msgid "Type your assignment description"
+#~ msgstr "Type your assignment description"
 
 #: components/ClassListManagement/CreateClassModal.tsx:91
 #~ msgid "Type your class name..."
@@ -1633,49 +1642,51 @@ msgid "Type your email!"
 msgstr "Type your email!"
 
 #: components/Document/RightPanel/GradeSection.tsx:102
-msgid "Type your feedback"
-msgstr "Type your feedback"
+#~ msgid "Type your feedback"
+#~ msgstr "Type your feedback"
 
 #: components/DocumentTemplate/EditCategoryModal.tsx:155
 #~ msgid "Typing category name"
 #~ msgstr "Typing category name"
 
+#: components/Document/DocumentBody/Editor/index.tsx:42
+msgid "Typing content here..."
+msgstr "Typing content here..."
+
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:229
-msgid "Typing criteria"
-msgstr "Typing criteria"
+#~ msgid "Typing criteria"
+#~ msgstr "Typing criteria"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:243
-msgid "Typing level"
-msgstr "Typing level"
+#~ msgid "Typing level"
+#~ msgstr "Typing level"
 
 #: components/DocumentTemplate/EditTemplateModal.tsx:148
 #~ msgid "Typing template name"
 #~ msgstr "Typing template name"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/Rubric.tsx:334
-msgid "Typing your description"
-msgstr "Typing your description"
+#~ msgid "Typing your description"
+#~ msgstr "Typing your description"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/index.tsx:102
-msgid "Ungraded"
-msgstr "Ungraded"
+#~ msgid "Ungraded"
+#~ msgstr "Ungraded"
 
-#: components/Document/LeftPanel/index.tsx:44
-#: components/DocumentV2/LeftSide/index.tsx:30
+#: components/Document/LeftSide/index.tsx:30
 msgid "Unknown"
 msgstr "Unknown"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:69
-msgid "Unlimited"
-msgstr "Unlimited"
+#~ msgid "Unlimited"
+#~ msgstr "Unlimited"
 
 #: components/Document/Assignment/ReviewAssignmentDocument.tsx:62
-msgid "Unlimited time"
-msgstr "Unlimited time"
+#~ msgid "Unlimited time"
+#~ msgstr "Unlimited time"
 
-#: components/Document/Assignment/ReviewAssignmentDocument.tsx:154
-#: components/Document/DocumentSetting.tsx:232
-#: components/DocumentV2/DocumentBody/CoverPage/index.tsx:59
+#: components/Document/DocumentBody/ContentPage/index.tsx:42
+#: components/Document/DocumentBody/CoverPage/index.tsx:57
 msgid "Untitled"
 msgstr "Untitled"
 
@@ -1685,8 +1696,8 @@ msgid "Update"
 msgstr "Update"
 
 #: components/Document/AssignmentSetting/index.tsx:85
-msgid "Update assignment successfully"
-msgstr "Update assignment successfully"
+#~ msgid "Update assignment successfully"
+#~ msgstr "Update assignment successfully"
 
 #: components/ProfileSetting/SecuritySettings.tsx:70
 #~ msgid "Update password successfully"
@@ -1701,8 +1712,7 @@ msgstr "Updated!"
 msgid "Upload"
 msgstr "Upload"
 
-#: components/Document/DocumentSetting.tsx:133
-#: components/DocumentV2/DocumentBody/CoverPage/CoverPhotoHeader.tsx:46
+#: components/Document/DocumentBody/CoverPage/CoverPhotoHeader.tsx:46
 msgid "Upload Cover"
 msgstr "Upload Cover"
 
@@ -1723,41 +1733,40 @@ msgid "uploaded successfully."
 msgstr "uploaded successfully."
 
 #: components/common/RichMarkdownEditor/RichMarkdownEditor.tsx:211
-msgid "Uploaded!"
-msgstr "Uploaded!"
+#~ msgid "Uploaded!"
+#~ msgstr "Uploaded!"
 
 #: components/DocumentTemplate/PreviewTemplate/index.tsx:131
 #~ msgid "Use template"
 #~ msgstr "Use template"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:146
-msgid "Use this rubric"
-msgstr "Use this rubric"
+#~ msgid "Use this rubric"
+#~ msgstr "Use this rubric"
 
 #: components/ProfileSetting/ProfileLeftMenu.tsx:51
 #~ msgid "User Settings"
 #~ msgstr "User Settings"
 
-#: components/SpaceSetting/InviteSpaceSetting.tsx:95
+#: components/SpaceSetting/InviteSpaceSetting.tsx:114
 msgid "Uses"
 msgstr "Uses"
 
 #: components/common/PanelDetail.tsx:42
-#: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:157
 msgid "View"
 msgstr "View"
 
 #: components/Document/AssignmentSetting/AssignmentGradeSettingTab/RubricManagement.tsx:156
-msgid "View and Edit"
-msgstr "View and Edit"
+#~ msgid "View and Edit"
+#~ msgstr "View and Edit"
 
 #: components/Document/DocumentMoreSetting.tsx:316
 #~ msgid "Visible Mode"
 #~ msgstr "Visible Mode"
 
 #: components/common/FilePreview.tsx:222
-msgid "We do not yet support the preview of this file"
-msgstr "We do not yet support the preview of this file"
+#~ msgid "We do not yet support the preview of this file"
+#~ msgstr "We do not yet support the preview of this file"
 
 #: components/UserCredential/ResetPasswordForm.tsx:59
 #~ msgid "We have emailed you OTP Code to <0>{identity}</0> to reset password."
@@ -1768,8 +1777,8 @@ msgstr "We do not yet support the preview of this file"
 #~ msgstr "We will send organization and access (includes password) information via email."
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/index.tsx:94
-msgid "We're developing it!!"
-msgstr "We're developing it!!"
+#~ msgid "We're developing it!!"
+#~ msgstr "We're developing it!!"
 
 #: components/UserCredential/NewAuthLayout.tsx:52
 #: components/UserCredential/NewAuthLayout.tsx:61
@@ -1777,12 +1786,12 @@ msgstr "We're developing it!!"
 #~ msgstr "welcome"
 
 #: components/Document/DocumentAssignedList.tsx:133
-msgid "When a person is assigned to this document, they will receive receive an email granting access to the document and enrolling them as a space student."
-msgstr "When a person is assigned to this document, they will receive receive an email granting access to the document and enrolling them as a space student."
+#~ msgid "When a person is assigned to this document, they will receive receive an email granting access to the document and enrolling them as a space student."
+#~ msgstr "When a person is assigned to this document, they will receive receive an email granting access to the document and enrolling them as a space student."
 
 #: components/Document/DocumentMoreSetting.tsx:195
-msgid "Width"
-msgstr "Width"
+#~ msgid "Width"
+#~ msgstr "Width"
 
 #: components/MagicLink/index.tsx:24
 #: components/PreJoinSpace.tsx:29
@@ -1790,12 +1799,12 @@ msgid "Wrong email format!"
 msgstr "Wrong email format!"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/SingleChoice/SingleChoiceReview.tsx:29
-msgid "Wrong! Correct answer is"
-msgstr "Wrong! Correct answer is"
+#~ msgid "Wrong! Correct answer is"
+#~ msgstr "Wrong! Correct answer is"
 
 #: components/common/RichMarkdownEditor/extensions/QuizExtension/QuizSetting/SingleChoiceSetting.tsx:82
-msgid "Yes, No, Not Given"
-msgstr "Yes, No, Not Given"
+#~ msgid "Yes, No, Not Given"
+#~ msgstr "Yes, No, Not Given"
 
 #: components/Trash/DeletedItem.tsx:55
 #~ msgid "You cannot recover data if you confirm to delete."
@@ -1818,9 +1827,9 @@ msgstr "You've joined. We've sent a magic email to <0>{email}</0>. Open the link
 #~ msgstr "Your submission is completed. We will move you to assignment page!"
 
 #: components/common/RichMarkdownEditor/extensions/FileExtension/FileBlockHeader.tsx:118
-msgid "ZoomIn"
-msgstr "ZoomIn"
+#~ msgid "ZoomIn"
+#~ msgstr "ZoomIn"
 
 #: components/common/RichMarkdownEditor/extensions/FileExtension/FileBlockHeader.tsx:125
-msgid "ZoomOut"
-msgstr "ZoomOut"
+#~ msgid "ZoomOut"
+#~ msgstr "ZoomOut"

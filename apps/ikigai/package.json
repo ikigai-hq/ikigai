@@ -45,7 +45,7 @@
     "@lingui/react": "^4.3.0",
     "@next/bundle-analyzer": "^11.1.2",
     "@react-pdf/renderer": "^3.1.9",
-    "@tabler/icons": "^3.4.0",
+    "@tabler/icons-react": "^3.4.0",
     "@tiptap/extension-placeholder": "^2.3.2",
     "@tiptap/extension-task-item": "^2.3.2",
     "@tiptap/extension-task-list": "^2.3.2",

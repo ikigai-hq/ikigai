@@ -46,7 +46,7 @@ const ContentPage = ({ page }: ContentPageProps) => {
         />
       </div>
       <Divider style={{ margin: 0 }} />
-      <div style={{ width: "calc(100vw - 530px)" }}>
+      <div style={{ width: "calc(100vw - 535px)" }}>
         <PanelGroup direction="horizontal">
           {pageContents.map((pageContent, index) => (
             <>

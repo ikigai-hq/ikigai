@@ -1,5 +1,5 @@
-import { Button } from "antd";
-import { Trans } from "@lingui/macro";
+import { Button, Dropdown } from "antd";
+import { t, Trans } from "@lingui/macro";
 import { useMutation } from "@apollo/client";
 import { v4 } from "uuid";
 
@@ -7,13 +7,16 @@ import usePageStore from "context/PageStore";
 import { ADD_OR_UPDATE_PAGE } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
 import { AddOrUpdatePage, PageInput, PageLayout } from "graphql/types";
-import useDocumentStore from "../../../context/DocumentStore";
+import useDocumentStore from "context/DocumentStore";
 import PageContentItem from "./PageContentItem";
+import { IconColumns1, IconColumns2 } from "@tabler/icons-react";
+import usePageContentStore from "context/PageContentStore";
 
 const PageTabContent = () => {
   const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
   const pages = usePageStore((state) => state.pages);
   const addPage = usePageStore((state) => state.addPage);
+  const addPageContent = usePageContentStore((state) => state.addPageContent);
 
   const [addOrUpdatePage, { loading }] = useMutation<AddOrUpdatePage>(
     ADD_OR_UPDATE_PAGE,
@@ -22,7 +25,7 @@ const PageTabContent = () => {
     },
   );
 
-  const onAddPage = async () => {
+  const onAddPage = async (isSinglePage: boolean) => {
     const index = pages.length
       ? Math.max(...pages.map((page) => page.index)) + 1
       : 1;
@@ -34,25 +37,46 @@ const PageTabContent = () => {
       title: "New Page",
       layout: PageLayout.HORIZONTAL,
     };
+
     const { data } = await addOrUpdatePage({
       variables: {
         page: pageInput,
+        isSinglePage,
       },
     });
 
-    if (data) addPage(data.documentAddOrUpdatePage);
+    if (data) {
+      addPage(data.documentAddOrUpdatePage);
+      data.documentAddOrUpdatePage.pageContents.forEach(addPageContent);
+    }
   };
 
   return (
     <div>
-      <Button
-        style={{ width: "100%" }}
-        onClick={onAddPage}
-        loading={loading}
+      <Dropdown
         disabled={loading}
+        trigger={["click"]}
+        menu={{
+          items: [
+            {
+              key: "Single",
+              label: t`Single page`,
+              icon: <IconColumns1 />,
+              onClick: () => onAddPage(true),
+            },
+            {
+              key: "Double",
+              label: t`Split page`,
+              icon: <IconColumns2 />,
+              onClick: () => onAddPage(false),
+            },
+          ],
+        }}
       >
-        <Trans>Add page</Trans>
-      </Button>
+        <Button style={{ width: "100%" }} loading={loading} disabled={loading}>
+          <Trans>Add page</Trans>
+        </Button>
+      </Dropdown>
       <PageContentItem index={1} />
       {pages
         .sort((a, b) => a.index - b.index)

@@ -203,7 +203,12 @@ impl DocumentMutation {
         Ok(true)
     }
 
-    async fn document_add_or_update_page(&self, ctx: &Context<'_>, mut page: Page) -> Result<Page> {
+    async fn document_add_or_update_page(
+        &self,
+        ctx: &Context<'_>,
+        mut page: Page,
+        is_single_page: Option<bool>,
+    ) -> Result<Page> {
         document_quick_authorize(
             ctx,
             page.document_id,
@@ -230,25 +235,27 @@ impl DocumentMutation {
             .transaction::<_, IkigaiError, _>(|| {
                 let page = Page::upsert(&conn, page)?;
                 if !page_is_existing {
-                    let page_content = PageContent {
-                        id: Uuid::new_v4(),
-                        page_id: page.id,
-                        index: 1,
-                        body: "".into(),
-                        updated_at: get_now_as_secs(),
-                        created_at: get_now_as_secs(),
-                    };
-                    PageContent::upsert(&conn, page_content)?;
+                        let page_content = PageContent {
+                            id: Uuid::new_v4(),
+                            page_id: page.id,
+                            index: 1,
+                            body: "".into(),
+                            updated_at: get_now_as_secs(),
+                            created_at: get_now_as_secs(),
+                        };
+                        PageContent::upsert(&conn, page_content)?;
 
-                    let page_content = PageContent {
-                        id: Uuid::new_v4(),
-                        page_id: page.id,
-                        index: 2,
-                        body: "".into(),
-                        updated_at: get_now_as_secs(),
-                        created_at: get_now_as_secs(),
-                    };
-                    PageContent::upsert(&conn, page_content)?;
+                    if is_single_page != Some(true) {
+                        let page_content = PageContent {
+                            id: Uuid::new_v4(),
+                            page_id: page.id,
+                            index: 2,
+                            body: "".into(),
+                            updated_at: get_now_as_secs(),
+                            created_at: get_now_as_secs(),
+                        };
+                        PageContent::upsert(&conn, page_content)?;
+                    }
                 }
                 Ok(page)
             })

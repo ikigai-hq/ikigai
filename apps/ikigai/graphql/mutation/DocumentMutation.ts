@@ -43,8 +43,8 @@ export const UPDATE_DOCUMENT_POSITIONS = gql`
 `;
 
 export const ADD_OR_UPDATE_PAGE = gql`
-  mutation AddOrUpdatePage($page: PageInput!) {
-    documentAddOrUpdatePage(page: $page) {
+  mutation AddOrUpdatePage($page: PageInput!, $isSinglePage: Boolean) {
+    documentAddOrUpdatePage(page: $page, isSinglePage: $isSinglePage) {
       id
       documentId
       index
@@ -55,6 +55,8 @@ export const ADD_OR_UPDATE_PAGE = gql`
         pageId
         index
         body
+        updatedAt
+        createdAt
       }
     }
   }

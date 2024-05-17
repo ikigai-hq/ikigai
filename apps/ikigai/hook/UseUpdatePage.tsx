@@ -17,6 +17,7 @@ const useUpdatePage = (pageId: string) => {
 
   const upsert = async (
     data: Partial<Omit<PageInput, "id" | "documentId">>,
+    isSinglePage?: boolean,
   ) => {
     if (!allow(DocumentActionPermission.EDIT_DOCUMENT)) return;
 
@@ -32,6 +33,7 @@ const useUpdatePage = (pageId: string) => {
     addOrUpdatePage({
       variables: {
         page: pageInput,
+        isSinglePage,
       },
     });
 

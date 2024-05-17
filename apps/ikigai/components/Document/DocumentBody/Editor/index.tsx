@@ -1,4 +1,4 @@
-import { useEditor, EditorContent, JSONContent } from "@tiptap/react";
+import { EditorContent, JSONContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import TaskItem from "@tiptap/extension-task-item";
@@ -9,12 +9,15 @@ import { useDebounce } from "ahooks";
 
 import { IPageContent } from "context/PageContentStore";
 import useAddOrUpdatePageContent from "hook/UseUpsertPageContent";
+import usePermission from "hook/UsePermission";
+import { DocumentActionPermission } from "graphql/types";
 
 export type EditorProps = {
   pageContent: IPageContent;
 };
 
 const Editor = ({ pageContent }: EditorProps) => {
+  const allow = usePermission();
   const [innerContent, setInnerContent] = useState<JSONContent>(
     pageContent.body,
   );
@@ -41,7 +44,6 @@ const Editor = ({ pageContent }: EditorProps) => {
     ],
     content: innerContent,
     onUpdate: ({ editor }) => {
-      console.log("Hello editor", editor.getJSON());
       setInnerContent(editor.getJSON());
     },
     autofocus: false,
@@ -49,7 +51,11 @@ const Editor = ({ pageContent }: EditorProps) => {
 
   return (
     <main style={{ margin: 20 }}>
-      <EditorContent style={{ width: "100%" }} editor={editor} />
+      <EditorContent
+        style={{ width: "100%" }}
+        editor={editor}
+        readOnly={allow(DocumentActionPermission.EDIT_DOCUMENT)}
+      />
     </main>
   );
 };

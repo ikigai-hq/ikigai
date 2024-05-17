@@ -88,6 +88,8 @@ export interface AddOrUpdatePage_documentAddOrUpdatePage_pageContents {
   pageId: any;
   index: number;
   body: any;
+  updatedAt: number;
+  createdAt: number;
 }
 
 export interface AddOrUpdatePage_documentAddOrUpdatePage {
@@ -105,6 +107,7 @@ export interface AddOrUpdatePage {
 
 export interface AddOrUpdatePageVariables {
   page: PageInput;
+  isSinglePage?: boolean | null;
 }
 
 /* tslint:disable */
@@ -138,6 +141,8 @@ export interface AddOrUpdatePageContent_documentAddOrUpdatePageContent {
   pageId: any;
   index: number;
   body: any;
+  updatedAt: number;
+  createdAt: number;
 }
 
 export interface AddOrUpdatePageContent {

@@ -11,6 +11,7 @@ use crate::util::get_now_as_secs;
 pub enum DocumentType {
     Folder,
     Assignment,
+    Submission,
 }
 
 #[derive(

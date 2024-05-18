@@ -1300,6 +1300,7 @@ export enum DocumentActionPermission {
 export enum DocumentType {
   ASSIGNMENT = "ASSIGNMENT",
   FOLDER = "FOLDER",
+  SUBMISSION = "SUBMISSION",
 }
 
 export enum GradeMethod {

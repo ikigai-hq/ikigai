@@ -262,7 +262,7 @@ impl Loader<SubmissionByDocumentId> for IkigaiDataLoader {
         let mut conn = get_conn_from_actor().await?;
         let document_ids = keys.iter().map(|c| c.0).collect();
 
-        Ok(Submission::find_by_documents(&mut conn, document_ids)?
+        Ok(Submission::find_by_documents(&mut conn, &document_ids)?
             .into_iter()
             .map(|i| (SubmissionByDocumentId(i.document_id), i))
             .collect())
@@ -305,6 +305,7 @@ impl Loader<FindDocumentType> for IkigaiDataLoader {
         let mut conn = get_conn_from_actor().await?;
 
         let assignments = Assignment::find_all_by_documents(&mut conn, &document_ids)?;
+        let submissions = Submission::find_by_documents(&mut conn, &document_ids)?;
 
         let mut result: HashMap<FindDocumentType, Self::Value> = HashMap::new();
         for key in keys {
@@ -315,6 +316,10 @@ impl Loader<FindDocumentType> for IkigaiDataLoader {
                 .any(|assignment| assignment.document_id == key.0)
             {
                 document_type = DocumentType::Assignment;
+            }
+
+            if submissions.iter().any(|submission| submission.document_id == key.0) {
+                document_type = DocumentType::Submission;
             }
 
             result.insert(*key, document_type);

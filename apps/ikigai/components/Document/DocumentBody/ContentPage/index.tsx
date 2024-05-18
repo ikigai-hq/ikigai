@@ -34,7 +34,7 @@ const ContentPage = ({ page }: ContentPageProps) => {
   const pageContents = usePageContentStore((state) =>
     state.pageContents.filter((content) => content.pageId === page.id),
   ).sort((a, b) => a.index - b.index);
-  const [title, setTitle] = useState(page?.title);
+  const [title, setTitle] = useState(page.title);
   const debouncedTitle = useDebounce(title, { wait: 500 });
   const { upsert } = useUpdatePage(page.id);
 

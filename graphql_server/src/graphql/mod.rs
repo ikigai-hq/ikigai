@@ -33,7 +33,7 @@ pub fn build_schema() -> IkigaiSchema {
         IkigaiMutation::default(),
         Subscription,
     )
-    .limit_depth(10)
+    .limit_depth(20)
     .data(redis)
     .data(DataLoader::new(IkigaiDataLoader, tokio::spawn))
     .data(init_oso())

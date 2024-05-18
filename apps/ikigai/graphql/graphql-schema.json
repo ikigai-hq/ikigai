@@ -1071,7 +1071,7 @@
       {
         "kind": "SCALAR",
         "name": "UUID",
-        "description": "A UUID is a unique 128-bit number, stored as 16 octets. UUIDs are parsed as Strings\nwithin GraphQL. UUIDs are used to assign unique identifiers to entities without requiring a central\nallocating authority.\n\n# References\n\n* [Wikipedia: Universally Unique Identifier](http://en.wikipedia.org/wiki/Universally_unique_identifier)\n* [RFC4122: A Universally Unique IDentifier (UUID) URN Namespace](http://tools.ietf.org/html/rfc4122)",
+        "description": "A UUID is a unique 128-bit number, stored as 16 octets. UUIDs are parsed as\nStrings within GraphQL. UUIDs are used to assign unique identifiers to\nentities without requiring a central allocating authority.\n\n# References\n\n* [Wikipedia: Universally Unique Identifier](http://en.wikipedia.org/wiki/Universally_unique_identifier)\n* [RFC4122: A Universally Unique IDentifier (UUID) URN Namespace](http://tools.ietf.org/html/rfc4122)",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -2621,6 +2621,12 @@
           },
           {
             "name": "ASSIGNMENT",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SUBMISSION",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

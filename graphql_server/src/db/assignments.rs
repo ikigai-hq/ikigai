@@ -467,7 +467,7 @@ impl Submission {
 
     pub fn find_by_documents(
         conn: &mut PgConnection,
-        document_ids: Vec<Uuid>,
+        document_ids: &Vec<Uuid>,
     ) -> Result<Vec<Self>, Error> {
         assignment_submissions::table
             .filter(assignment_submissions::document_id.eq_any(document_ids))

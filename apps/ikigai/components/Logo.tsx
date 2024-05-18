@@ -7,7 +7,7 @@ export type LogoProps = {
 
 const Logo = ({ src }: LogoProps) => {
   return (
-    <Link href="https://tikigai.org" target="_blank">
+    <Link href="https://ikigai.li" target="_blank" passHref>
       <img
         alt="logo"
         src={src}

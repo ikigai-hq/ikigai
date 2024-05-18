@@ -5,7 +5,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 import { useApollo } from "../graphql/ApolloClient";
-import OpenExamToaster from "components/Toaster";
+import IkigaiToaster from "components/Toaster";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
@@ -60,7 +60,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <meta name="theme-color" content="#ffffff" />
         <link rel="icon" href={formatFavicon(icon)} />
       </Head>
-      <OpenExamToaster />
+      <IkigaiToaster />
       <ApolloProvider client={client}>
         <I18nProvider i18n={i18n}>
           <ErrorBoundary>

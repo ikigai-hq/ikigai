@@ -1,6 +1,5 @@
 import React from "react";
 import EmptyState from "./EmptyState";
-import Link from "next/link";
 import { Button } from "./common/Button";
 import { Trans, t } from "@lingui/macro";
 
@@ -27,6 +26,10 @@ class ErrorBoundary extends React.Component<any, any> {
     window.location.reload();
   };
 
+  onClickBackHome = () => {
+    window.location.href = "/";
+  };
+
   render() {
     // Check if the error is thrown
     if (this.state.hasError) {
@@ -42,16 +45,14 @@ class ErrorBoundary extends React.Component<any, any> {
         >
           <EmptyState
             hasMinHeight={false}
-            content={t`Oops! We found a error.`}
+            content={t`Oops! We found an unexpected error...`}
           />
           <Button type="primary" onClick={this.onClickReload}>
             <Trans>Try to reload!</Trans>
           </Button>
-          <Link href={"/"} passHref>
-            <Button>
-              <Trans>Back to home</Trans>
-            </Button>
-          </Link>
+          <Button onClick={this.onClickBackHome}>
+            <Trans>Back to home</Trans>
+          </Button>
         </div>
       );
     }

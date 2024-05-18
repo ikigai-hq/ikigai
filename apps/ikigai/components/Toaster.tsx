@@ -1,6 +1,6 @@
 import { Toaster } from "react-hot-toast";
 
-const OpenExamToaster = () => {
+const IkigaiToaster = () => {
   return (
     <div>
       <Toaster />
@@ -8,4 +8,4 @@ const OpenExamToaster = () => {
   );
 };
 
-export default OpenExamToaster;
+export default IkigaiToaster;

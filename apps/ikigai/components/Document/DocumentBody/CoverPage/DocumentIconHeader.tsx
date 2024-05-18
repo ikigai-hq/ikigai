@@ -3,11 +3,13 @@ import data from "@emoji-mart/data";
 import { Popover } from "antd";
 import styled from "styled-components";
 
-import useDocumentStore from "../../../../context/DocumentStore";
-import { IconType } from "graphql/types";
+import useDocumentStore from "context/DocumentStore";
+import { DocumentActionPermission, IconType } from "graphql/types";
 import useUpdateDocument from "hook/UseUpdateDocument";
+import usePermission from "hook/UsePermission";
 
 const DocumentIconHeader = () => {
+  const allow = usePermission();
   const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
   const iconValue = useDocumentStore(
     (state) => state.activeDocument?.iconValue,
@@ -34,6 +36,14 @@ const DocumentIconHeader = () => {
       iconValue: emoji.native,
     });
   };
+
+  if (!allow(DocumentActionPermission.EDIT_DOCUMENT)) {
+    return (
+      <div>
+        <PickIconButton>{iconValue || "✏️"}</PickIconButton>
+      </div>
+    );
+  }
 
   return (
     <div>

@@ -26,14 +26,18 @@ const DocumentHeader = () => {
     <DocumentHeaderWrapper>
       <StyledActionContainer>
         <div>
-          <SideBarHeader
-            type="text"
-            icon={<IconLayoutSidebar size={22} stroke={1.5} />}
-            onClick={() =>
-              setUIConfig({ leftSidebarVisible: !uiConfig.leftSidebarVisible })
-            }
-            $active={uiConfig.leftSidebarVisible}
-          />
+          {uiConfig.hasLeftSidebar && (
+            <SideBarHeader
+              type="text"
+              icon={<IconLayoutSidebar size={22} stroke={1.5} />}
+              onClick={() =>
+                setUIConfig({
+                  leftSidebarVisible: !uiConfig.leftSidebarVisible,
+                })
+              }
+              $active={uiConfig.leftSidebarVisible}
+            />
+          )}
         </div>
       </StyledActionContainer>
       <StyledActionContainer style={{ justifyContent: "center" }}>
@@ -43,16 +47,18 @@ const DocumentHeader = () => {
       </StyledActionContainer>
       <StyledActionContainer style={{ justifyContent: "end" }}>
         <div>
-          <SideBarHeader
-            type="text"
-            icon={<IconLayoutSidebarRight size={22} stroke={1.5} />}
-            onClick={() =>
-              setUIConfig({
-                rightSidebarVisible: !uiConfig.rightSidebarVisible,
-              })
-            }
-            $active={uiConfig.rightSidebarVisible}
-          />
+          {uiConfig.hasRightSidebar && (
+            <SideBarHeader
+              type="text"
+              icon={<IconLayoutSidebarRight size={22} stroke={1.5} />}
+              onClick={() =>
+                setUIConfig({
+                  rightSidebarVisible: !uiConfig.rightSidebarVisible,
+                })
+              }
+              $active={uiConfig.rightSidebarVisible}
+            />
+          )}
         </div>
       </StyledActionContainer>
     </DocumentHeaderWrapper>

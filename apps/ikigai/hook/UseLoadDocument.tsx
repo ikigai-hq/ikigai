@@ -15,18 +15,20 @@ import {
   GET_DOCUMENT_V2,
   GET_PAGES,
 } from "graphql/query/DocumentQuery";
-import useDocumentStore from "../context/DocumentStore";
+import useDocumentStore from "context/DocumentStore";
 import { GET_SPACE_INFORMATION } from "graphql/query/SpaceQuery";
-import useAuthUserStore from "../context/AuthStore";
-import useSpaceStore from "../context/SpaceStore";
-import useSpaceMemberStore from "../context/SpaceMembeStore";
-import usePageStore from "../context/PageStore";
-import usePageContentStore from "../context/PageContentStore";
+import useAuthUserStore from "context/AuthStore";
+import useSpaceStore from "context/SpaceStore";
+import useSpaceMemberStore from "context/SpaceMembeStore";
+import usePageStore from "context/PageStore";
+import usePageContentStore from "context/PageContentStore";
+import useUIStore, { getUIConfig } from "context/UIStore";
 
 export const useLoadDocument = (documentId: string) => {
   const [loading, setLoading] = useState(true);
   const [loadingError, setLoadingError] = useState<string | undefined>();
 
+  const role = useAuthUserStore((state) => state.role);
   const activeDocument = useDocumentStore((state) => state.activeDocument);
   const setActiveDocument = useDocumentStore(
     (state) => state.setActiveDocument,
@@ -46,6 +48,7 @@ export const useLoadDocument = (documentId: string) => {
   );
   const setPages = usePageStore((state) => state.setPages);
   const setPageContents = usePageContentStore((state) => state.setPageContents);
+  const setUIConfig = useUIStore((state) => state.setConfig);
 
   const [fetchDocument] = useLazyQuery<GetDocumentV2>(GET_DOCUMENT_V2, {
     fetchPolicy: "network-only",
@@ -94,7 +97,7 @@ export const useLoadDocument = (documentId: string) => {
       const spaceId = data.documentGet.spaceId;
       if (spaceId) await fetchSpaceInformation(spaceId);
       await loadAdditionalDocumentInformation(documentId);
-
+      setUIConfig(getUIConfig(data.documentGet.documentType, role));
       setActiveDocument(data.documentGet);
     }
 

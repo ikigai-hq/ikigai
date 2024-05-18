@@ -30,11 +30,11 @@ const LeftSide = () => {
     (state) => state.setSpaceSettingVisible,
   );
   const spaceName = useSpaceStore((state) => state.space?.name);
-  const visible = useUIStore((state) => state.config.leftSidebarVisible);
-
+  const config = useUIStore((state) => state.config);
   const [openProfile, setOpenProfile] = useState(false);
 
   const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
+  const visible = config.hasLeftSidebar && config.leftSidebarVisible;
   return (
     <Container $hide={!visible}>
       <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>

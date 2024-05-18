@@ -9,7 +9,7 @@ on:
 # Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ikigai-hq/graphql-server-base
+  IMAGE_NAME: ${{ github.repository }}
 
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
@@ -47,7 +47,7 @@ jobs:
         with:
           context: ./graphql_server
           push: true
-          tags: latest
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: ./graphql_server/Base.Dockerfile
 

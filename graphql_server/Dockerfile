@@ -1,4 +1,4 @@
-FROM rodgers/open-exam-rust-base:latest as build-phase
+FROM ghcr.io/ikigai-hq/ikigai:build-base as build-phase
 
 WORKDIR /app
 

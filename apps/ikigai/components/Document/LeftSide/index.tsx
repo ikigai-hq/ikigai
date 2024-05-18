@@ -17,20 +17,23 @@ import useSpaceStore from "context/SpaceStore";
 import CreateContentButton from "components/common/LearningModuleDnd/CreateContentButton";
 import { ArrowDocument } from "components/common/IconSvg";
 import ManageSpace from "./ManageSpace";
+import useUIStore from "context/UIStore";
 
 const LeftSide = () => {
   const theme = useTheme();
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
   const spaceDocuments = useDocumentStore((state) => state.spaceDocuments);
-  const [openProfile, setOpenProfile] = useState(false);
   const setSpaceSettingVisible = useSpaceStore(
     (state) => state.setSpaceSettingVisible,
   );
   const spaceName = useSpaceStore((state) => state.space?.name);
-  const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
+  const visible = useUIStore((state) => state.config.leftSidebarVisible);
 
+  const [openProfile, setOpenProfile] = useState(false);
+
+  const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
   return (
-    <Container $hide={false}>
+    <Container $hide={!visible}>
       <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
         <SpaceInfoContainer>
           <Popover

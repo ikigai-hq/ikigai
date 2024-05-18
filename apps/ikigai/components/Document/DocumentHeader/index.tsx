@@ -1,10 +1,15 @@
 import styled from "styled-components";
 import { Typography } from "antd";
 import { useTitle } from "ahooks";
+import { IconLayoutSidebar, IconLayoutSidebarRight } from "@tabler/icons-react";
 
 import useDocumentStore from "context/DocumentStore";
+import { TextButtonWithHover } from "components/common/Button";
+import useUIStore from "context/UIStore";
 
 const DocumentHeader = () => {
+  const setUIConfig = useUIStore((state) => state.setConfig);
+  const uiConfig = useUIStore((state) => state.config);
   const activeDocumentTitle = useDocumentStore(
     (state) => state.activeDocument?.title,
   );
@@ -20,19 +25,48 @@ const DocumentHeader = () => {
   return (
     <DocumentHeaderWrapper>
       <StyledActionContainer>
+        <div>
+          <SideBarHeader
+            type="text"
+            icon={<IconLayoutSidebar size={22} stroke={1.5} />}
+            onClick={() =>
+              setUIConfig({ leftSidebarVisible: !uiConfig.leftSidebarVisible })
+            }
+            $active={uiConfig.leftSidebarVisible}
+          />
+        </div>
+      </StyledActionContainer>
+      <StyledActionContainer style={{ justifyContent: "center" }}>
         <StyledHeaderText ellipsis>
           {icon} {activeDocumentTitle || "Untitled"}
         </StyledHeaderText>
       </StyledActionContainer>
-      <StyledActionContainer />
-      <StyledActionContainer />
+      <StyledActionContainer style={{ justifyContent: "end" }}>
+        <div>
+          <SideBarHeader
+            type="text"
+            icon={<IconLayoutSidebarRight size={22} stroke={1.5} />}
+            onClick={() =>
+              setUIConfig({
+                rightSidebarVisible: !uiConfig.rightSidebarVisible,
+              })
+            }
+            $active={uiConfig.rightSidebarVisible}
+          />
+        </div>
+      </StyledActionContainer>
     </DocumentHeaderWrapper>
   );
 };
 
+const SideBarHeader = styled(TextButtonWithHover)<{ $active?: boolean }>`
+  background-color: ${(props) =>
+    props.$active ? props.theme.colors.primary[1] : "none"};
+`;
+
 const StyledHeaderText = styled(Typography.Text)`
-  font-weight: 600;
-  font-size: 13px;
+  font-weight: 500;
+  font-size: 16px;
   margin: 0;
 `;
 

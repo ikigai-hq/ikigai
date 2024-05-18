@@ -47,7 +47,7 @@ const CoverPage = () => {
             <DocumentIconHeader />
           </div>
         )}
-        <div>
+        <div style={{ flex: 1 }}>
           <DocumentTitle
             autoSize
             variant="borderless"

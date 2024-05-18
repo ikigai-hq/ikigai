@@ -6,6 +6,7 @@ import { IconTools, IconPageBreak } from "@tabler/icons-react";
 
 import { BreakPoints } from "styles/mediaQuery";
 import PageTabContent from "./PageTabContent";
+import useUIStore from "../../../context/UIStore";
 
 enum ContentOptions {
   Pages,
@@ -13,6 +14,7 @@ enum ContentOptions {
 }
 
 const RightSide = () => {
+  const visible = useUIStore((state) => state.config.rightSidebarVisible);
   const [contentTab, setContentTab] = useState(ContentOptions.Pages);
   const options = [
     {
@@ -50,7 +52,7 @@ const RightSide = () => {
   ];
 
   return (
-    <Container $hide={false}>
+    <Container $hide={!visible}>
       <div>
         <Segmented
           style={{ width: "100%" }}

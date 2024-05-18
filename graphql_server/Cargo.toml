@@ -56,3 +56,4 @@ awc = { version = "3.4.0", features = ["rustls"]}
 dyn-clone = "1.0.17"
 strum = "0.26"
 strum_macros = "0.26"
+openssl = { version = "0.10.34", features = ["vendored"] }

@@ -30,6 +30,7 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
   }, [debouncedInnerContent]);
 
   const editor = useEditor({
+    editable: !readOnly,
     extensions: [
       StarterKit,
       TaskList,
@@ -49,11 +50,7 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
 
   return (
     <main style={{ margin: 20 }}>
-      <EditorContent
-        style={{ width: "100%" }}
-        editor={editor}
-        readOnly={readOnly}
-      />
+      <EditorContent style={{ width: "100%" }} editor={editor} />
     </main>
   );
 };

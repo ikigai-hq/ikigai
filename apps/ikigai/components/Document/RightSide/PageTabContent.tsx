@@ -3,19 +3,26 @@ import { t, Trans } from "@lingui/macro";
 import { useMutation } from "@apollo/client";
 import { v4 } from "uuid";
 import { useTheme } from "styled-components";
+import React from "react";
 
 import usePageStore from "context/PageStore";
 import { ADD_OR_UPDATE_PAGE } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
-import { AddOrUpdatePage, PageInput, PageLayout } from "graphql/types";
+import {
+  AddOrUpdatePage,
+  DocumentActionPermission,
+  PageInput,
+  PageLayout,
+} from "graphql/types";
 import useDocumentStore from "context/DocumentStore";
 import PageContentItem from "./PageContentItem";
 import { IconColumns1, IconColumns2 } from "@tabler/icons-react";
 import usePageContentStore from "context/PageContentStore";
 import { Text, TextWeight } from "components/common/Text";
-import React from "react";
+import usePermission from "hook/UsePermission";
 
 const PageTabContent = () => {
+  const allow = usePermission();
   const theme = useTheme();
   const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
   const pages = usePageStore((state) => state.pages);
@@ -62,30 +69,36 @@ const PageTabContent = () => {
           <Trans>Pages</Trans>
         </Text>
       </div>
-      <Dropdown
-        disabled={loading}
-        trigger={["click"]}
-        menu={{
-          items: [
-            {
-              key: "Single",
-              label: t`Single page`,
-              icon: <IconColumns1 />,
-              onClick: () => onAddPage(true),
-            },
-            {
-              key: "Double",
-              label: t`Split page`,
-              icon: <IconColumns2 />,
-              onClick: () => onAddPage(false),
-            },
-          ],
-        }}
-      >
-        <Button style={{ width: "100%" }} loading={loading} disabled={loading}>
-          <Trans>Add page</Trans>
-        </Button>
-      </Dropdown>
+      {allow(DocumentActionPermission.EDIT_DOCUMENT) && (
+        <Dropdown
+          disabled={loading}
+          trigger={["click"]}
+          menu={{
+            items: [
+              {
+                key: "Single",
+                label: t`Single page`,
+                icon: <IconColumns1 />,
+                onClick: () => onAddPage(true),
+              },
+              {
+                key: "Double",
+                label: t`Split page`,
+                icon: <IconColumns2 />,
+                onClick: () => onAddPage(false),
+              },
+            ],
+          }}
+        >
+          <Button
+            style={{ width: "100%" }}
+            loading={loading}
+            disabled={loading}
+          >
+            <Trans>Add page</Trans>
+          </Button>
+        </Dropdown>
+      )}
       <PageContentItem index={1} />
       {pages
         .sort((a, b) => a.index - b.index)

@@ -5,7 +5,7 @@ use uuid::Uuid;
 use crate::authorization::{DocumentAuth, SpaceAuth, UserAuth};
 use crate::db::User;
 
-// Shared User info to avoid query it again
+// Shared Request Context to reuse later in other space
 #[derive(Default)]
 pub struct RequestContextCachingData {
     user: Arc<RwLock<Option<User>>>,

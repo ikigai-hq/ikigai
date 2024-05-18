@@ -18,9 +18,12 @@ import CreateContentButton from "components/common/LearningModuleDnd/CreateConte
 import { ArrowDocument } from "components/common/IconSvg";
 import ManageSpace from "./ManageSpace";
 import useUIStore from "context/UIStore";
+import usePermission from "hook/UsePermission";
+import { SpaceActionPermission } from "graphql/types";
 
 const LeftSide = () => {
   const theme = useTheme();
+  const allow = usePermission();
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
   const spaceDocuments = useDocumentStore((state) => state.spaceDocuments);
   const setSpaceSettingVisible = useSpaceStore(
@@ -71,16 +74,18 @@ const LeftSide = () => {
               <Trans>Content</Trans>
             </Text>
           </div>
-          <CreateContentButton parentId={null}>
-            <Tooltip title={t`Add content`} arrow={false}>
-              <StyledButton
-                icon={<PlusOutlined />}
-                type="text"
-                size={"small"}
-                onClick={(e) => e.stopPropagation()}
-              />
-            </Tooltip>
-          </CreateContentButton>
+          {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
+            <CreateContentButton parentId={null}>
+              <Tooltip title={t`Add content`} arrow={false}>
+                <StyledButton
+                  icon={<PlusOutlined />}
+                  type="text"
+                  size={"small"}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </Tooltip>
+            </CreateContentButton>
+          )}
         </div>
         <ListModule>
           <LearningModuleDnd

@@ -2,8 +2,9 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { Trans } from "@lingui/macro";
+import { Button, Typography } from "antd";
 
-import TokenStorage from "../storage/TokenStorage";
+import TokenStorage from "storage/TokenStorage";
 import {
   CheckDocument,
   CheckToken,
@@ -17,13 +18,12 @@ import {
   MY_LAST_ACTIVITY,
   USER_ME,
 } from "../graphql/query";
-import UserStorage from "../storage/UserStorage";
-import useAuthUserStore from "../context/AuthStore";
-import { formatDocumentRoute, Routes } from "../config/Routes";
+import UserStorage from "storage/UserStorage";
+import useAuthUserStore from "context/AuthStore";
+import { formatDocumentRoute, Routes } from "config/Routes";
 import LayoutManagement from "./UserCredential/AuthLayout";
 import Loading from "./Loading";
-import { VERIFY_MAGIC_LINK } from "../graphql/mutation/UserMutation";
-import { Button, Typography } from "antd";
+import { VERIFY_MAGIC_LINK } from "graphql/mutation/UserMutation";
 
 interface Props {
   children: ReactNode;

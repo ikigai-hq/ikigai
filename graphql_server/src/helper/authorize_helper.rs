@@ -62,13 +62,18 @@ pub async fn get_user_from_ctx(ctx: &Context<'_>) -> Result<User> {
 pub async fn get_user_auth_by_user_id_from_ctx(
     ctx: &Context<'_>,
     user_id: i32,
+    relative_space_id: Option<i32>,
 ) -> Result<UserAuth> {
     let caching_data = ctx.data::<RequestContextCachingData>()?;
     let user_auth = if let Some(user_auth) = caching_data.get_user_auth(user_id) {
         info!("Using cache user auth {:?}", user_auth);
         user_auth
     } else {
-        let space_id = get_active_space_id_from_ctx(ctx).await?;
+        let space_id = if let Some(relative_space_id) = relative_space_id {
+            relative_space_id
+        } else {
+            get_active_space_id_from_ctx(ctx).await?
+        };
         let mut conn = get_conn_from_ctx(ctx).await?;
         let space_member = SpaceMember::find(&mut conn, space_id, user_id).format_err()?;
         let user_auth = UserAuth::new(space_member);
@@ -82,7 +87,7 @@ pub async fn get_user_auth_by_user_id_from_ctx(
 
 pub async fn get_user_auth_from_ctx(ctx: &Context<'_>) -> Result<UserAuth> {
     let user_id = get_user_id_from_ctx(ctx).await?;
-    get_user_auth_by_user_id_from_ctx(ctx, user_id).await
+    get_user_auth_by_user_id_from_ctx(ctx, user_id, None).await
 }
 
 pub async fn is_owner_of_file(ctx: &Context<'_>, user_id: i32, file_id: Uuid) -> Result<File> {
@@ -205,14 +210,6 @@ pub async fn document_is_allowed(
 ) -> Result<bool> {
     let oso = ctx.data::<Oso>()?;
     let caching_data = ctx.data::<RequestContextCachingData>()?;
-
-    let user = if let Some(user_id) = user_id {
-        get_user_auth_by_user_id_from_ctx(ctx, user_id).await?
-    } else {
-        // Unauthorized user
-        UserAuth::init_dummy()
-    };
-
     let doc = if let Some(doc) = caching_data.get_document_auth(document_id) {
         info!("Using cache document {}", doc.id);
         doc
@@ -223,6 +220,14 @@ pub async fn document_is_allowed(
         info!("Set cache document {}", doc.id);
         doc
     };
+
+    let user = if let Some(user_id) = user_id {
+        get_user_auth_by_user_id_from_ctx(ctx, user_id, Some(doc.space_id)).await?
+    } else {
+        // Unauthorized user
+        UserAuth::init_dummy()
+    };
+
     let is_allowed = oso.is_allowed(user, action.to_string(), doc)?;
 
     Ok(is_allowed)
@@ -270,7 +275,7 @@ pub async fn rubric_is_allowed(
     action: RubricActionPermission,
 ) -> Result<bool> {
     let oso = ctx.data::<Oso>()?;
-    let user_auth = get_user_auth_by_user_id_from_ctx(ctx, user_id).await?;
+    let user_auth = get_user_auth_by_user_id_from_ctx(ctx, user_id, None).await?;
     let mut conn = get_conn_from_ctx(ctx).await?;
     let rubric = Rubric::find_by_id(&mut conn, rubric_id)?;
     let rubric_auth = RubricAuth::new(&rubric);

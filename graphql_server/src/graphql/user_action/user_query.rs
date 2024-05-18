@@ -89,9 +89,6 @@ impl UserQuery {
         get_rubric_allowed_permissions(ctx, rubric_id).await
     }
 
-    // FIXME: Replace this step by using new authorization logic
-    // Currently, ikigai use active org id, so this step is necessary to get org id before do any action
-    // However, it can be replaced by authorization logic and not rely on active org id
     async fn user_check_document(
         &self,
         ctx: &Context<'_>,

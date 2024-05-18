@@ -1,13 +1,13 @@
 import create from "zustand";
 
-export type DocumentUIConfig = {
+export type UIConfig = {
   leftSidebarVisible: boolean;
   rightSidebarVisible: boolean;
 };
 
 type IUIStore = {
-  config: DocumentUIConfig;
-  setConfig: (config: Partial<DocumentUIConfig>) => void;
+  config: UIConfig;
+  setConfig: (config: Partial<UIConfig>) => void;
 };
 
 const useUIStore = create<IUIStore>((set, get) => ({

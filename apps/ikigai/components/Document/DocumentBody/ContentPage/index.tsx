@@ -11,6 +11,17 @@ import { IPage } from "context/PageStore";
 import { useDebounce } from "ahooks";
 import useUpdatePage from "hook/UseUpdatePage";
 import usePageContentStore from "context/PageContentStore";
+import useUIStore, { UIConfig } from "context/UIStore";
+
+const getBodyWidth = (uiConfig: UIConfig) => {
+  let bodyWidth = "100vw - 535px";
+  // If left sidebar is not visible -> the side should be increase 256px
+  if (!uiConfig.leftSidebarVisible) bodyWidth += " + 256px";
+  // If right sidebar is not visible -> the side should be increase 256px
+  if (!uiConfig.rightSidebarVisible) bodyWidth += " + 256px";
+
+  return `calc(${bodyWidth})`;
+};
 
 export type ContentPageProps = {
   page: IPage;
@@ -19,6 +30,7 @@ export type ContentPageProps = {
 const ContentPage = ({ page }: ContentPageProps) => {
   const theme = useTheme();
   const allow = usePermission();
+  const uiConfig = useUIStore((state) => state.config);
   const pageContents = usePageContentStore((state) =>
     state.pageContents.filter((content) => content.pageId === page.id),
   ).sort((a, b) => a.index - b.index);
@@ -46,7 +58,7 @@ const ContentPage = ({ page }: ContentPageProps) => {
         />
       </div>
       <Divider style={{ margin: 0 }} />
-      <div style={{ width: "calc(100vw - 535px)" }}>
+      <div style={{ width: getBodyWidth(uiConfig) }}>
         <PanelGroup direction="horizontal">
           {pageContents.map((pageContent, index) => (
             <>

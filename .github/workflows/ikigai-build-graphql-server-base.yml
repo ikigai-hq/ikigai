@@ -22,8 +22,6 @@ jobs:
       attestations: write
       #
     steps:
-      - name: Install dependencies
-        run: sudo apt-get update && apt-get -y upgrade && apt-get -y install libpq-dev openssl ca-certificates libssl-dev software-properties-common
       - name: Checkout repository
         uses: actions/checkout@v4
       # Uses the `docker/login-action` action to log in to the Container registry registry using the account and password that will publish the packages. Once published, the packages are scoped to the account defined here.

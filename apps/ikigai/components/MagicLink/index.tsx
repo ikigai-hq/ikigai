@@ -9,6 +9,7 @@ import { handleError } from "graphql/ApolloClient";
 import { SEND_MAGIC_LINK } from "graphql/mutation/UserMutation";
 import { SendMagicLink } from "graphql/types";
 import validator from "validator";
+import { useKeyPress } from "ahooks";
 
 const MagicLink = () => {
   const [email, setEmail] = useState("");
@@ -18,6 +19,10 @@ const MagicLink = () => {
       onError: handleError,
     },
   );
+
+  useKeyPress("enter", () => {
+    send();
+  });
 
   const send = async () => {
     if (!validator.isEmail(email)) {

@@ -16,7 +16,7 @@ impl Redis {
         Self { client }
     }
 
-    pub fn set_value(&self, key: &str, value: &str, ttl_seconds: Option<usize>) -> RedisResult<()> {
+    pub fn set_value(&self, key: &str, value: &str, ttl_seconds: Option<i64>) -> RedisResult<()> {
         let mut conn = self.client.get_connection()?;
 
         conn.set(key, value)?;

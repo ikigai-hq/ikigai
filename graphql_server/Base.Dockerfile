@@ -2,6 +2,7 @@ FROM rust:1.75
 
 WORKDIR /app
 
+RUN cargo init .
 ADD Cargo.lock /app
 ADD Cargo.toml /app
 

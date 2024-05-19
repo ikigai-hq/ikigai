@@ -130,23 +130,16 @@ impl AssignmentMutation {
                     None,
                     false,
                 )?;
-                let submission = if let Some(current_submission) = last_submission {
-                    Submission::reset_attempt(
-                        conn,
-                        current_submission.id,
-                        current_submission.attempt_number + 1,
-                        document.id,
-                        assignment.test_duration.is_none(),
-                    )?
-                } else {
-                    let new_submission = NewSubmission::new(
-                        user_id,
-                        assignment_id,
-                        document.id,
-                        assignment.test_duration.is_none(),
-                    );
-                    Submission::insert(conn, new_submission)?
-                };
+
+                let new_submission = NewSubmission::new(
+                    user_id,
+                    assignment_id,
+                    document.id,
+                    last_submission.map_or_else(|| 1, |s| s.attempt_number + 1),
+                    assignment.test_duration.is_none(),
+                );
+                let submission = Submission::insert(conn, new_submission)?;
+
                 try_add_rubric_submission(conn, &assignment, &submission)?;
 
                 Ok(submission)
@@ -165,58 +158,6 @@ impl AssignmentMutation {
                 AJ::add_job(job);
             }
         }
-
-        Ok(submission)
-    }
-
-    async fn assignment_start_by_teacher(
-        &self,
-        ctx: &Context<'_>,
-        assignment_id: i32,
-        student_id: i32,
-    ) -> Result<Submission> {
-        let mut conn = get_conn_from_ctx(ctx).await?;
-        let assignment = Assignment::find_by_id(&mut conn, assignment_id).format_err()?;
-        document_quick_authorize(
-            ctx,
-            assignment.document_id,
-            DocumentActionPermission::ManageDocument,
-        )
-        .await?;
-        let last_submission =
-            Submission::find_last_submission(&mut conn, student_id, assignment_id).format_err()?;
-
-        if last_submission.is_some() {
-            return Err(IkigaiError::new_bad_request(
-                "Student already submit, please reload!",
-            ))
-            .format_err()?;
-        }
-
-        let assignment_document =
-            Document::find_by_id(&mut conn, assignment.document_id).format_err()?;
-        let submission = conn
-            .transaction::<_, IkigaiError, _>(|conn| {
-                let document = assignment_document.deep_clone(
-                    conn,
-                    student_id,
-                    DocumentCloneConfig::new("", false),
-                    assignment_document.space_id,
-                    false,
-                    None,
-                    false,
-                )?;
-                let new_submission = NewSubmission::new(
-                    student_id,
-                    assignment_id,
-                    document.id,
-                    assignment.test_duration.is_none(),
-                );
-                let submission = Submission::insert(conn, new_submission)?;
-                try_add_rubric_submission(conn, &assignment, &submission)?;
-                Ok(submission)
-            })
-            .format_err()?;
 
         Ok(submission)
     }

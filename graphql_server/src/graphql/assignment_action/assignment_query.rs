@@ -14,14 +14,4 @@ impl AssignmentQuery {
         let band_scores = BandScore::find_all(&mut conn).format_err()?;
         Ok(band_scores)
     }
-
-    async fn assignment_my_submission(
-        &self,
-        ctx: &Context<'_>,
-        assignment_id: i32,
-    ) -> Result<Option<Submission>> {
-        let user_id = get_user_id_from_ctx(ctx).await?;
-        let mut conn = get_conn_from_ctx(ctx).await?;
-        Submission::find_last_submission(&mut conn, user_id, assignment_id).format_err()
-    }
 }

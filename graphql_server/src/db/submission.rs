@@ -46,7 +46,13 @@ impl NewSubmission {
         self.created_at = get_now_as_secs();
     }
 
-    pub fn new(user_id: i32, assignment_id: i32, document_id: Uuid, allow_rework: bool) -> Self {
+    pub fn new(
+        user_id: i32,
+        assignment_id: i32,
+        document_id: Uuid,
+        attempt_number: i32,
+        allow_rework: bool,
+    ) -> Self {
         Self {
             assignment_id,
             document_id,
@@ -57,7 +63,7 @@ impl NewSubmission {
             submit_at: None,
             updated_at: get_now_as_secs(),
             created_at: get_now_as_secs(),
-            attempt_number: 1,
+            attempt_number,
             allow_rework,
         }
     }
@@ -227,6 +233,18 @@ impl Submission {
         assignment_submissions::table
             .find(submission_id)
             .first(conn)
+    }
+
+    pub fn find_all_by_assignment_and_user(
+        conn: &mut PgConnection,
+        user_id: i32,
+        assignment_id: i32,
+    ) -> Result<Vec<Submission>, Error> {
+        assignment_submissions::table
+            .filter(assignment_submissions::assignment_id.eq(assignment_id))
+            .filter(assignment_submissions::user_id.eq(user_id))
+            .order_by(assignment_submissions::attempt_number.desc())
+            .get_results(conn)
     }
 
     pub fn find_last_submission(

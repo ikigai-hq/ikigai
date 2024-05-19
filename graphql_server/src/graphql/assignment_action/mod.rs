@@ -4,14 +4,12 @@ pub mod assignment_query;
 pub use assignment_mutation::*;
 pub use assignment_query::*;
 
-use std::collections::HashMap;
-
-use crate::authorization::DocumentActionPermission;
 use async_graphql::dataloader::DataLoader;
 use async_graphql::{ComplexObject, Context, Result};
 use itertools::Itertools;
 use uuid::Uuid;
 
+use crate::authorization::DocumentActionPermission;
 use crate::db::*;
 use crate::error::IkigaiErrorExt;
 use crate::graphql::data_loader::{
@@ -25,6 +23,12 @@ use crate::helper::{
 #[ComplexObject]
 impl Assignment {
     async fn submissions(&self, ctx: &Context<'_>) -> Result<Vec<Submission>> {
+        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
+        let submissions = loader
+            .load_one(SubmissionByAssignmentId(self.id))
+            .await?
+            .unwrap_or_default();
+
         if document_quick_authorize(
             ctx,
             self.document_id,
@@ -33,45 +37,16 @@ impl Assignment {
         .await
         .is_ok()
         {
-            let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
-            let submissions = loader
-                .load_one(SubmissionByAssignmentId(self.id))
-                .await?
-                .unwrap_or_default();
-
-            let mut unique_submissions: HashMap<i32, Submission> = HashMap::new();
-            for submission in submissions {
-                let key = submission.user_id;
-                if let Some(current_submission) = unique_submissions.get_mut(&key) {
-                    if current_submission.attempt_number < submission.attempt_number {
-                        *current_submission = submission;
-                    }
-                } else {
-                    unique_submissions.insert(key, submission);
-                }
-            }
-
-            Ok(unique_submissions.into_iter().map(|i| i.1).collect())
+            Ok(submissions)
+        } else if let Ok(user_id) = get_user_id_from_ctx(ctx).await {
+            Ok(submissions
+                .into_iter()
+                .filter(|submission| submission.user_id == user_id)
+                .sorted_by(|a, b| b.attempt_number.cmp(&a.attempt_number))
+                .collect())
         } else {
             Ok(vec![])
         }
-    }
-
-    // TODO: Deprecated, should remove in the future
-    async fn my_submission(&self, ctx: &Context<'_>) -> Result<Option<Submission>> {
-        let user_id = get_user_id_from_ctx(ctx).await?;
-        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
-        let submissions = loader
-            .load_one(SubmissionByAssignmentId(self.id))
-            .await?
-            .unwrap_or_default();
-
-        let submission = submissions
-            .into_iter()
-            .sorted_by(|a, b| Ord::cmp(&b.attempt_number, &a.attempt_number))
-            .find(|s| s.user_id == user_id);
-
-        Ok(submission)
     }
 
     async fn document(&self, ctx: &Context<'_>) -> Result<Document> {

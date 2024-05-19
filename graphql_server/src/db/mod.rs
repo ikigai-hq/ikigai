@@ -1,7 +1,7 @@
-pub mod assignments;
+pub mod assignment;
 pub mod band_score;
-pub mod document_assigned_users;
-pub mod documents;
+pub mod document;
+pub mod document_assigned_user;
 pub mod file;
 pub mod notification;
 pub mod page;
@@ -9,18 +9,20 @@ pub mod rubric;
 pub mod schema;
 pub mod space;
 pub mod space_member;
+pub mod submission;
 pub mod user;
 
-pub use assignments::*;
+pub use assignment::*;
 pub use band_score::*;
-pub use document_assigned_users::*;
-pub use documents::*;
+pub use document::*;
+pub use document_assigned_user::*;
 pub use file::*;
 pub use notification::*;
 pub use page::*;
 pub use rubric::*;
 pub use space::*;
 pub use space_member::*;
+pub use submission::*;
 pub use user::*;
 
 use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};

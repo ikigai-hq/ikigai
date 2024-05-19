@@ -1304,14 +1304,9 @@ export enum DocumentType {
 }
 
 export enum GradeMethod {
-  AUTO_GRADE = "AUTO_GRADE",
+  AUTO = "AUTO",
   MANUAL = "MANUAL",
   RUBRIC = "RUBRIC",
-}
-
-export enum GradeType {
-  GRADE = "GRADE",
-  NON_GRADE = "NON_GRADE",
 }
 
 export enum IconType {
@@ -1353,7 +1348,7 @@ export interface CreateFileData {
 }
 
 export interface GradeSubmissionData {
-  tempGrade?: number | null;
+  autoGrade?: number | null;
   finalGrade?: number | null;
   feedback?: string | null;
 }
@@ -1427,16 +1422,13 @@ export interface SpaceInviteTokenInput {
 }
 
 export interface UpdateAssignmentData {
-  gradedType: GradeType;
   maxNumberOfAttempt?: number | null;
   preDescription?: string | null;
   testDuration?: number | null;
   bandScoreId?: number | null;
   gradeMethod: GradeMethod;
   forceAutoSubmit: boolean;
-  allowSubmissionChangeStructure: boolean;
   gradeByRubricId?: any | null;
-  weightingIntoFinalGrade: number;
 }
 
 export interface UpdateDocumentData {

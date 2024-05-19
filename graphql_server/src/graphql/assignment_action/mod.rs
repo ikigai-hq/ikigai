@@ -138,11 +138,11 @@ impl Submission {
     async fn grade(&self, ctx: &Context<'_>) -> Option<f64> {
         let user_auth = get_user_auth_from_ctx(ctx).await.ok()?;
         if user_auth.role != Role::Student {
-            return self.temp_grade;
+            return self.auto_grade;
         }
 
         if self.allow_for_student_view_answer {
-            self.temp_grade
+            self.auto_grade
         } else {
             None
         }

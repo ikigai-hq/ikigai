@@ -931,22 +931,6 @@
             "deprecationReason": null
           },
           {
-            "name": "canChangeStructure",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "status",
             "description": null,
             "args": [],
@@ -1601,22 +1585,6 @@
             "deprecationReason": null
           },
           {
-            "name": "gradedType",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "ENUM",
-                "name": "GradeType",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "maxNumberOfAttempt",
             "description": null,
             "args": [],
@@ -1697,22 +1665,6 @@
             "deprecationReason": null
           },
           {
-            "name": "allowSubmissionChangeStructure",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "gradeByRubricId",
             "description": null,
             "args": [],
@@ -1720,22 +1672,6 @@
               "kind": "SCALAR",
               "name": "UUID",
               "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "weightingIntoFinalGrade",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -1824,29 +1760,6 @@
       },
       {
         "kind": "ENUM",
-        "name": "GradeType",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "GRADE",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "NON_GRADE",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
         "name": "GradeMethod",
         "description": null,
         "fields": null,
@@ -1860,7 +1773,7 @@
             "deprecationReason": null
           },
           {
-            "name": "AUTO_GRADE",
+            "name": "AUTO",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -5807,20 +5720,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "gradedType",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "ENUM",
-                "name": "GradeType",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          },
-          {
             "name": "maxNumberOfAttempt",
             "description": null,
             "type": {
@@ -5889,40 +5788,12 @@
             "defaultValue": null
           },
           {
-            "name": "allowSubmissionChangeStructure",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          },
-          {
             "name": "gradeByRubricId",
             "description": null,
             "type": {
               "kind": "SCALAR",
               "name": "UUID",
               "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "weightingIntoFinalGrade",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              }
             },
             "defaultValue": null
           }
@@ -5938,7 +5809,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "tempGrade",
+            "name": "autoGrade",
             "description": null,
             "type": {
               "kind": "SCALAR",

@@ -17,8 +17,6 @@ pub struct DocumentAuth {
     #[polar(attribute)]
     pub is_doing_submission: bool,
     #[polar(attribute)]
-    pub is_doing_open_type_submission: bool,
-    #[polar(attribute)]
     pub space_id: i32,
 }
 
@@ -26,7 +24,6 @@ impl DocumentAuth {
     pub fn try_new(conn: &mut PgConnection, document_id: Uuid) -> Result<Self, IkigaiError> {
         let mut allow_for_student_view_answer = false;
         let mut is_doing_submission = false;
-        let mut is_doing_open_type_submission = false;
 
         let document = Document::find_by_id(conn, document_id)?;
         let submission = Submission::find_by_document(conn, document_id)?;
@@ -34,7 +31,6 @@ impl DocumentAuth {
         if let Some(submission) = &submission {
             allow_for_student_view_answer = submission.allow_for_student_view_answer;
             is_doing_submission = submission.submit_at.is_none();
-            is_doing_open_type_submission = is_doing_submission && submission.can_change_structure;
         }
 
         Ok(Self {
@@ -42,7 +38,6 @@ impl DocumentAuth {
             creator_id: document.creator_id,
             allow_for_student_view_answer,
             is_doing_submission,
-            is_doing_open_type_submission,
             space_id: document.space_id.unwrap_or(-1),
         })
     }

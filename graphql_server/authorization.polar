@@ -53,7 +53,7 @@ allow(actor: UserAuth, "interactive_with_tool", doc: DocumentAuth) if
 	actor.role = "teacher";
 
 allow(actor: UserAuth, "edit_document", doc: DocumentAuth) if
-	(doc.is_doing_open_type_submission and doc.space_id = actor.space_id and doc.creator_id = actor.id) and
+	(doc.space_id = actor.space_id and doc.creator_id = actor.id) and
     has_permission(actor, "edit_document", doc);
 
 resource DocumentAuth {

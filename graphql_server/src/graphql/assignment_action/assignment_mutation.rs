@@ -137,7 +137,6 @@ impl AssignmentMutation {
                         current_submission.attempt_number + 1,
                         document.id,
                         assignment.test_duration.is_none(),
-                        assignment.allow_submission_change_structure,
                     )?
                 } else {
                     let new_submission = NewSubmission::new(
@@ -145,7 +144,6 @@ impl AssignmentMutation {
                         assignment_id,
                         document.id,
                         assignment.test_duration.is_none(),
-                        assignment.allow_submission_change_structure,
                     );
                     Submission::insert(conn, new_submission)?
                 };
@@ -213,7 +211,6 @@ impl AssignmentMutation {
                     assignment_id,
                     document.id,
                     assignment.test_duration.is_none(),
-                    assignment.allow_submission_change_structure,
                 );
                 let submission = Submission::insert(conn, new_submission)?;
                 try_add_rubric_submission(conn, &assignment, &submission)?;

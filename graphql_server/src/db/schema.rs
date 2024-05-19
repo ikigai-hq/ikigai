@@ -5,7 +5,7 @@ diesel::table! {
         id -> Int4,
         assignment_id -> Int4,
         user_id -> Int4,
-        temp_grade -> Nullable<Float8>,
+        auto_grade -> Nullable<Float8>,
         feedback -> Nullable<Text>,
         updated_at -> Int8,
         created_at -> Int8,
@@ -17,7 +17,6 @@ diesel::table! {
         allow_for_student_view_answer -> Bool,
         submit_at -> Nullable<Int8>,
         allow_rework -> Bool,
-        can_change_structure -> Bool,
     }
 }
 
@@ -27,16 +26,13 @@ diesel::table! {
         updated_at -> Int8,
         created_at -> Int8,
         document_id -> Uuid,
-        graded_type -> Int4,
         max_number_of_attempt -> Nullable<Int4>,
         pre_description -> Nullable<Text>,
         test_duration -> Nullable<Int4>,
         band_score_id -> Nullable<Int4>,
         grade_method -> Int4,
         force_auto_submit -> Bool,
-        allow_submission_change_structure -> Bool,
         grade_by_rubric_id -> Nullable<Uuid>,
-        weighting_into_final_grade -> Float8,
     }
 }
 

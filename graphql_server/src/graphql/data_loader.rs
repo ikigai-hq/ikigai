@@ -318,7 +318,10 @@ impl Loader<FindDocumentType> for IkigaiDataLoader {
                 document_type = DocumentType::Assignment;
             }
 
-            if submissions.iter().any(|submission| submission.document_id == key.0) {
+            if submissions
+                .iter()
+                .any(|submission| submission.document_id == key.0)
+            {
                 document_type = DocumentType::Submission;
             }
 

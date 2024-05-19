@@ -21,7 +21,7 @@ pub fn submit_submission(
     }
 
     // Auto release grade in case teacher choose auto grade
-    let is_auto_grade = assignment.grade_method == GradeMethod::AutoGrade;
+    let is_auto_grade = assignment.grade_method == GradeMethod::Auto;
     Submission::submit(conn, submission.id, grade, final_grade, is_auto_grade)?;
     if notify_student {
         NotificationCenter::from_registry().do_send(SubmitCompleted {

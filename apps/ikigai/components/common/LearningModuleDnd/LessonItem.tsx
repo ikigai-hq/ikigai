@@ -23,6 +23,7 @@ export type DocumentItemProps = {
   collapsed?: boolean;
   onChangeCollapsed?: () => void;
   hasChildren: boolean;
+  bigSize?: boolean;
 };
 
 const LessonItem = ({
@@ -46,7 +47,8 @@ const LessonItem = ({
   );
   const isFolder = item.documentType === DocumentType.FOLDER;
 
-  const onClickCollapse = () => {
+  const onClickCollapse = (e) => {
+    e.stopPropagation();
     if (onChangeCollapsed && isFolder) onChangeCollapsed();
   };
   const icon = (

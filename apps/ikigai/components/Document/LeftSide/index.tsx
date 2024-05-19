@@ -93,6 +93,7 @@ const LeftSide = () => {
             keyword={""}
             TreeItemComponent={LessonItemDnd}
             defaultCollapsed={true}
+            parentId={null}
           />
         </ListModule>
         <NoMarginDivider $margin={0} />

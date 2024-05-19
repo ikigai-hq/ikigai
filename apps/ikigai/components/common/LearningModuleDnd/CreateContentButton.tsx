@@ -53,10 +53,8 @@ const CreateContentButton = ({
       variables: {
         data: {
           title: "Untitled",
-          body: "",
           index,
           parentId,
-          editorConfig: {},
           iconType: IconType.EMOJI,
           iconValue: isAssignment ? "✏️" : "📂",
         },

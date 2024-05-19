@@ -13,8 +13,8 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: components/common/LearningModuleDnd/CreateContentButton.tsx:124
-#: components/Document/LeftSide/index.tsx:72
+#: components/common/LearningModuleDnd/CreateContentButton.tsx:122
+#: components/Document/LeftSide/index.tsx:79
 msgid "Add content"
 msgstr "Add content"
 
@@ -22,19 +22,20 @@ msgstr "Add content"
 msgid "Add Cover"
 msgstr "Add Cover"
 
-#: components/Document/RightSide/PageTabContent.tsx:77
+#: components/Document/RightSide/PageTabContent.tsx:98
 msgid "Add page"
 msgstr "Add page"
 
-#: components/common/LearningModuleDnd/CreateContentButton.tsx:122
+#: components/common/LearningModuleDnd/CreateContentButton.tsx:120
+#: components/Document/DocumentBody/CoverPage/FolderCoverPageBody.tsx:58
 msgid "Add sub content"
 msgstr "Add sub content"
 
-#: components/common/LearningModuleDnd/CreateContentButton.tsx:93
+#: components/common/LearningModuleDnd/CreateContentButton.tsx:91
 msgid "Assignment"
 msgstr "Assignment"
 
-#: components/ErrorBoundary.tsx:52
+#: components/ErrorBoundary.tsx:54
 #: components/Initializing.tsx:223
 #: pages/404.tsx:23
 msgid "Back to home"
@@ -49,7 +50,7 @@ msgstr "Cancel"
 msgid "Click or drag file to this area to upload"
 msgstr "Click or drag file to this area to upload"
 
-#: components/Document/LeftSide/index.tsx:68
+#: components/Document/LeftSide/index.tsx:74
 msgid "Content"
 msgstr "Content"
 
@@ -66,7 +67,7 @@ msgstr "Copy"
 msgid "Copy invite link"
 msgstr "Copy invite link"
 
-#: components/Document/LeftSide/ManageSpace.tsx:44
+#: components/Document/LeftSide/ManageSpace.tsx:55
 msgid "Created! We're moving you to your new space"
 msgstr "Created! We're moving you to your new space"
 
@@ -90,8 +91,7 @@ msgstr "Do you want to remove this member?"
 msgid "Edit Cover"
 msgstr "Edit Cover"
 
-#: components/IdentityInput/index.tsx:62
-#: components/MagicLink/index.tsx:44
+#: components/MagicLink/index.tsx:49
 #: components/PreJoinSpace.tsx:57
 #: components/UserCredential/EditProfileModal.tsx:47
 msgid "Email"
@@ -109,7 +109,7 @@ msgstr "Expire after"
 msgid "Expired"
 msgstr "Expired"
 
-#: components/MagicLink/index.tsx:36
+#: components/MagicLink/index.tsx:41
 msgid "Failed! Please try again."
 msgstr "Failed! Please try again."
 
@@ -117,7 +117,7 @@ msgstr "Failed! Please try again."
 msgid "First name"
 msgstr "First name"
 
-#: components/common/LearningModuleDnd/CreateContentButton.tsx:88
+#: components/common/LearningModuleDnd/CreateContentButton.tsx:86
 msgid "Folder"
 msgstr "Folder"
 
@@ -130,8 +130,12 @@ msgid "Generate Invite Link"
 msgstr "Generate Invite Link"
 
 #: components/IdentityInput/index.tsx:42
-msgid "Invalid email"
-msgstr "Invalid email"
+#~ msgid "Invalid email"
+#~ msgstr "Invalid email"
+
+#: components/Document/LeftSide/ManageSpace.tsx:77
+msgid "Invite People"
+msgstr "Invite People"
 
 #: components/SpaceSetting/InviteSpaceSetting.tsx:77
 msgid "Invite token"
@@ -174,6 +178,10 @@ msgstr "Member since"
 msgid "Members"
 msgstr "Members"
 
+#: components/Document/LeftSide/ManageSpace.tsx:85
+msgid "My Spaces"
+msgstr "My Spaces"
+
 #: components/SpaceSetting/MemberSpaceSetting.tsx:43
 msgid "Name"
 msgstr "Name"
@@ -182,7 +190,7 @@ msgstr "Name"
 msgid "Never"
 msgstr "Never"
 
-#: components/Document/LeftSide/ManageSpace.tsx:83
+#: components/Document/LeftSide/ManageSpace.tsx:114
 msgid "New space"
 msgstr "New space"
 
@@ -191,10 +199,15 @@ msgid "No document"
 msgstr "No document"
 
 #: components/ErrorBoundary.tsx:45
-msgid "Oops! We found a error."
-msgstr "Oops! We found a error."
+#~ msgid "Oops! We found a error."
+#~ msgstr "Oops! We found a error."
 
-#: components/Document/RightSide/index.tsx:30
+#: components/ErrorBoundary.tsx:48
+msgid "Oops! We found an unexpected error..."
+msgstr "Oops! We found an unexpected error..."
+
+#: components/Document/RightSide/index.tsx:32
+#: components/Document/RightSide/PageTabContent.tsx:69
 msgid "Pages"
 msgstr "Pages"
 
@@ -214,7 +227,7 @@ msgstr "Remove Cover"
 msgid "Remove member"
 msgstr "Remove member"
 
-#: components/Document/RightSide/PageContentItem.tsx:46
+#: components/Document/RightSide/PageContentItem.tsx:56
 msgid "Remove page"
 msgstr "Remove page"
 
@@ -226,15 +239,15 @@ msgstr "Removed!"
 msgid "Role"
 msgstr "Role"
 
-#: components/MagicLink/index.tsx:66
+#: components/MagicLink/index.tsx:71
 msgid "Send me a magic link!"
 msgstr "Send me a magic link!"
 
-#: components/MagicLink/index.tsx:34
+#: components/MagicLink/index.tsx:39
 msgid "Sent. Please check your email inbox!"
 msgstr "Sent. Please check your email inbox!"
 
-#: components/Document/RightSide/PageTabContent.tsx:63
+#: components/Document/RightSide/PageTabContent.tsx:80
 msgid "Single page"
 msgstr "Single page"
 
@@ -247,14 +260,18 @@ msgid "Space name"
 msgstr "Space name"
 
 #: components/Document/LeftSide/ManageSpace.tsx:58
-msgid "Space Setting"
-msgstr "Space Setting"
+#~ msgid "Space Setting"
+#~ msgstr "Space Setting"
 
 #: components/SpaceSetting/index.tsx:56
 msgid "Space settings"
 msgstr "Space settings"
 
-#: components/Document/RightSide/PageTabContent.tsx:69
+#: components/Document/LeftSide/ManageSpace.tsx:69
+msgid "Space Settings"
+msgstr "Space Settings"
+
+#: components/Document/RightSide/PageTabContent.tsx:86
 msgid "Split page"
 msgstr "Split page"
 
@@ -262,15 +279,19 @@ msgstr "Split page"
 msgid "Student"
 msgstr "Student"
 
+#: components/Document/DocumentBody/CoverPage/FolderCoverPageBody.tsx:47
+msgid "Sub Contents"
+msgstr "Sub Contents"
+
 #: components/SpaceSetting/CreateSpaceInvite.tsx:84
 msgid "Teacher"
 msgstr "Teacher"
 
-#: components/Document/RightSide/index.tsx:46
+#: components/Document/RightSide/index.tsx:48
 msgid "Tools"
 msgstr "Tools"
 
-#: components/ErrorBoundary.tsx:48
+#: components/ErrorBoundary.tsx:51
 msgid "Try to reload!"
 msgstr "Try to reload!"
 
@@ -283,24 +304,24 @@ msgid "Type space name..."
 msgstr "Type space name..."
 
 #: components/IdentityInput/index.tsx:69
-msgid "Type your email"
-msgstr "Type your email"
+#~ msgid "Type your email"
+#~ msgstr "Type your email"
 
-#: components/MagicLink/index.tsx:47
+#: components/MagicLink/index.tsx:52
 #: components/PreJoinSpace.tsx:60
 msgid "Type your email!"
 msgstr "Type your email!"
 
-#: components/Document/DocumentBody/Editor/index.tsx:42
+#: components/Editor/index.tsx:41
 msgid "Typing content here..."
 msgstr "Typing content here..."
 
-#: components/Document/LeftSide/index.tsx:30
+#: components/Document/LeftSide/index.tsx:36
 msgid "Unknown"
 msgstr "Unknown"
 
-#: components/Document/DocumentBody/ContentPage/index.tsx:42
-#: components/Document/DocumentBody/CoverPage/index.tsx:57
+#: components/Document/DocumentBody/ContentPage/index.tsx:54
+#: components/Document/DocumentBody/CoverPage/index.tsx:58
 msgid "Untitled"
 msgstr "Untitled"
 
@@ -346,7 +367,7 @@ msgstr "Uses"
 msgid "View"
 msgstr "View"
 
-#: components/MagicLink/index.tsx:24
+#: components/MagicLink/index.tsx:29
 #: components/PreJoinSpace.tsx:29
 msgid "Wrong email format!"
 msgstr "Wrong email format!"

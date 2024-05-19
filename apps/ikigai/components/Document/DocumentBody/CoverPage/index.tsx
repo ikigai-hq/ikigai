@@ -4,12 +4,13 @@ import { t } from "@lingui/macro";
 import styled from "styled-components";
 import { useDebounce } from "ahooks";
 
-import useDocumentStore from "../../../../context/DocumentStore";
+import useDocumentStore from "context/DocumentStore";
 import CoverPhotoHeader from "./CoverPhotoHeader";
 import UseUpdateDocument from "hook/UseUpdateDocument";
 import usePermission from "hook/UsePermission";
 import { DocumentActionPermission } from "graphql/types";
 import DocumentIconHeader from "./DocumentIconHeader";
+import FolderCoverPageBody from "./FolderCoverPageBody";
 
 const CoverPage = () => {
   const allow = usePermission();
@@ -60,6 +61,9 @@ const CoverPage = () => {
         </div>
       </div>
       <Divider style={{ margin: 0 }} />
+      <div style={{ paddingLeft: 20, paddingRight: 20 }}>
+        {isFolder && <FolderCoverPageBody />}
+      </div>
     </div>
   );
 };

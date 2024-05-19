@@ -13,7 +13,7 @@ import {
   TreeItems,
 } from "../SortableTree/types";
 import { debounce, isEqual } from "lodash";
-import useSpaceStore from "../../../context/SpaceStore";
+import useSpaceStore from "context/SpaceStore";
 import { LearningItemType, LearningModuleItemTypeWrapper } from "./types";
 import { flattenTree, SortableTree } from "../SortableTree";
 import {
@@ -28,6 +28,7 @@ export type LearningModuleDndProps = {
   keyword: string;
   TreeItemComponent: TreeItemComponentType<Record<string, any>, HTMLElement>;
   defaultCollapsed: boolean;
+  parentId: string | null;
 };
 
 const debounceUpdatePositions = debounce(
@@ -40,10 +41,12 @@ export const LearningModuleDnd = ({
   keyword,
   TreeItemComponent,
   defaultCollapsed,
+  parentId,
 }: LearningModuleDndProps) => {
   const allow = usePermission();
-  const cacheFlattenTrees = useSpaceStore((state) => state.flattenTreeItems);
-  const setCacheFlattenTrees = useSpaceStore((state) => state.setTreeItems);
+  const [cacheFlattenTrees, setCacheFlattenTrees] = useState<
+    FlattenedItem<LearningModuleItemTypeWrapper>[]
+  >([]);
   const [convertedItems, setConvertedItems] = useState([]);
   const router = useRouter();
 
@@ -51,7 +54,7 @@ export const LearningModuleDnd = ({
   useEffect(() => {
     const items = convertToTreeItems(
       docs.filter((doc) => !doc.deletedAt),
-      null,
+      parentId,
       defaultCollapsed,
       getFullPathFromNode(router.query?.documentId as string, docs)?.map(
         (f) => f.id,
@@ -67,13 +70,13 @@ export const LearningModuleDnd = ({
   ) => {
     setConvertedItems(items);
     setCacheFlattenTrees(flattenTree(items));
-    const oldItems = convertToUpdatePositionData(convertedItems);
-    const newItems = convertToUpdatePositionData(items);
+    const oldItems = convertToUpdatePositionData(convertedItems, parentId);
+    const newItems = convertToUpdatePositionData(items, parentId);
     if (
       allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) &&
       !isEqual(oldItems, newItems)
     ) {
-      debounceUpdatePositions(convertToUpdatePositionData(items));
+      debounceUpdatePositions(convertToUpdatePositionData(items, parentId));
     }
   };
 
@@ -89,7 +92,7 @@ export const LearningModuleDnd = ({
 
 const convertToTreeItems = (
   docs: IDocumentItemList[],
-  parentId: number | null,
+  parentId: string | null,
   defaultCollapsed: boolean,
   listCollapsed: number[],
   previousItems?: TreeItems<LearningModuleItemTypeWrapper>,
@@ -136,7 +139,7 @@ const convertToTreeItems = (
 
 export const convertToUpdatePositionData = (
   items: TreeItems<LearningModuleItemTypeWrapper>,
-  parentId?: number,
+  parentId?: string,
 ): UpdatePositionData[] => {
   const results = [];
   items.forEach((item, index) => {
@@ -146,7 +149,7 @@ export const convertToUpdatePositionData = (
       index,
     });
     results.push(
-      ...convertToUpdatePositionData(item.children, item.id as number),
+      ...convertToUpdatePositionData(item.children, item.id as string),
     );
   });
   return results;

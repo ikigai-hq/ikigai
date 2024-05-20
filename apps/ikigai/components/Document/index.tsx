@@ -7,7 +7,7 @@ import LeftSide from "./LeftSide";
 import DocumentBody from "./DocumentBody";
 import RightSide from "./RightSide";
 import { useLoadDocument } from "../../hook/UseLoadDocument";
-import useDocumentStore from "../../context/DocumentStore";
+import useDocumentStore from "../../store/DocumentStore";
 import DocumentHeader from "./DocumentHeader";
 
 const Document = () => {

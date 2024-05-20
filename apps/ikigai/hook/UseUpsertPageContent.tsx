@@ -3,7 +3,7 @@ import { ADD_ORG_UPDATE_PAGE_CONTENT } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
 import { DocumentActionPermission, PageContentInput } from "../graphql/types";
 import usePermission from "./UsePermission";
-import usePageContentStore from "../context/PageContentStore";
+import usePageContentStore from "store/PageContentStore";
 
 const useAddOrUpdatePageContent = (pageContentId: string, pageId: string) => {
   const allow = usePermission();

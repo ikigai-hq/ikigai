@@ -1,7 +1,7 @@
 import { Trans, t } from "@lingui/macro";
 import Modal from "../common/Modal";
 import { Button, Input, Typography } from "antd";
-import useAuthUserStore from "../../context/AuthStore";
+import useAuthUserStore from "../../store/AuthStore";
 import { useState } from "react";
 import { UPDATE_PROFILE } from "../../graphql/mutation/UserMutation";
 import { handleError } from "../../graphql/ApolloClient";

@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import { DocumentActionPermission, UpdateDocumentData } from "graphql/types";
 import { UPDATE_DOCUMENT } from "graphql/mutation/SpaceMutation";
 import { handleError } from "graphql/ApolloClient";
-import useDocumentStore from "../context/DocumentStore";
+import useDocumentStore from "../store/DocumentStore";
 import usePermission from "./UsePermission";
 
 const UseUpdateDocument = () => {

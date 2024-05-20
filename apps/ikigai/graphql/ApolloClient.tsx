@@ -19,7 +19,7 @@ import { QueryOptions } from "@apollo/client/core/watchQueryOptions";
 
 import Config from "config/Config";
 import TokenStorage from "storage/TokenStorage";
-import useAuthUserStore from "../context/AuthStore";
+import useAuthUserStore from "store/AuthStore";
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 

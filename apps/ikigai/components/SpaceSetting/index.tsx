@@ -2,7 +2,7 @@ import { t } from "@lingui/macro";
 import { Tabs } from "antd";
 
 import Modal from "../common/Modal";
-import useSpaceStore from "../../context/SpaceStore";
+import useSpaceStore from "../../store/SpaceStore";
 import GeneralSpaceSetting from "./GeneralSpaceSetting";
 import MemberSpaceSetting from "./MemberSpaceSetting";
 import InviteSpaceSetting from "./InviteSpaceSetting";

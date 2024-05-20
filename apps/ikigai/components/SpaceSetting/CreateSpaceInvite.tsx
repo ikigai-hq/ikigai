@@ -11,7 +11,7 @@ import {
 } from "graphql/types";
 import { GENERATE_SPACE_INVITE_TOKEN } from "graphql/mutation/SpaceMutation";
 import { handleError } from "graphql/ApolloClient";
-import useSpaceStore from "../../context/SpaceStore";
+import useSpaceStore from "../../store/SpaceStore";
 import { getNowAsSec } from "../../util/Time";
 import { formatPreJoinSpaceUrl } from "../../config/Routes";
 import copy from "copy-to-clipboard";

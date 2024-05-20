@@ -15,14 +15,14 @@ import {
   GET_DOCUMENT_V2,
   GET_PAGES,
 } from "graphql/query/DocumentQuery";
-import useDocumentStore from "context/DocumentStore";
+import useDocumentStore from "store/DocumentStore";
 import { GET_SPACE_INFORMATION } from "graphql/query/SpaceQuery";
-import useAuthUserStore from "context/AuthStore";
-import useSpaceStore from "context/SpaceStore";
-import useSpaceMemberStore from "context/SpaceMembeStore";
-import usePageStore from "context/PageStore";
-import usePageContentStore from "context/PageContentStore";
-import useUIStore, { getUIConfig } from "context/UIStore";
+import useAuthUserStore from "store/AuthStore";
+import useSpaceStore from "store/SpaceStore";
+import useSpaceMemberStore from "store/SpaceMembeStore";
+import usePageStore from "store/PageStore";
+import usePageContentStore from "store/PageContentStore";
+import useUIStore, { getUIConfig } from "store/UIStore";
 
 export const useLoadDocument = (documentId: string) => {
   const [loading, setLoading] = useState(true);

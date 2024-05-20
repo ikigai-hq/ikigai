@@ -2,7 +2,7 @@ import { useMutation } from "@apollo/client";
 import { ADD_OR_UPDATE_PAGE } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
 import { DocumentActionPermission, PageInput } from "graphql/types";
-import usePageStore from "../context/PageStore";
+import usePageStore from "store/PageStore";
 import usePermission from "./UsePermission";
 
 const useUpdatePage = (pageId: string) => {

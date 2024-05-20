@@ -5,6 +5,7 @@ import {
   DocumentType,
   GetDocuments_spaceGet_documents as ISpaceDocument,
   GetDocumentV2_documentGet as IDocument,
+  UpdateAssignmentData,
 } from "graphql/types";
 
 export type IUpdateSpaceDocument = Partial<
@@ -28,6 +29,7 @@ type IDocumentStore = {
   spaceDocuments: ISpaceDocument[];
   setActiveDocument: (activeDocument: IDocument) => void;
   updateActiveDocument: (data: IUpdateActiveDocument) => void;
+  updateActiveAssignment: (data: Partial<UpdateAssignmentData>) => void;
   setSpaceDocuments: (documents: ISpaceDocument[]) => void;
   addSpaceDocument: (document: ISpaceDocument) => void;
   updateSpaceDocument: (id: string, data: IUpdateSpaceDocument) => void;
@@ -51,6 +53,17 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
       Object.assign(activeDocument, data);
       set({ activeDocument });
     }
+  },
+  updateActiveAssignment: (data: Partial<UpdateAssignmentData>) => {
+    const activeDocument = get().activeDocument;
+    if (activeDocument && activeDocument.assignment) {
+      activeDocument.assignment = {
+        ...activeDocument.assignment,
+        ...data,
+      };
+    }
+
+    set({ activeDocument });
   },
   setSpaceDocuments: (documents: ISpaceDocument[]) => {
     set({ spaceDocuments: cloneDeep(documents) });

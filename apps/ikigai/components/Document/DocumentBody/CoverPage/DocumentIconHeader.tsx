@@ -3,7 +3,7 @@ import data from "@emoji-mart/data";
 import { Popover } from "antd";
 import styled from "styled-components";
 
-import useDocumentStore from "context/DocumentStore";
+import useDocumentStore from "store/DocumentStore";
 import { DocumentActionPermission, IconType } from "graphql/types";
 import useUpdateDocument from "hook/UseUpdateDocument";
 import usePermission from "hook/UsePermission";

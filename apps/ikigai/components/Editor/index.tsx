@@ -7,7 +7,7 @@ import { t } from "@lingui/macro";
 import { useEffect, useState } from "react";
 import { useDebounce } from "ahooks";
 
-import { IPageContent } from "context/PageContentStore";
+import { IPageContent } from "store/PageContentStore";
 import useAddOrUpdatePageContent from "hook/UseUpsertPageContent";
 
 export type EditorProps = {

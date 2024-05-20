@@ -7,11 +7,11 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { DocumentActionPermission } from "graphql/types";
 import usePermission from "hook/UsePermission";
 import Editor from "components/Editor";
-import { IPage } from "context/PageStore";
+import { IPage } from "store/PageStore";
 import { useDebounce } from "ahooks";
 import useUpdatePage from "hook/UseUpdatePage";
-import usePageContentStore from "context/PageContentStore";
-import useUIStore, { UIConfig } from "context/UIStore";
+import usePageContentStore from "store/PageContentStore";
+import useUIStore, { UIConfig } from "store/UIStore";
 
 const getBodyWidth = (uiConfig: UIConfig) => {
   let bodyWidth = "100vw - 535px";

@@ -3,7 +3,7 @@ import { BreakPoints } from "styles/mediaQuery";
 import { Skeleton } from "antd";
 
 import CoverPage from "./CoverPage";
-import usePageStore from "context/PageStore";
+import usePageStore from "store/PageStore";
 import ContentPage from "./ContentPage";
 
 export type DocumentBodyProps = {

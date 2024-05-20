@@ -4,8 +4,8 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { t } from "@lingui/macro";
 import toast from "react-hot-toast";
 
-import useSpaceMemberStore from "../../context/SpaceMembeStore";
-import useSpaceStore from "../../context/SpaceStore";
+import useSpaceMemberStore from "../../store/SpaceMembeStore";
+import useSpaceStore from "../../store/SpaceStore";
 import { GetSpaceMembers_spaceGet_members as ISpaceMember } from "graphql/types";
 import UserBasicInformation from "../UserBasicInformation";
 import { fromNow } from "util/Time";

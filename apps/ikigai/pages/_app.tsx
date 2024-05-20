@@ -13,7 +13,7 @@ import { messages as enMessages } from "../locales/en/messages";
 import withTheme from "styles/theme";
 import { Initializing } from "../components/Initializing";
 import SpaceSetting from "../components/SpaceSetting";
-import useDocumentStore from "../context/DocumentStore";
+import useDocumentStore from "store/DocumentStore";
 
 require("../styles/globals.less");
 

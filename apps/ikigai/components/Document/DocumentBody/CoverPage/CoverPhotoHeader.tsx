@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Button } from "components/common/Button";
 import FileUpload, { DraggerStyled } from "components/common/FileUpload";
 import { PictureIcon, TrashIcon } from "components/common/IconSvg";
-import useDocumentStore from "../../../../context/DocumentStore";
+import useDocumentStore from "../../../../store/DocumentStore";
 import { Dropdown, MenuProps } from "antd";
 import { FileUploadResponse } from "components/common/AddResourceModal";
 import useUpdateDocument from "hook/UseUpdateDocument";

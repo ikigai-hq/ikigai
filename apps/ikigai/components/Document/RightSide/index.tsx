@@ -6,7 +6,7 @@ import { IconTools, IconPageBreak } from "@tabler/icons-react";
 
 import { BreakPoints } from "styles/mediaQuery";
 import PageTabContent from "./PageTabContent";
-import useUIStore from "context/UIStore";
+import useUIStore from "store/UIStore";
 
 enum ContentOptions {
   Pages,

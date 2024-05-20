@@ -1,5 +1,5 @@
 import { DocumentActionPermission, SpaceActionPermission } from "graphql/types";
-import useAuthUserStore from "../context/AuthStore";
+import useAuthUserStore from "store/AuthStore";
 
 export const allow = (
   permission: DocumentActionPermission | SpaceActionPermission,

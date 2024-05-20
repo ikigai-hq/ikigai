@@ -13,6 +13,16 @@ export const GET_DOCUMENT_V2 = gql`
       iconType
       iconValue
       documentType
+      assignment {
+        id
+        maxNumberOfAttempt
+        preDescription
+        testDuration
+        bandScoreId
+        gradeMethod
+        forceAutoSubmit
+        gradeByRubricId
+      }
     }
   }
 `;

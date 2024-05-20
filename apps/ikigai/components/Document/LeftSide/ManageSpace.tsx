@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { IconSettings, IconUserPlus } from "@tabler/icons-react";
 
-import useSpaceStore from "context/SpaceStore";
+import useSpaceStore from "store/SpaceStore";
 import {
   CreateSpace,
   GetMySpaces,

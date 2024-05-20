@@ -4,20 +4,20 @@ import { t, Trans } from "@lingui/macro";
 import styled, { useTheme } from "styled-components";
 import { PlusOutlined } from "@ant-design/icons";
 
-import useAuthUserStore from "context/AuthStore";
+import useAuthUserStore from "store/AuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
 import UserBasicInformation from "components/UserBasicInformation";
 import { BreakPoints } from "styles/mediaQuery";
 import LearningModuleDnd from "components/common/LearningModuleDnd";
 import LessonItemDnd from "components/common/LearningModuleDnd/LessonItemDnd";
-import useDocumentStore from "context/DocumentStore";
+import useDocumentStore from "store/DocumentStore";
 import { Text, TextWeight } from "components/common/Text";
 import { TextButtonWithHover } from "components/common/Button";
-import useSpaceStore from "context/SpaceStore";
+import useSpaceStore from "store/SpaceStore";
 import CreateContentButton from "components/common/LearningModuleDnd/CreateContentButton";
 import { ArrowDocument } from "components/common/IconSvg";
 import ManageSpace from "./ManageSpace";
-import useUIStore from "context/UIStore";
+import useUIStore from "store/UIStore";
 import usePermission from "hook/UsePermission";
 import { SpaceActionPermission } from "graphql/types";
 

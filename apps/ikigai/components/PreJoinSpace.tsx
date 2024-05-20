@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { Button, Divider, Input, Typography } from "antd";
 import { t, Trans } from "@lingui/macro";
-import useAuthUserStore from "../context/AuthStore";
+import useAuthUserStore from "../store/AuthStore";
 import { useMutation } from "@apollo/client";
 import { JOIN_SPACE_BY_INVITE_TOKEN } from "../graphql/mutation/SpaceMutation";
 import { handleError } from "../graphql/ApolloClient";

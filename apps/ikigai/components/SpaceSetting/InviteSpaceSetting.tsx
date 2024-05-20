@@ -16,7 +16,7 @@ import { CopyOutlined, DeleteOutlined } from "@ant-design/icons";
 import CreateSpaceInvite from "./CreateSpaceInvite";
 import { GET_SPACE_INVITE_TOKENS } from "graphql/query/SpaceQuery";
 import { handleError } from "graphql/ApolloClient";
-import useSpaceStore from "../../context/SpaceStore";
+import useSpaceStore from "../../store/SpaceStore";
 import {
   GetSpaceInviteTokens,
   GetSpaceInviteTokens_spaceGetInviteTokens as ISpaceInviteToken,

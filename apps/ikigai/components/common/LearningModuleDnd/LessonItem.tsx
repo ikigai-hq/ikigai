@@ -9,7 +9,7 @@ import { LearningItemType } from "components/common/LearningModuleDnd/types";
 import { TextButtonWithHover } from "components/common/Button";
 import { formatDocumentRoute } from "config/Routes";
 import { ActionMenuDropdown } from "components/common/ActionMenuDropdown";
-import useDocumentStore from "../../../context/DocumentStore";
+import useDocumentStore from "../../../store/DocumentStore";
 import usePermission from "hook/UsePermission";
 import { DocumentType, SpaceActionPermission } from "graphql/types";
 import CreateContentButton from "./CreateContentButton";

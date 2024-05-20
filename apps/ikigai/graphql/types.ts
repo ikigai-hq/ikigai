@@ -857,6 +857,17 @@ export interface GetRubrics {
 // GraphQL query operation: GetDocumentV2
 // ====================================================
 
+export interface GetDocumentV2_documentGet_assignment {
+  id: number;
+  maxNumberOfAttempt: number | null;
+  preDescription: string | null;
+  testDuration: number | null;
+  bandScoreId: number | null;
+  gradeMethod: GradeMethod;
+  forceAutoSubmit: boolean;
+  gradeByRubricId: any | null;
+}
+
 export interface GetDocumentV2_documentGet {
   id: any;
   title: string;
@@ -868,6 +879,7 @@ export interface GetDocumentV2_documentGet {
   iconType: IconType | null;
   iconValue: string | null;
   documentType: DocumentType;
+  assignment: GetDocumentV2_documentGet_assignment | null;
 }
 
 export interface GetDocumentV2 {

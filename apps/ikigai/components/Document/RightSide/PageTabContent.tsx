@@ -5,7 +5,7 @@ import { v4 } from "uuid";
 import { useTheme } from "styled-components";
 import React from "react";
 
-import usePageStore from "context/PageStore";
+import usePageStore from "store/PageStore";
 import { ADD_OR_UPDATE_PAGE } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
 import {
@@ -14,10 +14,10 @@ import {
   PageInput,
   PageLayout,
 } from "graphql/types";
-import useDocumentStore from "context/DocumentStore";
+import useDocumentStore from "store/DocumentStore";
 import PageContentItem from "./PageContentItem";
 import { IconColumns1, IconColumns2 } from "@tabler/icons-react";
-import usePageContentStore from "context/PageContentStore";
+import usePageContentStore from "store/PageContentStore";
 import { Text, TextWeight } from "components/common/Text";
 import usePermission from "hook/UsePermission";
 

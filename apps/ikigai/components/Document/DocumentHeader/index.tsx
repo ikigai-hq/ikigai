@@ -3,9 +3,9 @@ import { Typography } from "antd";
 import { useTitle } from "ahooks";
 import { IconLayoutSidebar, IconLayoutSidebarRight } from "@tabler/icons-react";
 
-import useDocumentStore from "context/DocumentStore";
+import useDocumentStore from "store/DocumentStore";
 import { TextButtonWithHover } from "components/common/Button";
-import useUIStore from "context/UIStore";
+import useUIStore from "store/UIStore";
 
 const DocumentHeader = () => {
   const setUIConfig = useUIStore((state) => state.setConfig);

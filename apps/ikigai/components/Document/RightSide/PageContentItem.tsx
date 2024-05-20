@@ -2,14 +2,14 @@ import styled from "styled-components";
 import { useMutation } from "@apollo/client";
 import { t } from "@lingui/macro";
 
-import usePageStore, { IPage } from "context/PageStore";
+import usePageStore, { IPage } from "store/PageStore";
 import { RemovePage } from "graphql/types";
 import { REMOVE_PAGE } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
 import { Dropdown, MenuProps, Typography } from "antd";
 import Image from "next/image";
-import useDocumentStore from "context/DocumentStore";
-import usePageContentStore from "context/PageContentStore";
+import useDocumentStore from "store/DocumentStore";
+import usePageContentStore from "store/PageContentStore";
 import { IconColumns1, IconColumns2 } from "@tabler/icons-react";
 
 export type PageContentItemProps = {

@@ -13,6 +13,14 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: components/Rubric/index.tsx:216
+msgid "% of total grade"
+msgstr "% of total grade"
+
+#: components/Rubric/index.tsx:456
+msgid "<0>{0}%</0> of grade"
+msgstr "<0>{0}%</0> of grade"
+
 #: components/common/LearningModuleDnd/CreateContentButton.tsx:122
 #: components/Document/LeftSide/index.tsx:79
 msgid "Add content"
@@ -22,18 +30,30 @@ msgstr "Add content"
 msgid "Add Cover"
 msgstr "Add Cover"
 
+#: components/Rubric/index.tsx:475
+msgid "Add criteria"
+msgstr "Add criteria"
+
+#: components/Rubric/index.tsx:444
+msgid "Add level"
+msgstr "Add level"
+
 #: components/Document/RightSide/PageTabContent.tsx:98
 msgid "Add page"
 msgstr "Add page"
 
 #: components/common/LearningModuleDnd/CreateContentButton.tsx:120
-#: components/Document/DocumentBody/CoverPage/FolderCoverPageBody.tsx:58
+#: components/Document/DocumentBody/CoverPage/FolderCoverPageBody.tsx:73
 msgid "Add sub content"
 msgstr "Add sub content"
 
 #: components/common/LearningModuleDnd/CreateContentButton.tsx:91
 msgid "Assignment"
 msgstr "Assignment"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TeacherGeneralInformation.tsx:176
+msgid "attempts"
+msgstr "attempts"
 
 #: components/ErrorBoundary.tsx:54
 #: components/Initializing.tsx:223
@@ -67,13 +87,31 @@ msgstr "Copy"
 msgid "Copy invite link"
 msgstr "Copy invite link"
 
+#: components/Rubric/RubricManagement.tsx:120
+msgid "Create new rubric"
+msgstr "Create new rubric"
+
+#: components/Rubric/RubricManagement.tsx:88
+msgid "Created!"
+msgstr "Created!"
+
 #: components/Document/LeftSide/ManageSpace.tsx:55
 msgid "Created! We're moving you to your new space"
 msgstr "Created! We're moving you to your new space"
 
+#: components/Rubric/index.tsx:205
+msgid "Criteria"
+msgstr "Criteria"
+
+#: components/Rubric/RubricManagement.tsx:64
 #: components/SpaceSetting/InviteSpaceSetting.tsx:58
 msgid "Deleted!"
 msgstr "Deleted!"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/StudentGeneralInformation.tsx:23
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TeacherGeneralInformation.tsx:82
+msgid "Description"
+msgstr "Description"
 
 #: components/SpaceSetting/index.tsx:31
 msgid "Details"
@@ -82,6 +120,15 @@ msgstr "Details"
 #: components/SpaceSetting/InviteSpaceSetting.tsx:143
 msgid "Do you want to delete this invite link"
 msgstr "Do you want to delete this invite link"
+
+#: components/Rubric/index.tsx:355
+#: components/Rubric/RubricManagement.tsx:178
+msgid "Do you want to remove {0}?"
+msgstr "Do you want to remove {0}?"
+
+#: components/Rubric/index.tsx:250
+msgid "Do you want to remove {level}?"
+msgstr "Do you want to remove {level}?"
 
 #: components/SpaceSetting/MemberSpaceSetting.tsx:85
 msgid "Do you want to remove this member?"
@@ -121,6 +168,14 @@ msgstr "First name"
 msgid "Folder"
 msgstr "Folder"
 
+#: components/Rubric/index.tsx:308
+msgid "From point"
+msgstr "From point"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/index.tsx:17
+msgid "General"
+msgstr "General"
+
 #: components/SpaceSetting/CreateSpaceInvite.tsx:95
 msgid "Generate"
 msgstr "Generate"
@@ -128,6 +183,19 @@ msgstr "Generate"
 #: components/SpaceSetting/InviteSpaceSetting.tsx:161
 msgid "Generate Invite Link"
 msgstr "Generate Invite Link"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:51
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/index.tsx:25
+msgid "Grade"
+msgstr "Grade"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:75
+msgid "In auto mode, students will receive their grades and results immediately after completing their assessments."
+msgstr "In auto mode, students will receive their grades and results immediately after completing their assessments."
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:67
+msgid "In manual mode, students will receive their grades and results only after the teacher has provided feedback."
+msgstr "In manual mode, students will receive their grades and results only after the teacher has provided feedback."
 
 #: components/IdentityInput/index.tsx:42
 #~ msgid "Invalid email"
@@ -170,6 +238,15 @@ msgstr "Joined! Please check your mail inbox"
 msgid "Last name"
 msgstr "Last name"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:104
+msgid "Manage Rubric"
+msgstr "Manage Rubric"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/StudentGeneralInformation.tsx:63
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TeacherGeneralInformation.tsx:142
+msgid "Max Attempts"
+msgstr "Max Attempts"
+
 #: components/SpaceSetting/MemberSpaceSetting.tsx:67
 msgid "Member since"
 msgstr "Member since"
@@ -177,6 +254,10 @@ msgstr "Member since"
 #: components/SpaceSetting/index.tsx:40
 msgid "Members"
 msgstr "Members"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TeacherGeneralInformation.tsx:132
+msgid "minutes"
+msgstr "minutes"
 
 #: components/Document/LeftSide/ManageSpace.tsx:85
 msgid "My Spaces"
@@ -211,6 +292,12 @@ msgstr "Oops! We found an unexpected error..."
 msgid "Pages"
 msgstr "Pages"
 
+#: components/Rubric/index.tsx:277
+#: components/Rubric/index.tsx:299
+#: components/Rubric/index.tsx:314
+msgid "point"
+msgstr "point"
+
 #: components/UserCredential/AuthLayout.tsx:86
 msgid "Powered by ikigai"
 msgstr "Powered by ikigai"
@@ -218,6 +305,10 @@ msgstr "Powered by ikigai"
 #: components/UserCredential/EditProfileModal.tsx:44
 msgid "Profile"
 msgstr "Profile"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:92
+msgid "Remove"
+msgstr "Remove"
 
 #: components/Document/DocumentBody/CoverPage/CoverPhotoHeader.tsx:55
 msgid "Remove Cover"
@@ -238,6 +329,26 @@ msgstr "Removed!"
 #: components/SpaceSetting/MemberSpaceSetting.tsx:56
 msgid "Role"
 msgstr "Role"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:87
+msgid "Rubric"
+msgstr "Rubric"
+
+#: components/Rubric/RubricManagement.tsx:96
+msgid "Rubric Management"
+msgstr "Rubric Management"
+
+#: components/Rubric/index.tsx:407
+msgid "Rubric Type"
+msgstr "Rubric Type"
+
+#: components/Rubric/RubricManagement.tsx:103
+msgid "Rubrics consist of rows and columns. The rows correspond to the criteria. The columns correspond to the level of achievement that describes each criterion."
+msgstr "Rubrics consist of rows and columns. The rows correspond to the criteria. The columns correspond to the level of achievement that describes each criterion."
+
+#: components/Rubric/index.tsx:401
+msgid "Save"
+msgstr "Save"
 
 #: components/MagicLink/index.tsx:71
 msgid "Send me a magic link!"
@@ -279,13 +390,26 @@ msgstr "Split page"
 msgid "Student"
 msgstr "Student"
 
-#: components/Document/DocumentBody/CoverPage/FolderCoverPageBody.tsx:47
+#: components/Document/DocumentBody/CoverPage/FolderCoverPageBody.tsx:56
 msgid "Sub Contents"
 msgstr "Sub Contents"
+
+#: components/Rubric/index.tsx:128
+msgid "Successfully!"
+msgstr "Successfully!"
 
 #: components/SpaceSetting/CreateSpaceInvite.tsx:84
 msgid "Teacher"
 msgstr "Teacher"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/StudentGeneralInformation.tsx:37
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TeacherGeneralInformation.tsx:99
+msgid "Test Duration"
+msgstr "Test Duration"
+
+#: components/Rubric/index.tsx:323
+msgid "To point"
+msgstr "To point"
 
 #: components/Document/RightSide/index.tsx:48
 msgid "Tools"
@@ -312,19 +436,42 @@ msgstr "Type space name..."
 msgid "Type your email!"
 msgstr "Type your email!"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TeacherGeneralInformation.tsx:86
+msgid "Typing assignment description..."
+msgstr "Typing assignment description..."
+
 #: components/Editor/index.tsx:41
 msgid "Typing content here..."
 msgstr "Typing content here..."
+
+#: components/Rubric/index.tsx:231
+msgid "Typing criteria"
+msgstr "Typing criteria"
+
+#: components/Rubric/index.tsx:245
+msgid "Typing level"
+msgstr "Typing level"
+
+#: components/Rubric/index.tsx:336
+msgid "Typing your description"
+msgstr "Typing your description"
 
 #: components/Document/LeftSide/index.tsx:36
 msgid "Unknown"
 msgstr "Unknown"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/StudentGeneralInformation.tsx:42
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/StudentGeneralInformation.tsx:68
+msgid "Unlimited"
+msgstr "Unlimited"
+
 #: components/Document/DocumentBody/ContentPage/index.tsx:54
-#: components/Document/DocumentBody/CoverPage/index.tsx:58
+#: components/Document/DocumentBody/CoverPage/index.tsx:62
 msgid "Untitled"
 msgstr "Untitled"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TeacherGeneralInformation.tsx:191
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:116
 #: components/SpaceSetting/GeneralSpaceSetting.tsx:63
 #: components/UserCredential/EditProfileModal.tsx:76
 msgid "Update"
@@ -359,13 +506,22 @@ msgstr "Upload Media"
 msgid "uploaded successfully."
 msgstr "uploaded successfully."
 
+#: components/Rubric/RubricManagement.tsx:149
+msgid "Use this rubric"
+msgstr "Use this rubric"
+
 #: components/SpaceSetting/InviteSpaceSetting.tsx:114
 msgid "Uses"
 msgstr "Uses"
 
 #: components/common/PanelDetail.tsx:42
+#: components/Rubric/RubricManagement.tsx:160
 msgid "View"
 msgstr "View"
+
+#: components/Rubric/RubricManagement.tsx:159
+msgid "View and Edit"
+msgstr "View and Edit"
 
 #: components/MagicLink/index.tsx:29
 #: components/PreJoinSpace.tsx:29

@@ -4,6 +4,249 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: UpdateAssignment
+// ====================================================
+
+export interface UpdateAssignment {
+  assignmentUpdate: boolean;
+}
+
+export interface UpdateAssignmentVariables {
+  assignmentId: number;
+  data: UpdateAssignmentData;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: StartSubmission
+// ====================================================
+
+export interface StartSubmission_assignmentStartSubmission {
+  id: number;
+  documentId: any;
+}
+
+export interface StartSubmission {
+  assignmentStartSubmission: StartSubmission_assignmentStartSubmission;
+}
+
+export interface StartSubmissionVariables {
+  assignmentId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: StudentRedoSubmission
+// ====================================================
+
+export interface StudentRedoSubmission {
+  assignmentRedo: boolean;
+}
+
+export interface StudentRedoSubmissionVariables {
+  submissionId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: StudentSubmitSubmission
+// ====================================================
+
+export interface StudentSubmitSubmission_assignmentSubmitSubmission {
+  id: number;
+}
+
+export interface StudentSubmitSubmission {
+  assignmentSubmitSubmission: StudentSubmitSubmission_assignmentSubmitSubmission;
+}
+
+export interface StudentSubmitSubmissionVariables {
+  submissionId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: TeacherStartSubmission
+// ====================================================
+
+export interface TeacherStartSubmission_assignmentStartByTeacher {
+  id: number;
+  documentId: any;
+}
+
+export interface TeacherStartSubmission {
+  assignmentStartByTeacher: TeacherStartSubmission_assignmentStartByTeacher;
+}
+
+export interface TeacherStartSubmissionVariables {
+  assignmentId: number;
+  studentId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: TeacherReviewSubmission
+// ====================================================
+
+export interface TeacherReviewSubmission {
+  assignmentGradeSubmission: boolean;
+}
+
+export interface TeacherReviewSubmissionVariables {
+  submissionId: number;
+  gradeData: GradeSubmissionData;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: TeacherRequestRedo
+// ====================================================
+
+export interface TeacherRequestRedo {
+  assignmentRequestRedo: boolean;
+}
+
+export interface TeacherRequestRedoVariables {
+  submissionId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: GradeRubricSubmission
+// ====================================================
+
+export interface GradeRubricSubmission_assignmentUpdateRubricSubmission_gradedData_items_userPick {
+  selected: boolean;
+  score: number;
+  comment: string;
+}
+
+export interface GradeRubricSubmission_assignmentUpdateRubricSubmission_gradedData_items {
+  explanation: string;
+  score: number;
+  toScore: number;
+  userPick: GradeRubricSubmission_assignmentUpdateRubricSubmission_gradedData_items_userPick;
+}
+
+export interface GradeRubricSubmission_assignmentUpdateRubricSubmission_gradedData {
+  rubricType: RubricType;
+  criteria: string[];
+  weightingCriteria: (number | null)[];
+  level: string[];
+  items: GradeRubricSubmission_assignmentUpdateRubricSubmission_gradedData_items[][];
+  totalUserScore: number;
+}
+
+export interface GradeRubricSubmission_assignmentUpdateRubricSubmission {
+  submissionId: number;
+  rubricId: any | null;
+  gradedData: GradeRubricSubmission_assignmentUpdateRubricSubmission_gradedData;
+}
+
+export interface GradeRubricSubmission {
+  assignmentUpdateRubricSubmission: GradeRubricSubmission_assignmentUpdateRubricSubmission;
+}
+
+export interface GradeRubricSubmissionVariables {
+  data: RubricSubmissionInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: UpsertRubric
+// ====================================================
+
+export interface UpsertRubric_userUpsertRubric_data_items_userPick {
+  selected: boolean;
+  score: number;
+  comment: string;
+}
+
+export interface UpsertRubric_userUpsertRubric_data_items {
+  explanation: string;
+  score: number;
+  toScore: number;
+  userPick: UpsertRubric_userUpsertRubric_data_items_userPick;
+}
+
+export interface UpsertRubric_userUpsertRubric_data {
+  rubricType: RubricType;
+  criteria: string[];
+  weightingCriteria: (number | null)[];
+  level: string[];
+  items: UpsertRubric_userUpsertRubric_data_items[][];
+}
+
+export interface UpsertRubric_userUpsertRubric {
+  id: any;
+  name: string;
+  data: UpsertRubric_userUpsertRubric_data;
+  createdAt: number;
+}
+
+export interface UpsertRubric {
+  userUpsertRubric: UpsertRubric_userUpsertRubric;
+}
+
+export interface UpsertRubricVariables {
+  rubric: RubricInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: RemoveRubric
+// ====================================================
+
+export interface RemoveRubric {
+  userRemoveRubric: boolean;
+}
+
+export interface RemoveRubricVariables {
+  rubricId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: SoftDeleteDocuments
 // ====================================================
 
@@ -246,249 +489,6 @@ export interface FileCheck {
 
 export interface FileCheckVariables {
   fileId: any;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: UpdateAssignment
-// ====================================================
-
-export interface UpdateAssignment {
-  assignmentUpdate: boolean;
-}
-
-export interface UpdateAssignmentVariables {
-  assignmentId: number;
-  data: UpdateAssignmentData;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: StartSubmission
-// ====================================================
-
-export interface StartSubmission_assignmentStartSubmission {
-  id: number;
-  documentId: any;
-}
-
-export interface StartSubmission {
-  assignmentStartSubmission: StartSubmission_assignmentStartSubmission;
-}
-
-export interface StartSubmissionVariables {
-  assignmentId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: StudentRedoSubmission
-// ====================================================
-
-export interface StudentRedoSubmission {
-  assignmentRedo: boolean;
-}
-
-export interface StudentRedoSubmissionVariables {
-  submissionId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: StudentSubmitSubmission
-// ====================================================
-
-export interface StudentSubmitSubmission_assignmentSubmitSubmission {
-  id: number;
-}
-
-export interface StudentSubmitSubmission {
-  assignmentSubmitSubmission: StudentSubmitSubmission_assignmentSubmitSubmission;
-}
-
-export interface StudentSubmitSubmissionVariables {
-  submissionId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: TeacherStartSubmission
-// ====================================================
-
-export interface TeacherStartSubmission_assignmentStartByTeacher {
-  id: number;
-  documentId: any;
-}
-
-export interface TeacherStartSubmission {
-  assignmentStartByTeacher: TeacherStartSubmission_assignmentStartByTeacher;
-}
-
-export interface TeacherStartSubmissionVariables {
-  assignmentId: number;
-  studentId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: TeacherReviewSubmission
-// ====================================================
-
-export interface TeacherReviewSubmission {
-  assignmentGradeSubmission: boolean;
-}
-
-export interface TeacherReviewSubmissionVariables {
-  submissionId: number;
-  gradeData: GradeSubmissionData;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: TeacherRequestRedo
-// ====================================================
-
-export interface TeacherRequestRedo {
-  assignmentRequestRedo: boolean;
-}
-
-export interface TeacherRequestRedoVariables {
-  submissionId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: UpsertRubric
-// ====================================================
-
-export interface UpsertRubric_userUpsertRubric_data_items_userPick {
-  selected: boolean;
-  score: number;
-  comment: string;
-}
-
-export interface UpsertRubric_userUpsertRubric_data_items {
-  explanation: string;
-  score: number;
-  toScore: number;
-  userPick: UpsertRubric_userUpsertRubric_data_items_userPick;
-}
-
-export interface UpsertRubric_userUpsertRubric_data {
-  rubricType: RubricType;
-  criteria: string[];
-  weightingCriteria: (number | null)[];
-  level: string[];
-  items: UpsertRubric_userUpsertRubric_data_items[][];
-}
-
-export interface UpsertRubric_userUpsertRubric {
-  id: any;
-  name: string;
-  data: UpsertRubric_userUpsertRubric_data;
-  createdAt: number;
-}
-
-export interface UpsertRubric {
-  userUpsertRubric: UpsertRubric_userUpsertRubric;
-}
-
-export interface UpsertRubricVariables {
-  rubric: RubricInput;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: RemoveRubric
-// ====================================================
-
-export interface RemoveRubric {
-  userRemoveRubric: boolean;
-}
-
-export interface RemoveRubricVariables {
-  rubricId: any;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: GradeRubricSubmission
-// ====================================================
-
-export interface GradeRubricSubmission_assignmentUpdateRubricSubmission_gradedData_items_userPick {
-  selected: boolean;
-  score: number;
-  comment: string;
-}
-
-export interface GradeRubricSubmission_assignmentUpdateRubricSubmission_gradedData_items {
-  explanation: string;
-  score: number;
-  toScore: number;
-  userPick: GradeRubricSubmission_assignmentUpdateRubricSubmission_gradedData_items_userPick;
-}
-
-export interface GradeRubricSubmission_assignmentUpdateRubricSubmission_gradedData {
-  rubricType: RubricType;
-  criteria: string[];
-  weightingCriteria: (number | null)[];
-  level: string[];
-  items: GradeRubricSubmission_assignmentUpdateRubricSubmission_gradedData_items[][];
-  totalUserScore: number;
-}
-
-export interface GradeRubricSubmission_assignmentUpdateRubricSubmission {
-  submissionId: number;
-  rubricId: any | null;
-  gradedData: GradeRubricSubmission_assignmentUpdateRubricSubmission_gradedData;
-}
-
-export interface GradeRubricSubmission {
-  assignmentUpdateRubricSubmission: GradeRubricSubmission_assignmentUpdateRubricSubmission;
-}
-
-export interface GradeRubricSubmissionVariables {
-  data: RubricSubmissionInput;
 }
 
 /* tslint:disable */

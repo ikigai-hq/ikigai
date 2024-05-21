@@ -81,14 +81,6 @@ impl UserQuery {
         Rubric::find_all_by_user(&mut conn, user_id).format_err()
     }
 
-    async fn rubric_my_permissions(
-        &self,
-        ctx: &Context<'_>,
-        rubric_id: Uuid,
-    ) -> Result<Vec<RubricActionPermission>> {
-        get_rubric_allowed_permissions(ctx, rubric_id).await
-    }
-
     async fn user_check_document(
         &self,
         ctx: &Context<'_>,

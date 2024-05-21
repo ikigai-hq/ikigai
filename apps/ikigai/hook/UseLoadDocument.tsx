@@ -9,6 +9,7 @@ import {
   GetDocuments,
   GetDocumentV2,
   GetPages,
+  GetRubrics,
 } from "graphql/types";
 import {
   GET_DOCUMENT_PAGE_CONTENT,
@@ -23,6 +24,9 @@ import useSpaceMemberStore from "store/SpaceMembeStore";
 import usePageStore from "store/PageStore";
 import usePageContentStore from "store/PageContentStore";
 import useUIStore, { getUIConfig } from "store/UIStore";
+import { GET_RUBRICS } from "graphql/query/AssignmentQuery";
+import { handleError } from "graphql/ApolloClient";
+import useRubricStore from "../store/RubricStore";
 
 export const useLoadDocument = (documentId: string) => {
   const [loading, setLoading] = useState(true);
@@ -49,6 +53,7 @@ export const useLoadDocument = (documentId: string) => {
   const setPages = usePageStore((state) => state.setPages);
   const setPageContents = usePageContentStore((state) => state.setPageContents);
   const setUIConfig = useUIStore((state) => state.setConfig);
+  const setRubrics = useRubricStore((state) => state.setRubrics);
 
   const [fetchDocument] = useLazyQuery<GetDocumentV2>(GET_DOCUMENT_V2, {
     fetchPolicy: "network-only",
@@ -68,6 +73,9 @@ export const useLoadDocument = (documentId: string) => {
       fetchPolicy: "network-only",
     },
   );
+  const [fetchRubrics] = useLazyQuery<GetRubrics>(GET_RUBRICS, {
+    onError: handleError,
+  });
 
   useEffect(() => {
     if (activeDocument?.id != documentId) {
@@ -120,13 +128,15 @@ export const useLoadDocument = (documentId: string) => {
         documentId,
       },
     });
-
     if (data) {
       const pageContents = pageContentsData.documentGet.pages.flatMap(
         (page) => page.pageContents,
       );
       setPageContents(pageContents);
     }
+
+    const { data: rubricData } = await fetchRubrics();
+    if (rubricData) setRubrics(rubricData.userGetMyRubrics);
   };
 
   const fetchSpaceInformation = async (spaceId: number) => {

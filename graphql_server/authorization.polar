@@ -85,7 +85,7 @@ has_role(user: UserAuth, "reader", doc: DocumentAuth) if
     doc.space_id = user.space_id;
 
 # RUBRIC AUTH SPACE
-allow(actor: UserAuth, action, doc: DocumentAuth) if
+allow(actor: UserAuth, action, doc: RubricAuth) if
     has_permission(actor, action, doc);
 
 resource RubricAuth {
@@ -97,5 +97,5 @@ resource RubricAuth {
     "manage_rubric" if "creator";
 }
 
-has_role(user: UserAuth, "creator", rubric: DocumentAuth) if
+has_role(user: UserAuth, "creator", rubric: RubricAuth) if
 	user.id = rubric.user_id;

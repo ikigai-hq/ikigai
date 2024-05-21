@@ -6,9 +6,8 @@ import StudentGeneralInformation from "./StudentGeneralInformation";
 const GeneralInformation = () => {
   const allow = usePermission();
   const caneEdit = allow(DocumentActionPermission.EDIT_DOCUMENT);
-  const isTeacherView = caneEdit;
 
-  if (isTeacherView) return <TeacherGeneralInformation />;
+  if (caneEdit) return <TeacherGeneralInformation />;
 
   return <StudentGeneralInformation />;
 };

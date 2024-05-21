@@ -1,9 +1,9 @@
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Dayjs } from "dayjs";
 
-dayjs.locale("en", {
+dayjs.locale(undefined, {
   weekStart: 1,
 });
 dayjs.extend(utc);

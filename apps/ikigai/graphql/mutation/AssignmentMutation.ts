@@ -59,6 +59,32 @@ export const TEACHER_REQUEST_REDO = gql`
   }
 `;
 
+export const GRADE_RUBRIC_SUBMISSION = gql`
+  mutation GradeRubricSubmission($data: RubricSubmissionInput!) {
+    assignmentUpdateRubricSubmission(data: $data) {
+      submissionId
+      rubricId
+      gradedData {
+        rubricType
+        criteria
+        weightingCriteria
+        level
+        items {
+          explanation
+          score
+          toScore
+          userPick {
+            selected
+            score
+            comment
+          }
+        }
+        totalUserScore
+      }
+    }
+  }
+`;
+
 export const UPSERT_RUBRIC = gql`
   mutation UpsertRubric($rubric: RubricInput!) {
     userUpsertRubric(rubric: $rubric) {
@@ -88,31 +114,5 @@ export const UPSERT_RUBRIC = gql`
 export const REMOVE_RUBRIC = gql`
   mutation RemoveRubric($rubricId: UUID!) {
     userRemoveRubric(rubricId: $rubricId)
-  }
-`;
-
-export const GRADE_RUBRIC_SUBMISSION = gql`
-  mutation GradeRubricSubmission($data: RubricSubmissionInput!) {
-    assignmentUpdateRubricSubmission(data: $data) {
-      submissionId
-      rubricId
-      gradedData {
-        rubricType
-        criteria
-        weightingCriteria
-        level
-        items {
-          explanation
-          score
-          toScore
-          userPick {
-            selected
-            score
-            comment
-          }
-        }
-        totalUserScore
-      }
-    }
   }
 `;

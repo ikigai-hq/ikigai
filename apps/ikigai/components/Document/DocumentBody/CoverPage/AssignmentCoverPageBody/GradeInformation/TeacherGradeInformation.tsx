@@ -9,7 +9,7 @@ import useDocumentStore from "store/DocumentStore";
 import RubricManagement from "components/Rubric/RubricManagement";
 import useRubricStore from "../../../../../../store/RubricStore";
 import { TextButtonWithHover } from "../../../../../common/Button";
-import { IconEdit, IconTrash, IconX } from "@tabler/icons-react";
+import { IconEdit, IconTable, IconTrash, IconX } from "@tabler/icons-react";
 
 const TeacherGradeInformation = () => {
   const [openRubric, setOpenRubric] = useState(false);
@@ -88,7 +88,9 @@ const TeacherGradeInformation = () => {
             </Typography.Text>
             {rubric && (
               <div style={{ display: "flex", alignItems: "center" }}>
-                <Typography.Text>{rubric.name}</Typography.Text>
+                <TextButtonWithHover type="text" icon={<IconTable />}>
+                  {rubric.name}
+                </TextButtonWithHover>
                 <Tooltip arrow={false} title={t`Remove`} placement="bottom">
                   <TextButtonWithHover
                     type="text"

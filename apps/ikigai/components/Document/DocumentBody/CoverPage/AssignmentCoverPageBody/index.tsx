@@ -1,6 +1,6 @@
 import { t } from "@lingui/macro";
 import { Tabs } from "antd";
-import { IconFileInfo, IconPencil } from "@tabler/icons-react";
+import { IconFileInfo, IconLicense, IconPencil } from "@tabler/icons-react";
 import React from "react";
 
 import TabPanelHeaderWrapper from "../TabPannelHeaderWrapper";
@@ -9,6 +9,7 @@ import GradeInformation from "./GradeInformation";
 import useAuthUserStore from "store/AuthStore";
 import { Role } from "graphql/types";
 import StudentExtraActions from "./StudentExtraActions";
+import SubmissionList from "./SubmissionList";
 
 const AssignmentCoverPageBody = () => {
   const isStudent = useAuthUserStore((state) => state.role === Role.STUDENT);
@@ -29,14 +30,18 @@ const AssignmentCoverPageBody = () => {
       <Tabs.TabPane
         key="Grade"
         tabKey="Grade"
-        tab={
-          <TabPanelHeaderWrapper
-            icon={<IconPencil />}
-            text={t`Grade Information`}
-          />
-        }
+        tab={<TabPanelHeaderWrapper icon={<IconPencil />} text={t`Grade`} />}
       >
         <GradeInformation />
+      </Tabs.TabPane>
+      <Tabs.TabPane
+        key="Submissions"
+        tabKey="Submissions"
+        tab={
+          <TabPanelHeaderWrapper icon={<IconLicense />} text={t`Submissions`} />
+        }
+      >
+        <SubmissionList />
       </Tabs.TabPane>
     </Tabs>
   );

@@ -703,37 +703,6 @@ export interface UpdateProfileVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetBandScores
-// ====================================================
-
-export interface GetBandScores_assignmentGetBandScores_range_items {
-  from: number;
-  to: number;
-  score: number;
-}
-
-export interface GetBandScores_assignmentGetBandScores_range {
-  items: GetBandScores_assignmentGetBandScores_range_items[];
-}
-
-export interface GetBandScores_assignmentGetBandScores {
-  id: number;
-  name: string;
-  range: GetBandScores_assignmentGetBandScores_range;
-  updatedAt: number;
-  createdAt: number;
-}
-
-export interface GetBandScores {
-  assignmentGetBandScores: GetBandScores_assignmentGetBandScores[];
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL query operation: GetSubmissionsOfAssignment
 // ====================================================
 

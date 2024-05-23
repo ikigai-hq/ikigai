@@ -11,7 +11,7 @@ dayjs.extend(relativeTime);
 
 export enum FormatType {
   DateFormat = "DD MMM, YYYY",
-  DateTimeFormat = "DD/MM/YYYY HH:mm",
+  DateTimeFormat = "HH:mm - DD MMM, YYYY ",
 }
 
 export const formatTimestamp = (

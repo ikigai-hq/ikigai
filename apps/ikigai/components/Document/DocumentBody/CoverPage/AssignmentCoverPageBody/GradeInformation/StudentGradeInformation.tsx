@@ -10,6 +10,7 @@ import { TextButtonWithHover } from "components/common/Button";
 import { useQuery } from "@apollo/client";
 import { GET_ASSIGNMENT_RUBRIC } from "graphql/query/AssignmentQuery";
 import { handleError } from "graphql/ApolloClient";
+import { IconTable } from "@tabler/icons-react";
 
 const StudentGradeInformation = () => {
   const [openRubric, setOpenRubric] = useState(false);
@@ -70,6 +71,7 @@ const StudentGradeInformation = () => {
               <TextButtonWithHover
                 type="text"
                 onClick={() => setOpenRubric(true)}
+                icon={<IconTable />}
               >
                 {rubric.name}
               </TextButtonWithHover>

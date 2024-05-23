@@ -1,23 +1,5 @@
 import { gql } from "@apollo/client";
 
-export const GET_BAND_SCORES = gql`
-  query GetBandScores {
-    assignmentGetBandScores {
-      id
-      name
-      range {
-        items {
-          from
-          to
-          score
-        }
-      }
-      updatedAt
-      createdAt
-    }
-  }
-`;
-
 export const GET_SUBMISSIONS_OF_ASSIGNMENT = gql`
   query GetSubmissionsOfAssignment($assignmentDocumentId: UUID!) {
     documentGet(documentId: $assignmentDocumentId) {

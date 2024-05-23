@@ -79,3 +79,35 @@ export const GET_RUBRICS = gql`
     }
   }
 `;
+
+export const GET_ASSIGNMENT_RUBRIC = gql`
+  query GetAssignmentRubric($documentId: UUID!) {
+    documentGet(documentId: $documentId) {
+      id
+      assignment {
+        id
+        rubric {
+          id
+          name
+          data {
+            rubricType
+            criteria
+            weightingCriteria
+            level
+            items {
+              explanation
+              score
+              toScore
+              userPick {
+                selected
+                score
+                comment
+              }
+            }
+          }
+          createdAt
+        }
+      }
+    }
+  }
+`;

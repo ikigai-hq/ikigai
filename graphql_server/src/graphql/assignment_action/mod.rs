@@ -64,10 +64,6 @@ impl Assignment {
     }
 
     async fn rubric(&self, ctx: &Context<'_>) -> Result<Option<Rubric>> {
-        if self.grade_method != GradeMethod::Rubric {
-            return Ok(None);
-        }
-
         if let Some(rubric_id) = self.grade_by_rubric_id {
             let mut conn = get_conn_from_ctx(ctx).await?;
             let rubric = Rubric::find_by_id(&mut conn, rubric_id).format_err()?;

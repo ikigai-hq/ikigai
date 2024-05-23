@@ -12,7 +12,7 @@ export type EditRubricProps = {
   rubric: IRubric;
 };
 
-const EditRubric = ({ visible, onClose, rubric }: EditRubricProps) => {
+const ViewOrEditRubric = ({ visible, onClose, rubric }: EditRubricProps) => {
   const allow = usePermission();
   const canEditRubric = allow(SpaceActionPermission.MANAGE_SPACE_CONTENT);
   return (
@@ -22,4 +22,4 @@ const EditRubric = ({ visible, onClose, rubric }: EditRubricProps) => {
   );
 };
 
-export default EditRubric;
+export default ViewOrEditRubric;

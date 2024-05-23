@@ -402,23 +402,25 @@ const Rubric = ({ rubric, afterSave, readOnly }: RubricProps) => {
           </Button>
         )}
       </div>
-      <div style={{ marginBottom: "5px" }}>
-        <Typography.Text strong>
-          <Trans>Rubric Type</Trans>
-        </Typography.Text>
-        <Select
-          value={rubricType}
-          onChange={setRubricType}
-          style={{ width: "130px", marginLeft: "5px" }}
-        >
-          <Select.Option value={RubricType.POINT_BASED}>
-            Point Based
-          </Select.Option>
-          <Select.Option value={RubricType.POINT_RANGE}>
-            Point Range
-          </Select.Option>
-        </Select>
-      </div>
+      {!readOnly && (
+        <div style={{ marginBottom: "5px" }}>
+          <Typography.Text strong>
+            <Trans>Rubric Type</Trans>
+          </Typography.Text>
+          <Select
+            value={rubricType}
+            onChange={setRubricType}
+            style={{ width: "130px", marginLeft: "5px" }}
+          >
+            <Select.Option value={RubricType.POINT_BASED}>
+              Point Based
+            </Select.Option>
+            <Select.Option value={RubricType.POINT_RANGE}>
+              Point Range
+            </Select.Option>
+          </Select>
+        </div>
+      )}
       <div style={{ flex: 1 }}>
         <div style={{ display: "flex" }}>
           <Table

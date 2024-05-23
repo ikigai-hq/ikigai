@@ -854,6 +854,61 @@ export interface GetRubrics {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetAssignmentRubric
+// ====================================================
+
+export interface GetAssignmentRubric_documentGet_assignment_rubric_data_items_userPick {
+  selected: boolean;
+  score: number;
+  comment: string;
+}
+
+export interface GetAssignmentRubric_documentGet_assignment_rubric_data_items {
+  explanation: string;
+  score: number;
+  toScore: number;
+  userPick: GetAssignmentRubric_documentGet_assignment_rubric_data_items_userPick;
+}
+
+export interface GetAssignmentRubric_documentGet_assignment_rubric_data {
+  rubricType: RubricType;
+  criteria: string[];
+  weightingCriteria: (number | null)[];
+  level: string[];
+  items: GetAssignmentRubric_documentGet_assignment_rubric_data_items[][];
+}
+
+export interface GetAssignmentRubric_documentGet_assignment_rubric {
+  id: any;
+  name: string;
+  data: GetAssignmentRubric_documentGet_assignment_rubric_data;
+  createdAt: number;
+}
+
+export interface GetAssignmentRubric_documentGet_assignment {
+  id: number;
+  rubric: GetAssignmentRubric_documentGet_assignment_rubric | null;
+}
+
+export interface GetAssignmentRubric_documentGet {
+  id: any;
+  assignment: GetAssignmentRubric_documentGet_assignment | null;
+}
+
+export interface GetAssignmentRubric {
+  documentGet: GetAssignmentRubric_documentGet;
+}
+
+export interface GetAssignmentRubricVariables {
+  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetDocumentV2
 // ====================================================
 

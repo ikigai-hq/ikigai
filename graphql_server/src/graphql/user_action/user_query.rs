@@ -1,9 +1,9 @@
-use crate::authorization::{DocumentActionPermission, RubricActionPermission};
+use crate::authorization::DocumentActionPermission;
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::{
-    create_default_space, document_authorize, get_conn_from_ctx, get_rubric_allowed_permissions,
-    get_user_from_ctx, get_user_id_from_ctx,
+    create_default_space, document_authorize, get_conn_from_ctx, get_user_from_ctx,
+    get_user_id_from_ctx,
 };
 use crate::util::get_now_as_secs;
 use async_graphql::*;

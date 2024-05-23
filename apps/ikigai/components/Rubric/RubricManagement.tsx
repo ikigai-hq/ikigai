@@ -27,7 +27,7 @@ import {
   UPSERT_RUBRIC,
 } from "graphql/mutation/AssignmentMutation";
 import { useState } from "react";
-import EditRubric from "./EditRubric";
+import ViewOrEditRubric from "./ViewOrEditRubric";
 import usePermission from "hook/UsePermission";
 import useRubricStore, { IRubric } from "store/RubricStore";
 
@@ -195,7 +195,7 @@ const RubricManagement = ({
         </div>
       </div>
       {editingRubric && (
-        <EditRubric
+        <ViewOrEditRubric
           visible={!!editingRubric}
           onClose={() => {
             setEditingRubric(undefined);

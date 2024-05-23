@@ -17,7 +17,7 @@ msgstr ""
 msgid "% of total grade"
 msgstr "% of total grade"
 
-#: components/Rubric/index.tsx:456
+#: components/Rubric/index.tsx:458
 msgid "<0>{0}%</0> of grade"
 msgstr "<0>{0}%</0> of grade"
 
@@ -30,11 +30,11 @@ msgstr "Add content"
 msgid "Add Cover"
 msgstr "Add Cover"
 
-#: components/Rubric/index.tsx:475
+#: components/Rubric/index.tsx:477
 msgid "Add criteria"
 msgstr "Add criteria"
 
-#: components/Rubric/index.tsx:444
+#: components/Rubric/index.tsx:446
 msgid "Add level"
 msgstr "Add level"
 
@@ -54,6 +54,10 @@ msgstr "Assignment"
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TeacherGeneralInformation.tsx:176
 msgid "attempts"
 msgstr "attempts"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/StudentGradeInformation.tsx:43
+msgid "Auto"
+msgstr "Auto"
 
 #: components/ErrorBoundary.tsx:54
 #: components/Initializing.tsx:223
@@ -184,15 +188,18 @@ msgstr "Generate"
 msgid "Generate Invite Link"
 msgstr "Generate Invite Link"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/StudentGradeInformation.tsx:38
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:51
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/index.tsx:25
 msgid "Grade"
 msgstr "Grade"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/StudentGradeInformation.tsx:58
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:75
 msgid "In auto mode, students will receive their grades and results immediately after completing their assessments."
 msgstr "In auto mode, students will receive their grades and results immediately after completing their assessments."
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/StudentGradeInformation.tsx:50
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:67
 msgid "In manual mode, students will receive their grades and results only after the teacher has provided feedback."
 msgstr "In manual mode, students will receive their grades and results only after the teacher has provided feedback."
@@ -238,9 +245,13 @@ msgstr "Joined! Please check your mail inbox"
 msgid "Last name"
 msgstr "Last name"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:104
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:105
 msgid "Manage Rubric"
 msgstr "Manage Rubric"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/StudentGradeInformation.tsx:44
+msgid "Manual"
+msgstr "Manual"
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/StudentGeneralInformation.tsx:63
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TeacherGeneralInformation.tsx:142
@@ -330,6 +341,7 @@ msgstr "Removed!"
 msgid "Role"
 msgstr "Role"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/StudentGradeInformation.tsx:70
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:87
 msgid "Rubric"
 msgstr "Rubric"
@@ -338,7 +350,7 @@ msgstr "Rubric"
 msgid "Rubric Management"
 msgstr "Rubric Management"
 
-#: components/Rubric/index.tsx:407
+#: components/Rubric/index.tsx:408
 msgid "Rubric Type"
 msgstr "Rubric Type"
 
@@ -471,7 +483,7 @@ msgid "Untitled"
 msgstr "Untitled"
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TeacherGeneralInformation.tsx:191
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:116
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:118
 #: components/SpaceSetting/GeneralSpaceSetting.tsx:63
 #: components/UserCredential/EditProfileModal.tsx:76
 msgid "Update"

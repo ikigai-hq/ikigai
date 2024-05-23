@@ -283,21 +283,3 @@ pub async fn rubric_is_allowed(
 
     Ok(is_allowed)
 }
-
-pub async fn get_rubric_allowed_permissions(
-    ctx: &Context<'_>,
-    rubric_id: Uuid,
-) -> Result<Vec<RubricActionPermission>> {
-    let user_auth = get_user_auth_from_ctx(ctx).await?;
-    let mut conn = get_conn_from_ctx(ctx).await?;
-    let rubric = Rubric::find_by_id(&mut conn, rubric_id)?;
-    let rubric_auth = RubricAuth::new(&rubric);
-
-    let oso = ctx.data::<Oso>()?;
-    let actions: HashSet<String> = oso.get_allowed_actions(user_auth, rubric_auth)?;
-    Ok(actions
-        .into_iter()
-        .map(|action| RubricActionPermission::from_str(&action))
-        .filter_map(|action| action.ok())
-        .collect())
-}

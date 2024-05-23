@@ -7,6 +7,7 @@ export type UIConfig = {
   leftSidebarVisible: boolean;
   hasRightSidebar: boolean;
   rightSidebarVisible: boolean;
+  submitSubmission: boolean;
 };
 
 type IUIStore = {
@@ -19,7 +20,8 @@ const useUIStore = create<IUIStore>((set, get) => ({
     hasLeftSidebar: true,
     leftSidebarVisible: true,
     hasRightSidebar: true,
-    rightSidebarVisible: true,
+    rightSidebarVisible: false,
+    submitSubmission: false,
   },
   setConfig: (config) => {
     const currentConfig = get().config;
@@ -37,6 +39,7 @@ const TEACHER_FOLDER_UI_CONFIG: UIConfig = {
   hasRightSidebar: false,
   leftSidebarVisible: true,
   rightSidebarVisible: false,
+  submitSubmission: false,
 };
 
 const STUDENT_FOLDER_UI_CONFIG = {
@@ -48,6 +51,7 @@ const TEACHER_ASSIGNMENT_UI_CONFIG: UIConfig = {
   hasRightSidebar: true,
   leftSidebarVisible: true,
   rightSidebarVisible: true,
+  submitSubmission: false,
 };
 
 const STUDENT_ASSIGNMENT_UI_CONFIG: UIConfig = {
@@ -61,12 +65,14 @@ const TEACHER_SUBMISSION_UI_CONFIG: UIConfig = {
   hasRightSidebar: true,
   leftSidebarVisible: false,
   rightSidebarVisible: true,
+  submitSubmission: false,
 };
 
 const STUDENT_SUBMISSION_UI_CONFIG: UIConfig = {
   ...TEACHER_SUBMISSION_UI_CONFIG,
-  hasRightSidebar: false,
-  rightSidebarVisible: false,
+  hasLeftSidebar: false,
+  leftSidebarVisible: false,
+  submitSubmission: true,
 };
 
 export const getUIConfig = (documentType: DocumentType, role: Role) => {

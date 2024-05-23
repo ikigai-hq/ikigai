@@ -82,29 +82,6 @@ export interface StudentSubmitSubmissionVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: TeacherStartSubmission
-// ====================================================
-
-export interface TeacherStartSubmission_assignmentStartByTeacher {
-  id: number;
-  documentId: any;
-}
-
-export interface TeacherStartSubmission {
-  assignmentStartByTeacher: TeacherStartSubmission_assignmentStartByTeacher;
-}
-
-export interface TeacherStartSubmissionVariables {
-  assignmentId: number;
-  studentId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL mutation operation: TeacherReviewSubmission
 // ====================================================
 
@@ -923,6 +900,17 @@ export interface GetDocumentV2_documentGet_assignment {
   gradeByRubricId: any | null;
 }
 
+export interface GetDocumentV2_documentGet_submission_assignment {
+  id: number;
+  documentId: any;
+}
+
+export interface GetDocumentV2_documentGet_submission {
+  id: number;
+  documentId: any;
+  assignment: GetDocumentV2_documentGet_submission_assignment;
+}
+
 export interface GetDocumentV2_documentGet {
   id: any;
   title: string;
@@ -935,6 +923,7 @@ export interface GetDocumentV2_documentGet {
   iconValue: string | null;
   documentType: DocumentType;
   assignment: GetDocumentV2_documentGet_assignment | null;
+  submission: GetDocumentV2_documentGet_submission | null;
 }
 
 export interface GetDocumentV2 {

@@ -19,13 +19,17 @@ import { ArrowDocument } from "components/common/IconSvg";
 import ManageSpace from "./ManageSpace";
 import useUIStore from "store/UIStore";
 import usePermission from "hook/UsePermission";
-import { SpaceActionPermission } from "graphql/types";
+import { DocumentType, SpaceActionPermission } from "graphql/types";
 
 const LeftSide = () => {
   const theme = useTheme();
   const allow = usePermission();
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
-  const spaceDocuments = useDocumentStore((state) => state.spaceDocuments);
+  const spaceDocuments = useDocumentStore((state) =>
+    state.spaceDocuments.filter(
+      (spaceDocument) => spaceDocument.documentType !== DocumentType.SUBMISSION,
+    ),
+  );
   const setSpaceSettingVisible = useSpaceStore(
     (state) => state.setSpaceSettingVisible,
   );

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Button } from "components/common/Button";
 import FileUpload, { DraggerStyled } from "components/common/FileUpload";
 import { PictureIcon, TrashIcon } from "components/common/IconSvg";
-import useDocumentStore from "../../../../store/DocumentStore";
+import useDocumentStore from "store/DocumentStore";
 import { Dropdown, MenuProps } from "antd";
 import { FileUploadResponse } from "components/common/AddResourceModal";
 import useUpdateDocument from "hook/UseUpdateDocument";
@@ -87,7 +87,7 @@ const CoverPhotoHeader = () => {
           )}
         </DocumentPhotoCover>
       )}
-      {!coverPhotoUrl && (
+      {!coverPhotoUrl && allow(DocumentActionPermission.EDIT_DOCUMENT) && (
         <FileUpload
           handleAddFileUuid={handleAddFileUuid}
           acceptType="image/png, image/jpg, image/jpeg"

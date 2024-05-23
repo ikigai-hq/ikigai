@@ -29,18 +29,6 @@ export const STUDENT_SUBMIT_SUBMISSION = gql`
   }
 `;
 
-export const TEACHER_START_SUBMISSION = gql`
-  mutation TeacherStartSubmission($assignmentId: Int!, $studentId: Int!) {
-    assignmentStartByTeacher(
-      assignmentId: $assignmentId
-      studentId: $studentId
-    ) {
-      id
-      documentId
-    }
-  }
-`;
-
 export const TEACHER_REVIEW_SUBMISSION = gql`
   mutation TeacherReviewSubmission(
     $submissionId: Int!

@@ -1,15 +1,36 @@
 import styled from "styled-components";
-import { Typography } from "antd";
+import { Button, Typography } from "antd";
 import { useTitle } from "ahooks";
 import { IconLayoutSidebar, IconLayoutSidebarRight } from "@tabler/icons-react";
+import { useRouter } from "next/router";
+import { t, Trans } from "@lingui/macro";
+import toast from "react-hot-toast";
 
+import useUIStore from "store/UIStore";
 import useDocumentStore from "store/DocumentStore";
 import { TextButtonWithHover } from "components/common/Button";
-import useUIStore from "store/UIStore";
+import { formatDocumentRoute } from "config/Routes";
+import { useMutation } from "@apollo/client";
+import { STUDENT_SUBMIT_SUBMISSION } from "graphql/mutation/AssignmentMutation";
+import { handleError } from "graphql/ApolloClient";
+import { StudentSubmitSubmission } from "graphql/types";
 
 const DocumentHeader = () => {
+  const router = useRouter();
+  const [submitSubmission] = useMutation<StudentSubmitSubmission>(
+    STUDENT_SUBMIT_SUBMISSION,
+    {
+      onError: handleError,
+    },
+  );
   const setUIConfig = useUIStore((state) => state.setConfig);
   const uiConfig = useUIStore((state) => state.config);
+  const assignmentDocumentId = useDocumentStore(
+    (state) => state.activeDocument?.submission?.assignment?.documentId,
+  );
+  const submissionId = useDocumentStore(
+    (state) => state.activeDocument?.submission?.id,
+  );
   const activeDocumentTitle = useDocumentStore(
     (state) => state.activeDocument?.title,
   );
@@ -21,6 +42,18 @@ const DocumentHeader = () => {
 
   const title = `${activeDocumentTitle || "Untitled"} - Powered by Ikigai!`;
   useTitle(title);
+
+  const onClickSubmit = async () => {
+    const { data } = await submitSubmission({
+      variables: {
+        submissionId,
+      },
+    });
+    if (data) {
+      toast.success(t`Success`);
+      await router.push(formatDocumentRoute(assignmentDocumentId));
+    }
+  };
 
   return (
     <DocumentHeaderWrapper>
@@ -37,6 +70,11 @@ const DocumentHeader = () => {
               }
               $active={uiConfig.leftSidebarVisible}
             />
+          )}
+          {uiConfig.submitSubmission && (
+            <Button type="primary" onClick={onClickSubmit}>
+              <Trans>Submit</Trans>
+            </Button>
           )}
         </div>
       </StyledActionContainer>

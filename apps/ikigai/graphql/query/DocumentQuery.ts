@@ -23,6 +23,14 @@ export const GET_DOCUMENT_V2 = gql`
         forceAutoSubmit
         gradeByRubricId
       }
+      submission {
+        id
+        documentId
+        assignment {
+          id
+          documentId
+        }
+      }
     }
   }
 `;

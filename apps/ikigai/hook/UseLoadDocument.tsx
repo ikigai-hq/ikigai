@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import toast from "react-hot-toast";
 import { t } from "@lingui/macro";
 
@@ -10,6 +10,7 @@ import {
   GetDocumentV2,
   GetPages,
   GetRubrics,
+  GetSubmissionsOfAssignment,
 } from "graphql/types";
 import {
   GET_DOCUMENT_PAGE_CONTENT,
@@ -24,9 +25,12 @@ import useSpaceMemberStore from "store/SpaceMembeStore";
 import usePageStore from "store/PageStore";
 import usePageContentStore from "store/PageContentStore";
 import useUIStore, { getUIConfig } from "store/UIStore";
-import { GET_RUBRICS } from "graphql/query/AssignmentQuery";
+import {
+  GET_RUBRICS,
+  GET_SUBMISSIONS_OF_ASSIGNMENT,
+} from "graphql/query/AssignmentQuery";
 import { handleError } from "graphql/ApolloClient";
-import useRubricStore from "../store/RubricStore";
+import useRubricStore from "store/RubricStore";
 
 export const useLoadDocument = (documentId: string) => {
   const [loading, setLoading] = useState(true);
@@ -54,6 +58,7 @@ export const useLoadDocument = (documentId: string) => {
   const setPageContents = usePageContentStore((state) => state.setPageContents);
   const setUIConfig = useUIStore((state) => state.setConfig);
   const setRubrics = useRubricStore((state) => state.setRubrics);
+  const setSubmissions = useDocumentStore((state) => state.setSubmissions);
 
   const [fetchDocument] = useLazyQuery<GetDocumentV2>(GET_DOCUMENT_V2, {
     fetchPolicy: "network-only",
@@ -76,6 +81,13 @@ export const useLoadDocument = (documentId: string) => {
   const [fetchRubrics] = useLazyQuery<GetRubrics>(GET_RUBRICS, {
     onError: handleError,
   });
+  const [fetchSubmissions] = useLazyQuery<GetSubmissionsOfAssignment>(
+    GET_SUBMISSIONS_OF_ASSIGNMENT,
+    {
+      onError: handleError,
+      fetchPolicy: "network-only",
+    },
+  );
 
   useEffect(() => {
     if (activeDocument?.id != documentId) {
@@ -104,9 +116,12 @@ export const useLoadDocument = (documentId: string) => {
     if (data) {
       const spaceId = data.documentGet.spaceId;
       if (spaceId) await fetchSpaceInformation(spaceId);
-      await loadAdditionalDocumentInformation(documentId);
-      setUIConfig(getUIConfig(data.documentGet.documentType, role));
       setActiveDocument(data.documentGet);
+      await Promise.all([
+        await loadAdditionalDocumentInformation(documentId),
+        await loadAssignmentInformation(data.documentGet.assignment?.id),
+      ]);
+      setUIConfig(getUIConfig(data.documentGet.documentType, role));
     }
 
     if (error) {
@@ -137,6 +152,19 @@ export const useLoadDocument = (documentId: string) => {
 
     const { data: rubricData } = await fetchRubrics();
     if (rubricData) setRubrics(rubricData.userGetMyRubrics);
+  };
+
+  const loadAssignmentInformation = async (assignmentId?: number) => {
+    if (!assignmentId) return;
+
+    const { data } = await fetchSubmissions({
+      variables: {
+        assignmentId,
+      },
+    });
+
+    console.log("Hello", data);
+    if (data) setSubmissions(data.assignmentGetSubmissions);
   };
 
   const fetchSpaceInformation = async (spaceId: number) => {

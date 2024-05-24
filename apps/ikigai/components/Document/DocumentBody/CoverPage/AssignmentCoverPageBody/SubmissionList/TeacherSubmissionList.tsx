@@ -1,14 +1,10 @@
-import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { t, Trans } from "@lingui/macro";
 import { ColumnsType } from "antd/es/table";
 import { Table, Tooltip, Typography } from "antd";
-import { cloneDeep } from "lodash";
 
-import { GetSubmissionsOfAssignment, Role } from "graphql/types";
+import { Role } from "graphql/types";
 import useDocumentStore, { ISubmission } from "store/DocumentStore";
-import { GET_SUBMISSIONS_OF_ASSIGNMENT } from "graphql/query/AssignmentQuery";
-import { handleError } from "graphql/ApolloClient";
 import { ISpaceMember, useGetSpaceMembers } from "store/SpaceMembeStore";
 import useSpaceStore from "store/SpaceStore";
 import UserBasicInformation from "components/UserBasicInformation";
@@ -22,7 +18,7 @@ enum SubmissionStatus {
   NotSubmitted = "Not Submitted",
   InDoing = "In Doing",
   Submitted = "Submitted",
-  Reviewed = "Feedback & Reviewed",
+  Graded = "Graded",
 }
 
 const TeacherSubmissionList = () => {
@@ -31,23 +27,11 @@ const TeacherSubmissionList = () => {
     ISpaceMember | undefined
   >(undefined);
   const spaceId = useSpaceStore((state) => state.spaceId);
-  const assignmentId = useDocumentStore(
-    (state) => state.activeDocument?.assignment?.id,
-  );
-  const { data } = useQuery<GetSubmissionsOfAssignment>(
-    GET_SUBMISSIONS_OF_ASSIGNMENT,
-    {
-      onError: handleError,
-      variables: {
-        assignmentId,
-      },
-      fetchPolicy: "network-only",
-    },
-  );
+  const innerSubmissions = useDocumentStore((state) => state.submissions);
   const { members } = useGetSpaceMembers(spaceId, Role.STUDENT);
 
   const submissions: Record<number, ISubmission[]> = {};
-  (cloneDeep(data?.assignmentGetSubmissions) || [])
+  innerSubmissions
     .sort((a, b) => b.attemptNumber - a.attemptNumber)
     .forEach((submission) => {
       const innerSubmissions = submissions[submission.userId];
@@ -66,7 +50,7 @@ const TeacherSubmissionList = () => {
     const submissions = getSubmissions(userId);
     if (submissions.length === 0) return SubmissionStatus.NotSubmitted;
     const lastSubmission = submissions[0];
-    if (lastSubmission.feedbackAt) return SubmissionStatus.Reviewed;
+    if (lastSubmission.feedbackAt) return SubmissionStatus.Graded;
     if (lastSubmission.submitAt) return SubmissionStatus.Submitted;
     return SubmissionStatus.InDoing;
   };
@@ -107,17 +91,19 @@ const TeacherSubmissionList = () => {
             <Typography.Text>
               {submissions.length} <Trans>times</Trans>
             </Typography.Text>
-            <Tooltip
-              title={t`View all submissions of ${member.user.name}`}
-              arrow={false}
-              placement="bottom"
-            >
-              <TextButtonWithHover
-                onClick={() => setSelectedMember(member)}
-                type="text"
-                icon={<IconListDetails size={18} />}
-              />
-            </Tooltip>
+            {submissions.length > 0 && (
+              <Tooltip
+                title={t`View all submissions of ${member.user.name}`}
+                arrow={false}
+                placement="bottom"
+              >
+                <TextButtonWithHover
+                  onClick={() => setSelectedMember(member)}
+                  type="text"
+                  icon={<IconListDetails size={18} />}
+                />
+              </Tooltip>
+            )}
           </div>
         );
       },

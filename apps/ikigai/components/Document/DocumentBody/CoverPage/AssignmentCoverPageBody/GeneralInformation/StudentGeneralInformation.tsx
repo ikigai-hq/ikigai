@@ -1,5 +1,5 @@
 import { Trans } from "@lingui/macro";
-import { Col, Radio, Row, Typography } from "antd";
+import { Col, Divider, Radio, Row, Typography } from "antd";
 import { IconClock, IconTicket } from "@tabler/icons-react";
 import React from "react";
 import { isNil } from "lodash";
@@ -12,6 +12,7 @@ const StudentGeneralInformation = () => {
   const assignment = useDocumentStore(
     (state) => state.activeDocument?.assignment,
   );
+  const lastSubmission = useDocumentStore((state) => state.submissions[0]);
   if (!assignment) return <></>;
 
   return (
@@ -84,6 +85,20 @@ const StudentGeneralInformation = () => {
           </ItemContainer>
         </Col>
       </Row>
+      {lastSubmission && lastSubmission.feedbackAt && (
+        <>
+          <Divider />
+          <div>
+            <Typography.Text strong type="secondary">
+              <Trans>Your Grade:</Trans>
+            </Typography.Text>
+            &ensp;
+            <Typography.Text strong>
+              {lastSubmission.finalGrade}
+            </Typography.Text>
+          </div>
+        </>
+      )}
     </div>
   );
 };

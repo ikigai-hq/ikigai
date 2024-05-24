@@ -51,8 +51,8 @@ const SubmissionsTableOfStudent = ({
       key: "Grade",
       title: t`Grade`,
       dataIndex: "finalGrade",
-      render: (finalGrade) => {
-        if (finalGrade !== null) {
+      render: (finalGrade, item) => {
+        if (item.feedbackAt && finalGrade !== null) {
           return <Typography.Text strong>{finalGrade}</Typography.Text>;
         }
 

@@ -1,7 +1,7 @@
 import { Drawer, Typography } from "antd";
 import { Trans } from "@lingui/macro";
 
-import { ISubmission } from "store/DocumentStore";
+import useDocumentStore, { ISubmission } from "store/DocumentStore";
 import { ISpaceMember } from "store/SpaceMembeStore";
 import UserBasicInformation from "components/UserBasicInformation";
 import SubmissionsTableOfStudent from "./SubmissionsTableOfStudent";
@@ -19,6 +19,7 @@ const SubmissionListOfStudent = ({
   submissions,
   member,
 }: SubmissionListOfStudentProps) => {
+  const title = useDocumentStore((state) => state.activeDocument?.title);
   return (
     <Drawer
       open={open}
@@ -35,7 +36,7 @@ const SubmissionListOfStudent = ({
     >
       <div>
         <Typography.Text strong type="secondary">
-          <Trans>Submissions</Trans>
+          <Trans>Submissions of {title}</Trans>
         </Typography.Text>
         <div>
           <SubmissionsTableOfStudent submissions={submissions} />

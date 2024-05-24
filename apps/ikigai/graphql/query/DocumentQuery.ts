@@ -26,6 +26,9 @@ export const GET_DOCUMENT_V2 = gql`
       submission {
         id
         documentId
+        startAt
+        submitAt
+        feedbackAt
         assignment {
           id
           documentId

@@ -868,6 +868,9 @@ export interface GetDocumentV2_documentGet_submission_assignment {
 export interface GetDocumentV2_documentGet_submission {
   id: number;
   documentId: any;
+  startAt: number;
+  submitAt: number | null;
+  feedbackAt: number | null;
   assignment: GetDocumentV2_documentGet_submission_assignment;
 }
 

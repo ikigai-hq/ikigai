@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { t, Trans } from "@lingui/macro";
 import { ColumnsType } from "antd/es/table";
 import { Table, Tooltip, Typography } from "antd";
+import { useState } from "react";
 
 import { Role } from "graphql/types";
 import useDocumentStore, { ISubmission } from "store/DocumentStore";
@@ -12,14 +13,7 @@ import { formatDocumentRoute } from "config/Routes";
 import { TextButtonWithHover } from "components/common/Button";
 import { IconListDetails, IconPencilCheck } from "@tabler/icons-react";
 import SubmissionListOfStudent from "./SubmissionListOfStudent";
-import { useState } from "react";
-
-enum SubmissionStatus {
-  NotSubmitted = "Not Submitted",
-  InDoing = "In Doing",
-  Submitted = "Submitted",
-  Graded = "Graded",
-}
+import { SubmissionStatus } from "util/DocumentUtil";
 
 const TeacherSubmissionList = () => {
   const router = useRouter();

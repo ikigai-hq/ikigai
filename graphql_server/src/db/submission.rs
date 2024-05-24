@@ -1,6 +1,5 @@
 use diesel::result::Error;
 use diesel::{AsChangeset, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
-use itertools::Itertools;
 use uuid::Uuid;
 
 use super::schema::assignment_submissions;

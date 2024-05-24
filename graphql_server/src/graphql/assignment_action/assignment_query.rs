@@ -1,5 +1,5 @@
-use async_graphql::*;
 use crate::authorization::{DocumentActionPermission, SpaceActionPermission};
+use async_graphql::*;
 
 use crate::db::*;
 use crate::error::IkigaiErrorExt;
@@ -27,9 +27,16 @@ impl AssignmentQuery {
             let document = Document::find_by_id(&mut conn, assignment.document_id).format_err()?;
             (assignment, document)
         };
-        document_quick_authorize(ctx, assignment.document_id, DocumentActionPermission::ViewDocument).await?;
+        document_quick_authorize(
+            ctx,
+            assignment.document_id,
+            DocumentActionPermission::ViewDocument,
+        )
+        .await?;
         let view_all = if let Some(space_id) = document.space_id {
-            space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceContent).await.is_ok()
+            space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceContent)
+                .await
+                .is_ok()
         } else {
             false
         };
@@ -39,7 +46,8 @@ impl AssignmentQuery {
             Submission::find_all_by_assignment(&mut conn, assignment_id).format_err()?
         } else {
             let user_id = get_user_id_from_ctx(ctx).await?;
-            Submission::find_all_by_assignment_and_user(&mut conn, user_id, assignment_id).format_err()?
+            Submission::find_all_by_assignment_and_user(&mut conn, user_id, assignment_id)
+                .format_err()?
         };
 
         Ok(submissions)

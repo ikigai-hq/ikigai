@@ -1,11 +1,13 @@
 import create from "zustand";
 import {
   GetSpaceMembers,
-  GetSpaceMembers_spaceGet_members as ISpaceMember,
+  GetSpaceMembers_spaceGet_members,
   Role,
 } from "graphql/types";
 import { query } from "graphql/ApolloClient";
 import { GET_SPACE_MEMBERS } from "graphql/query/SpaceQuery";
+
+export type ISpaceMember = GetSpaceMembers_spaceGet_members;
 
 // Type hint: Map<Space ID, Map<User ID, ISpaceMember>>
 export type SpaceMembersType = Map<number, Map<number, ISpaceMember>>;

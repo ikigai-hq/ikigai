@@ -38,8 +38,7 @@ const UserBasicInformation = (props: UserNameProps) => {
 
 const UserInformation = styled.div`
   padding: 0 15px 0 15px;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  border-radius: 8px;
   display: flex;
   gap: 10px;
   align-items: center;

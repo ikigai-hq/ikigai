@@ -309,28 +309,4 @@ impl Submission {
             .filter(assignment_submissions::id.eq_any(ids))
             .get_results(conn)
     }
-
-    pub fn find_all_by_user(
-        conn: &mut PgConnection,
-        user_id: i32,
-        submit_from: i64,
-        submit_to: i64,
-    ) -> Result<Vec<Self>, Error> {
-        let mut in_doing_submissions: Vec<Submission> = assignment_submissions::table
-            .filter(assignment_submissions::user_id.eq(user_id))
-            .filter(assignment_submissions::submit_at.is_null())
-            .load(conn)?;
-        let mut completed_submissions: Vec<Self> = assignment_submissions::table
-            .filter(assignment_submissions::user_id.eq(user_id))
-            .filter(assignment_submissions::submit_at.gt(submit_from))
-            .filter(assignment_submissions::submit_at.lt(submit_to))
-            .load(conn)?;
-        in_doing_submissions.append(&mut completed_submissions);
-
-        Ok(in_doing_submissions
-            .into_iter()
-            .dedup_by(|a, b| a.id == b.id)
-            .sorted_by(|a, b| Ord::cmp(&b.updated_at, &a.updated_at))
-            .collect())
-    }
 }

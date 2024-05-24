@@ -6,7 +6,10 @@ import {
   GetDocuments_spaceGet_documents as ISpaceDocument,
   GetDocumentV2_documentGet as IDocument,
   UpdateAssignmentData,
+  GetSubmissionsOfAssignment_assignmentGetSubmissions,
 } from "graphql/types";
+
+export type ISubmission = GetSubmissionsOfAssignment_assignmentGetSubmissions;
 
 export type IUpdateSpaceDocument = Partial<
   Omit<

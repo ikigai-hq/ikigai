@@ -706,19 +706,19 @@ export interface UpdateProfileVariables {
 // GraphQL query operation: GetSubmissionsOfAssignment
 // ====================================================
 
-export interface GetSubmissionsOfAssignment_documentGet_assignment_submissions_user_avatar {
+export interface GetSubmissionsOfAssignment_assignmentGetSubmissions_user_avatar {
   publicUrl: string | null;
 }
 
-export interface GetSubmissionsOfAssignment_documentGet_assignment_submissions_user {
+export interface GetSubmissionsOfAssignment_assignmentGetSubmissions_user {
   id: number;
   firstName: string;
   lastName: string;
-  avatar: GetSubmissionsOfAssignment_documentGet_assignment_submissions_user_avatar | null;
+  avatar: GetSubmissionsOfAssignment_assignmentGetSubmissions_user_avatar | null;
   randomColor: string;
 }
 
-export interface GetSubmissionsOfAssignment_documentGet_assignment_submissions {
+export interface GetSubmissionsOfAssignment_assignmentGetSubmissions {
   id: number;
   allowForStudentViewAnswer: boolean;
   userId: number;
@@ -732,25 +732,16 @@ export interface GetSubmissionsOfAssignment_documentGet_assignment_submissions {
   submitAt: number | null;
   isSubmitted: boolean;
   feedbackAt: number | null;
-  user: GetSubmissionsOfAssignment_documentGet_assignment_submissions_user;
-}
-
-export interface GetSubmissionsOfAssignment_documentGet_assignment {
-  id: number;
-  submissions: GetSubmissionsOfAssignment_documentGet_assignment_submissions[];
-}
-
-export interface GetSubmissionsOfAssignment_documentGet {
-  id: any;
-  assignment: GetSubmissionsOfAssignment_documentGet_assignment | null;
+  attemptNumber: number;
+  user: GetSubmissionsOfAssignment_assignmentGetSubmissions_user;
 }
 
 export interface GetSubmissionsOfAssignment {
-  documentGet: GetSubmissionsOfAssignment_documentGet;
+  assignmentGetSubmissions: GetSubmissionsOfAssignment_assignmentGetSubmissions[];
 }
 
 export interface GetSubmissionsOfAssignmentVariables {
-  assignmentDocumentId: any;
+  assignmentId: number;
 }
 
 /* tslint:disable */

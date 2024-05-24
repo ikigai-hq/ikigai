@@ -1,36 +1,31 @@
 import { gql } from "@apollo/client";
 
 export const GET_SUBMISSIONS_OF_ASSIGNMENT = gql`
-  query GetSubmissionsOfAssignment($assignmentDocumentId: UUID!) {
-    documentGet(documentId: $assignmentDocumentId) {
+  query GetSubmissionsOfAssignment($assignmentId: Int!) {
+    assignmentGetSubmissions(assignmentId: $assignmentId) {
       id
-      assignment {
+      allowForStudentViewAnswer
+      userId
+      grade
+      feedback
+      documentId
+      finalGrade
+      updatedAt
+      createdAt
+      startAt
+      submitAt
+      isSubmitted
+      feedbackAt
+      finalGrade
+      attemptNumber
+      user {
         id
-        submissions {
-          id
-          allowForStudentViewAnswer
-          userId
-          grade
-          feedback
-          documentId
-          finalGrade
-          updatedAt
-          createdAt
-          startAt
-          submitAt
-          isSubmitted
-          feedbackAt
-          finalGrade
-          user {
-            id
-            firstName
-            lastName
-            avatar {
-              publicUrl
-            }
-            randomColor
-          }
+        firstName
+        lastName
+        avatar {
+          publicUrl
         }
+        randomColor
       }
     }
   }

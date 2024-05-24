@@ -20,19 +20,6 @@ impl UserQuery {
         Ok(user)
     }
 
-    async fn user_my_submissions(
-        &self,
-        ctx: &Context<'_>,
-        submit_from: Option<i64>,
-        submit_to: Option<i64>,
-    ) -> Result<Vec<Submission>> {
-        let user_id = get_user_id_from_ctx(ctx).await?;
-        let mut conn = get_conn_from_ctx(ctx).await?;
-        let submit_to = submit_to.unwrap_or(get_now_as_secs());
-        let submit_from = submit_from.unwrap_or(submit_to - 2_592_000); // 30 days in secs
-        Submission::find_all_by_user(&mut conn, user_id, submit_from, submit_to).format_err()
-    }
-
     async fn user_last_activity(&self, ctx: &Context<'_>) -> Result<UserActivity> {
         let user_id = get_user_id_from_ctx(ctx).await?;
         let mut conn = get_conn_from_ctx(ctx).await?;

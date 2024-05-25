@@ -27,7 +27,6 @@ const SubmissionListOfStudent = ({
       title={
         <UserBasicInformation
           name={member.user.name}
-          email={member.user.email}
           randomColor={member.user.randomColor}
           avatar={member.user.avatar?.publicUrl}
         />

@@ -29,6 +29,14 @@ export const GET_DOCUMENT_V2 = gql`
         startAt
         submitAt
         feedbackAt
+        user {
+          id
+          name
+          avatar {
+            publicUrl
+          }
+          randomColor
+        }
         assignment {
           id
           documentId

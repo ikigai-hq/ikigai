@@ -11,6 +11,8 @@ import { STUDENT_SUBMIT_SUBMISSION } from "graphql/mutation/AssignmentMutation";
 import { handleError } from "graphql/ApolloClient";
 import useDocumentStore from "store/DocumentStore";
 import useAuthUserStore from "store/AuthStore";
+import HeaderSubmissionUserInfo from "./HeaderSubmissionUserInfo";
+import styled from "styled-components";
 
 const SubmissionHeader = () => {
   const role = useAuthUserStore((state) => state.role);
@@ -37,10 +39,29 @@ export const TeacherSubmissionHeader = () => {
   const submission = useDocumentStore(
     (state) => state.activeDocument?.submission,
   );
+  const router = useRouter();
+  const assignmentDocumentId = useDocumentStore(
+    (state) => state.activeDocument?.submission?.assignment?.documentId,
+  );
+
+  const onClickExit = () => {
+    router.push(formatDocumentRoute(assignmentDocumentId));
+  };
 
   if (!submission) return <></>;
 
-  return <></>;
+  return (
+    <HeaderSubmissionWrapper>
+      <Button
+        style={{ display: "flex", alignItems: "center", gap: 4 }}
+        icon={<IconLogout2 size={16} />}
+        onClick={onClickExit}
+      >
+        <Trans>Back to space</Trans>
+      </Button>
+      <HeaderSubmissionUserInfo />
+    </HeaderSubmissionWrapper>
+  );
 };
 
 export const StudentDoingSubmissionHeader = () => {
@@ -75,7 +96,7 @@ export const StudentDoingSubmissionHeader = () => {
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+    <HeaderSubmissionWrapper>
       <Popconfirm
         title={t`Do you want to submit your submission?`}
         onConfirm={onClickSubmit}
@@ -87,7 +108,8 @@ export const StudentDoingSubmissionHeader = () => {
       <Button onClick={onClickSaveAndExit}>
         <Trans>Save & Exit</Trans>
       </Button>
-    </div>
+      <HeaderSubmissionUserInfo />
+    </HeaderSubmissionWrapper>
   );
 };
 
@@ -102,7 +124,7 @@ const StudentNonDoingSubmissionHeader = () => {
   };
 
   return (
-    <div>
+    <HeaderSubmissionWrapper>
       <Button
         style={{ display: "flex", alignItems: "center", gap: 4 }}
         icon={<IconLogout2 size={16} />}
@@ -110,6 +132,13 @@ const StudentNonDoingSubmissionHeader = () => {
       >
         <Trans>Back to space</Trans>
       </Button>
-    </div>
+      <HeaderSubmissionUserInfo />
+    </HeaderSubmissionWrapper>
   );
 };
+
+const HeaderSubmissionWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;

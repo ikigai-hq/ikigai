@@ -6,6 +6,7 @@ import {
 } from "graphql/types";
 import { query } from "graphql/ApolloClient";
 import { GET_SPACE_MEMBERS } from "graphql/query/SpaceQuery";
+import useSpaceStore from "./SpaceStore";
 
 export type ISpaceMember = GetSpaceMembers_spaceGet_members;
 
@@ -59,13 +60,24 @@ const useSpaceMemberStore = create<SpaceMemberContext>((set, get) => ({
   },
 }));
 
-export const useGetSpaceMembers = (spaceId?: number, filterRole?: Role) => {
+export const useGetSpaceMembers = (
+  filterRole?: Role,
+  skipUserIds?: number[],
+) => {
+  const spaceId = useSpaceStore((state) => state.spaceId);
   const members = useSpaceMemberStore((state) => state.data.get(spaceId));
   const filteredMembers = members
-    ? Array.from(members.values()).filter((member) => {
-        if (!filterRole) return true;
-        return member.role === filterRole;
-      })
+    ? Array.from(members.values())
+        .filter((member) => {
+          if (!filterRole) return true;
+          return member.role === filterRole;
+        })
+        .filter((member) => {
+          if (skipUserIds) {
+            return !skipUserIds.includes(member.userId);
+          }
+          return true;
+        })
     : [];
 
   return { members: filteredMembers };

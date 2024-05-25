@@ -860,6 +860,17 @@ export interface GetDocumentV2_documentGet_assignment {
   gradeByRubricId: any | null;
 }
 
+export interface GetDocumentV2_documentGet_submission_user_avatar {
+  publicUrl: string | null;
+}
+
+export interface GetDocumentV2_documentGet_submission_user {
+  id: number;
+  name: string;
+  avatar: GetDocumentV2_documentGet_submission_user_avatar | null;
+  randomColor: string;
+}
+
 export interface GetDocumentV2_documentGet_submission_assignment {
   id: number;
   documentId: any;
@@ -871,6 +882,7 @@ export interface GetDocumentV2_documentGet_submission {
   startAt: number;
   submitAt: number | null;
   feedbackAt: number | null;
+  user: GetDocumentV2_documentGet_submission_user;
   assignment: GetDocumentV2_documentGet_submission_assignment;
 }
 

@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { formatDocumentRoute } from "config/Routes";
 import { formatTimestamp, FormatType } from "util/Time";
 import { GetSubmissionsOfAssignment_assignmentGetSubmissions as ISubmission } from "graphql/types";
+import { getSubmissionStatus } from "util/DocumentUtil";
 
 export type SubmissionsTableOfStudentProps = {
   submissions: ISubmission[];
@@ -46,6 +47,14 @@ const SubmissionsTableOfStudent = ({
           </Typography.Text>
         );
       },
+    },
+    {
+      key: "status",
+      title: t`Status`,
+      dataIndex: "status",
+      render: (_, item) => (
+        <Typography.Text>{getSubmissionStatus(item)}</Typography.Text>
+      ),
     },
     {
       key: "Grade",

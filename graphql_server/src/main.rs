@@ -14,6 +14,8 @@ extern crate actix;
 extern crate num_derive;
 #[macro_use]
 extern crate thiserror;
+#[macro_use]
+extern crate derive_builder;
 
 use actix_cors::Cors;
 use actix_web::middleware::Logger;

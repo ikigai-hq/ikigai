@@ -57,3 +57,4 @@ dyn-clone = "1.0.17"
 strum = "0.26"
 strum_macros = "0.26"
 openssl = { version = "0.10.34", features = ["vendored"] }
+derive_builder = "0.20.0"

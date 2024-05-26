@@ -45,17 +45,16 @@ pub fn duplicate_space(
 
         for space_document in space_documents.into_iter() {
             if space_document.parent_id.is_none() && space_document.deleted_at.is_none() {
-                let mut config = DocumentCloneConfig::new("", true);
-                config.set_index(space_document.index);
-                space_document.deep_clone(
-                    conn,
-                    creator_id,
-                    config,
-                    Some(new_space.id),
-                    true,
-                    None,
-                    true,
-                )?;
+                let config = DocumentCloneConfigBuilder::default()
+                    .prefix_title("")
+                    .index(space_document.index)
+                    .creator_id(creator_id)
+                    .clone_to_space(Some(new_space.id))
+                    .clone_children(true)
+                    .keep_document_type(true)
+                    .build()
+                    .unwrap();
+                space_document.deep_clone(conn, config)?;
             }
         }
 

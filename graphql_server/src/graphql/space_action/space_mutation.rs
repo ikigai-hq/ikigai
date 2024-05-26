@@ -87,22 +87,19 @@ impl SpaceMutation {
         }
         let last_index =
             Document::find_last_index(&mut conn, space_id, original_document.parent_id)?;
-        let mut config = DocumentCloneConfig::new("Copy of ", true);
-        config.set_index(last_index);
-        config.set_parent(original_document.parent_id);
+        let config = DocumentCloneConfigBuilder::default()
+            .prefix_title("Copy of ")
+            .index(last_index)
+            .creator_id(user_auth.id)
+            .parent_id(original_document.parent_id)
+            .clone_to_space(Some(space_id))
+            .clone_children(true)
+            .keep_document_type(true)
+            .build()
+            .unwrap();
 
         let doc = conn
-            .transaction::<_, IkigaiError, _>(|conn| {
-                original_document.deep_clone(
-                    conn,
-                    user_auth.id,
-                    config,
-                    Some(space_id),
-                    true,
-                    None,
-                    true,
-                )
-            })
+            .transaction::<_, IkigaiError, _>(|conn| original_document.deep_clone(conn, config))
             .format_err()?;
 
         let mut res: Vec<Document> = vec![];

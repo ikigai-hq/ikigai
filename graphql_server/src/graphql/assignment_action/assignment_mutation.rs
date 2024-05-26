@@ -121,15 +121,15 @@ impl AssignmentMutation {
 
         let submission = conn
             .transaction::<_, IkigaiError, _>(|conn| {
-                let document = assignment_document.deep_clone(
-                    conn,
-                    user_id,
-                    DocumentCloneConfig::new("", false),
-                    assignment_document.space_id,
-                    false,
-                    None,
-                    false,
-                )?;
+                let config = DocumentCloneConfigBuilder::default()
+                    .prefix_title("")
+                    .creator_id(user_id)
+                    .clone_to_space(assignment_document.space_id)
+                    .clone_children(false)
+                    .keep_document_type(false)
+                    .build()
+                    .unwrap();
+                let document = assignment_document.deep_clone(conn, config)?;
 
                 let new_submission = NewSubmission::new(
                     user_id,

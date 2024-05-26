@@ -1,84 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { Trans } from "@lingui/macro";
-import { Segmented } from "antd";
-import { IconTools, IconPageBreak } from "@tabler/icons-react";
 
 import { BreakPoints } from "styles/mediaQuery";
-import PageTabContent from "./PageTabContent";
-import useUIStore from "store/UIStore";
-
-enum ContentOptions {
-  Pages,
-  Tools,
-}
+import useUIStore, { RightSideBarOptions } from "store/UIStore";
+import EditContentSidebar from "./EditContentSidebar";
+import GradingSidebar from "./GradingSidebar";
 
 const RightSide = () => {
   const config = useUIStore((state) => state.config);
-  const [contentTab, setContentTab] = useState(ContentOptions.Pages);
-  const options = [
-    {
-      value: ContentOptions.Pages,
-      label: (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 4,
-          }}
-        >
-          <IconPageBreak size={16} />
-          <Trans>Pages</Trans>
-        </div>
-      ),
-    },
-    {
-      value: ContentOptions.Tools,
-      label: (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 4,
-          }}
-        >
-          <IconTools size={16} />
-          <Trans>Tools</Trans>
-        </div>
-      ),
-    },
-  ];
 
-  const visible = config.hasRightSidebar && config.rightSidebarVisible;
+  const isEditContentSidebarVisible =
+    config.hasEditContentSidebar &&
+    config.rightSideBarVisible === RightSideBarOptions.EditContent;
+  const isGradingSidebarVisible =
+    config.hasGradeSidebar &&
+    config.rightSideBarVisible === RightSideBarOptions.Grading;
+  const visible = isEditContentSidebarVisible || isGradingSidebarVisible;
+
   return (
     <Container $hide={!visible}>
-      <div>
-        <Segmented
-          style={{ width: "100%" }}
-          options={options}
-          onChange={setContentTab}
-          value={contentTab}
-          block
-        />
-      </div>
-      <div style={{ width: "100%", overflow: "auto" }}>
-        {contentTab === ContentOptions.Pages && (
-          <SpaceInfoContainer>
-            <PageTabContent />
-          </SpaceInfoContainer>
-        )}
-      </div>
+      {isEditContentSidebarVisible && <EditContentSidebar />}
+      {isGradingSidebarVisible && <GradingSidebar />}
     </Container>
   );
 };
 
 export default RightSide;
-
-const SpaceInfoContainer = styled.div`
-  padding: 5px;
-`;
 
 const Container = styled.div<{
   $hide: boolean;

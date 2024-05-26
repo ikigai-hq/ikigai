@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import toast from "react-hot-toast";
 import { t } from "@lingui/macro";
 
@@ -121,7 +121,7 @@ export const useLoadDocument = (documentId: string) => {
         await loadAdditionalDocumentInformation(documentId),
         await loadAssignmentInformation(data.documentGet.assignment?.id),
       ]);
-      setUIConfig(getUIConfig(data.documentGet.documentType, role));
+      setUIConfig(getUIConfig(data.documentGet, role));
     }
 
     if (error) {
@@ -163,7 +163,6 @@ export const useLoadDocument = (documentId: string) => {
       },
     });
 
-    console.log("Hello", data);
     if (data) setSubmissions(data.assignmentGetSubmissions);
   };
 

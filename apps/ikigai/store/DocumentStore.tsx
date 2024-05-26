@@ -3,21 +3,21 @@ import { cloneDeep } from "lodash";
 
 import {
   DocumentType,
-  GetDocuments_spaceGet_documents as ISpaceDocument,
-  GetDocumentV2_documentGet as IDocument,
+  GetDocuments_spaceGet_documents,
+  GetDocumentV2_documentGet,
   UpdateAssignmentData,
   GetSubmissionsOfAssignment_assignmentGetSubmissions,
 } from "graphql/types";
 
+export type IDocument = GetDocumentV2_documentGet;
+export type ISpaceDocument = GetDocuments_spaceGet_documents;
 export type ISubmission = GetSubmissionsOfAssignment_assignmentGetSubmissions;
-
 export type IUpdateSpaceDocument = Partial<
   Omit<
     ISpaceDocument,
     "id" | "createdAt" | "assignment" | "submission" | "documentType"
   >
 >;
-
 export type IUpdateActiveDocument = Partial<
   Pick<
     IDocument,

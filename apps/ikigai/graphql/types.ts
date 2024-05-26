@@ -882,6 +882,8 @@ export interface GetDocumentV2_documentGet_submission {
   startAt: number;
   submitAt: number | null;
   feedbackAt: number | null;
+  feedback: string | null;
+  finalGrade: number | null;
   user: GetDocumentV2_documentGet_submission_user;
   assignment: GetDocumentV2_documentGet_submission_assignment;
 }

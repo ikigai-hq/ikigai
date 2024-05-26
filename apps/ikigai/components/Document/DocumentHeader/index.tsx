@@ -1,12 +1,17 @@
 import styled from "styled-components";
-import { Typography } from "antd";
+import { Tooltip, Typography } from "antd";
 import { useTitle } from "ahooks";
-import { IconLayoutSidebar, IconLayoutSidebarRight } from "@tabler/icons-react";
+import {
+  IconLayoutSidebar,
+  IconLayoutSidebarRight,
+  IconPencilCheck,
+} from "@tabler/icons-react";
 
-import useUIStore from "store/UIStore";
+import useUIStore, { RightSideBarOptions } from "store/UIStore";
 import useDocumentStore from "store/DocumentStore";
 import { TextButtonWithHover } from "components/common/Button";
 import SubmissionHeader from "./SubmissionHeader";
+import { t } from "@lingui/macro";
 
 const DocumentHeader = () => {
   const setUIConfig = useUIStore((state) => state.setConfig);
@@ -49,17 +54,46 @@ const DocumentHeader = () => {
       </StyledActionContainer>
       <StyledActionContainer style={{ justifyContent: "end" }}>
         <div>
-          {uiConfig.hasRightSidebar && (
-            <SideBarHeader
-              type="text"
-              icon={<IconLayoutSidebarRight size={22} stroke={1.5} />}
-              onClick={() =>
-                setUIConfig({
-                  rightSidebarVisible: !uiConfig.rightSidebarVisible,
-                })
-              }
-              $active={uiConfig.rightSidebarVisible}
-            />
+          {uiConfig.hasGradeSidebar && (
+            <Tooltip title={t`Grade`} arrow={false}>
+              <SideBarHeader
+                type="text"
+                icon={<IconPencilCheck size={22} stroke={1.5} />}
+                onClick={() =>
+                  setUIConfig({
+                    rightSideBarVisible:
+                      uiConfig.rightSideBarVisible ===
+                      RightSideBarOptions.Grading
+                        ? RightSideBarOptions.None
+                        : RightSideBarOptions.Grading,
+                  })
+                }
+                $active={
+                  uiConfig.rightSideBarVisible === RightSideBarOptions.Grading
+                }
+              />
+            </Tooltip>
+          )}
+          {uiConfig.hasEditContentSidebar && (
+            <Tooltip title={t`Pages & Edit tools`} arrow={false}>
+              <SideBarHeader
+                type="text"
+                icon={<IconLayoutSidebarRight size={22} stroke={1.5} />}
+                onClick={() =>
+                  setUIConfig({
+                    rightSideBarVisible:
+                      uiConfig.rightSideBarVisible ===
+                      RightSideBarOptions.EditContent
+                        ? RightSideBarOptions.None
+                        : RightSideBarOptions.EditContent,
+                  })
+                }
+                $active={
+                  uiConfig.rightSideBarVisible ===
+                  RightSideBarOptions.EditContent
+                }
+              />
+            </Tooltip>
           )}
         </div>
       </StyledActionContainer>

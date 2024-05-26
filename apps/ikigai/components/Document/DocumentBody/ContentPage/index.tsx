@@ -11,14 +11,15 @@ import { IPage } from "store/PageStore";
 import { useDebounce } from "ahooks";
 import useUpdatePage from "hook/UseUpdatePage";
 import usePageContentStore from "store/PageContentStore";
-import useUIStore, { UIConfig } from "store/UIStore";
+import useUIStore, { RightSideBarOptions, UIConfig } from "store/UIStore";
 
 const getBodyWidth = (uiConfig: UIConfig) => {
   let bodyWidth = "100vw - 535px";
   // If left sidebar is not visible -> the side should be increase 256px
   if (!uiConfig.leftSidebarVisible) bodyWidth += " + 256px";
   // If right sidebar is not visible -> the side should be increase 256px
-  if (!uiConfig.rightSidebarVisible) bodyWidth += " + 256px";
+  if (uiConfig.rightSideBarVisible !== RightSideBarOptions.None)
+    bodyWidth += " + 256px";
 
   return `calc(${bodyWidth})`;
 };

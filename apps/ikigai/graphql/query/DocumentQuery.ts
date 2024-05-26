@@ -29,6 +29,8 @@ export const GET_DOCUMENT_V2 = gql`
         startAt
         submitAt
         feedbackAt
+        feedback
+        finalGrade
         user {
           id
           name

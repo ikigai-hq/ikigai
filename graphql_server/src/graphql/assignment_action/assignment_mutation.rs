@@ -215,7 +215,6 @@ impl AssignmentMutation {
         submission_id: i32,
         grade_data: GradeSubmissionData,
     ) -> Result<bool> {
-        let user_id = get_user_id_from_ctx(ctx).await?;
         let mut conn = get_conn_from_ctx(ctx).await?;
         let submission = Submission::find_by_id(&mut conn, submission_id).format_err()?;
         let assignment =
@@ -236,7 +235,7 @@ impl AssignmentMutation {
                 submission_name: submission_document.title,
             });
         let notification = Notification::insert(&mut conn, notification).format_err()?;
-        send_notification(&mut conn, notification, vec![user_id]).format_err()?;
+        send_notification(&mut conn, notification, vec![submission.user_id]).format_err()?;
 
         Ok(true)
     }

@@ -1,12 +1,25 @@
 import create from "zustand";
 
 import { DocumentType, Role } from "graphql/types";
+import { IDocument } from "./DocumentStore";
+
+export enum RightSideBarOptions {
+  None,
+  EditContent,
+  Grading,
+}
 
 export type UIConfig = {
+  // Left Side Bar
   hasLeftSidebar: boolean;
   leftSidebarVisible: boolean;
-  hasRightSidebar: boolean;
-  rightSidebarVisible: boolean;
+
+  // Right Side Bard
+  hasEditContentSidebar: boolean;
+  hasGradeSidebar: boolean;
+  rightSideBarVisible: RightSideBarOptions;
+
+  // Header
   submitSubmission: boolean;
 };
 
@@ -19,8 +32,11 @@ const useUIStore = create<IUIStore>((set, get) => ({
   config: {
     hasLeftSidebar: true,
     leftSidebarVisible: true,
-    hasRightSidebar: true,
-    rightSidebarVisible: false,
+
+    hasEditContentSidebar: true,
+    hasGradeSidebar: false,
+    rightSideBarVisible: RightSideBarOptions.EditContent,
+
     submitSubmission: false,
   },
   setConfig: (config) => {
@@ -36,9 +52,12 @@ const useUIStore = create<IUIStore>((set, get) => ({
 
 const TEACHER_FOLDER_UI_CONFIG: UIConfig = {
   hasLeftSidebar: true,
-  hasRightSidebar: false,
   leftSidebarVisible: true,
-  rightSidebarVisible: false,
+
+  hasEditContentSidebar: false,
+  hasGradeSidebar: false,
+  rightSideBarVisible: RightSideBarOptions.EditContent,
+
   submitSubmission: false,
 };
 
@@ -48,34 +67,56 @@ const STUDENT_FOLDER_UI_CONFIG = {
 
 const TEACHER_ASSIGNMENT_UI_CONFIG: UIConfig = {
   hasLeftSidebar: true,
-  hasRightSidebar: true,
   leftSidebarVisible: true,
-  rightSidebarVisible: true,
+
+  hasEditContentSidebar: true,
+  hasGradeSidebar: false,
+  rightSideBarVisible: RightSideBarOptions.EditContent,
+
   submitSubmission: false,
 };
 
 const STUDENT_ASSIGNMENT_UI_CONFIG: UIConfig = {
   ...TEACHER_ASSIGNMENT_UI_CONFIG,
-  hasRightSidebar: false,
-  rightSidebarVisible: false,
+  hasEditContentSidebar: false,
+  rightSideBarVisible: RightSideBarOptions.None,
 };
 
 const TEACHER_SUBMISSION_UI_CONFIG: UIConfig = {
   hasLeftSidebar: false,
-  hasRightSidebar: true,
   leftSidebarVisible: false,
-  rightSidebarVisible: true,
+
+  hasEditContentSidebar: true,
+  hasGradeSidebar: true,
+  rightSideBarVisible: RightSideBarOptions.Grading,
+
   submitSubmission: false,
 };
 
-const STUDENT_SUBMISSION_UI_CONFIG: UIConfig = {
+const STUDENT_DOING_SUBMISSION_UI_CONFIG: UIConfig = {
   ...TEACHER_SUBMISSION_UI_CONFIG,
   hasLeftSidebar: false,
   leftSidebarVisible: false,
+
+  hasGradeSidebar: false,
+  rightSideBarVisible: RightSideBarOptions.EditContent,
+
   submitSubmission: true,
 };
 
-export const getUIConfig = (documentType: DocumentType, role: Role) => {
+const STUDENT_NON_DOING_SUBMISSION_UI_CONFIG: UIConfig = {
+  ...TEACHER_SUBMISSION_UI_CONFIG,
+  hasLeftSidebar: false,
+  leftSidebarVisible: false,
+
+  hasGradeSidebar: true,
+  rightSideBarVisible: RightSideBarOptions.Grading,
+
+  submitSubmission: false,
+};
+
+export const getUIConfig = (document: IDocument, role: Role) => {
+  const documentType = document.documentType;
   if (role === Role.TEACHER) {
     if (documentType === DocumentType.FOLDER) return TEACHER_FOLDER_UI_CONFIG;
     if (documentType === DocumentType.ASSIGNMENT)
@@ -86,7 +127,8 @@ export const getUIConfig = (documentType: DocumentType, role: Role) => {
   if (documentType === DocumentType.FOLDER) return STUDENT_FOLDER_UI_CONFIG;
   if (documentType === DocumentType.ASSIGNMENT)
     return STUDENT_ASSIGNMENT_UI_CONFIG;
-  return STUDENT_SUBMISSION_UI_CONFIG;
+  if (!document.submission?.submitAt) return STUDENT_DOING_SUBMISSION_UI_CONFIG;
+  return STUDENT_NON_DOING_SUBMISSION_UI_CONFIG;
 };
 
 export default useUIStore;

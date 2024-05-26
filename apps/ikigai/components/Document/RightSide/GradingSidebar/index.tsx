@@ -3,6 +3,7 @@ import { useState } from "react";
 import { t, Trans } from "@lingui/macro";
 import { useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
+import { round } from "lodash";
 
 import { Input } from "components/common/Input";
 import usePermission from "hook/UsePermission";
@@ -45,11 +46,27 @@ const GradingSidebar = () => {
       style={{ padding: 8, display: "flex", flexDirection: "column", gap: 8 }}
     >
       <div>
-        <div>
-          <Typography.Text strong type="secondary">
-            <Trans>Feedback</Trans>
+        <Typography.Text strong type="secondary">
+          <Trans>Grade</Trans>
+        </Typography.Text>
+      </div>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ flex: 1 }}>
+          <Typography.Text type="secondary">
+            <Trans>Final Grade</Trans>
           </Typography.Text>
         </div>
+        <div>
+          <InputNumber
+            size="small"
+            min={0}
+            readOnly={!canFeedback}
+            value={round(grade, 2)}
+            onChange={(value) => setGrade(round(value, 2))}
+          />
+        </div>
+      </div>
+      <div>
         <Input.TextArea
           autoSize={{
             minRows: 5,
@@ -60,22 +77,6 @@ const GradingSidebar = () => {
           value={feedback}
           onChange={(e) => setFeedback(e.currentTarget.value)}
         />
-      </div>
-      <div>
-        <div>
-          <Typography.Text strong type="secondary">
-            <Trans>Final grade</Trans>
-          </Typography.Text>
-        </div>
-        <div>
-          <InputNumber
-            style={{ width: "100%" }}
-            min={0}
-            readOnly={!canFeedback}
-            value={grade}
-            onChange={(value) => setGrade(value)}
-          />
-        </div>
       </div>
       {canFeedback && (
         <div>

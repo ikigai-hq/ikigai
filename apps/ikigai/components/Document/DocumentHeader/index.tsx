@@ -2,16 +2,16 @@ import styled from "styled-components";
 import { Tooltip, Typography } from "antd";
 import { useTitle } from "ahooks";
 import {
+  IconChecklist,
   IconLayoutSidebar,
-  IconLayoutSidebarRight,
-  IconPencilCheck,
+  IconPencil,
 } from "@tabler/icons-react";
+import { t } from "@lingui/macro";
 
 import useUIStore, { RightSideBarOptions } from "store/UIStore";
 import useDocumentStore from "store/DocumentStore";
 import { TextButtonWithHover } from "components/common/Button";
 import SubmissionHeader from "./SubmissionHeader";
-import { t } from "@lingui/macro";
 
 const DocumentHeader = () => {
   const setUIConfig = useUIStore((state) => state.setConfig);
@@ -58,7 +58,7 @@ const DocumentHeader = () => {
             <Tooltip title={t`Grade`} arrow={false}>
               <SideBarHeader
                 type="text"
-                icon={<IconPencilCheck size={22} stroke={1.5} />}
+                icon={<IconChecklist size={22} stroke={1.5} />}
                 onClick={() =>
                   setUIConfig({
                     rightSideBarVisible:
@@ -78,7 +78,7 @@ const DocumentHeader = () => {
             <Tooltip title={t`Pages & Edit tools`} arrow={false}>
               <SideBarHeader
                 type="text"
-                icon={<IconLayoutSidebarRight size={22} stroke={1.5} />}
+                icon={<IconPencil size={22} stroke={1.5} />}
                 onClick={() =>
                   setUIConfig({
                     rightSideBarVisible:

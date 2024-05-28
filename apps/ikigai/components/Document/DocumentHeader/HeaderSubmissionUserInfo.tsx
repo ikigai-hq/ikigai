@@ -1,4 +1,3 @@
-import { IconLicense } from "@tabler/icons-react";
 import { Drawer, Tooltip } from "antd";
 import { t } from "@lingui/macro";
 import { useQuery } from "@apollo/client";
@@ -8,7 +7,6 @@ import {
   GetSubmissionsOfAssignment,
   SpaceActionPermission,
 } from "graphql/types";
-import { TextButtonWithHover } from "components/common/Button";
 import UserBasicInformation from "components/UserBasicInformation";
 import useDocumentStore from "store/DocumentStore";
 import usePermission from "hook/UsePermission";
@@ -25,30 +23,36 @@ const HeaderSubmissionUserInfo = () => {
   );
 
   const canManageContent = allow(SpaceActionPermission.MANAGE_SPACE_CONTENT);
-  return (
-    <>
+  if (!canManageContent) {
+    return (
       <UserBasicInformation
         size={"small"}
         name={submission?.user?.name}
         avatar={submission?.user?.avatar?.publicUrl}
         randomColor={submission?.user?.randomColor}
+        onClick={() => setOpenSubmissionList(true)}
       />
-      {canManageContent && (
-        <Tooltip title={t`View other students`} arrow={false}>
-          <TextButtonWithHover
-            type="text"
-            icon={<IconLicense />}
+    );
+  }
+
+  return (
+    <>
+      <Tooltip title={t`Click to view other students`} arrow={false}>
+        <div>
+          <UserBasicInformation
+            size={"small"}
+            name={submission?.user?.name}
+            avatar={submission?.user?.avatar?.publicUrl}
+            randomColor={submission?.user?.randomColor}
             onClick={() => setOpenSubmissionList(true)}
           />
-        </Tooltip>
-      )}
-      {canManageContent && (
-        <OtherStudentSubmissions
-          currentSubmissionUserId={submission?.user?.id}
-          open={openSubmissionList}
-          onClose={() => setOpenSubmissionList(false)}
-        />
-      )}
+        </div>
+      </Tooltip>
+      <OtherStudentSubmissions
+        currentSubmissionUserId={submission?.user?.id}
+        open={openSubmissionList}
+        onClose={() => setOpenSubmissionList(false)}
+      />
     </>
   );
 };

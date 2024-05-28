@@ -1,4 +1,4 @@
-import { Button, Popconfirm } from "antd";
+import { Button, Popconfirm, Tooltip } from "antd";
 import { t, Trans } from "@lingui/macro";
 import toast from "react-hot-toast";
 import { useMutation } from "@apollo/client";
@@ -52,13 +52,14 @@ export const TeacherSubmissionHeader = () => {
 
   return (
     <HeaderSubmissionWrapper>
-      <Button
-        style={{ display: "flex", alignItems: "center", gap: 4 }}
-        icon={<IconLogout2 size={16} />}
-        onClick={onClickExit}
-      >
-        <Trans>Back to space</Trans>
-      </Button>
+      <Tooltip title={t`Back to space`} arrow={false}>
+        <Button
+          style={{ display: "flex", alignItems: "center", gap: 4 }}
+          icon={<IconLogout2 size={16} />}
+          onClick={onClickExit}
+          type="text"
+        />
+      </Tooltip>
       <HeaderSubmissionUserInfo />
     </HeaderSubmissionWrapper>
   );
@@ -129,9 +130,7 @@ const StudentNonDoingSubmissionHeader = () => {
         style={{ display: "flex", alignItems: "center", gap: 4 }}
         icon={<IconLogout2 size={16} />}
         onClick={onClickExit}
-      >
-        <Trans>Back to space</Trans>
-      </Button>
+      />
       <HeaderSubmissionUserInfo />
     </HeaderSubmissionWrapper>
   );

@@ -4,6 +4,7 @@ use uuid::Uuid;
 use crate::db::Document;
 use crate::db::*;
 use crate::error::IkigaiError;
+use crate::util::get_now_as_secs;
 
 #[derive(Debug, Clone, Builder)]
 pub struct DocumentCloneConfig<'a> {
@@ -46,9 +47,14 @@ impl Document {
             );
             Document::upsert(conn, new_doc)?
         };
-        // Step 1: Change body of document
 
-        // Step 3: Document Type
+        // Step 1: Clone pages of document
+        let pages = Page::find_all_by_document_id(conn, self.id)?;
+        for page in pages {
+            page.deep_clone(conn, self)?;
+        }
+
+        // Step 2: Document Type
         if config.keep_document_type {
             if let Ok(Some(assignment)) = Assignment::find_by_document(conn, self.id) {
                 let mut new_assignment = NewAssignment::from(assignment);
@@ -63,7 +69,7 @@ impl Document {
             }
         }
 
-        // Step 4: Clone Child Documents
+        // Step 3: Clone Child Documents
         if config.clone_children {
             for child_document in Document::find_by_parent(conn, self.id)? {
                 if child_document.deleted_at.is_some() {
@@ -85,6 +91,41 @@ impl Document {
         }
 
         Ok(document)
+    }
+}
+
+impl Page {
+    pub fn deep_clone(
+        &self,
+        conn: &mut PgConnection,
+        new_document: &Document,
+    ) -> Result<Self, IkigaiError> {
+        let mut this = self.clone();
+        this.id = Uuid::new_v4();
+        this.document_id = new_document.id;
+        this.updated_at = get_now_as_secs();
+        this.created_at = get_now_as_secs();
+        this.created_by_id = new_document.creator_id;
+
+        let new_page = Page::upsert(conn, this)?;
+
+        let page_contents = PageContent::find_all_by_page(conn, self.id)?;
+        for page_content in page_contents {
+            page_content.deep_clone(conn, &new_page)?;
+        }
+
+        Ok(new_page)
+    }
+}
+
+impl PageContent {
+    pub fn deep_clone(
+        &self,
+        conn: &mut PgConnection,
+        new_page: &Page,
+    ) -> Result<Self, IkigaiError> {
+        let new_content = PageContent::new(Uuid::new_v4(), new_page.id, self.index, self.body.clone());
+        Ok(PageContent::upsert(conn, new_content)?)
     }
 }
 

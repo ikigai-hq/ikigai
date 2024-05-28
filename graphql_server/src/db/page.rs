@@ -64,6 +64,16 @@ impl Page {
         pages::table.find(id).first(conn)
     }
 
+    pub fn find_all_by_document_id(
+        conn: &mut PgConnection,
+        document_id: Uuid,
+    ) -> Result<Vec<Self>, Error> {
+        pages::table
+            .filter(pages::document_id.eq(document_id))
+            .filter(pages::deleted_at.is_null())
+            .get_results(conn)
+    }
+
     pub fn find_all_by_document_ids(
         conn: &mut PgConnection,
         document_ids: Vec<Uuid>,
@@ -104,6 +114,17 @@ pub struct PageContent {
 }
 
 impl PageContent {
+    pub fn new(id: Uuid, page_id: Uuid, index: i32, body: serde_json::Value) -> Self {
+        Self {
+            id,
+            page_id,
+            index,
+            body,
+            updated_at: get_now_as_secs(),
+            created_at: get_now_as_secs(),
+        }
+    }
+
     pub fn upsert(conn: &mut PgConnection, mut page_content: Self) -> Result<Self, Error> {
         page_content.updated_at = get_now_as_secs();
         page_content.created_at = get_now_as_secs();
@@ -122,6 +143,12 @@ impl PageContent {
 
     pub fn find(conn: &mut PgConnection, id: Uuid) -> Result<Self, Error> {
         page_contents::table.find(id).first(conn)
+    }
+
+    pub fn find_all_by_page(conn: &mut PgConnection, page_id: Uuid) -> Result<Vec<Self>, Error> {
+        page_contents::table
+            .filter(page_contents::page_id.eq(page_id))
+            .get_results(conn)
     }
 
     pub fn find_all_by_pages(

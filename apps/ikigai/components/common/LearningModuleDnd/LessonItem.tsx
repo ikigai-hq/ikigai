@@ -7,10 +7,9 @@ import { DotsVerticalIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
 
 import { LearningItemType } from "components/common/LearningModuleDnd/types";
-import { TextButtonWithHover } from "components/common/Button";
 import { formatDocumentRoute } from "config/Routes";
 import { ActionMenuDropdown } from "components/common/ActionMenuDropdown";
-import useDocumentStore from "../../../store/DocumentStore";
+import useDocumentStore from "store/DocumentStore";
 import usePermission from "hook/UsePermission";
 import { DocumentType, SpaceActionPermission } from "graphql/types";
 import CreateContentButton from "./CreateContentButton";
@@ -64,13 +63,13 @@ const LessonItem = ({
         <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
           <div style={{ flex: "1", display: "inline-grid" }}>
             {item.parentId ? (
-              <StyledText $active={active} $isFolder={isFolder} truncate>
+              <Text truncate size="2">
                 {documentTitle || DEFAULT_DOCUMENT_TITLE}
-              </StyledText>
+              </Text>
             ) : (
-              <StyledText $isFolder={isFolder} truncate>
+              <Text truncate size="2">
                 {documentTitle || DEFAULT_DOCUMENT_TITLE}
-              </StyledText>
+              </Text>
             )}
           </div>
           {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && !dragging && (
@@ -110,25 +109,6 @@ const LessonItem = ({
     </Link>
   );
 };
-
-const StyledText = styled(Text)<{
-  $active?: boolean;
-  $weight?: number;
-  $isFolder?: boolean;
-}>`
-  color: ${(props) => props.theme.colors.gray[7]};
-  font-family: Inter, serif;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: ${(props) => (props.$isFolder ? 500 : 400)};
-  line-height: normal;
-  letter-spacing: -0.014px;
-`;
-
-const StyledButton = styled(TextButtonWithHover)`
-  margin: unset;
-  color: #888e9c;
-`;
 
 const ButtonGroup = styled.div`
   display: none;

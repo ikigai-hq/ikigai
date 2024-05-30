@@ -1,4 +1,4 @@
-import { Drawer, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import { t } from "@lingui/macro";
 import { useQuery } from "@apollo/client";
 import { cloneDeep } from "lodash";
@@ -13,10 +13,9 @@ import usePermission from "hook/UsePermission";
 import { GET_SUBMISSIONS_OF_ASSIGNMENT } from "graphql/query/AssignmentQuery";
 import { handleError } from "graphql/ApolloClient";
 import TeacherSubmissionListTable from "../DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable";
-import { useState } from "react";
+import IkigaiPopover from "@/components/base/Popover";
 
 const HeaderSubmissionUserInfo = () => {
-  const [openSubmissionList, setOpenSubmissionList] = useState(false);
   const allow = usePermission();
   const submission = useDocumentStore(
     (state) => state.activeDocument?.submission,
@@ -26,46 +25,42 @@ const HeaderSubmissionUserInfo = () => {
   if (!canManageContent) {
     return (
       <UserBasicInformation
-        size={"small"}
         name={submission?.user?.name}
         avatar={submission?.user?.avatar?.publicUrl}
         randomColor={submission?.user?.randomColor}
-        onClick={() => setOpenSubmissionList(true)}
       />
     );
   }
 
   return (
     <>
-      <Tooltip title={t`Click to view other students`} arrow={false}>
-        <div>
-          <UserBasicInformation
-            size={"small"}
-            name={submission?.user?.name}
-            avatar={submission?.user?.avatar?.publicUrl}
-            randomColor={submission?.user?.randomColor}
-            onClick={() => setOpenSubmissionList(true)}
-          />
-        </div>
+      <Tooltip title={t`View other students`} arrow={false}>
+        <IkigaiPopover
+          content={
+            <OtherStudentSubmissions
+              currentSubmissionUserId={submission?.user?.id}
+            />
+          }
+          width={"100vw"}
+        >
+          <div>
+            <UserBasicInformation
+              name={submission?.user?.name}
+              avatar={submission?.user?.avatar?.publicUrl}
+              randomColor={submission?.user?.randomColor}
+            />
+          </div>
+        </IkigaiPopover>
       </Tooltip>
-      <OtherStudentSubmissions
-        currentSubmissionUserId={submission?.user?.id}
-        open={openSubmissionList}
-        onClose={() => setOpenSubmissionList(false)}
-      />
     </>
   );
 };
 
 type OtherStudentSubmissionsProps = {
   currentSubmissionUserId: number;
-  open: boolean;
-  onClose: () => void;
 };
 
 const OtherStudentSubmissions = ({
-  open,
-  onClose,
   currentSubmissionUserId,
 }: OtherStudentSubmissionsProps) => {
   const assignmentId = useDocumentStore(
@@ -83,14 +78,12 @@ const OtherStudentSubmissions = ({
 
   const submissions = cloneDeep(data?.assignmentGetSubmissions) || [];
   return (
-    <Drawer open={open} onClose={() => onClose()} width="70vw">
-      <div>
-        <TeacherSubmissionListTable
-          submissions={submissions}
-          skipUserIds={[currentSubmissionUserId]}
-        />
-      </div>
-    </Drawer>
+    <div>
+      <TeacherSubmissionListTable
+        submissions={submissions}
+        skipUserIds={[currentSubmissionUserId]}
+      />
+    </div>
   );
 };
 

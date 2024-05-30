@@ -1,8 +1,6 @@
-import { Avatar, Typography } from "antd";
-import { UserOutlined } from "@ant-design/icons";
 import React from "react";
 import styled from "styled-components";
-import { AvatarSize } from "antd/es/avatar/AvatarContext";
+import { Avatar, Button, Text } from "@radix-ui/themes";
 
 export type UserNameProps = {
   name: string;
@@ -10,7 +8,6 @@ export type UserNameProps = {
   email?: string;
   avatar?: string;
   onClick?: () => void;
-  size?: AvatarSize;
 };
 
 const UserBasicInformation = (props: UserNameProps) => {
@@ -19,23 +16,25 @@ const UserBasicInformation = (props: UserNameProps) => {
   };
 
   return (
-    <UserInformation onClick={onClick}>
+    <UserInformation size="2" onClick={onClick} variant="ghost">
       <div>
         <Avatar
-          size={props.size}
-          icon={<UserOutlined />}
+          radius="full"
+          fallback={props.name.charAt(0)}
           src={props.avatar}
-          style={{ backgroundColor: props.randomColor }}
+          size="2"
         />
       </div>
-      <div>
-        <Typography.Text>{props.name}</Typography.Text>
+      <div style={{ flex: "1", display: "inline-grid" }}>
+        <Text size="1" style={{ color: "black" }} weight="medium" truncate>
+          {props.name}
+        </Text>
         {props.email && (
           <>
             <br />
-            <Typography.Text type="secondary" ellipsis>
+            <Text size="1" color="gray" truncate>
               {props.email}
-            </Typography.Text>
+            </Text>
           </>
         )}
       </div>
@@ -43,15 +42,12 @@ const UserBasicInformation = (props: UserNameProps) => {
   );
 };
 
-const UserInformation = styled.div`
-  padding: 4px 15px 4px 15px;
-  border-radius: 8px;
+const UserInformation = styled(Button)`
   display: flex;
-  gap: 10px;
   align-items: center;
+  max-width: 200px;
 
   &:hover {
-    background-color: #b8babd;
     cursor: pointer;
   }
 `;

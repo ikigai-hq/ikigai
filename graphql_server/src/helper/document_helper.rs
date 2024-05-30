@@ -7,14 +7,21 @@ use crate::error::IkigaiError;
 use crate::util::get_now_as_secs;
 
 #[derive(Debug, Clone, Builder)]
-pub struct DocumentCloneConfig<'a> {
-    pub prefix_title: &'a str,
+pub struct DocumentCloneConfig {
+    #[builder(default, setter(into))]
+    pub prefix_title: String,
+    #[builder(default)]
     pub parent_id: Option<Uuid>,
+    #[builder(default = "1")]
     pub index: i32,
     pub creator_id: i32,
+    #[builder(default)]
     pub clone_to_space: Option<i32>,
+    #[builder(default = "true")]
     pub clone_children: bool,
+    #[builder(default)]
     pub clone_to_replace_document_id: Option<Uuid>,
+    #[builder(default = "true")]
     pub keep_document_type: bool,
 }
 

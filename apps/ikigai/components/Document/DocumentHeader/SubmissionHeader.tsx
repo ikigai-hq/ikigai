@@ -1,9 +1,9 @@
-import { Button, Popconfirm, Tooltip } from "antd";
+import { Popconfirm } from "antd";
 import { t, Trans } from "@lingui/macro";
 import toast from "react-hot-toast";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-import { IconLogout2 } from "@tabler/icons-react";
+import { Button } from "@radix-ui/themes";
 
 import { formatDocumentRoute } from "config/Routes";
 import { Role, StudentSubmitSubmission } from "graphql/types";
@@ -39,27 +39,10 @@ export const TeacherSubmissionHeader = () => {
   const submission = useDocumentStore(
     (state) => state.activeDocument?.submission,
   );
-  const router = useRouter();
-  const assignmentDocumentId = useDocumentStore(
-    (state) => state.activeDocument?.submission?.assignment?.documentId,
-  );
-
-  const onClickExit = () => {
-    router.push(formatDocumentRoute(assignmentDocumentId));
-  };
-
   if (!submission) return <></>;
 
   return (
     <HeaderSubmissionWrapper>
-      <Tooltip title={t`Back to space`} arrow={false}>
-        <Button
-          style={{ display: "flex", alignItems: "center", gap: 4 }}
-          icon={<IconLogout2 size={16} />}
-          onClick={onClickExit}
-          type="text"
-        />
-      </Tooltip>
       <HeaderSubmissionUserInfo />
     </HeaderSubmissionWrapper>
   );
@@ -98,39 +81,29 @@ export const StudentDoingSubmissionHeader = () => {
 
   return (
     <HeaderSubmissionWrapper>
+      <HeaderSubmissionUserInfo />
+      <Button
+        variant="outline"
+        onClick={onClickSaveAndExit}
+        style={{ marginLeft: 5 }}
+      >
+        <Trans>Save & Exit</Trans>
+      </Button>
       <Popconfirm
         title={t`Do you want to submit your submission?`}
         onConfirm={onClickSubmit}
       >
-        <Button type="primary">
+        <Button variant="solid">
           <Trans>Submit</Trans>
         </Button>
       </Popconfirm>
-      <Button onClick={onClickSaveAndExit}>
-        <Trans>Save & Exit</Trans>
-      </Button>
-      <HeaderSubmissionUserInfo />
     </HeaderSubmissionWrapper>
   );
 };
 
 const StudentNonDoingSubmissionHeader = () => {
-  const router = useRouter();
-  const assignmentDocumentId = useDocumentStore(
-    (state) => state.activeDocument?.submission?.assignment?.documentId,
-  );
-
-  const onClickExit = () => {
-    router.push(formatDocumentRoute(assignmentDocumentId));
-  };
-
   return (
     <HeaderSubmissionWrapper>
-      <Button
-        style={{ display: "flex", alignItems: "center", gap: 4 }}
-        icon={<IconLogout2 size={16} />}
-        onClick={onClickExit}
-      />
       <HeaderSubmissionUserInfo />
     </HeaderSubmissionWrapper>
   );

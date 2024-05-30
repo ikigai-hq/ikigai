@@ -31,38 +31,16 @@ export const Container = styled.div`
   overflow: hidden;
 `;
 
-export const DocumentBodyContainer = styled.div<{
-  $isPresentationMode?: boolean;
-}>`
+export const DocumentBodyContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
   position: relative;
   overflow: hidden;
-  flex-grow: 1;
-  margin-bottom: ${(props) => (props.$isPresentationMode ? 0 : "10px")};
+  height: 100vh;
+  flex: 1;
 
   ${BreakPoints.tablet} {
     margin-bottom: 0;
-  }
-`;
-
-export const BodyWrapper = styled.div`
-  display: flex;
-  flex: 1;
-  max-width: 100vw;
-  width: 100%;
-  height: 100%;
-  padding: 0 8px;
-  box-sizing: border-box;
-  gap: 8px;
-
-  ${BreakPoints.tablet} {
-    flex-direction: column-reverse;
-    gap: 12px;
-    height: 100%;
-    justify-content: flex-end;
-    padding: 0;
   }
 `;
 

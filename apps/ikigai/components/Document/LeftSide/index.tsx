@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { t } from "@lingui/macro";
 import styled from "styled-components";
-import { Avatar, Box, IconButton, Separator, Tooltip } from "@radix-ui/themes";
+import { Avatar, Box, Separator, Tooltip } from "@radix-ui/themes";
 import { FileIcon } from "@radix-ui/react-icons";
 
 import useAuthUserStore from "store/AuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
 import useSpaceStore from "store/SpaceStore";
 import ManageSpace from "./ManageSpace";
-import useUIStore from "store/UIStore";
 import Modal from "@/components/base/Modal";
 import LeftSecondarySide, {
   LeftSecondaryType,
 } from "@/components/Document/LeftSide/LeftSecondarySide";
+import IkigaiIconButton from "@/components/base/IconButton";
 
 const LeftSide = () => {
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
@@ -20,18 +20,16 @@ const LeftSide = () => {
     (state) => state.setSpaceSettingVisible,
   );
   const spaceName = useSpaceStore((state) => state.space?.name);
-  const config = useUIStore((state) => state.config);
   const [openProfile, setOpenProfile] = useState(false);
-  const [expandSelectedType, setExpandSelectedType] = useState<
+  const [leftSecondaryType, setLeftSecondaryType] = useState<
     LeftSecondaryType | undefined
   >();
 
   const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
-  const visible = config.hasLeftSidebar && config.leftSidebarVisible;
 
   const onClickContent = () => {
-    setExpandSelectedType(
-      expandSelectedType === LeftSecondaryType.Content
+    setLeftSecondaryType(
+      leftSecondaryType === LeftSecondaryType.Content
         ? undefined
         : LeftSecondaryType.Content,
     );
@@ -39,7 +37,7 @@ const LeftSide = () => {
 
   return (
     <>
-      <Container $hide={!visible}>
+      <Container>
         <Modal
           content={
             <ManageSpace
@@ -61,14 +59,14 @@ const LeftSide = () => {
         <Separator style={{ width: "100%" }} />
         <div style={{ flex: 1, margin: "0 auto" }}>
           <MenuItemWrapper>
-            <IconButton
-              style={{ cursor: "pointer" }}
+            <IkigaiIconButton
               size="2"
               variant="ghost"
               onClick={onClickContent}
+              active={LeftSecondaryType.Content === leftSecondaryType}
             >
               <FileIcon width="20" height="20" />
-            </IconButton>
+            </IkigaiIconButton>
           </MenuItemWrapper>
         </div>
         <Tooltip content={myName}>
@@ -93,7 +91,7 @@ const LeftSide = () => {
         )}
       </Container>
       <Separator style={{ height: "100vh", width: 1 }} />
-      <LeftSecondarySide selectedType={expandSelectedType} />
+      <LeftSecondarySide selectedType={leftSecondaryType} />
     </>
   );
 };

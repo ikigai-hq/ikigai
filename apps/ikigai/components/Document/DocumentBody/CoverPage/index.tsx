@@ -1,15 +1,13 @@
 import { useEffect } from "react";
-import { Divider, Input } from "antd";
 import { t } from "@lingui/macro";
 import styled from "styled-components";
 import { useDebounce } from "ahooks";
+import { Separator } from "@radix-ui/themes";
 
 import useDocumentStore from "store/DocumentStore";
-import CoverPhotoHeader from "./CoverPhotoHeader";
 import UseUpdateDocument from "hook/UseUpdateDocument";
 import usePermission from "hook/UsePermission";
 import { DocumentActionPermission, DocumentType } from "graphql/types";
-import DocumentIconHeader from "./DocumentIconHeader";
 import FolderCoverPageBody from "./FolderCoverPageBody";
 import AssignmentCoverPageBody from "./AssignmentCoverPageBody";
 
@@ -45,16 +43,9 @@ const CoverPage = () => {
 
   return (
     <div>
-      <div style={{ padding: 20, display: "flex", alignItems: "center" }}>
-        {!isFolder && (
-          <div>
-            <DocumentIconHeader />
-          </div>
-        )}
+      <div style={{ padding: 10, display: "flex", alignItems: "center" }}>
         <div style={{ flex: 1 }}>
           <DocumentTitle
-            autoSize
-            variant="borderless"
             maxLength={255}
             value={activeDocumentTitle}
             onChange={(e) => changeTitle(e.currentTarget.value)}
@@ -63,7 +54,7 @@ const CoverPage = () => {
           />
         </div>
       </div>
-      <Divider style={{ margin: 0 }} />
+      <Separator style={{ width: "100%" }} />
       <div style={{ paddingLeft: 20, paddingRight: 20 }}>
         {isFolder && <FolderCoverPageBody />}
         {documentType === DocumentType.ASSIGNMENT && (
@@ -74,19 +65,24 @@ const CoverPage = () => {
   );
 };
 
-export const DocumentTitle = styled(Input.TextArea)`
-  &&& {
-    font-size: 28px;
-    font-weight: 700;
-    padding-left: 0;
-    overflow: hidden;
-    line-height: normal;
+export const DocumentTitle = styled.input`
+  font-size: 24px;
+  font-weight: 600;
+  padding-left: 0;
+  overflow: hidden;
+  line-height: normal;
+  background-color: white;
+  color: black;
+  border: none;
+  width: 100%;
+  resize: none;
+  overflow-wrap: break-word;
 
-    &:focus {
-      outline: none !important;
-      box-shadow: none !important;
-      border-color: transparent !important;
-    }
+  &:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+    --text-field-focus-color: white;
   }
 `;
 

@@ -45,7 +45,6 @@ const CoverPage = () => {
 
   return (
     <div>
-      {!isFolder && <CoverPhotoHeader />}
       <div style={{ padding: 20, display: "flex", alignItems: "center" }}>
         {!isFolder && (
           <div>

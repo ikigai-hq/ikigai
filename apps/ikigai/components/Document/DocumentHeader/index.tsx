@@ -1,12 +1,9 @@
 import styled from "styled-components";
-import { Tooltip, Typography } from "antd";
+import { Tooltip } from "antd";
 import { useTitle } from "ahooks";
-import {
-  IconChecklist,
-  IconLayoutSidebar,
-  IconPencil,
-} from "@tabler/icons-react";
+import { IconChecklist, IconPencil } from "@tabler/icons-react";
 import { t } from "@lingui/macro";
+import { Text } from "@radix-ui/themes";
 
 import useUIStore, { RightSideBarOptions } from "store/UIStore";
 import useDocumentStore from "store/DocumentStore";
@@ -19,38 +16,17 @@ const DocumentHeader = () => {
   const activeDocumentTitle = useDocumentStore(
     (state) => state.activeDocument?.title,
   );
-  const iconValue = useDocumentStore(
-    (state) => state.activeDocument?.iconValue,
-  );
-  const isFolder = useDocumentStore((state) => state.isFolder);
-  const icon = !isFolder ? iconValue || "✏️" : "📁";
 
   const title = `${activeDocumentTitle || "Untitled"} - Powered by Ikigai!`;
   useTitle(title);
 
   return (
     <DocumentHeaderWrapper>
-      <StyledActionContainer>
-        <div>
-          {uiConfig.hasLeftSidebar && (
-            <SideBarHeader
-              type="text"
-              icon={<IconLayoutSidebar size={22} stroke={1.5} />}
-              onClick={() =>
-                setUIConfig({
-                  leftSidebarVisible: !uiConfig.leftSidebarVisible,
-                })
-              }
-              $active={uiConfig.leftSidebarVisible}
-            />
-          )}
-          <SubmissionHeader />
-        </div>
+      <StyledActionContainer style={{ justifyContent: "start" }}>
+        <Text size="2">{activeDocumentTitle || "Untitled"}</Text>
       </StyledActionContainer>
-      <StyledActionContainer style={{ justifyContent: "center" }}>
-        <StyledHeaderText ellipsis>
-          {icon} {activeDocumentTitle || "Untitled"}
-        </StyledHeaderText>
+      <StyledActionContainer>
+        <SubmissionHeader />
       </StyledActionContainer>
       <StyledActionContainer style={{ justifyContent: "end" }}>
         <div>
@@ -106,12 +82,6 @@ const SideBarHeader = styled(TextButtonWithHover)<{ $active?: boolean }>`
     props.$active ? props.theme.colors.primary[1] : "none"};
 `;
 
-const StyledHeaderText = styled(Typography.Text)`
-  font-weight: 500;
-  font-size: 16px;
-  margin: 0;
-`;
-
 export const DocumentHeaderWrapper = styled.div`
   padding: 8px 8px;
   display: flex;
@@ -120,13 +90,13 @@ export const DocumentHeaderWrapper = styled.div`
   gap: 4px;
   width: 100%;
   box-sizing: border-box;
+  height: 52px;
 `;
 
 const StyledActionContainer = styled.div`
   display: flex;
   align-items: center;
   flex: 1;
-  min-height: 28px;
   gap: 4px;
 `;
 

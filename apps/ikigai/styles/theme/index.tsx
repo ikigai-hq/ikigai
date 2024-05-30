@@ -2,6 +2,7 @@ import React from "react";
 import { ConfigProvider, App } from "antd";
 import { ThemeProvider } from "styled-components";
 import theme from "./defaultTheme";
+import { Theme } from "@radix-ui/themes";
 
 const { token, components } = theme;
 
@@ -13,7 +14,9 @@ const withTheme = (node: JSX.Element) => (
         components,
       }}
     >
-      <App>{node}</App>
+      <App>
+        <Theme>{node}</Theme>
+      </App>
     </ConfigProvider>
   </ThemeProvider>
 );

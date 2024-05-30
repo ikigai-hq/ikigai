@@ -1,178 +1,121 @@
 import React, { useState } from "react";
-import { Avatar, Divider, Popover, Tooltip, Typography } from "antd";
-import { t, Trans } from "@lingui/macro";
-import styled, { useTheme } from "styled-components";
-import { PlusOutlined } from "@ant-design/icons";
+import { t } from "@lingui/macro";
+import styled from "styled-components";
+import { Avatar, Box, IconButton, Separator, Tooltip } from "@radix-ui/themes";
+import { FileIcon } from "@radix-ui/react-icons";
 
 import useAuthUserStore from "store/AuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
-import UserBasicInformation from "components/UserBasicInformation";
-import { BreakPoints } from "styles/mediaQuery";
-import LearningModuleDnd from "components/common/LearningModuleDnd";
-import LessonItemDnd from "components/common/LearningModuleDnd/LessonItemDnd";
-import useDocumentStore from "store/DocumentStore";
-import { Text, TextWeight } from "components/common/Text";
-import { TextButtonWithHover } from "components/common/Button";
 import useSpaceStore from "store/SpaceStore";
-import CreateContentButton from "components/common/LearningModuleDnd/CreateContentButton";
-import { ArrowDocument } from "components/common/IconSvg";
 import ManageSpace from "./ManageSpace";
 import useUIStore from "store/UIStore";
-import usePermission from "hook/UsePermission";
-import { DocumentType, SpaceActionPermission } from "graphql/types";
+import Modal from "@/components/base/Modal";
+import LeftSecondarySide, {
+  LeftSecondaryType,
+} from "@/components/Document/LeftSide/LeftSecondarySide";
 
 const LeftSide = () => {
-  const theme = useTheme();
-  const allow = usePermission();
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
-  const spaceDocuments = useDocumentStore((state) =>
-    state.spaceDocuments.filter(
-      (spaceDocument) => spaceDocument.documentType !== DocumentType.SUBMISSION,
-    ),
-  );
   const setSpaceSettingVisible = useSpaceStore(
     (state) => state.setSpaceSettingVisible,
   );
   const spaceName = useSpaceStore((state) => state.space?.name);
   const config = useUIStore((state) => state.config);
   const [openProfile, setOpenProfile] = useState(false);
+  const [expandSelectedType, setExpandSelectedType] = useState<
+    LeftSecondaryType | undefined
+  >();
 
   const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
   const visible = config.hasLeftSidebar && config.leftSidebarVisible;
+
+  const onClickContent = () => {
+    setExpandSelectedType(
+      expandSelectedType === LeftSecondaryType.Content
+        ? undefined
+        : LeftSecondaryType.Content,
+    );
+  };
+
   return (
-    <Container $hide={!visible}>
-      <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
-        <SpaceInfoContainer>
-          <Popover
-            trigger={"click"}
-            content={
-              <ManageSpace
-                onClickSpaceSetting={() => setSpaceSettingVisible(true)}
-              />
-            }
-            placement="bottomRight"
-            arrow={false}
-          >
-            <SpaceContainer>
-              <Avatar
-                size={"small"}
-                shape="square"
-                style={{ backgroundColor: theme.colors.primary[5] }}
-              >
-                {spaceName ? spaceName.charAt(0) : "I"}
-              </Avatar>
-              <Typography.Text ellipsis strong style={{ fontWeight: 700 }}>
-                {spaceName}
-              </Typography.Text>
-              <ArrowDocument style={{ transform: `rotate(270deg)` }} />
-            </SpaceContainer>
-          </Popover>
-        </SpaceInfoContainer>
-        <div style={{ padding: "10px", display: "flex" }}>
-          <div style={{ flex: 1 }}>
-            <Text
-              color={theme.colors.gray[6]}
-              weight={TextWeight.medium}
-              level={2}
+    <>
+      <Container $hide={!visible}>
+        <Modal
+          content={
+            <ManageSpace
+              onClickSpaceSetting={() => setSpaceSettingVisible(true)}
+            />
+          }
+          title={t`Space`}
+          description={t`Manage, Switch, or Create Space`}
+        >
+          <SpaceWrapper>
+            <Avatar
+              variant="solid"
+              radius={"small"}
+              fallback={spaceName ? spaceName.charAt(0) : "I"}
+              size="2"
+            />
+          </SpaceWrapper>
+        </Modal>
+        <Separator style={{ width: "100%" }} />
+        <div style={{ flex: 1, margin: "0 auto" }}>
+          <MenuItemWrapper>
+            <IconButton
+              style={{ cursor: "pointer" }}
+              size="2"
+              variant="ghost"
+              onClick={onClickContent}
             >
-              <Trans>Content</Trans>
-            </Text>
-          </div>
-          {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
-            <CreateContentButton parentId={null}>
-              <Tooltip title={t`Add content`} arrow={false}>
-                <StyledButton
-                  icon={<PlusOutlined />}
-                  type="text"
-                  size={"small"}
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </Tooltip>
-            </CreateContentButton>
-          )}
+              <FileIcon width="20" height="20" />
+            </IconButton>
+          </MenuItemWrapper>
         </div>
-        <ListModule>
-          <LearningModuleDnd
-            docs={spaceDocuments}
-            keyword={""}
-            TreeItemComponent={LessonItemDnd}
-            defaultCollapsed={true}
-            parentId={null}
+        <Tooltip content={myName}>
+          <div
+            style={{ margin: "5px auto", cursor: "pointer" }}
+            onClick={() => setOpenProfile(true)}
+          >
+            <Avatar
+              radius={"full"}
+              fallback={myName.charAt(0)}
+              color={"orange"}
+              src={me?.avatar?.publicUrl}
+              size="2"
+            />
+          </div>
+        </Tooltip>
+        {openProfile && (
+          <EditProfileModal
+            visible={openProfile}
+            onClose={() => setOpenProfile(false)}
           />
-        </ListModule>
-        <NoMarginDivider $margin={0} />
-        <UserBasicInformation
-          onClick={() => setOpenProfile(true)}
-          name={myName}
-          avatar={me?.randomColor}
-          randomColor={me?.randomColor}
-          email={me?.email}
-        />
-      </div>
-      {openProfile && (
-        <EditProfileModal
-          visible={openProfile}
-          onClose={() => setOpenProfile(false)}
-        />
-      )}
-    </Container>
+        )}
+      </Container>
+      <Separator style={{ height: "100vh", width: 1 }} />
+      <LeftSecondarySide selectedType={expandSelectedType} />
+    </>
   );
 };
 
 export default LeftSide;
 
-const SpaceInfoContainer = styled.div``;
-
-const NoMarginDivider = styled(Divider)<{ $margin: number }>`
-  margin-top: ${(props) => props.$margin}px;
-  margin-bottom: ${(props) => props.$margin}px;
-`;
-
-const Container = styled.div<{
-  $hide: boolean;
-}>`
-  min-width: 250px;
-  width: 250px;
+const Container = styled.div<{ $hide?: boolean }>`
+  min-width: 52px;
   display: ${({ $hide }) => ($hide ? "none" : "flex")};
-  border-radius: 8px;
   backdrop-filter: blur(12px);
-  border: ${({ $hide }) =>
-    $hide ? "none" : "1px solid var(--gray-4, #EAECEF)"};
   background: rgba(255, 255, 255, 0.75);
   box-sizing: border-box;
   height: 100%;
-
-  ${BreakPoints.tablet} {
-    box-shadow: 0px 0px 20px rgba(19, 48, 122, 0.1);
-    width: 100%;
-    height: auto;
-  }
-`;
-
-const ListModule = styled.div`
-  padding: 2px 5px;
-  overflow: auto;
-  display: flex;
   flex-direction: column;
-  gap: 5px;
-  flex: 1;
 `;
 
-const StyledButton = styled(TextButtonWithHover)`
-  margin: unset;
-  color: #888e9c;
+const MenuItemWrapper = styled.div`
+  margin-top: 10px;
 `;
 
-const SpaceContainer = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0 10px 0 10px;
-  height: 38px;
-  gap: 8px;
+const SpaceWrapper = styled(Box)`
+  margin: 5px auto;
+  height: 40px;
   cursor: pointer;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  justify-content: space-between;
-  text-align: left;
-  background-color: ${(props) => props.theme.colors.gray[3]};
 `;

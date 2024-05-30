@@ -15,7 +15,7 @@ import { Initializing } from "../components/Initializing";
 import SpaceSetting from "../components/SpaceSetting";
 import useDocumentStore from "store/DocumentStore";
 
-require("../styles/globals.less");
+require("../styles/globals.css");
 
 i18n.load({
   en: enMessages,

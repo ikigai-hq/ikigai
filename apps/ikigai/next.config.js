@@ -3,16 +3,11 @@
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
-const withAntdLess = require("next-plugin-antd-less");
 const { theme } = require("antd/lib");
 const { convertLegacyToken } = require("@ant-design/compatible/lib");
 const { defaultAlgorithm, defaultSeed } = theme;
 const mapToken = defaultAlgorithm(defaultSeed);
 const v4Token = convertLegacyToken(mapToken);
-withAntdLess({
-  lessVarsFilePath: "styles/variables.less",
-  modifyVars: v4Token,
-});
 
 const nextConfig = {
   reactStrictMode: false,
@@ -38,7 +33,7 @@ const nextConfig = {
 };
 
 module.exports = (_phase, { defaultConfig }) => {
-  return [withAntdLess, withBundleAnalyzer].reduce(
+  return [withBundleAnalyzer].reduce(
     (config, plugin) => plugin(config),
     nextConfig,
   );

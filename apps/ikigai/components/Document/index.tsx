@@ -3,29 +3,23 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 
 import { BreakPoints } from "styles/mediaQuery";
-import LeftSide from "./LeftSide";
 import DocumentBody from "./DocumentBody";
-import RightSide from "./RightSide";
-import { useLoadDocument } from "../../hook/UseLoadDocument";
-import useDocumentStore from "../../store/DocumentStore";
+import { useLoadDocument } from "hook/UseLoadDocument";
 import DocumentHeader from "./DocumentHeader";
+import LeftSide from "./LeftSide";
 
 const Document = () => {
   const router = useRouter();
   const documentId = router.query.documentId as string;
-  const isFolder = useDocumentStore((state) => state.isFolder);
 
   const { loading } = useLoadDocument(documentId);
 
   return (
     <Container>
-      <DocumentHeader />
+      <LeftSide />
       <DocumentBodyContainer>
-        <BodyWrapper>
-          <LeftSide />
-          <DocumentBody loading={loading} />
-          {!isFolder && <RightSide />}
-        </BodyWrapper>
+        <DocumentHeader />
+        <DocumentBody loading={loading} />
       </DocumentBodyContainer>
     </Container>
   );
@@ -33,10 +27,8 @@ const Document = () => {
 
 export const Container = styled.div`
   display: flex;
-  flex-direction: column;
   height: 100vh;
   overflow: hidden;
-  background-color: #fcfaf4;
 `;
 
 export const DocumentBodyContainer = styled.div<{

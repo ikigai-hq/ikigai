@@ -1,4 +1,3 @@
-import { Popconfirm } from "antd";
 import { t, Trans } from "@lingui/macro";
 import toast from "react-hot-toast";
 import { useMutation } from "@apollo/client";
@@ -13,6 +12,7 @@ import useDocumentStore from "store/DocumentStore";
 import useAuthUserStore from "store/AuthStore";
 import HeaderSubmissionUserInfo from "./HeaderSubmissionUserInfo";
 import styled from "styled-components";
+import Modal from "@/components/base/Modal";
 
 const SubmissionHeader = () => {
   const role = useAuthUserStore((state) => state.role);
@@ -89,14 +89,17 @@ export const StudentDoingSubmissionHeader = () => {
       >
         <Trans>Save & Exit</Trans>
       </Button>
-      <Popconfirm
+      <Modal
         title={t`Do you want to submit your submission?`}
-        onConfirm={onClickSubmit}
+        description={t`You cannot revert this action.`}
+        content={<></>}
+        onOk={onClickSubmit}
+        okText={t`Submit`}
       >
         <Button variant="solid">
           <Trans>Submit</Trans>
         </Button>
-      </Popconfirm>
+      </Modal>
     </HeaderSubmissionWrapper>
   );
 };

@@ -6,9 +6,18 @@ export type ModalProps = {
   title: React.ReactNode;
   description: React.ReactNode;
   content: React.ReactNode;
+  onOk?: () => void | Promise<void>;
+  okText?: React.ReactNode;
 };
 
-const Modal = ({ children, title, description, content }: ModalProps) => {
+const Modal = ({
+  children,
+  title,
+  description,
+  content,
+  onOk,
+  okText,
+}: ModalProps) => {
   return (
     <Dialog.Root>
       <Dialog.Trigger>{children}</Dialog.Trigger>
@@ -24,6 +33,11 @@ const Modal = ({ children, title, description, content }: ModalProps) => {
               Close
             </Button>
           </Dialog.Close>
+          {onOk && (
+            <Dialog.Close>
+              <Button onClick={onOk}>{okText || "Save"}</Button>
+            </Dialog.Close>
+          )}
         </Flex>
       </Dialog.Content>
     </Dialog.Root>

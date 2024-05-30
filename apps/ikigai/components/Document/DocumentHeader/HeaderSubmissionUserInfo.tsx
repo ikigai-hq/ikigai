@@ -1,7 +1,7 @@
-import { Tooltip } from "antd";
 import { t } from "@lingui/macro";
 import { useQuery } from "@apollo/client";
 import { cloneDeep } from "lodash";
+import { Tooltip } from "@radix-ui/themes";
 
 import {
   GetSubmissionsOfAssignment,
@@ -34,7 +34,7 @@ const HeaderSubmissionUserInfo = () => {
 
   return (
     <>
-      <Tooltip title={t`View other students`} arrow={false}>
+      <Tooltip content={t`View other students`}>
         <IkigaiPopover
           content={
             <OtherStudentSubmissions

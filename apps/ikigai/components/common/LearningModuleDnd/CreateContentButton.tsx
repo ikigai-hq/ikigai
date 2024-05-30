@@ -10,10 +10,10 @@ import { TextButton } from "components/common/Button";
 import { AddDocumentStandaloneV2, DocumentType, IconType } from "graphql/types";
 import { Text, TextWeight } from "components/common/Text";
 import { formatDocumentRoute } from "config/Routes";
-import useDocumentStore from "../../../store/DocumentStore";
+import useDocumentStore from "store/DocumentStore";
 import { handleError } from "graphql/ApolloClient";
 import { ADD_DOCUMENT_STANDALONE_V2 } from "graphql/mutation/DocumentMutation";
-import useSpaceStore from "../../../store/SpaceStore";
+import useSpaceStore from "store/SpaceStore";
 
 export type CreateContentButtonProps = {
   parentId: string | null;

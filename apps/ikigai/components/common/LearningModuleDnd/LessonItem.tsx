@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import { MoreOutlined, PlusOutlined } from "@ant-design/icons";
-import { Typography } from "antd";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { Text } from "@radix-ui/themes";
+import { DotsVerticalIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import { IconButton } from "@radix-ui/themes";
 
 import { LearningItemType } from "components/common/LearningModuleDnd/types";
 import { TextButtonWithHover } from "components/common/Button";
@@ -40,12 +41,8 @@ const LessonItem = ({
     (state) =>
       state.spaceDocuments.find((spaceDoc) => spaceDoc.id === item.id)?.title,
   );
-  const documentIconValue = useDocumentStore(
-    (state) =>
-      state.spaceDocuments.find((spaceDoc) => spaceDoc.id === item.id)
-        ?.iconValue || "✏️",
-  );
   const isFolder = item.documentType === DocumentType.FOLDER;
+  const fileIcon = isFolder ? "📁" : "📝";
 
   const onClickCollapse = (e) => {
     e.stopPropagation();
@@ -63,17 +60,15 @@ const LessonItem = ({
     <Link href={formatDocumentRoute(item.id)} passHref>
       <LessonItemContainer ref={ref} $active={active}>
         <div style={{ marginTop: 5 }}>{isFolder && icon}</div>
-        {!isFolder && (
-          <span style={{ display: "flex" }}>{documentIconValue}</span>
-        )}
+        <span style={{ display: "flex" }}>{fileIcon}</span>
         <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
           <div style={{ flex: "1", display: "inline-grid" }}>
             {item.parentId ? (
-              <StyledText ellipsis $active={active} $isFolder={isFolder}>
+              <StyledText $active={active} $isFolder={isFolder} truncate>
                 {documentTitle || DEFAULT_DOCUMENT_TITLE}
               </StyledText>
             ) : (
-              <StyledText ellipsis $isFolder={isFolder}>
+              <StyledText $isFolder={isFolder} truncate>
                 {documentTitle || DEFAULT_DOCUMENT_TITLE}
               </StyledText>
             )}
@@ -85,21 +80,27 @@ const LessonItem = ({
                 menuList={[]}
                 hasPermission={true}
               >
-                <StyledButton
-                  icon={<MoreOutlined />}
-                  type="text"
-                  size={"small"}
+                <IconButton
+                  style={{ cursor: "pointer" }}
+                  size="2"
+                  variant="ghost"
+                  color="gray"
                   onClick={(e) => e.stopPropagation()}
-                />
+                >
+                  <DotsVerticalIcon />
+                </IconButton>
               </ActionMenuDropdown>
               {isFolder && (
                 <CreateContentButton parentId={item.id}>
-                  <StyledButton
-                    icon={<PlusOutlined />}
-                    type="text"
-                    size={"small"}
+                  <IconButton
+                    style={{ cursor: "pointer" }}
+                    size="2"
+                    variant="ghost"
+                    color="gray"
                     onClick={(e) => e.stopPropagation()}
-                  />
+                  >
+                    <Pencil2Icon />
+                  </IconButton>
                 </CreateContentButton>
               )}
             </ButtonGroup>
@@ -110,7 +111,7 @@ const LessonItem = ({
   );
 };
 
-const StyledText = styled(Typography.Text)<{
+const StyledText = styled(Text)<{
   $active?: boolean;
   $weight?: number;
   $isFolder?: boolean;

@@ -42,9 +42,9 @@ const CoverPage = () => {
   };
 
   return (
-    <div>
-      <div style={{ padding: 10, display: "flex", alignItems: "center" }}>
-        <div style={{ flex: 1 }}>
+    <div style={{ display: "flex", justifyContent: "center", padding: 10 }}>
+      <div style={{ width: "100%" }}>
+        <div>
           <DocumentTitle
             maxLength={255}
             value={activeDocumentTitle}
@@ -53,20 +53,19 @@ const CoverPage = () => {
             readOnly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
           />
         </div>
-      </div>
-      <Separator style={{ width: "100%" }} />
-      <div style={{ paddingLeft: 20, paddingRight: 20 }}>
-        {isFolder && <FolderCoverPageBody />}
-        {documentType === DocumentType.ASSIGNMENT && (
-          <AssignmentCoverPageBody />
-        )}
+        <div style={{ marginTop: "10px" }}>
+          {isFolder && <FolderCoverPageBody />}
+          {documentType === DocumentType.ASSIGNMENT && (
+            <AssignmentCoverPageBody />
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
 export const DocumentTitle = styled.input`
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 600;
   padding-left: 0;
   overflow: hidden;

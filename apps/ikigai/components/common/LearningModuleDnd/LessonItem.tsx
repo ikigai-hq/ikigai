@@ -3,16 +3,11 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Text } from "@radix-ui/themes";
-import { DotsVerticalIcon, Pencil2Icon } from "@radix-ui/react-icons";
-import { IconButton } from "@radix-ui/themes";
 
 import { LearningItemType } from "components/common/LearningModuleDnd/types";
 import { formatDocumentRoute } from "config/Routes";
-import { ActionMenuDropdown } from "components/common/ActionMenuDropdown";
 import useDocumentStore from "store/DocumentStore";
-import usePermission from "hook/UsePermission";
-import { DocumentType, SpaceActionPermission } from "graphql/types";
-import CreateContentButton from "./CreateContentButton";
+import { DocumentType } from "graphql/types";
 import { ArrowDocument } from "../IconSvg";
 
 export const DEFAULT_DOCUMENT_TITLE = "Untitled";
@@ -28,13 +23,11 @@ export type DocumentItemProps = {
 
 const LessonItem = ({
   item,
-  dragging,
   onChangeCollapsed,
   collapsed,
 }: DocumentItemProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const allow = usePermission();
 
   const documentTitle = useDocumentStore(
     (state) =>
@@ -72,48 +65,11 @@ const LessonItem = ({
               </Text>
             )}
           </div>
-          {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && !dragging && (
-            <ButtonGroup>
-              <ActionMenuDropdown
-                item={item}
-                menuList={[]}
-                hasPermission={true}
-              >
-                <IconButton
-                  style={{ cursor: "pointer" }}
-                  size="2"
-                  variant="ghost"
-                  color="gray"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <DotsVerticalIcon />
-                </IconButton>
-              </ActionMenuDropdown>
-              {isFolder && (
-                <CreateContentButton parentId={item.id}>
-                  <IconButton
-                    style={{ cursor: "pointer" }}
-                    size="2"
-                    variant="ghost"
-                    color="gray"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Pencil2Icon />
-                  </IconButton>
-                </CreateContentButton>
-              )}
-            </ButtonGroup>
-          )}
         </div>
       </LessonItemContainer>
     </Link>
   );
 };
-
-const ButtonGroup = styled.div`
-  display: none;
-  padding: 0 5px;
-`;
 
 const LessonItemContainer = styled.div<{
   $active?: boolean;
@@ -135,9 +91,6 @@ const LessonItemContainer = styled.div<{
 
   &:hover {
     background-color: ${(props) => props.theme.colors.gray[2]};
-    ${ButtonGroup} {
-      display: flex;
-    }
   }
 `;
 

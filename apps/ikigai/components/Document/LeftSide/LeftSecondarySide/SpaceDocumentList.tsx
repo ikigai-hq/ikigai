@@ -44,17 +44,15 @@ const SpaceDocumentList = () => {
         </div>
         {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
           <CreateContentButton parentId={null}>
-            <Tooltip content={t`Add content`}>
-              <IconButton
-                style={{ cursor: "pointer" }}
-                size="2"
-                variant="ghost"
-                color="gray"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <Pencil2Icon />
-              </IconButton>
-            </Tooltip>
+            <IconButton
+              style={{ cursor: "pointer" }}
+              size="2"
+              variant="ghost"
+              color="gray"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Pencil2Icon />
+            </IconButton>
           </CreateContentButton>
         )}
       </div>

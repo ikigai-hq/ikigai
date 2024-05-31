@@ -4,8 +4,8 @@ import { t } from "@lingui/macro";
 import { Button, Text } from "@radix-ui/themes";
 
 import useDocumentStore from "store/DocumentStore";
-import { DocumentType } from "@/graphql/types";
-import SubmissionHeader from "@/components/Document/DocumentHeader/SubmissionHeader";
+import { DocumentType } from "graphql/types";
+import SubmissionHeader from "components/Document/DocumentHeader/SubmissionHeader";
 
 const DocumentHeader = () => {
   const activeDocument = useDocumentStore((state) => state.activeDocument);

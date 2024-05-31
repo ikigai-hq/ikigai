@@ -1,6 +1,6 @@
 import { Separator } from "@radix-ui/themes";
 import React from "react";
-import SpaceDocumentList from "@/components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList";
+import SpaceDocumentList from "components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList";
 import styled from "styled-components";
 
 export enum LeftSecondaryType {

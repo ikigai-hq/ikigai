@@ -8,11 +8,11 @@ import useAuthUserStore from "store/AuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
 import useSpaceStore from "store/SpaceStore";
 import ManageSpace from "./ManageSpace";
-import Modal from "@/components/base/Modal";
+import Modal from "components/base/Modal";
 import LeftSecondarySide, {
   LeftSecondaryType,
-} from "@/components/Document/LeftSide/LeftSecondarySide";
-import IkigaiIconButton from "@/components/base/IconButton";
+} from "components/Document/LeftSide/LeftSecondarySide";
+import IkigaiIconButton from "components/base/IconButton";
 
 const LeftSide = () => {
   const me = useAuthUserStore((state) => state.currentUser?.userMe);

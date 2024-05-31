@@ -12,7 +12,7 @@ import useDocumentStore from "store/DocumentStore";
 import useAuthUserStore from "store/AuthStore";
 import HeaderSubmissionUserInfo from "./HeaderSubmissionUserInfo";
 import styled from "styled-components";
-import Modal from "@/components/base/Modal";
+import Modal from "components/base/Modal";
 
 const SubmissionHeader = () => {
   const role = useAuthUserStore((state) => state.role);

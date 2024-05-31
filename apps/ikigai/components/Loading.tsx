@@ -7,7 +7,8 @@ const Loading = () => {
     <div
       style={{
         width: "100%",
-        textAlign: "center",
+        display: "flex",
+        justifyContent: "center",
       }}
     >
       <Spinner />

@@ -13,7 +13,7 @@ import usePermission from "hook/UsePermission";
 import { GET_SUBMISSIONS_OF_ASSIGNMENT } from "graphql/query/AssignmentQuery";
 import { handleError } from "graphql/ApolloClient";
 import TeacherSubmissionListTable from "../DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable";
-import IkigaiPopover from "@/components/base/Popover";
+import IkigaiPopover from "components/base/Popover";
 
 const HeaderSubmissionUserInfo = () => {
   const allow = usePermission();

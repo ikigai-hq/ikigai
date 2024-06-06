@@ -1,16 +1,16 @@
 import { t, Trans } from "@lingui/macro";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { Badge, Table, Tooltip, Text, IconButton } from "@radix-ui/themes";
+import { Table, Tooltip, Text, IconButton } from "@radix-ui/themes";
+import { RowsIcon, Pencil1Icon } from "@radix-ui/react-icons";
 
 import { formatDocumentRoute } from "config/Routes";
 import SubmissionListOfStudent from "./SubmissionListOfStudent";
 import { ISpaceMember, useGetSpaceMembers } from "store/SpaceMembeStore";
 import UserBasicInformation from "components/UserBasicInformation";
-import { SubmissionStatus } from "util/DocumentUtil";
+import { StudentStatus, SubmissionStatus } from "util/DocumentUtil";
 import { ISubmission } from "store/DocumentStore";
 import { Role } from "graphql/types";
-import { RowsIcon, Pencil1Icon } from "@radix-ui/react-icons";
 
 export type TeacherSubmissionListTableProps = {
   submissions: ISubmission[];
@@ -107,20 +107,6 @@ const TeacherSubmissionListTable = ({
       )}
     </div>
   );
-};
-
-const StudentStatus = ({ status }: { status: SubmissionStatus }) => {
-  if (status === SubmissionStatus.InDoing) {
-    return <Badge color="orange">In Doing</Badge>;
-  }
-  if (status === SubmissionStatus.Submitted) {
-    return <Badge color="blue">Submitted</Badge>;
-  }
-  if (status === SubmissionStatus.Graded) {
-    return <Badge color="green">Graded</Badge>;
-  }
-
-  return <Badge color="bronze">Not Submitted</Badge>;
 };
 
 const StudentSubmissionStatus = ({

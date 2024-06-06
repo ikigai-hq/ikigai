@@ -1,11 +1,8 @@
-import { ColumnsType } from "antd/es/table";
 import { t, Trans } from "@lingui/macro";
-import { IconListDetails, IconPencilCheck } from "@tabler/icons-react";
-import { Table, Tooltip, Typography } from "antd";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { Badge, Table, Tooltip, Text, IconButton } from "@radix-ui/themes";
 
-import { TextButtonWithHover } from "components/common/Button";
 import { formatDocumentRoute } from "config/Routes";
 import SubmissionListOfStudent from "./SubmissionListOfStudent";
 import { ISpaceMember, useGetSpaceMembers } from "store/SpaceMembeStore";
@@ -13,6 +10,7 @@ import UserBasicInformation from "components/UserBasicInformation";
 import { SubmissionStatus } from "util/DocumentUtil";
 import { ISubmission } from "store/DocumentStore";
 import { Role } from "graphql/types";
+import { RowsIcon, Pencil1Icon } from "@radix-ui/react-icons";
 
 export type TeacherSubmissionListTableProps = {
   submissions: ISubmission[];
@@ -23,7 +21,6 @@ const TeacherSubmissionListTable = ({
   submissions: innerSubmissions,
   skipUserIds,
 }: TeacherSubmissionListTableProps) => {
-  const router = useRouter();
   const [selectedMember, setSelectedMember] = useState<
     ISpaceMember | undefined
   >(undefined);
@@ -54,94 +51,52 @@ const TeacherSubmissionListTable = ({
     return SubmissionStatus.InDoing;
   };
 
-  const columns: ColumnsType<ISpaceMember> = [
-    {
-      key: "student",
-      title: t`Student`,
-      dataIndex: "student",
-      render: (_, item) => {
-        return (
-          <UserBasicInformation
-            name={item.user.name}
-            avatar={item.user.avatar?.publicUrl}
-            email={item.user.email}
-            randomColor={item.user.randomColor}
-          />
-        );
-      },
-    },
-    {
-      key: "status",
-      title: t`Status`,
-      dataIndex: "status",
-      render: (_, member) => {
-        const status = getSubmissionStatus(member.userId);
-        return <Typography.Text>{status}</Typography.Text>;
-      },
-    },
-    {
-      key: "Attempt",
-      title: t`Attempt`,
-      dataIndex: "attempt",
-      render: (_, member) => {
-        const submissions = getSubmissions(member.userId);
-        return (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <Typography.Text>
-              {submissions.length} <Trans>times</Trans>
-            </Typography.Text>
-            {submissions.length > 0 && (
-              <Tooltip
-                title={t`View all submissions of ${member.user.name}`}
-                arrow={false}
-                placement="bottom"
-              >
-                <TextButtonWithHover
-                  onClick={() => setSelectedMember(member)}
-                  type="text"
-                  icon={<IconListDetails size={18} />}
-                />
-              </Tooltip>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      key: "Actions",
-      dataIndex: "actions",
-      width: 50,
-      render: (_, member) => {
-        const submissions = getSubmissions(member.userId);
-        const lastSubmission = submissions[0];
-        return (
-          <div>
-            {lastSubmission && (
-              <Tooltip
-                placement="bottom"
-                title={t`Review and feedback last submission`}
-                arrow={false}
-              >
-                <TextButtonWithHover
-                  type="text"
-                  onClick={() => {
-                    router.push(formatDocumentRoute(lastSubmission.documentId));
-                  }}
-                  icon={<IconPencilCheck />}
-                >
-                  Feedback
-                </TextButtonWithHover>
-              </Tooltip>
-            )}
-          </div>
-        );
-      },
-    },
-  ];
-
   return (
     <div>
-      <Table rowKey={"userId"} columns={columns} dataSource={members} />
+      <Table.Root>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeaderCell>
+              <Trans>Name</Trans>
+            </Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>
+              <Trans>Status</Trans>
+            </Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>
+              <Trans>Attempt</Trans>
+            </Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell />
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {members.map((member) => (
+            <Table.Row key={member.userId} align="center">
+              <Table.RowHeaderCell>
+                <UserBasicInformation
+                  name={member.user.name}
+                  avatar={member.user.avatar?.publicUrl}
+                  email={member.user.email}
+                  randomColor={member.user.randomColor}
+                />
+              </Table.RowHeaderCell>
+              <Table.Cell>
+                <StudentStatus status={getSubmissionStatus(member.userId)} />
+              </Table.Cell>
+              <Table.Cell>
+                <StudentSubmissionStatus
+                  setSelectedMember={setSelectedMember}
+                  submissions={getSubmissions(member.userId)}
+                  member={member}
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <Actions lastSubmission={getSubmissions(member.userId)[0]} />
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+
       {selectedMember && (
         <SubmissionListOfStudent
           open={!!selectedMember}
@@ -149,6 +104,70 @@ const TeacherSubmissionListTable = ({
           submissions={getSubmissions(selectedMember.userId)}
           member={selectedMember}
         />
+      )}
+    </div>
+  );
+};
+
+const StudentStatus = ({ status }: { status: SubmissionStatus }) => {
+  if (status === SubmissionStatus.InDoing) {
+    return <Badge color="orange">In Doing</Badge>;
+  }
+  if (status === SubmissionStatus.Submitted) {
+    return <Badge color="blue">Submitted</Badge>;
+  }
+  if (status === SubmissionStatus.Graded) {
+    return <Badge color="green">Graded</Badge>;
+  }
+
+  return <Badge color="bronze">Not Submitted</Badge>;
+};
+
+const StudentSubmissionStatus = ({
+  submissions,
+  member,
+  setSelectedMember,
+}: {
+  submissions: ISubmission[];
+  member: ISpaceMember;
+  setSelectedMember: (member: ISpaceMember) => void;
+}) => {
+  return (
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <Text>
+        {submissions.length} <Trans>times</Trans>
+      </Text>
+      {submissions.length > 0 && (
+        <Tooltip content={t`View all submissions of ${member.user.name}`}>
+          <IconButton
+            size="1"
+            color="gray"
+            variant="ghost"
+            onClick={() => setSelectedMember(member)}
+            style={{ marginLeft: 10 }}
+          >
+            <RowsIcon />
+          </IconButton>
+        </Tooltip>
+      )}
+    </div>
+  );
+};
+
+const Actions = ({ lastSubmission }: { lastSubmission?: ISubmission }) => {
+  const router = useRouter();
+  return (
+    <div>
+      {lastSubmission && (
+        <Tooltip content={t`Review and feedback last submission`}>
+          <IconButton
+            onClick={() => {
+              router.push(formatDocumentRoute(lastSubmission.documentId));
+            }}
+          >
+            <Pencil1Icon width="18px" height="18px" />
+          </IconButton>
+        </Tooltip>
       )}
     </div>
   );

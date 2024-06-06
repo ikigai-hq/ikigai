@@ -50,7 +50,7 @@ const GradeMethodAttribute = ({
           >
             <IconButton
               size="1"
-              aria-label="Copy value"
+              aria-label="Edit attribute"
               color="gray"
               variant="ghost"
             >

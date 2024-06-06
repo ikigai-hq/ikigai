@@ -1,17 +1,18 @@
 import { t, Trans } from "@lingui/macro";
-import {
-  CheckOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
-import { useTheme } from "styled-components";
 import toast from "react-hot-toast";
 import { v4 } from "uuid";
 import { cloneDeep } from "lodash";
+import { CheckIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
+import {
+  AlertDialog,
+  Button,
+  Flex,
+  IconButton,
+  ScrollArea,
+  Separator,
+  Text,
+} from "@radix-ui/themes";
 
-import { Divider, Popconfirm, Tooltip, Typography } from "antd";
-import { TextButtonWithHover } from "components/common/Button";
 import { useMutation } from "@apollo/client";
 import { handleError } from "graphql/ApolloClient";
 import {
@@ -29,7 +30,6 @@ import { useState } from "react";
 import ViewOrEditRubric from "./ViewOrEditRubric";
 import usePermission from "hook/UsePermission";
 import useRubricStore, { IRubric } from "store/RubricStore";
-import { Button, ScrollArea } from "@radix-ui/themes";
 
 export type BandScoresDrawerProps = {
   selectedRubricId?: string;
@@ -41,7 +41,6 @@ const RubricManagement = ({
   onChangeSelected,
 }: BandScoresDrawerProps) => {
   const allow = usePermission();
-  const theme = useTheme();
   const rubrics = useRubricStore((state) => state.rubrics);
   const removeRubricStore = useRubricStore((state) => state.removeRubric);
   const addRubricStore = useRubricStore((state) => state.addOrUpdateRubric);
@@ -103,81 +102,82 @@ const RubricManagement = ({
             <Trans>Create new rubric</Trans>
           </Button>
         )}
-        <Divider />
+        <Separator />
         <ScrollArea
           type="always"
           scrollbars="vertical"
           style={{ height: "30vh" }}
         >
-          <div>
+          <div style={{ paddingRight: 10 }}>
             {rubrics.map((rubric) => (
-              <div key={rubric.id}>
-                <div style={{ display: "flex", alignItems: "baseline" }}>
+              <div key={rubric.id} style={{ marginTop: 5, marginBottom: 5 }}>
+                <div style={{ display: "flex", alignItems: "center" }}>
                   <div style={{ flex: 1 }}>
-                    <Typography.Text
-                      strong
-                      style={{
-                        color:
-                          rubric.id === selectedRubricId
-                            ? theme.colors.primary[7]
-                            : "black",
-                      }}
+                    <Text
+                      color={
+                        rubric.id === selectedRubricId ? "amber" : undefined
+                      }
+                      weight="bold"
                     >
                       {rubric.name}
-                    </Typography.Text>
+                    </Text>
                     <br />
-                    <Typography.Text type="secondary">
+                    <Text size="1" weight="light" color={"gray"}>
                       {formatTimestamp(
                         rubric.createdAt,
                         FormatType.DateTimeFormat,
                       )}
-                    </Typography.Text>
+                    </Text>
                   </div>
-                  <div style={{ display: "flex" }}>
-                    <Tooltip title={t`Use this rubric`} arrow={false}>
-                      <TextButtonWithHover
-                        type="text"
-                        icon={<CheckOutlined />}
-                        onClick={() => onChangeSelected(rubric)}
-                      />
-                    </Tooltip>
-                    <Tooltip
-                      title={
-                        allow(SpaceActionPermission.MANAGE_SPACE_CONTENT)
-                          ? t`View and Edit`
-                          : t`View`
-                      }
-                      arrow={false}
+                  <div
+                    style={{ display: "flex", gap: 4, alignContent: "center" }}
+                  >
+                    <IconButton
+                      color="gray"
+                      variant="soft"
+                      onClick={() => onChangeSelected(rubric)}
                     >
-                      <TextButtonWithHover
-                        type="text"
-                        icon={
-                          allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) ? (
-                            <EditOutlined />
-                          ) : (
-                            <EyeOutlined />
-                          )
-                        }
-                        onClick={() => setEditingRubric(rubric)}
-                      />
-                    </Tooltip>
-                    {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
-                      <Popconfirm
-                        title={t`Do you want to remove ${rubric.name}?`}
-                        onConfirm={() => onRemoveRubric(rubric.id)}
-                      >
-                        <TextButtonWithHover
-                          type="text"
-                          icon={<DeleteOutlined />}
-                          style={{ color: "red" }}
-                          disabled={loading}
-                          loading={loading}
-                        />
-                      </Popconfirm>
-                    )}
+                      <CheckIcon width="18" height="18" />
+                    </IconButton>
+                    <IconButton
+                      color="gray"
+                      variant="soft"
+                      onClick={() => setEditingRubric(rubric)}
+                    >
+                      <Pencil1Icon width="18" height="18" />
+                    </IconButton>
+                    <AlertDialog.Root>
+                      <AlertDialog.Trigger>
+                        <IconButton color="red" variant="soft">
+                          <TrashIcon width="18" height="18" />
+                        </IconButton>
+                      </AlertDialog.Trigger>
+                      <AlertDialog.Content maxWidth="450px">
+                        <AlertDialog.Description size="2">
+                          <Trans>
+                            Are you sure? This rubric will no longer be
+                            accessible.
+                          </Trans>
+                        </AlertDialog.Description>
+                        <Flex gap="3" mt="4" justify="end">
+                          <AlertDialog.Cancel>
+                            <Button variant="soft" color="gray">
+                              Cancel
+                            </Button>
+                          </AlertDialog.Cancel>
+                          <AlertDialog.Action
+                            onClick={() => onRemoveRubric(rubric.id)}
+                          >
+                            <Button variant="solid" color="red">
+                              Remove
+                            </Button>
+                          </AlertDialog.Action>
+                        </Flex>
+                      </AlertDialog.Content>
+                    </AlertDialog.Root>
                   </div>
                 </div>
-                <Divider />
+                <Separator style={{ width: "100%" }} />
               </div>
             ))}
           </div>

@@ -3,11 +3,13 @@ import { Dialog, Flex, Button, Box } from "@radix-ui/themes";
 
 export type ModalProps = {
   children: React.ReactNode;
-  title: React.ReactNode;
-  description: React.ReactNode;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
   content: React.ReactNode;
   onOk?: () => void | Promise<void>;
   okText?: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 };
 
 const Modal = ({
@@ -17,13 +19,15 @@ const Modal = ({
   content,
   onOk,
   okText,
+  open,
+  onOpenChange,
 }: ModalProps) => {
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Trigger>{children}</Dialog.Trigger>
       <Dialog.Content>
-        <Dialog.Title>{title}</Dialog.Title>
-        <Dialog.Description>{description}</Dialog.Description>
+        {title && <Dialog.Title>{title}</Dialog.Title>}
+        {description && <Dialog.Description>{description}</Dialog.Description>}
 
         <Box pb="3">{content}</Box>
 

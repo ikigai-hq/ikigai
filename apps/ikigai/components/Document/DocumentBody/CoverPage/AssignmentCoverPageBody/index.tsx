@@ -1,49 +1,38 @@
-import { t } from "@lingui/macro";
-import { Tabs } from "antd";
-import { IconFileInfo, IconLicense, IconPencil } from "@tabler/icons-react";
+import { Trans } from "@lingui/macro";
 import React from "react";
+import { Box, Tabs } from "@radix-ui/themes";
 
-import TabPanelHeaderWrapper from "../TabPannelHeaderWrapper";
 import GeneralInformation from "./GeneralInformation";
-import GradeInformation from "./GradeInformation";
-import useAuthUserStore from "store/AuthStore";
-import { Role } from "graphql/types";
-import StudentExtraActions from "./StudentExtraActions";
 import SubmissionList from "./SubmissionList";
 
+export enum AssignmentCoverPageTabs {
+  General = "general",
+  Grade = "grade",
+  Submissions = "submissions",
+}
+
 const AssignmentCoverPageBody = () => {
-  const isStudent = useAuthUserStore((state) => state.role === Role.STUDENT);
   return (
-    <Tabs
-      style={{ flex: 1 }}
-      tabBarExtraContent={isStudent ? <StudentExtraActions /> : undefined}
-    >
-      <Tabs.TabPane
-        key="General"
-        tabKey="General"
-        tab={
-          <TabPanelHeaderWrapper icon={<IconFileInfo />} text={t`General`} />
-        }
-      >
-        <GeneralInformation />
-      </Tabs.TabPane>
-      <Tabs.TabPane
-        key="Grade"
-        tabKey="Grade"
-        tab={<TabPanelHeaderWrapper icon={<IconPencil />} text={t`Grade`} />}
-      >
-        <GradeInformation />
-      </Tabs.TabPane>
-      <Tabs.TabPane
-        key="Submissions"
-        tabKey="Submissions"
-        tab={
-          <TabPanelHeaderWrapper icon={<IconLicense />} text={t`Submissions`} />
-        }
-      >
-        <SubmissionList />
-      </Tabs.TabPane>
-    </Tabs>
+    <Tabs.Root defaultValue={AssignmentCoverPageTabs.General}>
+      <Tabs.List>
+        <Tabs.Trigger value={AssignmentCoverPageTabs.General}>
+          <Trans>General</Trans>
+        </Tabs.Trigger>
+        <Tabs.Trigger value={AssignmentCoverPageTabs.Submissions}>
+          <Trans>Submissions</Trans>
+        </Tabs.Trigger>
+      </Tabs.List>
+
+      <Box pt="3">
+        <Tabs.Content value={AssignmentCoverPageTabs.General}>
+          <GeneralInformation />
+        </Tabs.Content>
+
+        <Tabs.Content value={AssignmentCoverPageTabs.Submissions}>
+          <SubmissionList />
+        </Tabs.Content>
+      </Box>
+    </Tabs.Root>
   );
 };
 

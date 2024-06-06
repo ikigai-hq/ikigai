@@ -23,7 +23,7 @@ const LeftSide = () => {
   const [openProfile, setOpenProfile] = useState(false);
   const [leftSecondaryType, setLeftSecondaryType] = useState<
     LeftSecondaryType | undefined
-  >();
+  >(LeftSecondaryType.Content);
 
   const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
 

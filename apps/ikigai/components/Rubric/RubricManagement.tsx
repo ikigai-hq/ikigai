@@ -10,9 +10,8 @@ import toast from "react-hot-toast";
 import { v4 } from "uuid";
 import { cloneDeep } from "lodash";
 
-import { Drawer } from "components/common/Drawer";
 import { Divider, Popconfirm, Tooltip, Typography } from "antd";
-import { Button, TextButtonWithHover } from "components/common/Button";
+import { TextButtonWithHover } from "components/common/Button";
 import { useMutation } from "@apollo/client";
 import { handleError } from "graphql/ApolloClient";
 import {
@@ -30,10 +29,9 @@ import { useState } from "react";
 import ViewOrEditRubric from "./ViewOrEditRubric";
 import usePermission from "hook/UsePermission";
 import useRubricStore, { IRubric } from "store/RubricStore";
+import { Button, ScrollArea } from "@radix-ui/themes";
 
 export type BandScoresDrawerProps = {
-  visible: boolean;
-  onClose: () => void;
   selectedRubricId?: string;
   onChangeSelected?: (rubric: IRubric) => void;
 };
@@ -41,8 +39,6 @@ export type BandScoresDrawerProps = {
 const RubricManagement = ({
   selectedRubricId,
   onChangeSelected,
-  visible,
-  onClose,
 }: BandScoresDrawerProps) => {
   const allow = usePermission();
   const theme = useTheme();
@@ -92,23 +88,10 @@ const RubricManagement = ({
   };
 
   return (
-    <Drawer
-      title={t`Rubric Management`}
-      open={visible}
-      onClose={onClose}
-      width={"40vw"}
-    >
+    <>
       <div>
-        <Typography.Text type="secondary">
-          <Trans>
-            Rubrics consist of rows and columns. The rows correspond to the
-            criteria. The columns correspond to the level of achievement that
-            describes each criterion.
-          </Trans>
-        </Typography.Text>
         {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
           <Button
-            type="primary"
             style={{
               width: "100%",
               marginTop: "15px",
@@ -121,78 +104,84 @@ const RubricManagement = ({
           </Button>
         )}
         <Divider />
-        <div>
-          {rubrics.map((rubric) => (
-            <div key={rubric.id}>
-              <div style={{ display: "flex", alignItems: "baseline" }}>
-                <div style={{ flex: 1 }}>
-                  <Typography.Text
-                    strong
-                    style={{
-                      color:
-                        rubric.id === selectedRubricId
-                          ? theme.colors.primary[7]
-                          : "black",
-                    }}
-                  >
-                    {rubric.name}
-                  </Typography.Text>
-                  <br />
-                  <Typography.Text type="secondary">
-                    {formatTimestamp(
-                      rubric.createdAt,
-                      FormatType.DateTimeFormat,
-                    )}
-                  </Typography.Text>
-                </div>
-                <div style={{ display: "flex" }}>
-                  <Tooltip title={t`Use this rubric`} arrow={false}>
-                    <TextButtonWithHover
-                      type="text"
-                      icon={<CheckOutlined />}
-                      onClick={() => onChangeSelected(rubric)}
-                    />
-                  </Tooltip>
-                  <Tooltip
-                    title={
-                      allow(SpaceActionPermission.MANAGE_SPACE_CONTENT)
-                        ? t`View and Edit`
-                        : t`View`
-                    }
-                    arrow={false}
-                  >
-                    <TextButtonWithHover
-                      type="text"
-                      icon={
-                        allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) ? (
-                          <EditOutlined />
-                        ) : (
-                          <EyeOutlined />
-                        )
+        <ScrollArea
+          type="always"
+          scrollbars="vertical"
+          style={{ height: "30vh" }}
+        >
+          <div>
+            {rubrics.map((rubric) => (
+              <div key={rubric.id}>
+                <div style={{ display: "flex", alignItems: "baseline" }}>
+                  <div style={{ flex: 1 }}>
+                    <Typography.Text
+                      strong
+                      style={{
+                        color:
+                          rubric.id === selectedRubricId
+                            ? theme.colors.primary[7]
+                            : "black",
+                      }}
+                    >
+                      {rubric.name}
+                    </Typography.Text>
+                    <br />
+                    <Typography.Text type="secondary">
+                      {formatTimestamp(
+                        rubric.createdAt,
+                        FormatType.DateTimeFormat,
+                      )}
+                    </Typography.Text>
+                  </div>
+                  <div style={{ display: "flex" }}>
+                    <Tooltip title={t`Use this rubric`} arrow={false}>
+                      <TextButtonWithHover
+                        type="text"
+                        icon={<CheckOutlined />}
+                        onClick={() => onChangeSelected(rubric)}
+                      />
+                    </Tooltip>
+                    <Tooltip
+                      title={
+                        allow(SpaceActionPermission.MANAGE_SPACE_CONTENT)
+                          ? t`View and Edit`
+                          : t`View`
                       }
-                      onClick={() => setEditingRubric(rubric)}
-                    />
-                  </Tooltip>
-                  {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
-                    <Popconfirm
-                      title={t`Do you want to remove ${rubric.name}?`}
-                      onConfirm={() => onRemoveRubric(rubric.id)}
+                      arrow={false}
                     >
                       <TextButtonWithHover
                         type="text"
-                        icon={<DeleteOutlined />}
-                        style={{ color: "red" }}
-                        disabled={loading}
-                        loading={loading}
+                        icon={
+                          allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) ? (
+                            <EditOutlined />
+                          ) : (
+                            <EyeOutlined />
+                          )
+                        }
+                        onClick={() => setEditingRubric(rubric)}
                       />
-                    </Popconfirm>
-                  )}
+                    </Tooltip>
+                    {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
+                      <Popconfirm
+                        title={t`Do you want to remove ${rubric.name}?`}
+                        onConfirm={() => onRemoveRubric(rubric.id)}
+                      >
+                        <TextButtonWithHover
+                          type="text"
+                          icon={<DeleteOutlined />}
+                          style={{ color: "red" }}
+                          disabled={loading}
+                          loading={loading}
+                        />
+                      </Popconfirm>
+                    )}
+                  </div>
                 </div>
+                <Divider />
               </div>
-              <Divider />
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </ScrollArea>
       </div>
       {editingRubric && (
         <ViewOrEditRubric
@@ -203,7 +192,7 @@ const RubricManagement = ({
           rubric={cloneDeep(editingRubric)}
         />
       )}
-    </Drawer>
+    </>
   );
 };
 

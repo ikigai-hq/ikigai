@@ -84,6 +84,7 @@ const TeacherSubmissionListTable = ({
               </Table.Cell>
               <Table.Cell>
                 <StudentSubmissionStatus
+                  selectedMember={selectedMember}
                   setSelectedMember={setSelectedMember}
                   submissions={getSubmissions(member.userId)}
                   member={member}
@@ -96,15 +97,6 @@ const TeacherSubmissionListTable = ({
           ))}
         </Table.Body>
       </Table.Root>
-
-      {selectedMember && (
-        <SubmissionListOfStudent
-          open={!!selectedMember}
-          onClose={() => setSelectedMember(undefined)}
-          submissions={getSubmissions(selectedMember.userId)}
-          member={selectedMember}
-        />
-      )}
     </div>
   );
 };
@@ -112,10 +104,12 @@ const TeacherSubmissionListTable = ({
 const StudentSubmissionStatus = ({
   submissions,
   member,
+  selectedMember,
   setSelectedMember,
 }: {
   submissions: ISubmission[];
   member: ISpaceMember;
+  selectedMember?: ISpaceMember;
   setSelectedMember: (member: ISpaceMember) => void;
 }) => {
   return (
@@ -124,17 +118,24 @@ const StudentSubmissionStatus = ({
         {submissions.length} <Trans>times</Trans>
       </Text>
       {submissions.length > 0 && (
-        <Tooltip content={t`View all submissions of ${member.user.name}`}>
-          <IconButton
-            size="1"
-            color="gray"
-            variant="ghost"
-            onClick={() => setSelectedMember(member)}
-            style={{ marginLeft: 10 }}
-          >
-            <RowsIcon />
-          </IconButton>
-        </Tooltip>
+        <SubmissionListOfStudent
+          open={!!selectedMember}
+          onClose={() => setSelectedMember(undefined)}
+          submissions={submissions}
+          member={selectedMember}
+        >
+          <Tooltip content={t`View all submissions of ${member.user.name}`}>
+            <IconButton
+              size="1"
+              color="gray"
+              variant="ghost"
+              onClick={() => setSelectedMember(member)}
+              style={{ marginLeft: 10 }}
+            >
+              <RowsIcon />
+            </IconButton>
+          </Tooltip>
+        </SubmissionListOfStudent>
       )}
     </div>
   );

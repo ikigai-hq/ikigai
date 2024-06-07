@@ -10,6 +10,8 @@ export type ModalProps = {
   okText?: React.ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  minWidth?: string;
+  maxWidth?: string;
 };
 
 const Modal = ({
@@ -21,11 +23,13 @@ const Modal = ({
   okText,
   open,
   onOpenChange,
+  minWidth,
+  maxWidth,
 }: ModalProps) => {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Trigger>{children}</Dialog.Trigger>
-      <Dialog.Content>
+      <Dialog.Content minWidth={minWidth} maxWidth={maxWidth}>
         {title && <Dialog.Title>{title}</Dialog.Title>}
         {description && <Dialog.Description>{description}</Dialog.Description>}
 

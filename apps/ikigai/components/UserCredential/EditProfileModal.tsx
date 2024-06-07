@@ -1,24 +1,30 @@
 import { Trans, t } from "@lingui/macro";
-import Modal from "../common/Modal";
-import { Button, Input, Typography } from "antd";
-import useAuthUserStore from "../../store/AuthStore";
-import { useState } from "react";
-import { UPDATE_PROFILE } from "../../graphql/mutation/UserMutation";
-import { handleError } from "../../graphql/ApolloClient";
-import { useMutation } from "@apollo/client";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { TextField, Text } from "@radix-ui/themes";
+import { useMutation } from "@apollo/client";
+
+import useAuthUserStore from "store/AuthStore";
+import { UPDATE_PROFILE } from "graphql/mutation/UserMutation";
+import { handleError } from "graphql/ApolloClient";
+import Modal from "components/base/Modal";
 
 export type EditProfileModalProps = {
-  visible: boolean;
-  onClose: () => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  children: React.ReactNode;
 };
 
-const EditProfileModal = ({ visible, onClose }: EditProfileModalProps) => {
+const EditProfileModal = ({
+  open,
+  onOpenChange,
+  children,
+}: EditProfileModalProps) => {
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
   const setProfile = useAuthUserStore((state) => state.setProfile);
   const [firstName, setFirstName] = useState(me?.firstName);
   const [lastName, setLastName] = useState(me?.lastName);
-  const [updateProfile, { loading }] = useMutation(UPDATE_PROFILE, {
+  const [updateProfile] = useMutation(UPDATE_PROFILE, {
     onError: handleError,
   });
 
@@ -36,45 +42,50 @@ const EditProfileModal = ({ visible, onClose }: EditProfileModalProps) => {
     if (data) {
       setProfile(firstName, lastName);
       toast.success(t`Updated!`);
-      onClose();
     }
   };
 
   return (
-    <Modal visible={visible} onClose={onClose} title={t`Profile`}>
-      <div>
-        <Typography.Text strong>
-          <Trans>Email</Trans>
-        </Typography.Text>
-        <br />
-        <Typography.Text>{me.email}</Typography.Text>
-      </div>
-      <div>
-        <Typography.Text strong>
-          <Trans>First name</Trans>
-        </Typography.Text>
-        <Input
-          value={firstName}
-          onChange={(e) => setFirstName(e.currentTarget.value)}
-        />
-      </div>
-      <div>
-        <Typography.Text strong>
-          <Trans>Last name</Trans>
-        </Typography.Text>
-        <Input
-          value={lastName}
-          onChange={(e) => setLastName(e.currentTarget.value)}
-        />
-      </div>
-      <Button
-        type="primary"
-        onClick={update}
-        loading={loading}
-        disabled={loading}
-      >
-        <Trans>Update</Trans>
-      </Button>
+    <Modal
+      open={open}
+      onOpenChange={onOpenChange}
+      title={t`Profile`}
+      onOk={update}
+      content={
+        <>
+          <div>
+            <Text weight="bold">
+              <Trans>First name</Trans>
+            </Text>
+            <br />
+            <Text>{me.email}</Text>
+          </div>
+          <div>
+            <label>
+              <Text weight="bold">
+                <Trans>First name</Trans>
+              </Text>
+              <TextField.Root
+                value={firstName}
+                onChange={(e) => setFirstName(e.currentTarget.value)}
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              <Text weight="bold">
+                <Trans>Last name</Trans>
+              </Text>
+              <TextField.Root
+                value={lastName}
+                onChange={(e) => setLastName(e.currentTarget.value)}
+              />
+            </label>
+          </div>
+        </>
+      }
+    >
+      {children}
     </Modal>
   );
 };

@@ -69,26 +69,22 @@ const LeftSide = () => {
             </IkigaiIconButton>
           </MenuItemWrapper>
         </div>
-        <Tooltip content={myName}>
-          <div
-            style={{ margin: "5px auto", cursor: "pointer" }}
-            onClick={() => setOpenProfile(true)}
-          >
-            <Avatar
-              radius={"full"}
-              fallback={myName.charAt(0)}
-              color={"orange"}
-              src={me?.avatar?.publicUrl}
-              size="2"
-            />
-          </div>
-        </Tooltip>
-        {openProfile && (
-          <EditProfileModal
-            visible={openProfile}
-            onClose={() => setOpenProfile(false)}
-          />
-        )}
+        <EditProfileModal open={openProfile} onOpenChange={setOpenProfile}>
+          <Tooltip content={myName}>
+            <div
+              style={{ margin: "5px auto", cursor: "pointer" }}
+              onClick={() => setOpenProfile(true)}
+            >
+              <Avatar
+                radius={"full"}
+                fallback={myName.charAt(0)}
+                color={"orange"}
+                src={me?.avatar?.publicUrl}
+                size="2"
+              />
+            </div>
+          </Tooltip>
+        </EditProfileModal>
       </Container>
       <Separator style={{ height: "100vh", width: 1 }} />
       <LeftSecondarySide selectedType={leftSecondaryType} />

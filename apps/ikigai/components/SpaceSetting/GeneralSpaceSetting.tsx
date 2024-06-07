@@ -1,11 +1,10 @@
-import { Button, Col, Input, Row, Typography } from "antd";
 import { t, Trans } from "@lingui/macro";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import styled from "styled-components";
 import { useMutation } from "@apollo/client";
+import { Button, Text, TextField } from "@radix-ui/themes";
 
-import useSpaceStore from "../../store/SpaceStore";
+import useSpaceStore from "store/SpaceStore";
 import { UPDATE_SPACE } from "graphql/mutation/SpaceMutation";
 import { handleError } from "graphql/ApolloClient";
 import { UpdateSpace } from "graphql/types";
@@ -41,33 +40,25 @@ const GeneralSpaceSetting = () => {
   return (
     <div>
       <div>
-        <Row>
-          <Col span={12}>
-            <Typography.Text strong>
-              <Trans>Space name</Trans>
-            </Typography.Text>
-            <Input
-              value={innerSpaceName}
-              onChange={(e) => setInnerSpaceName(e.currentTarget.value)}
-              placeholder={t`Type space name...`}
-            />
-          </Col>
-        </Row>
+        <Text size="3" weight="bold">
+          <Trans>Space name</Trans>
+        </Text>
+        <TextField.Root
+          value={innerSpaceName}
+          onChange={(e) => setInnerSpaceName(e.currentTarget.value)}
+          placeholder={t`Type space name...`}
+        />
       </div>
-      <UpdateButton
-        type="primary"
+      <Button
         loading={loading}
         disabled={loading}
         onClick={onUpdateSpace}
+        style={{ marginTop: 5 }}
       >
         <Trans>Update</Trans>
-      </UpdateButton>
+      </Button>
     </div>
   );
 };
-
-const UpdateButton = styled(Button)`
-  margin-top: 15px;
-`;
 
 export default GeneralSpaceSetting;

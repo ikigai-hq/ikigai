@@ -2,7 +2,7 @@ import React from "react";
 import { Dialog, Flex, Button, Box, Text } from "@radix-ui/themes";
 
 export type ModalProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   title?: React.ReactNode;
   description?: React.ReactNode;
   content: React.ReactNode;
@@ -12,6 +12,7 @@ export type ModalProps = {
   onOpenChange?: (open: boolean) => void;
   minWidth?: string;
   maxWidth?: string;
+  showClose?: boolean;
 };
 
 const Modal = ({
@@ -25,10 +26,11 @@ const Modal = ({
   onOpenChange,
   minWidth,
   maxWidth,
+  showClose = true,
 }: ModalProps) => {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <Dialog.Trigger>{children}</Dialog.Trigger>
+      {children && <Dialog.Trigger>{children}</Dialog.Trigger>}
       <Dialog.Content minWidth={minWidth} maxWidth={maxWidth}>
         {title && <Dialog.Title>{title}</Dialog.Title>}
         {description && (
@@ -42,11 +44,13 @@ const Modal = ({
         <Box pb="3">{content}</Box>
 
         <Flex gap="3" justify="end">
-          <Dialog.Close>
-            <Button variant="soft" color="gray">
-              Close
-            </Button>
-          </Dialog.Close>
+          {showClose && (
+            <Dialog.Close>
+              <Button variant="soft" color="gray">
+                Close
+              </Button>
+            </Dialog.Close>
+          )}
           {onOk && (
             <Dialog.Close>
               <Button onClick={onOk}>{okText || "Save"}</Button>

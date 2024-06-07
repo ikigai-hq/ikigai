@@ -1,13 +1,13 @@
-import { t } from "@lingui/macro";
-import { Tabs } from "antd";
+import { t, Trans } from "@lingui/macro";
+import { Box, Tabs, Text } from "@radix-ui/themes";
 
-import Modal from "../common/Modal";
 import useSpaceStore from "../../store/SpaceStore";
 import GeneralSpaceSetting from "./GeneralSpaceSetting";
 import MemberSpaceSetting from "./MemberSpaceSetting";
 import InviteSpaceSetting from "./InviteSpaceSetting";
 import usePermission from "hook/UsePermission";
 import { SpaceActionPermission } from "graphql/types";
+import Modal from "components/base/Modal";
 
 export enum SpaceSettingTabKeys {
   General = "general",
@@ -23,41 +23,50 @@ const SpaceSetting = () => {
     (state) => state.setSpaceSettingVisible,
   );
   const allow = usePermission();
-  const onClose = () => setSpaceSettingVisible(false);
-
-  const tabs = [];
-  if (allow(SpaceActionPermission.MANAGE_SPACE_SETTING)) {
-    tabs.push({
-      label: t`Details`,
-      key: SpaceSettingTabKeys.General,
-      children: <GeneralSpaceSetting />,
-    });
-  }
-
-  if (allow(SpaceActionPermission.MANAGE_SPACE_MEMBER)) {
-    tabs.push(
-      {
-        label: t`Members`,
-        key: SpaceSettingTabKeys.Members,
-        children: <MemberSpaceSetting />,
-      },
-      {
-        label: t`Invites`,
-        key: SpaceSettingTabKeys.Invites,
-        children: <InviteSpaceSetting />,
-      },
-    );
-  }
 
   return (
     <Modal
-      visible={spaceSettingVisible}
-      onClose={onClose}
+      open={spaceSettingVisible}
+      onOpenChange={setSpaceSettingVisible}
       title={t`Space settings`}
-      width={"70vw"}
-    >
-      <Tabs items={tabs} />
-    </Modal>
+      content={
+        <>
+          <Tabs.Root defaultValue={SpaceSettingTabKeys.General}>
+            <Tabs.List>
+              <Tabs.Trigger value={SpaceSettingTabKeys.General}>
+                <Trans>General</Trans>
+              </Tabs.Trigger>
+              {allow(SpaceActionPermission.MANAGE_SPACE_MEMBER) && (
+                <Tabs.Trigger value={SpaceSettingTabKeys.Members}>
+                  <Trans>Members</Trans>
+                </Tabs.Trigger>
+              )}
+              {allow(SpaceActionPermission.MANAGE_SPACE_MEMBER) && (
+                <Tabs.Trigger value={SpaceSettingTabKeys.Invites}>
+                  <Trans>Invite</Trans>
+                </Tabs.Trigger>
+              )}
+            </Tabs.List>
+
+            <Box pt="3">
+              <Tabs.Content value={SpaceSettingTabKeys.General}>
+                <GeneralSpaceSetting />
+              </Tabs.Content>
+
+              <Tabs.Content value={SpaceSettingTabKeys.Members}>
+                <MemberSpaceSetting />
+              </Tabs.Content>
+
+              <Tabs.Content value={SpaceSettingTabKeys.Invites}>
+                <Text size="2">
+                  <InviteSpaceSetting />
+                </Text>
+              </Tabs.Content>
+            </Box>
+          </Tabs.Root>
+        </>
+      }
+    />
   );
 };
 

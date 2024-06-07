@@ -25,7 +25,14 @@ const UserBasicInformation = (props: UserNameProps) => {
           size="2"
         />
       </div>
-      <div style={{ flex: "1", display: "inline-grid" }}>
+      <div
+        style={{
+          flex: "1",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+        }}
+      >
         <Text size="1" style={{ color: "black" }} weight="medium" truncate>
           {props.name}
         </Text>

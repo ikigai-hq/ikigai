@@ -148,11 +148,12 @@ const Actions = ({ lastSubmission }: { lastSubmission?: ISubmission }) => {
       {lastSubmission && (
         <Tooltip content={t`Review and feedback last submission`}>
           <IconButton
+            size="1"
             onClick={() => {
               router.push(formatDocumentRoute(lastSubmission.documentId));
             }}
           >
-            <Pencil1Icon width="18px" height="18px" />
+            <Pencil1Icon />
           </IconButton>
         </Tooltip>
       )}

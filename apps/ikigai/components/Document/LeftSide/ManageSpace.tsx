@@ -71,12 +71,17 @@ const ManageSpace = ({ onClickSpaceSetting }: ManageSpaceProps) => {
         </ItemContainer>
       )}
       {allow(SpaceActionPermission.MANAGE_SPACE_MEMBER) && (
-        <ItemContainer onClick={() => setShowCreateInvite(true)}>
-          <Text size="2" weight="medium">
-            <Trans>Invite People</Trans>
-          </Text>
-          <PersonIcon width="18px" height="18px" />
-        </ItemContainer>
+        <CreateSpaceInvite
+          open={showCreateInvite}
+          onOpenChange={setShowCreateInvite}
+        >
+          <ItemContainer onClick={() => setShowCreateInvite(true)}>
+            <Text size="2" weight="medium">
+              <Trans>Invite People</Trans>
+            </Text>
+            <PersonIcon width="18px" height="18px" />
+          </ItemContainer>
+        </CreateSpaceInvite>
       )}
       <Separator style={{ width: "100%" }} />
       <div
@@ -115,12 +120,6 @@ const ManageSpace = ({ onClickSpaceSetting }: ManageSpaceProps) => {
           </ItemContainer>
         ))}
       </ScrollArea>
-      {showCreateInvite && (
-        <CreateSpaceInvite
-          visible={showCreateInvite}
-          onClose={() => setShowCreateInvite(false)}
-        />
-      )}
     </div>
   );
 };

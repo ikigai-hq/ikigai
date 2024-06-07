@@ -1,25 +1,19 @@
 import React, { useState } from "react";
 import { t } from "@lingui/macro";
 import styled from "styled-components";
-import { Avatar, Box, Separator, Tooltip } from "@radix-ui/themes";
+import { Avatar, Separator, Tooltip } from "@radix-ui/themes";
 import { FileIcon } from "@radix-ui/react-icons";
 
 import useAuthUserStore from "store/AuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
-import useSpaceStore from "store/SpaceStore";
-import ManageSpace from "./ManageSpace";
-import Modal from "components/base/Modal";
 import LeftSecondarySide, {
   LeftSecondaryType,
 } from "components/Document/LeftSide/LeftSecondarySide";
 import IkigaiIconButton from "components/base/IconButton";
+import ManageSpaceModal from "./ManageSpaceModal";
 
 const LeftSide = () => {
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
-  const setSpaceSettingVisible = useSpaceStore(
-    (state) => state.setSpaceSettingVisible,
-  );
-  const spaceName = useSpaceStore((state) => state.space?.name);
   const [openProfile, setOpenProfile] = useState(false);
   const [leftSecondaryType, setLeftSecondaryType] = useState<
     LeftSecondaryType | undefined
@@ -38,24 +32,7 @@ const LeftSide = () => {
   return (
     <>
       <Container>
-        <Modal
-          content={
-            <ManageSpace
-              onClickSpaceSetting={() => setSpaceSettingVisible(true)}
-            />
-          }
-          title={t`Space`}
-          description={t`Manage, Switch, or Create Space`}
-        >
-          <SpaceWrapper>
-            <Avatar
-              variant="solid"
-              radius={"small"}
-              fallback={spaceName ? spaceName.charAt(0) : "I"}
-              size="2"
-            />
-          </SpaceWrapper>
-        </Modal>
+        <ManageSpaceModal />
         <Separator style={{ width: "100%" }} />
         <div style={{ flex: 1, margin: "0 auto" }}>
           <MenuItemWrapper>
@@ -106,10 +83,4 @@ const Container = styled.div<{ $hide?: boolean }>`
 
 const MenuItemWrapper = styled.div`
   margin-top: 10px;
-`;
-
-const SpaceWrapper = styled(Box)`
-  margin: 5px auto;
-  height: 40px;
-  cursor: pointer;
 `;

@@ -1,10 +1,10 @@
-import { Avatar, Button, Divider, Typography } from "antd";
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import { t, Trans } from "@lingui/macro";
 import toast from "react-hot-toast";
 import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { IconSettings, IconUserPlus } from "@tabler/icons-react";
+import { Avatar, Button, ScrollArea, Separator, Text } from "@radix-ui/themes";
+import { PlusIcon, GearIcon, PersonIcon } from "@radix-ui/react-icons";
 
 import useSpaceStore from "store/SpaceStore";
 import {
@@ -25,7 +25,6 @@ export type ManageSpaceProps = {
 };
 
 const ManageSpace = ({ onClickSpaceSetting }: ManageSpaceProps) => {
-  const theme = useTheme();
   const allow = usePermission();
   const currentSpaceId = useSpaceStore((state) => state.spaceId);
   const { data } = useQuery<GetMySpaces>(GET_MY_SPACES, {
@@ -65,55 +64,57 @@ const ManageSpace = ({ onClickSpaceSetting }: ManageSpaceProps) => {
     <div>
       {allow(SpaceActionPermission.MANAGE_SPACE_SETTING) && (
         <ItemContainer onClick={onClickSpaceSetting}>
-          <Typography.Text>
+          <Text size="2" weight="medium">
             <Trans>Space Settings</Trans>
-          </Typography.Text>
-          <IconSettings size={20} />
+          </Text>
+          <GearIcon width="18px" height="18px" />
         </ItemContainer>
       )}
       {allow(SpaceActionPermission.MANAGE_SPACE_MEMBER) && (
         <ItemContainer onClick={() => setShowCreateInvite(true)}>
-          <Typography.Text>
+          <Text size="2" weight="medium">
             <Trans>Invite People</Trans>
-          </Typography.Text>
-          <IconUserPlus size={20} />
+          </Text>
+          <PersonIcon width="18px" height="18px" />
         </ItemContainer>
       )}
-      <Divider style={{ marginTop: 10, marginBottom: 10 }} />
-      <div style={{ marginBottom: 5 }}>
-        <Typography.Text type="secondary" strong>
+      <Separator style={{ width: "100%" }} />
+      <div
+        style={{
+          marginTop: 5,
+          marginBottom: 5,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Text size="2" weight="bold" color="gray" style={{ flex: 1 }}>
           <Trans>My Spaces</Trans>
-        </Typography.Text>
-      </div>
-      {spaces.map((space) => (
-        <ItemContainer
-          key={space.id}
-          onClick={() => onSwitch(space)}
-          $active={space.id === currentSpaceId}
-          style={{ justifyContent: "start" }}
-        >
-          <Avatar
-            size={"small"}
-            shape="square"
-            style={{ backgroundColor: theme.colors.primary[5] }}
-          >
-            {space.name.charAt(0)}
-          </Avatar>
-          <Typography.Text ellipsis>{space.name}</Typography.Text>
-        </ItemContainer>
-      ))}
-      <Divider style={{ marginTop: 10, marginBottom: 10 }} />
-      <div>
+        </Text>
         <Button
-          type="primary"
+          variant="soft"
           onClick={onCreateSpace}
           loading={loading}
           disabled={loading}
-          style={{ width: "100%" }}
         >
+          <PlusIcon />
           <Trans>New space</Trans>
         </Button>
       </div>
+      <ScrollArea type="auto" scrollbars="vertical" style={{ maxHeight: 180 }}>
+        {spaces.map((space) => (
+          <ItemContainer
+            key={space.id}
+            onClick={() => onSwitch(space)}
+            $active={space.id === currentSpaceId}
+            style={{ justifyContent: "start" }}
+          >
+            <Avatar fallback={space.name.charAt(0)} size="1" />
+            <Text size="2" truncate>
+              {space.name}
+            </Text>
+          </ItemContainer>
+        ))}
+      </ScrollArea>
       {showCreateInvite && (
         <CreateSpaceInvite
           visible={showCreateInvite}
@@ -134,11 +135,10 @@ const ItemContainer = styled.div<{ $active?: boolean }>`
   align-items: center;
   gap: 8px;
   font-weight: 450;
-  background: ${(props) =>
-    props.$active ? props.theme.colors.primary[1] : "unset"};
+  background: ${(props) => (props.$active ? "#8EC8F6" : "unset")};
 
   &:hover {
-    background: ${(props) => props.theme.colors.gray[4]};
+    background: #c2e5ff;
   }
 `;
 

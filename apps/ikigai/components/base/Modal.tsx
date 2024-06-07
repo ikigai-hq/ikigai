@@ -1,5 +1,5 @@
 import React from "react";
-import { Dialog, Flex, Button, Box } from "@radix-ui/themes";
+import { Dialog, Flex, Button, Box, Text } from "@radix-ui/themes";
 
 export type ModalProps = {
   children: React.ReactNode;
@@ -31,7 +31,13 @@ const Modal = ({
       <Dialog.Trigger>{children}</Dialog.Trigger>
       <Dialog.Content minWidth={minWidth} maxWidth={maxWidth}>
         {title && <Dialog.Title>{title}</Dialog.Title>}
-        {description && <Dialog.Description>{description}</Dialog.Description>}
+        {description && (
+          <Dialog.Description>
+            <Text color="gray" size="2">
+              {description}
+            </Text>
+          </Dialog.Description>
+        )}
 
         <Box pb="3">{content}</Box>
 

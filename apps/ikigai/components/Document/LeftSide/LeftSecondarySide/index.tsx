@@ -2,22 +2,17 @@ import { Separator } from "@radix-ui/themes";
 import React from "react";
 import SpaceDocumentList from "components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList";
 import styled from "styled-components";
+import useUIStore, { LeftSideBarOptions } from "store/UIStore";
 
-export enum LeftSecondaryType {
-  Content = "Content",
-}
-
-export type LeftSecondarySideProps = {
-  selectedType?: LeftSecondaryType;
-};
-
-const LeftSecondarySide = ({ selectedType }: LeftSecondarySideProps) => {
+const LeftSecondarySide = () => {
+  const leftSidebar = useUIStore((state) => state.config.leftSidebar);
+  const expanded = leftSidebar !== LeftSideBarOptions.None;
   return (
     <>
-      <Container $hide={!selectedType}>
-        {selectedType === LeftSecondaryType.Content && <SpaceDocumentList />}
+      <Container $hide={!expanded}>
+        {leftSidebar === LeftSideBarOptions.Content && <SpaceDocumentList />}
       </Container>
-      {selectedType && <Separator style={{ height: "100vh", width: 1 }} />}
+      {expanded && <Separator style={{ height: "100vh", width: 1 }} />}
     </>
   );
 };

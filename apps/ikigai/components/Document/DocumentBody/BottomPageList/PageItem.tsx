@@ -60,6 +60,7 @@ const PageContainer = styled(Card)<{
   gap: 4px;
   transition: all linear 0.3s;
   padding: 5px;
+  justify-content: center;
 
   &:hover {
     background-color: #c2e5ff;

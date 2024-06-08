@@ -6,27 +6,25 @@ import { FileIcon } from "@radix-ui/react-icons";
 
 import useAuthUserStore from "store/AuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
-import LeftSecondarySide, {
-  LeftSecondaryType,
-} from "components/Document/LeftSide/LeftSecondarySide";
+import LeftSecondarySide from "components/Document/LeftSide/LeftSecondarySide";
 import IkigaiIconButton from "components/base/IconButton";
 import ManageSpaceModal from "./ManageSpaceModal";
+import useUIStore, { LeftSideBarOptions } from "store/UIStore";
 
 const LeftSide = () => {
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
   const [openProfile, setOpenProfile] = useState(false);
-  const [leftSecondaryType, setLeftSecondaryType] = useState<
-    LeftSecondaryType | undefined
-  >(LeftSecondaryType.Content);
-
+  const leftSidebar = useUIStore((state) => state.config.leftSidebar);
+  const setUiConfig = useUIStore((state) => state.setConfig);
   const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
 
   const onClickContent = () => {
-    setLeftSecondaryType(
-      leftSecondaryType === LeftSecondaryType.Content
-        ? undefined
-        : LeftSecondaryType.Content,
-    );
+    setUiConfig({
+      leftSidebar:
+        leftSidebar === LeftSideBarOptions.Content
+          ? LeftSideBarOptions.None
+          : LeftSideBarOptions.Content,
+    });
   };
 
   return (
@@ -40,7 +38,7 @@ const LeftSide = () => {
               size="2"
               variant="ghost"
               onClick={onClickContent}
-              active={LeftSecondaryType.Content === leftSecondaryType}
+              active={leftSidebar === LeftSideBarOptions.Content}
             >
               <FileIcon width="20" height="20" />
             </IkigaiIconButton>
@@ -64,7 +62,7 @@ const LeftSide = () => {
         </EditProfileModal>
       </Container>
       <Separator style={{ height: "100vh", width: 1 }} />
-      <LeftSecondarySide selectedType={leftSecondaryType} />
+      <LeftSecondarySide />
     </>
   );
 };

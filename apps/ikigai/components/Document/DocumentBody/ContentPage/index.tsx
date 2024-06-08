@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { Divider } from "antd";
 import { t } from "@lingui/macro";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
@@ -11,17 +10,13 @@ import { IPage } from "store/PageStore";
 import { useDebounce } from "ahooks";
 import useUpdatePage from "hook/UseUpdatePage";
 import usePageContentStore from "store/PageContentStore";
-import useUIStore, { RightSideBarOptions, UIConfig } from "store/UIStore";
+import useUIStore, { LeftSideBarOptions, UIConfig } from "store/UIStore";
 import { Inset, Separator } from "@radix-ui/themes";
 
 const getBodyWidth = (uiConfig: UIConfig) => {
-  let bodyWidth = "100vw - 535px";
+  let bodyWidth = "100vw - 305px";
   // If left sidebar is not visible -> the side should be increase 256px
-  if (!uiConfig.leftSidebarVisible) bodyWidth += " + 256px";
-  // If right sidebar is not visible -> the side should be increase 256px
-  if (uiConfig.rightSideBarVisible !== RightSideBarOptions.None)
-    bodyWidth += " + 256px";
-
+  if (uiConfig.leftSidebar === LeftSideBarOptions.None) bodyWidth += " + 250px";
   return `calc(${bodyWidth})`;
 };
 
@@ -47,11 +42,11 @@ const ContentPage = ({ page }: ContentPageProps) => {
   }, [debouncedTitle]);
 
   return (
-    <div style={{ padding: 10 }}>
-      <div>
+    <div>
+      <div style={{ padding: "10px 15px" }}>
         <PageTitle
           maxLength={255}
-          placeholder={t`Untitled`}
+          placeholder={t`Type page name...`}
           value={title}
           onChange={(e) => setTitle(e.currentTarget.value)}
           readOnly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}

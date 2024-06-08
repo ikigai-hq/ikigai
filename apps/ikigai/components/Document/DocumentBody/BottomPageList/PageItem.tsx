@@ -26,7 +26,7 @@ const PageItem = ({ page, index }: PageItemProps) => {
         <div>
           {!page && (
             <Text weight="medium">
-              <Trans>Main Page</Trans>
+              <Trans>Main</Trans>
             </Text>
           )}
           {index && (

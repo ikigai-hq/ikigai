@@ -1328,6 +1328,7 @@ export enum DocumentActionPermission {
   MANAGE_DOCUMENT = "MANAGE_DOCUMENT",
   VIEW_ANSWER = "VIEW_ANSWER",
   VIEW_DOCUMENT = "VIEW_DOCUMENT",
+  VIEW_PAGE_CONTENT = "VIEW_PAGE_CONTENT",
 }
 
 export enum DocumentType {

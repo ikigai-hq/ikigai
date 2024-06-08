@@ -48,6 +48,11 @@ allow(actor: UserAuth, "interactive_with_tool", doc: DocumentAuth) if
 	doc.creator_id = actor.id and
 	actor.role = "student";
 
+allow(actor: UserAuth, "view_page_content", doc: DocumentAuth) if
+	doc.is_submission and
+	doc.creator_id = actor.id and
+	actor.role = "student";
+
 allow(actor: UserAuth, "interactive_with_tool", doc: DocumentAuth) if
 	not doc.is_doing_submission and
 	actor.role = "teacher";
@@ -60,6 +65,7 @@ resource DocumentAuth {
     roles = ["reader", "writer"];
     permissions = [
         "view_document",
+        "view_page_content",
         "interactive_with_tool",
         "view_answer",
         "edit_document",
@@ -69,6 +75,7 @@ resource DocumentAuth {
     "view_document" if "reader";
 
     "reader" if "writer";
+    "view_page_content" if "writer";
     "view_answer" if "writer";
     "edit_document" if "writer";
     "manage_document" if "writer";

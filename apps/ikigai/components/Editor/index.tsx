@@ -49,7 +49,7 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
   });
 
   return (
-    <main style={{ margin: 20 }}>
+    <main style={{ margin: 15 }}>
       <EditorContent style={{ width: "100%" }} editor={editor} />
     </main>
   );

@@ -18,6 +18,10 @@ pub struct DocumentAuth {
     pub is_doing_submission: bool,
     #[polar(attribute)]
     pub space_id: i32,
+    #[polar(attribute)]
+    pub is_assignment: bool,
+    #[polar(attribute)]
+    pub is_submission: bool,
 }
 
 impl DocumentAuth {
@@ -27,6 +31,7 @@ impl DocumentAuth {
 
         let document = Document::find_by_id(conn, document_id)?;
         let submission = Submission::find_by_document(conn, document_id)?;
+        let assignment = Assignment::find_by_document(conn, document_id)?;
 
         if let Some(submission) = &submission {
             allow_for_student_view_answer = submission.allow_for_student_view_answer;
@@ -39,6 +44,8 @@ impl DocumentAuth {
             allow_for_student_view_answer,
             is_doing_submission,
             space_id: document.space_id.unwrap_or(-1),
+            is_assignment: assignment.is_some(),
+            is_submission: submission.is_some(),
         })
     }
 }
@@ -51,4 +58,5 @@ pub enum DocumentActionPermission {
     ViewAnswer,
     EditDocument,
     ManageDocument,
+    ViewPageContent,
 }

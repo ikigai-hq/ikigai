@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { Divider, Input } from "antd";
+import { Divider } from "antd";
 import { t } from "@lingui/macro";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
@@ -12,6 +12,7 @@ import { useDebounce } from "ahooks";
 import useUpdatePage from "hook/UseUpdatePage";
 import usePageContentStore from "store/PageContentStore";
 import useUIStore, { RightSideBarOptions, UIConfig } from "store/UIStore";
+import { Inset, Separator } from "@radix-ui/themes";
 
 const getBodyWidth = (uiConfig: UIConfig) => {
   let bodyWidth = "100vw - 535px";
@@ -46,11 +47,9 @@ const ContentPage = ({ page }: ContentPageProps) => {
   }, [debouncedTitle]);
 
   return (
-    <div>
-      <div style={{ padding: 20 }}>
+    <div style={{ padding: 10 }}>
+      <div>
         <PageTitle
-          autoSize
-          variant="borderless"
           maxLength={255}
           placeholder={t`Untitled`}
           value={title}
@@ -58,7 +57,9 @@ const ContentPage = ({ page }: ContentPageProps) => {
           readOnly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
         />
       </div>
-      <Divider style={{ margin: 0 }} />
+      <Inset side="top" pb="current">
+        <Separator style={{ width: "100%" }} />
+      </Inset>
       <div style={{ width: getBodyWidth(uiConfig) }}>
         <PanelGroup direction="horizontal">
           {pageContents.map((pageContent, index) => (
@@ -85,13 +86,15 @@ const ContentPage = ({ page }: ContentPageProps) => {
   );
 };
 
-export const PageTitle = styled(Input.TextArea)`
+export const PageTitle = styled.input`
   &&& {
     font-size: 20px;
     font-weight: 700;
     padding-left: 0;
     overflow: hidden;
     line-height: normal;
+    border: none;
+    width: 100%;
 
     &:focus {
       outline: none !important;

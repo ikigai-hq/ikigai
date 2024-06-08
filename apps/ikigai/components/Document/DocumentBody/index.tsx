@@ -5,13 +5,16 @@ import CoverPage from "./CoverPage";
 import usePageStore from "store/PageStore";
 import ContentPage from "./ContentPage";
 import BottomPageList from "./BottomPageList";
-import Loading from "../../Loading";
+import Loading from "components/Loading";
+import usePermission from "hook/UsePermission";
+import { DocumentActionPermission } from "graphql/types";
 
 export type DocumentBodyProps = {
   loading: boolean;
 };
 
 const DocumentBody = ({ loading }: DocumentBodyProps) => {
+  const allow = usePermission();
   const activePageId = usePageStore((state) => state.activePageId);
   const page = usePageStore((state) =>
     state.pages.find((p) => p.id === state.activePageId),
@@ -28,7 +31,9 @@ const DocumentBody = ({ loading }: DocumentBodyProps) => {
             <ContentPage key={page?.id} page={page} />
           )}
         </BodyContent>
-        <BottomPageList />
+        {allow(DocumentActionPermission.VIEW_PAGE_CONTENT) && (
+          <BottomPageList />
+        )}
       </Body>
     </Container>
   );

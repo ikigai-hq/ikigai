@@ -41,6 +41,7 @@ export const useLoadDocument = (documentId: string) => {
   const setActiveDocument = useDocumentStore(
     (state) => state.setActiveDocument,
   );
+  const setActivePage = usePageStore((state) => state.setActivePageId);
   const setSpaceDocuments = useDocumentStore(
     (state) => state.setSpaceDocuments,
   );
@@ -117,6 +118,7 @@ export const useLoadDocument = (documentId: string) => {
       const spaceId = data.documentGet.spaceId;
       if (spaceId) await fetchSpaceInformation(spaceId);
       setActiveDocument(data.documentGet);
+      setActivePage(undefined);
       await Promise.all([
         await loadAdditionalDocumentInformation(documentId),
         await loadAssignmentInformation(data.documentGet.assignment?.id),

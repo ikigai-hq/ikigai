@@ -3,11 +3,40 @@ import { TrashIcon } from "@radix-ui/react-icons";
 import { t, Trans } from "@lingui/macro";
 import React from "react";
 
+export type BaseColors =
+  | "gray"
+  | "gold"
+  | "bronze"
+  | "brown"
+  | "yellow"
+  | "amber"
+  | "orange"
+  | "tomato"
+  | "red"
+  | "ruby"
+  | "crimson"
+  | "pink"
+  | "plum"
+  | "purple"
+  | "violet"
+  | "iris"
+  | "indigo"
+  | "blue"
+  | "cyan"
+  | "teal"
+  | "jade"
+  | "green"
+  | "grass"
+  | "lime"
+  | "mint"
+  | "sky";
+
 export type IkigaiAlertDialogProps = {
   title: string;
   description: string;
   onConfirm: () => void | Promise<void>;
   confirmText?: string;
+  confirmColor?: BaseColors;
   children?: React.ReactNode;
 };
 
@@ -21,6 +50,7 @@ const IkigaiAlertDialog = ({
     </IconButton>
   ),
   confirmText = t`Remove`,
+  confirmColor = "red",
 }: IkigaiAlertDialogProps) => {
   return (
     <AlertDialog.Root>
@@ -38,7 +68,7 @@ const IkigaiAlertDialog = ({
             </Button>
           </AlertDialog.Cancel>
           <AlertDialog.Action onClick={onConfirm}>
-            <Button variant="solid" color="red">
+            <Button variant="solid" color={confirmColor}>
               {confirmText}
             </Button>
           </AlertDialog.Action>

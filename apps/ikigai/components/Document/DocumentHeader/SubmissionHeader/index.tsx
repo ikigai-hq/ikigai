@@ -16,6 +16,11 @@ import Modal from "components/base/Modal";
 
 const SubmissionHeader = () => {
   const role = useAuthUserStore((state) => state.role);
+  const submission = useDocumentStore(
+    (state) => state.activeDocument?.submission,
+  );
+
+  if (!submission) return <></>;
 
   if (role === Role.TEACHER) return <TeacherSubmissionHeader />;
   if (role === Role.STUDENT) return <StudentSubmissionHeader />;
@@ -36,11 +41,6 @@ export const StudentSubmissionHeader = () => {
 };
 
 export const TeacherSubmissionHeader = () => {
-  const submission = useDocumentStore(
-    (state) => state.activeDocument?.submission,
-  );
-  if (!submission) return <></>;
-
   return (
     <HeaderSubmissionWrapper>
       <HeaderSubmissionUserInfo />

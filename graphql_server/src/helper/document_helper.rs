@@ -34,7 +34,7 @@ impl Document {
         let new_title = format!("{}{}", config.prefix_title, self.title);
         let new_cover_photo_id = self.cover_photo_id;
 
-        let document = if let Some(clone_to_document_id) = config.clone_to_replace_document_id {
+        let new_document = if let Some(clone_to_document_id) = config.clone_to_replace_document_id {
             let mut document = Document::find_by_id(conn, clone_to_document_id)?;
             document.title = new_title;
             document.cover_photo_id = new_cover_photo_id;
@@ -58,20 +58,20 @@ impl Document {
         // Step 1: Clone pages of document
         let pages = Page::find_all_by_document_id(conn, self.id)?;
         for page in pages {
-            page.deep_clone(conn, self)?;
+            page.deep_clone(conn, &new_document)?;
         }
 
         // Step 2: Document Type
         if config.keep_document_type {
             if let Ok(Some(assignment)) = Assignment::find_by_document(conn, self.id) {
                 let mut new_assignment = NewAssignment::from(assignment);
-                new_assignment.document_id = document.id;
+                new_assignment.document_id = new_document.id;
                 Assignment::insert(conn, new_assignment)?;
             }
 
             if let Ok(Some(submission)) = Submission::find_by_document(conn, self.id) {
                 let mut new_submission = NewSubmission::from(submission);
-                new_submission.document_id = document.id;
+                new_submission.document_id = new_document.id;
                 Submission::insert(conn, new_submission)?;
             }
         }
@@ -97,7 +97,7 @@ impl Document {
             }
         }
 
-        Ok(document)
+        Ok(new_document)
     }
 }
 

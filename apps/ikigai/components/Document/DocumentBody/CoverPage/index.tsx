@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { t } from "@lingui/macro";
 import styled from "styled-components";
 import { useDebounce } from "ahooks";
-import { Separator } from "@radix-ui/themes";
 
 import useDocumentStore from "store/DocumentStore";
 import UseUpdateDocument from "hook/UseUpdateDocument";

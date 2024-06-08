@@ -9,7 +9,9 @@ import SubmissionHeader from "components/Document/DocumentHeader/SubmissionHeade
 
 const DocumentHeader = () => {
   const activeDocument = useDocumentStore((state) => state.activeDocument);
-  const activeDocumentTitle = activeDocument?.title;
+  const activeDocumentTitle = useDocumentStore(
+    (state) => state.activeDocument?.title,
+  );
 
   const title = `${activeDocumentTitle || "Untitled"} - Powered by Ikigai!`;
   useTitle(title);

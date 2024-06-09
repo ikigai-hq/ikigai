@@ -224,16 +224,16 @@ export interface RemoveRubricVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: SoftDeleteDocuments
+// GraphQL mutation operation: SoftDeleteDocument
 // ====================================================
 
-export interface SoftDeleteDocuments {
-  spaceSoftDeleteMultiple: boolean;
+export interface SoftDeleteDocument {
+  documentSoftDelete: boolean;
 }
 
-export interface SoftDeleteDocumentsVariables {
-  documentIds: any[];
-  spaceId: number;
+export interface SoftDeleteDocumentVariables {
+  documentId: any;
+  includeChildren: boolean;
 }
 
 /* tslint:disable */
@@ -495,6 +495,14 @@ export interface UpdateDocumentVariables {
 // GraphQL mutation operation: DuplicateSpaceDocument
 // ====================================================
 
+export interface DuplicateSpaceDocument_spaceDuplicateDocument_assignment {
+  id: number;
+}
+
+export interface DuplicateSpaceDocument_spaceDuplicateDocument_submission {
+  id: number;
+}
+
 export interface DuplicateSpaceDocument_spaceDuplicateDocument {
   id: any;
   title: string;
@@ -503,7 +511,10 @@ export interface DuplicateSpaceDocument_spaceDuplicateDocument {
   index: number;
   documentType: DocumentType;
   deletedAt: number | null;
-  spaceId: number | null;
+  iconType: IconType | null;
+  iconValue: string | null;
+  assignment: DuplicateSpaceDocument_spaceDuplicateDocument_assignment | null;
+  submission: DuplicateSpaceDocument_spaceDuplicateDocument_submission | null;
 }
 
 export interface DuplicateSpaceDocument {
@@ -899,6 +910,7 @@ export interface GetDocumentV2_documentGet {
   iconType: IconType | null;
   iconValue: string | null;
   documentType: DocumentType;
+  parentId: any | null;
   assignment: GetDocumentV2_documentGet_assignment | null;
   submission: GetDocumentV2_documentGet_submission | null;
 }

@@ -1,4 +1,4 @@
-use diesel::PgConnection;
+use diesel::{PgConnection};
 use uuid::Uuid;
 
 use crate::db::Document;
@@ -86,9 +86,9 @@ impl Document {
                 let new_config = DocumentCloneConfigBuilder::default()
                     .prefix_title("")
                     .index(child_document.index)
-                    .parent_id(child_document.parent_id)
+                    .parent_id(Some(new_document.id))
                     .creator_id(config.creator_id)
-                    .clone_to_space(config.clone_to_space)
+                    .clone_to_space(new_document.space_id)
                     .clone_children(config.clone_children)
                     .keep_document_type(config.keep_document_type)
                     .build()
@@ -149,4 +149,18 @@ pub fn get_all_documents_by_id(
     }
 
     Ok(res)
+}
+
+pub fn delete_document(
+    conn: &mut PgConnection,
+    document_id: Uuid,
+    include_children: bool,
+) -> Result<(), IkigaiError> {
+    let mut document_ids = vec![document_id];
+    if include_children {
+        document_ids.append(&mut get_all_documents_by_id(conn, document_id)?.iter().map(|document| document.id).collect());
+    };
+
+    Document::soft_delete_by_ids(conn, document_ids, Some(get_now_as_secs()))?;
+    Ok(())
 }

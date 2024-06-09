@@ -5,8 +5,8 @@ import {
   DocumentType,
   GetDocuments_spaceGet_documents,
   GetDocumentV2_documentGet,
-  UpdateAssignmentData,
   GetSubmissionsOfAssignment_assignmentGetSubmissions,
+  UpdateAssignmentData,
 } from "graphql/types";
 
 export type IDocument = GetDocumentV2_documentGet;
@@ -36,6 +36,7 @@ type IDocumentStore = {
   setSpaceDocuments: (documents: ISpaceDocument[]) => void;
   addSpaceDocument: (document: ISpaceDocument) => void;
   updateSpaceDocument: (id: string, data: IUpdateSpaceDocument) => void;
+  removeSpaceDocument: (id: string) => undefined | string;
   // Submissions
   submissions: ISubmission[];
   setSubmissions: (submissions: ISubmission[]) => void;
@@ -55,14 +56,14 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
       submissions: [],
     });
   },
-  updateActiveDocument: (data: IUpdateActiveDocument) => {
+  updateActiveDocument: (data) => {
     const activeDocument = get().activeDocument;
     if (activeDocument) {
       Object.assign(activeDocument, data);
       set({ activeDocument });
     }
   },
-  updateActiveAssignment: (data: Partial<UpdateAssignmentData>) => {
+  updateActiveAssignment: (data) => {
     const activeDocument = get().activeDocument;
     if (activeDocument && activeDocument.assignment) {
       activeDocument.assignment = {
@@ -73,15 +74,15 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
 
     set({ activeDocument });
   },
-  setSpaceDocuments: (documents: ISpaceDocument[]) => {
+  setSpaceDocuments: (documents) => {
     set({ spaceDocuments: cloneDeep(documents) });
   },
-  addSpaceDocument: (document: ISpaceDocument) => {
+  addSpaceDocument: (document) => {
     const spaceDocuments = get().spaceDocuments;
     spaceDocuments.push(cloneDeep(document));
     set({ spaceDocuments });
   },
-  updateSpaceDocument: (id: string, data: IUpdateSpaceDocument) => {
+  updateSpaceDocument: (id, data) => {
     const currentSpaceDocuments = get().spaceDocuments;
     const spaceDocument = currentSpaceDocuments.find(
       (spaceDocument) => spaceDocument.id === id,
@@ -89,7 +90,36 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
     Object.assign(spaceDocument, data);
     set({ spaceDocuments: currentSpaceDocuments });
   },
+  removeSpaceDocument: (id) => {
+    const spaceDocuments = get().spaceDocuments;
+    const removedIds = getAllByParentIds(spaceDocuments, id);
+    removedIds.push(id);
+
+    const newItems = spaceDocuments.filter(
+      (spaceDocument) => !removedIds.includes(spaceDocument.id),
+    );
+    set({ spaceDocuments: newItems });
+
+    return newItems.filter(
+      (item) => item.documentType !== DocumentType.SUBMISSION,
+    )[0]?.id;
+  },
   setSubmissions: (submissions) => set({ submissions: cloneDeep(submissions) }),
 }));
+
+const getAllByParentIds = (
+  items: ISpaceDocument[],
+  parentId: string,
+): string[] => {
+  const result: string[] = [];
+
+  const childrenItems = items.filter((item) => item.parentId === parentId);
+  childrenItems.forEach((item) => {
+    result.push(item.id);
+    result.push(...getAllByParentIds(items, item.id));
+  });
+
+  return result;
+};
 
 export default useDocumentStore;

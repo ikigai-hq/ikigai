@@ -8,6 +8,7 @@ import BottomPageList from "./BottomPageList";
 import Loading from "components/Loading";
 import usePermission from "hook/UsePermission";
 import { DocumentActionPermission } from "graphql/types";
+import useDocumentStore from "../../../store/DocumentStore";
 
 export type DocumentBodyProps = {
   loading: boolean;
@@ -15,6 +16,7 @@ export type DocumentBodyProps = {
 
 const DocumentBody = ({ loading }: DocumentBodyProps) => {
   const allow = usePermission();
+  const isFolder = useDocumentStore((state) => state.isFolder);
   const activePageId = usePageStore((state) => state.activePageId);
   const page = usePageStore((state) =>
     state.pages.find((p) => p.id === state.activePageId),
@@ -31,7 +33,7 @@ const DocumentBody = ({ loading }: DocumentBodyProps) => {
             <ContentPage key={page?.id} page={page} />
           )}
         </BodyContent>
-        {allow(DocumentActionPermission.VIEW_PAGE_CONTENT) && (
+        {!isFolder && allow(DocumentActionPermission.VIEW_PAGE_CONTENT) && (
           <BottomPageList />
         )}
       </Body>

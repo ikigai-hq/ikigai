@@ -36,13 +36,6 @@ const PageItem = ({ page, index }: PageItemProps) => {
           )}
         </div>
       </PageContainer>
-      {index && (
-        <div style={{ textAlign: "center" }}>
-          <Text size="1" color="gray">
-            {index}
-          </Text>
-        </div>
-      )}
     </div>
   );
 };
@@ -51,7 +44,7 @@ const PageContainer = styled(Card)<{
   $active?: boolean;
   $isExpanded?: boolean;
 }>`
-  height: 42px;
+  height: 30px;
   width: ${(props) => (props.$isExpanded ? "400px" : "130px")};
   cursor: pointer;
   background-color: ${(props) => (props.$active ? "#0588F0" : "unset")};

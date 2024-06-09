@@ -13,6 +13,7 @@ export const GET_DOCUMENT_V2 = gql`
       iconType
       iconValue
       documentType
+      parentId
       assignment {
         id
         maxNumberOfAttempt

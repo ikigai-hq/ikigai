@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { useTitle } from "ahooks";
-import { t } from "@lingui/macro";
-import { Button, Text } from "@radix-ui/themes";
+import { Text } from "@radix-ui/themes";
 
 import useDocumentStore from "store/DocumentStore";
 import { DocumentType } from "graphql/types";
 import SubmissionHeader from "components/Document/DocumentHeader/SubmissionHeader";
 import AssignmentHeader from "./AssignmentHeader";
+import IkigaiMenubar from "./Menubar";
 
 const DocumentHeader = () => {
   const activeDocument = useDocumentStore((state) => state.activeDocument);
@@ -17,12 +17,6 @@ const DocumentHeader = () => {
   const title = `${activeDocumentTitle || "Untitled"} - Powered by Ikigai!`;
   useTitle(title);
 
-  let documentTypeName = t`Folder`;
-  if (activeDocument?.documentType === DocumentType.ASSIGNMENT)
-    documentTypeName = t`Assignment`;
-  if (activeDocument?.documentType === DocumentType.SUBMISSION)
-    documentTypeName = t`Submission`;
-
   return (
     <DocumentHeaderWrapper>
       <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
@@ -31,12 +25,8 @@ const DocumentHeader = () => {
             {activeDocumentTitle || "Untitled"}
           </Text>
         </div>
-        <div>
-          <Button variant="ghost" color="gray">
-            <Text size="1" weight="medium">
-              {documentTypeName}
-            </Text>
-          </Button>
+        <div style={{ marginLeft: -7 }}>
+          <IkigaiMenubar />
         </div>
       </div>
       {activeDocument?.documentType === DocumentType.ASSIGNMENT && (

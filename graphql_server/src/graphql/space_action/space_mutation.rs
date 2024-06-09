@@ -108,58 +108,6 @@ impl SpaceMutation {
         Ok(res)
     }
 
-    async fn space_remove_document(&self, ctx: &Context<'_>, document_id: Uuid) -> Result<bool> {
-        document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
-            .await?;
-
-        let mut conn = get_conn_from_ctx(ctx).await?;
-        Document::delete(&mut conn, document_id).format_err()?;
-
-        Ok(true)
-    }
-
-    async fn space_soft_delete_document(
-        &self,
-        ctx: &Context<'_>,
-        space_id: i32,
-        document_id: Uuid,
-    ) -> Result<bool> {
-        space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceContent).await?;
-
-        let mut conn = get_conn_from_ctx(ctx).await?;
-        Document::soft_delete(&mut conn, document_id).format_err()?;
-
-        Ok(true)
-    }
-
-    async fn space_soft_delete_multiple(
-        &self,
-        ctx: &Context<'_>,
-        space_id: i32,
-        document_ids: Vec<Uuid>,
-    ) -> Result<bool> {
-        space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceContent).await?;
-
-        let mut conn = get_conn_from_ctx(ctx).await?;
-        let now = get_now_as_secs();
-        Document::soft_delete_by_ids(&mut conn, document_ids, Some(now)).format_err()?;
-
-        Ok(true)
-    }
-
-    async fn space_restore_soft_delete_document(
-        &self,
-        ctx: &Context<'_>,
-        space_id: i32,
-        document_ids: Vec<Uuid>,
-    ) -> Result<bool> {
-        space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceContent).await?;
-
-        let mut conn = get_conn_from_ctx(ctx).await?;
-        Document::soft_delete_by_ids(&mut conn, document_ids, None).format_err()?;
-        Ok(true)
-    }
-
     async fn space_remove_member(
         &self,
         ctx: &Context<'_>,

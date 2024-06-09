@@ -1,8 +1,11 @@
 import { gql } from "@apollo/client";
 
-export const SOFT_DELETE_DOCUMENTS = gql`
-  mutation SoftDeleteDocuments($documentIds: [UUID!]!, $spaceId: Int!) {
-    spaceSoftDeleteMultiple(spaceId: $spaceId, documentIds: $documentIds)
+export const SOFT_DELETE_DOCUMENT = gql`
+  mutation SoftDeleteDocument($documentId: UUID!, $includeChildren: Boolean!) {
+    documentSoftDelete(
+      documentId: $documentId
+      includeChildren: $includeChildren
+    )
   }
 `;
 

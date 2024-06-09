@@ -70,7 +70,9 @@ const BottomPageList = () => {
           style={{
             display: "flex",
             padding: 5,
-            paddingRight: 0,
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
           }}
         >
           <Dropdown
@@ -89,7 +91,7 @@ const BottomPageList = () => {
               variant="soft"
               disabled={loading}
               loading={loading}
-              size="3"
+              size="1"
             >
               <PlusIcon />
             </IconButton>

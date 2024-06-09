@@ -88,29 +88,12 @@ impl DocumentMutation {
         Ok(true)
     }
 
-    async fn document_soft_delete(&self, ctx: &Context<'_>, document_id: Uuid) -> Result<bool> {
+    async fn document_soft_delete(&self, ctx: &Context<'_>, document_id: Uuid, include_children: bool) -> Result<bool> {
         document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
             .await?;
 
         let mut conn = get_conn_from_ctx(ctx).await?;
-        Document::soft_delete(&mut conn, document_id).format_err()?;
-
-        Ok(true)
-    }
-
-    async fn document_soft_delete_multiples(
-        &self,
-        ctx: &Context<'_>,
-        document_ids: Vec<Uuid>,
-    ) -> Result<bool> {
-        for document_id in &document_ids {
-            document_quick_authorize(ctx, *document_id, DocumentActionPermission::ManageDocument)
-                .await?;
-        }
-
-        let mut conn = get_conn_from_ctx(ctx).await?;
-        Document::soft_delete_by_ids(&mut conn, document_ids, Some(get_now_as_secs()))
-            .format_err()?;
+        delete_document(&mut conn, document_id, include_children).format_err()?;
 
         Ok(true)
     }

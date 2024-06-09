@@ -16,7 +16,14 @@ export const DUPLICATE_SPACE_DOCUMENT = gql`
       index
       documentType
       deletedAt
-      spaceId
+      iconType
+      iconValue
+      assignment {
+        id
+      }
+      submission {
+        id
+      }
     }
   }
 `;

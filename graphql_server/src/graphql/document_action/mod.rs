@@ -4,14 +4,17 @@ pub mod document_query;
 pub use document_mutation::*;
 pub use document_query::*;
 
+use crate::authorization::DocumentActionPermission;
 use async_graphql::dataloader::DataLoader;
 use async_graphql::*;
-use crate::authorization::DocumentActionPermission;
 
 use crate::db::*;
 use crate::error::IkigaiErrorExt;
 use crate::graphql::data_loader::*;
-use crate::helper::{document_quick_authorize, generate_download_url, get_conn_from_ctx, get_public_user_from_loader, get_user_id_from_ctx};
+use crate::helper::{
+    document_quick_authorize, generate_download_url, get_conn_from_ctx,
+    get_public_user_from_loader, get_user_id_from_ctx,
+};
 
 #[ComplexObject]
 impl Document {
@@ -89,7 +92,10 @@ impl Document {
     }
 
     async fn pages(&self, ctx: &Context<'_>) -> Result<Vec<Page>> {
-        if document_quick_authorize(ctx, self.id, DocumentActionPermission::ViewPageContent).await.is_ok() {
+        if document_quick_authorize(ctx, self.id, DocumentActionPermission::ViewPageContent)
+            .await
+            .is_ok()
+        {
             let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
             Ok(loader
                 .load_one(FindPageByDocumentId {

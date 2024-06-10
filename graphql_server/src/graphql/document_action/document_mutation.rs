@@ -88,7 +88,12 @@ impl DocumentMutation {
         Ok(true)
     }
 
-    async fn document_soft_delete(&self, ctx: &Context<'_>, document_id: Uuid, include_children: bool) -> Result<bool> {
+    async fn document_soft_delete(
+        &self,
+        ctx: &Context<'_>,
+        document_id: Uuid,
+        include_children: bool,
+    ) -> Result<bool> {
         document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
             .await?;
 

@@ -1,4 +1,4 @@
-use diesel::{PgConnection};
+use diesel::PgConnection;
 use uuid::Uuid;
 
 use crate::db::Document;
@@ -131,7 +131,8 @@ impl PageContent {
         conn: &mut PgConnection,
         new_page: &Page,
     ) -> Result<Self, IkigaiError> {
-        let new_content = PageContent::new(Uuid::new_v4(), new_page.id, self.index, self.body.clone());
+        let new_content =
+            PageContent::new(Uuid::new_v4(), new_page.id, self.index, self.body.clone());
         Ok(PageContent::upsert(conn, new_content)?)
     }
 }
@@ -158,7 +159,12 @@ pub fn delete_document(
 ) -> Result<(), IkigaiError> {
     let mut document_ids = vec![document_id];
     if include_children {
-        document_ids.append(&mut get_all_documents_by_id(conn, document_id)?.iter().map(|document| document.id).collect());
+        document_ids.append(
+            &mut get_all_documents_by_id(conn, document_id)?
+                .iter()
+                .map(|document| document.id)
+                .collect(),
+        );
     };
 
     Document::soft_delete_by_ids(conn, document_ids, Some(get_now_as_secs()))?;

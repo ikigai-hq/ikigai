@@ -35,6 +35,8 @@ export type IkigaiAlertDialogProps = {
   title: string;
   description: string;
   onConfirm: () => void | Promise<void>;
+  open?: boolean;
+  onOpenChanged?: (open: boolean) => void;
   confirmText?: string;
   confirmColor?: BaseColors;
   children?: React.ReactNode;
@@ -51,9 +53,11 @@ const IkigaiAlertDialog = ({
   ),
   confirmText = t`Remove`,
   confirmColor = "red",
+  open,
+  onOpenChanged,
 }: IkigaiAlertDialogProps) => {
   return (
-    <AlertDialog.Root>
+    <AlertDialog.Root open={open} onOpenChange={onOpenChanged}>
       <AlertDialog.Trigger>{children}</AlertDialog.Trigger>
       <AlertDialog.Content maxWidth="450px">
         <AlertDialog.Title>{title}</AlertDialog.Title>

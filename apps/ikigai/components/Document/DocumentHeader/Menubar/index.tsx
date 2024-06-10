@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Menubar from "@radix-ui/react-menubar";
 import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { t, Trans } from "@lingui/macro";
@@ -8,17 +8,25 @@ import copy from "copy-to-clipboard";
 import toast from "react-hot-toast";
 import { useMutation } from "@apollo/client";
 
-import { DocumentType, DuplicateSpaceDocument } from "graphql/types";
+import {
+  DocumentActionPermission,
+  DocumentType,
+  DuplicateSpaceDocument,
+} from "graphql/types";
 import useDocumentStore from "store/DocumentStore";
 import useCreateDocument from "hook/UseCreateDocument";
 import { formatDocumentRoute } from "config/Routes";
 import { DUPLICATE_SPACE_DOCUMENT } from "graphql/mutation/SpaceMutation";
 import { handleError } from "graphql/ApolloClient";
 import { SOFT_DELETE_DOCUMENT } from "graphql/mutation/DocumentMutation";
+import AlertDialog from "components/base/AlertDialog";
+import usePermission from "hook/UsePermission";
 
 // Ref: https://www.radix-ui.com/primitives/docs/components/menubar
 const IkigaiMenubar = () => {
+  const allow = usePermission();
   const router = useRouter();
+  const [showDeleteWarning, setShowDeleteWarning] = useState(false);
   const activeDocument = useDocumentStore((state) => state.activeDocument);
   const { onCreate } = useCreateDocument(activeDocument?.parentId);
   const addSpaceDocument = useDocumentStore((state) => state.addSpaceDocument);
@@ -88,7 +96,10 @@ const IkigaiMenubar = () => {
   return (
     <Menubar.Root className="MenubarRoot">
       <Menubar.Menu>
-        <Menubar.Trigger className="MenubarTrigger">
+        <Menubar.Trigger
+          className="MenubarTrigger"
+          disabled={!allow(DocumentActionPermission.MANAGE_DOCUMENT)}
+        >
           <Text size="1" weight="medium" color="gray">
             {documentTypeName}
           </Text>
@@ -141,13 +152,22 @@ const IkigaiMenubar = () => {
             <Menubar.Separator className="MenubarSeparator" />
             <Menubar.Item
               className="MenubarItem MenubarItemDanger"
-              onClick={onDelete}
+              onClick={() => setShowDeleteWarning(true)}
             >
               <Trans>Delete</Trans>
             </Menubar.Item>
           </Menubar.Content>
         </Menubar.Portal>
       </Menubar.Menu>
+      <AlertDialog
+        title={t`Delete ${activeDocument?.title}!`}
+        description={t`It will delete children files if this is folder.`}
+        onConfirm={onDelete}
+        open={showDeleteWarning}
+        onOpenChanged={setShowDeleteWarning}
+      >
+        <></>
+      </AlertDialog>
     </Menubar.Root>
   );
 };

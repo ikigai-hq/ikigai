@@ -2,7 +2,7 @@ use async_graphql::*;
 use diesel::Connection;
 use uuid::Uuid;
 
-use crate::authorization::{DocumentActionPermission, SpaceActionPermission};
+use crate::authorization::SpaceActionPermission;
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;

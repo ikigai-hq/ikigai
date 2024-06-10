@@ -12,6 +12,7 @@ import useUpdatePage from "hook/UseUpdatePage";
 import usePageContentStore from "store/PageContentStore";
 import useUIStore, { LeftSideBarOptions, UIConfig } from "store/UIStore";
 import { Inset, Separator } from "@radix-ui/themes";
+import ContentToolbar from "./ContentToolbar";
 
 const getBodyWidth = (uiConfig: UIConfig) => {
   let bodyWidth = "100vw - 305px";
@@ -43,6 +44,8 @@ const ContentPage = ({ page }: ContentPageProps) => {
 
   return (
     <div>
+      <ContentToolbar />
+      <Separator style={{ width: "100%" }} />
       <div style={{ padding: "10px 15px" }}>
         <PageTitle
           maxLength={255}
@@ -52,9 +55,6 @@ const ContentPage = ({ page }: ContentPageProps) => {
           readOnly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
         />
       </div>
-      <Inset side="top" pb="current">
-        <Separator style={{ width: "100%" }} />
-      </Inset>
       <div style={{ width: getBodyWidth(uiConfig) }}>
         <PanelGroup direction="horizontal">
           {pageContents.map((pageContent, index) => (

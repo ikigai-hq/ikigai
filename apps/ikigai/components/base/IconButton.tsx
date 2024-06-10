@@ -3,7 +3,7 @@ import { IconButton } from "@radix-ui/themes";
 import { IconButtonProps } from "@radix-ui/themes/src/components/icon-button";
 
 export type IkigaiIconButtonProps = {
-  active?: boolean;
+  isActive?: boolean;
 } & IconButtonProps;
 
 const IkigaiIconButton = (props: IkigaiIconButtonProps) => {
@@ -12,7 +12,7 @@ const IkigaiIconButton = (props: IkigaiIconButtonProps) => {
       {...props}
       style={{
         cursor: "pointer",
-        backgroundColor: props.active ? "#E6F4FE" : "unset",
+        backgroundColor: props.isActive ? "#E6F4FE" : "unset",
       }}
     >
       {props.children}

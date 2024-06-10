@@ -38,7 +38,7 @@ const LeftSide = () => {
               size="2"
               variant="ghost"
               onClick={onClickContent}
-              active={leftSidebar === LeftSideBarOptions.Content}
+              isActive={leftSidebar === LeftSideBarOptions.Content}
             >
               <FileIcon width="20" height="20" />
             </IkigaiIconButton>

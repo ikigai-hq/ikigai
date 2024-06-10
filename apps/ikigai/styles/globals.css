@@ -1,5 +1,6 @@
 @import "@radix-ui/themes/styles.css";
 @import "./menubar.css";
+@import "./toolbar.css";
 @import "video.js/dist/video-js.css";
 
 body {
@@ -266,4 +267,25 @@ body * ::-moz-scrollbar {
 .tiptap ul,
 .tiptap ol {
   padding: 0 1rem;
+}
+
+/* Code  styles */
+.tiptap > * + * {
+  margin-top: 0.75em;
+}
+.tiptap code {
+  background-color: rgba(97, 97, 97, 0.1);
+  border-radius: 0.25em;
+  box-decoration-break: clone;
+  color: #616161;
+  font-size: 0.9rem;
+  padding: 0.25em;
+}
+
+.rt-BaseMenuViewport {
+  padding: unset!important;
+}
+
+.twitter-picker {
+  box-shadow: unset!important;
 }

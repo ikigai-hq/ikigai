@@ -46,8 +46,8 @@ const FolderCoverPageBody = () => {
     <div>
       {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
         <CreateContentButton parentId={activeDocumentId}>
-          <Button>
-            <Pencil2Icon /> <Trans>Add Folder Content</Trans>
+          <Button size="1" variant="soft">
+            <Pencil2Icon /> <Trans>Add Content</Trans>
           </Button>
         </CreateContentButton>
       )}

@@ -52,7 +52,7 @@ const IkigaiMenubar = () => {
   const clickCreateDocument = (docType: DocumentType) => async () => {
     const res = await onCreate(docType);
     if (res) {
-      router.push(formatDocumentRoute(res.documentCreate.id));
+      window.open(formatDocumentRoute(res.documentCreate.id));
     }
   };
 
@@ -72,7 +72,7 @@ const IkigaiMenubar = () => {
     if (data) {
       data.spaceDuplicateDocument.forEach(addSpaceDocument);
       toast.success(t`Duplicated!`);
-      router.push(formatDocumentRoute(data.spaceDuplicateDocument[0]?.id));
+      window.open(formatDocumentRoute(data.spaceDuplicateDocument[0]?.id));
     }
   };
 
@@ -93,13 +93,11 @@ const IkigaiMenubar = () => {
     }
   };
 
+  const showMenu = allow(DocumentActionPermission.MANAGE_DOCUMENT);
   return (
     <Menubar.Root className="MenubarRoot">
       <Menubar.Menu>
-        <Menubar.Trigger
-          className="MenubarTrigger"
-          disabled={!allow(DocumentActionPermission.MANAGE_DOCUMENT)}
-        >
+        <Menubar.Trigger className="MenubarTrigger" disabled={!showMenu}>
           <Text size="1" weight="medium" color="gray">
             {documentTypeName}
           </Text>

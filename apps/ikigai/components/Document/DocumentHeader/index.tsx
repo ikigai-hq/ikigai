@@ -1,18 +1,30 @@
 import styled from "styled-components";
 import { useTitle } from "ahooks";
-import { Text } from "@radix-ui/themes";
+import { Badge, Text } from "@radix-ui/themes";
 
 import useDocumentStore from "store/DocumentStore";
 import { DocumentType } from "graphql/types";
 import SubmissionHeader from "components/Document/DocumentHeader/SubmissionHeader";
 import AssignmentHeader from "./AssignmentHeader";
 import IkigaiMenubar from "./Menubar";
+import { formatDocumentRoute } from "config/Routes";
 
 const DocumentHeader = () => {
   const activeDocument = useDocumentStore((state) => state.activeDocument);
   const activeDocumentTitle = useDocumentStore(
     (state) => state.activeDocument?.title,
   );
+  const parent = useDocumentStore((state) =>
+    state.spaceDocuments.find(
+      (spaceDocument) => spaceDocument.id === activeDocument?.parentId,
+    ),
+  );
+
+  const onClickParent = () => {
+    if (parent) {
+      window.open(formatDocumentRoute(parent.id));
+    }
+  };
 
   const title = `${activeDocumentTitle || "Untitled"} - Powered by Ikigai!`;
   useTitle(title);
@@ -21,9 +33,21 @@ const DocumentHeader = () => {
     <DocumentHeaderWrapper>
       <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
         <div>
-          <Text size="2" weight="bold">
+          <Text size="2" weight="bold" truncate>
             {activeDocumentTitle || "Untitled"}
           </Text>
+          {parent && (
+            <Badge
+              variant="soft"
+              color="gray"
+              size="1"
+              radius="full"
+              style={{ marginLeft: 5, cursor: "pointer" }}
+              onClick={onClickParent}
+            >
+              📁 {parent.title}
+            </Badge>
+          )}
         </div>
         <div style={{ marginLeft: -7 }}>
           <IkigaiMenubar />

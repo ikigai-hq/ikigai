@@ -4,6 +4,7 @@ import {
   IconAlignCenter,
   IconAlignLeft,
   IconAlignRight,
+  IconBlockquote,
   IconBold,
   IconCode,
   IconH1,
@@ -100,6 +101,12 @@ const ContentToolbar = () => {
       });
     }
     activeEditor.chain().focus().toggleHeading({ level: headingLevel }).run();
+  };
+
+  const onChangeBlockquote = () => {
+    if (!activeEditor) return;
+    activeEditor.chain().focus().toggleBlockquote().run();
+    setToolbarOptions({ blockquote: activeEditor.isActive("blockquote") });
   };
 
   return (
@@ -300,6 +307,18 @@ const ContentToolbar = () => {
             onClick={() => onChangeTextAlign("right")}
           >
             <IconAlignRight size={20} stroke={1.7} />
+          </Toolbar.ToggleItem>
+        </Toolbar.ToggleGroup>
+        <Toolbar.Separator className="ToolbarSeparator" />
+        <Toolbar.ToggleGroup type="multiple" aria-label="Other Blocks">
+          <Toolbar.ToggleItem
+            className="ToolbarToggleItem"
+            value="blockquote"
+            aria-label="Block Quote"
+            data-state={toolbarOptions?.blockquote ? "on" : "off"}
+            onClick={onChangeBlockquote}
+          >
+            <IconBlockquote size={20} stroke={2} />
           </Toolbar.ToggleItem>
         </Toolbar.ToggleGroup>
       </Toolbar.Root>

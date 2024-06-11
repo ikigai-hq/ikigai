@@ -44,7 +44,6 @@ const PageContainer = styled(Card)<{
   $active?: boolean;
   $isExpanded?: boolean;
 }>`
-  height: 30px;
   width: ${(props) => (props.$isExpanded ? "400px" : "130px")};
   cursor: pointer;
   background-color: ${(props) => (props.$active ? "#0588F0" : "unset")};

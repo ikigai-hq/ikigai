@@ -116,6 +116,7 @@ const PagesListContainer = styled.div`
   display: flex;
   width: 100%;
   gap: 10px;
+  height: 50px;
 `;
 
 export default BottomPageList;

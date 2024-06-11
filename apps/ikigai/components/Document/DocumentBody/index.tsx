@@ -62,7 +62,9 @@ const Body = styled.div<{
 `;
 
 const BodyContent = styled.div`
-  flex: 1;
+  height: calc(100vh - 50px - 50px);
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 export default DocumentBody;

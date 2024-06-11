@@ -12,7 +12,7 @@
 
 &nbsp;
 
-<a href="https://github.com/ikigai-hq/ikigai"><img src="https://raw.githubusercontent.com/ikigai-hq/ikigai/master/assets/app-screenshot.jpeg" alt="Best Assignment Open Source" /></a>
+<a href="https://github.com/ikigai-hq/ikigai"><img src="https://raw.githubusercontent.com/ikigai-hq/ikigai/master/assets/demo.png" alt="AI Assignment Open Source" /></a>
 
 > Our project is currently in development, which means our code will be evolving frequently. We appreciate your patience during this process. 
 > If you ever need assistance or have any questions, please don't hesitate to reach out to us within our [community](https://discord.gg/XuYWkn6kUS). We're here to help!

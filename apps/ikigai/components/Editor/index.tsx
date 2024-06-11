@@ -83,6 +83,10 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
       // @ts-ignore
       setActiveEditor(event.editor);
     },
+    onFocus: (event) => {
+      // @ts-ignore
+      setActiveEditor(event.editor);
+    },
   });
 
   return (

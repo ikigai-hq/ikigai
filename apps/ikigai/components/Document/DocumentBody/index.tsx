@@ -46,7 +46,6 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   max-width: 100%;
-  position: relative;
   height: 100%;
 `;
 
@@ -62,7 +61,8 @@ const Body = styled.div<{
 `;
 
 const BodyContent = styled.div`
-  height: calc(100vh - 50px - 50px);
+  // 100 Height - Header - Bottom
+  height: calc(100vh - 51px - 50px);
   overflow-y: auto;
   overflow-x: hidden;
 `;

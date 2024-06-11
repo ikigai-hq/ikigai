@@ -185,12 +185,16 @@ const RubricManagement = ({
       </div>
       {editingRubric && (
         <ViewOrEditRubric
-          visible={!!editingRubric}
-          onClose={() => {
-            setEditingRubric(undefined);
+          open={!!editingRubric}
+          onOpenChange={(open) => {
+            if (!open) {
+              setEditingRubric(undefined);
+            }
           }}
           rubric={cloneDeep(editingRubric)}
-        />
+        >
+          <></>
+        </ViewOrEditRubric>
       )}
     </>
   );

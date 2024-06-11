@@ -3,11 +3,6 @@
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
-const { theme } = require("antd/lib");
-const { convertLegacyToken } = require("@ant-design/compatible/lib");
-const { defaultAlgorithm, defaultSeed } = theme;
-const mapToken = defaultAlgorithm(defaultSeed);
-const v4Token = convertLegacyToken(mapToken);
 
 const nextConfig = {
   reactStrictMode: false,

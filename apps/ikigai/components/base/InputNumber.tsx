@@ -10,6 +10,7 @@ export type InputNumberProps = {
   icon?: React.ReactNode;
   precision?: number;
   size?: "1" | "2" | "3";
+  readOnly?: boolean;
 };
 
 const InputNumber = ({
@@ -19,13 +20,15 @@ const InputNumber = ({
   onChange,
   precision,
   size,
+  readOnly = false,
 }: InputNumberProps) => {
   const [innerValue, setInnerValue] = useState<number | undefined>(value);
 
   const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     try {
       if (e.currentTarget.value !== "") {
-        let value = parseInt(e.currentTarget.value, 10);
+        let value = parseFloat(e.currentTarget.value.trim());
+        console.log("Hello", value);
         if (precision !== undefined) {
           value = round(value, precision);
         }
@@ -49,6 +52,7 @@ const InputNumber = ({
       placeholder={placeholder}
       value={innerValue}
       onChange={onChangeValue}
+      readOnly={readOnly}
     >
       <TextField.Slot>{icon}</TextField.Slot>
     </TextField.Root>

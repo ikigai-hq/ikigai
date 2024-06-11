@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import { t } from "@lingui/macro";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
@@ -11,7 +11,7 @@ import { useDebounce } from "ahooks";
 import useUpdatePage from "hook/UseUpdatePage";
 import usePageContentStore from "store/PageContentStore";
 import useUIStore, { LeftSideBarOptions, UIConfig } from "store/UIStore";
-import { Inset, Separator } from "@radix-ui/themes";
+import { Separator } from "@radix-ui/themes";
 import ContentToolbar from "./ContentToolbar";
 
 const getBodyWidth = (uiConfig: UIConfig) => {
@@ -26,7 +26,6 @@ export type ContentPageProps = {
 };
 
 const ContentPage = ({ page }: ContentPageProps) => {
-  const theme = useTheme();
   const allow = usePermission();
   const uiConfig = useUIStore((state) => state.config);
   const pageContents = usePageContentStore((state) =>
@@ -69,7 +68,7 @@ const ContentPage = ({ page }: ContentPageProps) => {
                 <PanelResizeHandle
                   style={{
                     width: "1px",
-                    backgroundColor: theme.colors.gray[4],
+                    backgroundColor: "var(--gray-4)",
                   }}
                 />
               )}

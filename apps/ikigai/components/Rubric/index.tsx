@@ -1,29 +1,25 @@
 import { useMutation } from "@apollo/client";
-import {
-  Input,
-  InputNumber,
-  Popconfirm,
-  Select,
-  Table,
-  Tooltip,
-  Typography,
-} from "antd";
-import { round } from "lodash";
-import {
-  ArrowRightOutlined,
-  MinusCircleOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { Table } from "antd";
+import { cloneDeep, round } from "lodash";
 import styled from "styled-components";
 import toast from "react-hot-toast";
-import { cloneDeep } from "lodash";
 import { ColumnsType } from "antd/es/table";
 import { t, Trans } from "@lingui/macro";
 import { ChangeEvent, useMemo, useState } from "react";
+import {
+  Button,
+  Heading,
+  IconButton,
+  Select,
+  Text,
+  Tooltip,
+  TextArea,
+  TextField,
+} from "@radix-ui/themes";
+import { ArrowRightIcon, MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 
 import { UPSERT_RUBRIC } from "graphql/mutation/AssignmentMutation";
 import { handleError } from "graphql/ApolloClient";
-import { Button, TextButtonWithHover } from "components/common/Button";
 import useRubricStore, { IRubric } from "store/RubricStore";
 import {
   RubricInput,
@@ -32,6 +28,8 @@ import {
   RubricType,
   UpsertRubric,
 } from "graphql/types";
+import AlertDialog from "components/base/AlertDialog";
+import InputNumber from "components/base/InputNumber";
 
 export type RubricRecordType = {
   criteria: string;
@@ -210,26 +208,16 @@ const Rubric = ({ rubric, afterSave, readOnly }: RubricProps) => {
         render: (criterion: string, record, index) => (
           <div style={{ display: "flex", gap: 10, flexDirection: "column" }}>
             <InputNumber
-              style={{ width: "100%" }}
-              suffix={
-                <Typography.Text type="secondary">
-                  <Trans>% of total grade</Trans>
-                </Typography.Text>
-              }
-              value={round(record.weightingCriteria * 100, 2)}
+              value={record.weightingCriteria}
               onChange={onChangeWeightingCriteria(index)}
               readOnly={readOnly}
+              precision={0}
             />
-            <Input.TextArea
+            <TextArea
               style={{ fontWeight: "bold", padding: 0 }}
               defaultValue={criterion}
               onChange={onChangeCriteria(index)}
-              autoSize={{
-                minRows: 2,
-                maxRows: 10,
-              }}
               placeholder={t`Typing criteria`}
-              bordered={false}
               readOnly={readOnly}
             />
           </div>
@@ -238,27 +226,31 @@ const Rubric = ({ rubric, afterSave, readOnly }: RubricProps) => {
       ...levels.map((level, levelIndex) => {
         return {
           title: (
-            <StyledLevelInput
-              defaultValue={level}
-              onChange={onChangeLevel(levelIndex)}
-              bordered={false}
-              placeholder={t`Typing level`}
-              readOnly={readOnly}
-              suffix={
-                readOnly ? undefined : (
-                  <Popconfirm
-                    title={t`Do you want to remove ${level}?`}
-                    onConfirm={() => onRemoveLevel(levelIndex)}
-                  >
-                    <TextButtonWithHover
-                      type="text"
-                      icon={<MinusCircleOutlined />}
-                      style={{ color: "red" }}
-                    />
-                  </Popconfirm>
-                )
-              }
-            />
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <StyledLevelInput
+                defaultValue={level}
+                onChange={onChangeLevel(levelIndex)}
+                placeholder={t`Typing level`}
+                readOnly={readOnly}
+              />
+              {readOnly ? undefined : (
+                <AlertDialog
+                  title={t`Do you want to remove ${level}?`}
+                  description={t`This action cannot revert!`}
+                  onConfirm={() => onRemoveLevel(levelIndex)}
+                >
+                  <IconButton variant="soft" color={"red"}>
+                    <MinusIcon />
+                  </IconButton>
+                </AlertDialog>
+              )}
+            </div>
           ),
           width: 300,
           key: level,
@@ -272,67 +264,41 @@ const Rubric = ({ rubric, afterSave, readOnly }: RubricProps) => {
               >
                 {rubricType === RubricType.POINT_BASED && (
                   <InputNumber
-                    suffix={
-                      <Typography.Text type="secondary">
-                        <Trans>point</Trans>
-                      </Typography.Text>
-                    }
                     value={item.score}
                     onChange={onChangeScore(index, levelIndex)}
-                    style={{ width: "110px" }}
-                    min={0}
-                    max={100}
                     readOnly={readOnly}
+                    precision={2}
                   />
                 )}
                 {rubricType === RubricType.POINT_RANGE && (
                   <div
                     style={{
                       display: "flex",
-                      alignContent: "baseline",
                       gap: 5,
+                      alignItems: "center",
                     }}
                   >
                     <InputNumber
-                      suffix={
-                        <Typography.Text type="secondary">
-                          <Trans>point</Trans>
-                        </Typography.Text>
-                      }
-                      value={round(item.score, 2)}
+                      value={item.score}
                       onChange={onChangeScore(index, levelIndex)}
-                      style={{ width: "110px" }}
-                      min={0}
-                      max={100}
                       readOnly={readOnly}
                       placeholder={t`From point`}
+                      precision={2}
                     />
-                    <ArrowRightOutlined />
+                    <ArrowRightIcon />
                     <InputNumber
-                      suffix={
-                        <Typography.Text type="secondary">
-                          <Trans>point</Trans>
-                        </Typography.Text>
-                      }
-                      value={round(item.toScore, 2)}
+                      value={item.toScore}
                       onChange={onChangeToScore(index, levelIndex)}
-                      style={{ width: "110px" }}
-                      min={0}
-                      max={100}
                       readOnly={readOnly}
                       placeholder={t`To point`}
+                      precision={2}
                     />
                   </div>
                 )}
-                <Input.TextArea
+                <TextArea
                   value={item.explanation}
                   rows={3}
                   onChange={onChangeExplanation(index, levelIndex)}
-                  autoSize={{
-                    minRows: 2,
-                    maxRows: 10,
-                  }}
-                  bordered={false}
                   placeholder={t`Typing your description`}
                   style={{ padding: 0 }}
                   readOnly={readOnly}
@@ -351,16 +317,15 @@ const Rubric = ({ rubric, afterSave, readOnly }: RubricProps) => {
         width: 70,
         fixed: "right",
         render: (_, item, index) => (
-          <Popconfirm
+          <AlertDialog
             title={t`Do you want to remove ${item.criteria}?`}
+            description={t`This action cannot revert!`}
             onConfirm={() => onRemoveCriteria(index)}
           >
-            <TextButtonWithHover
-              type="text"
-              icon={<MinusCircleOutlined />}
-              style={{ color: "red" }}
-            />
-          </Popconfirm>
+            <IconButton variant="soft" color="red">
+              <MinusIcon />
+            </IconButton>
+          </AlertDialog>
         ),
       });
     }
@@ -376,8 +341,8 @@ const Rubric = ({ rubric, afterSave, readOnly }: RubricProps) => {
         flexDirection: "column",
       }}
     >
-      <div style={{ display: "flex" }}>
-        <Typography.Title
+      <div style={{ display: "flex", marginBottom: 10 }}>
+        <Heading
           key={rubric.id}
           contentEditable={!readOnly}
           style={{
@@ -389,36 +354,46 @@ const Rubric = ({ rubric, afterSave, readOnly }: RubricProps) => {
           suppressContentEditableWarning={true}
         >
           {rubric.name}
-        </Typography.Title>
+        </Heading>
         {!readOnly && (
           <Button
-            type="primary"
+            size="2"
             onClick={onSave}
             loading={loading}
             disabled={loading}
-            style={{ height: "fit-content", marginLeft: "15px" }}
           >
             <Trans>Save</Trans>
           </Button>
         )}
       </div>
       {!readOnly && (
-        <div style={{ marginBottom: "5px" }}>
-          <Typography.Text strong>
+        <div
+          style={{
+            marginBottom: 10,
+            display: "flex",
+            gap: 5,
+            alignItems: "center",
+          }}
+        >
+          <Text weight="bold">
             <Trans>Rubric Type</Trans>
-          </Typography.Text>
-          <Select
+          </Text>
+          <Select.Root
             value={rubricType}
-            onChange={setRubricType}
-            style={{ width: "130px", marginLeft: "5px" }}
+            onValueChange={(value) => setRubricType(RubricType[value])}
           >
-            <Select.Option value={RubricType.POINT_BASED}>
-              Point Based
-            </Select.Option>
-            <Select.Option value={RubricType.POINT_RANGE}>
-              Point Range
-            </Select.Option>
-          </Select>
+            <Select.Trigger />
+            <Select.Content>
+              <Select.Group>
+                <Select.Item value={RubricType.POINT_BASED}>
+                  Point Based
+                </Select.Item>
+                <Select.Item value={RubricType.POINT_RANGE}>
+                  Point Range
+                </Select.Item>
+              </Select.Group>
+            </Select.Content>
+          </Select.Root>
         </div>
       )}
       <div style={{ flex: 1 }}>
@@ -443,28 +418,23 @@ const Rubric = ({ rubric, afterSave, readOnly }: RubricProps) => {
                 marginLeft: "5px",
               }}
             >
-              <Tooltip title={t`Add level`} arrow={false}>
-                <Button
-                  size="small"
-                  icon={<PlusOutlined />}
-                  onClick={addNewLevel}
-                />
+              <Tooltip content={t`Add level`}>
+                <IconButton variant="soft" onClick={addNewLevel}>
+                  <PlusIcon />
+                </IconButton>
               </Tooltip>
             </div>
           )}
         </div>
         <div>
-          <Typography.Text>
+          <Text>
             <Trans>
-              <Typography.Text
-                type={totalGrade !== 1 ? "danger" : "success"}
-                strong
-              >
+              <Text color={totalGrade !== 1 ? "red" : "indigo"}>
                 <Trans>{round(totalGrade * 100, 2)}%</Trans>
-              </Typography.Text>{" "}
+              </Text>{" "}
               of grade
             </Trans>
-          </Typography.Text>
+          </Text>
         </div>
         {!readOnly && (
           <div
@@ -474,12 +444,10 @@ const Rubric = ({ rubric, afterSave, readOnly }: RubricProps) => {
               marginTop: "5px",
             }}
           >
-            <Tooltip title={t`Add criteria`} arrow={false}>
-              <Button
-                size="small"
-                icon={<PlusOutlined />}
-                onClick={addNewCriteria}
-              />
+            <Tooltip content={t`Add criteria`}>
+              <IconButton variant="soft" onClick={addNewCriteria}>
+                <PlusIcon />
+              </IconButton>
             </Tooltip>
           </div>
         )}
@@ -488,7 +456,7 @@ const Rubric = ({ rubric, afterSave, readOnly }: RubricProps) => {
   );
 };
 
-const StyledLevelInput = styled(Input)`
+const StyledLevelInput = styled(TextField.Root)`
   & > input {
     font-weight: bold;
   }

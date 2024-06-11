@@ -83,14 +83,14 @@ const LessonItemContainer = styled.div<{
   cursor: pointer;
   background-color: ${(props) => {
     if (props.$active) {
-      return props.theme.colors.gray[2];
+      return "var(--gray-4)";
     }
     return "unset";
   }};
   border-radius: 8px;
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.gray[2]};
+    background-color: var(--gray-3);
   }
 `;
 

@@ -44,7 +44,7 @@ export const FormAuthContainer = styled.div`
   padding: 48px 48px 48px 48px;
   margin-top: 52px;
   margin-bottom: 26px;
-  background: ${(props) => props.theme.colors.gray[0]};
+  background: var(--gray-1);
   ${BreakPoints.tablet} {
     margin-top: 52px;
     margin-bottom: 24px;

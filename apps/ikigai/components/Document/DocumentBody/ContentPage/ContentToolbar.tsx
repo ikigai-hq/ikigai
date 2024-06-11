@@ -74,6 +74,18 @@ const ContentToolbar = () => {
     }
   };
 
+  const onChangeTextAlign = (textAlign: "left" | "center" | "right") => {
+    if (!activeEditor) return;
+    const currentAlign = toolbarOptions.textAlign;
+    if (currentAlign === textAlign) {
+      activeEditor.chain().focus().unsetTextAlign().run();
+      setToolbarOptions({ textAlign: undefined });
+    } else {
+      activeEditor.chain().focus().setTextAlign(textAlign).run();
+      setToolbarOptions({ textAlign });
+    }
+  };
+
   return (
     <>
       <Toolbar.Root className="ToolbarRoot" aria-label="Formatting options">
@@ -213,11 +225,16 @@ const ContentToolbar = () => {
           </DropdownMenu.Root>
         </Toolbar.ToggleGroup>
         <Toolbar.Separator className="ToolbarSeparator" />
-        <Toolbar.ToggleGroup type="single" aria-label="Text alignment">
+        <Toolbar.ToggleGroup
+          value={toolbarOptions?.textAlign}
+          type="single"
+          aria-label="Text alignment"
+        >
           <Toolbar.ToggleItem
             className="ToolbarToggleItem"
             value="left"
             aria-label="Left aligned"
+            onClick={() => onChangeTextAlign("left")}
           >
             <IconAlignLeft size={20} stroke={1.7} />
           </Toolbar.ToggleItem>
@@ -225,6 +242,7 @@ const ContentToolbar = () => {
             className="ToolbarToggleItem"
             value="center"
             aria-label="Center aligned"
+            onClick={() => onChangeTextAlign("center")}
           >
             <IconAlignCenter size={20} stroke={1.7} />
           </Toolbar.ToggleItem>
@@ -232,6 +250,7 @@ const ContentToolbar = () => {
             className="ToolbarToggleItem"
             value="right"
             aria-label="Right aligned"
+            onClick={() => onChangeTextAlign("right")}
           >
             <IconAlignRight size={20} stroke={1.7} />
           </Toolbar.ToggleItem>

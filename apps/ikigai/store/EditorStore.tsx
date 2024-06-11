@@ -9,6 +9,7 @@ export type ToolbarOptions = {
   code: boolean;
   color: string;
   highlightColor?: string;
+  textAlign?: string;
 };
 
 export type IEditorStore = {
@@ -33,6 +34,7 @@ const useEditorStore = create<IEditorStore>((set, get) => ({
           code: editor.isActive("code"),
           color: editor.getAttributes("textStyle").color,
           highlightColor: editor.getAttributes("highlight")?.color,
+          textAlign: editor.getAttributes("textAlign")?.textAlign,
         },
       });
     } else {

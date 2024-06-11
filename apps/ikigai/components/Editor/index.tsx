@@ -7,6 +7,7 @@ import TaskList from "@tiptap/extension-task-list";
 import Highlight from "@tiptap/extension-highlight";
 import Color from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
+import { TextAlign } from "@tiptap/extension-text-align";
 import { t } from "@lingui/macro";
 import { useEffect, useState } from "react";
 import { useDebounce } from "ahooks";
@@ -52,6 +53,10 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
       }),
       TextStyle,
       Color,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+        alignments: ["left", "center", "right"],
+      }),
     ],
     content: innerContent,
     onUpdate: ({ editor }) => {

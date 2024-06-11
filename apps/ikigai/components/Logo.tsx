@@ -14,6 +14,7 @@ const Logo = ({ src }: LogoProps) => {
         style={{
           objectFit: "contain",
           height: 40,
+          cursor: "pointer",
         }}
       />
     </Link>

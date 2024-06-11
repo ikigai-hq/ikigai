@@ -1,6 +1,5 @@
 import React from "react";
 
-import { Col, Space } from "antd";
 import styled from "styled-components";
 import { Trans } from "@lingui/macro";
 import Link from "next/link";
@@ -44,11 +43,11 @@ export const FormAuthContainer = styled.div`
   box-shadow: 0px 0px 20px rgba(19, 48, 122, 0.1);
   padding: 48px 48px 48px 48px;
   margin-top: 52px;
-  margin-bottom: 52px;
+  margin-bottom: 26px;
   background: ${(props) => props.theme.colors.gray[0]};
   ${BreakPoints.tablet} {
     margin-top: 52px;
-    margin-bottom: 48px;
+    margin-bottom: 24px;
   }
 
   ${BreakPoints.mobile} {
@@ -67,8 +66,7 @@ export default function LayoutManagement({ children }: LayoutManagementProps) {
       <FormContainer>
         <Logo src={logoSrc} />
         <FormAuthContainer>{children}</FormAuthContainer>
-        <Col />
-        <Space>
+        <div>
           <Link
             href="https://ikigai.li"
             target="_blank"
@@ -80,7 +78,7 @@ export default function LayoutManagement({ children }: LayoutManagementProps) {
               </Text>
             </a>
           </Link>
-        </Space>
+        </div>
       </FormContainer>
     </Container>
   );

@@ -6,6 +6,9 @@ import {
   IconAlignRight,
   IconBold,
   IconCode,
+  IconH1,
+  IconH2,
+  IconH3,
   IconHighlight,
   IconItalic,
   IconStrikethrough,
@@ -84,6 +87,19 @@ const ContentToolbar = () => {
       activeEditor.chain().focus().setTextAlign(textAlign).run();
       setToolbarOptions({ textAlign });
     }
+  };
+
+  const onChangeHeading = (headingLevel: 1 | 2 | 3) => {
+    if (!activeEditor) return;
+    const currentLevel = toolbarOptions.headingLevel;
+    if (headingLevel === currentLevel) {
+      setToolbarOptions({ headingLevel: undefined });
+    } else {
+      setToolbarOptions({
+        headingLevel,
+      });
+    }
+    activeEditor.chain().focus().toggleHeading({ level: headingLevel }).run();
   };
 
   return (
@@ -223,6 +239,37 @@ const ContentToolbar = () => {
               </div>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
+        </Toolbar.ToggleGroup>
+        <Toolbar.Separator className="ToolbarSeparator" />
+        <Toolbar.ToggleGroup
+          type="single"
+          aria-label="Heading formatting"
+          value={toolbarOptions?.headingLevel?.toString() || "0"}
+        >
+          <Toolbar.ToggleItem
+            className="ToolbarToggleItem"
+            value="1"
+            aria-label="heading 1"
+            onClick={() => onChangeHeading(1)}
+          >
+            <IconH1 size={20} stroke={2} />
+          </Toolbar.ToggleItem>
+          <Toolbar.ToggleItem
+            className="ToolbarToggleItem"
+            value="2"
+            aria-label="heading 2"
+            onClick={() => onChangeHeading(2)}
+          >
+            <IconH2 size={20} stroke={2} />
+          </Toolbar.ToggleItem>
+          <Toolbar.ToggleItem
+            className="ToolbarToggleItem"
+            value="3"
+            aria-label="heading 3"
+            onClick={() => onChangeHeading(3)}
+          >
+            <IconH3 size={20} stroke={2} />
+          </Toolbar.ToggleItem>
         </Toolbar.ToggleGroup>
         <Toolbar.Separator className="ToolbarSeparator" />
         <Toolbar.ToggleGroup

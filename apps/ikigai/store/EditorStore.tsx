@@ -10,6 +10,7 @@ export type ToolbarOptions = {
   color: string;
   highlightColor?: string;
   textAlign?: string;
+  headingLevel?: number;
 };
 
 export type IEditorStore = {
@@ -35,6 +36,7 @@ const useEditorStore = create<IEditorStore>((set, get) => ({
           color: editor.getAttributes("textStyle").color,
           highlightColor: editor.getAttributes("highlight")?.color,
           textAlign: editor.getAttributes("textAlign")?.textAlign,
+          headingLevel: editor.getAttributes("heading")?.level,
         },
       });
     } else {

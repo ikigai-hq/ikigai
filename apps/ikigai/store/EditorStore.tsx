@@ -12,6 +12,9 @@ export type ToolbarOptions = {
   textAlign?: string;
   headingLevel?: number;
   blockquote: boolean;
+  bulletList: boolean;
+  orderedList: boolean;
+  todoList: boolean;
 };
 
 export type IEditorStore = {
@@ -39,6 +42,9 @@ const useEditorStore = create<IEditorStore>((set, get) => ({
           textAlign: editor.getAttributes("textAlign")?.textAlign,
           headingLevel: editor.getAttributes("heading")?.level,
           blockquote: editor.isActive("blockquote"),
+          bulletList: editor.isActive("bulletList"),
+          orderedList: editor.isActive("orderedList"),
+          todoList: editor.isActive("taskList"),
         },
       });
     } else {

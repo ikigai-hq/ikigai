@@ -8,6 +8,9 @@ import Highlight from "@tiptap/extension-highlight";
 import Color from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
 import { TextAlign } from "@tiptap/extension-text-align";
+import { BulletList } from "@tiptap/extension-bullet-list";
+import { ListItem } from "@tiptap/extension-list-item";
+import { OrderedList } from "@tiptap/extension-ordered-list";
 import { t } from "@lingui/macro";
 import { useEffect, useState } from "react";
 import { useDebounce } from "ahooks";
@@ -56,6 +59,19 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
       TextAlign.configure({
         types: ["heading", "paragraph"],
         alignments: ["left", "center", "right"],
+      }),
+      BulletList.configure({
+        keepAttributes: true,
+        keepMarks: true,
+      }),
+      OrderedList.configure({
+        keepAttributes: true,
+        keepMarks: true,
+      }),
+      ListItem,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
       }),
     ],
     content: innerContent,

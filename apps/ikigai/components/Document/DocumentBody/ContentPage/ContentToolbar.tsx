@@ -12,6 +12,9 @@ import {
   IconH3,
   IconHighlight,
   IconItalic,
+  IconList,
+  IconListCheck,
+  IconListNumbers,
   IconStrikethrough,
   IconTextColor,
   IconUnderline,
@@ -107,6 +110,24 @@ const ContentToolbar = () => {
     if (!activeEditor) return;
     activeEditor.chain().focus().toggleBlockquote().run();
     setToolbarOptions({ blockquote: activeEditor.isActive("blockquote") });
+  };
+
+  const onChangeBulletList = () => {
+    if (!activeEditor) return;
+    activeEditor.chain().focus().toggleBulletList().run();
+    setToolbarOptions({ bulletList: activeEditor.isActive("bulletList") });
+  };
+
+  const onChangeOrderedList = () => {
+    if (!activeEditor) return;
+    activeEditor.chain().focus().toggleOrderedList().run();
+    setToolbarOptions({ orderedList: activeEditor.isActive("orderedList") });
+  };
+
+  const onChangeTaskList = () => {
+    if (!activeEditor) return;
+    activeEditor.chain().focus().toggleTaskList().run();
+    setToolbarOptions({ todoList: activeEditor.isActive("taskList") });
   };
 
   return (
@@ -276,6 +297,45 @@ const ContentToolbar = () => {
             onClick={() => onChangeHeading(3)}
           >
             <IconH3 size={20} stroke={2} />
+          </Toolbar.ToggleItem>
+        </Toolbar.ToggleGroup>
+        <Toolbar.Separator className="ToolbarSeparator" />
+        <Toolbar.ToggleGroup
+          type="single"
+          aria-label="List"
+          value={
+            toolbarOptions?.bulletList
+              ? "bulletList"
+              : toolbarOptions?.todoList
+              ? "todoList"
+              : toolbarOptions?.orderedList
+              ? "orderedList"
+              : ""
+          }
+        >
+          <Toolbar.ToggleItem
+            className="ToolbarToggleItem"
+            value="bulletList"
+            aria-label="Bullet List"
+            onClick={onChangeBulletList}
+          >
+            <IconList size={20} stroke={2} />
+          </Toolbar.ToggleItem>
+          <Toolbar.ToggleItem
+            className="ToolbarToggleItem"
+            value="orderedList"
+            aria-label="Ordered List"
+            onClick={onChangeOrderedList}
+          >
+            <IconListNumbers size={20} stroke={2} />
+          </Toolbar.ToggleItem>
+          <Toolbar.ToggleItem
+            className="ToolbarToggleItem"
+            value="todoList"
+            aria-label="Todo List"
+            onClick={onChangeTaskList}
+          >
+            <IconListCheck size={20} stroke={2} />
           </Toolbar.ToggleItem>
         </Toolbar.ToggleGroup>
         <Toolbar.Separator className="ToolbarSeparator" />

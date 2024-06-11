@@ -1,12 +1,12 @@
 import React from "react";
 
 import { Col, Space } from "antd";
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import { Trans } from "@lingui/macro";
 import Link from "next/link";
+import { Text } from "@radix-ui/themes";
 
 import { BreakPoints } from "styles/mediaQuery";
-import { Text, TextWeight } from "components/common/Text";
 import Logo from "../Logo";
 
 const Container = styled.div`
@@ -61,8 +61,6 @@ type LayoutManagementProps = {
 };
 
 export default function LayoutManagement({ children }: LayoutManagementProps) {
-  const theme = useTheme();
-
   const logoSrc = "/logo.png";
   return (
     <Container>
@@ -72,17 +70,12 @@ export default function LayoutManagement({ children }: LayoutManagementProps) {
         <Col />
         <Space>
           <Link
-            href="https://tikigai.org"
+            href="https://ikigai.li"
             target="_blank"
             rel="noopener noreferrer"
           >
             <a>
-              <Text
-                weight={TextWeight.medium}
-                level={2}
-                color={theme.colors.gray[6]}
-                style={{ cursor: "pointer" }}
-              >
+              <Text weight="medium" color="gray" style={{ cursor: "pointer" }}>
                 <Trans>Powered by ikigai</Trans>
               </Text>
             </a>

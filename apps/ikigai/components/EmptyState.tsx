@@ -1,9 +1,8 @@
-import { Space } from "antd";
 import Image from "next/image";
-import styled, { useTheme } from "styled-components";
-import { Text } from "./common/Text";
+import styled from "styled-components";
 import { ReactNode } from "react";
 import { t } from "@lingui/macro";
+import { Text } from "@radix-ui/themes";
 
 const EmptyContainer = styled.div<{ hasMinHeight: boolean }>`
   min-height: ${(props) => (props.hasMinHeight ? "calc(100vh - 274px)" : 0)};
@@ -12,12 +11,7 @@ const EmptyContainer = styled.div<{ hasMinHeight: boolean }>`
   justify-content: center;
   text-align: center;
   padding: 0 20px;
-`;
-
-const ContentSpace = styled(Space)`
-  max-width: 300px;
-  margin: auto;
-  text-align: center;
+  flex-direction: column;
 `;
 
 const StyledChildren = styled.div`
@@ -37,25 +31,20 @@ const EmptyState = ({
   hasMinHeight = true,
   children,
 }: Props) => {
-  const theme = useTheme();
   return (
     <EmptyContainer hasMinHeight={hasMinHeight}>
-      <Space size={54} direction="vertical">
-        <Image
-          alt="empty"
-          src="/course/empty-state.png"
-          width="284"
-          height="214"
-        />
-        {content && (
-          <ContentSpace size={20} direction="vertical">
-            <Text level={3} weight={400} color={theme.colors.gray[7]}>
-              {content}
-            </Text>
-          </ContentSpace>
-        )}
-        <StyledChildren>{children}</StyledChildren>
-      </Space>
+      <Image
+        alt="empty"
+        src="/course/empty-state.png"
+        width="284"
+        height="214"
+      />
+      {content && (
+        <Text weight="light" color="gray">
+          {content}
+        </Text>
+      )}
+      <StyledChildren>{children}</StyledChildren>
     </EmptyContainer>
   );
 };

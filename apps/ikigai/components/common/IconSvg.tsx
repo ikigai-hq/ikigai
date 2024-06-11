@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
-import Icon from "@ant-design/icons";
-import React, { SVGProps } from "react";
+import React from "react";
 
 interface IconSVGProps {
   color?: string;

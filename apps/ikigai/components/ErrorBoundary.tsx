@@ -1,7 +1,7 @@
 import React from "react";
 import EmptyState from "./EmptyState";
-import { Button } from "./common/Button";
 import { Trans, t } from "@lingui/macro";
+import { Button } from "@radix-ui/themes";
 
 class ErrorBoundary extends React.Component<any, any> {
   constructor(props) {
@@ -11,7 +11,7 @@ class ErrorBoundary extends React.Component<any, any> {
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(_error) {
     // Update state so the next render will show the fallback UI
 
     return { hasError: true };
@@ -47,10 +47,10 @@ class ErrorBoundary extends React.Component<any, any> {
             hasMinHeight={false}
             content={t`Oops! We found an unexpected error...`}
           />
-          <Button type="primary" onClick={this.onClickReload}>
+          <Button onClick={this.onClickReload}>
             <Trans>Try to reload!</Trans>
           </Button>
-          <Button onClick={this.onClickBackHome}>
+          <Button variant="soft" onClick={this.onClickBackHome}>
             <Trans>Back to home</Trans>
           </Button>
         </div>

@@ -1,8 +1,9 @@
 import React from "react";
-import EmptyState from "../components/EmptyState";
 import Link from "next/link";
-import { Button } from "../components/common/Button";
 import { Trans } from "@lingui/macro";
+import { Button } from "@radix-ui/themes";
+
+import EmptyState from "components/EmptyState";
 
 export default function PageNotFound() {
   return (
@@ -19,7 +20,7 @@ export default function PageNotFound() {
         content="We can't find the page you're looking for."
       />
       <Link href={"/"} passHref>
-        <Button type="primary">
+        <Button>
           <Trans>Back to home</Trans>
         </Button>
       </Link>

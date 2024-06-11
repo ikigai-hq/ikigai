@@ -1,9 +1,4 @@
-import {
-  Button as ButtonAntd,
-  Tooltip,
-  ButtonProps as AntdBtnProps,
-  TooltipProps,
-} from "antd";
+import { Button as ButtonAntd } from "antd";
 import styled from "styled-components";
 
 type ButtonProps = {
@@ -20,49 +15,6 @@ export const Button = styled(ButtonAntd)<ButtonProps>`
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-`;
-
-export const ButtonWithTooltip: React.FC<{
-  btnProps: AntdBtnProps;
-  tooltipProps: TooltipProps;
-  btnChildren?: React.ReactNode;
-  isSelected?: boolean;
-}> = ({ btnProps, tooltipProps, btnChildren, isSelected }) => {
-  return (
-    <Tooltip {...tooltipProps} destroyTooltipOnHide arrow={false}>
-      <SelectedButton
-        $isSelected={isSelected}
-        onClick={btnProps.onClick}
-        {...btnProps}
-      >
-        {btnChildren}
-      </SelectedButton>
-    </Tooltip>
-  );
-};
-
-const SelectedButton = styled(ButtonAntd)<{ $isSelected?: boolean }>`
-  &&& {
-    background: ${({ $isSelected, theme }) => {
-      return $isSelected ? `${theme.colors.primary[1]} !important` : undefined;
-    }};
-
-    &:hover {
-      background: ${(props) => props.theme.colors.primary[1]};
-
-      svg {
-        color: ${(props) => props.theme.colors.primary[7]};
-      }
-    }
-
-    ${(props) =>
-      props.$isSelected &&
-      `
-      svg {
-        color: ${props.theme.colors.primary[7]}
-      }
-    `}
   }
 `;
 
@@ -92,10 +44,4 @@ export const TextButtonWithHover = styled(TextButton)<{
     ${() => {
       return `background: ${(props) => props.theme.colors.gray[4]}`;
     }};
-`;
-
-export const TextButtonBlock = styled(TextButtonWithHover)<{ margin?: string }>`
-  padding: 4px;
-
-  ${(props) => props.margin && `margin: ${props.margin}`};
 `;

@@ -1,14 +1,15 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { Button, Divider, Input, Typography } from "antd";
 import { t, Trans } from "@lingui/macro";
-import useAuthUserStore from "../store/AuthStore";
 import { useMutation } from "@apollo/client";
-import { JOIN_SPACE_BY_INVITE_TOKEN } from "../graphql/mutation/SpaceMutation";
-import { handleError } from "../graphql/ApolloClient";
 import validator from "validator";
 import toast from "react-hot-toast";
-import { JoinSpaceByInviteToken } from "../graphql/types";
+import { Button, TextField, Text, Heading } from "@radix-ui/themes";
+
+import { JoinSpaceByInviteToken } from "graphql/types";
+import { JOIN_SPACE_BY_INVITE_TOKEN } from "graphql/mutation/SpaceMutation";
+import { handleError } from "graphql/ApolloClient";
+import useAuthUserStore from "store/AuthStore";
 
 const PreJoinSpace = () => {
   const router = useRouter();
@@ -50,22 +51,20 @@ const PreJoinSpace = () => {
     <div style={{ width: "400px" }}>
       {status === undefined && (
         <div>
-          <Typography.Title level={5}>
+          <Heading size="6" style={{ marginBottom: 10 }}>
             <Trans>You've been invited to join ikigai</Trans>
-          </Typography.Title>
-          <Typography.Text strong>
+          </Heading>
+          <Text weight="bold">
             <Trans>Email</Trans>
-          </Typography.Text>
-          <Input
+          </Text>
+          <TextField.Root
             placeholder={t`Type your email!`}
             value={email}
             readOnly={!!currentEmail}
             onChange={(e) => setEmail(e.currentTarget.value)}
           />
-          <Divider />
           <Button
-            type="primary"
-            style={{ width: "100%" }}
+            style={{ width: "100%", marginTop: 10 }}
             loading={loading}
             disabled={loading}
             onClick={join}
@@ -76,16 +75,16 @@ const PreJoinSpace = () => {
       )}
       {status !== undefined && (
         <div>
-          <Typography.Title level={5}>
+          <Heading size="5">
             <Trans>Joined!</Trans>
-          </Typography.Title>
-          <Typography.Text type="secondary">
+          </Heading>
+          <Text color="gray" style={{ marginTop: 10 }}>
             <Trans>
               You've joined. We've sent a magic email to{" "}
               <b style={{ color: "black" }}>{email}</b>. Open the link in email
               to access space.
             </Trans>
-          </Typography.Text>
+          </Text>
         </div>
       )}
     </div>

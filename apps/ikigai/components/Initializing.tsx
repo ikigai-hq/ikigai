@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { Trans } from "@lingui/macro";
-import { Button, Typography } from "antd";
+import { Button, Text } from "@radix-ui/themes";
 
 import TokenStorage from "storage/TokenStorage";
 import {
@@ -207,10 +207,10 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
           <div
             style={{ width: "100%", textAlign: "center", marginTop: "15px" }}
           >
-            <Typography.Text type="danger">
+            <Text color="red">
               Cannot initializing application because: <br />
               {hasError}
-            </Typography.Text>
+            </Text>
           </div>
           <div
             style={{

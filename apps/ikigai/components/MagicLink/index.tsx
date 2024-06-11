@@ -1,15 +1,15 @@
 import { Trans, t } from "@lingui/macro";
-import { Button, Input, Typography } from "antd";
 import { useMutation } from "@apollo/client";
 import styled from "styled-components";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import validator from "validator";
+import { useKeyPress } from "ahooks";
+import { Button, Text, TextField } from "@radix-ui/themes";
 
 import { handleError } from "graphql/ApolloClient";
 import { SEND_MAGIC_LINK } from "graphql/mutation/UserMutation";
 import { SendMagicLink } from "graphql/types";
-import validator from "validator";
-import { useKeyPress } from "ahooks";
 
 const MagicLink = () => {
   const [email, setEmail] = useState("");
@@ -45,29 +45,21 @@ const MagicLink = () => {
 
   return (
     <Container>
-      <Typography.Text strong>
+      <Text weight="bold">
         <Trans>Email</Trans>
-      </Typography.Text>
-      <Input
+      </Text>
+      <TextField.Root
         placeholder={t`Type your email!`}
         value={email}
         onChange={(e) => setEmail(e.currentTarget.value)}
       />
       <DescriptionDiv>
-        <Typography.Text type="secondary">
+        <Text color="gray" size="1">
           We will send a link to your email. You can access your space by open
           the magic link inside email.
-        </Typography.Text>
+        </Text>
       </DescriptionDiv>
-      <DescriptionDiv>
-        <Typography.Text type="secondary"></Typography.Text>
-      </DescriptionDiv>
-      <Button
-        type="primary"
-        onClick={send}
-        loading={loading}
-        disabled={loading}
-      >
+      <Button onClick={send} loading={loading} disabled={loading}>
         <Trans>Send me a magic link!</Trans>
       </Button>
     </Container>

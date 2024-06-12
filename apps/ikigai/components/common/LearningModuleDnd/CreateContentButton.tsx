@@ -36,7 +36,7 @@ const CreateContentButton = ({
             Folder
           </DropdownMenu.Item>
           <DropdownMenu.Item
-            onClick={() => clickCreateDocument(DocumentType.FOLDER)}
+            onClick={() => clickCreateDocument(DocumentType.ASSIGNMENT)}
           >
             Assignment
           </DropdownMenu.Item>

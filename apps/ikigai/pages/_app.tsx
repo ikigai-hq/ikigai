@@ -10,7 +10,6 @@ import ErrorBoundary from "../components/ErrorBoundary";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { messages as enMessages } from "../locales/en/messages";
-import withTheme from "styles/theme";
 import { Initializing } from "components/Initializing";
 import SpaceSetting from "../components/SpaceSetting";
 
@@ -38,7 +37,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const client = useApollo(pageProps.initialApolloState);
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  return withTheme(
+  return (
     <>
       <Head>
         <title>Ikigai - AI powered Open Assignment Platform!</title>
@@ -61,7 +60,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           </ErrorBoundary>
         </I18nProvider>
       </ApolloProvider>
-    </>,
+    </>
   );
 }
 

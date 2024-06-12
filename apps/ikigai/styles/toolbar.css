@@ -1,6 +1,6 @@
-@import '@radix-ui/colors/black-alpha.css';
-@import '@radix-ui/colors/mauve.css';
-@import '@radix-ui/colors/indigo.css';
+@import "@radix-ui/colors/black-alpha.css";
+@import "@radix-ui/colors/mauve.css";
+@import "@radix-ui/colors/indigo.css";
 
 /* reset */
 a,
@@ -49,7 +49,7 @@ button {
 .ToolbarToggleItem:first-child {
     margin-left: 0;
 }
-.ToolbarToggleItem[data-state='on'] {
+.ToolbarToggleItem[data-state="on"] {
     background-color: var(--indigo-5);
     color: var(--indigo-11);
 }

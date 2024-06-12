@@ -1,5 +1,5 @@
-@import '@radix-ui/colors/black-alpha.css';
-@import '@radix-ui/colors/mauve.css';
+@import "@radix-ui/colors/black-alpha.css";
+@import "@radix-ui/colors/mauve.css";
 @import "@radix-ui/colors/gray.css";
 @import "@radix-ui/colors/indigo.css";
 
@@ -29,7 +29,7 @@ button {
 }
 
 .MenubarTrigger[data-highlighted],
-.MenubarTrigger[data-state='open'] {
+.MenubarTrigger[data-state="open"] {
     background-color: var(--indigo-4);
 }
 
@@ -69,8 +69,8 @@ button {
     padding-left: 20px;
 }
 
-.MenubarItem[data-state='open'],
-.MenubarSubTrigger[data-state='open'] {
+.MenubarItem[data-state="open"],
+.MenubarSubTrigger[data-state="open"] {
     background-color: var(--gray-4);
     color: var(--gray-11);
 }

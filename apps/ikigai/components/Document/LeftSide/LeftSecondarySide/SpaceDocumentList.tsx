@@ -1,8 +1,8 @@
 import React from "react";
-import { t, Trans } from "@lingui/macro";
+import { Trans } from "@lingui/macro";
 import styled from "styled-components";
 import { Pencil2Icon } from "@radix-ui/react-icons";
-import { Tooltip, IconButton, Heading, Separator } from "@radix-ui/themes";
+import { IconButton, Heading, Separator } from "@radix-ui/themes";
 
 import LearningModuleDnd from "components/common/LearningModuleDnd";
 import LessonItemDnd from "components/common/LearningModuleDnd/LessonItemDnd";

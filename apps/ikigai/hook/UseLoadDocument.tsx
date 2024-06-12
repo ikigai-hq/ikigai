@@ -7,14 +7,14 @@ import {
   DocumentActionPermission,
   GetDocumentPageContents,
   GetDocuments,
-  GetDocumentV2,
+  GetDocument,
   GetPages,
   GetRubrics,
   GetSubmissionsOfAssignment,
 } from "graphql/types";
 import {
   GET_DOCUMENT_PAGE_CONTENT,
-  GET_DOCUMENT_V2,
+  GET_DOCUMENT,
   GET_PAGES,
 } from "graphql/query/DocumentQuery";
 import useDocumentStore from "store/DocumentStore";
@@ -61,7 +61,7 @@ export const useLoadDocument = (documentId: string) => {
   const setRubrics = useRubricStore((state) => state.setRubrics);
   const setSubmissions = useDocumentStore((state) => state.setSubmissions);
 
-  const [fetchDocument] = useLazyQuery<GetDocumentV2>(GET_DOCUMENT_V2, {
+  const [fetchDocument] = useLazyQuery<GetDocument>(GET_DOCUMENT, {
     fetchPolicy: "network-only",
   });
   const [fetchSpaceDocuments] = useLazyQuery<GetDocuments>(

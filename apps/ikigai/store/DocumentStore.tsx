@@ -4,12 +4,12 @@ import { cloneDeep } from "lodash";
 import {
   DocumentType,
   GetDocuments_spaceGet_documents,
-  GetDocumentV2_documentGet,
+  GetDocument_documentGet,
   GetSubmissionsOfAssignment_assignmentGetSubmissions,
   UpdateAssignmentData,
 } from "graphql/types";
 
-export type IDocument = GetDocumentV2_documentGet;
+export type IDocument = GetDocument_documentGet;
 export type ISpaceDocument = GetDocuments_spaceGet_documents;
 export type ISubmission = GetSubmissionsOfAssignment_assignmentGetSubmissions;
 export type IUpdateSpaceDocument = Partial<

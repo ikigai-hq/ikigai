@@ -2,7 +2,7 @@ import { arrayMove } from "@dnd-kit/sortable";
 
 import type { FlattenedItem, TreeItem, TreeItems } from "./types";
 import { UniqueIdentifier } from "@dnd-kit/core";
-import { GetDocuments_spaceGet_documents as IDocumentItemList } from "../../../graphql/types";
+import { GetDocuments_spaceGet_documents as IDocumentItemList } from "graphql/types";
 
 export const iOS =
   typeof window !== "undefined"

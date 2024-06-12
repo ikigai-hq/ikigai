@@ -857,10 +857,10 @@ export interface GetAssignmentRubricVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetDocumentV2
+// GraphQL query operation: GetDocument
 // ====================================================
 
-export interface GetDocumentV2_documentGet_assignment {
+export interface GetDocument_documentGet_assignment {
   id: number;
   maxNumberOfAttempt: number | null;
   preDescription: string | null;
@@ -871,23 +871,23 @@ export interface GetDocumentV2_documentGet_assignment {
   gradeByRubricId: any | null;
 }
 
-export interface GetDocumentV2_documentGet_submission_user_avatar {
+export interface GetDocument_documentGet_submission_user_avatar {
   publicUrl: string | null;
 }
 
-export interface GetDocumentV2_documentGet_submission_user {
+export interface GetDocument_documentGet_submission_user {
   id: number;
   name: string;
-  avatar: GetDocumentV2_documentGet_submission_user_avatar | null;
+  avatar: GetDocument_documentGet_submission_user_avatar | null;
   randomColor: string;
 }
 
-export interface GetDocumentV2_documentGet_submission_assignment {
+export interface GetDocument_documentGet_submission_assignment {
   id: number;
   documentId: any;
 }
 
-export interface GetDocumentV2_documentGet_submission {
+export interface GetDocument_documentGet_submission {
   id: number;
   documentId: any;
   startAt: number;
@@ -895,11 +895,11 @@ export interface GetDocumentV2_documentGet_submission {
   feedbackAt: number | null;
   feedback: string | null;
   finalGrade: number | null;
-  user: GetDocumentV2_documentGet_submission_user;
-  assignment: GetDocumentV2_documentGet_submission_assignment;
+  user: GetDocument_documentGet_submission_user;
+  assignment: GetDocument_documentGet_submission_assignment;
 }
 
-export interface GetDocumentV2_documentGet {
+export interface GetDocument_documentGet {
   id: any;
   title: string;
   coverPhotoId: any | null;
@@ -911,15 +911,15 @@ export interface GetDocumentV2_documentGet {
   iconValue: string | null;
   documentType: DocumentType;
   parentId: any | null;
-  assignment: GetDocumentV2_documentGet_assignment | null;
-  submission: GetDocumentV2_documentGet_submission | null;
+  assignment: GetDocument_documentGet_assignment | null;
+  submission: GetDocument_documentGet_submission | null;
 }
 
-export interface GetDocumentV2 {
-  documentGet: GetDocumentV2_documentGet;
+export interface GetDocument {
+  documentGet: GetDocument_documentGet;
 }
 
-export interface GetDocumentV2Variables {
+export interface GetDocumentVariables {
   documentId: any;
 }
 

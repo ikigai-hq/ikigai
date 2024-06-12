@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
-export const GET_DOCUMENT_V2 = gql`
-  query GetDocumentV2($documentId: UUID!) {
+export const GET_DOCUMENT = gql`
+  query GetDocument($documentId: UUID!) {
     documentGet(documentId: $documentId) {
       id
       title

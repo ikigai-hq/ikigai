@@ -192,9 +192,7 @@ const RubricManagement = ({
             }
           }}
           rubric={cloneDeep(editingRubric)}
-        >
-          <></>
-        </ViewOrEditRubric>
+        />
       )}
     </>
   );

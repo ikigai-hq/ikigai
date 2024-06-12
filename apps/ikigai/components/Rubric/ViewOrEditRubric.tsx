@@ -6,38 +6,24 @@ import {
 } from "graphql/types";
 import Rubric from "./index";
 import usePermission from "hook/UsePermission";
-import Modal from "../base/Modal";
 
 export type EditRubricProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   rubric: IRubric;
-  children: React.ReactNode;
 };
 
-const ViewOrEditRubric = ({
-  open,
-  onOpenChange,
-  rubric,
-  children,
-}: EditRubricProps) => {
+const ViewOrEditRubric = ({ open, onOpenChange, rubric }: EditRubricProps) => {
   const allow = usePermission();
   const canEditRubric = allow(SpaceActionPermission.MANAGE_SPACE_CONTENT);
   return (
-    <Modal
+    <Rubric
       open={open}
       onOpenChange={onOpenChange}
-      content={
-        <Rubric
-          rubric={rubric}
-          afterSave={() => onOpenChange(false)}
-          readOnly={!canEditRubric}
-        />
-      }
-      minWidth="80vw"
-    >
-      {children}
-    </Modal>
+      rubric={rubric}
+      afterSave={() => onOpenChange(false)}
+      readOnly={!canEditRubric}
+    />
   );
 };
 

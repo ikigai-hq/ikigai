@@ -173,7 +173,7 @@ impl ContextMessage for AssignToAssignmentContext {
     fn get_message(&self) -> String {
         format!(
             r#"
-Hello there! You've been assigned to a new assignment: {assignment_name}. If you have any questions or need assistance, don't hesitate to reach out. Best of luck! 🚀 "#,
+Hello there! You've been assigned to a assignment: {assignment_name}. If you have any questions or need assistance, don't hesitate to reach out. Best of luck! 🚀 "#,
             assignment_name = self.assignment_name,
         )
     }

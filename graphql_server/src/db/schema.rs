@@ -47,14 +47,6 @@ diesel::table! {
 }
 
 diesel::table! {
-    document_assigned_users (document_id, assigned_user_id) {
-        document_id -> Uuid,
-        assigned_user_id -> Int4,
-        created_at -> Int8,
-    }
-}
-
-diesel::table! {
     documents (id) {
         id -> Uuid,
         creator_id -> Int4,
@@ -214,8 +206,6 @@ diesel::joinable!(assignment_submissions -> users (user_id));
 diesel::joinable!(assignments -> band_scores (band_score_id));
 diesel::joinable!(assignments -> documents (document_id));
 diesel::joinable!(assignments -> rubrics (grade_by_rubric_id));
-diesel::joinable!(document_assigned_users -> documents (document_id));
-diesel::joinable!(document_assigned_users -> users (assigned_user_id));
 diesel::joinable!(documents -> files (cover_photo_id));
 diesel::joinable!(documents -> spaces (space_id));
 diesel::joinable!(notification_receivers -> notifications (notification_id));
@@ -239,7 +229,6 @@ diesel::allow_tables_to_appear_in_same_query!(
     assignment_submissions,
     assignments,
     band_scores,
-    document_assigned_users,
     documents,
     files,
     notification_receivers,

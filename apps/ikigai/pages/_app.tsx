@@ -3,6 +3,7 @@ import { ApolloProvider } from "@apollo/client";
 import type { AppProps } from "next/app";
 import type { NextPage } from "next";
 import Head from "next/head";
+import { Theme } from "@radix-ui/themes";
 
 import { useApollo } from "graphql/ApolloClient";
 import IkigaiToaster from "components/Toaster";
@@ -38,29 +39,31 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
-    <>
-      <Head>
-        <title>Ikigai - AI powered Open Assignment Platform!</title>
-        <meta charSet="utf-8" />
-        <meta
-          name="viewport"
-          content="initial-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no"
-        />
-        <meta name="theme-color" content="#ffffff" />
-        <link rel="icon" href={"/favicon.ico"} />
-      </Head>
-      <IkigaiToaster />
-      <ApolloProvider client={client}>
-        <I18nProvider i18n={i18n}>
-          <ErrorBoundary>
-            <Initializing>
-              {getLayout(<Component {...pageProps} />)}
-              <SpaceSetting />
-            </Initializing>
-          </ErrorBoundary>
-        </I18nProvider>
-      </ApolloProvider>
-    </>
+    <Theme>
+      <>
+        <Head>
+          <title>Ikigai - AI powered Open Assignment Platform!</title>
+          <meta charSet="utf-8" />
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no"
+          />
+          <meta name="theme-color" content="#ffffff" />
+          <link rel="icon" href={"/favicon.ico"} />
+        </Head>
+        <IkigaiToaster />
+        <ApolloProvider client={client}>
+          <I18nProvider i18n={i18n}>
+            <ErrorBoundary>
+              <Initializing>
+                {getLayout(<Component {...pageProps} />)}
+                <SpaceSetting />
+              </Initializing>
+            </ErrorBoundary>
+          </I18nProvider>
+        </ApolloProvider>
+      </>
+    </Theme>
   );
 }
 

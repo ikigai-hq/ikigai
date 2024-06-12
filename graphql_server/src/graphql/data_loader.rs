@@ -333,43 +333,6 @@ impl Loader<FindDocumentType> for IkigaiDataLoader {
 }
 
 #[derive(Debug, Clone, Hash, Eq, PartialEq)]
-pub struct FindDocumentAssignedUsers {
-    pub document_id: Uuid,
-}
-
-impl Loader<FindDocumentAssignedUsers> for IkigaiDataLoader {
-    type Value = Vec<DocumentAssignedUser>;
-    type Error = IkigaiError;
-
-    async fn load(
-        &self,
-        keys: &[FindDocumentAssignedUsers],
-    ) -> std::result::Result<HashMap<FindDocumentAssignedUsers, Self::Value>, Self::Error> {
-        if keys.is_empty() {
-            return Ok(HashMap::new());
-        }
-
-        let document_ids = keys.iter().map(|key| key.document_id).unique().collect();
-        let mut conn = get_conn_from_actor().await?;
-        let items = DocumentAssignedUser::find_all_by_documents(&mut conn, document_ids)?;
-
-        let mut result: HashMap<FindDocumentAssignedUsers, Self::Value> = HashMap::new();
-        for item in items {
-            let key = FindDocumentAssignedUsers {
-                document_id: item.document_id,
-            };
-            if let Some(inner_items) = result.get_mut(&key) {
-                inner_items.push(item);
-            } else {
-                result.insert(key, vec![item]);
-            }
-        }
-
-        Ok(result)
-    }
-}
-
-#[derive(Debug, Clone, Hash, Eq, PartialEq)]
 pub struct FindPageByDocumentId {
     pub document_id: Uuid,
 }

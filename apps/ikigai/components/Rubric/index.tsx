@@ -1,11 +1,9 @@
 import { useMutation } from "@apollo/client";
-import { Table } from "antd";
-import { cloneDeep, round } from "lodash";
+import { round } from "lodash";
 import styled from "styled-components";
 import toast from "react-hot-toast";
-import { ColumnsType } from "antd/es/table";
 import { t, Trans } from "@lingui/macro";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import {
   Button,
   Heading,
@@ -15,6 +13,7 @@ import {
   Tooltip,
   TextArea,
   TextField,
+  Table,
 } from "@radix-ui/themes";
 import { ArrowRightIcon, MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 
@@ -197,141 +196,6 @@ const Rubric = ({ rubric, afterSave, readOnly }: RubricProps) => {
     setItems(getRubricItems(data));
   };
 
-  const columns: ColumnsType<RubricRecordType> = useMemo(() => {
-    const items: ColumnsType<RubricRecordType> = [
-      {
-        title: t`Criteria`,
-        dataIndex: "criteria",
-        key: "criteria",
-        width: 200,
-        fixed: "left",
-        render: (criterion: string, record, index) => (
-          <div style={{ display: "flex", gap: 10, flexDirection: "column" }}>
-            <InputNumber
-              value={record.weightingCriteria}
-              onChange={onChangeWeightingCriteria(index)}
-              readOnly={readOnly}
-              precision={0}
-            />
-            <TextArea
-              style={{ fontWeight: "bold", padding: 0 }}
-              defaultValue={criterion}
-              onChange={onChangeCriteria(index)}
-              placeholder={t`Typing criteria`}
-              readOnly={readOnly}
-            />
-          </div>
-        ),
-      },
-      ...levels.map((level, levelIndex) => {
-        return {
-          title: (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <StyledLevelInput
-                defaultValue={level}
-                onChange={onChangeLevel(levelIndex)}
-                placeholder={t`Typing level`}
-                readOnly={readOnly}
-              />
-              {readOnly ? undefined : (
-                <AlertDialog
-                  title={t`Do you want to remove ${level}?`}
-                  description={t`This action cannot revert!`}
-                  onConfirm={() => onRemoveLevel(levelIndex)}
-                >
-                  <IconButton variant="soft" color={"red"}>
-                    <MinusIcon />
-                  </IconButton>
-                </AlertDialog>
-              )}
-            </div>
-          ),
-          width: 300,
-          key: level,
-          dataIndex: level,
-          render: (_, record: RubricRecordType, index: number) => {
-            const item =
-              record.criteriaItems[levelIndex] || cloneDeep(defaultRubricItem);
-            return (
-              <div
-                style={{ display: "flex", gap: 10, flexDirection: "column" }}
-              >
-                {rubricType === RubricType.POINT_BASED && (
-                  <InputNumber
-                    value={item.score}
-                    onChange={onChangeScore(index, levelIndex)}
-                    readOnly={readOnly}
-                    precision={2}
-                  />
-                )}
-                {rubricType === RubricType.POINT_RANGE && (
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: 5,
-                      alignItems: "center",
-                    }}
-                  >
-                    <InputNumber
-                      value={item.score}
-                      onChange={onChangeScore(index, levelIndex)}
-                      readOnly={readOnly}
-                      placeholder={t`From point`}
-                      precision={2}
-                    />
-                    <ArrowRightIcon />
-                    <InputNumber
-                      value={item.toScore}
-                      onChange={onChangeToScore(index, levelIndex)}
-                      readOnly={readOnly}
-                      placeholder={t`To point`}
-                      precision={2}
-                    />
-                  </div>
-                )}
-                <TextArea
-                  value={item.explanation}
-                  rows={3}
-                  onChange={onChangeExplanation(index, levelIndex)}
-                  placeholder={t`Typing your description`}
-                  style={{ padding: 0 }}
-                  readOnly={readOnly}
-                />
-              </div>
-            );
-          },
-        };
-      }),
-    ];
-    if (!readOnly) {
-      items.push({
-        title: "",
-        dataIndex: "actions",
-        key: "actions",
-        width: 70,
-        fixed: "right",
-        render: (_, item, index) => (
-          <AlertDialog
-            title={t`Do you want to remove ${item.criteria}?`}
-            description={t`This action cannot revert!`}
-            onConfirm={() => onRemoveCriteria(index)}
-          >
-            <IconButton variant="soft" color="red">
-              <MinusIcon />
-            </IconButton>
-          </AlertDialog>
-        ),
-      });
-    }
-    return items;
-  }, [levels.length, items.length, rubricType]);
-
   let totalGrade = 0;
   items.forEach((item) => (totalGrade += item.weightingCriteria));
   return (
@@ -398,17 +262,152 @@ const Rubric = ({ rubric, afterSave, readOnly }: RubricProps) => {
       )}
       <div style={{ flex: 1 }}>
         <div style={{ display: "flex" }}>
-          <Table
-            rowKey={"rowKey"}
-            style={{ flex: 1, overflow: "auto" }}
-            columns={columns}
-            dataSource={items}
-            pagination={false}
-            scroll={{
-              x: 700,
-              y: 700,
-            }}
-          />
+          <Table.Root layout={"fixed"}>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeaderCell>
+                  <Trans>Criteria</Trans>
+                </Table.ColumnHeaderCell>
+                {levels.map((level, levelIndex) => (
+                  <Table.ColumnHeaderCell key={`${level}-${levelIndex}`}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <StyledLevelInput
+                        defaultValue={level}
+                        onChange={onChangeLevel(levelIndex)}
+                        placeholder={t`Typing level`}
+                        readOnly={readOnly}
+                      />
+                      {readOnly ? undefined : (
+                        <AlertDialog
+                          title={t`Do you want to remove ${level}?`}
+                          description={t`This action cannot revert!`}
+                          onConfirm={() => onRemoveLevel(levelIndex)}
+                        >
+                          <IconButton variant="soft" color={"red"}>
+                            <MinusIcon />
+                          </IconButton>
+                        </AlertDialog>
+                      )}
+                    </div>
+                  </Table.ColumnHeaderCell>
+                ))}
+
+                {!readOnly && (
+                  <Table.ColumnHeaderCell width="50px"></Table.ColumnHeaderCell>
+                )}
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
+              {items.map((item, criteriaIndex) => (
+                <Table.Row key={`${item.criteria}-${criteriaIndex}`}>
+                  <Table.RowHeaderCell>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: 10,
+                        flexDirection: "column",
+                      }}
+                    >
+                      <InputNumber
+                        value={item.weightingCriteria}
+                        onChange={onChangeWeightingCriteria(criteriaIndex)}
+                        readOnly={readOnly}
+                        precision={0}
+                      />
+                      <TextArea
+                        style={{ fontWeight: "bold", padding: 0 }}
+                        defaultValue={item.criteria}
+                        onChange={onChangeCriteria(criteriaIndex)}
+                        placeholder={t`Typing criteria`}
+                        readOnly={readOnly}
+                      />
+                    </div>
+                  </Table.RowHeaderCell>
+                  {item.criteriaItems.map((criteriaItem, levelIndex) => (
+                    <Table.Cell key={levelIndex}>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: 10,
+                          flexDirection: "column",
+                        }}
+                      >
+                        {rubricType === RubricType.POINT_BASED && (
+                          <InputNumber
+                            value={criteriaItem.score}
+                            onChange={onChangeScore(criteriaIndex, levelIndex)}
+                            readOnly={readOnly}
+                            precision={2}
+                          />
+                        )}
+                        {rubricType === RubricType.POINT_RANGE && (
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: 5,
+                              alignItems: "center",
+                            }}
+                          >
+                            <InputNumber
+                              value={criteriaItem.score}
+                              onChange={onChangeScore(
+                                criteriaIndex,
+                                levelIndex,
+                              )}
+                              readOnly={readOnly}
+                              placeholder={t`From point`}
+                              precision={2}
+                            />
+                            <ArrowRightIcon />
+                            <InputNumber
+                              value={criteriaItem.toScore}
+                              onChange={onChangeToScore(
+                                criteriaIndex,
+                                levelIndex,
+                              )}
+                              readOnly={readOnly}
+                              placeholder={t`To point`}
+                              precision={2}
+                            />
+                          </div>
+                        )}
+                        <TextArea
+                          value={criteriaItem.explanation}
+                          rows={3}
+                          onChange={onChangeExplanation(
+                            criteriaIndex,
+                            levelIndex,
+                          )}
+                          placeholder={t`Typing your description`}
+                          style={{ padding: 0 }}
+                          readOnly={readOnly}
+                        />
+                      </div>
+                    </Table.Cell>
+                  ))}
+                  <Table.Cell>
+                    <AlertDialog
+                      title={t`Do you want to remove ${item.criteria}?`}
+                      description={t`This action cannot revert!`}
+                      onConfirm={() => onRemoveCriteria(criteriaIndex)}
+                    >
+                      <IconButton variant="soft" color="red">
+                        <MinusIcon />
+                      </IconButton>
+                    </AlertDialog>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+
           {!readOnly && (
             <div
               style={{

@@ -18,6 +18,7 @@ import { useDebounce } from "ahooks";
 import { IPageContent } from "store/PageContentStore";
 import useAddOrUpdatePageContent from "hook/UseUpsertPageContent";
 import useEditorStore from "store/EditorStore";
+import FileHandler from "./Extensions/FileHandler";
 
 export type EditorProps = {
   readOnly: boolean;
@@ -33,7 +34,7 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
     pageContent.id,
     pageContent.pageId,
   );
-  const debouncedInnerContent = useDebounce(innerContent, { wait: 1000 });
+  const debouncedInnerContent = useDebounce(innerContent, { wait: 100 });
 
   useEffect(() => {
     upsert({ body: debouncedInnerContent });
@@ -73,8 +74,14 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
       TaskItem.configure({
         nested: true,
       }),
+      FileHandler,
     ],
     content: innerContent,
+    editorProps: {
+      attributes: {
+        pageContentId: pageContent.id,
+      },
+    },
     onUpdate: ({ editor }) => {
       setInnerContent(editor.getJSON());
     },

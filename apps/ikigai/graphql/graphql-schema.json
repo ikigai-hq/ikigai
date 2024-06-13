@@ -1354,11 +1354,11 @@
             "deprecationReason": null
           },
           {
-            "name": "downloadUrlByDocumentId",
+            "name": "downloadUrlByPageContentId",
             "description": null,
             "args": [
               {
-                "name": "documentId",
+                "name": "pageContentId",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
@@ -4318,13 +4318,9 @@
               }
             ],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

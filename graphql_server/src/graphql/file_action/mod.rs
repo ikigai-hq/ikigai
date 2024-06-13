@@ -9,9 +9,10 @@ use async_graphql::{ComplexObject, Context, Enum, Result};
 use uuid::Uuid;
 
 use crate::authorization::DocumentActionPermission;
-use crate::db::{File, PublicUser};
+use crate::db::{File, JSONContent, Page, PageContent, PublicUser};
+use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::graphql::data_loader::{FindPublicUserById, IkigaiDataLoader};
-use crate::helper::{document_quick_authorize, generate_download_url};
+use crate::helper::{document_quick_authorize, generate_download_url, get_conn_from_ctx};
 
 #[derive(Enum, Debug, Clone, Copy, Eq, PartialEq)]
 pub enum FileType {
@@ -24,11 +25,24 @@ pub enum FileType {
 
 #[ComplexObject]
 impl File {
-    async fn download_url_by_document_id(
+    async fn download_url_by_page_content_id(
         &self,
         ctx: &Context<'_>,
-        document_id: Uuid,
+        page_content_id: Uuid,
     ) -> Result<Option<String>> {
+        let document_id = {
+            let mut conn = get_conn_from_ctx(ctx).await?;
+            let page_content = PageContent::find(&mut conn, page_content_id).format_err()?;
+            let json_content =
+                serde_json::from_value::<JSONContent>(page_content.body).unwrap_or_default();
+            if !json_content.has_file_handler(self.uuid) {
+                return Err(IkigaiError::new_unauthorized("Page does not contain file."))
+                    .format_err();
+            }
+
+            let page = Page::find(&mut conn, page_content.page_id).format_err()?;
+            page.document_id
+        };
         document_quick_authorize(ctx, document_id, DocumentActionPermission::ViewDocument).await?;
         generate_download_url(self, ctx).await
     }

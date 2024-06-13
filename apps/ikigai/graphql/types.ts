@@ -463,7 +463,7 @@ export interface FileCreateRecordingVariables {
 // ====================================================
 
 export interface FileCheck {
-  fileCheck: boolean;
+  fileCheck: string | null;
 }
 
 export interface FileCheckVariables {
@@ -999,23 +999,45 @@ export interface GetDocumentPageContentsVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetFullFileInfo
+// GraphQL query operation: GetFile
 // ====================================================
 
-export interface GetFullFileInfo_getFile {
+export interface GetFile_getFile {
   uuid: any;
-  downloadUrlByDocumentId: string | null;
   contentType: string;
   contentLength: number;
+  fileName: string;
 }
 
-export interface GetFullFileInfo {
-  getFile: GetFullFileInfo_getFile;
+export interface GetFile {
+  getFile: GetFile_getFile;
 }
 
-export interface GetFullFileInfoVariables {
+export interface GetFileVariables {
   fileId: any;
-  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetDownloadUrl
+// ====================================================
+
+export interface GetDownloadUrl_getFile {
+  uuid: any;
+  downloadUrlByPageContentId: string | null;
+}
+
+export interface GetDownloadUrl {
+  getFile: GetDownloadUrl_getFile;
+}
+
+export interface GetDownloadUrlVariables {
+  fileId: any;
+  pageContentId: any;
 }
 
 /* tslint:disable */

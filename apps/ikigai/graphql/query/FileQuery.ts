@@ -1,12 +1,21 @@
 import { gql } from "@apollo/client";
 
-export const GET_FULL_FILE_INFO = gql`
-  query GetFullFileInfo($fileId: UUID!, $documentId: UUID!) {
+export const GET_FILE = gql`
+  query GetFile($fileId: UUID!) {
     getFile(fileId: $fileId) {
       uuid
-      downloadUrlByDocumentId(documentId: $documentId)
       contentType
       contentLength
+      fileName
+    }
+  }
+`;
+
+export const GET_DOWNLOAD_URL_BY_PAGE_CONTENT_ID = gql`
+  query GetDownloadUrl($fileId: UUID!, $pageContentId: UUID!) {
+    getFile(fileId: $fileId) {
+      uuid
+      downloadUrlByPageContentId(pageContentId: $pageContentId)
     }
   }
 `;

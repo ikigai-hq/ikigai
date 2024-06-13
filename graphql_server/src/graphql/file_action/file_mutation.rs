@@ -7,7 +7,8 @@ use crate::db::file::{File, FileStatus};
 use crate::db::Connection;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::{
-    get_conn_from_ctx, get_user_auth_from_ctx, get_user_from_ctx, is_owner_of_file,
+    generate_download_url, get_conn_from_ctx, get_user_auth_from_ctx, get_user_from_ctx,
+    is_owner_of_file,
 };
 use crate::service::{Storage, UploadInfo};
 
@@ -86,7 +87,7 @@ impl FileMutation {
         Ok(result)
     }
 
-    async fn file_check(&self, ctx: &Context<'_>, file_id: Uuid) -> Result<bool> {
+    async fn file_check(&self, ctx: &Context<'_>, file_id: Uuid) -> Result<Option<String>> {
         let user = get_user_from_ctx(ctx).await?;
         is_owner_of_file(ctx, user.id, file_id).await?;
 
@@ -103,7 +104,7 @@ impl FileMutation {
                 add_generate_waveform_job(file.uuid);
             }
 
-            Ok(true)
+            generate_download_url(&file, ctx).await
         } else {
             file.status = FileStatus::Failed;
             File::upsert(&mut conn, &file)?;

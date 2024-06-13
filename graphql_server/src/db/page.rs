@@ -1,6 +1,7 @@
 use diesel::result::Error;
 use diesel::sql_types::Integer;
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
+use std::collections::HashMap;
 use uuid::Uuid;
 
 use super::schema::{page_contents, pages};
@@ -158,5 +159,57 @@ impl PageContent {
         page_contents::table
             .filter(page_contents::page_id.eq_any(page_ids))
             .get_results(conn)
+    }
+}
+
+// This is the struct of tiptap JSON Content
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct JSONContent {
+    #[serde(rename = "type")]
+    pub content_type: Option<String>,
+    pub attrs: Option<HashMap<String, serde_json::Value>>,
+    pub content: Option<Vec<JSONContent>>,
+    pub marks: Option<Vec<ContentMark>>,
+    pub text: Option<String>,
+    #[serde(flatten)]
+    pub other_data: HashMap<String, serde_json::Value>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ContentMark {
+    #[serde(rename = "type")]
+    pub content_type: String,
+    pub attrs: Option<HashMap<String, serde_json::Value>>,
+    #[serde(flatten)]
+    pub keys: HashMap<String, serde_json::Value>,
+}
+
+impl JSONContent {
+    pub fn find_blocks(&self, predicate: fn(&JSONContent) -> bool) -> Vec<&JSONContent> {
+        let mut result: Vec<&JSONContent> = vec![];
+        if predicate(self) {
+            result.push(self);
+        }
+
+        if let Some(contents) = self.content.as_ref() {
+            for content in contents {
+                result.append(&mut content.find_blocks(predicate));
+            }
+        }
+
+        result
+    }
+
+    pub fn has_file_handler(&self, file_id: Uuid) -> bool {
+        let file_value = serde_json::to_value(file_id).unwrap_or_default();
+        let predicate =
+            |content: &JSONContent| content.content_type.as_deref() == Some("fileHandler");
+        let file_handlers = self.find_blocks(predicate);
+        file_handlers.iter().any(|file_content| {
+            file_content
+                .attrs
+                .as_ref()
+                .map_or_else(|| false, |attrs| attrs.get("fileId") == Some(&file_value))
+        })
     }
 }

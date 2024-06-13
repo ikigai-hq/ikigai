@@ -7,6 +7,7 @@ import {
   IconBlockquote,
   IconBold,
   IconCode,
+  IconFilePlus,
   IconH1,
   IconH2,
   IconH3,
@@ -128,6 +129,11 @@ const ContentToolbar = () => {
     if (!activeEditor) return;
     activeEditor.chain().focus().toggleTaskList().run();
     setToolbarOptions({ todoList: activeEditor.isActive("taskList") });
+  };
+
+  const onInsertFileHandler = () => {
+    if (!activeEditor) return;
+    activeEditor.chain().focus().insertFileHandler().run();
   };
 
   return (
@@ -379,6 +385,14 @@ const ContentToolbar = () => {
             onClick={onChangeBlockquote}
           >
             <IconBlockquote size={20} stroke={2} />
+          </Toolbar.ToggleItem>
+          <Toolbar.ToggleItem
+            className="ToolbarToggleItem"
+            value="file-handler"
+            aria-label="FileHandler"
+            onClick={onInsertFileHandler}
+          >
+            <IconFilePlus size={20} stroke={2} />
           </Toolbar.ToggleItem>
         </Toolbar.ToggleGroup>
       </Toolbar.Root>

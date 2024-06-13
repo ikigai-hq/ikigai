@@ -1,5 +1,6 @@
 import { ISubmission } from "store/DocumentStore";
 import { Badge } from "@radix-ui/themes";
+import { DocumentType } from "../graphql/types";
 
 export enum SubmissionStatus {
   NotSubmitted = "Not Submitted",
@@ -27,3 +28,13 @@ export const StudentStatus = ({ status }: { status: SubmissionStatus }) => {
 
   return <Badge color="bronze">Not Submitted</Badge>;
 };
+
+export const documentIcon = (item?: {
+  isDefaultFolderPrivate: boolean;
+  documentType: DocumentType;
+}) =>
+  item?.isDefaultFolderPrivate
+    ? "🔏"
+    : item?.documentType === DocumentType.FOLDER
+    ? "📁"
+    : "📝";

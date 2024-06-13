@@ -10,14 +10,16 @@ import useCreateDocument from "hook/UseCreateDocument";
 export type CreateContentButtonProps = {
   parentId: string | null;
   children: React.ReactElement<any, any>;
+  isPrivate: boolean;
 };
 
 const CreateContentButton = ({
   parentId,
   children,
+  isPrivate,
 }: CreateContentButtonProps) => {
   const router = useRouter();
-  const { onCreate } = useCreateDocument(parentId);
+  const { onCreate } = useCreateDocument(isPrivate, parentId);
 
   const clickCreateDocument = async (docType: DocumentType) => {
     const res = await onCreate(docType);

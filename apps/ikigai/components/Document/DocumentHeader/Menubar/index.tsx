@@ -28,7 +28,10 @@ const IkigaiMenubar = () => {
   const router = useRouter();
   const [showDeleteWarning, setShowDeleteWarning] = useState(false);
   const activeDocument = useDocumentStore((state) => state.activeDocument);
-  const { onCreate } = useCreateDocument(activeDocument?.parentId);
+  const { onCreate } = useCreateDocument(
+    activeDocument?.isPrivate,
+    activeDocument?.parentId,
+  );
   const addSpaceDocument = useDocumentStore((state) => state.addSpaceDocument);
   const removeSpaceDocument = useDocumentStore(
     (state) => state.removeSpaceDocument,
@@ -48,6 +51,8 @@ const IkigaiMenubar = () => {
     documentTypeName = t`Assignment`;
   if (activeDocument?.documentType === DocumentType.SUBMISSION)
     documentTypeName = t`Submission`;
+  if (activeDocument?.isDefaultFolderPrivate)
+    documentTypeName = t`Private folder`;
 
   const clickCreateDocument = (docType: DocumentType) => async () => {
     const res = await onCreate(docType);
@@ -93,7 +98,9 @@ const IkigaiMenubar = () => {
     }
   };
 
-  const showMenu = allow(DocumentActionPermission.MANAGE_DOCUMENT);
+  const showMenu =
+    allow(DocumentActionPermission.MANAGE_DOCUMENT) &&
+    !activeDocument?.isDefaultFolderPrivate;
   return (
     <Menubar.Root className="MenubarRoot">
       <Menubar.Menu>

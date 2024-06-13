@@ -17,6 +17,9 @@ const CoverPage = () => {
   const activeDocumentTitle = useDocumentStore(
     (state) => state.activeDocument?.title,
   );
+  const isDefaultPrivate = useDocumentStore(
+    (state) => state.activeDocument?.isDefaultFolderPrivate,
+  );
   const updateActiveDocument = useDocumentStore(
     (state) => state.updateActiveDocument,
   );
@@ -49,7 +52,9 @@ const CoverPage = () => {
             value={activeDocumentTitle}
             onChange={(e) => changeTitle(e.currentTarget.value)}
             placeholder={t`Untitled`}
-            readOnly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
+            readOnly={
+              !allow(DocumentActionPermission.EDIT_DOCUMENT) || isDefaultPrivate
+            }
           />
         </div>
         <div style={{ marginTop: "10px" }}>

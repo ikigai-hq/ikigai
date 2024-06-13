@@ -9,6 +9,7 @@ import { formatDocumentRoute } from "config/Routes";
 import useDocumentStore from "store/DocumentStore";
 import { DocumentType } from "graphql/types";
 import { ArrowDocument } from "../IconSvg";
+import { documentIcon } from "util/DocumentUtil";
 
 export const DEFAULT_DOCUMENT_TITLE = "Untitled";
 
@@ -34,7 +35,7 @@ const LessonItem = ({
       state.spaceDocuments.find((spaceDoc) => spaceDoc.id === item.id)?.title,
   );
   const isFolder = item.documentType === DocumentType.FOLDER;
-  const fileIcon = isFolder ? "📁" : "📝";
+  const fileIcon = documentIcon(item);
 
   const onClickCollapse = (e) => {
     e.stopPropagation();

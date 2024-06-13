@@ -51,6 +51,8 @@ impl Document {
                 config.clone_to_space,
                 self.icon_type,
                 self.icon_value.clone(),
+                self.is_private,
+                self.is_default_folder_private,
             );
             Document::upsert(conn, new_doc)?
         };

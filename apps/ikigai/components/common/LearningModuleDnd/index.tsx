@@ -29,6 +29,7 @@ export type LearningModuleDndProps = {
   TreeItemComponent: TreeItemComponentType<Record<string, any>, HTMLElement>;
   defaultCollapsed: boolean;
   parentId: string | null;
+  isParentPrivate: boolean;
 };
 
 const debounceUpdatePositions = debounce(
@@ -42,6 +43,7 @@ export const LearningModuleDnd = ({
   TreeItemComponent,
   defaultCollapsed,
   parentId,
+  isParentPrivate,
 }: LearningModuleDndProps) => {
   const allow = usePermission();
   const [cacheFlattenTrees, setCacheFlattenTrees] = useState<
@@ -70,13 +72,23 @@ export const LearningModuleDnd = ({
   ) => {
     setConvertedItems(items);
     setCacheFlattenTrees(flattenTree(items));
-    const oldItems = convertToUpdatePositionData(convertedItems, parentId);
-    const newItems = convertToUpdatePositionData(items, parentId);
+    const oldItems = convertToUpdatePositionData(
+      convertedItems,
+      isParentPrivate,
+      parentId,
+    );
+    const newItems = convertToUpdatePositionData(
+      items,
+      isParentPrivate,
+      parentId,
+    );
     if (
       allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) &&
       !isEqual(oldItems, newItems)
     ) {
-      debounceUpdatePositions(convertToUpdatePositionData(items, parentId));
+      debounceUpdatePositions(
+        convertToUpdatePositionData(items, isParentPrivate, parentId),
+      );
     }
   };
 
@@ -133,23 +145,32 @@ const convertToTreeItems = (
         },
         collapsed,
         canHaveChildren: isFolder,
+        disableSorting: doc.isDefaultFolderPrivate,
+        isPrivateSpace: doc.isDefaultFolderPrivate,
       };
     });
 };
 
 export const convertToUpdatePositionData = (
   items: TreeItems<LearningModuleItemTypeWrapper>,
+  isParentPrivate: boolean,
   parentId?: string,
 ): UpdatePositionData[] => {
-  const results = [];
+  const results: UpdatePositionData[] = [];
   items.forEach((item, index) => {
+    const isFinalPrivate = isParentPrivate || item.data.isDefaultFolderPrivate;
     results.push({
       id: item.data.id,
       parentId,
       index,
+      isPrivate: isFinalPrivate,
     });
     results.push(
-      ...convertToUpdatePositionData(item.children, item.id as string),
+      ...convertToUpdatePositionData(
+        item.children,
+        isFinalPrivate,
+        item.id as string,
+      ),
     );
   });
   return results;
@@ -180,13 +201,8 @@ export const convertDocumentToLearningItemType = (
   childrenTitle: string,
 ): LearningItemType => {
   return {
-    id: document.id,
-    title: document.title,
-    createdAt: document.createdAt,
-    index: document.index,
-    documentType: document.documentType,
+    ...document,
     indexTitle: `${document.title}#${childrenTitle}`,
-    parentId: document.parentId,
   };
 };
 

@@ -8,6 +8,7 @@ import SubmissionHeader from "components/Document/DocumentHeader/SubmissionHeade
 import AssignmentHeader from "./AssignmentHeader";
 import IkigaiMenubar from "./Menubar";
 import { formatDocumentRoute } from "config/Routes";
+import { documentIcon } from "../../../util/DocumentUtil";
 
 const DocumentHeader = () => {
   const activeDocument = useDocumentStore((state) => state.activeDocument);
@@ -34,7 +35,7 @@ const DocumentHeader = () => {
       <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
         <div>
           <Text size="2" weight="bold" truncate>
-            {activeDocumentTitle || "Untitled"}
+            {documentIcon(activeDocument)} {activeDocumentTitle || "Untitled"}
           </Text>
           {parent && (
             <Badge
@@ -45,11 +46,11 @@ const DocumentHeader = () => {
               style={{ marginLeft: 5, cursor: "pointer" }}
               onClick={onClickParent}
             >
-              📁 {parent.title}
+              {documentIcon(parent)} {parent.title}
             </Badge>
           )}
         </div>
-        <div style={{ marginLeft: -7 }}>
+        <div style={{ marginLeft: -6 }}>
           <IkigaiMenubar />
         </div>
       </div>

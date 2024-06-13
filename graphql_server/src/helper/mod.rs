@@ -35,7 +35,7 @@ pub fn duplicate_space(
     creator_id: i32,
 ) -> Result<Space, IkigaiError> {
     let space = Space::find_by_id(conn, space_id)?;
-    let space_documents = Document::find_all_by_space(conn, space_id)?;
+    let space_documents = Document::find_all_by_space(conn, space_id, false)?;
 
     conn.transaction::<_, IkigaiError, _>(|conn| {
         // Duplicate Class

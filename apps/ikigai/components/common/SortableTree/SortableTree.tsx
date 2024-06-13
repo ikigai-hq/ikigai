@@ -195,7 +195,6 @@ export function SortableTree<
       sensors={disableSorting ? undefined : sensors}
       modifiers={indicator ? modifiersArray : undefined}
       collisionDetection={closestCenter}
-      // measuring={measuring}
       onDragStart={disableSorting ? undefined : handleDragStart}
       onDragMove={disableSorting ? undefined : handleDragMove}
       onDragOver={disableSorting ? undefined : handleDragOver}
@@ -206,59 +205,55 @@ export function SortableTree<
         items={sortedIds}
         strategy={disableSorting ? undefined : verticalListSortingStrategy}
       >
-        <>
-          {flattenedItems.map((item) => {
-            return (
-              <SortableTreeItem
-                {...rest}
-                key={item.id}
-                id={item.id as any}
-                item={item}
-                childCount={item.children?.length}
-                depth={
-                  item.id === activeId && projected
-                    ? projected.depth
-                    : item.depth
-                }
-                indentationWidth={indentationWidth}
-                indicator={indicator}
-                collapsed={Boolean(item.collapsed)}
-                onCollapse={handleCollapse}
-                onRemove={handleRemove}
-                isLast={
-                  item.id === activeId && projected
-                    ? projected.isLast
-                    : item.isLast
-                }
-                parent={
-                  item.id === activeId && projected
-                    ? projected.parent
-                    : item.parent
-                }
-                TreeItemComponent={TreeItemComponent}
-                disableSorting={disableSorting}
-              />
-            );
-          })}
-          {createPortal(
-            <DragOverlay dropAnimation={dropAnimation}>
-              {activeId && activeItem ? (
-                <TreeItemComponent
-                  {...rest}
-                  item={activeItem}
-                  depth={activeItem.depth}
-                  clone
-                  childCount={getChildCount(items, activeId) + 1}
-                  indentationWidth={indentationWidth}
-                  isLast={false}
-                  parent={activeItem.parent}
-                />
-              ) : null}
-            </DragOverlay>,
-            document.body,
-          )}
-        </>
+        {flattenedItems.map((item) => {
+          return (
+            <SortableTreeItem
+              {...rest}
+              key={item.id}
+              id={item.id as any}
+              item={item}
+              childCount={item.children?.length}
+              depth={
+                item.id === activeId && projected ? projected.depth : item.depth
+              }
+              indentationWidth={indentationWidth}
+              indicator={indicator}
+              collapsed={Boolean(item.collapsed)}
+              onCollapse={handleCollapse}
+              onRemove={handleRemove}
+              isLast={
+                item.id === activeId && projected
+                  ? projected.isLast
+                  : item.isLast
+              }
+              parent={
+                item.id === activeId && projected
+                  ? projected.parent
+                  : item.parent
+              }
+              TreeItemComponent={TreeItemComponent}
+              disableSorting={disableSorting || item.disableSorting}
+            />
+          );
+        })}
       </SortableContext>
+      {createPortal(
+        <DragOverlay dropAnimation={dropAnimation}>
+          {activeId && activeItem ? (
+            <TreeItemComponent
+              {...rest}
+              item={activeItem}
+              depth={activeItem.depth}
+              clone
+              childCount={getChildCount(items, activeId) + 1}
+              indentationWidth={indentationWidth}
+              isLast={false}
+              parent={activeItem.parent}
+            />
+          ) : null}
+        </DragOverlay>,
+        document.body,
+      )}
     </DndContext>
   );
 

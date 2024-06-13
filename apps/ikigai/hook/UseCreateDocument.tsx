@@ -9,7 +9,7 @@ import { handleError } from "../graphql/ApolloClient";
 import useDocumentStore from "../store/DocumentStore";
 import useSpaceStore from "../store/SpaceStore";
 
-const useCreateDocument = (parentId?: string) => {
+const useCreateDocument = (isPrivate: boolean, parentId?: string) => {
   const [createStandaloneDocument, { loading }] =
     useMutation<AddDocumentStandaloneV2>(ADD_DOCUMENT_STANDALONE_V2, {
       onError: handleError,
@@ -22,6 +22,7 @@ const useCreateDocument = (parentId?: string) => {
     const indexes = documents
       .filter((doc) => !doc.deletedAt)
       .filter((doc) => doc.parentId === parentId)
+      .filter((doc) => doc.isPrivate === isPrivate)
       .map((doc) => doc.index);
     const index = indexes.length ? Math.max(...indexes) + 1 : 1;
 
@@ -34,6 +35,7 @@ const useCreateDocument = (parentId?: string) => {
           parentId,
           iconType: IconType.EMOJI,
           iconValue: isAssignment ? "✏️" : "📂",
+          isPrivate,
         },
         spaceId,
         isAssignment,

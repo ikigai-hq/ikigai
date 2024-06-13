@@ -22,6 +22,8 @@ pub struct DocumentAuth {
     pub is_assignment: bool,
     #[polar(attribute)]
     pub is_submission: bool,
+    #[polar(attribute)]
+    pub is_private: bool,
 }
 
 impl DocumentAuth {
@@ -46,6 +48,7 @@ impl DocumentAuth {
             space_id: document.space_id.unwrap_or(-1),
             is_assignment: assignment.is_some(),
             is_submission: submission.is_some(),
+            is_private: document.is_private || document.is_default_folder_private,
         })
     }
 }

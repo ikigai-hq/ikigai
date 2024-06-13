@@ -62,6 +62,8 @@ diesel::table! {
         space_id -> Nullable<Int4>,
         icon_type -> Nullable<Int4>,
         icon_value -> Nullable<Varchar>,
+        is_private -> Bool,
+        is_default_folder_private -> Bool,
     }
 }
 

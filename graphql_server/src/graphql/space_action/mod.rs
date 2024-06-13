@@ -57,7 +57,16 @@ impl Space {
         space_quick_authorize(ctx, self.id, SpaceActionPermission::ViewSpaceContent).await?;
 
         let mut conn = get_conn_from_ctx(ctx).await?;
-        let documents = Document::find_all_by_space(&mut conn, self.id).format_err()?;
+        let mut documents = Document::find_all_by_space(&mut conn, self.id, false).format_err()?;
+
+        if space_quick_authorize(ctx, self.id, SpaceActionPermission::ManageSpaceContent)
+            .await
+            .is_ok()
+        {
+            documents
+                .append(&mut Document::find_all_by_space(&mut conn, self.id, true).format_err()?);
+        }
+
         Ok(documents)
     }
 }

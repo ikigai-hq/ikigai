@@ -22,6 +22,8 @@ export const GET_SPACE_INFORMATION = gql`
         submission {
           id
         }
+        isPrivate
+        isDefaultFolderPrivate
       }
     }
   }

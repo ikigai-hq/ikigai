@@ -1,15 +1,11 @@
-import { DocumentType } from "graphql/types";
+import { ISpaceDocument } from "store/DocumentStore";
 
-export type LearningItemType = {
-  id: string;
-  title: string;
-  index: number;
-  createdAt: number;
-  documentType: DocumentType;
+export type LearningItemType = ISpaceDocument & {
   indexTitle: string;
-  parentId: string;
 };
 
 export type LearningModuleItemTypeWrapper = {
-  data: LearningItemType;
+  data?: LearningItemType;
+  disableSorting: boolean;
+  isPrivateSpace: boolean;
 };

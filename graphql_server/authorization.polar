@@ -18,8 +18,8 @@ resource SpaceAuth {
 	"manage_space_content" if "teacher";
 
 	"teacher" if "creator";
-	"manage_space_member" if "teacher";
-	"manage_space_setting" if "teacher";
+	"manage_space_member" if "creator";
+	"manage_space_setting" if "creator";
 }
 
 has_role(user: UserAuth, "creator", space: SpaceAuth) if
@@ -89,7 +89,7 @@ has_role(user: UserAuth, "writer", doc: DocumentAuth) if
     user.role = "teacher";
 
 has_role(user: UserAuth, "reader", doc: DocumentAuth) if
-    doc.space_id = user.space_id;
+    doc.space_id = user.space_id and not doc.is_private;
 
 # RUBRIC AUTH SPACE
 allow(actor: UserAuth, action, doc: RubricAuth) if

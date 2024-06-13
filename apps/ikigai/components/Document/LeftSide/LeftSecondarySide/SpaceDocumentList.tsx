@@ -43,7 +43,7 @@ const SpaceDocumentList = () => {
           </Heading>
         </div>
         {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
-          <CreateContentButton parentId={null}>
+          <CreateContentButton isPrivate={true} parentId={null}>
             <IconButton
               style={{ cursor: "pointer" }}
               size="2"
@@ -64,6 +64,7 @@ const SpaceDocumentList = () => {
           TreeItemComponent={LessonItemDnd}
           defaultCollapsed={true}
           parentId={null}
+          isParentPrivate={false}
         />
       </ListModule>
     </div>

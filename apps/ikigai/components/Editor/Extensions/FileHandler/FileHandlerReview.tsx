@@ -111,6 +111,7 @@ const ImageWrapper = styled.div`
   min-height: 200px;
   position: relative;
   aspect-ratio: 16/9 auto;
+  margin: 0 auto;
 `;
 
 const NonSupportWrapper = styled.div`

@@ -33,7 +33,7 @@ const ContentPage = ({ page }: ContentPageProps) => {
           {pageContents.map((pageContent, index) => (
             <>
               <Panel key={pageContent.id} minSize={30}>
-                <EditorWrapper>
+                <EditorWrapper $pageContentLength={pageContents.length}>
                   <Editor
                     readOnly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
                     pageContent={pageContent}
@@ -61,10 +61,12 @@ const ContentPageWrapper = styled.div`
   overflow: hidden;
 `;
 
-const EditorWrapper = styled.div`
+const EditorWrapper = styled.div<{ $pageContentLength: number }>`
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+  padding: ${(props) => (props.$pageContentLength === 1 ? "0 15%" : "unset")};
+  margin: 0 auto;
 `;
 
 export default ContentPage;

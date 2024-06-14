@@ -81,6 +81,16 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
       attributes: {
         pageContentId: pageContent.id,
       },
+      handleDOMEvents: {
+        keydown: (_, event) => {
+          if (event.key === "s" && event.metaKey) {
+            upsert({ body: innerContent });
+            event.preventDefault();
+          }
+
+          return false;
+        },
+      },
     },
     onUpdate: ({ editor }) => {
       setInnerContent(editor.getJSON());

@@ -50,16 +50,12 @@ const FileHandler = (props: NodeViewProps) => {
       <ExtensionWrapper selected={props.selected}>
         {loading && <Loading />}
         {!data && !loading && (
-          <div>
-            <FileUploader onComplete={onUploadComplete}>
-              <FileUploaderWrapper
-                style={{ display: "flex", alignItems: "center", gap: 4 }}
-              >
-                <UploadIcon />
-                <Text align="center">Click here to upload</Text>
-              </FileUploaderWrapper>
-            </FileUploader>
-          </div>
+          <FileUploader onComplete={onUploadComplete}>
+            <FileUploaderWrapper>
+              <UploadIcon style={{ marginLeft: 5 }} />
+              <Text weight="medium">Click here to upload</Text>
+            </FileUploaderWrapper>
+          </FileUploader>
         )}
         {data && (
           <FileHandlerReview
@@ -75,7 +71,8 @@ const FileHandler = (props: NodeViewProps) => {
 
 const FileUploaderWrapper = styled.div`
   background-color: var(--indigo-3);
-  padding: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   display: flex;
   align-items: center;
   gap: 4px;

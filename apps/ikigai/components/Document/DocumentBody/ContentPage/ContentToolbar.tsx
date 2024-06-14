@@ -386,14 +386,14 @@ const ContentToolbar = () => {
           >
             <IconBlockquote size={20} stroke={2} />
           </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem
+          <Toolbar.Button
             className="ToolbarToggleItem"
             value="file-handler"
             aria-label="FileHandler"
             onClick={onInsertFileHandler}
           >
             <IconFileUpload size={20} stroke={2} />
-          </Toolbar.ToggleItem>
+          </Toolbar.Button>
         </Toolbar.ToggleGroup>
       </Toolbar.Root>
     </>

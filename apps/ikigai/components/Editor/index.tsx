@@ -34,7 +34,7 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
     pageContent.id,
     pageContent.pageId,
   );
-  const debouncedInnerContent = useDebounce(innerContent, { wait: 100 });
+  const debouncedInnerContent = useDebounce(innerContent, { wait: 500 });
 
   useEffect(() => {
     upsert({ body: debouncedInnerContent });

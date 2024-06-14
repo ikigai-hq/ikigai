@@ -27,12 +27,11 @@ const FileHandler = (props: NodeViewProps) => {
     onError: handleError,
     variables: {
       fileId: props.node.attrs.fileId,
-      pageContentId,
     },
   });
   const [downloadUrl, setDownloadUrl] = useState<string | undefined>();
 
-  const onUploadComplete = (res: FileResponse) => {
+  const onUploadComplete = async (res: FileResponse) => {
     props.updateAttributes({
       fileId: res.fileCreate.file.uuid,
     });

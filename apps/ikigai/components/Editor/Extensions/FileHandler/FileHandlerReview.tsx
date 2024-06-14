@@ -6,11 +6,10 @@ import { FileIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@apollo/client";
 import Image from "next/image";
 import styled from "styled-components";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import ReactPlayer from "react-player";
 
 import { GET_DOWNLOAD_URL_BY_PAGE_CONTENT_ID } from "graphql/query";
-import { handleError } from "graphql/ApolloClient";
 import { isSupportedImage, isSupportedVideo } from "util/FileUtil";
 
 const KB = 1024;
@@ -39,17 +38,33 @@ const FileHandlerReview = ({
   pageContentId,
   downloadUrl,
 }: FileHandlerReviewProps) => {
-  const { data } = useQuery<GetDownloadUrl>(
+  const retries = useRef(0);
+  const { data, error, refetch } = useQuery<GetDownloadUrl>(
     GET_DOWNLOAD_URL_BY_PAGE_CONTENT_ID,
     {
       skip: !!downloadUrl,
-      onError: handleError,
       variables: {
         fileId: file.getFile.uuid,
         pageContentId,
       },
     },
   );
+
+  useEffect(() => {
+    let timeoutHandler: NodeJS.Timeout | undefined;
+    if (error && retries.current < 3) {
+      timeoutHandler = setTimeout(() => {
+        refetch({
+          fileId: file.getFile.uuid,
+          pageContentId,
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (timeoutHandler) clearTimeout(timeoutHandler);
+    };
+  }, [error]);
 
   const onClick = async () => {
     if (downloadUrl) {

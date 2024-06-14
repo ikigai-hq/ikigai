@@ -4,11 +4,14 @@ import { round } from "lodash";
 import { t } from "@lingui/macro";
 import { FileIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@apollo/client";
-import { GET_DOWNLOAD_URL_BY_PAGE_CONTENT_ID } from "graphql/query";
-import { handleError } from "graphql/ApolloClient";
-import { isImage } from "util/FileUtil";
 import Image from "next/image";
 import styled from "styled-components";
+import React from "react";
+import ReactPlayer from "react-player";
+
+import { GET_DOWNLOAD_URL_BY_PAGE_CONTENT_ID } from "graphql/query";
+import { handleError } from "graphql/ApolloClient";
+import { isSupportedImage, isSupportedVideo } from "util/FileUtil";
 
 const KB = 1024;
 const MB = KB * 1024;
@@ -60,11 +63,20 @@ const FileHandlerReview = ({
     downloadUrl || data?.getFile?.downloadUrlByPageContentId;
 
   // Render Image
-  if (isImage(file.getFile.contentType) && fileDownloadUrl) {
+  if (isSupportedImage(file.getFile.contentType) && fileDownloadUrl) {
     return (
       <ImageWrapper>
         <Image src={fileDownloadUrl} layout={"fill"} alt={file.getFile.uuid} />
       </ImageWrapper>
+    );
+  }
+
+  // Render Video
+  if (isSupportedVideo(file.getFile.contentType) && fileDownloadUrl) {
+    return (
+      <div style={{ padding: "10px" }}>
+        <ReactPlayer url={fileDownloadUrl} controls={true} width="100%" />
+      </div>
     );
   }
 
@@ -83,7 +95,6 @@ const ImageWrapper = styled.div`
   width: 100%;
   min-height: 200px;
   position: relative;
-  border-radius: 4px;
   aspect-ratio: 16/9 auto;
 `;
 

@@ -1,7 +1,6 @@
 @import "@radix-ui/themes/styles.css";
 @import "./menubar.css";
 @import "./toolbar.css";
-@import "video.js/dist/video-js.css";
 
 body {
   padding: 0;
@@ -34,123 +33,26 @@ body * ::-moz-scrollbar {
 .circle-picker > span:nth-child(1) > div > span > div {
   background: black !important;
 }
-.ant-picker-calendar-mode-switch {
-  display: none;
-}
-.ant-modal-content {
-  padding: 0 !important;
-}
-.ant-modal-confirm-btns {
-  margin-top: 24px !important;
-}
+
 .custom-confirm-popup {
   max-width: 617px !important;
   width: max-content !important;
 }
-.custom-confirm-popup .ant-modal-content .ant-modal-body {
-  padding: 24px 24px 32px 24px;
-}
-@media screen and (max-width: 512px) {
-  .custom-confirm-popup .ant-modal-content .ant-modal-body {
-    padding: 16px;
-    text-align: center;
-  }
-}
-.custom-confirm-popup .ant-modal-confirm-btns {
-  padding: 0 24px;
-}
-.custom-confirm-popup .ant-modal-confirm-btns button {
-  height: auto;
-  padding: 11px 24px;
-  min-width: 173px;
-}
-@media screen and (max-width: 512px) {
-  .custom-confirm-popup {
-    width: auto !important;
-    margin: 0 20px !important;
-  }
-  .custom-confirm-popup .ant-modal-confirm-title div {
-    margin-bottom: 0;
-  }
-  .custom-confirm-popup .ant-modal-confirm-content {
-    max-width: 100% !important;
-  }
-  .custom-confirm-popup .ant-modal-confirm-btns {
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 12px;
-    padding: 0;
-  }
-  .custom-confirm-popup .ant-modal-confirm-btns button {
-    width: 100%;
-    margin: 0 !important;
-  }
-}
-.ant-menu-inline-collapsed-tooltip {
-  display: none !important;
-}
-.ant-input-group-addon {
-  border: none !important;
-}
+
 .attendance-popover {
   padding-bottom: 0px !important;
 }
-.attendance-popover .ant-popover-arrow {
-  display: none;
-}
-.attendance-popover .ant-popover-inner {
-  box-shadow: 0px 0px 20px #000000;
-  border-radius: 4px;
-}
-.attendance-popover .ant-popover-inner .ant-popover-inner-content {
-  padding: 9px 12px;
-}
-.time-picker-non-footer .ant-picker-time-panel {
-  padding-bottom: 2px;
-}
-.time-picker-non-footer .ant-picker-footer {
-  display: none;
-}
-.popover-datepicker .ant-popover-inner {
-  width: 280px;
-  height: 310px;
-  padding: 0;
-}
-.popover-datepicker .ant-picker {
-  visibility: hidden;
-  width: 0px;
-  padding: 0px;
-  height: 0px;
-  position: absolute;
-  top: -4px;
-  left: 0px;
-  border: 0px;
-}
-.popover-datepicker .ant-picker-panel-container {
-  box-shadow: none;
-}
-.popover-datepicker .ant-picker-panel-container .ant-picker-panel {
-  border-bottom: none;
-  min-height: 311px;
-}
-.popover-datepicker .ant-picker-panel-container .ant-picker-panel .ant-picker-month-panel {
-  height: 100%;
-}
-.popover-datepicker .ant-picker-content .ant-picker-body {
-  height: 100%;
-}
-.popover-datepicker .ant-picker-footer-extra {
-  text-align: right;
-  padding: 0 12px;
-}
+
 .ewa-embed-footer {
   display: none !important;
 }
+
 .dnd-sortable-tree_simple_wrapper {
   list-style: none;
   box-sizing: border-box;
   margin-bottom: -1px;
 }
+
 .dnd-sortable-tree_simple_tree-item {
   position: relative;
   display: flex;
@@ -160,11 +62,13 @@ body * ::-moz-scrollbar {
   color: #222;
   box-sizing: border-box;
 }
+
 .dnd-sortable-tree_simple_clone {
   display: inline-block;
   pointer-events: none;
   padding: 5px;
 }
+
 .dnd-sortable-tree_simple_clone > .dnd-sortable-tree_simple_tree-item {
   padding-top: 5px;
   padding-bottom: 5px;

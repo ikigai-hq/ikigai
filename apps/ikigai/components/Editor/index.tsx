@@ -83,9 +83,11 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
       },
       handleDOMEvents: {
         keydown: (_, event) => {
-          if (event.key === "s" && event.metaKey) {
-            upsert({ body: innerContent });
-            event.preventDefault();
+          if (event.key === "s") {
+            if (event.metaKey || event.ctrlKey) {
+              upsert({ body: innerContent });
+              event.preventDefault();
+            }
           }
 
           return false;

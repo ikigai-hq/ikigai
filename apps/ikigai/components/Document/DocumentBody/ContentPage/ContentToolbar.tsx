@@ -137,7 +137,7 @@ const ContentToolbar = () => {
   };
 
   return (
-    <>
+    <div style={{ height: "45px", marginLeft: "-5px" }}>
       <Toolbar.Root className="ToolbarRoot" aria-label="Formatting options">
         <Toolbar.ToggleGroup type="multiple" aria-label="Text formatting">
           <Toolbar.ToggleItem
@@ -396,7 +396,7 @@ const ContentToolbar = () => {
           </Toolbar.Button>
         </Toolbar.ToggleGroup>
       </Toolbar.Root>
-    </>
+    </div>
   );
 };
 

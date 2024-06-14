@@ -75,11 +75,6 @@ export const uploadS3 = async (
   return res.status === 204;
 };
 
-export interface FileItem {
-  fileId: string;
-  fileName?: string;
-  contentType: string;
-  publicUrl?: string;
-}
-
 export const EMPTY_UUID = "00000000-0000-0000-0000-000000000000";
+
+export const isImage = (contentType: string) => contentType.includes("image/");

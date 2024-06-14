@@ -8,7 +8,7 @@ const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
   compiler: {
-    styledComponents: true
+    styledComponents: true,
   },
   env: {
     NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV,
@@ -16,15 +16,19 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: '**.s3.amazonaws.com',
+        protocol: "https",
+        hostname: "**.s3.amazonaws.com",
       },
       {
-        protocol: 'https',
-        hostname: '**.s3.**.amazonaws.com',
-      }
+        protocol: "https",
+        hostname: "**.s3.**.amazonaws.com",
+      },
+      {
+        protocol: "https",
+        hostname: "s3.**.amazonaws.com",
+      },
     ],
-  }
+  },
 };
 
 module.exports = (_phase, { defaultConfig }) => {

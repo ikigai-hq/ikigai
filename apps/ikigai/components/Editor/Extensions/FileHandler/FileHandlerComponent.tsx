@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { UploadIcon } from "@radix-ui/react-icons";
 import { Text } from "@radix-ui/themes";
 
-import { BlockExtensionWrapper } from "components/base/ExtensionComponentUtil";
+import { ExtensionWrapper } from "components/base/ExtensionComponentUtil";
 import FileUploader from "components/base/FileUploader";
 import { useQuery } from "@apollo/client";
 import { GET_FILE } from "graphql/query";
@@ -14,6 +14,7 @@ import { EMPTY_UUID, FileResponse } from "util/FileUtil";
 import { GetFile } from "graphql/types";
 import Loading from "components/Loading";
 import FileHandlerReview from "./FileHandlerReview";
+import styled from "styled-components";
 
 const FileHandler = (props: NodeViewProps) => {
   const pageContentId =
@@ -46,17 +47,19 @@ const FileHandler = (props: NodeViewProps) => {
 
   return (
     <NodeViewWrapper className="file-handler-component">
-      <BlockExtensionWrapper $selected={props.selected}>
+      <ExtensionWrapper selected={props.selected}>
         {loading && <Loading />}
         {!data && !loading && (
-          <div>
+          <FileUploaderWrapper>
             <FileUploader onComplete={onUploadComplete}>
-              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <FileUploaderWrapper
+                style={{ display: "flex", alignItems: "center", gap: 4 }}
+              >
                 <UploadIcon />
                 <Text align="center">Click here to upload</Text>
-              </div>
+              </FileUploaderWrapper>
             </FileUploader>
-          </div>
+          </FileUploaderWrapper>
         )}
         {data && (
           <FileHandlerReview
@@ -65,9 +68,19 @@ const FileHandler = (props: NodeViewProps) => {
             file={data}
           />
         )}
-      </BlockExtensionWrapper>
+      </ExtensionWrapper>
     </NodeViewWrapper>
   );
 };
+
+const FileUploaderWrapper = styled.div`
+  background-color: var(--indigo-3);
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  cursor: pointer;
+`;
 
 export default FileHandler;

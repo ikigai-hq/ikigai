@@ -3,9 +3,11 @@ import { Text } from "@radix-ui/themes";
 import { round } from "lodash";
 import { t } from "@lingui/macro";
 import { FileIcon } from "@radix-ui/react-icons";
-import { useLazyQuery } from "@apollo/client";
-import { GET_DOWNLOAD_URL_BY_PAGE_CONTENT_ID } from "../../../../graphql/query";
-import { handleError } from "../../../../graphql/ApolloClient";
+import { useQuery } from "@apollo/client";
+import { GET_DOWNLOAD_URL_BY_PAGE_CONTENT_ID } from "graphql/query";
+import { handleError } from "graphql/ApolloClient";
+import { isImage } from "util/FileUtil";
+import Image from "next/image";
 
 const KB = 1024;
 const MB = KB * 1024;
@@ -33,32 +35,53 @@ const FileHandlerReview = ({
   pageContentId,
   downloadUrl,
 }: FileHandlerReviewProps) => {
-  const [getDownloadUrl] = useLazyQuery<GetDownloadUrl>(
+  const { data } = useQuery<GetDownloadUrl>(
     GET_DOWNLOAD_URL_BY_PAGE_CONTENT_ID,
     {
+      skip: !!downloadUrl,
       onError: handleError,
+      variables: {
+        fileId: file.getFile.uuid,
+        pageContentId,
+      },
     },
   );
+
   const onClick = async () => {
     if (downloadUrl) {
       window.open(downloadUrl);
-    } else {
-      const { data } = await getDownloadUrl({
-        variables: {
-          fileId: file.getFile.uuid,
-          pageContentId,
-        },
-      });
-
-      if (data) {
-        window.open(data.getFile.downloadUrlByPageContentId, "_blank");
-      }
+    } else if (data) {
+      window.open(data.getFile.downloadUrlByPageContentId, "_blank");
     }
   };
 
+  const fileDownloadUrl =
+    downloadUrl || data?.getFile?.downloadUrlByPageContentId;
+  if (isImage(file.getFile.contentType) && fileDownloadUrl) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          minHeight: "300px",
+          position: "relative",
+          borderRadius: 4,
+          aspectRatio: "4/3",
+        }}
+      >
+        <Image src={fileDownloadUrl} layout={"fill"} alt={file.getFile.uuid} />
+      </div>
+    );
+  }
+
   return (
     <div
-      style={{ display: "flex", gap: 4, alignItems: "center" }}
+      style={{
+        display: "flex",
+        gap: 4,
+        alignItems: "center",
+        padding: 5,
+        backgroundColor: "var(--indigo-3)",
+      }}
       onDoubleClick={onClick}
     >
       <FileIcon />

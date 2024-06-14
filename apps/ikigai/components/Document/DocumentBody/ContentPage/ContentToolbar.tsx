@@ -7,7 +7,7 @@ import {
   IconBlockquote,
   IconBold,
   IconCode,
-  IconFilePlus,
+  IconFileUpload,
   IconH1,
   IconH2,
   IconH3,
@@ -392,7 +392,7 @@ const ContentToolbar = () => {
             aria-label="FileHandler"
             onClick={onInsertFileHandler}
           >
-            <IconFilePlus size={20} stroke={2} />
+            <IconFileUpload size={20} stroke={2} />
           </Toolbar.ToggleItem>
         </Toolbar.ToggleGroup>
       </Toolbar.Root>

@@ -8,6 +8,7 @@ import { GET_DOWNLOAD_URL_BY_PAGE_CONTENT_ID } from "graphql/query";
 import { handleError } from "graphql/ApolloClient";
 import { isImage } from "util/FileUtil";
 import Image from "next/image";
+import styled from "styled-components";
 
 const KB = 1024;
 const MB = KB * 1024;
@@ -57,40 +58,41 @@ const FileHandlerReview = ({
 
   const fileDownloadUrl =
     downloadUrl || data?.getFile?.downloadUrlByPageContentId;
+
+  // Render Image
   if (isImage(file.getFile.contentType) && fileDownloadUrl) {
     return (
-      <div
-        style={{
-          width: "100%",
-          minHeight: "300px",
-          position: "relative",
-          borderRadius: 4,
-          aspectRatio: "4/3",
-        }}
-      >
+      <ImageWrapper>
         <Image src={fileDownloadUrl} layout={"fill"} alt={file.getFile.uuid} />
-      </div>
+      </ImageWrapper>
     );
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: 4,
-        alignItems: "center",
-        padding: 5,
-        backgroundColor: "var(--indigo-3)",
-      }}
-      onDoubleClick={onClick}
-    >
+    <NonSupportWrapper onDoubleClick={onClick}>
       <FileIcon />
       <Text weight="medium">{file.getFile.fileName}</Text>
       <Text size="1" color="gray">
         {formatContentLength(file.getFile.contentLength)}
       </Text>
-    </div>
+    </NonSupportWrapper>
   );
 };
+
+const ImageWrapper = styled.div`
+  width: 100%;
+  min-height: 200px;
+  position: relative;
+  border-radius: 4px;
+  aspect-ratio: 16/9 auto;
+`;
+
+const NonSupportWrapper = styled.div`
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 5px;
+  background-color: var(--indigo-3);
+`;
 
 export default FileHandlerReview;

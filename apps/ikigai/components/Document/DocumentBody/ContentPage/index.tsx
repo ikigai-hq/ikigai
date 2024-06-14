@@ -42,43 +42,58 @@ const ContentPage = ({ page }: ContentPageProps) => {
   }, [debouncedTitle]);
 
   return (
-    <div>
+    <ContentPageWrapper>
       <ContentToolbar />
       <Separator style={{ width: "100%" }} />
-      <div style={{ padding: "10px 15px" }}>
-        <PageTitle
-          maxLength={255}
-          placeholder={t`Type page name...`}
-          value={title}
-          onChange={(e) => setTitle(e.currentTarget.value)}
-          readOnly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
-        />
+      <div style={{ height: "100%" }}>
+        <div style={{ padding: "10px 15px" }}>
+          <PageTitle
+            maxLength={255}
+            placeholder={t`Type page name...`}
+            value={title}
+            onChange={(e) => setTitle(e.currentTarget.value)}
+            readOnly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
+          />
+        </div>
+        <div style={{ width: getBodyWidth(uiConfig), height: "100%" }}>
+          <PanelGroup direction="horizontal">
+            {pageContents.map((pageContent, index) => (
+              <>
+                <Panel key={pageContent.id} minSize={30}>
+                  <EditorWrapper>
+                    <Editor
+                      readOnly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
+                      pageContent={pageContent}
+                    />
+                  </EditorWrapper>
+                </Panel>
+                {index !== pageContents.length - 1 && (
+                  <PanelResizeHandle
+                    style={{
+                      width: "1px",
+                      backgroundColor: "var(--gray-4)",
+                    }}
+                  />
+                )}
+              </>
+            ))}
+          </PanelGroup>
+        </div>
       </div>
-      <div style={{ width: getBodyWidth(uiConfig) }}>
-        <PanelGroup direction="horizontal">
-          {pageContents.map((pageContent, index) => (
-            <>
-              <Panel key={pageContent.id} minSize={30}>
-                <Editor
-                  readOnly={!allow(DocumentActionPermission.EDIT_DOCUMENT)}
-                  pageContent={pageContent}
-                />
-              </Panel>
-              {index !== pageContents.length - 1 && (
-                <PanelResizeHandle
-                  style={{
-                    width: "1px",
-                    backgroundColor: "var(--gray-4)",
-                  }}
-                />
-              )}
-            </>
-          ))}
-        </PanelGroup>
-      </div>
-    </div>
+    </ContentPageWrapper>
   );
 };
+
+const ContentPageWrapper = styled.div`
+  height: 100%;
+  overflow: hidden;
+`;
+
+const EditorWrapper = styled.div`
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+`;
 
 export const PageTitle = styled.input`
   &&& {

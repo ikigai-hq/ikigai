@@ -63,7 +63,7 @@ const Body = styled.div<{
 const BodyContent = styled.div`
   // 100 Height - Header - Bottom
   height: calc(100vh - 51px - 50px);
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
 `;
 

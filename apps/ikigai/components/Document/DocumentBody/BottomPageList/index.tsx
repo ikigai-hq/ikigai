@@ -1,4 +1,4 @@
-import { DropdownMenu, IconButton, ScrollArea } from "@radix-ui/themes";
+import { Button, DropdownMenu, IconButton, ScrollArea } from "@radix-ui/themes";
 import styled from "styled-components";
 import { useMutation } from "@apollo/client";
 import { v4 } from "uuid";
@@ -65,6 +65,16 @@ const BottomPageList = () => {
 
   return (
     <PagesListContainer>
+      <ScrollArea scrollbars="horizontal">
+        <div style={{ display: "flex", gap: 5, padding: 5 }}>
+          <PageItem />
+          {pages
+            .sort((a, b) => a.index - b.index)
+            .map((page, index) => (
+              <PageItem index={index + 1} page={page} key={page.id} />
+            ))}
+        </div>
+      </ScrollArea>
       {allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
         <div
           style={{
@@ -87,27 +97,17 @@ const BottomPageList = () => {
               </>
             }
           >
-            <IconButton
+            <Button
               variant="soft"
               disabled={loading}
               loading={loading}
               size="1"
             >
-              <PlusIcon />
-            </IconButton>
+              <PlusIcon /> Page
+            </Button>
           </Dropdown>
         </div>
       )}
-      <ScrollArea scrollbars="horizontal">
-        <div style={{ display: "flex", gap: 5, padding: 5 }}>
-          <PageItem />
-          {pages
-            .sort((a, b) => a.index - b.index)
-            .map((page, index) => (
-              <PageItem index={index + 1} page={page} key={page.id} />
-            ))}
-        </div>
-      </ScrollArea>
     </PagesListContainer>
   );
 };

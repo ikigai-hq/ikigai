@@ -19,7 +19,7 @@ type IUIStore = {
 
 const useUIStore = create<IUIStore>((set, get) => ({
   config: {
-    leftSidebar: LeftSideBarOptions.Content,
+    leftSidebar: LeftSideBarOptions.None,
   },
   setConfig: (config) => {
     const currentConfig = get().config;
@@ -33,7 +33,7 @@ const useUIStore = create<IUIStore>((set, get) => ({
 }));
 
 export const NORMAL_UI_CONFIG: UIConfig = {
-  leftSidebar: LeftSideBarOptions.Content,
+  leftSidebar: LeftSideBarOptions.None,
 };
 
 export const SUBMISSION_UI_CONFIG: UIConfig = {

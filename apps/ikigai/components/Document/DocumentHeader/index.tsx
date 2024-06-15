@@ -66,24 +66,6 @@ const DocumentHeader = () => {
   );
 };
 
-export const PageTitle = styled.input`
-  &&& {
-    font-size: 20px;
-    font-weight: 700;
-    padding-left: 0;
-    overflow: hidden;
-    line-height: normal;
-    border: none;
-    width: 100%;
-
-    &:focus {
-      outline: none !important;
-      box-shadow: none !important;
-      border-color: transparent !important;
-    }
-  }
-`;
-
 export const DocumentHeaderWrapper = styled.div`
   display: flex;
   justify-content: space-between;

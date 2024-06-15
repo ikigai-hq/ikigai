@@ -6,14 +6,6 @@ import usePermission from "hook/UsePermission";
 import Editor from "components/Editor";
 import { IPage } from "store/PageStore";
 import usePageContentStore from "store/PageContentStore";
-import useUIStore, { LeftSideBarOptions, UIConfig } from "store/UIStore";
-
-const getBodyWidth = (uiConfig: UIConfig) => {
-  let bodyWidth = "100vw - 305px";
-  // If left sidebar is not visible -> the side should be increase 256px
-  if (uiConfig.leftSidebar === LeftSideBarOptions.None) bodyWidth += " + 250px";
-  return `calc(${bodyWidth})`;
-};
 
 export type ContentPageProps = {
   page: IPage;
@@ -21,14 +13,13 @@ export type ContentPageProps = {
 
 const ContentPage = ({ page }: ContentPageProps) => {
   const allow = usePermission();
-  const uiConfig = useUIStore((state) => state.config);
   const pageContents = usePageContentStore((state) =>
     state.pageContents.filter((content) => content.pageId === page.id),
   ).sort((a, b) => a.index - b.index);
 
   return (
     <ContentPageWrapper>
-      <div style={{ width: getBodyWidth(uiConfig), height: "100%" }}>
+      <div style={{ width: "calc(100vw - 51px)", height: "100%" }}>
         <PanelGroup direction="horizontal">
           {pageContents.map((pageContent, index) => (
             <>

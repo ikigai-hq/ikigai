@@ -420,45 +420,6 @@ export interface FileCreateVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: FileCreateRecording
-// ====================================================
-
-export interface FileCreateRecording_fileCreateRecording_file {
-  uuid: any;
-  userId: number;
-  fileName: string;
-  contentType: string;
-  contentLength: number;
-  updatedAt: number;
-  createdAt: number;
-  public: boolean;
-  publicUrl: string | null;
-}
-
-export interface FileCreateRecording_fileCreateRecording_uploadInfo {
-  fields: any;
-  uploadUrl: string;
-}
-
-export interface FileCreateRecording_fileCreateRecording {
-  file: FileCreateRecording_fileCreateRecording_file;
-  uploadInfo: FileCreateRecording_fileCreateRecording_uploadInfo;
-}
-
-export interface FileCreateRecording {
-  fileCreateRecording: FileCreateRecording_fileCreateRecording;
-}
-
-export interface FileCreateRecordingVariables {
-  data: CreateFileData;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL mutation operation: FileCheck
 // ====================================================
 
@@ -869,7 +830,6 @@ export interface GetDocument_documentGet_assignment {
   testDuration: number | null;
   bandScoreId: number | null;
   gradeMethod: GradeMethod;
-  forceAutoSubmit: boolean;
   gradeByRubricId: any | null;
 }
 
@@ -897,6 +857,7 @@ export interface GetDocument_documentGet_submission {
   feedbackAt: number | null;
   feedback: string | null;
   finalGrade: number | null;
+  testDuration: number | null;
   user: GetDocument_documentGet_submission_user;
   assignment: GetDocument_documentGet_submission_assignment;
 }
@@ -1502,7 +1463,6 @@ export interface UpdateAssignmentData {
   testDuration?: number | null;
   bandScoreId?: number | null;
   gradeMethod: GradeMethod;
-  forceAutoSubmit: boolean;
   gradeByRubricId?: any | null;
 }
 

@@ -36,7 +36,6 @@ pub struct NewAssignment {
     pub test_duration: Option<i32>,
     pub band_score_id: Option<i32>,
     pub grade_method: GradeMethod,
-    pub force_auto_submit: bool,
     pub grade_by_rubric_id: Option<Uuid>,
 }
 
@@ -51,7 +50,6 @@ impl From<Assignment> for NewAssignment {
             test_duration: assignment.test_duration,
             band_score_id: assignment.band_score_id,
             grade_method: assignment.grade_method,
-            force_auto_submit: assignment.force_auto_submit,
             grade_by_rubric_id: assignment.grade_by_rubric_id,
         }
     }
@@ -79,7 +77,6 @@ pub struct UpdateAssignmentData {
     pub test_duration: Option<i32>,
     pub band_score_id: Option<i32>,
     pub grade_method: GradeMethod,
-    pub force_auto_submit: bool,
     pub grade_by_rubric_id: Option<Uuid>,
     #[graphql(skip)]
     pub updated_at: i64,
@@ -97,7 +94,6 @@ pub struct Assignment {
     pub test_duration: Option<i32>,
     pub band_score_id: Option<i32>,
     pub grade_method: GradeMethod,
-    pub force_auto_submit: bool,
     pub grade_by_rubric_id: Option<Uuid>,
 }
 

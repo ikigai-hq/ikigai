@@ -23,7 +23,6 @@ export const GET_DOCUMENT = gql`
         testDuration
         bandScoreId
         gradeMethod
-        forceAutoSubmit
         gradeByRubricId
       }
       submission {
@@ -34,6 +33,7 @@ export const GET_DOCUMENT = gql`
         feedbackAt
         feedback
         finalGrade
+        testDuration
         user {
           id
           name

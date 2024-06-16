@@ -57,9 +57,11 @@ const DocumentHeader = () => {
         {activeDocument?.documentType === DocumentType.ASSIGNMENT && (
           <AssignmentHeader />
         )}
-        <div style={{ display: "flex" }}>
-          <SubmissionHeader />
-        </div>
+        {activeDocument?.documentType === DocumentType.SUBMISSION && (
+          <div style={{ display: "flex" }}>
+            <SubmissionHeader />
+          </div>
+        )}
       </DocumentHeaderWrapper>
       <Separator style={{ width: "100%" }} />
     </div>

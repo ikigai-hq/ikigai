@@ -17,6 +17,7 @@ diesel::table! {
         allow_for_student_view_answer -> Bool,
         submit_at -> Nullable<Int8>,
         allow_rework -> Bool,
+        test_duration -> Nullable<Int4>,
     }
 }
 
@@ -31,7 +32,6 @@ diesel::table! {
         test_duration -> Nullable<Int4>,
         band_score_id -> Nullable<Int4>,
         grade_method -> Int4,
-        force_auto_submit -> Bool,
         grade_by_rubric_id -> Nullable<Uuid>,
     }
 }

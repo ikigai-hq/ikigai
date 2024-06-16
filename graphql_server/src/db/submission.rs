@@ -19,6 +19,7 @@ pub struct NewSubmission {
     pub attempt_number: i32,
     pub allow_rework: bool,
     pub submit_at: Option<i64>,
+    pub test_duration: Option<i32>,
 }
 
 impl From<Submission> for NewSubmission {
@@ -35,6 +36,7 @@ impl From<Submission> for NewSubmission {
             attempt_number: value.attempt_number,
             allow_rework: value.allow_rework,
             submit_at: value.submit_at,
+            test_duration: value.test_duration,
         }
     }
 }
@@ -51,6 +53,7 @@ impl NewSubmission {
         document_id: Uuid,
         attempt_number: i32,
         allow_rework: bool,
+        test_duration: Option<i32>,
     ) -> Self {
         Self {
             assignment_id,
@@ -64,6 +67,7 @@ impl NewSubmission {
             created_at: get_now_as_secs(),
             attempt_number,
             allow_rework,
+            test_duration,
         }
     }
 }
@@ -109,6 +113,7 @@ pub struct Submission {
     pub allow_for_student_view_answer: bool,
     pub submit_at: Option<i64>,
     pub allow_rework: bool,
+    pub test_duration: Option<i32>,
 }
 
 impl Submission {

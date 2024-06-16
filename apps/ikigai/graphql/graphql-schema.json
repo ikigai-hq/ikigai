@@ -859,6 +859,18 @@
             "deprecationReason": null
           },
           {
+            "name": "testDuration",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "status",
             "description": null,
             "args": [],
@@ -1570,22 +1582,6 @@
               "ofType": {
                 "kind": "ENUM",
                 "name": "GradeMethod",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "forceAutoSubmit",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
                 "ofType": null
               }
             },
@@ -5258,20 +5254,6 @@
               "ofType": {
                 "kind": "ENUM",
                 "name": "GradeMethod",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "forceAutoSubmit",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
                 "ofType": null
               }
             },

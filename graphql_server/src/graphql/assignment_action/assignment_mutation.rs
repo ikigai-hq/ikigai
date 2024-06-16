@@ -138,6 +138,7 @@ impl AssignmentMutation {
                     document.id,
                     last_submission.map_or_else(|| 1, |s| s.attempt_number + 1),
                     assignment.test_duration.is_none(),
+                    assignment.test_duration,
                 );
                 let submission = Submission::insert(conn, new_submission)?;
 
@@ -147,17 +148,15 @@ impl AssignmentMutation {
             })
             .format_err()?;
 
-        if assignment.force_auto_submit {
-            if let Some(close_in) = assignment.test_duration {
-                let message = CompleteSubmission {
-                    attempt_number: submission.attempt_number,
-                    submission_id: submission.id,
-                };
-                let job = JobBuilder::new(message)
-                    .set_schedule_at(get_date_from_ts(get_now_as_secs() + close_in as i64))
-                    .build();
-                AJ::add_job(job);
-            }
+        if let Some(close_in) = submission.test_duration {
+            let message = CompleteSubmission {
+                attempt_number: submission.attempt_number,
+                submission_id: submission.id,
+            };
+            let job = JobBuilder::new(message)
+                .set_schedule_at(get_date_from_ts(get_now_as_secs() + close_in as i64))
+                .build();
+            AJ::add_job(job);
         }
 
         Ok(submission)

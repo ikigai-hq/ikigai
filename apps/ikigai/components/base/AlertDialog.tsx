@@ -40,6 +40,7 @@ export type IkigaiAlertDialogProps = {
   confirmText?: string;
   confirmColor?: BaseColors;
   children?: React.ReactNode;
+  showCancel?: boolean;
 };
 
 const IkigaiAlertDialog = ({
@@ -55,6 +56,7 @@ const IkigaiAlertDialog = ({
   confirmColor = "red",
   open,
   onOpenChanged,
+  showCancel = true,
 }: IkigaiAlertDialogProps) => {
   return (
     <AlertDialog.Root open={open} onOpenChange={onOpenChanged}>
@@ -66,11 +68,13 @@ const IkigaiAlertDialog = ({
         </AlertDialog.Description>
 
         <Flex gap="3" mt="4" justify="end">
-          <AlertDialog.Cancel>
-            <Button variant="soft" color="gray">
-              <Trans>Cancel</Trans>
-            </Button>
-          </AlertDialog.Cancel>
+          {showCancel && (
+            <AlertDialog.Cancel>
+              <Button variant="soft" color="gray">
+                <Trans>Cancel</Trans>
+              </Button>
+            </AlertDialog.Cancel>
+          )}
           <AlertDialog.Action onClick={onConfirm}>
             <Button variant="solid" color={confirmColor}>
               {confirmText}

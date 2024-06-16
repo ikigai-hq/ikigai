@@ -20,7 +20,6 @@ const GeneralInformation = () => {
   );
   const [innerAssignment, setInnerAssignment] = useState<UpdateAssignmentData>({
     bandScoreId: assignment.bandScoreId,
-    forceAutoSubmit: assignment.forceAutoSubmit,
     gradeByRubricId: assignment.gradeByRubricId,
     gradeMethod: assignment.gradeMethod,
     maxNumberOfAttempt: assignment.maxNumberOfAttempt,

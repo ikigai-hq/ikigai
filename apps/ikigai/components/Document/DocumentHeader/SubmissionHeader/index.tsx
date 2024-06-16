@@ -3,6 +3,9 @@ import toast from "react-hot-toast";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { Button } from "@radix-ui/themes";
+import { ExitIcon } from "@radix-ui/react-icons";
+import { useTimer } from "react-timer-hook";
+import styled from "styled-components";
 
 import { formatDocumentRoute } from "config/Routes";
 import { Role, StudentSubmitSubmission } from "graphql/types";
@@ -11,9 +14,9 @@ import { handleError } from "graphql/ApolloClient";
 import useDocumentStore from "store/DocumentStore";
 import useAuthUserStore from "store/AuthStore";
 import HeaderSubmissionUserInfo from "./HeaderSubmissionUserInfo";
-import styled from "styled-components";
 import Modal from "components/base/Modal";
-import { ExitIcon } from "@radix-ui/react-icons";
+import { convertTsToDate } from "util/Time";
+import AlertDialog from "components/base/AlertDialog";
 
 const SubmissionHeader = () => {
   const role = useAuthUserStore((state) => state.role);
@@ -63,8 +66,8 @@ export const TeacherSubmissionHeader = () => {
 
 export const StudentDoingSubmissionHeader = () => {
   const router = useRouter();
-  const submissionId = useDocumentStore(
-    (state) => state.activeDocument?.submission?.id,
+  const submission = useDocumentStore(
+    (state) => state.activeDocument?.submission,
   );
   const assignmentDocumentId = useDocumentStore(
     (state) => state.activeDocument?.submission?.assignment?.documentId,
@@ -79,7 +82,7 @@ export const StudentDoingSubmissionHeader = () => {
   const onClickSubmit = async () => {
     const { data } = await submitSubmission({
       variables: {
-        submissionId,
+        submissionId: submission?.id,
       },
     });
     if (data) {
@@ -95,6 +98,13 @@ export const StudentDoingSubmissionHeader = () => {
   return (
     <HeaderSubmissionWrapper>
       <HeaderSubmissionUserInfo />
+      {submission?.testDuration && (
+        <TestDurationCountdown
+          startAt={submission.startAt}
+          testDuration={submission.testDuration}
+          onTestComplete={onClickSaveAndExit}
+        />
+      )}
       <Button
         variant="outline"
         onClick={onClickSaveAndExit}
@@ -104,7 +114,7 @@ export const StudentDoingSubmissionHeader = () => {
       </Button>
       <Modal
         title={t`Do you want to submit your submission?`}
-        description={t`You cannot revert this action.`}
+        description={t`You cannot continue edit your submission after you submit.`}
         content={<></>}
         onOk={onClickSubmit}
         okText={t`Submit`}
@@ -114,6 +124,41 @@ export const StudentDoingSubmissionHeader = () => {
         </Button>
       </Modal>
     </HeaderSubmissionWrapper>
+  );
+};
+
+export type TestDurationCountdownProps = {
+  startAt: number;
+  testDuration: number;
+  onTestComplete: () => void;
+};
+
+const TestDurationCountdown = ({
+  testDuration,
+  startAt,
+  onTestComplete,
+}: TestDurationCountdownProps) => {
+  const { seconds, hours, minutes, days, isRunning } = useTimer({
+    expiryTimestamp: convertTsToDate(startAt + testDuration).toDate(),
+  });
+
+  const finalMinutes = hours * 60 + days * 24 * 60 + minutes;
+
+  return (
+    <AlertDialog
+      title={t`The test duration is complete!`}
+      description={t`We will move you back to assignment page!`}
+      onConfirm={onTestComplete}
+      open={!isRunning}
+      showCancel={false}
+      confirmColor="indigo"
+      confirmText={t`Submit`}
+    >
+      <Button variant="soft">
+        {finalMinutes > 9 ? finalMinutes : `0${finalMinutes}`}:
+        {seconds > 9 ? seconds : `0${seconds}`}
+      </Button>
+    </AlertDialog>
   );
 };
 

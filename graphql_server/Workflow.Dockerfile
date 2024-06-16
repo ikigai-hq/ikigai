@@ -1,4 +1,4 @@
-FROM ghcr.io/ikigai-hq/ikigai:build-base
+FROM ghcr.io/ikigai-hq/ikigai-base:build-base
 
 WORKDIR /app
 

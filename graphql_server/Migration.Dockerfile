@@ -1,4 +1,4 @@
-FROM ghcr.io/ikigai-hq/ikigai:build-base
+FROM ghcr.io/ikigai-hq/ikigai-base:build-base
 
 RUN apt-get update && apt-get -y upgrade && \
     apt-get -y install libpq-dev openssl ca-certificates libssl-dev

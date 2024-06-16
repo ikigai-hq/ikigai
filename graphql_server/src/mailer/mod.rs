@@ -116,10 +116,17 @@ impl Mailer {
         Self::send_email(SmtpServerInfo::init(), to, &subject, &body_html)
     }
 
-    pub fn send_magic_link_email(to_email: &str, magic_link: String) -> Result<(), IkigaiError> {
+    pub fn send_magic_link_email(
+        to_email: &str,
+        space_name: String,
+        magic_link: String,
+    ) -> Result<(), IkigaiError> {
         let to = format!("<{to_email}>").parse()?;
         let subject = "Magic link to access your space in ikigai".to_string();
-        let body_html = Template::render_magic_link(MagicLinkContext { magic_link })?;
+        let body_html = Template::render_magic_link(MagicLinkContext {
+            magic_link,
+            space_name,
+        })?;
         Self::send_email(SmtpServerInfo::init(), to, &subject, &body_html)
     }
 }

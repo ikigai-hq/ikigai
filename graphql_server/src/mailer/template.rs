@@ -32,6 +32,7 @@ pub struct NotificationMailContext {
 #[derive(Serialize)]
 pub struct MagicLinkContext {
     pub magic_link: String,
+    pub space_name: String,
 }
 
 const NOTIFICATION: &str = "notification.html";

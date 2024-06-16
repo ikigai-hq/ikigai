@@ -31,28 +31,31 @@ impl UserMutation {
     ) -> Result<bool> {
         let mut conn = get_conn_from_ctx(ctx).await?;
         let user = User::find_by_email_opt(&mut conn, &email).format_err()?;
-        let (user, document) = match user {
+        let (user, document, space) = match user {
             Some(user) => {
                 let space_members = SpaceMember::find_all_by_user(&mut conn, user.id)?;
-                let document = if let Some(space_member) = space_members.first() {
+                let (document, space) = if let Some(space_member) = space_members.first() {
                     let space = Space::find_by_id(&mut conn, space_member.space_id).format_err()?;
-                    Document::get_or_create_starter_doc(
-                        &mut conn,
-                        space.creator_id,
-                        space_member.space_id,
+                    (
+                        Document::get_or_create_starter_doc(
+                            &mut conn,
+                            space.creator_id,
+                            space_member.space_id,
+                        )
+                        .format_err()?,
+                        space,
                     )
-                    .format_err()?
                 } else {
                     conn.transaction::<_, IkigaiError, _>(|conn| {
                         let space = create_default_space(conn, user.id)?;
                         let document =
                             Document::get_or_create_starter_doc(conn, user.id, space.id)?;
-                        Ok(document)
+                        Ok((document, space))
                     })
                     .format_err()?
                 };
 
-                (user, document)
+                (user, document, space)
             }
             None => {
                 // Create user, org, and space
@@ -62,13 +65,13 @@ impl UserMutation {
                     let space = create_default_space(conn, user.id)?;
                     let document = Document::get_or_create_starter_doc(conn, user.id, space.id)?;
 
-                    Ok((user, document))
+                    Ok((user, document, space))
                 })
                 .format_err()?
             }
         };
 
-        send_space_magic_link(&user, document.id)
+        send_space_magic_link(&user, &space, document.id)
     }
 
     async fn user_check_magic_link(

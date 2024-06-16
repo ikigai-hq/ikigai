@@ -118,9 +118,10 @@ pub fn generate_magic_link(user_id: i32, document_id: Uuid) -> Result<String, Ik
     Ok(format_magic_link(document_id, &otp, user_id))
 }
 
-pub fn send_space_magic_link(user: &User, document_id: Uuid) -> Result<bool> {
+pub fn send_space_magic_link(user: &User, space: &Space, document_id: Uuid) -> Result<bool> {
     let magic_link = generate_magic_link(user.id, document_id).format_err()?;
-    if let Err(reason) = Mailer::send_magic_link_email(&user.email, magic_link) {
+    if let Err(reason) = Mailer::send_magic_link_email(&user.email, space.name.clone(), magic_link)
+    {
         error!("Cannot send magic link to {}: {:?}", user.email, reason);
         Ok(false)
     } else {

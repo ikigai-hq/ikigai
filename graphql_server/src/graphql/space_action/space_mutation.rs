@@ -209,7 +209,7 @@ impl SpaceMutation {
         let starter_document =
             Document::get_or_create_starter_doc(&mut conn, space_member.user_id, space_id)
                 .format_err()?;
-        let res = send_space_magic_link(&user, starter_document.id);
+        let res = send_space_magic_link(&user, &space, starter_document.id);
 
         // Notify space owner
         if is_new_space_member {

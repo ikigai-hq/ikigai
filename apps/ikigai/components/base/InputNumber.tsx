@@ -28,7 +28,6 @@ const InputNumber = ({
     try {
       if (e.currentTarget.value !== "") {
         let value = parseFloat(e.currentTarget.value.trim());
-        console.log("Hello", value);
         if (precision !== undefined) {
           value = round(value, precision);
         }

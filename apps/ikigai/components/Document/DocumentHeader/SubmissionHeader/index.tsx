@@ -13,6 +13,7 @@ import useAuthUserStore from "store/AuthStore";
 import HeaderSubmissionUserInfo from "./HeaderSubmissionUserInfo";
 import styled from "styled-components";
 import Modal from "components/base/Modal";
+import { ExitIcon } from "@radix-ui/react-icons";
 
 const SubmissionHeader = () => {
   const role = useAuthUserStore((state) => state.role);
@@ -41,9 +42,21 @@ export const StudentSubmissionHeader = () => {
 };
 
 export const TeacherSubmissionHeader = () => {
+  const router = useRouter();
+  const submission = useDocumentStore(
+    (state) => state.activeDocument?.submission,
+  );
+
+  const backToAssignment = () => {
+    router.push(formatDocumentRoute(submission.assignment.documentId));
+  };
+
   return (
     <HeaderSubmissionWrapper>
       <HeaderSubmissionUserInfo />
+      <Button variant="soft" onClick={backToAssignment}>
+        <ExitIcon /> <Trans>Exit</Trans>
+      </Button>
     </HeaderSubmissionWrapper>
   );
 };
@@ -105,9 +118,20 @@ export const StudentDoingSubmissionHeader = () => {
 };
 
 const StudentNonDoingSubmissionHeader = () => {
+  const router = useRouter();
+  const submission = useDocumentStore(
+    (state) => state.activeDocument?.submission,
+  );
+
+  const backToAssignment = () => {
+    router.push(formatDocumentRoute(submission.assignment.documentId));
+  };
   return (
     <HeaderSubmissionWrapper>
       <HeaderSubmissionUserInfo />
+      <Button variant="soft" onClick={backToAssignment}>
+        <ExitIcon /> <Trans>Exit</Trans>
+      </Button>
     </HeaderSubmissionWrapper>
   );
 };

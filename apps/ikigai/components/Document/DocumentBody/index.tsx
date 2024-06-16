@@ -18,7 +18,7 @@ export type DocumentBodyProps = {
 
 const DocumentBody = ({ loading }: DocumentBodyProps) => {
   const allow = usePermission();
-  const isFocus = useUIStore((state) => state.config.focusMode);
+  const hideHeader = useUIStore((state) => state.config.hideHeader);
   const isFolder = useDocumentStore((state) => state.isFolder);
   const activePageId = usePageStore((state) => state.activePageId);
   const page = usePageStore((state) =>
@@ -33,7 +33,7 @@ const DocumentBody = ({ loading }: DocumentBodyProps) => {
   let editorReducedHeight = 0;
   if (showBottomPage) editorReducedHeight += 45;
   if (showContentToolbar) editorReducedHeight += 46;
-  if (!isFocus) editorReducedHeight += 50;
+  if (!hideHeader) editorReducedHeight += 50;
 
   return (
     <Container>

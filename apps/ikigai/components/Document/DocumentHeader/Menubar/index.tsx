@@ -104,7 +104,8 @@ const IkigaiMenubar = () => {
 
   const showMenu =
     allow(DocumentActionPermission.MANAGE_DOCUMENT) &&
-    !activeDocument?.isDefaultFolderPrivate;
+    !activeDocument?.isDefaultFolderPrivate &&
+    !uiConfig.disableHeaderMenu;
   return (
     <Menubar.Root className="MenubarRoot">
       <Menubar.Menu>
@@ -169,32 +170,37 @@ const IkigaiMenubar = () => {
         </Menubar.Portal>
       </Menubar.Menu>
 
-      <Menubar.Menu>
-        <Menubar.Trigger className="MenubarTrigger" disabled={!showMenu}>
-          <Text size="1" weight="regular" color="gray">
-            View
-          </Text>
-        </Menubar.Trigger>
-        <Menubar.Portal>
-          <Menubar.Content
-            className="MenubarContent"
-            align="start"
-            sideOffset={5}
-            alignOffset={-3}
-          >
-            <Menubar.Item
-              className="MenubarItem"
-              onClick={() => {
-                setUIConfig({ focusMode: !uiConfig.focusMode });
-              }}
+      {!uiConfig.disableHeaderMenu && (
+        <Menubar.Menu>
+          <Menubar.Trigger className="MenubarTrigger" disabled={!showMenu}>
+            <Text size="1" weight="regular" color="gray">
+              View
+            </Text>
+          </Menubar.Trigger>
+          <Menubar.Portal>
+            <Menubar.Content
+              className="MenubarContent"
+              align="start"
+              sideOffset={5}
+              alignOffset={-3}
             >
-              <Trans>
-                {uiConfig.focusMode ? "Disable" : "Enable"} focus mode
-              </Trans>
-            </Menubar.Item>
-          </Menubar.Content>
-        </Menubar.Portal>
-      </Menubar.Menu>
+              <Menubar.Item
+                className="MenubarItem"
+                onClick={() => {
+                  setUIConfig({
+                    hideLeftSide: !uiConfig.hideLeftSide,
+                    hideHeader: !uiConfig.hideHeader,
+                  });
+                }}
+              >
+                <Trans>
+                  {uiConfig.hideLeftSide ? "Disable" : "Enable"} focus mode
+                </Trans>
+              </Menubar.Item>
+            </Menubar.Content>
+          </Menubar.Portal>
+        </Menubar.Menu>
+      )}
       <AlertDialog
         title={t`Delete ${activeDocument?.title}!`}
         description={t`It will delete children files if this is folder.`}

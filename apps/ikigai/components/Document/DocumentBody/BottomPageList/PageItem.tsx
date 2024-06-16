@@ -12,6 +12,8 @@ import useUpdatePage from "hook/UseUpdatePage";
 import AlertDialog from "components/base/AlertDialog";
 import { REMOVE_PAGE } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
+import usePermission from "hook/UsePermission";
+import { DocumentActionPermission } from "graphql/types";
 
 export type PageItemProps = {
   page?: IPage;
@@ -19,6 +21,7 @@ export type PageItemProps = {
 };
 
 const PageItem = ({ page, index }: PageItemProps) => {
+  const allow = usePermission();
   const activePageId = usePageStore((state) => state.activePageId);
   const setActivePageId = usePageStore((state) => state.setActivePageId);
   const removePageInStore = usePageStore((state) => state.removePage);
@@ -71,7 +74,7 @@ const PageItem = ({ page, index }: PageItemProps) => {
             </Text>
           )}
         </div>
-        {isExpanded && (
+        {isExpanded && allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
           <>
             <Modal
               title={t`Edit Page`}

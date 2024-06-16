@@ -84,6 +84,7 @@ impl AssignmentMutation {
         assignment_id: i32,
     ) -> Result<Submission> {
         let user_id = get_user_id_from_ctx(ctx).await?;
+        let user = get_user_from_ctx(ctx).await?;
         let mut conn = get_conn_from_ctx(ctx).await?;
         let assignment = Assignment::find_by_id(&mut conn, assignment_id).format_err()?;
         document_quick_authorize(
@@ -122,7 +123,7 @@ impl AssignmentMutation {
         let submission = conn
             .transaction::<_, IkigaiError, _>(|conn| {
                 let config = DocumentCloneConfigBuilder::default()
-                    .prefix_title("")
+                    .prefix_title(format!("[{}]", user.name()))
                     .creator_id(user_id)
                     .clone_to_space(assignment_document.space_id)
                     .clone_children(false)

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { Button } from "@radix-ui/themes";
 
 import { BreakPoints } from "styles/mediaQuery";
 import DocumentBody from "./DocumentBody";
@@ -8,28 +9,27 @@ import { useLoadDocument } from "hook/UseLoadDocument";
 import DocumentHeader from "./DocumentHeader";
 import LeftSide from "./LeftSide";
 import useUIStore from "store/UIStore";
-import { Button } from "@radix-ui/themes";
 
 const Document = () => {
   const router = useRouter();
   const documentId = router.query.documentId as string;
-  const isFocusMode = useUIStore((state) => state.config.focusMode);
+  const config = useUIStore((state) => state.config);
   const setUiConfig = useUIStore((state) => state.setConfig);
 
   const onClickExitFocusMode = () => {
-    setUiConfig({ focusMode: false });
+    setUiConfig({ hideLeftSide: false, hideHeader: false });
   };
 
   const { loading } = useLoadDocument(documentId);
 
   return (
     <Container>
-      {!isFocusMode && <LeftSide />}
+      {!config.hideLeftSide && <LeftSide />}
       <DocumentBodyContainer>
-        {!isFocusMode && <DocumentHeader />}
+        {!config.hideHeader && <DocumentHeader />}
         <DocumentBody loading={loading} />
       </DocumentBodyContainer>
-      {isFocusMode && (
+      {config.hideHeader && (
         <div style={{ position: "fixed", right: 10, top: 10 }}>
           <Button size="1" variant="soft" onClick={onClickExitFocusMode}>
             Exit focus mode

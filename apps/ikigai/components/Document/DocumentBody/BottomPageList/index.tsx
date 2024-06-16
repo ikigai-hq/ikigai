@@ -1,8 +1,10 @@
-import { Button, DropdownMenu, IconButton, ScrollArea } from "@radix-ui/themes";
+import { Button, DropdownMenu, ScrollArea } from "@radix-ui/themes";
 import styled from "styled-components";
 import { useMutation } from "@apollo/client";
 import { v4 } from "uuid";
 import { PlusIcon } from "@radix-ui/react-icons";
+import React from "react";
+import { IconColumns1, IconColumns2 } from "@tabler/icons-react";
 
 import {
   AddOrUpdatePage,
@@ -18,11 +20,11 @@ import useDocumentStore from "store/DocumentStore";
 import PageItem from "./PageItem";
 import usePermission from "hook/UsePermission";
 import Dropdown from "components/base/Dropdown";
-import React from "react";
-import { IconColumns1, IconColumns2 } from "@tabler/icons-react";
+import useUIStore from "store/UIStore";
 
 const BottomPageList = () => {
   const allow = usePermission();
+  const uiConfig = useUIStore((state) => state.config);
   const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
   const pages = usePageStore((state) => state.pages);
   const addPage = usePageStore((state) => state.addPage);
@@ -67,7 +69,7 @@ const BottomPageList = () => {
     <PagesListContainer>
       <ScrollArea scrollbars="horizontal">
         <div style={{ display: "flex", gap: 5, padding: 5 }}>
-          <PageItem />
+          {uiConfig.showInformationPage && <PageItem />}
           {pages
             .sort((a, b) => a.index - b.index)
             .map((page, index) => (

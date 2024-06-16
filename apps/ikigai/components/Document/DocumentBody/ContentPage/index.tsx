@@ -23,7 +23,7 @@ const ContentPage = ({ page }: ContentPageProps) => {
     <ContentPageWrapper>
       <div
         style={{
-          width: uiConfig.focusMode ? "100vw" : "calc(100vw - 51px)",
+          width: uiConfig.hideLeftSide ? "100vw" : "calc(100vw - 51px)",
           height: "100%",
         }}
       >

@@ -48,21 +48,8 @@ allow(actor: UserAuth, "interactive_with_tool", doc: DocumentAuth) if
 	doc.creator_id = actor.id and
 	actor.role = "student";
 
-allow(actor: UserAuth, "view_page_content", doc: DocumentAuth) if
-	doc.is_submission and
-	doc.creator_id = actor.id and
-	actor.role = "student";
-
-allow(actor: UserAuth, "interactive_with_tool", doc: DocumentAuth) if
-	not doc.is_doing_submission and
-	actor.role = "teacher";
-
-allow(actor: UserAuth, "edit_document", doc: DocumentAuth) if
-	(doc.space_id = actor.space_id and doc.creator_id = actor.id) and
-    has_permission(actor, "edit_document", doc);
-
 resource DocumentAuth {
-    roles = ["reader", "writer"];
+    roles = ["reader", "reviewer", "submission_doer", "writer"];
     permissions = [
         "view_document",
         "view_page_content",
@@ -74,22 +61,35 @@ resource DocumentAuth {
 
     "view_document" if "reader";
 
-    "reader" if "writer";
-    "view_page_content" if "writer";
+    "reader" if "reviewer";
+    "view_page_content" if "reviewer";
+
+    "reviewer" if "submission_doer";
+    "edit_document" if "submission_doer";
+
+    "submission_doer" if "writer";
+    "interactive_with_tool" if "writer";
     "view_answer" if "writer";
-    "edit_document" if "writer";
     "manage_document" if "writer";
 }
 
-has_role(user: UserAuth, "writer", doc: DocumentAuth) if
-    user.space_id = doc.space_id and user.id = doc.creator_id;
+has_role(user: UserAuth, "reader", doc: DocumentAuth) if
+    doc.space_id = user.space_id and not doc.is_private;
+
+has_role(user: UserAuth, "reviewer", doc: DocumentAuth) if
+    doc.space_id = user.space_id and
+     doc.creator_id = user.id and
+     doc.is_submission;
+
+has_role(user: UserAuth, "submission_doer", doc: DocumentAuth) if
+    doc.space_id = user.space_id and
+     doc.creator_id = user.id and
+     doc.is_doing_submission;
 
 has_role(user: UserAuth, "writer", doc: DocumentAuth) if
     user.space_id = doc.space_id and
     user.role = "teacher";
 
-has_role(user: UserAuth, "reader", doc: DocumentAuth) if
-    doc.space_id = user.space_id and not doc.is_private;
 
 # RUBRIC AUTH SPACE
 allow(actor: UserAuth, action, doc: RubricAuth) if

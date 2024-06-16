@@ -1,6 +1,6 @@
 import create from "zustand";
 
-import { DocumentType } from "graphql/types";
+import { DocumentType, Role } from "graphql/types";
 import { IDocument } from "./DocumentStore";
 
 export enum LeftSideBarOptions {
@@ -10,7 +10,10 @@ export enum LeftSideBarOptions {
 
 export type UIConfig = {
   leftSidebar: LeftSideBarOptions;
-  focusMode: boolean;
+  hideLeftSide: boolean;
+  hideHeader: boolean;
+  showInformationPage: boolean;
+  disableHeaderMenu: boolean;
 };
 
 type IUIStore = {
@@ -21,7 +24,10 @@ type IUIStore = {
 const useUIStore = create<IUIStore>((set, get) => ({
   config: {
     leftSidebar: LeftSideBarOptions.None,
-    focusMode: false,
+    hideLeftSide: false,
+    hideHeader: false,
+    showInformationPage: false,
+    disableHeaderMenu: false,
   },
   setConfig: (config) => {
     const currentConfig = get().config;
@@ -36,17 +42,37 @@ const useUIStore = create<IUIStore>((set, get) => ({
 
 export const NORMAL_UI_CONFIG: UIConfig = {
   leftSidebar: LeftSideBarOptions.None,
-  focusMode: false,
+  hideLeftSide: false,
+  hideHeader: false,
+  showInformationPage: true,
+  disableHeaderMenu: false,
 };
 
 export const SUBMISSION_UI_CONFIG: UIConfig = {
   leftSidebar: LeftSideBarOptions.None,
-  focusMode: false,
+  hideLeftSide: true,
+  hideHeader: false,
+  showInformationPage: false,
+  disableHeaderMenu: true,
 };
 
-export const getUIConfig = (document: IDocument) => {
+export const TEACHER_SUBMISSION_UI_CONFIG: UIConfig = {
+  ...SUBMISSION_UI_CONFIG,
+  hideLeftSide: false,
+  hideHeader: false,
+  showInformationPage: false,
+  disableHeaderMenu: true,
+};
+
+export const getUIConfig = (document: IDocument, role: Role) => {
   const documentType = document.documentType;
-  if (documentType === DocumentType.SUBMISSION) return SUBMISSION_UI_CONFIG;
+  if (documentType === DocumentType.SUBMISSION) {
+    if (role === Role.STUDENT) {
+      return SUBMISSION_UI_CONFIG;
+    }
+
+    return TEACHER_SUBMISSION_UI_CONFIG;
+  }
 
   return NORMAL_UI_CONFIG;
 };

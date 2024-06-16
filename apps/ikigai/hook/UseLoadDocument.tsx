@@ -5,16 +5,17 @@ import { t } from "@lingui/macro";
 
 import {
   DocumentActionPermission,
+  DocumentType,
+  GetDocument,
   GetDocumentPageContents,
   GetDocuments,
-  GetDocument,
   GetPages,
   GetRubrics,
   GetSubmissionsOfAssignment,
 } from "graphql/types";
 import {
-  GET_DOCUMENT_PAGE_CONTENT,
   GET_DOCUMENT,
+  GET_DOCUMENT_PAGE_CONTENT,
   GET_PAGES,
 } from "graphql/query/DocumentQuery";
 import useDocumentStore from "store/DocumentStore";
@@ -118,12 +119,14 @@ export const useLoadDocument = (documentId: string) => {
       const spaceId = data.documentGet.spaceId;
       if (spaceId) await fetchSpaceInformation(spaceId);
       setActiveDocument(data.documentGet);
-      setActivePage(undefined);
       await Promise.all([
-        await loadAdditionalDocumentInformation(documentId),
+        await loadAdditionalDocumentInformation(
+          documentId,
+          data.documentGet.documentType,
+        ),
         await loadAssignmentInformation(data.documentGet.assignment?.id),
       ]);
-      setUIConfig(getUIConfig(data.documentGet));
+      setUIConfig(getUIConfig(data.documentGet, role));
     }
 
     if (error) {
@@ -132,13 +135,23 @@ export const useLoadDocument = (documentId: string) => {
     setLoading(false);
   };
 
-  const loadAdditionalDocumentInformation = async (documentId: string) => {
+  const loadAdditionalDocumentInformation = async (
+    documentId: string,
+    documentType: DocumentType,
+  ) => {
     const { data } = await fetchPages({
       variables: {
         documentId,
       },
     });
-    if (data) setPages(data.documentGet.pages);
+    if (data) {
+      setPages(data.documentGet.pages);
+      if (documentType === DocumentType.SUBMISSION) {
+        setActivePage(data.documentGet.pages[0]?.id);
+      } else {
+        setActivePage(undefined);
+      }
+    }
 
     const { data: pageContentsData } = await fetchPageContents({
       variables: {

@@ -3,8 +3,8 @@ import { cloneDeep } from "lodash";
 
 import {
   DocumentType,
-  GetDocuments_spaceGet_documents,
   GetDocument_documentGet,
+  GetDocuments_spaceGet_documents,
   GetSubmissionsOfAssignment_assignmentGetSubmissions,
   UpdateAssignmentData,
 } from "graphql/types";
@@ -50,9 +50,9 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
   submissions: [],
   setActiveDocument: (activeDocument) => {
     set({
+      isFolder: activeDocument.documentType === DocumentType.FOLDER,
       activeDocumentId: activeDocument.id,
       activeDocument: cloneDeep(activeDocument),
-      isFolder: activeDocument.documentType === DocumentType.FOLDER,
       submissions: [],
     });
   },

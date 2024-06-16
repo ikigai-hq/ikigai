@@ -47,8 +47,7 @@ jobs:
           context: ./graphql_server
           push: true
           tags: |
-            # minimal
-            type=pep440,pattern={{version}}
+            type=semver,pattern={{version}}
           file: ./graphql_server/Dockerfile
           labels: ${{ steps.meta.outputs.labels }}
 
@@ -95,8 +94,7 @@ jobs:
           context: ./graphql_server
           push: true
           tags: |
-            # minimal
-            type=pep440,pattern={{version}}
+            type=semver,pattern={{version}}
           file: ./graphql_server/Migration.Dockerfile
           labels: ${{ steps.meta.outputs.labels }}
 

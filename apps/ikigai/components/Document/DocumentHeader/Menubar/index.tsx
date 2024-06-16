@@ -21,11 +21,15 @@ import { handleError } from "graphql/ApolloClient";
 import { SOFT_DELETE_DOCUMENT } from "graphql/mutation/DocumentMutation";
 import AlertDialog from "components/base/AlertDialog";
 import usePermission from "hook/UsePermission";
+import useUIStore from "store/UIStore";
 
 // Ref: https://www.radix-ui.com/primitives/docs/components/menubar
 const IkigaiMenubar = () => {
   const allow = usePermission();
   const router = useRouter();
+  const uiConfig = useUIStore((state) => state.config);
+  const setUIConfig = useUIStore((state) => state.setConfig);
+
   const [showDeleteWarning, setShowDeleteWarning] = useState(false);
   const activeDocument = useDocumentStore((state) => state.activeDocument);
   const { onCreate } = useCreateDocument(
@@ -160,6 +164,33 @@ const IkigaiMenubar = () => {
               onClick={() => setShowDeleteWarning(true)}
             >
               <Trans>Delete</Trans>
+            </Menubar.Item>
+          </Menubar.Content>
+        </Menubar.Portal>
+      </Menubar.Menu>
+
+      <Menubar.Menu>
+        <Menubar.Trigger className="MenubarTrigger" disabled={!showMenu}>
+          <Text size="1" weight="regular" color="gray">
+            View
+          </Text>
+        </Menubar.Trigger>
+        <Menubar.Portal>
+          <Menubar.Content
+            className="MenubarContent"
+            align="start"
+            sideOffset={5}
+            alignOffset={-3}
+          >
+            <Menubar.Item
+              className="MenubarItem"
+              onClick={() => {
+                setUIConfig({ focusMode: !uiConfig.focusMode });
+              }}
+            >
+              <Trans>
+                {uiConfig.focusMode ? "Disable" : "Enable"} focus mode
+              </Trans>
             </Menubar.Item>
           </Menubar.Content>
         </Menubar.Portal>

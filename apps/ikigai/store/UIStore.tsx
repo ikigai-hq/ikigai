@@ -1,6 +1,6 @@
 import create from "zustand";
 
-import { DocumentType, Role } from "graphql/types";
+import { DocumentType } from "graphql/types";
 import { IDocument } from "./DocumentStore";
 
 export enum LeftSideBarOptions {
@@ -10,6 +10,7 @@ export enum LeftSideBarOptions {
 
 export type UIConfig = {
   leftSidebar: LeftSideBarOptions;
+  focusMode: boolean;
 };
 
 type IUIStore = {
@@ -20,6 +21,7 @@ type IUIStore = {
 const useUIStore = create<IUIStore>((set, get) => ({
   config: {
     leftSidebar: LeftSideBarOptions.None,
+    focusMode: false,
   },
   setConfig: (config) => {
     const currentConfig = get().config;
@@ -34,13 +36,15 @@ const useUIStore = create<IUIStore>((set, get) => ({
 
 export const NORMAL_UI_CONFIG: UIConfig = {
   leftSidebar: LeftSideBarOptions.None,
+  focusMode: false,
 };
 
 export const SUBMISSION_UI_CONFIG: UIConfig = {
   leftSidebar: LeftSideBarOptions.None,
+  focusMode: false,
 };
 
-export const getUIConfig = (document: IDocument, _role: Role) => {
+export const getUIConfig = (document: IDocument) => {
   const documentType = document.documentType;
   if (documentType === DocumentType.SUBMISSION) return SUBMISSION_UI_CONFIG;
 

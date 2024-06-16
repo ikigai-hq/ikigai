@@ -10,6 +10,7 @@ import usePermission from "hook/UsePermission";
 import { DocumentActionPermission } from "graphql/types";
 import useDocumentStore from "store/DocumentStore";
 import ContentToolbar from "./ContentPage/ContentToolbar";
+import useUIStore from "store/UIStore";
 
 export type DocumentBodyProps = {
   loading: boolean;
@@ -17,6 +18,7 @@ export type DocumentBodyProps = {
 
 const DocumentBody = ({ loading }: DocumentBodyProps) => {
   const allow = usePermission();
+  const isFocus = useUIStore((state) => state.config.focusMode);
   const isFolder = useDocumentStore((state) => state.isFolder);
   const activePageId = usePageStore((state) => state.activePageId);
   const page = usePageStore((state) =>
@@ -28,9 +30,10 @@ const DocumentBody = ({ loading }: DocumentBodyProps) => {
   const showContentToolbar =
     allow(DocumentActionPermission.EDIT_DOCUMENT) && activePageId;
 
-  let editorReducedWidth = 0;
-  if (showBottomPage) editorReducedWidth += 45;
-  if (showContentToolbar) editorReducedWidth += 46;
+  let editorReducedHeight = 0;
+  if (showBottomPage) editorReducedHeight += 45;
+  if (showContentToolbar) editorReducedHeight += 46;
+  if (!isFocus) editorReducedHeight += 50;
 
   return (
     <Container>
@@ -40,7 +43,7 @@ const DocumentBody = ({ loading }: DocumentBodyProps) => {
           <Separator style={{ width: "100%" }} />
         </>
       )}
-      <Body $editorReducedWidth={editorReducedWidth}>
+      <Body $editorReducedHeight={editorReducedHeight}>
         {loading && <Loading />}
         {!loading && !activePageId && <CoverPage />}
         {!loading && activePageId && page && (
@@ -60,14 +63,14 @@ const Container = styled.div`
 `;
 
 const Body = styled.div<{
-  $editorReducedWidth: number;
+  $editorReducedHeight: number;
 }>`
   width: 100%;
   background: #ffff;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  height: ${(props) => `calc(100vh - ${props.$editorReducedWidth}px - 50px)`};
+  height: ${(props) => `calc(100vh - ${props.$editorReducedHeight}px)`};
   overflow: hidden;
 `;
 

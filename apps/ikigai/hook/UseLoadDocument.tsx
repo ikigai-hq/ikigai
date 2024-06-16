@@ -123,7 +123,7 @@ export const useLoadDocument = (documentId: string) => {
         await loadAdditionalDocumentInformation(documentId),
         await loadAssignmentInformation(data.documentGet.assignment?.id),
       ]);
-      setUIConfig(getUIConfig(data.documentGet, role));
+      setUIConfig(getUIConfig(data.documentGet));
     }
 
     if (error) {

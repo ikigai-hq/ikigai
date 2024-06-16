@@ -7,20 +7,35 @@ import DocumentBody from "./DocumentBody";
 import { useLoadDocument } from "hook/UseLoadDocument";
 import DocumentHeader from "./DocumentHeader";
 import LeftSide from "./LeftSide";
+import useUIStore from "store/UIStore";
+import { Button } from "@radix-ui/themes";
 
 const Document = () => {
   const router = useRouter();
   const documentId = router.query.documentId as string;
+  const isFocusMode = useUIStore((state) => state.config.focusMode);
+  const setUiConfig = useUIStore((state) => state.setConfig);
+
+  const onClickExitFocusMode = () => {
+    setUiConfig({ focusMode: false });
+  };
 
   const { loading } = useLoadDocument(documentId);
 
   return (
     <Container>
-      <LeftSide />
+      {!isFocusMode && <LeftSide />}
       <DocumentBodyContainer>
-        <DocumentHeader />
+        {!isFocusMode && <DocumentHeader />}
         <DocumentBody loading={loading} />
       </DocumentBodyContainer>
+      {isFocusMode && (
+        <div style={{ position: "fixed", right: 10, top: 10 }}>
+          <Button size="1" variant="soft" onClick={onClickExitFocusMode}>
+            Exit focus mode
+          </Button>
+        </div>
+      )}
     </Container>
   );
 };

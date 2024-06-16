@@ -6,6 +6,7 @@ import usePermission from "hook/UsePermission";
 import Editor from "components/Editor";
 import { IPage } from "store/PageStore";
 import usePageContentStore from "store/PageContentStore";
+import useUIStore from "store/UIStore";
 
 export type ContentPageProps = {
   page: IPage;
@@ -13,13 +14,19 @@ export type ContentPageProps = {
 
 const ContentPage = ({ page }: ContentPageProps) => {
   const allow = usePermission();
+  const uiConfig = useUIStore((state) => state.config);
   const pageContents = usePageContentStore((state) =>
     state.pageContents.filter((content) => content.pageId === page.id),
   ).sort((a, b) => a.index - b.index);
 
   return (
     <ContentPageWrapper>
-      <div style={{ width: "calc(100vw - 51px)", height: "100%" }}>
+      <div
+        style={{
+          width: uiConfig.focusMode ? "100vw" : "calc(100vw - 51px)",
+          height: "100%",
+        }}
+      >
         <PanelGroup direction="horizontal">
           {pageContents.map((pageContent, index) => (
             <>

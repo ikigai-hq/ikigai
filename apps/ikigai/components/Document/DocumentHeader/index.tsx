@@ -4,7 +4,9 @@ import { Badge, Separator, Text } from "@radix-ui/themes";
 
 import useDocumentStore from "store/DocumentStore";
 import { DocumentType } from "graphql/types";
-import SubmissionHeader from "components/Document/DocumentHeader/SubmissionHeader";
+import RightSubmissionHeader, {
+  TestDurationCountdown,
+} from "components/Document/DocumentHeader/SubmissionHeader";
 import AssignmentHeader from "./AssignmentHeader";
 import IkigaiMenubar from "./Menubar";
 import { formatDocumentRoute } from "config/Routes";
@@ -54,12 +56,19 @@ const DocumentHeader = () => {
             <IkigaiMenubar />
           </div>
         </div>
+        {activeDocument?.submission &&
+          !activeDocument.submission.submitAt &&
+          activeDocument.submission.testDuration && (
+            <div>
+              <TestDurationCountdown />
+            </div>
+          )}
         {activeDocument?.documentType === DocumentType.ASSIGNMENT && (
           <AssignmentHeader />
         )}
         {activeDocument?.documentType === DocumentType.SUBMISSION && (
-          <div style={{ display: "flex" }}>
-            <SubmissionHeader />
+          <div style={{ display: "flex", flex: 1, justifyContent: "right" }}>
+            <RightSubmissionHeader />
           </div>
         )}
       </DocumentHeaderWrapper>

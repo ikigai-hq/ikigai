@@ -18,7 +18,7 @@ import Modal from "components/base/Modal";
 import { convertTsToDate } from "util/Time";
 import AlertDialog from "components/base/AlertDialog";
 
-const SubmissionHeader = () => {
+const RightSubmissionHeader = () => {
   const role = useAuthUserStore((state) => state.role);
   const submission = useDocumentStore(
     (state) => state.activeDocument?.submission,
@@ -30,7 +30,7 @@ const SubmissionHeader = () => {
   if (role === Role.STUDENT) return <StudentSubmissionHeader />;
 };
 
-export default SubmissionHeader;
+export default RightSubmissionHeader;
 
 export const StudentSubmissionHeader = () => {
   const submission = useDocumentStore(
@@ -98,13 +98,6 @@ export const StudentDoingSubmissionHeader = () => {
   return (
     <HeaderSubmissionWrapper>
       <HeaderSubmissionUserInfo />
-      {submission?.testDuration && (
-        <TestDurationCountdown
-          startAt={submission.startAt}
-          testDuration={submission.testDuration}
-          onTestComplete={onClickSaveAndExit}
-        />
-      )}
       <Button
         variant="outline"
         onClick={onClickSaveAndExit}
@@ -127,20 +120,21 @@ export const StudentDoingSubmissionHeader = () => {
   );
 };
 
-export type TestDurationCountdownProps = {
-  startAt: number;
-  testDuration: number;
-  onTestComplete: () => void;
-};
-
-const TestDurationCountdown = ({
-  testDuration,
-  startAt,
-  onTestComplete,
-}: TestDurationCountdownProps) => {
+export const TestDurationCountdown = () => {
+  const router = useRouter();
+  const submission = useDocumentStore(
+    (state) => state.activeDocument?.submission,
+  );
   const { seconds, hours, minutes, days, isRunning } = useTimer({
-    expiryTimestamp: convertTsToDate(startAt + testDuration).toDate(),
+    expiryTimestamp: convertTsToDate(
+      submission.startAt + submission.testDuration,
+    ).toDate(),
   });
+
+  const onConfirmExpire = () => {
+    if (!submission) return;
+    router.push(formatDocumentRoute(submission.assignment.documentId));
+  };
 
   const finalMinutes = hours * 60 + days * 24 * 60 + minutes;
 
@@ -148,7 +142,7 @@ const TestDurationCountdown = ({
     <AlertDialog
       title={t`The test duration is complete!`}
       description={t`We will move you back to assignment page!`}
-      onConfirm={onTestComplete}
+      onConfirm={onConfirmExpire}
       open={!isRunning}
       showCancel={false}
       confirmColor="indigo"

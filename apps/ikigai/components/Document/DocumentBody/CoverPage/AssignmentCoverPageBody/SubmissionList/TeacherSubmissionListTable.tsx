@@ -1,8 +1,8 @@
 import { t, Trans } from "@lingui/macro";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { Table, Tooltip, Text, IconButton } from "@radix-ui/themes";
-import { RowsIcon, Pencil1Icon } from "@radix-ui/react-icons";
+import { IconButton, Table, Text, Tooltip } from "@radix-ui/themes";
+import { Pencil1Icon, RowsIcon } from "@radix-ui/react-icons";
 
 import { formatDocumentRoute } from "config/Routes";
 import SubmissionListOfStudent from "./SubmissionListOfStudent";
@@ -11,6 +11,7 @@ import UserBasicInformation from "components/UserBasicInformation";
 import { StudentStatus, SubmissionStatus } from "util/DocumentUtil";
 import { ISubmission } from "store/DocumentStore";
 import { Role } from "graphql/types";
+import { formatTimestamp, FormatType } from "../../../../../../util/Time";
 
 export type TeacherSubmissionListTableProps = {
   submissions: ISubmission[];
@@ -42,6 +43,10 @@ const TeacherSubmissionListTable = ({
     return submissions[userId] || [];
   };
 
+  const lastSubmission = (userId: number) => {
+    return getSubmissions(userId)[0];
+  };
+
   const getSubmissionStatus = (userId: number): SubmissionStatus => {
     const submissions = getSubmissions(userId);
     if (submissions.length === 0) return SubmissionStatus.NotSubmitted;
@@ -49,6 +54,51 @@ const TeacherSubmissionListTable = ({
     if (lastSubmission.feedbackAt) return SubmissionStatus.Graded;
     if (lastSubmission.submitAt) return SubmissionStatus.Submitted;
     return SubmissionStatus.InDoing;
+  };
+
+  const rowRender = (member: ISpaceMember) => {
+    const submission = lastSubmission(member.userId);
+    return (
+      <Table.Row key={member.userId} align="center">
+        <Table.RowHeaderCell>
+          <UserBasicInformation
+            name={member.user.name}
+            avatar={member.user.avatar?.publicUrl}
+            email={member.user.email}
+            randomColor={member.user.randomColor}
+          />
+        </Table.RowHeaderCell>
+        <Table.Cell>
+          {submission?.startAt
+            ? formatTimestamp(submission.startAt, FormatType.DateTimeFormat)
+            : ""}
+        </Table.Cell>
+        <Table.Cell>
+          {submission?.submitAt
+            ? formatTimestamp(submission.submitAt, FormatType.DateTimeFormat)
+            : ""}
+        </Table.Cell>
+        <Table.Cell>
+          {submission?.feedbackAt
+            ? formatTimestamp(submission.feedbackAt, FormatType.DateTimeFormat)
+            : ""}
+        </Table.Cell>
+        <Table.Cell>
+          <StudentStatus status={getSubmissionStatus(member.userId)} />
+        </Table.Cell>
+        <Table.Cell>
+          <StudentSubmissionStatus
+            selectedMember={selectedMember}
+            setSelectedMember={setSelectedMember}
+            submissions={getSubmissions(member.userId)}
+            member={member}
+          />
+        </Table.Cell>
+        <Table.Cell>
+          <Actions lastSubmission={getSubmissions(member.userId)[0]} />
+        </Table.Cell>
+      </Table.Row>
+    );
   };
 
   return (
@@ -60,6 +110,15 @@ const TeacherSubmissionListTable = ({
               <Trans>Name</Trans>
             </Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>
+              <Trans>Start at</Trans>
+            </Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>
+              <Trans>Submit at</Trans>
+            </Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>
+              <Trans>Feedback at</Trans>
+            </Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>
               <Trans>Status</Trans>
             </Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>
@@ -68,34 +127,7 @@ const TeacherSubmissionListTable = ({
             <Table.ColumnHeaderCell />
           </Table.Row>
         </Table.Header>
-        <Table.Body>
-          {members.map((member) => (
-            <Table.Row key={member.userId} align="center">
-              <Table.RowHeaderCell>
-                <UserBasicInformation
-                  name={member.user.name}
-                  avatar={member.user.avatar?.publicUrl}
-                  email={member.user.email}
-                  randomColor={member.user.randomColor}
-                />
-              </Table.RowHeaderCell>
-              <Table.Cell>
-                <StudentStatus status={getSubmissionStatus(member.userId)} />
-              </Table.Cell>
-              <Table.Cell>
-                <StudentSubmissionStatus
-                  selectedMember={selectedMember}
-                  setSelectedMember={setSelectedMember}
-                  submissions={getSubmissions(member.userId)}
-                  member={member}
-                />
-              </Table.Cell>
-              <Table.Cell>
-                <Actions lastSubmission={getSubmissions(member.userId)[0]} />
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
+        <Table.Body>{members.map(rowRender)}</Table.Body>
       </Table.Root>
     </div>
   );

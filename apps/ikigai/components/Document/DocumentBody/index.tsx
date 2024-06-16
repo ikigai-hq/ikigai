@@ -11,6 +11,7 @@ import { DocumentActionPermission } from "graphql/types";
 import useDocumentStore from "store/DocumentStore";
 import ContentToolbar from "./ContentPage/ContentToolbar";
 import useUIStore from "store/UIStore";
+import Grading from "./Grading";
 
 export type DocumentBodyProps = {
   loading: boolean;
@@ -24,6 +25,7 @@ const DocumentBody = ({ loading }: DocumentBodyProps) => {
   const page = usePageStore((state) =>
     state.pages.find((p) => p.id === state.activePageId),
   );
+  const uiConfig = useUIStore((state) => state.config);
 
   const showBottomPage =
     !isFolder && allow(DocumentActionPermission.VIEW_PAGE_CONTENT);
@@ -35,6 +37,10 @@ const DocumentBody = ({ loading }: DocumentBodyProps) => {
   if (showContentToolbar) editorReducedHeight += 46;
   if (!hideHeader) editorReducedHeight += 50;
 
+  let bodyReduceWidth = 0;
+  if (uiConfig.hideLeftSide) bodyReduceWidth += 51;
+  if (uiConfig.showGrading) bodyReduceWidth += 300;
+
   return (
     <Container>
       {showContentToolbar && (
@@ -44,11 +50,22 @@ const DocumentBody = ({ loading }: DocumentBodyProps) => {
         </>
       )}
       <Body $editorReducedHeight={editorReducedHeight}>
-        {loading && <Loading />}
-        {!loading && !activePageId && <CoverPage />}
-        {!loading && activePageId && page && (
-          <ContentPage key={page?.id} page={page} />
-        )}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            width: `calc(100vw - ${bodyReduceWidth}px)`,
+            flex: 1,
+          }}
+        >
+          {loading && <Loading />}
+          {!loading && !activePageId && <CoverPage />}
+          {!loading && activePageId && page && (
+            <ContentPage key={page?.id} page={page} />
+          )}
+        </div>
+        {uiConfig.showGrading && <Grading />}
       </Body>
       {showBottomPage && <BottomPageList />}
     </Container>
@@ -69,7 +86,6 @@ const Body = styled.div<{
   background: #ffff;
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
   height: ${(props) => `calc(100vh - ${props.$editorReducedHeight}px)`};
   overflow: hidden;
 `;

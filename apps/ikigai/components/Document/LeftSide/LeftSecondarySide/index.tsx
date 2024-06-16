@@ -1,13 +1,16 @@
-import React from "react";
-import SpaceDocumentList from "components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList";
+import React, { useRef } from "react";
 import styled from "styled-components";
+
+import SpaceDocumentList from "components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList";
 import useUIStore, { LeftSideBarOptions } from "store/UIStore";
 
 const LeftSecondarySide = () => {
+  const ref = useRef<HTMLDivElement>();
   const leftSidebar = useUIStore((state) => state.config.leftSidebar);
   const expanded = leftSidebar !== LeftSideBarOptions.None;
+
   return (
-    <Container $hide={!expanded}>
+    <Container ref={ref} $hide={!expanded}>
       {leftSidebar === LeftSideBarOptions.Content && <SpaceDocumentList />}
     </Container>
   );

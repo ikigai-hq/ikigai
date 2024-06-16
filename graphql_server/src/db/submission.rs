@@ -75,7 +75,6 @@ impl NewSubmission {
 #[derive(Debug, Clone, InputObject, AsChangeset)]
 #[diesel(table_name = assignment_submissions, treat_none_as_null = true)]
 pub struct GradeSubmissionData {
-    pub auto_grade: Option<f64>,
     pub final_grade: Option<f64>,
     pub feedback: Option<String>,
     #[graphql(skip)]

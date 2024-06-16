@@ -34,6 +34,7 @@ export const GET_DOCUMENT = gql`
         feedback
         finalGrade
         testDuration
+        attemptNumber
         user {
           id
           name

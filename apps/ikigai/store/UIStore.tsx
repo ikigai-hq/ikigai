@@ -2,6 +2,7 @@ import create from "zustand";
 
 import { DocumentType, Role } from "graphql/types";
 import { IDocument } from "./DocumentStore";
+import { cloneDeep } from "lodash";
 
 export enum LeftSideBarOptions {
   None = "None",
@@ -14,6 +15,7 @@ export type UIConfig = {
   hideHeader: boolean;
   showInformationPage: boolean;
   disableHeaderMenu: boolean;
+  showGrading: boolean;
 };
 
 type IUIStore = {
@@ -28,6 +30,7 @@ const useUIStore = create<IUIStore>((set, get) => ({
     hideHeader: false,
     showInformationPage: false,
     disableHeaderMenu: false,
+    showGrading: false,
   },
   setConfig: (config) => {
     const currentConfig = get().config;
@@ -46,6 +49,7 @@ export const NORMAL_UI_CONFIG: UIConfig = {
   hideHeader: false,
   showInformationPage: true,
   disableHeaderMenu: false,
+  showGrading: false,
 };
 
 export const SUBMISSION_UI_CONFIG: UIConfig = {
@@ -54,6 +58,7 @@ export const SUBMISSION_UI_CONFIG: UIConfig = {
   hideHeader: false,
   showInformationPage: false,
   disableHeaderMenu: true,
+  showGrading: false,
 };
 
 export const TEACHER_SUBMISSION_UI_CONFIG: UIConfig = {
@@ -62,19 +67,32 @@ export const TEACHER_SUBMISSION_UI_CONFIG: UIConfig = {
   hideHeader: false,
   showInformationPage: false,
   disableHeaderMenu: true,
+  showGrading: false,
 };
 
 export const getUIConfig = (document: IDocument, role: Role) => {
+  return cloneDeep(_getUIConfig(document, role));
+};
+
+const _getUIConfig = (document: IDocument, role: Role) => {
   const documentType = document.documentType;
   if (documentType === DocumentType.SUBMISSION) {
-    if (role === Role.STUDENT) {
-      return SUBMISSION_UI_CONFIG;
+    const config = getSubmissionUIConfig(role);
+    if (document.submission.submitAt) {
+      config.showGrading = true;
     }
-
-    return TEACHER_SUBMISSION_UI_CONFIG;
+    return config;
   }
 
   return NORMAL_UI_CONFIG;
+};
+
+export const getSubmissionUIConfig = (role: Role) => {
+  if (role === Role.STUDENT) {
+    return SUBMISSION_UI_CONFIG;
+  }
+
+  return TEACHER_SUBMISSION_UI_CONFIG;
 };
 
 export default useUIStore;

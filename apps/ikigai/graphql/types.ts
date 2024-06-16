@@ -858,6 +858,7 @@ export interface GetDocument_documentGet_submission {
   feedback: string | null;
   finalGrade: number | null;
   testDuration: number | null;
+  attemptNumber: number;
   user: GetDocument_documentGet_submission_user;
   assignment: GetDocument_documentGet_submission_assignment;
 }

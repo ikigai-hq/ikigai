@@ -10,8 +10,8 @@ dayjs.extend(utc);
 dayjs.extend(relativeTime);
 
 export enum FormatType {
-  DateFormat = "DD MMM, YYYY",
-  DateTimeFormat = "HH:mm - DD MMM, YYYY ",
+  DateFormat = "MMM DD, YYYY",
+  DateTimeFormat = "HH:mm MMM DD, YYYY",
 }
 
 export const formatTimestamp = (

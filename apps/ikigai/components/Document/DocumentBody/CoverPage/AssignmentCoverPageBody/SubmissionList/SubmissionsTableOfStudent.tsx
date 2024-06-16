@@ -27,6 +27,9 @@ const SubmissionsTableOfStudent = ({
               <Trans>Submit at</Trans>
             </Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>
+              <Trans>Feedback at</Trans>
+            </Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>
               <Trans>Status</Trans>
             </Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>
@@ -51,6 +54,18 @@ const SubmissionsTableOfStudent = ({
                 {!submission.submitAt && (
                   <Text>
                     <Trans>Not submitted</Trans>
+                  </Text>
+                )}
+              </Table.Cell>
+              <Table.Cell>
+                {submission.feedbackAt &&
+                  formatTimestamp(
+                    submission.feedbackAt,
+                    FormatType.DateTimeFormat,
+                  )}
+                {!submission.feedbackAt && (
+                  <Text>
+                    <Trans>No feedback</Trans>
                   </Text>
                 )}
               </Table.Cell>

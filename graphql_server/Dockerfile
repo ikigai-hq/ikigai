@@ -16,7 +16,7 @@ RUN RUST_BACKTRACE=1 cargo build --release
 
 FROM ubuntu:20.04
 RUN apt-get update && apt-get -y upgrade && \
-    apt-get -y install libpq-dev openssl ca-certificates libssl-dev software-properties-common
+    apt-get -y install libpq-dev openssl ca-certificates libssl-dev software-properties-common libc6
 
 RUN add-apt-repository ppa:chris-needham/ppa
 RUN apt-get update && apt-get -y install audiowaveform

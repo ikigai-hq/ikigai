@@ -1,22 +1,6 @@
 {
   "index": "Introduction",
   "getting-started": "Getting started",
-  "installation_separator": {
-    "type": "separator",
-    "title": "Download & Installation"
-  },
-  "installation": "Installation",
-  "self-hosting": "Self Hosting",
-  "architecture_separator": {
-    "type": "separator",
-    "title": "Documentation"
-  },
-  "architecture": "Ikigai Architecture",
-  "ikigai_team": {
-    "type": "separator",
-    "title": "Ikigai Team & Other Information"
-  },
-  "roadmap": "Roadmap",
   "community": "Join our Community",
   "about": "About Ikigai"
 }

@@ -17,22 +17,22 @@ export default {
   docsRepositoryBase: "https://github.com/ikigai-hq/ikigai/tree/master/apps/docs",
   useNextSeoProps() {
     return {
-      titleTemplate: '%s – ikigai - Open Assignment Platform'
+      titleTemplate: '%s – ikigai - AI Open Assignment Platform'
     }
   },
   head: (
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta property="og:title" content="Ikigai" />
-      <meta property="og:description" content="Open Assignment Platform" />
+      <meta property="og:description" content="AI Open Assignment Platform" />
       <link rel="icon" href="https://raw.githubusercontent.com/ikigai-hq/ikigai/master/assets/logo/logo.svg" />
     </>
   ),
   banner: {
     key: 'v0.1.1-release',
     text: (
-      <a href="https://github.com/ikigai-hq/ikigai/releases/tag/v0.1.1" target="_blank">
-        🎉 Ikigai 0.1.1 is released. Read more →
+      <a href="https://cloud.ikigai.li" target="_blank">
+        🎉 Ikigai cloud is live. It's the easiest way to use ikigai. Try it →
       </a>
     )
   },

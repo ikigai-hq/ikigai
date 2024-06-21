@@ -32,4 +32,17 @@ impl DocumentQuery {
 
         Ok(document)
     }
+
+    async fn document_get_assignees(
+        &self,
+        ctx: &Context<'_>,
+        document_id: Uuid,
+    ) -> Result<Vec<DocumentAssignedUsers>> {
+        document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
+            .await?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let assignees =
+            DocumentAssignedUsers::find_all_by_document(&mut conn, document_id).format_err()?;
+        Ok(assignees)
+    }
 }

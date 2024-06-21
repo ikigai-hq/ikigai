@@ -381,6 +381,42 @@ export interface AddOrUpdatePageContentVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: AssignDocument
+// ====================================================
+
+export interface AssignDocument {
+  documentAssign: boolean;
+}
+
+export interface AssignDocumentVariables {
+  documentId: any;
+  emails: string[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: RemoveDocumentAssignee
+// ====================================================
+
+export interface RemoveDocumentAssignee {
+  documentRemoveAssignee: boolean;
+}
+
+export interface RemoveDocumentAssigneeVariables {
+  documentId: any;
+  userId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: FileCreate
 // ====================================================
 
@@ -961,6 +997,38 @@ export interface GetDocumentPageContentsVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetDocumentAssignees
+// ====================================================
+
+export interface GetDocumentAssignees_documentGetAssignees_user_avatar {
+  publicUrl: string | null;
+}
+
+export interface GetDocumentAssignees_documentGetAssignees_user {
+  id: number;
+  name: string;
+  avatar: GetDocumentAssignees_documentGetAssignees_user_avatar | null;
+}
+
+export interface GetDocumentAssignees_documentGetAssignees {
+  createdAt: number;
+  user: GetDocumentAssignees_documentGetAssignees_user;
+}
+
+export interface GetDocumentAssignees {
+  documentGetAssignees: GetDocumentAssignees_documentGetAssignees[];
+}
+
+export interface GetDocumentAssigneesVariables {
+  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetFile
 // ====================================================
 
@@ -1384,7 +1452,6 @@ export interface CreateFileData {
 }
 
 export interface GradeSubmissionData {
-  autoGrade?: number | null;
   finalGrade?: number | null;
   feedback?: string | null;
 }

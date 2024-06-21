@@ -85,3 +85,15 @@ export const ADD_ORG_UPDATE_PAGE_CONTENT = gql`
     }
   }
 `;
+
+export const ASSIGN_TO_STUDENTS = gql`
+  mutation AssignDocument($documentId: UUID!, $emails: [String!]!) {
+    documentAssign(documentId: $documentId, emails: $emails)
+  }
+`;
+
+export const REMOVE_ASSIGNEE = gql`
+  mutation RemoveDocumentAssignee($documentId: UUID!, $userId: Int!) {
+    documentRemoveAssignee(documentId: $documentId, userId: $userId)
+  }
+`;

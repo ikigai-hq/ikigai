@@ -85,3 +85,18 @@ export const GET_DOCUMENT_PAGE_CONTENT = gql`
     }
   }
 `;
+
+export const GET_DOCUMENT_ASSIGNEE = gql`
+  query GetDocumentAssignees($documentId: UUID!) {
+    documentGetAssignees(documentId: $documentId) {
+      createdAt
+      user {
+        id
+        name
+        avatar {
+          publicUrl
+        }
+      }
+    }
+  }
+`;

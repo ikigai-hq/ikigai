@@ -109,3 +109,10 @@ impl Page {
         Ok(page_contents)
     }
 }
+
+#[ComplexObject]
+impl DocumentAssignedUsers {
+    async fn user(&self, ctx: &Context<'_>) -> Result<PublicUser> {
+        get_public_user_from_loader(ctx, self.assigned_user_id).await
+    }
+}

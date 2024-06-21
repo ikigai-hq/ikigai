@@ -3,10 +3,11 @@ use diesel::Connection;
 use itertools::Itertools;
 use uuid::Uuid;
 
-use crate::authorization::DocumentActionPermission;
+use crate::authorization::{DocumentActionPermission, SpaceActionPermission};
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
+use crate::notification_center::send_notification;
 use crate::util::get_now_as_secs;
 
 #[derive(Default)]
@@ -235,5 +236,95 @@ impl DocumentMutation {
 
         let content = PageContent::upsert(&mut conn, page_content).format_err()?;
         Ok(content)
+    }
+
+    async fn document_assign(
+        &self,
+        ctx: &Context<'_>,
+        document_id: Uuid,
+        emails: Vec<String>,
+    ) -> Result<bool> {
+        let document = {
+            let mut conn = get_conn_from_ctx(ctx).await?;
+            Document::find_by_id(&mut conn, document_id).format_err()?
+        };
+
+        document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
+            .await?;
+
+        if let Some(space_id) = document.space_id {
+            space_quick_authorize(ctx, space_id, SpaceActionPermission::ManageSpaceMember).await?;
+        } else {
+            return Err(IkigaiError::new_bad_request(
+                "Cannot assign non space assignment",
+            ))
+            .format_err();
+        }
+
+        let space_id = document.space_id.unwrap();
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let space_members = conn
+            .transaction::<_, IkigaiError, _>(|conn| {
+                let mut students = vec![];
+                let mut new_users = vec![];
+                for email in emails {
+                    if let Some(user) = User::find_by_email_opt(conn, &email)? {
+                        students.push(user);
+                    } else {
+                        new_users.push(NewUser::new(email.clone(), email, "".into()));
+                    };
+                }
+                students.append(&mut User::batch_insert(conn, new_users)?);
+
+                let space_members = students
+                    .iter()
+                    .map(|student| SpaceMember::new(space_id, student.id, None, Role::Student))
+                    .collect();
+                let space_members: Vec<SpaceMember> =
+                    SpaceMember::batch_upsert(conn, space_members)?
+                        .into_iter()
+                        .filter(|member| member.role == Role::Student)
+                        .collect();
+
+                let assigned_users = space_members
+                    .iter()
+                    .map(|member| DocumentAssignedUsers::new(document_id, member.user_id))
+                    .collect();
+
+                DocumentAssignedUsers::batch_upsert(conn, assigned_users)?;
+
+                Ok(space_members)
+            })
+            .format_err()?;
+
+        let notification =
+            Notification::new_assign_to_assignment_notification(AssignToAssignmentContext {
+                assignment_document_id: document_id,
+                assignment_name: document.title,
+            });
+        let notification = Notification::insert(&mut conn, notification).format_err()?;
+        send_notification(
+            &mut conn,
+            notification,
+            space_members.iter().map(|member| member.user_id).collect(),
+        )
+        .format_err()?;
+
+        Ok(true)
+    }
+
+    async fn document_remove_assignee(
+        &self,
+        ctx: &Context<'_>,
+        document_id: Uuid,
+        user_id: i32,
+    ) -> Result<bool> {
+        document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
+            .await?;
+
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        DocumentAssignedUsers::remove(&mut conn, document_id, user_id).format_err()?;
+
+        Ok(true)
     }
 }

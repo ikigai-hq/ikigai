@@ -4,7 +4,7 @@ use diesel::sql_types::Integer;
 use diesel::{AsChangeset, Connection, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use uuid::Uuid;
 
-use super::schema::documents;
+use super::schema::{document_assigned_users, documents};
 use crate::impl_enum_for_db;
 use crate::util::get_now_as_secs;
 
@@ -312,6 +312,50 @@ impl Document {
         let deleted_at = DeletedAt { deleted_at };
         diesel::update(documents::table.filter(documents::id.eq_any(ids)))
             .set(deleted_at)
+            .execute(conn)?;
+        Ok(())
+    }
+}
+
+#[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
+#[diesel(table_name = document_assigned_users)]
+#[graphql(complex, input_name = "NewDocument")]
+pub struct DocumentAssignedUsers {
+    pub document_id: Uuid,
+    pub assigned_user_id: i32,
+    pub created_at: i64,
+}
+
+impl DocumentAssignedUsers {
+    pub fn new(document_id: Uuid, assigned_user_id: i32) -> Self {
+        Self {
+            document_id,
+            assigned_user_id,
+            created_at: get_now_as_secs(),
+        }
+    }
+
+    pub fn batch_upsert(
+        conn: &mut PgConnection,
+        assigned_users: Vec<Self>,
+    ) -> Result<Vec<Self>, Error> {
+        diesel::insert_into(document_assigned_users::table)
+            .values(assigned_users)
+            .on_conflict_do_nothing()
+            .get_results(conn)
+    }
+
+    pub fn find_all_by_document(
+        conn: &mut PgConnection,
+        document_id: Uuid,
+    ) -> Result<Vec<Self>, Error> {
+        document_assigned_users::table
+            .filter(document_assigned_users::document_id.eq(document_id))
+            .get_results(conn)
+    }
+
+    pub fn remove(conn: &mut PgConnection, document_id: Uuid, user_id: i32) -> Result<(), Error> {
+        diesel::delete(document_assigned_users::table.find((document_id, user_id)))
             .execute(conn)?;
         Ok(())
     }

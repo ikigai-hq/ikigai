@@ -59,6 +59,18 @@ impl SpaceMember {
             .get_result(conn)
     }
 
+    pub fn batch_upsert(
+        conn: &mut PgConnection,
+        members: Vec<SpaceMember>,
+    ) -> Result<Vec<Self>, Error> {
+        diesel::insert_into(space_members::table)
+            .values(members)
+            .on_conflict((space_members::space_id, space_members::user_id))
+            .do_update()
+            .set(space_members::updated_at.eq(get_now_as_secs()))
+            .get_results(conn)
+    }
+
     pub fn find_opt(
         conn: &mut PgConnection,
         space_id: i32,

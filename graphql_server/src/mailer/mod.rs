@@ -104,7 +104,7 @@ impl Mailer {
         button_name: String,
         button_url: String,
     ) -> Result<(), IkigaiError> {
-        let to = format!("{name} <{to_email}>").parse()?;
+        let to = format!("<{to_email}>").parse()?;
         let subject = title.clone();
         let body_html = Template::render_notification(NotificationMailContext {
             name,

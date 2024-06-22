@@ -1,7 +1,7 @@
 # aj 
 ![ci status](https://github.com/cptrodgers/aj/actions/workflows/test-and-build.yml/badge.svg)
 
-aj is solution for background jobs (based on actix).
+aj is background jobs solution (based on actix framework - Actor Model).
 
 ## Features & Docs
 
@@ -12,7 +12,7 @@ aj is solution for background jobs (based on actix).
   - [x] Get job
 - [x] Retry mechanism
   - [x] Customizable failed and retry logic: You can handle case that you want to retry based on job output.
-  - Configurable:
+  - [x] Configurable:
     - [x] Max times
     - [x] Strategy:
       - [x] Interval Strategy
@@ -21,14 +21,16 @@ aj is solution for background jobs (based on actix).
 - [x] Persistent.
 - [x] Flexible Broker and Backend with `Backend` trait: You can choose your database or storage engine that you want to use.
   - [x] Native support: 
-    - Redis
-    - In-memory (testing purpose)
+    - [x] Redis
+    - [x] In-memory (Not recommend for production, it does not support persisted job)
   - [x] `Backend` trait: you can implement your backend by your demand.
 - [x] Custom processing speed.
   - [x] Scan job period (tick).
   - [x] Number of job per tick.
-- [ ] DAG
-- [ ] Admin Dashboard (UI)
+- [ ] Multiple Node (Distributed Mode)
+- [ ] DAG (https://en.wikipedia.org/wiki/Directed_acyclic_graph)
+- [ ] APIs
+- [ ] Dashboard UI
 - [ ] Integration
 
 [examples](https://github.com/openexamhq/aj/tree/master/examples)
@@ -36,6 +38,7 @@ aj is solution for background jobs (based on actix).
 ## Using by:
 
 - [ZenClass](https://zenclass.co) - ZenClass is an education platform that help you build your class.
+- [Ikigai](https://ikigai.li) - Ikigai is an AI open assignment platform.
 
 If you're using `aj`, please contact us to update the list.
 

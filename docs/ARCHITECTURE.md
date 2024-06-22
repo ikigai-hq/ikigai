@@ -1,9 +1,10 @@
 # Architecture
 
-### Job Processing Flow
+## Single Node
 
-![Job Processing Flow](https://github.com/cptrodgers/aj/blob/master/docs/job_processing_flow.png)
+![Single Node Flow](./single_node_basic_flow.png)
 
-### Enqueue Flow:
 
-![Enqueue Flow](https://github.com/cptrodgers/aj/blob/master/docs/enqueue_flow.png)
+## Multiple Node (Distributed)
+
+TBD

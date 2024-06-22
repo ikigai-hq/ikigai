@@ -27,7 +27,11 @@ impl Executable for RetryJob {
 
 fn run_retry_job() {
     let retry = Retry::default();
-    let job = JobBuilder::new(RetryJob).set_retry(retry).build();
+    let job = JobBuilder::default()
+        .message(RetryJob)
+        .retry(retry)
+        .build()
+        .unwrap();
     AJ::add_job(job);
 }
 

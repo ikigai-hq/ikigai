@@ -1,12 +1,10 @@
 use actix_rt::time::sleep;
-use std::str::FromStr;
 use std::time::Duration;
 
 use aj::async_trait::async_trait;
-use aj::cron::Schedule;
 use aj::mem::InMemory;
 use aj::serde::{Deserialize, Serialize};
-use aj::{get_now_as_ms, CronContext, AJ};
+use aj::{get_now_as_ms, CronContext, JobType, AJ};
 use aj::{Executable, JobBuilder};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -26,23 +24,26 @@ impl Executable for PrintJob {
 
 fn run_simple_cron_job() {
     let expression = "* * * * * * *";
-    let schedule = Schedule::from_str(expression).unwrap();
-    let job = JobBuilder::new(PrintJob { number: 1 })
-        .set_cron(schedule, CronContext::default())
-        .build();
+    let job_type = JobType::init_cron(expression, CronContext::default()).unwrap();
+    let job = JobBuilder::default()
+        .message(PrintJob { number: 1 })
+        .job_type(job_type)
+        .build()
+        .unwrap();
     AJ::add_job(job);
 }
 
 fn run_cron_job_with_condition() {
     let expression = "* * * * * * *";
-    let schedule = Schedule::from_str(expression).unwrap();
-
     let mut context = CronContext::default();
     context.max_repeat = Some(3); // Run 3 times
-
-    let job = JobBuilder::new(PrintJob { number: 2 })
-        .set_cron(schedule, context)
-        .build();
+    let job_type = JobType::init_cron(expression, context).unwrap();
+    let job = JobBuilder::default()
+        .message(PrintJob { number: 2 })
+        .job_type(job_type)
+        .build()
+        .unwrap();
+    println!("{:?}", job);
     AJ::add_job(job);
 }
 

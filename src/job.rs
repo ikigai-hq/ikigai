@@ -1,13 +1,12 @@
-use crate::get_ms_as_datetime;
 use async_trait::async_trait;
 use chrono::{serde::ts_microseconds, serde::ts_microseconds_option, DateTime, Duration, Utc};
 use cron::Schedule;
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 use std::str::FromStr;
-use uuid::Uuid;
 
 use crate::util::{get_now, get_now_as_ms};
+use crate::Error;
 
 #[serde_as]
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -117,6 +116,15 @@ pub enum JobType {
     ),
 }
 
+impl JobType {
+    pub fn init_cron(expression: &str, context: CronContext) -> Result<Self, Error> {
+        let schedule = Schedule::from_str(expression)?;
+        let now = get_now();
+        let next_tick = schedule.after(&now).next().unwrap_or(now);
+        Ok(Self::Cron(expression.into(), next_tick, 1, context))
+    }
+}
+
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, Eq, PartialEq)]
 pub enum JobStatus {
     Created,
@@ -127,17 +135,26 @@ pub enum JobStatus {
     Failed,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Builder)]
 pub struct Job<M: Executable + Clone> {
+    #[builder(default = "uuid::Uuid::new_v4().to_string()")]
     pub id: String,
+    #[builder(default = "JobType::Normal")]
     pub job_type: JobType,
+    #[builder(default = "JobStatus::Created")]
     pub job_status: JobStatus,
     pub message: M,
+    #[builder(default, setter(skip))]
     pub enqueue_at: Option<i64>,
+    #[builder(default, setter(skip))]
     pub process_at: Option<i64>,
+    #[builder(default, setter(skip))]
     pub complete_at: Option<i64>,
+    #[builder(default, setter(skip))]
     pub cancel_at: Option<i64>,
+    #[builder(default = "get_now_as_ms()", setter(skip))]
     pub created_at: i64,
+    #[builder(setter(into, strip_option), default)]
     pub retry: Option<Retry>,
 }
 
@@ -145,27 +162,6 @@ impl<M> Job<M>
 where
     M: Executable + Clone,
 {
-    pub fn new(
-        id: String,
-        job_type: JobType,
-        job_status: JobStatus,
-        message: M,
-        retry: Option<Retry>,
-    ) -> Self {
-        Self {
-            id,
-            job_type,
-            job_status,
-            message,
-            created_at: get_now_as_ms(),
-            enqueue_at: None,
-            process_at: None,
-            complete_at: None,
-            cancel_at: None,
-            retry,
-        }
-    }
-
     pub fn is_ready(&self) -> bool {
         let now = get_now();
         match &self.job_type {
@@ -271,69 +267,5 @@ where
         debug!("[Job] Cancel {}", self.id);
         self.job_status = JobStatus::Failed;
         self.complete_at = Some(get_now_as_ms());
-    }
-}
-
-#[derive(Debug, Clone, Default)]
-pub struct JobBuilder<M: Executable + Clone> {
-    pub id: Option<String>,
-    pub job_type: Option<JobType>,
-    pub retry: Option<Retry>,
-    pub message: M,
-}
-
-impl<M: Executable + Clone> JobBuilder<M> {
-    pub fn new(message: M) -> Self {
-        Self {
-            id: None,
-            job_type: None,
-            retry: None,
-            message,
-        }
-    }
-
-    pub fn set_id(mut self, id: String) -> Self {
-        self.id = Some(id);
-        self
-    }
-
-    pub fn set_job_type(mut self, job_type: JobType) -> Self {
-        self.job_type = Some(job_type);
-        self
-    }
-
-    pub fn set_job_normal(self) -> Self {
-        self.set_job_type(JobType::Normal)
-    }
-
-    pub fn set_schedule_at(self, schedule_at: DateTime<Utc>) -> Self {
-        self.set_job_type(JobType::ScheduledAt(schedule_at))
-    }
-
-    pub fn run_after_ms(self, ms: i64) -> Self {
-        let dt = get_ms_as_datetime(ms);
-        self.set_schedule_at(dt)
-    }
-
-    pub fn run_after_secs(self, secs: i64) -> Self {
-        self.run_after_ms(secs * 1_000)
-    }
-
-    pub fn set_cron(self, cron: Schedule, context: CronContext) -> Self {
-        let now = get_now();
-        let next_time = cron.after(&now).next().unwrap_or(now);
-        self.set_job_type(JobType::Cron(cron.to_string(), next_time, 1, context))
-    }
-
-    pub fn set_retry(mut self, retry: Retry) -> Self {
-        self.retry = Some(retry);
-        self
-    }
-
-    pub fn build(self) -> Job<M> {
-        let id = self.id.unwrap_or(Uuid::new_v4().to_string());
-        let job_type = self.job_type.unwrap_or(JobType::Normal);
-
-        Job::new(id, job_type, JobStatus::Created, self.message, self.retry)
     }
 }

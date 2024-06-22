@@ -24,7 +24,10 @@ impl Executable for PrintJob {
 }
 
 fn run_job_instantly() {
-    let job = JobBuilder::new(PrintJob { number: 1 }).build();
+    let job = JobBuilder::default()
+        .message(PrintJob { number: 1 })
+        .build()
+        .unwrap();
     AJ::add_job(job);
 }
 

@@ -1,10 +1,10 @@
 import axios, { AxiosRequestConfig } from "axios";
+import { t } from "@lingui/macro";
+import { cloneDeep } from "lodash";
 
 import { CreateFileData, FileCheck, FileCreate } from "graphql/types";
 import { getApolloClient } from "graphql/ApolloClient";
 import { CREATE_FILE, CHECK_UPLOADING_FILE } from "graphql/mutation";
-import { t } from "@lingui/macro";
-import { cloneDeep } from "lodash";
 
 export type FileResponse = FileCreate & { downloadUrl?: string };
 
@@ -18,6 +18,10 @@ export const uploadFile = async (
   config?: AxiosRequestConfig,
 ): Promise<FileResponse | string> => {
   const uploadingFile = uploadingInfo.uploadingFile;
+
+  if (uploadingFile.size > 52_428_800) {
+    return t`Please choose file small than 50MB.`;
+  }
 
   // Step 1: Create File
   const inputData: CreateFileData = {

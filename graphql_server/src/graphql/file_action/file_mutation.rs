@@ -16,6 +16,7 @@ use crate::service::{Storage, UploadInfo};
 pub struct CreateFileData {
     file_name: String,
     content_type: String,
+    #[graphql(validator(maximum = 52_428_800))]
     content_length: i64,
     public: bool,
 }

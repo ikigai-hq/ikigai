@@ -323,9 +323,9 @@ dependencies = [
 
 [[package]]
 name = "aj"
-version = "0.4.2"
+version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c5ec7c245fcd59526aa61e4a8e696acbe35e6dd501277a900e9630c2a8b2e8be"
+checksum = "119108c38a0f172c698585fd9c8b9f6286293a7a747de847fedcf9f27b6adac4"
 dependencies = [
  "actix",
  "actix-rt",
@@ -333,13 +333,14 @@ dependencies = [
  "chrono",
  "cron",
  "dashmap",
+ "derive_builder",
  "lazy_static",
  "log",
- "redis 0.23.0",
+ "redis",
  "serde",
  "serde_json",
  "serde_with",
- "uuid 0.8.2",
+ "uuid",
 ]
 
 [[package]]
@@ -447,7 +448,7 @@ dependencies = [
  "static_assertions_next",
  "tempfile",
  "thiserror",
- "uuid 1.8.0",
+ "uuid",
 ]
 
 [[package]]
@@ -1472,7 +1473,7 @@ dependencies = [
  "pq-sys",
  "r2d2",
  "serde_json",
- "uuid 1.8.0",
+ "uuid",
 ]
 
 [[package]]
@@ -1873,7 +1874,7 @@ dependencies = [
  "r2d2",
  "rand",
  "rand_core",
- "redis 0.25.3",
+ "redis",
  "regex",
  "reqwest 0.12.4",
  "serde",
@@ -1885,7 +1886,7 @@ dependencies = [
  "thiserror",
  "tokio",
  "urlencoding",
- "uuid 1.8.0",
+ "uuid",
  "validator",
 ]
 
@@ -2725,7 +2726,7 @@ dependencies = [
  "polar-core",
  "thiserror",
  "tracing",
- "uuid 1.8.0",
+ "uuid",
 ]
 
 [[package]]
@@ -3086,20 +3087,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
 dependencies = [
  "getrandom",
-]
-
-[[package]]
-name = "redis"
-version = "0.23.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3ea8c51b5dc1d8e5fd3350ec8167f464ec0995e79f2e90a075b63371500d557f"
-dependencies = [
- "combine",
- "itoa 1.0.1",
- "percent-encoding",
- "ryu",
- "sha1_smol",
- "url",
 ]
 
 [[package]]
@@ -4245,16 +4232,6 @@ name = "urlencoding"
 version = "2.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "daf8dba3b7eb870caf1ddeed7bc9d2a049f3cfdfae7cb521b087cc33ae4c49da"
-
-[[package]]
-name = "uuid"
-version = "0.8.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc5cf98d8186244414c848017f0e2676b3fcb46807f6668a97dfe67359a3c4b7"
-dependencies = [
- "getrandom",
- "serde",
-]
 
 [[package]]
 name = "uuid"

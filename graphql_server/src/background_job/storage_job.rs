@@ -10,13 +10,15 @@ use crate::service::audio_waveform::AudioWaveform;
 
 pub fn add_generate_waveform_job(file_id: Uuid) {
     let job_id = format!("generate_waveform_{file_id}");
-    let job = JobBuilder::new(GenerateWaveform { file_id })
-        .set_id(job_id)
-        .set_retry(Retry::new_interval_retry(
+    let job = JobBuilder::default()
+        .message(GenerateWaveform { file_id })
+        .id(job_id)
+        .retry(Retry::new_interval_retry(
             Some(5),
             Duration::try_seconds(10).unwrap(),
         ))
-        .build();
+        .build()
+        .unwrap();
 
     AJ::add_job(job);
 }
@@ -52,9 +54,9 @@ impl Executable for GenerateWaveform {
         Ok(res)
     }
 
-    fn is_failed_output(&self, job_output: &Self::Output) -> bool {
+    async fn is_failed_output(&self, job_output: Self::Output) -> bool {
         match job_output {
-            Ok(success) => !*success,
+            Ok(success) => success,
             _ => true,
         }
     }

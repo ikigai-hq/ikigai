@@ -43,7 +43,6 @@ fn run_cron_job_with_condition() {
         .job_type(job_type)
         .build()
         .unwrap();
-    println!("{:?}", job);
     AJ::add_job(job);
 }
 

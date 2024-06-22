@@ -13,16 +13,10 @@ pub struct InMemory {
     pub storages: Arc<Mutex<HashMap<String, HashMap<String, String>>>>,
 }
 
-fn insert_item_to_queue(
-    queue: &mut VecDeque<String>,
-    items: Vec<String>,
-    direction: QueueDirection,
-) {
-    for item in items {
-        match direction {
-            QueueDirection::Front => queue.push_front(item.clone()),
-            QueueDirection::Back => queue.push_back(item.clone()),
-        }
+fn insert_item_to_queue(queue: &mut VecDeque<String>, item: String, direction: QueueDirection) {
+    match direction {
+        QueueDirection::Front => queue.push_front(item),
+        QueueDirection::Back => queue.push_back(item),
     }
 }
 
@@ -30,7 +24,7 @@ impl Backend for InMemory {
     fn queue_push(&self, queue_name: &str, item: &str) -> Result<(), Error> {
         let mut queues = self.queues.lock().unwrap();
         if let Some(queue) = queues.get_mut(queue_name) {
-            queue.push_back(item.to_string());
+            insert_item_to_queue(queue, item.into(), QueueDirection::Front);
         } else {
             let items = VecDeque::from([item.to_string()]);
             queues.insert(queue_name.to_string(), items);
@@ -38,7 +32,6 @@ impl Backend for InMemory {
         Ok(())
     }
 
-    // Direction::Left => Head, Direction::Right => Tail
     fn queue_move(
         &self,
         from_queue: &str,
@@ -61,15 +54,24 @@ impl Backend for InMemory {
             }
         }
 
-        if let Some(to_queue) = queues.get_mut(to_queue) {
-            insert_item_to_queue(to_queue, moving_items.clone(), to_direction);
-        } else {
-            let mut items = VecDeque::new();
-            insert_item_to_queue(&mut items, moving_items.clone(), to_direction);
-            queues.insert(to_queue.to_string(), items);
+        for moving_item in moving_items.iter() {
+            if let Some(to_queue) = queues.get_mut(to_queue) {
+                insert_item_to_queue(to_queue, moving_item.clone(), to_direction);
+            } else {
+                let items = VecDeque::from([moving_item.clone()]);
+                queues.insert(to_queue.to_string(), items);
+            }
         }
 
         Ok(moving_items)
+    }
+
+    fn queue_remove(&self, queue_name: &str, item: &str) -> Result<(), Error> {
+        if let Some(queue) = self.queues.lock().unwrap().get_mut(queue_name) {
+            queue.retain(|inner_item| inner_item.as_str() != item);
+        }
+
+        Ok(())
     }
 
     fn queue_get(&self, queue: &str, count: usize) -> Result<Vec<String>, Error> {
@@ -91,11 +93,6 @@ impl Backend for InMemory {
         } else {
             Ok(0)
         }
-    }
-
-    fn queue_del(&self, queue: &str) -> Result<(), Error> {
-        self.queues.lock().unwrap().remove(queue);
-        Ok(())
     }
 
     fn storage_upsert(&self, hash: &str, key: &str, value: String) -> Result<(), Error> {

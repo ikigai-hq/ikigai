@@ -9,7 +9,7 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use crate::job::{Job, JobStatus};
-use crate::types::{get_from_storage, upsert_to_storage, Backend};
+use crate::types::{get_from_storage, upsert_to_storage, Backend, QueueDirection};
 use crate::{Error, Executable, JobType};
 
 const DEFAULT_TICK_DURATION: Duration = Duration::from_millis(100);
@@ -148,13 +148,14 @@ where
         Ok(())
     }
 
-    pub fn re_enqueue(&self, mut job: Job<M>) -> Result<(), Error> {
-        debug!("Re Enqueue job {}", job.id);
+    pub fn re_enqueue_processing_job(&self, mut job: Job<M>) -> Result<(), Error> {
+        debug!("[WorkQueue] Re Enqueue job {}", job.id);
         if job.is_cancelled() {
             error!("[WorkQueue] Cannot re enqueue canceled job {}", job.id);
             return Ok(());
         }
 
+        self.remove_process_job(&job.id);
         job.job_status = JobStatus::Queued;
         upsert_to_storage(self.backend.deref(), &self.storage_name(), &job.id, &job)?;
 
@@ -175,6 +176,7 @@ where
 
     pub fn mark_finished_job(&self, mut job: Job<M>) -> Result<(), Error> {
         info!("Finish job {}", job.id);
+        self.remove_process_job(&job.id);
         job.finish();
         upsert_to_storage(self.backend.deref(), &self.storage_name(), &job.id, &job)?;
 
@@ -195,11 +197,22 @@ where
     }
 
     pub fn push_failed_job(&self, job_id: &str) {
+        self.remove_process_job(job_id);
         let failed_queue = self.format_failed_queue_name();
         if let Err(e) = self.backend.queue_push(&failed_queue, job_id) {
             error!(
                 "[WorkQueue] Cannot move to failed queue {}: {:?}",
                 job_id, e
+            );
+        };
+    }
+
+    pub fn remove_process_job(&self, job_id: &str) {
+        let processing_queue = self.format_queue_name(JobStatus::Processing);
+        if let Err(reason) = self.backend.queue_remove(&processing_queue, job_id) {
+            error!(
+                "[WorkQueue] Cannot remove job {} in processing queue: {:?}",
+                job_id, reason
             );
         };
     }
@@ -219,37 +232,42 @@ where
 
     // This logic will pick job from queued jobs -> processing jobs
     pub fn process_jobs(&mut self, ctx: &mut Context<WorkQueue<M>>) {
-        self._pick_queued_job();
-        self._process_processing_jobs(ctx);
+        match self._pick_queued_job() {
+            Err(err) => {
+                error!("[WorkQueue]: Cannot pick queued jobs {err:?}",);
+            }
+            Ok(job_ids) => {
+                for job_id in job_ids {
+                    self.execute_job_by_id(job_id, ctx);
+                }
+            }
+        }
         ctx.run_later(self.config.process_tick_duration, |work_queue, ctx| {
             work_queue.process_jobs(ctx);
         });
     }
 
-    pub fn _pick_queued_job(&self) {
+    pub fn _pick_queued_job(&self) -> Result<Vec<String>, Error> {
         let processing_queue = self.format_queue_name(JobStatus::Processing);
         let total_processing_jobs = self.backend.queue_count(&processing_queue).unwrap_or(0);
         if total_processing_jobs > 0 {
             // There
-            return;
+            return Ok(vec![]);
         }
 
         // No job in processing queue, should import queued jobs to processing
-        if let Err(err) = self.pick_queued_job(self.config.job_per_ticks) {
-            error!(
-                "[WorkQueue]: Cannot pick queued jobs of {} :{:?}",
-                processing_queue, err
-            );
-        }
+        self.pick_queued_job(self.config.job_per_ticks)
     }
 
     pub fn pick_queued_job(&self, count: usize) -> Result<Vec<String>, Error> {
         let idle_queue_name = self.format_queue_name(JobStatus::Queued);
         let processing_queue_name = self.format_queue_name(JobStatus::Processing);
-        let job_ids = self.backend.queue_move_back_to_front(
+        let job_ids = self.backend.queue_move(
             &idle_queue_name,
             &processing_queue_name,
             count,
+            QueueDirection::Back,
+            QueueDirection::Front,
         )?;
 
         let storage_name = self.storage_name();
@@ -265,32 +283,6 @@ where
         }
 
         Ok(job_ids)
-    }
-
-    pub fn _process_processing_jobs(&self, ctx: &mut Context<WorkQueue<M>>) {
-        let processing_queue = self.format_queue_name(JobStatus::Processing);
-        let total_processing_jobs = self.backend.queue_count(&processing_queue).unwrap_or(0);
-        if total_processing_jobs == 0 {
-            return;
-        }
-
-        match self.get_processing_job_ids(total_processing_jobs) {
-            Ok(job_ids) => {
-                for job_id in job_ids {
-                    self.execute_job_by_id(job_id, ctx);
-                }
-
-                if let Err(reason) = self.backend.queue_del(processing_queue.as_str()) {
-                    error!(
-                        "[WorkQueue] Cannot delete processing queue {}: {:?}",
-                        processing_queue, reason,
-                    );
-                }
-            }
-            Err(reason) => {
-                error!("[WorkQueue] Cannot get processing job ids {:?}", reason);
-            }
-        }
     }
 
     pub fn execute_job_by_id(&self, job_id: String, ctx: &mut Context<WorkQueue<M>>) {
@@ -323,7 +315,7 @@ where
 
         // If job is not ready -> Move back to queue
         if !job.is_ready() {
-            return self.re_enqueue(job);
+            return self.re_enqueue_processing_job(job);
         }
 
         let job_output = job.message.execute().await;
@@ -336,13 +328,13 @@ where
             if let Some(next_retry_ms) = job.message.should_retry(retry_context, job_output).await {
                 info!("[WorkQueue] Retry this job. {}", job.id);
                 job.job_type = JobType::ScheduledAt(next_retry_ms);
-                return self.re_enqueue(job);
+                return self.re_enqueue_processing_job(job);
             }
         }
 
         // If this is interval job (has next tick) -> re_enqueue it
         if let Some(next_job) = job.next_tick() {
-            return self.re_enqueue(next_job);
+            return self.re_enqueue_processing_job(next_job);
         }
 
         self.mark_finished_job(job)

@@ -16,36 +16,6 @@ pub enum QueueDirection {
 pub trait Backend {
     fn queue_push(&self, queue_name: &str, item: &str) -> Result<(), Error>;
 
-    fn queue_move_front_to_front(
-        &self,
-        from_queue: &str,
-        to_queue: &str,
-        count: usize,
-    ) -> Result<Vec<String>, Error> {
-        self.queue_move(
-            from_queue,
-            to_queue,
-            count,
-            QueueDirection::Front,
-            QueueDirection::Front,
-        )
-    }
-
-    fn queue_move_back_to_front(
-        &self,
-        from_queue: &str,
-        to_queue: &str,
-        count: usize,
-    ) -> Result<Vec<String>, Error> {
-        self.queue_move(
-            from_queue,
-            to_queue,
-            count,
-            QueueDirection::Back,
-            QueueDirection::Front,
-        )
-    }
-
     fn queue_move(
         &self,
         from_queue: &str,
@@ -55,11 +25,11 @@ pub trait Backend {
         to_position: QueueDirection,
     ) -> Result<Vec<String>, Error>;
 
+    fn queue_remove(&self, queue: &str, item: &str) -> Result<(), Error>;
+
     fn queue_get(&self, queue: &str, count: usize) -> Result<Vec<String>, Error>;
 
     fn queue_count(&self, queue: &str) -> Result<usize, Error>;
-
-    fn queue_del(&self, queue: &str) -> Result<(), Error>;
 
     fn storage_upsert(&self, hash: &str, key: &str, value: String) -> Result<(), Error>;
 

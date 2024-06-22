@@ -57,6 +57,11 @@ impl Redis {
         let mut conn = self.client.get_connection()?;
         conn.llen(queue)
     }
+
+    pub fn lrem(&self, queue: &str, item: &str) -> RedisResult<usize> {
+        let mut conn = self.client.get_connection()?;
+        conn.lrem(queue, 0, item)
+    }
 }
 
 impl Backend for Redis {
@@ -79,6 +84,11 @@ impl Backend for Redis {
         Ok(res)
     }
 
+    fn queue_remove(&self, queue: &str, item: &str) -> Result<(), Error> {
+        self.lrem(queue, item)?;
+        Ok(())
+    }
+
     fn queue_get(&self, queue: &str, count: usize) -> Result<Vec<String>, Error> {
         let res = self.lrange(queue, count)?;
         Ok(res)
@@ -87,12 +97,6 @@ impl Backend for Redis {
     fn queue_count(&self, queue: &str) -> Result<usize, Error> {
         let res = self.llen(queue)?;
         Ok(res)
-    }
-
-    fn queue_del(&self, queue: &str) -> Result<(), Error> {
-        let mut conn = self.client.get_connection()?;
-        conn.del(queue)?;
-        Ok(())
     }
 
     fn storage_upsert(&self, hash: &str, key: &str, value: String) -> Result<(), Error> {

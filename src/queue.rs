@@ -31,8 +31,12 @@ impl EnqueueConfig {
         }
     }
 
-    pub fn new_re_run_if_complete() -> Self {
+    pub fn new_re_run() -> Self {
         Self::new(true, true)
+    }
+
+    pub fn new_skip_if_finished() -> Self {
+        Self::new(false, true)
     }
 }
 
@@ -63,7 +67,7 @@ where
     M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
     Self: Actor<Context = Context<Self>>,
 {
-    pub job_name: Arc<String>,
+    name: Arc<String>,
     config: WorkQueueConfig,
     _type: PhantomData<M>,
     backend: Arc<dyn Backend>,
@@ -83,7 +87,7 @@ where
 {
     pub fn new(job_name: String, backend: impl Backend + 'static) -> Self {
         Self {
-            job_name: Arc::new(job_name),
+            name: Arc::new(job_name),
             config: WorkQueueConfig::default(),
             _type: PhantomData,
             backend: Arc::new(backend),
@@ -91,15 +95,15 @@ where
     }
 
     pub fn format_queue_name(&self, status: JobStatus) -> String {
-        format!("{}:queue:{:?}", self.job_name, status)
+        format!("{}:queue:{:?}", self.name, status)
     }
 
     pub fn format_failed_queue_name(&self) -> String {
-        format!("{}:queue:failed", self.job_name)
+        format!("{}:queue:failed", self.name)
     }
 
     pub fn storage_name(&self) -> String {
-        format!("{}:storage", self.job_name)
+        format!("{}:storage", self.name)
     }
 
     pub fn start_with_name(name: String, backend: impl Backend + Send + 'static) -> Addr<Self> {
@@ -123,7 +127,7 @@ where
             }
 
             if config.re_run && existing_job.is_done() {
-                info!("Job {} is done but config want re-run", existing_job.id);
+                info!("Job {} is finished but config want re-run", existing_job.id);
                 self.enqueue(job)?;
                 return Ok(());
             }
@@ -370,7 +374,7 @@ where
         let error_text = format!(
             "Cannot insert new job {:?} to queue {}",
             serde_json::to_string(&msg.0),
-            self.job_name
+            self.name
         );
         if self.enqueue_with_config(msg.0, msg.1).is_err() {
             error!("{}", error_text)

@@ -123,16 +123,6 @@ impl AJ {
         Self::enqueue_job(job, config)
     }
 
-    pub fn add_job_and_force_run<M>(job: Job<M>) -> bool
-    where
-        M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,
-
-        WorkQueue<M>: Actor<Context = Context<WorkQueue<M>>>,
-    {
-        let config = EnqueueConfig::new_force_update_re_run();
-        Self::enqueue_job(job, config)
-    }
-
     pub fn update_queue_config<M>(config: WorkQueueConfig)
     where
         M: Executable + Send + Sync + Clone + Serialize + DeserializeOwned + 'static,

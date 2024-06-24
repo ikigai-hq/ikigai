@@ -2,5 +2,10 @@
   "index": "Introduction",
   "getting-started": "Getting started",
   "community": "Join our Community",
+  "---": {
+    "type": "separator"
+  },
+  "policy": "Privacy Policy",
+  "term": "Terms of Service",
   "about": "About Ikigai"
 }

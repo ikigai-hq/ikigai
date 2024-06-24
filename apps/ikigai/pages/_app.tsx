@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { Theme } from "@radix-ui/themes";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import { useApollo } from "graphql/ApolloClient";
 import IkigaiToaster from "components/Toaster";
@@ -13,6 +14,7 @@ import { I18nProvider } from "@lingui/react";
 import { messages as enMessages } from "../locales/en/messages";
 import { Initializing } from "components/Initializing";
 import SpaceSetting from "../components/SpaceSetting";
+import Config from "config/Config";
 
 require("../styles/globals.css");
 
@@ -54,12 +56,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <IkigaiToaster />
         <ApolloProvider client={client}>
           <I18nProvider i18n={i18n}>
-            <ErrorBoundary>
-              <Initializing>
-                {getLayout(<Component {...pageProps} />)}
-                <SpaceSetting />
-              </Initializing>
-            </ErrorBoundary>
+            <GoogleOAuthProvider clientId={Config.googleClientId}>
+              <ErrorBoundary>
+                <Initializing>
+                  {getLayout(<Component {...pageProps} />)}
+                  <SpaceSetting />
+                </Initializing>
+              </ErrorBoundary>
+            </GoogleOAuthProvider>
           </I18nProvider>
         </ApolloProvider>
       </>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { t } from "@lingui/macro";
+import { t, Trans } from "@lingui/macro";
 import styled from "styled-components";
-import { Avatar, Separator, Tooltip } from "@radix-ui/themes";
+import { Avatar, DropdownMenu, Separator } from "@radix-ui/themes";
 import { FileIcon } from "@radix-ui/react-icons";
 
 import useAuthUserStore from "store/AuthStore";
@@ -10,6 +10,8 @@ import LeftSecondarySide from "components/Document/LeftSide/LeftSecondarySide";
 import IkigaiIconButton from "components/base/IconButton";
 import ManageSpaceModal from "./ManageSpaceModal";
 import useUIStore, { LeftSideBarOptions } from "store/UIStore";
+import TokenStorage from "storage/TokenStorage";
+import UserStorage from "storage/UserStorage";
 
 const LeftSide = () => {
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
@@ -17,6 +19,12 @@ const LeftSide = () => {
   const leftSidebar = useUIStore((state) => state.config.leftSidebar);
   const setUiConfig = useUIStore((state) => state.setConfig);
   const myName = me ? `${me.firstName} ${me.lastName}` : t`Unknown`;
+
+  const onClickLogout = () => {
+    UserStorage.del();
+    TokenStorage.del();
+    window.location.href = "/";
+  };
 
   const onClickContent = () => {
     setUiConfig({
@@ -44,12 +52,9 @@ const LeftSide = () => {
             </IkigaiIconButton>
           </MenuItemWrapper>
         </div>
-        <EditProfileModal open={openProfile} onOpenChange={setOpenProfile}>
-          <Tooltip content={myName}>
-            <div
-              style={{ margin: "5px auto", cursor: "pointer" }}
-              onClick={() => setOpenProfile(true)}
-            >
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <div style={{ margin: "5px auto", cursor: "pointer" }}>
               <Avatar
                 radius={"full"}
                 fallback={myName.charAt(0)}
@@ -58,11 +63,23 @@ const LeftSide = () => {
                 size="2"
               />
             </div>
-          </Tooltip>
-        </EditProfileModal>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content style={{ padding: 5 }}>
+            <DropdownMenu.Item color="red" onClick={onClickLogout}>
+              <Trans>Log out</Trans>
+            </DropdownMenu.Item>
+            <DropdownMenu.Separator />
+            <DropdownMenu.Item onClick={() => setOpenProfile(true)}>
+              <Trans>Edit Profile</Trans>
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
       </Container>
       <Separator style={{ height: "100vh", width: 1 }} />
       <LeftSecondarySide />
+      <EditProfileModal open={openProfile} onOpenChange={setOpenProfile}>
+        <></>
+      </EditProfileModal>
     </>
   );
 };

@@ -713,6 +713,32 @@ export interface UpdateProfileVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: SigninWithGoogle
+// ====================================================
+
+export interface SigninWithGoogle_userSigninWithGoogle_user {
+  id: number;
+}
+
+export interface SigninWithGoogle_userSigninWithGoogle {
+  user: SigninWithGoogle_userSigninWithGoogle_user;
+  accessToken: string;
+}
+
+export interface SigninWithGoogle {
+  userSigninWithGoogle: SigninWithGoogle_userSigninWithGoogle;
+}
+
+export interface SigninWithGoogleVariables {
+  idToken: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetSubmissionsOfAssignment
 // ====================================================
 

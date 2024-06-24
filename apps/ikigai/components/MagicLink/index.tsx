@@ -5,11 +5,17 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import validator from "validator";
 import { useKeyPress } from "ahooks";
-import { Button, Text, TextField } from "@radix-ui/themes";
+import { GoogleLogin } from "@react-oauth/google";
+import { Button, Separator, Text, TextField } from "@radix-ui/themes";
 
 import { handleError } from "graphql/ApolloClient";
-import { SEND_MAGIC_LINK } from "graphql/mutation/UserMutation";
-import { SendMagicLink } from "graphql/types";
+import {
+  SEND_MAGIC_LINK,
+  SIGNIN_WITH_GOOGLE,
+} from "graphql/mutation/UserMutation";
+import { SendMagicLink, SigninWithGoogle } from "graphql/types";
+import TokenStorage from "storage/TokenStorage";
+import UserStorage from "storage/UserStorage";
 
 const MagicLink = () => {
   const [email, setEmail] = useState("");
@@ -19,6 +25,14 @@ const MagicLink = () => {
       onError: handleError,
     },
   );
+  const [signInWithGoogle] = useMutation<SigninWithGoogle>(SIGNIN_WITH_GOOGLE, {
+    onError: handleError,
+    onCompleted: (data) => {
+      TokenStorage.set(data.userSigninWithGoogle.accessToken);
+      UserStorage.set(data.userSigninWithGoogle.user.id);
+      window.location.reload();
+    },
+  });
 
   useKeyPress("enter", () => {
     send();
@@ -59,9 +73,33 @@ const MagicLink = () => {
           the magic link inside email.
         </Text>
       </DescriptionDiv>
-      <Button onClick={send} loading={loading} disabled={loading}>
+      <Button
+        onClick={send}
+        loading={loading}
+        disabled={loading || !validator.isEmail(email)}
+        style={{ width: "100%" }}
+      >
         <Trans>Send me a magic link!</Trans>
       </Button>
+      <Separator style={{ width: "100%", marginTop: 10, marginBottom: 10 }} />
+      <GoogleLogin
+        onSuccess={(credentialResponse) => {
+          if (credentialResponse.credential) {
+            signInWithGoogle({
+              variables: {
+                idToken: credentialResponse.credential,
+              },
+            });
+          } else {
+            toast.error(
+              t`Cannot get credentials from google. Please try again!`,
+            );
+          }
+        }}
+        onError={() => {
+          toast.error(t`Cannot signin with google.`);
+        }}
+      />
     </Container>
   );
 };

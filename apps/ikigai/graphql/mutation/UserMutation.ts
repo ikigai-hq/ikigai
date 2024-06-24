@@ -22,3 +22,14 @@ export const UPDATE_PROFILE = gql`
     userUpdateInfo(input: $input)
   }
 `;
+
+export const SIGNIN_WITH_GOOGLE = gql`
+  mutation SigninWithGoogle($idToken: String!) {
+    userSigninWithGoogle(idToken: $idToken) {
+      user {
+        id
+      }
+      accessToken
+    }
+  }
+`;

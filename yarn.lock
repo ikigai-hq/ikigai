@@ -2564,6 +2564,11 @@
     classnames "^2.3.2"
     rc-util "^5.24.4"
 
+"@react-oauth/google@^0.12.1":
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/@react-oauth/google/-/google-0.12.1.tgz#b76432c3a525e9afe076f787d2ded003fcc1bee9"
+  integrity sha512-qagsy22t+7UdkYAiT5ZhfM4StXi9PPNvw0zuwNmabrWyMKddczMtBIOARflbaIj+wHiQjnMAsZmzsUYuXeyoSg==
+
 "@react-pdf/fns@2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@react-pdf/fns/-/fns-2.2.1.tgz#04fe664a6f70214569c9c27e249e3395836f37d5"

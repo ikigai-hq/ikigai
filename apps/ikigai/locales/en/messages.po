@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: components/Document/DocumentHeader/Menubar/index.tsx:196
+msgid "{0} focus mode"
+msgstr "{0} focus mode"
+
 #: components/Editor/Extensions/FileHandler/FileHandlerReview.tsx:24
 msgid "{0}KB"
 msgstr "{0}KB"
@@ -75,12 +79,32 @@ msgstr "Are you sure to remove this invite token?"
 msgid "Are you sure? This rubric will no longer be accessible."
 msgstr "Are you sure? This rubric will no longer be accessible."
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:51
-#: components/Document/DocumentHeader/Menubar/index.tsx:135
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:90
+msgid "Assign"
+msgstr "Assign"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:102
+msgid "Assign at"
+msgstr "Assign at"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:93
+msgid "Assign to students"
+msgstr "Assign to students"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:65
+msgid "Assigned!"
+msgstr "Assigned!"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/index.tsx:31
+msgid "Assignees"
+msgstr "Assignees"
+
+#: components/Document/DocumentHeader/Menubar/index.tsx:55
+#: components/Document/DocumentHeader/Menubar/index.tsx:140
 msgid "Assignment"
 msgstr "Assignment"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:66
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:125
 msgid "Attempt"
 msgstr "Attempt"
 
@@ -103,13 +127,21 @@ msgstr "Back to home"
 #~ msgid "Back to space"
 #~ msgstr "Back to space"
 
-#: components/base/AlertDialog.tsx:71
+#: components/base/AlertDialog.tsx:74
 msgid "Cancel"
 msgstr "Cancel"
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/StudentExtraActions.tsx:35
 #~ msgid "Cannot create submission"
 #~ msgstr "Cannot create submission"
+
+#: components/MagicLink/index.tsx:95
+msgid "Cannot get credentials from google. Please try again!"
+msgstr "Cannot get credentials from google. Please try again!"
+
+#: components/MagicLink/index.tsx:100
+msgid "Cannot signin with google."
+msgstr "Cannot signin with google."
 
 #: components/common/FileUpload.tsx:198
 #: components/common/ManualFileUpload.tsx:50
@@ -120,7 +152,7 @@ msgstr "Cancel"
 msgid "Content"
 msgstr "Content"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:66
+#: components/Document/DocumentHeader/Menubar/index.tsx:70
 msgid "Copied"
 msgstr "Copied"
 
@@ -138,7 +170,7 @@ msgstr "Copied!"
 msgid "Copy invite link"
 msgstr "Copy invite link"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:151
+#: components/Document/DocumentHeader/Menubar/index.tsx:156
 msgid "Copy Link"
 msgstr "Copy Link"
 
@@ -158,23 +190,23 @@ msgstr "Created! We're moving you to your new space"
 msgid "Criteria"
 msgstr "Criteria"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:162
+#: components/Document/DocumentHeader/Menubar/index.tsx:167
 msgid "Delete"
 msgstr "Delete"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:168
+#: components/Document/DocumentHeader/Menubar/index.tsx:205
 msgid "Delete {0}!"
 msgstr "Delete {0}!"
 
-#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:102
+#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:105
 msgid "Delete page {innerTitle}!"
 msgstr "Delete page {innerTitle}!"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:93
+#: components/Document/DocumentHeader/Menubar/index.tsx:97
 msgid "Deleted"
 msgstr "Deleted"
 
-#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:47
+#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:50
 #: components/Rubric/RubricManagement.tsx:59
 #: components/SpaceSetting/InviteSpaceSetting.tsx:51
 msgid "Deleted!"
@@ -209,11 +241,11 @@ msgstr "Do you want to remove {level}?"
 msgid "Do you want to start new attempt?"
 msgstr "Do you want to start new attempt?"
 
-#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:93
+#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:109
 msgid "Do you want to submit your submission?"
 msgstr "Do you want to submit your submission?"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:79
+#: components/Document/DocumentHeader/Menubar/index.tsx:83
 msgid "Duplicated!"
 msgstr "Duplicated!"
 
@@ -221,14 +253,23 @@ msgstr "Duplicated!"
 #~ msgid "Edit Cover"
 #~ msgstr "Edit Cover"
 
-#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:77
+#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:80
 msgid "Edit Page"
 msgstr "Edit Page"
 
-#: components/MagicLink/index.tsx:49
+#: components/Document/LeftSide/index.tsx:73
+msgid "Edit Profile"
+msgstr "Edit Profile"
+
+#: components/MagicLink/index.tsx:63
 #: components/PreJoinSpace.tsx:58
 msgid "Email"
 msgstr "Email"
+
+#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:61
+#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:172
+msgid "Exit"
+msgstr "Exit"
 
 #: components/SpaceSetting/InviteSpaceSetting.tsx:89
 #~ msgid "Expire"
@@ -246,9 +287,23 @@ msgstr "Expire at"
 msgid "Expired"
 msgstr "Expired"
 
-#: components/MagicLink/index.tsx:41
+#: components/MagicLink/index.tsx:55
 msgid "Failed! Please try again."
 msgstr "Failed! Please try again."
+
+#: components/Document/DocumentBody/Grading/index.tsx:135
+msgid "Feedback"
+msgstr "Feedback"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:30
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:119
+#: components/Document/DocumentBody/Grading/index.tsx:79
+msgid "Feedback at"
+msgstr "Feedback at"
+
+#: components/Document/DocumentBody/Grading/index.tsx:40
+msgid "Feedback successfully!"
+msgstr "Feedback successfully!"
 
 #: components/Document/RightSide/GradingSidebar/index.tsx:56
 #~ msgid "Final Grade"
@@ -259,8 +314,8 @@ msgstr "Failed! Please try again."
 msgid "First name"
 msgstr "First name"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:49
-#: components/Document/DocumentHeader/Menubar/index.tsx:141
+#: components/Document/DocumentHeader/Menubar/index.tsx:53
+#: components/Document/DocumentHeader/Menubar/index.tsx:146
 msgid "Folder"
 msgstr "Folder"
 
@@ -268,7 +323,7 @@ msgstr "Folder"
 msgid "From point"
 msgstr "From point"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/index.tsx:19
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/index.tsx:24
 #: components/SpaceSetting/index.tsx:37
 msgid "General"
 msgstr "General"
@@ -281,7 +336,8 @@ msgstr "Generate"
 msgid "Generate Invite Link"
 msgstr "Generate Invite Link"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:33
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:36
+#: components/Document/DocumentBody/Grading/index.tsx:108
 msgid "Grade"
 msgstr "Grade"
 
@@ -297,6 +353,10 @@ msgstr "Grade Method"
 #~ msgid "Graded!"
 #~ msgstr "Graded!"
 
+#: components/Document/DocumentBody/Grading/index.tsx:50
+msgid "Grading"
+msgstr "Grading"
+
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/StudentGradeInformation.tsx:56
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:75
 #~ msgid "In auto mode, students will receive their grades and results immediately after completing their assessments."
@@ -307,7 +367,7 @@ msgstr "Grade Method"
 #~ msgid "In manual mode, students will receive their grades and results only after the teacher has provided feedback."
 #~ msgstr "In manual mode, students will receive their grades and results only after the teacher has provided feedback."
 
-#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:65
+#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:68
 msgid "Information"
 msgstr "Information"
 
@@ -344,7 +404,7 @@ msgstr "Inviter"
 msgid "Inviting role"
 msgstr "Inviting role"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:169
+#: components/Document/DocumentHeader/Menubar/index.tsx:206
 msgid "It will delete children files if this is folder."
 msgstr "It will delete children files if this is folder."
 
@@ -364,7 +424,11 @@ msgstr "Joined! Please check your mail inbox"
 msgid "Last name"
 msgstr "Last name"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:155
+#: components/Document/LeftSide/index.tsx:69
+msgid "Log out"
+msgstr "Log out"
+
+#: components/Document/DocumentHeader/Menubar/index.tsx:160
 msgid "Make a copy"
 msgstr "Make a copy"
 
@@ -409,8 +473,9 @@ msgstr "minutes"
 msgid "My Spaces"
 msgstr "My Spaces"
 
-#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:81
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:60
+#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:84
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:99
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:110
 #: components/SpaceSetting/MemberSpaceSetting.tsx:27
 msgid "Name"
 msgstr "Name"
@@ -419,7 +484,7 @@ msgstr "Name"
 msgid "Never"
 msgstr "Never"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:121
+#: components/Document/DocumentHeader/Menubar/index.tsx:126
 msgid "New"
 msgstr "New"
 
@@ -444,7 +509,11 @@ msgstr "New space"
 msgid "No document"
 msgstr "No document"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:66
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:68
+msgid "No feedback"
+msgstr "No feedback"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:81
 msgid "No grade"
 msgstr "No grade"
 
@@ -456,7 +525,7 @@ msgstr "No grade"
 msgid "Not set"
 msgstr "Not set"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:53
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:56
 msgid "Not submitted"
 msgstr "Not submitted"
 
@@ -491,7 +560,7 @@ msgstr "Oops! We found an unexpected error..."
 msgid "Powered by ikigai"
 msgstr "Powered by ikigai"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:55
+#: components/Document/DocumentHeader/Menubar/index.tsx:59
 msgid "Private folder"
 msgstr "Private folder"
 
@@ -499,13 +568,17 @@ msgstr "Private folder"
 msgid "Profile"
 msgstr "Profile"
 
-#: components/base/AlertDialog.tsx:54
+#: components/base/AlertDialog.tsx:55
 msgid "Remove"
 msgstr "Remove"
 
 #: components/SpaceSetting/MemberSpaceSetting.tsx:91
 msgid "Remove {0}"
 msgstr "Remove {0}"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:119
+msgid "Remove assignee {0}!"
+msgstr "Remove assignee {0}!"
 
 #: components/Document/DocumentBody/CoverPage/CoverPhotoHeader.tsx:55
 #~ msgid "Remove Cover"
@@ -523,11 +596,12 @@ msgstr "Remove member"
 #~ msgid "Remove page"
 #~ msgstr "Remove page"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:79
 #: components/SpaceSetting/MemberSpaceSetting.tsx:81
 msgid "Removed!"
 msgstr "Removed!"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:149
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:181
 msgid "Review and feedback last submission"
 msgstr "Review and feedback last submission"
 
@@ -570,19 +644,19 @@ msgstr ""
 msgid "Save"
 msgstr "Save"
 
-#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:90
+#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:106
 msgid "Save & Exit"
 msgstr "Save & Exit"
 
-#: components/MagicLink/index.tsx:63
+#: components/MagicLink/index.tsx:82
 msgid "Send me a magic link!"
 msgstr "Send me a magic link!"
 
-#: components/MagicLink/index.tsx:39
+#: components/MagicLink/index.tsx:53
 msgid "Sent. Please check your email inbox!"
 msgstr "Sent. Please check your email inbox!"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:148
+#: components/Document/DocumentHeader/Menubar/index.tsx:153
 msgid "Share"
 msgstr "Share"
 
@@ -623,11 +697,13 @@ msgstr "Space Settings & Switch Space"
 #~ msgstr "Split page"
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:24
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:113
+#: components/Document/DocumentBody/Grading/index.tsx:56
 msgid "Start at"
 msgstr "Start at"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:30
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:63
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:33
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:122
 msgid "Status"
 msgstr "Status"
 
@@ -640,11 +716,11 @@ msgstr "Status"
 #~ msgid "Sub Contents"
 #~ msgstr "Sub Contents"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:53
+#: components/Document/DocumentHeader/Menubar/index.tsx:57
 msgid "Submission"
 msgstr "Submission"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/index.tsx:22
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/index.tsx:27
 msgid "Submissions"
 msgstr "Submissions"
 
@@ -652,16 +728,19 @@ msgstr "Submissions"
 msgid "Submissions of {title}"
 msgstr "Submissions of {title}"
 
-#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:97
-#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:100
+#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:113
+#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:116
+#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:149
 msgid "Submit"
 msgstr "Submit"
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:27
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:116
+#: components/Document/DocumentBody/Grading/index.tsx:66
 msgid "Submit at"
 msgstr "Submit at"
 
-#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:73
+#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:89
 msgid "Success"
 msgstr "Success"
 
@@ -682,7 +761,11 @@ msgstr "Test duration"
 #~ msgid "Test Duration"
 #~ msgstr "Test Duration"
 
-#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:103
+#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:143
+msgid "The test duration is complete!"
+msgstr "The test duration is complete!"
+
+#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:106
 msgid "This action cannot revert, do you want to delete this page?"
 msgstr "This action cannot revert, do you want to delete this page?"
 
@@ -691,8 +774,16 @@ msgstr "This action cannot revert, do you want to delete this page?"
 msgid "This action cannot revert!"
 msgstr "This action cannot revert!"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:120
+msgid "This action cannot revert. Do you want to remove this assignee?"
+msgstr "This action cannot revert. Do you want to remove this assignee?"
+
+#: components/Document/DocumentBody/Grading/index.tsx:92
+msgid "Time completion"
+msgstr "Time completion"
+
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AttemptAttribute.tsx:38
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:118
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:150
 msgid "times"
 msgstr "times"
 
@@ -724,7 +815,11 @@ msgstr "Type maximum attempt number..."
 msgid "Type minutes number..."
 msgstr "Type minutes number..."
 
-#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:84
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:190
+msgid "Type or paste emails, separate by space or comma"
+msgstr "Type or paste emails, separate by space or comma"
+
+#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:87
 msgid "Type page name"
 msgstr "Type page name"
 
@@ -736,16 +831,16 @@ msgstr "Type space name..."
 #~ msgid "Type your email"
 #~ msgstr "Type your email"
 
-#: components/MagicLink/index.tsx:52
+#: components/MagicLink/index.tsx:66
 #: components/PreJoinSpace.tsx:61
 msgid "Type your email!"
 msgstr "Type your email!"
 
-#: components/Document/RightSide/GradingSidebar/index.tsx:75
-#~ msgid "Type your feedback..."
-#~ msgstr "Type your feedback..."
+#: components/Document/DocumentBody/Grading/index.tsx:122
+msgid "Type your feedback..."
+msgstr "Type your feedback..."
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/index.tsx:52
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/index.tsx:51
 msgid "Typing assignment description or guide..."
 msgstr "Typing assignment description or guide..."
 
@@ -769,7 +864,7 @@ msgstr "Typing level"
 msgid "Typing your description"
 msgstr "Typing your description"
 
-#: components/Document/LeftSide/index.tsx:19
+#: components/Document/LeftSide/index.tsx:21
 msgid "Unknown"
 msgstr "Unknown"
 
@@ -782,7 +877,7 @@ msgstr "Unlimited"
 msgid "Untitled"
 msgstr "Untitled"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/index.tsx:66
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/index.tsx:65
 #: components/SpaceSetting/GeneralSpaceSetting.tsx:58
 msgid "Update"
 msgstr "Update"
@@ -824,11 +919,11 @@ msgstr "Updated!"
 #~ msgid "Uses"
 #~ msgstr "Uses"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:78
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:93
 msgid "View"
 msgstr "View"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:127
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:159
 msgid "View all submissions of {0}"
 msgstr "View all submissions of {0}"
 
@@ -844,14 +939,22 @@ msgstr "View other students"
 #~ msgid "View submission"
 #~ msgstr "View submission"
 
-#: components/MagicLink/index.tsx:29
+#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:144
+msgid "We will move you back to assignment page!"
+msgstr "We will move you back to assignment page!"
+
+#: components/MagicLink/index.tsx:43
 #: components/PreJoinSpace.tsx:30
 msgid "Wrong email format!"
 msgstr "Wrong email format!"
 
+#: components/Document/DocumentHeader/SubmissionHeader/index.tsx:110
+msgid "You cannot continue edit your submission after you submit."
+msgstr "You cannot continue edit your submission after you submit."
+
 #: components/Document/DocumentHeader/SubmissionHeader/index.tsx:94
-msgid "You cannot revert this action."
-msgstr "You cannot revert this action."
+#~ msgid "You cannot revert this action."
+#~ msgstr "You cannot revert this action."
 
 #: components/EmptyState.tsx:27
 msgid "You have no class here"

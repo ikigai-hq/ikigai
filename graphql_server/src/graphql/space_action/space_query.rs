@@ -4,7 +4,7 @@ use async_graphql::*;
 use crate::db::*;
 use crate::error::IkigaiErrorExt;
 use crate::helper::{
-    get_conn_from_ctx, get_space_allowed_permissions, get_user_auth_from_ctx, space_quick_authorize,
+    get_conn_from_ctx, get_space_allowed_permissions, get_user_id_from_ctx, space_quick_authorize,
 };
 
 #[derive(Default)]
@@ -29,9 +29,9 @@ impl SpaceQuery {
     }
 
     async fn space_mine(&self, ctx: &Context<'_>) -> Result<Vec<Space>> {
-        let user_auth = get_user_auth_from_ctx(ctx).await?;
+        let user_id = get_user_id_from_ctx(ctx).await?;
         let mut conn = get_conn_from_ctx(ctx).await?;
-        Space::find_my_spaces(&mut conn, user_auth.id).format_err()
+        Space::find_my_spaces(&mut conn, user_id).format_err()
     }
 
     async fn space_get_invite_tokens(

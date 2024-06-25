@@ -8,6 +8,7 @@ import TokenStorage from "storage/TokenStorage";
 import {
   CheckDocument,
   CheckToken,
+  GetMySpaces,
   MyLastActivity,
   UserMe,
   VerifyMagicLink,
@@ -24,6 +25,7 @@ import { formatDocumentRoute, Routes } from "config/Routes";
 import LayoutManagement from "./UserCredential/AuthLayout";
 import Loading from "./Loading";
 import { VERIFY_MAGIC_LINK } from "graphql/mutation/UserMutation";
+import { GET_MY_SPACES } from "../graphql/query/SpaceQuery";
 
 interface Props {
   children: ReactNode;
@@ -43,6 +45,7 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
   });
   const [getLastActivity] = useLazyQuery<MyLastActivity>(MY_LAST_ACTIVITY);
   const [checkMagicLink] = useMutation<VerifyMagicLink>(VERIFY_MAGIC_LINK);
+  const [getMySpaces] = useLazyQuery<GetMySpaces>(GET_MY_SPACES);
 
   useEffect(() => {
     if (router.isReady) verifyAuth();
@@ -58,8 +61,8 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
       if (checkNext) checkNext = await verifyDocument();
       console.info("Verifying User Authentication", checkNext);
       if (checkNext) checkNext = await verifyUserAuth();
-      console.info("Verifying Last Activity", checkNext);
-      if (checkNext) await verifyLastActivity();
+      console.info("Verifying Possible Document", checkNext);
+      if (checkNext) await verifyPossibleDocument();
     } catch (e) {
       console.error("Cannot verify user auth", e);
       setHasError(e.message);
@@ -100,7 +103,7 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
     return await checkDocumentSpace(documentId);
   };
 
-  const verifyLastActivity = async (): Promise<boolean> => {
+  const verifyPossibleDocument = async (): Promise<boolean> => {
     const isHome = router.pathname === Routes.Home;
     const token = TokenStorage.get();
     if (isHome && token) {
@@ -121,6 +124,14 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
       documentId && router.pathname.includes("/documents");
     if (isDocumentRoute && token) {
       await router.push(formatDocumentRoute(documentId));
+      return false;
+    }
+
+    const { data } = await getMySpaces();
+    if (data && data.spaceMine.length > 0) {
+      window.location.replace(
+        formatDocumentRoute(data.spaceMine[0].starterDocument.id),
+      );
       return false;
     }
 

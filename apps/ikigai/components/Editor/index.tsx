@@ -109,7 +109,7 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
   });
 
   return (
-    <main style={{ margin: 15 }}>
+    <main style={{ margin: 15 }} spellCheck={false}>
       <EditorContent style={{ width: "100%" }} editor={editor} />
     </main>
   );

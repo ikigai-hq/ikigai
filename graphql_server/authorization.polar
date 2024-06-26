@@ -48,6 +48,10 @@ allow(actor: UserAuth, "interactive_with_tool", doc: DocumentAuth) if
 	doc.creator_id = actor.id and
 	actor.role = "student";
 
+allow(actor: UserAuth, "edit_document", doc: DocumentAuth) if
+	has_role(actor, "submission_doer", doc) and
+		not doc.is_structured_submission;
+
 resource DocumentAuth {
     roles = ["reader", "reviewer", "submission_doer", "writer"];
     permissions = [
@@ -65,9 +69,9 @@ resource DocumentAuth {
     "view_page_content" if "reviewer";
 
     "reviewer" if "submission_doer";
-    "edit_document" if "submission_doer";
 
     "submission_doer" if "writer";
+    "edit_document" if "writer";
     "interactive_with_tool" if "writer";
     "view_answer" if "writer";
     "manage_document" if "writer";

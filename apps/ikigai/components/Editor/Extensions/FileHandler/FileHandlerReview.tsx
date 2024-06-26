@@ -11,6 +11,7 @@ import ReactPlayer from "react-player";
 
 import { GET_DOWNLOAD_URL_BY_PAGE_CONTENT_ID } from "graphql/query";
 import { isSupportedImage, isSupportedVideo } from "util/FileUtil";
+import { isAudio } from "../../../../util/FileType";
 
 const KB = 1024;
 const MB = KB * 1024;
@@ -88,6 +89,15 @@ const FileHandlerReview = ({
 
   // Render Video
   if (isSupportedVideo(file.getFile.contentType) && fileDownloadUrl) {
+    return (
+      <div style={{ padding: "10px" }}>
+        <ReactPlayer url={fileDownloadUrl} controls={true} width="100%" />
+      </div>
+    );
+  }
+
+  // Render Audio
+  if (isAudio(file.getFile.contentType) && fileDownloadUrl) {
     return (
       <div style={{ padding: "10px" }}>
         <ReactPlayer url={fileDownloadUrl} controls={true} width="100%" />

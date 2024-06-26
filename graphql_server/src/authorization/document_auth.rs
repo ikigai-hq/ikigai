@@ -24,6 +24,8 @@ pub struct DocumentAuth {
     pub is_submission: bool,
     #[polar(attribute)]
     pub is_private: bool,
+    #[polar(attribute)]
+    pub is_structured_submission: bool,
 }
 
 impl DocumentAuth {
@@ -49,6 +51,8 @@ impl DocumentAuth {
             is_assignment: assignment.is_some(),
             is_submission: submission.is_some(),
             is_private: document.is_private || document.is_default_folder_private,
+            // WARN: change by submission attribute to support open assignment.
+            is_structured_submission: true,
         })
     }
 }

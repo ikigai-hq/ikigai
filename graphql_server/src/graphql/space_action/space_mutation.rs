@@ -9,6 +9,13 @@ use crate::helper::*;
 use crate::notification_center::send_notification;
 use crate::util::get_now_as_secs;
 
+#[derive(SimpleObject)]
+pub struct SpaceJoinResponse {
+    pub space_id: i32,
+    pub document_id: Uuid,
+    pub should_go_to_space: bool,
+}
+
 #[derive(Default)]
 pub struct SpaceMutation;
 
@@ -167,7 +174,15 @@ impl SpaceMutation {
         email: String,
         space_id: i32,
         token: String,
-    ) -> Result<bool> {
+    ) -> Result<SpaceJoinResponse> {
+        let authorized_user = get_user_from_ctx(ctx).await.ok();
+        if authorized_user.as_ref().map(|user| user.email.as_str()) != Some(email.as_str()) {
+            return Err(IkigaiError::new_bad_request(
+                "Cannot join space by using different with authorized email",
+            ))
+            .format_err();
+        }
+
         let mut conn = get_conn_from_ctx(ctx).await?;
         let space = Space::find_by_id(&mut conn, space_id).format_err()?;
         let space_invite_token =
@@ -209,7 +224,9 @@ impl SpaceMutation {
         let starter_document =
             Document::get_or_create_starter_doc(&mut conn, space_member.user_id, space_id)
                 .format_err()?;
-        let res = send_space_magic_link(&user, &space, starter_document.id);
+        if authorized_user.is_none() {
+            send_space_magic_link(&user, &space, starter_document.id)?;
+        }
 
         // Notify space owner
         if is_new_space_member {
@@ -222,7 +239,11 @@ impl SpaceMutation {
             send_notification(&mut conn, notification, vec![space.creator_id]).format_err()?;
         }
 
-        res
+        Ok(SpaceJoinResponse {
+            space_id: space_member.space_id,
+            document_id: starter_document.id,
+            should_go_to_space: authorized_user.is_some(),
+        })
     }
 
     async fn space_remove_invite_token(

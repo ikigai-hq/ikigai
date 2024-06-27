@@ -19,6 +19,7 @@ import { IPageContent } from "store/PageContentStore";
 import useAddOrUpdatePageContent from "hook/UseUpsertPageContent";
 import useEditorStore from "store/EditorStore";
 import FileHandler from "./Extensions/FileHandler";
+import { WritingBlock } from "./Extensions/WritingBlock";
 
 export type EditorProps = {
   readOnly: boolean;
@@ -75,6 +76,7 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
         nested: true,
       }),
       FileHandler,
+      WritingBlock,
     ],
     content: innerContent,
     editorProps: {

@@ -18,12 +18,15 @@ import {
   IconListNumbers,
   IconStrikethrough,
   IconTextColor,
+  IconTools,
   IconUnderline,
+  IconWriting,
 } from "@tabler/icons-react";
 
 import useEditorStore from "store/EditorStore";
-import { Button, DropdownMenu } from "@radix-ui/themes";
+import { Button, DropdownMenu, Tooltip } from "@radix-ui/themes";
 import { TwitterPicker } from "react-color";
+import { t, Trans } from "@lingui/macro";
 
 const ContentToolbar = () => {
   const activeEditor = useEditorStore((state) => state.activeEditor);
@@ -113,6 +116,12 @@ const ContentToolbar = () => {
     setToolbarOptions({ blockquote: activeEditor.isActive("blockquote") });
   };
 
+  const onChangeWritingBlock = () => {
+    if (!activeEditor) return;
+    activeEditor.chain().focus().toggleWritingBlock().run();
+    setToolbarOptions({ blockquote: activeEditor.isActive("writingBlock") });
+  };
+
   const onChangeBulletList = () => {
     if (!activeEditor) return;
     activeEditor.chain().focus().toggleBulletList().run();
@@ -140,65 +149,77 @@ const ContentToolbar = () => {
     <div style={{ height: "45px", marginLeft: "-5px" }}>
       <Toolbar.Root className="ToolbarRoot" aria-label="Formatting options">
         <Toolbar.ToggleGroup type="multiple" aria-label="Text formatting">
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="bold"
-            aria-label="Bold"
-            data-state={toolbarOptions?.bold ? "on" : "off"}
-            onClick={onToggleBold}
-          >
-            <IconBold size={20} stroke={2} />
-          </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="italic"
-            aria-label="Italic"
-            data-state={toolbarOptions?.italic ? "on" : "off"}
-            onClick={onToggleItalic}
-          >
-            <IconItalic size={20} stroke={1.7} />
-          </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="underline"
-            aria-label="Underline"
-            data-state={toolbarOptions?.underline ? "on" : "off"}
-            onClick={onToggleUnderline}
-          >
-            <IconUnderline size={20} stroke={1.7} />
-          </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="strikethrough"
-            aria-label="Strike through"
-            data-state={toolbarOptions?.strike ? "on" : "off"}
-            onClick={onToggleStrike}
-          >
-            <IconStrikethrough size={20} stroke={1.7} />
-          </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="strikethrough"
-            aria-label="Strike through"
-            data-state={toolbarOptions?.code ? "on" : "off"}
-            onClick={onToggleCode}
-          >
-            <IconCode size={20} stroke={1.7} />
-          </Toolbar.ToggleItem>
+          <Tooltip content={t`Bold`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="bold"
+              aria-label="Bold"
+              data-state={toolbarOptions?.bold ? "on" : "off"}
+              onClick={onToggleBold}
+            >
+              <IconBold size={20} stroke={2.5} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
+          <Tooltip content={t`Italic`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="italic"
+              aria-label="Italic"
+              data-state={toolbarOptions?.italic ? "on" : "off"}
+              onClick={onToggleItalic}
+            >
+              <IconItalic size={20} stroke={1.7} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
+          <Tooltip content={t`Underline`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="underline"
+              aria-label="Underline"
+              data-state={toolbarOptions?.underline ? "on" : "off"}
+              onClick={onToggleUnderline}
+            >
+              <IconUnderline size={20} stroke={1.7} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
+          <Tooltip content={t`Strike through`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="strikethrough"
+              aria-label="Strike through"
+              data-state={toolbarOptions?.strike ? "on" : "off"}
+              onClick={onToggleStrike}
+            >
+              <IconStrikethrough size={20} stroke={1.7} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
+          <Tooltip content={t`Code`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="code"
+              aria-label="Code"
+              data-state={toolbarOptions?.code ? "on" : "off"}
+              onClick={onToggleCode}
+            >
+              <IconCode size={20} stroke={1.7} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
           <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              <Toolbar.ToggleItem
-                className="ToolbarToggleItem"
-                value="text-color"
-                aria-label="Text Color"
-              >
-                <IconTextColor
-                  size={20}
-                  stroke={1.7}
-                  color={toolbarOptions?.color}
-                />
-              </Toolbar.ToggleItem>
-            </DropdownMenu.Trigger>
+            <Tooltip content={t`Text color`}>
+              <DropdownMenu.Trigger>
+                <Toolbar.ToggleItem
+                  className="ToolbarToggleItem"
+                  value="text-color"
+                  aria-label="Text Color"
+                >
+                  <IconTextColor
+                    size={20}
+                    stroke={1.7}
+                    color={toolbarOptions?.color}
+                  />
+                </Toolbar.ToggleItem>
+              </DropdownMenu.Trigger>
+            </Tooltip>
             <DropdownMenu.Content>
               <div>
                 <div style={{ paddingTop: 5, paddingLeft: 15 }}>
@@ -230,19 +251,21 @@ const ContentToolbar = () => {
             </DropdownMenu.Content>
           </DropdownMenu.Root>
           <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              <Toolbar.ToggleItem
-                className="ToolbarToggleItem"
-                value="highlight"
-                aria-label="highlight"
-              >
-                <IconHighlight
-                  size={20}
-                  stroke={1.7}
-                  color={toolbarOptions?.highlightColor}
-                />
-              </Toolbar.ToggleItem>
-            </DropdownMenu.Trigger>
+            <Tooltip content={t`Highlight text`}>
+              <DropdownMenu.Trigger>
+                <Toolbar.ToggleItem
+                  className="ToolbarToggleItem"
+                  value="highlight"
+                  aria-label="highlight"
+                >
+                  <IconHighlight
+                    size={20}
+                    stroke={1.7}
+                    color={toolbarOptions?.highlightColor}
+                  />
+                </Toolbar.ToggleItem>
+              </DropdownMenu.Trigger>
+            </Tooltip>
             <DropdownMenu.Content>
               <div>
                 <div style={{ paddingTop: 5, paddingLeft: 15 }}>
@@ -319,30 +342,36 @@ const ContentToolbar = () => {
               : ""
           }
         >
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="bulletList"
-            aria-label="Bullet List"
-            onClick={onChangeBulletList}
-          >
-            <IconList size={20} stroke={2} />
-          </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="orderedList"
-            aria-label="Ordered List"
-            onClick={onChangeOrderedList}
-          >
-            <IconListNumbers size={20} stroke={2} />
-          </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="todoList"
-            aria-label="Todo List"
-            onClick={onChangeTaskList}
-          >
-            <IconListCheck size={20} stroke={2} />
-          </Toolbar.ToggleItem>
+          <Tooltip content={t`Bullet list`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="bulletList"
+              aria-label="Bullet List"
+              onClick={onChangeBulletList}
+            >
+              <IconList size={20} stroke={2} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
+          <Tooltip content={t`Number list`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="orderedList"
+              aria-label="Ordered List"
+              onClick={onChangeOrderedList}
+            >
+              <IconListNumbers size={20} stroke={2} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
+          <Tooltip content={t`Todo list`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="todoList"
+              aria-label="Todo List"
+              onClick={onChangeTaskList}
+            >
+              <IconListCheck size={20} stroke={2} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
         </Toolbar.ToggleGroup>
         <Toolbar.Separator className="ToolbarSeparator" />
         <Toolbar.ToggleGroup
@@ -350,50 +379,77 @@ const ContentToolbar = () => {
           type="single"
           aria-label="Text alignment"
         >
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="left"
-            aria-label="Left aligned"
-            onClick={() => onChangeTextAlign("left")}
-          >
-            <IconAlignLeft size={20} stroke={1.7} />
-          </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="center"
-            aria-label="Center aligned"
-            onClick={() => onChangeTextAlign("center")}
-          >
-            <IconAlignCenter size={20} stroke={1.7} />
-          </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="right"
-            aria-label="Right aligned"
-            onClick={() => onChangeTextAlign("right")}
-          >
-            <IconAlignRight size={20} stroke={1.7} />
-          </Toolbar.ToggleItem>
+          <Tooltip content={t`Left`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="left"
+              aria-label="Left aligned"
+              onClick={() => onChangeTextAlign("left")}
+            >
+              <IconAlignLeft size={20} stroke={1.7} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
+          <Tooltip content={t`Center`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="center"
+              aria-label="Center aligned"
+              onClick={() => onChangeTextAlign("center")}
+            >
+              <IconAlignCenter size={20} stroke={1.7} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
+          <Tooltip content={t`Right`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="right"
+              aria-label="Right aligned"
+              onClick={() => onChangeTextAlign("right")}
+            >
+              <IconAlignRight size={20} stroke={1.7} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
         </Toolbar.ToggleGroup>
         <Toolbar.Separator className="ToolbarSeparator" />
         <Toolbar.ToggleGroup type="multiple" aria-label="Other Blocks">
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="blockquote"
-            aria-label="Block Quote"
-            data-state={toolbarOptions?.blockquote ? "on" : "off"}
-            onClick={onChangeBlockquote}
-          >
-            <IconBlockquote size={20} stroke={2} />
-          </Toolbar.ToggleItem>
-          <Toolbar.Button
-            className="ToolbarToggleItem"
-            value="file-handler"
-            aria-label="FileHandler"
-            onClick={onInsertFileHandler}
-          >
-            <IconFileUpload size={20} stroke={2} />
-          </Toolbar.Button>
+          <Tooltip content={t`Quote`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="blockquote"
+              aria-label="Block Quote"
+              data-state={toolbarOptions?.blockquote ? "on" : "off"}
+              onClick={onChangeBlockquote}
+            >
+              <IconBlockquote size={20} stroke={2} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
+          <Tooltip content={t`Essay Block`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="writingBlock"
+              aria-label="Writing Block"
+              data-state={toolbarOptions?.writingBlock ? "on" : "off"}
+              onClick={onChangeWritingBlock}
+            >
+              <IconWriting size={20} stroke={2} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
+              <Toolbar.ToolbarButton
+                className="ToolbarToggleItem"
+                value="insert-item"
+                aria-label="InsertItem"
+              >
+                <IconTools size={20} stroke={1.7} /> <Trans>More Tools</Trans>
+              </Toolbar.ToolbarButton>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content style={{ padding: 5 }}>
+              <DropdownMenu.Item onClick={onInsertFileHandler}>
+                <IconFileUpload size={20} stroke={1.7} /> File Upload
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
         </Toolbar.ToggleGroup>
       </Toolbar.Root>
     </div>

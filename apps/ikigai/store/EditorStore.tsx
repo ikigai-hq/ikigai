@@ -15,6 +15,7 @@ export type ToolbarOptions = {
   bulletList: boolean;
   orderedList: boolean;
   todoList: boolean;
+  writingBlock: boolean;
 };
 
 export type IEditorStore = {
@@ -45,6 +46,7 @@ const useEditorStore = create<IEditorStore>((set, get) => ({
           bulletList: editor.isActive("bulletList"),
           orderedList: editor.isActive("orderedList"),
           todoList: editor.isActive("taskList"),
+          writingBlock: editor.isActive("writingBlock"),
         },
       });
     } else {

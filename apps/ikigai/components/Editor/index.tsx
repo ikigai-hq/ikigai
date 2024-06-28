@@ -1,4 +1,3 @@
-import { EditorContent, JSONContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -12,14 +11,13 @@ import { BulletList } from "@tiptap/extension-bullet-list";
 import { ListItem } from "@tiptap/extension-list-item";
 import { OrderedList } from "@tiptap/extension-ordered-list";
 import { t } from "@lingui/macro";
-import { useEffect, useState } from "react";
-import { useDebounce } from "ahooks";
+import { useDebounceFn } from "ahooks";
 
 import { IPageContent } from "store/PageContentStore";
 import useAddOrUpdatePageContent from "hook/UseUpsertPageContent";
-import useEditorStore from "store/EditorStore";
 import FileHandler from "./Extensions/FileHandler";
-import { WritingBlock } from "./Extensions/WritingBlock";
+import WritingBlock from "./Extensions/WritingBlock";
+import BaseEditor from "./BaseEditor";
 
 export type EditorProps = {
   readOnly: boolean;
@@ -27,93 +25,61 @@ export type EditorProps = {
 };
 
 const Editor = ({ pageContent, readOnly }: EditorProps) => {
-  const setActiveEditor = useEditorStore((state) => state.setActiveEditor);
-  const [innerContent, setInnerContent] = useState<JSONContent>(
-    pageContent.body,
-  );
   const { upsert } = useAddOrUpdatePageContent(
     pageContent.id,
     pageContent.pageId,
   );
-  const debouncedInnerContent = useDebounce(innerContent, { wait: 500 });
-
-  useEffect(() => {
-    upsert({ body: debouncedInnerContent });
-  }, [debouncedInnerContent]);
-
-  const editor = useEditor({
-    editable: !readOnly,
-    extensions: [
-      StarterKit,
-      TaskList,
-      TaskItem.configure({
-        nested: true,
-      }),
-      Placeholder.configure({
-        placeholder: t`Typing content here...`,
-      }),
-      Underline,
-      Highlight.configure({
-        multicolor: true,
-      }),
-      TextStyle,
-      Color,
-      TextAlign.configure({
-        types: ["heading", "paragraph"],
-        alignments: ["left", "center", "right"],
-      }),
-      BulletList.configure({
-        keepAttributes: true,
-        keepMarks: true,
-      }),
-      OrderedList.configure({
-        keepAttributes: true,
-        keepMarks: true,
-      }),
-      ListItem,
-      TaskList,
-      TaskItem.configure({
-        nested: true,
-      }),
-      FileHandler,
-      WritingBlock,
-    ],
-    content: innerContent,
-    editorProps: {
-      attributes: {
-        pageContentId: pageContent.id,
-      },
-      handleDOMEvents: {
-        keydown: (_, event) => {
-          if (event.key === "s") {
-            if (event.metaKey || event.ctrlKey) {
-              upsert({ body: innerContent });
-              event.preventDefault();
-            }
-          }
-
-          return false;
-        },
-      },
-    },
-    onUpdate: ({ editor }) => {
-      setInnerContent(editor.getJSON());
-    },
-    autofocus: false,
-    onSelectionUpdate: (event) => {
-      // @ts-ignore
-      setActiveEditor(event.editor);
-    },
-    onFocus: (event) => {
-      // @ts-ignore
-      setActiveEditor(event.editor);
-    },
-  });
+  const { run, cancel } = useDebounceFn(upsert, { wait: 300, maxWait: 1000 });
 
   return (
-    <main style={{ margin: 15 }} spellCheck={false}>
-      <EditorContent style={{ width: "100%" }} editor={editor} />
-    </main>
+    <BaseEditor
+      body={pageContent.body}
+      onUpdate={(body) => run({ body })}
+      onForceSave={(body) => {
+        cancel();
+        upsert({ body });
+      }}
+      extensions={[
+        StarterKit,
+        TaskList,
+        TaskItem.configure({
+          nested: true,
+        }),
+        Placeholder.configure({
+          placeholder: t`Typing content here...`,
+        }),
+        Underline,
+        Highlight.configure({
+          multicolor: true,
+        }),
+        TextStyle,
+        Color,
+        TextAlign.configure({
+          types: ["heading", "paragraph"],
+          alignments: ["left", "center", "right"],
+        }),
+        BulletList.configure({
+          keepAttributes: true,
+          keepMarks: true,
+        }),
+        OrderedList.configure({
+          keepAttributes: true,
+          keepMarks: true,
+        }),
+        ListItem,
+        TaskList,
+        TaskItem.configure({
+          nested: true,
+        }),
+        FileHandler.configure({
+          pageContentId: pageContent.id,
+        }),
+        WritingBlock.configure({
+          pageContentId: pageContent.id,
+        }),
+      ]}
+      readOnly={readOnly}
+    />
   );
 };
 

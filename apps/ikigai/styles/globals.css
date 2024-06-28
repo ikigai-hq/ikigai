@@ -193,8 +193,3 @@ body * ::-moz-scrollbar {
 .twitter-picker {
   box-shadow: unset!important;
 }
-
-.tiptap .rodgers {
-  background: var(--accent-2);
-  padding: 5px;
-}

@@ -17,8 +17,7 @@ import FileHandlerReview from "./FileHandlerReview";
 import styled from "styled-components";
 
 const FileHandler = (props: NodeViewProps) => {
-  const pageContentId =
-    props.editor.options.editorProps.attributes["pageContentId"];
+  const pageContentId = props.extension.options.pageContentId;
   const { data, loading } = useQuery<GetFile>(GET_FILE, {
     skip:
       !props.node.attrs.fileId ||

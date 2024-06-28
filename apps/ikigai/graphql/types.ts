@@ -417,6 +417,33 @@ export interface RemoveDocumentAssigneeVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: UpsertWritingBlock
+// ====================================================
+
+export interface UpsertWritingBlock_documentUpsertWritingBlock {
+  id: any;
+  pageContentId: any;
+  creatorId: number;
+  content: any;
+  updatedAt: number;
+  createdAt: number;
+}
+
+export interface UpsertWritingBlock {
+  documentUpsertWritingBlock: UpsertWritingBlock_documentUpsertWritingBlock;
+}
+
+export interface UpsertWritingBlockVariables {
+  pageContentId: any;
+  writingBlock: WritingBlockInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: FileCreate
 // ====================================================
 
@@ -592,8 +619,13 @@ export interface DeleteSpaceInviteTokenVariables {
 // GraphQL mutation operation: JoinSpaceByInviteToken
 // ====================================================
 
+export interface JoinSpaceByInviteToken_spaceJoinByInviteToken {
+  documentId: any;
+  shouldGoToSpace: boolean;
+}
+
 export interface JoinSpaceByInviteToken {
-  spaceJoinByInviteToken: boolean;
+  spaceJoinByInviteToken: JoinSpaceByInviteToken_spaceJoinByInviteToken;
 }
 
 export interface JoinSpaceByInviteTokenVariables {
@@ -1047,6 +1079,32 @@ export interface GetDocumentAssignees {
 
 export interface GetDocumentAssigneesVariables {
   documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetWritingBlock
+// ====================================================
+
+export interface GetWritingBlock_documentGetWritingBlock {
+  id: any;
+  pageContentId: any;
+  creatorId: number;
+  content: any;
+  updatedAt: number;
+  createdAt: number;
+}
+
+export interface GetWritingBlock {
+  documentGetWritingBlock: GetWritingBlock_documentGetWritingBlock;
+}
+
+export interface GetWritingBlockVariables {
+  writingBlockId: any;
 }
 
 /* tslint:disable */
@@ -1583,6 +1641,11 @@ export interface UpdateUserData {
   firstName: string;
   lastName: string;
   avatarFileId?: any | null;
+}
+
+export interface WritingBlockInput {
+  id: any;
+  content: any;
 }
 
 //==============================================================

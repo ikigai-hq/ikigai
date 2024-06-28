@@ -81,6 +81,8 @@ export const uploadS3 = async (
 
 export const EMPTY_UUID = "00000000-0000-0000-0000-000000000000";
 
+export const isEmptyUuid = (uuid?: string) => !uuid || uuid === EMPTY_UUID;
+
 export const isSupportedImage = (contentType: string) =>
   contentType.includes("image/");
 

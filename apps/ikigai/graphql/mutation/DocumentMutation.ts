@@ -97,3 +97,22 @@ export const REMOVE_ASSIGNEE = gql`
     documentRemoveAssignee(documentId: $documentId, userId: $userId)
   }
 `;
+
+export const UPSERT_WRITING_BLOCK = gql`
+  mutation UpsertWritingBlock(
+    $pageContentId: UUID!
+    $writingBlock: WritingBlockInput!
+  ) {
+    documentUpsertWritingBlock(
+      pageContentId: $pageContentId
+      writingBlock: $writingBlock
+    ) {
+      id
+      pageContentId
+      creatorId
+      content
+      updatedAt
+      createdAt
+    }
+  }
+`;

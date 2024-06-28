@@ -153,7 +153,11 @@ impl User {
     }
 
     pub fn name(&self) -> String {
-        format!("{} {}", self.first_name, self.last_name)
+        if self.last_name.is_empty() {
+            format!("{}", self.first_name)
+        } else {
+            format!("{} {}", self.first_name, self.last_name)
+        }
     }
 }
 

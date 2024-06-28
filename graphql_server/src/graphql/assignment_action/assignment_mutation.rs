@@ -123,7 +123,7 @@ impl AssignmentMutation {
         let submission = conn
             .transaction::<_, IkigaiError, _>(|conn| {
                 let config = DocumentCloneConfigBuilder::default()
-                    .prefix_title(format!("[{}]", user.name()))
+                    .prefix_title(format!("[{}] ", user.name()))
                     .creator_id(user_id)
                     .clone_to_space(assignment_document.space_id)
                     .clone_children(false)

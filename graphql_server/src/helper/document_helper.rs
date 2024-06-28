@@ -120,7 +120,7 @@ impl Page {
 
         let page_contents = PageContent::find_all_by_page(conn, self.id)?;
         for page_content in page_contents {
-            page_content.deep_clone(conn, &new_page)?;
+            page_content.deep_clone(conn, &new_page, new_document.creator_id)?;
         }
 
         Ok(new_page)
@@ -132,10 +132,44 @@ impl PageContent {
         &self,
         conn: &mut PgConnection,
         new_page: &Page,
+        creator_id: i32,
     ) -> Result<Self, IkigaiError> {
         let new_content =
             PageContent::new(Uuid::new_v4(), new_page.id, self.index, self.body.clone());
-        Ok(PageContent::upsert(conn, new_content)?)
+        let mut new_page_content = PageContent::upsert(conn, new_content)?;
+
+        let mut new_content = new_page_content.get_json_content();
+        let writing_blocks = WritingBlock::find_all_by_page_content(conn, self.id)?;
+        for writing_block in writing_blocks {
+            if let Ok(new_writing_block) =
+                writing_block.deep_clone(conn, &new_page_content, creator_id)
+            {
+                new_content.replace_block_id(
+                    "writingBlock",
+                    "writingBlockId",
+                    &serde_json::to_value(writing_block.id).unwrap_or_default(),
+                    &serde_json::to_value(new_writing_block.id).unwrap_or_default(),
+                );
+            }
+        }
+
+        new_page_content.body = serde_json::to_value(new_content).unwrap_or_default();
+        Ok(PageContent::upsert(conn, new_page_content)?)
+    }
+}
+
+impl WritingBlock {
+    pub fn deep_clone(
+        &self,
+        conn: &mut PgConnection,
+        new_page_content: &PageContent,
+        creator_id: i32,
+    ) -> Result<Self, IkigaiError> {
+        let mut new_writing_block = self.clone();
+        new_writing_block.id = Uuid::new_v4();
+        new_writing_block.page_content_id = new_page_content.id;
+        new_writing_block.creator_id = creator_id;
+        Ok(WritingBlock::upsert(conn, new_writing_block)?)
     }
 }
 

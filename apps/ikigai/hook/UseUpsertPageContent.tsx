@@ -1,18 +1,41 @@
-import { useMutation } from "@apollo/client";
 import { ADD_ORG_UPDATE_PAGE_CONTENT } from "graphql/mutation/DocumentMutation";
-import { handleError } from "graphql/ApolloClient";
-import { DocumentActionPermission, PageContentInput } from "../graphql/types";
+import { mutate } from "graphql/ApolloClient";
+import { DocumentActionPermission, PageContentInput } from "graphql/types";
 import usePermission from "./UsePermission";
 import usePageContentStore from "store/PageContentStore";
+import { debounce } from "lodash";
+
+const upsertPageContent = (
+  pageContentId: string,
+  data: Partial<Omit<PageContentInput, "id" | "pageId">>,
+) => {
+  const pageContent = usePageContentStore
+    .getState()
+    .pageContents.find((content) => content.id === pageContentId);
+  if (!pageContent) return;
+
+  const pageContentInput: PageContentInput = {
+    id: pageContentId,
+    pageId: pageContent.pageId,
+    index: pageContent.index,
+    body: pageContent.body,
+    ...data,
+  };
+  mutate(
+    {
+      mutation: ADD_ORG_UPDATE_PAGE_CONTENT,
+      variables: {
+        pageContent: pageContentInput,
+      },
+    },
+    false,
+  );
+};
+
+export const debouncedUpsertPageContent = debounce(upsertPageContent, 300);
 
 const useAddOrUpdatePageContent = (pageContentId: string, pageId: string) => {
   const allow = usePermission();
-  const [addOrUpdate, { loading }] = useMutation(ADD_ORG_UPDATE_PAGE_CONTENT, {
-    onError: handleError,
-  });
-  const pageContent = usePageContentStore((state) =>
-    state.pageContents.find((content) => content.id === pageContentId),
-  );
   const updatePageContent = usePageContentStore(
     (state) => state.updatePageContent,
   );
@@ -20,20 +43,13 @@ const useAddOrUpdatePageContent = (pageContentId: string, pageId: string) => {
   const upsert = async (
     data: Partial<Omit<PageContentInput, "id" | "pageId">>,
   ) => {
-    if (!allow(DocumentActionPermission.EDIT_DOCUMENT)) return;
+    if (
+      !allow(DocumentActionPermission.EDIT_DOCUMENT) ||
+      !allow(DocumentActionPermission.INTERACTIVE_WITH_TOOL)
+    )
+      return;
 
-    const pageContentInput: PageContentInput = {
-      id: pageContentId,
-      pageId,
-      index: pageContent?.index || 1,
-      body: pageContent?.body,
-      ...data,
-    };
-    addOrUpdate({
-      variables: {
-        pageContent: pageContentInput,
-      },
-    });
+    upsertPageContent(pageContentId, data);
     updatePageContent({
       id: pageContentId,
       pageId,
@@ -43,7 +59,6 @@ const useAddOrUpdatePageContent = (pageContentId: string, pageId: string) => {
 
   return {
     upsert,
-    loading,
   };
 };
 

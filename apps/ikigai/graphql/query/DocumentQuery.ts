@@ -100,3 +100,16 @@ export const GET_DOCUMENT_ASSIGNEE = gql`
     }
   }
 `;
+
+export const GET_WRITING_BLOCK = gql`
+  query GetWritingBlock($writingBlockId: UUID!) {
+    documentGetWritingBlock(writingBlockId: $writingBlockId) {
+      id
+      pageContentId
+      creatorId
+      content
+      updatedAt
+      createdAt
+    }
+  }
+`;

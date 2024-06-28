@@ -55,7 +55,10 @@ export const JOIN_SPACE_BY_INVITE_TOKEN = gql`
     $spaceId: Int!
     $token: String!
   ) {
-    spaceJoinByInviteToken(email: $email, spaceId: $spaceId, token: $token)
+    spaceJoinByInviteToken(email: $email, spaceId: $spaceId, token: $token) {
+      documentId
+      shouldGoToSpace
+    }
   }
 `;
 

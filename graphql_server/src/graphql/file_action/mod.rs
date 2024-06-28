@@ -9,7 +9,7 @@ use async_graphql::{ComplexObject, Context, Enum, Result};
 use uuid::Uuid;
 
 use crate::authorization::DocumentActionPermission;
-use crate::db::{File, JSONContent, Page, PageContent, PublicUser};
+use crate::db::{File, Page, PageContent, PublicUser};
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::graphql::data_loader::{FindPublicUserById, IkigaiDataLoader};
 use crate::helper::{document_quick_authorize, generate_download_url, get_conn_from_ctx};
@@ -33,8 +33,7 @@ impl File {
         let document_id = {
             let mut conn = get_conn_from_ctx(ctx).await?;
             let page_content = PageContent::find(&mut conn, page_content_id).format_err()?;
-            let json_content =
-                serde_json::from_value::<JSONContent>(page_content.body).unwrap_or_default();
+            let json_content = page_content.get_json_content();
             if !json_content.has_file_handler(self.uuid) {
                 return Err(IkigaiError::new_unauthorized("Page does not contain file."))
                     .format_err();

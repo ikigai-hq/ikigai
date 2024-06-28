@@ -10,6 +10,7 @@ pub mod space;
 pub mod space_member;
 pub mod submission;
 pub mod user;
+pub mod writing_block;
 
 pub use assignment::*;
 pub use band_score::*;
@@ -22,6 +23,7 @@ pub use space::*;
 pub use space_member::*;
 pub use submission::*;
 pub use user::*;
+pub use writing_block::*;
 
 use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
 use diesel::PgConnection;

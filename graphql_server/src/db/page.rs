@@ -160,6 +160,10 @@ impl PageContent {
             .filter(page_contents::page_id.eq_any(page_ids))
             .get_results(conn)
     }
+
+    pub fn get_json_content(&self) -> JSONContent {
+        serde_json::from_value::<JSONContent>(self.body.clone()).unwrap_or_default()
+    }
 }
 
 // This is the struct of tiptap JSON Content
@@ -198,6 +202,32 @@ impl JSONContent {
         }
 
         result
+    }
+
+    pub fn replace_block_id(
+        &mut self,
+        block_name: &str,
+        key_id: &str,
+        old_id: &serde_json::Value,
+        new_id: &serde_json::Value,
+    ) {
+        if self.content_type.as_deref() == Some(block_name) {
+            let is_correct_block = self
+                .attrs
+                .as_ref()
+                .map_or_else(|| false, |attrs| attrs.get(key_id) == Some(old_id));
+            if is_correct_block {
+                if let Some(attrs) = self.attrs.as_mut() {
+                    attrs.insert(key_id.into(), new_id.clone());
+                }
+            }
+        }
+
+        if let Some(contents) = self.content.as_mut() {
+            for content in contents {
+                content.replace_block_id(block_name, key_id, old_id, new_id);
+            }
+        }
     }
 
     pub fn has_file_handler(&self, file_id: Uuid) -> bool {

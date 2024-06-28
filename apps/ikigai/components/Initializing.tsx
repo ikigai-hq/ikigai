@@ -128,7 +128,7 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
     }
 
     const { data } = await getMySpaces();
-    if (data && data.spaceMine.length > 0) {
+    if (isHome && data && data.spaceMine.length > 0) {
       window.location.replace(
         formatDocumentRoute(data.spaceMine[0].starterDocument.id),
       );

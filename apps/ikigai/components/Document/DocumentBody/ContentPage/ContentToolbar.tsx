@@ -118,7 +118,7 @@ const ContentToolbar = () => {
 
   const onChangeWritingBlock = () => {
     if (!activeEditor) return;
-    activeEditor.chain().focus().toggleWritingBlock().run();
+    activeEditor.chain().focus().insertWritingBlock().run();
     setToolbarOptions({ blockquote: activeEditor.isActive("writingBlock") });
   };
 

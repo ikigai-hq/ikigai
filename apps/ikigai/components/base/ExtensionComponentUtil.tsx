@@ -10,7 +10,7 @@ export const OverlayBlockExtension = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--black-a1);
+  background-color: var(--black-a2);
   z-index: 2;
   cursor: pointer;
   pointer-events: none;

@@ -8,6 +8,10 @@ import {
 import FileHandlerComponent from "./FileHandlerComponent";
 import { EMPTY_UUID } from "util/FileUtil";
 
+export type FileHandlerOptions = {
+  pageContentId: string;
+};
+
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     customExtension: {
@@ -18,11 +22,17 @@ declare module "@tiptap/core" {
 
 export const FileHandlerExtensionName = "fileHandler";
 
-export default Node.create({
+export default Node.create<FileHandlerOptions>({
   name: FileHandlerExtensionName,
   group: "block",
   atom: true,
   selectable: true,
+
+  addOptions() {
+    return {
+      pageContentId: EMPTY_UUID,
+    };
+  },
 
   addAttributes() {
     return {

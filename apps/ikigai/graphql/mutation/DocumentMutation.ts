@@ -116,3 +116,24 @@ export const UPSERT_WRITING_BLOCK = gql`
     }
   }
 `;
+
+export const CLONE_WRITING_BLOCK = gql`
+  mutation CloneWritingBlock(
+    $writingBlockId: UUID!
+    $newWritingBlockId: UUID!
+    $newPageContentId: UUID!
+  ) {
+    documentCloneWritingBlock(
+      writingBlockId: $writingBlockId
+      newWritingBlockId: $newWritingBlockId
+      newPageContentId: $newPageContentId
+    ) {
+      id
+      pageContentId
+      creatorId
+      content
+      updatedAt
+      createdAt
+    }
+  }
+`;

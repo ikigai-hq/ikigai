@@ -5,8 +5,27 @@ import {
   useEditor,
 } from "@tiptap/react";
 import { useRef } from "react";
+import { Fragment, Node } from "prosemirror-model";
 
 import useEditorStore from "store/EditorStore";
+import { WRITING_BLOCK_NAME } from "./Extensions/WritingBlock";
+import { EMPTY_UUID, isEmptyUuid } from "util/FileUtil";
+
+export const findTransformBlocks = (
+  fragment: Fragment | Node,
+  nodeName: string,
+): Node[] => {
+  const blocks = [];
+  fragment.forEach((node: Node) => {
+    if (node.type.name === nodeName) {
+      blocks.push(node);
+    }
+
+    blocks.push(...findTransformBlocks(node, nodeName));
+  });
+
+  return blocks;
+};
 
 export type BaseEditorProps = {
   readOnly: boolean;
@@ -42,6 +61,29 @@ const BaseEditor = ({
 
           return false;
         },
+      },
+      // This function will handle pasted data.
+      transformPasted: (slice) => {
+        const writingBlocks = findTransformBlocks(
+          slice.content,
+          WRITING_BLOCK_NAME,
+        );
+        writingBlocks.forEach((writingBlock) => {
+          if (
+            writingBlock.attrs.writingBlockId &&
+            !isEmptyUuid(writingBlock.attrs.writingBlockId)
+          ) {
+            // Force change readonly data
+            // @ts-ignore
+            writingBlock.attrs.originalBlockId =
+              writingBlock.attrs.writingBlockId;
+            // Force change readonly data
+            // @ts-ignore
+            writingBlock.attrs.writingBlockId = EMPTY_UUID;
+          }
+        });
+
+        return slice;
       },
     },
     onUpdate: ({ editor }) => {

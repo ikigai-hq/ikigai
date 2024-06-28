@@ -19,15 +19,19 @@ import { useDebounceFn } from "ahooks";
 import { v4 } from "uuid";
 
 import BaseEditor from "../../BaseEditor";
-import { isEmptyUuid } from "util/FileUtil";
+import { EMPTY_UUID, isEmptyUuid } from "util/FileUtil";
 import { GET_WRITING_BLOCK } from "graphql/query/DocumentQuery";
 import { handleError } from "graphql/ApolloClient";
 import {
+  CloneWritingBlock,
   DocumentActionPermission,
   GetWritingBlock,
   UpsertWritingBlock,
 } from "graphql/types";
-import { UPSERT_WRITING_BLOCK } from "graphql/mutation/DocumentMutation";
+import {
+  CLONE_WRITING_BLOCK,
+  UPSERT_WRITING_BLOCK,
+} from "graphql/mutation/DocumentMutation";
 import Loading from "components/Loading";
 import usePermission from "hook/UsePermission";
 import { ExtensionWrapper } from "components/base/ExtensionComponentUtil";
@@ -36,6 +40,7 @@ const WritingBlockComponent = (props: NodeViewProps) => {
   const allow = usePermission();
   const pageContentId = props.extension.options.pageContentId;
   const writingBlockId = props.node.attrs.writingBlockId;
+  const originalBlockId = props.node.attrs.originalBlockId;
   const [initializing, setInitializing] = useState(true);
   const innerContent = useRef<JSONContent>();
 
@@ -43,6 +48,12 @@ const WritingBlockComponent = (props: NodeViewProps) => {
     useMutation<UpsertWritingBlock>(UPSERT_WRITING_BLOCK, {
       onError: handleError,
     });
+  const [clone, { loading: cloneLoading }] = useMutation<CloneWritingBlock>(
+    CLONE_WRITING_BLOCK,
+    {
+      onError: handleError,
+    },
+  );
   const [fetchWritingBlock, { loading }] = useLazyQuery<GetWritingBlock>(
     GET_WRITING_BLOCK,
     {
@@ -63,8 +74,13 @@ const WritingBlockComponent = (props: NodeViewProps) => {
   const initialize = async () => {
     setInitializing(true);
     if (isEmptyUuid(writingBlockId)) {
-      await addNewWritingBlock();
-    } else if (!createLoading || !loading) {
+      if (isEmptyUuid(originalBlockId)) {
+        await addNewWritingBlock();
+      } else {
+        // Handle copy
+        await cloneWritingBlock();
+      }
+    } else if (!createLoading || !loading || !cloneLoading) {
       await fetchWritingBlock({
         variables: {
           writingBlockId,
@@ -72,6 +88,26 @@ const WritingBlockComponent = (props: NodeViewProps) => {
       });
     }
     setInitializing(false);
+  };
+
+  const cloneWritingBlock = async () => {
+    const newId = v4();
+
+    const { data } = await clone({
+      variables: {
+        writingBlockId: originalBlockId,
+        newWritingBlockId: newId,
+        newPageContentId: pageContentId,
+      },
+    });
+
+    if (data) {
+      innerContent.current = data.documentCloneWritingBlock.content;
+      props.updateAttributes({
+        writingBlockId: newId,
+        originalBlockId: EMPTY_UUID,
+      });
+    }
   };
 
   const addNewWritingBlock = async () => {
@@ -88,6 +124,7 @@ const WritingBlockComponent = (props: NodeViewProps) => {
     });
 
     if (data) {
+      innerContent.current = data.documentUpsertWritingBlock.content;
       props.updateAttributes({ writingBlockId: newId });
     }
   };
@@ -135,7 +172,7 @@ const WritingBlockComponent = (props: NodeViewProps) => {
   return (
     <NodeViewWrapper>
       <ExtensionWrapper selected={props.selected}>
-        <div style={{ minHeight: 250 }}>
+        <div style={{ minHeight: 200 }}>
           <BaseEditor
             body={innerContent.current}
             onUpdate={updateContent}

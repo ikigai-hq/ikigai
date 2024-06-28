@@ -444,6 +444,34 @@ export interface UpsertWritingBlockVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: CloneWritingBlock
+// ====================================================
+
+export interface CloneWritingBlock_documentCloneWritingBlock {
+  id: any;
+  pageContentId: any;
+  creatorId: number;
+  content: any;
+  updatedAt: number;
+  createdAt: number;
+}
+
+export interface CloneWritingBlock {
+  documentCloneWritingBlock: CloneWritingBlock_documentCloneWritingBlock;
+}
+
+export interface CloneWritingBlockVariables {
+  writingBlockId: any;
+  newWritingBlockId: any;
+  newPageContentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: FileCreate
 // ====================================================
 

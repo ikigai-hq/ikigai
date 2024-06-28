@@ -16,8 +16,10 @@ declare module "@tiptap/core" {
   }
 }
 
+export const WRITING_BLOCK_NAME = "writingBlock";
+
 export default Node.create<WritingBlockOptions>({
-  name: "writingBlock",
+  name: WRITING_BLOCK_NAME,
   group: "block",
   atom: true,
   selectable: true,
@@ -58,7 +60,7 @@ export default Node.create<WritingBlockOptions>({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["writing-block", mergeAttributes(HTMLAttributes), 0];
+    return ["writing-block", mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {

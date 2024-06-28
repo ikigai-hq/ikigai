@@ -17,13 +17,10 @@ export const OverlayBlockExtension = styled.div`
 `;
 
 export const BlockExtensionWrapper = styled.div<{ $selected: boolean }>`
-  position: relative;
-
+  border: 1px solid
+    ${(props) => (props.$selected ? "var(--indigo-9)" : "var(--indigo-4)")};
   &:hover {
     cursor: pointer;
-  }
-  & ${OverlayBlockExtension} {
-    display: ${(props) => (props.$selected ? "block" : "none")};
   }
 `;
 
@@ -38,7 +35,6 @@ export const ExtensionWrapper = ({
 }: ExtensionWrapperProps) => {
   return (
     <BlockExtensionWrapper $selected={selected}>
-      <OverlayBlockExtension />
       {children}
     </BlockExtensionWrapper>
   );

@@ -17,15 +17,15 @@ msgstr ""
 msgid "{0} focus mode"
 msgstr "{0} focus mode"
 
-#: components/Editor/Extensions/FileHandler/FileHandlerReview.tsx:24
+#: components/Editor/Extensions/FileHandler/FileHandlerReview.tsx:25
 msgid "{0}KB"
 msgstr "{0}KB"
 
-#: components/Editor/Extensions/FileHandler/FileHandlerReview.tsx:20
+#: components/Editor/Extensions/FileHandler/FileHandlerReview.tsx:21
 msgid "{0}MB"
 msgstr "{0}MB"
 
-#: components/Editor/Extensions/FileHandler/FileHandlerReview.tsx:27
+#: components/Editor/Extensions/FileHandler/FileHandlerReview.tsx:28
 msgid "{contentLength}B"
 msgstr "{contentLength}B"
 
@@ -117,7 +117,7 @@ msgid "Auto"
 msgstr "Auto"
 
 #: components/ErrorBoundary.tsx:54
-#: components/Initializing.tsx:223
+#: components/Initializing.tsx:234
 #: pages/404.tsx:24
 msgid "Back to home"
 msgstr "Back to home"
@@ -126,6 +126,14 @@ msgstr "Back to home"
 #: components/Document/DocumentHeader/SubmissionHeader.tsx:133
 #~ msgid "Back to space"
 #~ msgstr "Back to space"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:152
+msgid "Bold"
+msgstr "Bold"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:345
+msgid "Bullet list"
+msgstr "Bullet list"
 
 #: components/base/AlertDialog.tsx:74
 msgid "Cancel"
@@ -143,10 +151,18 @@ msgstr "Cannot get credentials from google. Please try again!"
 msgid "Cannot signin with google."
 msgstr "Cannot signin with google."
 
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:392
+msgid "Center"
+msgstr "Center"
+
 #: components/common/FileUpload.tsx:198
 #: components/common/ManualFileUpload.tsx:50
 #~ msgid "Click or drag file to this area to upload"
 #~ msgstr "Click or drag file to this area to upload"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:196
+msgid "Code"
+msgstr "Code"
 
 #: components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList.tsx:42
 msgid "Content"
@@ -262,9 +278,13 @@ msgid "Edit Profile"
 msgstr "Edit Profile"
 
 #: components/MagicLink/index.tsx:63
-#: components/PreJoinSpace.tsx:58
+#: components/PreJoinSpace.tsx:66
 msgid "Email"
 msgstr "Email"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:426
+msgid "Essay Block"
+msgstr "Essay Block"
 
 #: components/Document/DocumentHeader/SubmissionHeader/index.tsx:61
 #: components/Document/DocumentHeader/SubmissionHeader/index.tsx:172
@@ -357,6 +377,10 @@ msgstr "Grade Method"
 msgid "Grading"
 msgstr "Grading"
 
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:254
+msgid "Highlight text"
+msgstr "Highlight text"
+
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/StudentGradeInformation.tsx:56
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:75
 #~ msgid "In auto mode, students will receive their grades and results immediately after completing their assessments."
@@ -370,6 +394,10 @@ msgstr "Grading"
 #: components/Document/DocumentBody/BottomPageList/PageItem.tsx:68
 msgid "Information"
 msgstr "Information"
+
+#: components/Editor/Extensions/WritingBlock/WritingBlockComponent.tsx:128
+msgid "Initializing..."
+msgstr "Initializing..."
 
 #: components/IdentityInput/index.tsx:42
 #~ msgid "Invalid email"
@@ -408,21 +436,33 @@ msgstr "Inviting role"
 msgid "It will delete children files if this is folder."
 msgstr "It will delete children files if this is folder."
 
-#: components/PreJoinSpace.tsx:72
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:163
+msgid "Italic"
+msgstr "Italic"
+
+#: components/PreJoinSpace.tsx:80
 msgid "Join"
 msgstr "Join"
 
-#: components/PreJoinSpace.tsx:79
+#: components/PreJoinSpace.tsx:87
 msgid "Joined!"
 msgstr "Joined!"
 
-#: components/PreJoinSpace.tsx:44
+#: components/PreJoinSpace.tsx:51
 msgid "Joined! Please check your mail inbox"
 msgstr "Joined! Please check your mail inbox"
+
+#: components/PreJoinSpace.tsx:46
+msgid "Joined! We're moving you to the space!"
+msgstr "Joined! We're moving you to the space!"
 
 #: components/UserCredential/EditProfileModal.tsx:77
 msgid "Last name"
 msgstr "Last name"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:382
+msgid "Left"
+msgstr "Left"
 
 #: components/Document/LeftSide/index.tsx:69
 msgid "Log out"
@@ -464,6 +504,10 @@ msgstr "Members"
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TestDurationAttribute.tsx:38
 msgid "minutes"
 msgstr "minutes"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:444
+msgid "More Tools"
+msgstr "More Tools"
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/StudentExtraActions.tsx:34
 #~ msgid "Moved to submission space!"
@@ -529,6 +573,10 @@ msgstr "Not set"
 msgid "Not submitted"
 msgstr "Not submitted"
 
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:355
+msgid "Number list"
+msgstr "Number list"
+
 #: components/ErrorBoundary.tsx:45
 #~ msgid "Oops! We found a error."
 #~ msgstr "Oops! We found a error."
@@ -568,6 +616,10 @@ msgstr "Private folder"
 msgid "Profile"
 msgstr "Profile"
 
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:415
+msgid "Quote"
+msgstr "Quote"
+
 #: components/base/AlertDialog.tsx:55
 msgid "Remove"
 msgstr "Remove"
@@ -604,6 +656,10 @@ msgstr "Removed!"
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:181
 msgid "Review and feedback last submission"
 msgstr "Review and feedback last submission"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:402
+msgid "Right"
+msgstr "Right"
 
 #: components/SpaceSetting/MemberSpaceSetting.tsx:30
 msgid "Role"
@@ -707,6 +763,10 @@ msgstr "Start at"
 msgid "Status"
 msgstr "Status"
 
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:185
+msgid "Strike through"
+msgstr "Strike through"
+
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:60
 #: components/SpaceSetting/CreateSpaceInvite.tsx:81
 #~ msgid "Student"
@@ -761,6 +821,10 @@ msgstr "Test duration"
 #~ msgid "Test Duration"
 #~ msgstr "Test Duration"
 
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:208
+msgid "Text color"
+msgstr "Text color"
+
 #: components/Document/DocumentHeader/SubmissionHeader/index.tsx:143
 msgid "The test duration is complete!"
 msgstr "The test duration is complete!"
@@ -790,6 +854,10 @@ msgstr "times"
 #: components/Rubric/index.tsx:383
 msgid "To point"
 msgstr "To point"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:365
+msgid "Todo list"
+msgstr "Todo list"
 
 #: components/SpaceSetting/InviteSpaceSetting.tsx:80
 msgid "Token"
@@ -832,7 +900,7 @@ msgstr "Type space name..."
 #~ msgstr "Type your email"
 
 #: components/MagicLink/index.tsx:66
-#: components/PreJoinSpace.tsx:61
+#: components/PreJoinSpace.tsx:69
 msgid "Type your email!"
 msgstr "Type your email!"
 
@@ -848,7 +916,7 @@ msgstr "Typing assignment description or guide..."
 #~ msgid "Typing assignment description..."
 #~ msgstr "Typing assignment description..."
 
-#: components/Editor/index.tsx:52
+#: components/Editor/index.tsx:49
 msgid "Typing content here..."
 msgstr "Typing content here..."
 
@@ -863,6 +931,10 @@ msgstr "Typing level"
 #: components/Rubric/index.tsx:395
 msgid "Typing your description"
 msgstr "Typing your description"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:174
+msgid "Underline"
+msgstr "Underline"
 
 #: components/Document/LeftSide/index.tsx:21
 msgid "Unknown"
@@ -943,8 +1015,12 @@ msgstr "View other students"
 msgid "We will move you back to assignment page!"
 msgstr "We will move you back to assignment page!"
 
+#: components/Editor/Extensions/WritingBlock/WritingBlockComponent.tsx:150
+msgid "Writing here..."
+msgstr "Writing here..."
+
 #: components/MagicLink/index.tsx:43
-#: components/PreJoinSpace.tsx:30
+#: components/PreJoinSpace.tsx:31
 msgid "Wrong email format!"
 msgstr "Wrong email format!"
 
@@ -964,11 +1040,11 @@ msgstr "You have no class here"
 msgid "You reach max attempt times for this assignment!"
 msgstr "You reach max attempt times for this assignment!"
 
-#: components/PreJoinSpace.tsx:55
+#: components/PreJoinSpace.tsx:63
 msgid "You've been invited to join ikigai"
 msgstr "You've been invited to join ikigai"
 
-#: components/PreJoinSpace.tsx:82
+#: components/PreJoinSpace.tsx:90
 msgid "You've joined. We've sent a magic email to <0>{email}</0>. Open the link in email to access space."
 msgstr "You've joined. We've sent a magic email to <0>{email}</0>. Open the link in email to access space."
 

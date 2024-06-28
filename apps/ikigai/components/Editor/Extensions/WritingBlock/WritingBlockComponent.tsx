@@ -14,7 +14,6 @@ import { ListItem } from "@tiptap/extension-list-item";
 import { JSONContent, NodeViewWrapper } from "@tiptap/react";
 import { NodeViewProps } from "@tiptap/core";
 import React, { useEffect, useRef, useState } from "react";
-import { Card } from "@radix-ui/themes";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useDebounceFn } from "ahooks";
 import { v4 } from "uuid";
@@ -31,6 +30,7 @@ import {
 import { UPSERT_WRITING_BLOCK } from "graphql/mutation/DocumentMutation";
 import Loading from "components/Loading";
 import usePermission from "hook/UsePermission";
+import { ExtensionWrapper } from "components/base/ExtensionComponentUtil";
 
 const WritingBlockComponent = (props: NodeViewProps) => {
   const allow = usePermission();
@@ -124,57 +124,59 @@ const WritingBlockComponent = (props: NodeViewProps) => {
   if (initializing) {
     return (
       <NodeViewWrapper>
-        <Card>
+        <ExtensionWrapper selected={props.selected}>
           <Trans>Initializing...</Trans>
           <Loading />
-        </Card>
+        </ExtensionWrapper>
       </NodeViewWrapper>
     );
   }
 
   return (
     <NodeViewWrapper>
-      <Card>
-        <BaseEditor
-          body={innerContent.current}
-          onUpdate={updateContent}
-          onForceSave={forceSave}
-          extensions={[
-            StarterKit,
-            TaskList,
-            TaskItem.configure({
-              nested: true,
-            }),
-            Placeholder.configure({
-              placeholder: t`Typing here...`,
-            }),
-            Underline,
-            Highlight.configure({
-              multicolor: true,
-            }),
-            TextStyle,
-            Color,
-            TextAlign.configure({
-              types: ["heading", "paragraph"],
-              alignments: ["left", "center", "right"],
-            }),
-            BulletList.configure({
-              keepAttributes: true,
-              keepMarks: true,
-            }),
-            OrderedList.configure({
-              keepAttributes: true,
-              keepMarks: true,
-            }),
-            ListItem,
-            TaskList,
-            TaskItem.configure({
-              nested: true,
-            }),
-          ]}
-          readOnly={!allow(DocumentActionPermission.INTERACTIVE_WITH_TOOL)}
-        />
-      </Card>
+      <ExtensionWrapper selected={props.selected}>
+        <div style={{ minHeight: 250 }}>
+          <BaseEditor
+            body={innerContent.current}
+            onUpdate={updateContent}
+            onForceSave={forceSave}
+            extensions={[
+              StarterKit,
+              TaskList,
+              TaskItem.configure({
+                nested: true,
+              }),
+              Placeholder.configure({
+                placeholder: t`Writing here...`,
+              }),
+              Underline,
+              Highlight.configure({
+                multicolor: true,
+              }),
+              TextStyle,
+              Color,
+              TextAlign.configure({
+                types: ["heading", "paragraph"],
+                alignments: ["left", "center", "right"],
+              }),
+              BulletList.configure({
+                keepAttributes: true,
+                keepMarks: true,
+              }),
+              OrderedList.configure({
+                keepAttributes: true,
+                keepMarks: true,
+              }),
+              ListItem,
+              TaskList,
+              TaskItem.configure({
+                nested: true,
+              }),
+            ]}
+            readOnly={!allow(DocumentActionPermission.INTERACTIVE_WITH_TOOL)}
+          />
+        </div>
+      </ExtensionWrapper>
     </NodeViewWrapper>
   );
 };

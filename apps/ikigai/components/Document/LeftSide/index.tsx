@@ -26,7 +26,8 @@ const LeftSide = () => {
     window.location.href = "/";
   };
 
-  const onClickContent = () => {
+  const onClickContent = (event) => {
+    event.stopPropagation();
     setUiConfig({
       leftSidebar:
         leftSidebar === LeftSideBarOptions.Content

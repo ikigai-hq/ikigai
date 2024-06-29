@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
+import { useClickAway } from "ahooks";
 
 import SpaceDocumentList from "components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList";
 import useUIStore, { LeftSideBarOptions } from "store/UIStore";
@@ -7,7 +8,14 @@ import useUIStore, { LeftSideBarOptions } from "store/UIStore";
 const LeftSecondarySide = () => {
   const ref = useRef<HTMLDivElement>();
   const leftSidebar = useUIStore((state) => state.config.leftSidebar);
+  const setUIConfig = useUIStore((state) => state.setConfig);
   const expanded = leftSidebar !== LeftSideBarOptions.None;
+
+  useClickAway(() => {
+    if (expanded) {
+      setUIConfig({ leftSidebar: LeftSideBarOptions.None });
+    }
+  }, ref);
 
   return (
     <Container ref={ref} $hide={!expanded}>

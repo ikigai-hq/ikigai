@@ -42,7 +42,6 @@ const CreateSpaceInvite = ({
   children,
 }: CreateSpaceInviteProps) => {
   const spaceId = useSpaceStore((state) => state.spaceId);
-  const [role, setRole] = useState(Role.STUDENT);
   const [expireAfter, setExpireAfter] = useState<number | undefined>(
     SEVEN_DAYS,
   );
@@ -55,7 +54,7 @@ const CreateSpaceInvite = ({
     const expireAt = expireAfter ? getNowAsSec() + expireAfter : undefined;
     const dataInput: SpaceInviteTokenInput = {
       spaceId,
-      invitingRole: role,
+      invitingRole: Role.STUDENT,
       expireAt,
     };
 
@@ -107,33 +106,6 @@ const CreateSpaceInvite = ({
               </Select.Content>
             </Select.Root>
           </div>
-          <div style={{ marginTop: 5 }}>
-            <Text weight="bold" size="3">
-              <Trans>Inviting role</Trans>
-            </Text>
-            <br />
-            <Select.Root
-              value={role}
-              onValueChange={(roleStr) => setRole(Role[roleStr])}
-            >
-              <Select.Trigger />
-              <Select.Content>
-                <Select.Group>
-                  <Select.Item value={Role.STUDENT}>Student</Select.Item>
-                  <Select.Item value={Role.TEACHER}>Teacher</Select.Item>
-                </Select.Group>
-              </Select.Content>
-            </Select.Root>
-          </div>
-          <Separator style={{ width: "100%", marginTop: 5, marginBottom: 5 }} />
-          <Button
-            onClick={onGenerate}
-            disabled={loading}
-            loading={loading}
-            variant="outline"
-          >
-            <Trans>Generate</Trans>
-          </Button>
           {data && (
             <div>
               <Separator
@@ -173,6 +145,15 @@ const CreateSpaceInvite = ({
               </TextField.Root>
             </div>
           )}
+          <Button
+            onClick={onGenerate}
+            disabled={loading || !!data}
+            loading={loading}
+            variant="outline"
+            style={{ marginTop: 10 }}
+          >
+            <Trans>Generate</Trans>
+          </Button>
         </div>
       }
     >

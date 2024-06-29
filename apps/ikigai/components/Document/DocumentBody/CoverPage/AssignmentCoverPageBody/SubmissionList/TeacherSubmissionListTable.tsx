@@ -11,7 +11,7 @@ import UserBasicInformation from "components/UserBasicInformation";
 import { StudentStatus, SubmissionStatus } from "util/DocumentUtil";
 import { ISubmission } from "store/DocumentStore";
 import { Role } from "graphql/types";
-import { formatTimestamp, FormatType } from "../../../../../../util/Time";
+import { formatTimestamp, FormatType } from "util/Time";
 
 export type TeacherSubmissionListTableProps = {
   submissions: ISubmission[];
@@ -87,6 +87,9 @@ const TeacherSubmissionListTable = ({
           <StudentStatus status={getSubmissionStatus(member.userId)} />
         </Table.Cell>
         <Table.Cell>
+          <Text>{getSubmissions(member.userId)[0]?.finalGrade}</Text>
+        </Table.Cell>
+        <Table.Cell>
           <StudentSubmissionStatus
             selectedMember={selectedMember}
             setSelectedMember={setSelectedMember}
@@ -120,6 +123,9 @@ const TeacherSubmissionListTable = ({
             </Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>
               <Trans>Status</Trans>
+            </Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>
+              <Trans>Grade</Trans>
             </Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>
               <Trans>Attempt</Trans>

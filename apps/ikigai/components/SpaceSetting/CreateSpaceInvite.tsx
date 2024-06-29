@@ -77,7 +77,7 @@ const CreateSpaceInvite = ({
     <Modal
       open={open}
       onOpenChange={onOpenChange}
-      title={t`Space invite link`}
+      title={t`Create Invite Link`}
       content={
         <div>
           <div>

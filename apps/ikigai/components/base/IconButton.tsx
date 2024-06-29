@@ -7,12 +7,13 @@ export type IkigaiIconButtonProps = {
 } & IconButtonProps;
 
 const IkigaiIconButton = (props: IkigaiIconButtonProps) => {
+  const { isActive, ...remainingProps } = props;
   return (
     <IconButton
-      {...props}
+      {...remainingProps}
       style={{
         cursor: "pointer",
-        backgroundColor: props.isActive ? "#E6F4FE" : "unset",
+        backgroundColor: isActive ? "#E6F4FE" : "unset",
       }}
     >
       {props.children}

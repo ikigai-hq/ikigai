@@ -28,7 +28,7 @@ export const findTransformBlocks = (
   return blocks;
 };
 
-export type BaseEditorProps = {
+export type IkigaiEditorProps = {
   readOnly: boolean;
   onUpdate: (body: JSONContent) => void | Promise<void>;
   onForceSave: (body: JSONContent) => void | Promise<void>;
@@ -42,7 +42,7 @@ export const useIkigaiEditor = ({
   onUpdate,
   extensions,
   onForceSave,
-}: BaseEditorProps) => {
+}: IkigaiEditorProps) => {
   const setActiveEditor = useEditorStore((state) => state.setActiveEditor);
   const innerContent = useRef(body);
 
@@ -103,11 +103,11 @@ export const useIkigaiEditor = ({
   });
 };
 
-export type WrapperEditorProps = {
+export type BaseEditorProps = {
   editor: Editor;
 };
 
-const WrapperEditor = ({ editor }: WrapperEditorProps) => {
+const BaseEditor = ({ editor }: BaseEditorProps) => {
   return (
     <main style={{ margin: 15 }} spellCheck={false}>
       <EditorContent style={{ width: "100%" }} editor={editor} />
@@ -115,4 +115,4 @@ const WrapperEditor = ({ editor }: WrapperEditorProps) => {
   );
 };
 
-export default WrapperEditor;
+export default BaseEditor;

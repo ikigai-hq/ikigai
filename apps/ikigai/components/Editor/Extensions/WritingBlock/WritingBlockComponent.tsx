@@ -17,8 +17,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useDebounceFn } from "ahooks";
 import { v4 } from "uuid";
+import CharacterCount from "@tiptap/extension-character-count";
 
-import BaseEditor from "../../BaseEditor";
+import BaseEditor, { useIkigaiEditor } from "../../BaseEditor";
 import { EMPTY_UUID, isEmptyUuid } from "util/FileUtil";
 import { GET_WRITING_BLOCK } from "graphql/query/DocumentQuery";
 import { handleError } from "graphql/ApolloClient";
@@ -35,9 +36,9 @@ import {
 import Loading from "components/Loading";
 import usePermission from "hook/UsePermission";
 import { ExtensionWrapper } from "components/base/ExtensionComponentUtil";
+import { Text } from "@radix-ui/themes";
 
 const WritingBlockComponent = (props: NodeViewProps) => {
-  const allow = usePermission();
   const pageContentId = props.extension.options.pageContentId;
   const writingBlockId = props.node.attrs.writingBlockId;
   const originalBlockId = props.node.attrs.originalBlockId;
@@ -157,7 +158,6 @@ const WritingBlockComponent = (props: NodeViewProps) => {
     });
     innerContent.current = content;
   };
-
   if (initializing) {
     return (
       <NodeViewWrapper>
@@ -172,49 +172,78 @@ const WritingBlockComponent = (props: NodeViewProps) => {
   return (
     <NodeViewWrapper>
       <ExtensionWrapper selected={props.selected}>
-        <div style={{ minHeight: 200 }}>
-          <BaseEditor
-            body={innerContent.current}
-            onUpdate={updateContent}
-            onForceSave={forceSave}
-            extensions={[
-              StarterKit,
-              TaskList,
-              TaskItem.configure({
-                nested: true,
-              }),
-              Placeholder.configure({
-                placeholder: t`Writing here...`,
-              }),
-              Underline,
-              Highlight.configure({
-                multicolor: true,
-              }),
-              TextStyle,
-              Color,
-              TextAlign.configure({
-                types: ["heading", "paragraph"],
-                alignments: ["left", "center", "right"],
-              }),
-              BulletList.configure({
-                keepAttributes: true,
-                keepMarks: true,
-              }),
-              OrderedList.configure({
-                keepAttributes: true,
-                keepMarks: true,
-              }),
-              ListItem,
-              TaskList,
-              TaskItem.configure({
-                nested: true,
-              }),
-            ]}
-            readOnly={!allow(DocumentActionPermission.INTERACTIVE_WITH_TOOL)}
-          />
-        </div>
+        <WritingEditor
+          body={innerContent.current}
+          onUpdate={updateContent}
+          onForceSave={forceSave}
+        />
       </ExtensionWrapper>
     </NodeViewWrapper>
+  );
+};
+
+type WritingEditorProps = {
+  body: JSONContent;
+  onUpdate: (content: JSONContent) => void;
+  onForceSave: (content: JSONContent) => void;
+};
+
+const WritingEditor = ({ body, onUpdate, onForceSave }: WritingEditorProps) => {
+  const allow = usePermission();
+  const editor = useIkigaiEditor({
+    body,
+    onUpdate,
+    onForceSave,
+    extensions: [
+      StarterKit,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
+      Placeholder.configure({
+        placeholder: t`Writing here...`,
+      }),
+      Underline,
+      Highlight.configure({
+        multicolor: true,
+      }),
+      TextStyle,
+      Color,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+        alignments: ["left", "center", "right"],
+      }),
+      BulletList.configure({
+        keepAttributes: true,
+        keepMarks: true,
+      }),
+      OrderedList.configure({
+        keepAttributes: true,
+        keepMarks: true,
+      }),
+      ListItem,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
+      CharacterCount,
+    ],
+    readOnly: !allow(DocumentActionPermission.INTERACTIVE_WITH_TOOL),
+  });
+
+  return (
+    <>
+      <div style={{ minHeight: 200 }}>
+        <BaseEditor editor={editor} />
+      </div>
+      <div style={{ paddingRight: 5 }}>
+        <Text size="2" align="right" as="div" color={"gray"}>
+          {editor?.storage?.characterCount?.characters() || 0} characters
+          /&nbsp;
+          {editor?.storage?.characterCount?.words() || 0} words
+        </Text>
+      </div>
+    </>
   );
 };
 

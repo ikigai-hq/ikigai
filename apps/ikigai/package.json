@@ -49,6 +49,7 @@
     "@react-pdf/renderer": "^3.1.9",
     "@tabler/icons-react": "^3.4.0",
     "@tiptap/extension-bullet-list": "^2.4.0",
+    "@tiptap/extension-character-count": "^2.4.0",
     "@tiptap/extension-color": "^2.4.0",
     "@tiptap/extension-highlight": "^2.4.0",
     "@tiptap/extension-list-item": "^2.4.0",

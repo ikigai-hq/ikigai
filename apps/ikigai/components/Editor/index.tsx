@@ -17,7 +17,7 @@ import { IPageContent } from "store/PageContentStore";
 import useAddOrUpdatePageContent from "hook/UseUpsertPageContent";
 import FileHandler from "./Extensions/FileHandler";
 import WritingBlock from "./Extensions/WritingBlock";
-import BaseEditor from "./BaseEditor";
+import BaseEditor, { useIkigaiEditor } from "./BaseEditor";
 
 export type EditorProps = {
   readOnly: boolean;
@@ -31,56 +31,56 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
   );
   const { run, cancel } = useDebounceFn(upsert, { wait: 300, maxWait: 1000 });
 
-  return (
-    <BaseEditor
-      body={pageContent.body}
-      onUpdate={(body) => run({ body })}
-      onForceSave={(body) => {
-        cancel();
-        upsert({ body });
-      }}
-      extensions={[
-        StarterKit,
-        TaskList,
-        TaskItem.configure({
-          nested: true,
-        }),
-        Placeholder.configure({
-          placeholder: t`Typing content here...`,
-        }),
-        Underline,
-        Highlight.configure({
-          multicolor: true,
-        }),
-        TextStyle,
-        Color,
-        TextAlign.configure({
-          types: ["heading", "paragraph"],
-          alignments: ["left", "center", "right"],
-        }),
-        BulletList.configure({
-          keepAttributes: true,
-          keepMarks: true,
-        }),
-        OrderedList.configure({
-          keepAttributes: true,
-          keepMarks: true,
-        }),
-        ListItem,
-        TaskList,
-        TaskItem.configure({
-          nested: true,
-        }),
-        FileHandler.configure({
-          pageContentId: pageContent.id,
-        }),
-        WritingBlock.configure({
-          pageContentId: pageContent.id,
-        }),
-      ]}
-      readOnly={readOnly}
-    />
-  );
+  const editor = useIkigaiEditor({
+    body: pageContent.body,
+    onUpdate: (body) => run({ body }),
+    onForceSave: (body) => {
+      cancel();
+      upsert({ body });
+    },
+    extensions: [
+      StarterKit,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
+      Placeholder.configure({
+        placeholder: t`Typing content here...`,
+      }),
+      Underline,
+      Highlight.configure({
+        multicolor: true,
+      }),
+      TextStyle,
+      Color,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+        alignments: ["left", "center", "right"],
+      }),
+      BulletList.configure({
+        keepAttributes: true,
+        keepMarks: true,
+      }),
+      OrderedList.configure({
+        keepAttributes: true,
+        keepMarks: true,
+      }),
+      ListItem,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
+      FileHandler.configure({
+        pageContentId: pageContent.id,
+      }),
+      WritingBlock.configure({
+        pageContentId: pageContent.id,
+      }),
+    ],
+    readOnly,
+  });
+
+  return <BaseEditor editor={editor} />;
 };
 
 export default Editor;

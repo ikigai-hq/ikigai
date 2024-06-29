@@ -22,11 +22,14 @@ import {
   IconUnderline,
   IconWriting,
 } from "@tabler/icons-react";
-
-import useEditorStore from "store/EditorStore";
-import { Button, DropdownMenu, Tooltip } from "@radix-ui/themes";
 import { TwitterPicker } from "react-color";
 import { t, Trans } from "@lingui/macro";
+import { Button, DropdownMenu, Tooltip } from "@radix-ui/themes";
+
+import useEditorStore from "store/EditorStore";
+import { WRITING_BLOCK_NAME } from "components/Editor/Extensions/WritingBlock";
+import { hasExtension } from "util/ExtensionUtil";
+import { FILE_HANDLER_NAME } from "components/Editor/Extensions/FileHandler";
 
 const ContentToolbar = () => {
   const activeEditor = useEditorStore((state) => state.activeEditor);
@@ -117,9 +120,9 @@ const ContentToolbar = () => {
   };
 
   const onChangeWritingBlock = () => {
-    if (!activeEditor) return;
+    if (!activeEditor || !hasExtension(activeEditor, WRITING_BLOCK_NAME))
+      return;
     activeEditor.chain().focus().insertWritingBlock().run();
-    setToolbarOptions({ blockquote: activeEditor.isActive("writingBlock") });
   };
 
   const onChangeBulletList = () => {
@@ -141,7 +144,7 @@ const ContentToolbar = () => {
   };
 
   const onInsertFileHandler = () => {
-    if (!activeEditor) return;
+    if (!activeEditor || !hasExtension(activeEditor, FILE_HANDLER_NAME)) return;
     activeEditor.chain().focus().insertFileHandler().run();
   };
 
@@ -428,7 +431,10 @@ const ContentToolbar = () => {
               className="ToolbarToggleItem"
               value="writingBlock"
               aria-label="Writing Block"
-              data-state={toolbarOptions?.writingBlock ? "on" : "off"}
+              disabled={
+                activeEditor?.isActive(WRITING_BLOCK_NAME) ||
+                !hasExtension(activeEditor, WRITING_BLOCK_NAME)
+              }
               onClick={onChangeWritingBlock}
             >
               <IconWriting size={20} stroke={2} />
@@ -446,7 +452,8 @@ const ContentToolbar = () => {
             </DropdownMenu.Trigger>
             <DropdownMenu.Content style={{ padding: 5 }}>
               <DropdownMenu.Item onClick={onInsertFileHandler}>
-                <IconFileUpload size={20} stroke={1.7} /> File Upload
+                <IconFileUpload size={20} stroke={1.7} />{" "}
+                <Trans>File Upload</Trans>
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Root>

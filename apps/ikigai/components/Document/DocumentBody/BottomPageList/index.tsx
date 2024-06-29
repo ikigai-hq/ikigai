@@ -99,12 +99,7 @@ const BottomPageList = () => {
               </>
             }
           >
-            <Button
-              variant="soft"
-              disabled={loading}
-              loading={loading}
-              size="1"
-            >
+            <Button disabled={loading} loading={loading}>
               <PlusIcon /> Page
             </Button>
           </Dropdown>

@@ -15,7 +15,6 @@ export type ToolbarOptions = {
   bulletList: boolean;
   orderedList: boolean;
   todoList: boolean;
-  writingBlock: boolean;
 };
 
 export type IEditorStore = {
@@ -30,8 +29,14 @@ const useEditorStore = create<IEditorStore>((set, get) => ({
   toolbarOptions: undefined,
   setActiveEditor: (editor) => {
     if (editor) {
+      const currentEditor = get().activeEditor;
+      if (editor !== currentEditor) {
+        set({
+          activeEditor: editor,
+        });
+      }
+
       set({
-        activeEditor: editor,
         toolbarOptions: {
           bold: editor.isActive("bold"),
           italic: editor.isActive("italic"),
@@ -46,7 +51,6 @@ const useEditorStore = create<IEditorStore>((set, get) => ({
           bulletList: editor.isActive("bulletList"),
           orderedList: editor.isActive("orderedList"),
           todoList: editor.isActive("taskList"),
-          writingBlock: editor.isActive("writingBlock"),
         },
       });
     } else {

@@ -20,10 +20,10 @@ declare module "@tiptap/core" {
   }
 }
 
-export const FileHandlerExtensionName = "fileHandler";
+export const FILE_HANDLER_NAME = "fileHandler";
 
 export default Node.create<FileHandlerOptions>({
-  name: FileHandlerExtensionName,
+  name: FILE_HANDLER_NAME,
   group: "block",
   atom: true,
   selectable: true,
@@ -49,7 +49,7 @@ export default Node.create<FileHandlerOptions>({
         ({ commands }: CommandProps) => {
           return commands.insertContent([
             {
-              type: FileHandlerExtensionName,
+              type: FILE_HANDLER_NAME,
             },
           ]);
         },

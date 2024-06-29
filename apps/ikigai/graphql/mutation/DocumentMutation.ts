@@ -9,8 +9,8 @@ export const SOFT_DELETE_DOCUMENT = gql`
   }
 `;
 
-export const ADD_DOCUMENT_STANDALONE_V2 = gql`
-  mutation AddDocumentStandaloneV2(
+export const ADD_DOCUMENT_STANDALONE = gql`
+  mutation AddDocumentStandalone(
     $data: NewDocument!
     $spaceId: Int
     $isAssignment: Boolean!

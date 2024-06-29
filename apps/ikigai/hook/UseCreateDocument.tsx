@@ -1,17 +1,13 @@
 import { useMutation } from "@apollo/client";
-import {
-  AddDocumentStandaloneV2,
-  DocumentType,
-  IconType,
-} from "../graphql/types";
-import { ADD_DOCUMENT_STANDALONE_V2 } from "../graphql/mutation/DocumentMutation";
-import { handleError } from "../graphql/ApolloClient";
-import useDocumentStore from "../store/DocumentStore";
-import useSpaceStore from "../store/SpaceStore";
+import { AddDocumentStandalone, DocumentType, IconType } from "graphql/types";
+import { ADD_DOCUMENT_STANDALONE } from "graphql/mutation/DocumentMutation";
+import { handleError } from "graphql/ApolloClient";
+import useDocumentStore from "store/DocumentStore";
+import useSpaceStore from "store/SpaceStore";
 
 const useCreateDocument = (isPrivate: boolean, parentId?: string) => {
   const [createStandaloneDocument, { loading }] =
-    useMutation<AddDocumentStandaloneV2>(ADD_DOCUMENT_STANDALONE_V2, {
+    useMutation<AddDocumentStandalone>(ADD_DOCUMENT_STANDALONE, {
       onError: handleError,
     });
   const documents = useDocumentStore((state) => state.spaceDocuments);

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import { useClickAway } from "ahooks";
+import { useKeyPress } from "ahooks";
 
 import SpaceDocumentList from "components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList";
 import useUIStore, { LeftSideBarOptions } from "store/UIStore";
@@ -11,11 +11,15 @@ const LeftSecondarySide = () => {
   const setUIConfig = useUIStore((state) => state.setConfig);
   const expanded = leftSidebar !== LeftSideBarOptions.None;
 
-  useClickAway(() => {
-    if (expanded) {
-      setUIConfig({ leftSidebar: LeftSideBarOptions.None });
-    }
-  }, ref);
+  useKeyPress(
+    (key) => key.code === "Escape",
+    () => {
+      if (expanded) setUIConfig({ leftSidebar: LeftSideBarOptions.None });
+    },
+    {
+      events: ["keydown"],
+    },
+  );
 
   return (
     <Container ref={ref} $hide={!expanded}>

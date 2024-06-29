@@ -242,18 +242,18 @@ export interface SoftDeleteDocumentVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: AddDocumentStandaloneV2
+// GraphQL mutation operation: AddDocumentStandalone
 // ====================================================
 
-export interface AddDocumentStandaloneV2_documentCreate_assignment {
+export interface AddDocumentStandalone_documentCreate_assignment {
   id: number;
 }
 
-export interface AddDocumentStandaloneV2_documentCreate_submission {
+export interface AddDocumentStandalone_documentCreate_submission {
   id: number;
 }
 
-export interface AddDocumentStandaloneV2_documentCreate {
+export interface AddDocumentStandalone_documentCreate {
   id: any;
   title: string;
   createdAt: number;
@@ -263,17 +263,17 @@ export interface AddDocumentStandaloneV2_documentCreate {
   deletedAt: number | null;
   iconType: IconType | null;
   iconValue: string | null;
-  assignment: AddDocumentStandaloneV2_documentCreate_assignment | null;
-  submission: AddDocumentStandaloneV2_documentCreate_submission | null;
+  assignment: AddDocumentStandalone_documentCreate_assignment | null;
+  submission: AddDocumentStandalone_documentCreate_submission | null;
   isPrivate: boolean;
   isDefaultFolderPrivate: boolean;
 }
 
-export interface AddDocumentStandaloneV2 {
-  documentCreate: AddDocumentStandaloneV2_documentCreate;
+export interface AddDocumentStandalone {
+  documentCreate: AddDocumentStandalone_documentCreate;
 }
 
-export interface AddDocumentStandaloneV2Variables {
+export interface AddDocumentStandaloneVariables {
   data: NewDocument;
   spaceId?: number | null;
   isAssignment: boolean;

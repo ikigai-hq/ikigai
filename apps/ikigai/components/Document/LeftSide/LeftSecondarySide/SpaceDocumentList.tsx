@@ -18,6 +18,9 @@ const SpaceDocumentList = () => {
       (spaceDocument) => spaceDocument.documentType !== DocumentType.SUBMISSION,
     ),
   );
+  const privateFolder = spaceDocuments.find(
+    (doc) => doc.isDefaultFolderPrivate,
+  );
 
   return (
     <div
@@ -43,7 +46,7 @@ const SpaceDocumentList = () => {
           </Heading>
         </div>
         {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
-          <CreateContentButton isPrivate={true} parentId={null}>
+          <CreateContentButton isPrivate={true} parentId={privateFolder?.id}>
             <IconButton
               style={{ cursor: "pointer" }}
               size="2"

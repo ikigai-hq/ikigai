@@ -1,9 +1,11 @@
 import { useMutation } from "@apollo/client";
+
 import { ADD_OR_UPDATE_PAGE } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
 import { DocumentActionPermission, PageInput } from "graphql/types";
 import usePageStore from "store/PageStore";
 import usePermission from "./UsePermission";
+import { wrapAsyncDocumentSavingFn } from "store/DocumentStore";
 
 const useUpdatePage = (pageId: string) => {
   const allow = usePermission();
@@ -30,7 +32,7 @@ const useUpdatePage = (pageId: string) => {
       ...data,
     };
 
-    addOrUpdatePage({
+    wrapAsyncDocumentSavingFn(addOrUpdatePage)({
       variables: {
         page: pageInput,
         isSinglePage,

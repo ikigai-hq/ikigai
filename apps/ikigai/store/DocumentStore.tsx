@@ -40,6 +40,9 @@ type IDocumentStore = {
   // Submissions
   submissions: ISubmission[];
   setSubmissions: (submissions: ISubmission[]) => void;
+  // Saving
+  isSaving: boolean;
+  setIsSaving: (isSaving: boolean) => void;
 };
 
 const useDocumentStore = create<IDocumentStore>((set, get) => ({
@@ -105,7 +108,25 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
     )[0]?.id;
   },
   setSubmissions: (submissions) => set({ submissions: cloneDeep(submissions) }),
+  isSaving: false,
+  setIsSaving: (isSaving) => set({ isSaving }),
 }));
+
+type noop = (...args: any[]) => any;
+export function wrapAsyncDocumentSavingFn<T extends noop>(
+  fn: T,
+): (...args: any[]) => Promise<ReturnType<T>> {
+  return async (...args: any[]) => {
+    try {
+      useDocumentStore.getState().setIsSaving(true);
+      return await fn(...args);
+    } catch (e) {
+      console.error("Cannot run document saving fn", e);
+    } finally {
+      useDocumentStore.getState().setIsSaving(false);
+    }
+  };
+}
 
 const getAllByParentIds = (
   items: ISpaceDocument[],

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useTitle } from "ahooks";
 import { Badge, Separator, Text } from "@radix-ui/themes";
+import { t } from "@lingui/macro";
 
 import useDocumentStore from "store/DocumentStore";
 import { DocumentType } from "graphql/types";
@@ -13,6 +14,7 @@ import { formatDocumentRoute } from "config/Routes";
 import { documentIcon } from "util/DocumentUtil";
 
 const DocumentHeader = () => {
+  const isSaving = useDocumentStore((state) => state.isSaving);
   const activeDocument = useDocumentStore((state) => state.activeDocument);
   const activeDocumentTitle = useDocumentStore(
     (state) => state.activeDocument?.title,
@@ -51,6 +53,10 @@ const DocumentHeader = () => {
                 {documentIcon(parent)} {parent.title}
               </Badge>
             )}
+            <Text size="1" color="gray">
+              {" "}
+              {isSaving ? t`Saving...` : t`Saved`}
+            </Text>
           </div>
           <div style={{ marginLeft: -6 }}>
             <IkigaiMenubar />

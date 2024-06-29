@@ -3,7 +3,9 @@ import { useMutation } from "@apollo/client";
 import { UPDATE_ASSIGNMENT } from "graphql/mutation/AssignmentMutation";
 import { handleError } from "graphql/ApolloClient";
 import { UpdateAssignmentData } from "graphql/types";
-import useDocumentStore from "store/DocumentStore";
+import useDocumentStore, {
+  wrapAsyncDocumentSavingFn,
+} from "store/DocumentStore";
 
 const useUpdateAssignment = () => {
   const [updateAssignmentServer, res] = useMutation(UPDATE_ASSIGNMENT, {
@@ -18,7 +20,9 @@ const useUpdateAssignment = () => {
 
   const updateAssignment = async (data: UpdateAssignmentData) => {
     if (!assignment) return;
-    const { data: resData } = await updateAssignmentServer({
+    const { data: resData } = await wrapAsyncDocumentSavingFn(
+      updateAssignmentServer,
+    )({
       variables: {
         assignmentId: assignment.id,
         data,

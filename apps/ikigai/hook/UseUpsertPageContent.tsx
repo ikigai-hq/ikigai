@@ -1,9 +1,11 @@
+import { debounce } from "lodash";
+
 import { ADD_ORG_UPDATE_PAGE_CONTENT } from "graphql/mutation/DocumentMutation";
 import { mutate } from "graphql/ApolloClient";
 import { DocumentActionPermission, PageContentInput } from "graphql/types";
 import usePermission from "./UsePermission";
 import usePageContentStore from "store/PageContentStore";
-import { debounce } from "lodash";
+import { wrapAsyncDocumentSavingFn } from "store/DocumentStore";
 
 const upsertPageContent = (
   pageContentId: string,
@@ -21,7 +23,7 @@ const upsertPageContent = (
     body: pageContent.body,
     ...data,
   };
-  mutate(
+  wrapAsyncDocumentSavingFn(mutate)(
     {
       mutation: ADD_ORG_UPDATE_PAGE_CONTENT,
       variables: {

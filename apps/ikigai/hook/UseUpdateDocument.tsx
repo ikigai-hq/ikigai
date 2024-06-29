@@ -3,7 +3,9 @@ import { useMutation } from "@apollo/client";
 import { DocumentActionPermission, UpdateDocumentData } from "graphql/types";
 import { UPDATE_DOCUMENT } from "graphql/mutation/SpaceMutation";
 import { handleError } from "graphql/ApolloClient";
-import useDocumentStore from "../store/DocumentStore";
+import useDocumentStore, {
+  wrapAsyncDocumentSavingFn,
+} from "../store/DocumentStore";
 import usePermission from "./UsePermission";
 
 const UseUpdateDocument = () => {
@@ -24,7 +26,7 @@ const UseUpdateDocument = () => {
       ...data,
     };
 
-    updateDocumentServer({
+    wrapAsyncDocumentSavingFn(updateDocumentServer)({
       variables: {
         documentId: activeDocument.id,
         data: updateDocumentData,

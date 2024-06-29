@@ -1,4 +1,5 @@
 import {
+  Editor,
   EditorContent,
   Extensions,
   JSONContent,
@@ -35,7 +36,7 @@ export type BaseEditorProps = {
   body?: JSONContent;
 };
 
-const BaseEditor = ({
+export const useIkigaiEditor = ({
   readOnly,
   body,
   onUpdate,
@@ -45,7 +46,7 @@ const BaseEditor = ({
   const setActiveEditor = useEditorStore((state) => state.setActiveEditor);
   const innerContent = useRef(body);
 
-  const editor = useEditor({
+  return useEditor({
     editable: !readOnly,
     extensions,
     content: body,
@@ -100,7 +101,13 @@ const BaseEditor = ({
       setActiveEditor(event.editor);
     },
   });
+};
 
+export type WrapperEditorProps = {
+  editor: Editor;
+};
+
+const WrapperEditor = ({ editor }: WrapperEditorProps) => {
   return (
     <main style={{ margin: 15 }} spellCheck={false}>
       <EditorContent style={{ width: "100%" }} editor={editor} />
@@ -108,4 +115,4 @@ const BaseEditor = ({
   );
 };
 
-export default BaseEditor;
+export default WrapperEditor;

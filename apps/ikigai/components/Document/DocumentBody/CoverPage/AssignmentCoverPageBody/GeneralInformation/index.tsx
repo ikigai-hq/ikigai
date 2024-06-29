@@ -1,20 +1,19 @@
-import { t, Trans } from "@lingui/macro";
-import React, { ChangeEvent, useState } from "react";
-import { Flex, TextArea, Button } from "@radix-ui/themes";
+import { t } from "@lingui/macro";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { Flex, TextArea } from "@radix-ui/themes";
 
 import { DocumentActionPermission, UpdateAssignmentData } from "graphql/types";
 import useUpdateAssignment from "hook/UseUpdateAssignment";
 import useDocumentStore from "store/DocumentStore";
 import AssignmentAttributes from "./AssignmentAttributes";
 import usePermission from "hook/UsePermission";
+import { useDebounceFn, usePrevious } from "ahooks";
+import { isEqual } from "lodash";
 
 const GeneralInformation = () => {
   const allow = usePermission();
   const canEdit = allow(DocumentActionPermission.EDIT_DOCUMENT);
-  const {
-    updateAssignment,
-    res: { loading },
-  } = useUpdateAssignment();
+  const { updateAssignment } = useUpdateAssignment();
   const assignment = useDocumentStore(
     (state) => state.activeDocument?.assignment,
   );
@@ -26,6 +25,18 @@ const GeneralInformation = () => {
     preDescription: assignment.preDescription,
     testDuration: assignment.testDuration,
   });
+  const previousInnerAssignment = usePrevious(innerAssignment);
+  const { run } = useDebounceFn(updateAssignment, { wait: 100, maxWait: 1000 });
+
+  useEffect(() => {
+    if (
+      canEdit &&
+      previousInnerAssignment &&
+      !isEqual(innerAssignment, previousInnerAssignment)
+    ) {
+      run(innerAssignment);
+    }
+  }, [innerAssignment]);
 
   const onChangeInnerAssignment = (data: Partial<UpdateAssignmentData>) => {
     setInnerAssignment({
@@ -55,17 +66,6 @@ const GeneralInformation = () => {
           readOnly={!canEdit}
         />
       </Flex>
-      {canEdit && (
-        <div style={{ marginTop: "10px" }}>
-          <Button
-            onClick={() => updateAssignment(innerAssignment)}
-            loading={loading}
-            disabled={loading}
-          >
-            <Trans>Update</Trans>
-          </Button>
-        </div>
-      )}
     </div>
   );
 };

@@ -1,6 +1,4 @@
 import { useMutation } from "@apollo/client";
-import toast from "react-hot-toast";
-import { t } from "@lingui/macro";
 
 import { UPDATE_ASSIGNMENT } from "graphql/mutation/AssignmentMutation";
 import { handleError } from "graphql/ApolloClient";
@@ -28,7 +26,6 @@ const useUpdateAssignment = () => {
     });
     if (resData) {
       updateAssignmentInStore(data);
-      toast.success(t`Updated!`);
     }
   };
 

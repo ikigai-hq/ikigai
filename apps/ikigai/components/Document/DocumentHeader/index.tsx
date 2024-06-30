@@ -53,9 +53,8 @@ const DocumentHeader = () => {
                 {documentIcon(parent)} {parent.title}
               </Badge>
             )}
-            <Text size="1" color="gray">
-              {" "}
-              {isSaving ? t`Saving...` : t`Saved`}
+            <Text size="1" color="gray" style={{ marginLeft: 5 }}>
+              {isSaving ? t`Saving...` : ""}
             </Text>
           </div>
           <div style={{ marginLeft: -6 }}>

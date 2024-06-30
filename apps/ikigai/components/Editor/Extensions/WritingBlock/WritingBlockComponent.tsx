@@ -18,6 +18,7 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { useDebounceFn } from "ahooks";
 import { v4 } from "uuid";
 import CharacterCount from "@tiptap/extension-character-count";
+import { Text } from "@radix-ui/themes";
 
 import BaseEditor, { useIkigaiEditor } from "../../BaseEditor";
 import { EMPTY_UUID, isEmptyUuid } from "util/FileUtil";
@@ -36,7 +37,7 @@ import {
 import Loading from "components/Loading";
 import usePermission from "hook/UsePermission";
 import { ExtensionWrapper } from "components/base/ExtensionComponentUtil";
-import { Text } from "@radix-ui/themes";
+import { wrapAsyncDocumentSavingFn } from "store/DocumentStore";
 
 const WritingBlockComponent = (props: NodeViewProps) => {
   const pageContentId = props.extension.options.pageContentId;
@@ -63,10 +64,15 @@ const WritingBlockComponent = (props: NodeViewProps) => {
         (innerContent.current = data.documentGetWritingBlock.content),
     },
   );
-  const { run: upsertDebounced, cancel } = useDebounceFn(upsertWritingBlock, {
-    wait: 300,
-    maxWait: 2000,
-  });
+  const wrappedUpsertWritingBlock =
+    wrapAsyncDocumentSavingFn(upsertWritingBlock);
+  const { run: upsertDebounced, cancel } = useDebounceFn(
+    wrappedUpsertWritingBlock,
+    {
+      wait: 300,
+      maxWait: 2000,
+    },
+  );
 
   useEffect(() => {
     initialize();
@@ -147,7 +153,7 @@ const WritingBlockComponent = (props: NodeViewProps) => {
   const forceSave = (content: JSONContent) => {
     if (isEmptyUuid(writingBlockId)) return;
     cancel();
-    upsertWritingBlock({
+    wrappedUpsertWritingBlock({
       variables: {
         pageContentId,
         writingBlock: {

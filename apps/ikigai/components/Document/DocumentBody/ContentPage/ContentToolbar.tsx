@@ -306,30 +306,36 @@ const ContentToolbar = () => {
           aria-label="Heading formatting"
           value={toolbarOptions?.headingLevel?.toString() || "0"}
         >
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="1"
-            aria-label="heading 1"
-            onClick={() => onChangeHeading(1)}
-          >
-            <IconH1 size={20} stroke={2} />
-          </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="2"
-            aria-label="heading 2"
-            onClick={() => onChangeHeading(2)}
-          >
-            <IconH2 size={20} stroke={2} />
-          </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem
-            className="ToolbarToggleItem"
-            value="3"
-            aria-label="heading 3"
-            onClick={() => onChangeHeading(3)}
-          >
-            <IconH3 size={20} stroke={2} />
-          </Toolbar.ToggleItem>
+          <Tooltip content={t`Heading 1`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="1"
+              aria-label="heading 1"
+              onClick={() => onChangeHeading(1)}
+            >
+              <IconH1 size={20} stroke={2} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
+          <Tooltip content={t`Heading 2`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="2"
+              aria-label="heading 2"
+              onClick={() => onChangeHeading(2)}
+            >
+              <IconH2 size={20} stroke={2} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
+          <Tooltip content={t`Heading 3`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="3"
+              aria-label="heading 3"
+              onClick={() => onChangeHeading(3)}
+            >
+              <IconH3 size={20} stroke={2} />
+            </Toolbar.ToggleItem>
+          </Tooltip>
         </Toolbar.ToggleGroup>
         <Toolbar.Separator className="ToolbarSeparator" />
         <Toolbar.ToggleGroup
@@ -426,8 +432,8 @@ const ContentToolbar = () => {
               <IconBlockquote size={20} stroke={2} />
             </Toolbar.ToggleItem>
           </Tooltip>
-          <Tooltip content={t`Essay Block`}>
-            <Toolbar.ToggleItem
+          <Tooltip content={t`Writing Quizz`}>
+            <Toolbar.ToolbarButton
               className="ToolbarToggleItem"
               value="writingBlock"
               aria-label="Writing Block"
@@ -438,7 +444,7 @@ const ContentToolbar = () => {
               onClick={onChangeWritingBlock}
             >
               <IconWriting size={20} stroke={2} />
-            </Toolbar.ToggleItem>
+            </Toolbar.ToolbarButton>
           </Tooltip>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
@@ -451,7 +457,10 @@ const ContentToolbar = () => {
               </Toolbar.ToolbarButton>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content style={{ padding: 5 }}>
-              <DropdownMenu.Item onClick={onInsertFileHandler}>
+              <DropdownMenu.Item
+                onClick={onInsertFileHandler}
+                disabled={!hasExtension(activeEditor, FILE_HANDLER_NAME)}
+              >
                 <IconFileUpload size={20} stroke={1.7} />{" "}
                 <Trans>File Upload</Trans>
               </DropdownMenu.Item>

@@ -1,4 +1,4 @@
-import { Card, IconButton, Text, TextField } from "@radix-ui/themes";
+import { IconButton, Text, TextField } from "@radix-ui/themes";
 import styled from "styled-components";
 import { t, Trans } from "@lingui/macro";
 import { useState } from "react";
@@ -56,11 +56,9 @@ const PageItem = ({ page, index }: PageItemProps) => {
   return (
     <div style={{ display: "flex" }}>
       <PageContainer
-        size="1"
         onClick={() => setActivePageId(page?.id)}
         $active={isActive}
         $isExpanded={isExpanded}
-        variant="classic"
       >
         <div style={{ display: "flex", justifyContent: "center", flex: 1 }}>
           {!page && (
@@ -122,13 +120,14 @@ const PageItem = ({ page, index }: PageItemProps) => {
   );
 };
 
-const PageContainer = styled(Card)<{
+const PageContainer = styled.div<{
   $active?: boolean;
   $isExpanded?: boolean;
 }>`
   width: ${(props) => (props.$isExpanded ? "400px" : "130px")};
   cursor: pointer;
-  background-color: ${(props) => (props.$active ? "var(--indigo-5)" : "unset")};
+  background-color: ${(props) =>
+    props.$active ? "var(--indigo-5)" : "var(--gray-1)"};
   display: flex;
   align-items: center;
   gap: 4px;

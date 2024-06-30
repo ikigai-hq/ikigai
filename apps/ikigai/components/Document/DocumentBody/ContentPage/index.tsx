@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import React from "react";
 
 import { DocumentActionPermission } from "graphql/types";
 import usePermission from "hook/UsePermission";
@@ -27,7 +28,7 @@ const ContentPage = ({ page }: ContentPageProps) => {
       >
         <PanelGroup direction="horizontal">
           {pageContents.map((pageContent, index) => (
-            <>
+            <React.Fragment key={pageContent.id}>
               <Panel key={pageContent.id} minSize={30}>
                 <EditorWrapper $pageContentLength={pageContents.length}>
                   <Editor
@@ -44,7 +45,7 @@ const ContentPage = ({ page }: ContentPageProps) => {
                   }}
                 />
               )}
-            </>
+            </React.Fragment>
           ))}
         </PanelGroup>
       </div>

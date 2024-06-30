@@ -89,17 +89,17 @@ const BottomPageList = () => {
         >
           <Dropdown
             content={
-              <>
+              <div style={{ padding: 5 }}>
                 <DropdownMenu.Item onClick={() => onAddPage(true)}>
                   <IconColumns1 stroke={1} /> Single layout
                 </DropdownMenu.Item>
                 <DropdownMenu.Item onClick={() => onAddPage(false)}>
                   <IconColumns2 stroke={1} /> Split layout
                 </DropdownMenu.Item>
-              </>
+              </div>
             }
           >
-            <Button disabled={loading} loading={loading}>
+            <Button radius="none" disabled={loading} loading={loading}>
               <PlusIcon /> Page
             </Button>
           </Dropdown>

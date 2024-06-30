@@ -34,6 +34,7 @@ button {
 .ToolbarButton:hover {
     background-color: var(--indigo-3);
     color: var(--indigo-11);
+    cursor: pointer;
 }
 .ToolbarToggleItem:focus,
 .ToolbarLink:focus,
@@ -86,4 +87,11 @@ button {
 .ToolbarButton:hover {
     background-color: var(--indigo-10);
     color: white;
+}
+
+.ToolbarToggleItem:disabled,
+.ToolbarLink:disabled,
+.ToolbarButton:disabled {
+    cursor: not-allowed;
+    color: var(--gray-7);
 }

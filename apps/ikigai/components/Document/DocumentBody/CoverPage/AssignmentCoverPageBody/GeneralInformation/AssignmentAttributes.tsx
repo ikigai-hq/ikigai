@@ -1,9 +1,12 @@
 import { DataList } from "@radix-ui/themes";
+
 import TestDurationAttribute from "./TestDurationAttribute";
-import { UpdateAssignmentData } from "graphql/types";
+import { DocumentActionPermission, UpdateAssignmentData } from "graphql/types";
 import AttemptAttribute from "./AttemptAttribute";
 import GradeMethodAttribute from "./GradeMethodAttribute";
 import RubricAttribute from "./RubricAttribute";
+import AssigneesAttribute from "./AssigneesAttribute";
+import usePermission from "hook/UsePermission";
 
 export type AssignmentAttributesProps = {
   data: UpdateAssignmentData;
@@ -16,6 +19,7 @@ const AssignmentAttributes = ({
   onChange,
   canEdit,
 }: AssignmentAttributesProps) => {
+  const allow = usePermission();
   const onChangeInnerAssignment = (
     updateData: Partial<UpdateAssignmentData>,
   ) => {
@@ -75,6 +79,14 @@ const AssignmentAttributes = ({
           />
         </DataList.Value>
       </DataList.Item>
+      {allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
+        <DataList.Item>
+          <DataList.Label minWidth="88px">Assignees</DataList.Label>
+          <DataList.Value>
+            <AssigneesAttribute />
+          </DataList.Value>
+        </DataList.Item>
+      )}
     </DataList.Root>
   );
 };

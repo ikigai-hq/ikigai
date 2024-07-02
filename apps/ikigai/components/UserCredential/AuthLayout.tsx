@@ -3,10 +3,11 @@ import React from "react";
 import styled from "styled-components";
 import { Trans } from "@lingui/macro";
 import Link from "next/link";
-import { Text } from "@radix-ui/themes";
+import { Separator, Text } from "@radix-ui/themes";
 
 import { BreakPoints } from "styles/mediaQuery";
 import Logo from "../Logo";
+import Config from "config/Config";
 
 const Container = styled.div`
   width: 100%;
@@ -66,15 +67,51 @@ export default function LayoutManagement({ children }: LayoutManagementProps) {
       <FormContainer>
         <Logo src={logoSrc} />
         <FormAuthContainer>{children}</FormAuthContainer>
-        <div>
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <Link
             href="https://ikigai.li"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <a>
-              <Text weight="medium" color="gray" style={{ cursor: "pointer" }}>
+            <a target="_blank">
+              <Text
+                weight="medium"
+                color={"gray"}
+                style={{ cursor: "pointer" }}
+              >
                 <Trans>Powered by ikigai</Trans>
+              </Text>
+            </a>
+          </Link>
+          <Separator orientation="vertical" />
+          <Link
+            href={Config.privacyPage}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <a target="_blank">
+              <Text
+                weight="medium"
+                color={"gray"}
+                style={{ cursor: "pointer" }}
+              >
+                <Trans>Privacy Policy</Trans>
+              </Text>
+            </a>
+          </Link>
+          <Separator orientation="vertical" />
+          <Link
+            href={Config.termPage}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <a target="_blank">
+              <Text
+                weight="medium"
+                color={"gray"}
+                style={{ cursor: "pointer" }}
+              >
+                <Trans>Terms of service</Trans>
               </Text>
             </a>
           </Link>

@@ -120,6 +120,9 @@ const ManageSpace = ({ onClickSpaceSetting }: ManageSpaceProps) => {
           </ItemContainer>
         ))}
       </ScrollArea>
+      <Text size="1" color="gray" weight="light">
+        <Trans>Click item in the list to switch space</Trans>
+      </Text>
     </div>
   );
 };

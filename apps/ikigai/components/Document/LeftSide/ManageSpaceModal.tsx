@@ -19,7 +19,7 @@ const ManageSpaceModal = () => {
       content={
         <ManageSpace onClickSpaceSetting={() => setSpaceSettingVisible(true)} />
       }
-      title={t`Space`}
+      title={t`${spaceName} Settings`}
       description={t`Manage, Switch, or Create Space`}
       open={openModal}
       onOpenChange={setOpenModal}

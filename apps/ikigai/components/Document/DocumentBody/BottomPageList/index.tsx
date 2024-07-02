@@ -67,16 +67,6 @@ const BottomPageList = () => {
 
   return (
     <PagesListContainer>
-      <ScrollArea scrollbars="horizontal">
-        <div style={{ display: "flex", gap: 5, padding: 5 }}>
-          {uiConfig.showInformationPage && <PageItem />}
-          {pages
-            .sort((a, b) => a.index - b.index)
-            .map((page, index) => (
-              <PageItem index={index + 1} page={page} key={page.id} />
-            ))}
-        </div>
-      </ScrollArea>
       {allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
         <div
           style={{
@@ -105,6 +95,16 @@ const BottomPageList = () => {
           </Dropdown>
         </div>
       )}
+      <ScrollArea scrollbars="horizontal">
+        <div style={{ display: "flex", gap: 5, padding: 5 }}>
+          {uiConfig.showInformationPage && <PageItem />}
+          {pages
+            .sort((a, b) => a.index - b.index)
+            .map((page, index) => (
+              <PageItem index={index + 1} page={page} key={page.id} />
+            ))}
+        </div>
+      </ScrollArea>
     </PagesListContainer>
   );
 };

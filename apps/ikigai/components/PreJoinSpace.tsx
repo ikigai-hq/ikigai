@@ -70,6 +70,7 @@ const PreJoinSpace = () => {
             value={email}
             readOnly={!!currentEmail}
             onChange={(e) => setEmail(e.currentTarget.value)}
+            autoFocus
           />
           <Button
             style={{ width: "100%", marginTop: 10 }}

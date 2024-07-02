@@ -66,6 +66,7 @@ const MagicLink = () => {
         placeholder={t`Type your email!`}
         value={email}
         onChange={(e) => setEmail(e.currentTarget.value)}
+        autoFocus
       />
       <DescriptionDiv>
         <Text color="gray" size="1">

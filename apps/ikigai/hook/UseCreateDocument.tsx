@@ -26,7 +26,7 @@ const useCreateDocument = (isPrivate: boolean, parentId?: string) => {
     const { data } = await createStandaloneDocument({
       variables: {
         data: {
-          title: "Untitled",
+          title: "",
           index,
           parentId,
           iconType: IconType.EMOJI,

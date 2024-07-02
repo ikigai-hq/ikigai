@@ -55,6 +55,7 @@ const CoverPage = () => {
             readOnly={
               !allow(DocumentActionPermission.EDIT_DOCUMENT) || isDefaultPrivate
             }
+            autoFocus
           />
         </div>
         <div style={{ marginTop: "10px" }}>

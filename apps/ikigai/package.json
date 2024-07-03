@@ -67,6 +67,7 @@
     "axios": "^0.28.0",
     "babel-plugin-styled-components": "^2.1.4",
     "bowser": "^2.11.0",
+    "clsx": "^2.1.1",
     "cookie": "^0.4.1",
     "copy-to-clipboard": "^3.3.3",
     "cron-time-generator": "^2.0.0",

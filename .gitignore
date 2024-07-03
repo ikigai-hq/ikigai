@@ -44,3 +44,6 @@ firebase_service_account.json
 
 # Expo
 .expo/
+
+# Ikigai AI
+local_cache

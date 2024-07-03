@@ -98,7 +98,8 @@
     "urlencode": "^1.1.0",
     "uuid": "^8.3.2",
     "validator": "^13.6.0",
-    "wavesurfer.js": "^6.4.0"
+    "wavesurfer.js": "^6.4.0",
+    "zustand": "3.3.0"
   },
   "devDependencies": {
     "@lingui/cli": "^4.3.0",
@@ -130,7 +131,6 @@
     "prettier": "^2.3.1",
     "re-resizable": "^6.9.9",
     "style-loader": "^3.2.1",
-    "typescript": "5.4.5",
-    "zustand": "3.3.0"
+    "typescript": "5.4.5"
   }
 }

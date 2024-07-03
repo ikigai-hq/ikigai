@@ -18,7 +18,6 @@ services:
       - "6379:6379"
   migration:
     image: ghcr.io/ikigai-hq/ikigai-migration:latest
-    working_dir: graphql_server
     build:
       dockerfile: Migration.Dockerfile
     environment:
@@ -29,7 +28,7 @@ services:
   graphql-server:
     image: ghcr.io/ikigai-hq/ikigai:latest
     env_file:
-      - "graphql_server/.env"
+      - "./graphql_server/.env"
     depends_on:
       postgres:
         condition: service_healthy
@@ -39,8 +38,6 @@ services:
         condition: service_completed_successfully
     network_mode: host
   ikigai-web-client:
-    working_dir: apps/ikigai
-    build:
-      dockerfile: Dockerfile
+    image: ghcr.io/ikigai-hq/ikigai-web:latest
     depends_on: [graphql-server]
     network_mode: host

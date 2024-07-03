@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres:14
+    restart: always
     environment:
       POSTGRES_PASSWORD: ikigai
       POSTGRES_USER: ikigai
@@ -12,8 +13,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   redis:
     image: redis
+    restart: always
+    volumes:
+      - redis_data:/data
     ports:
       - "6379:6379"
   migration:
@@ -41,3 +47,7 @@ services:
     image: ghcr.io/ikigai-hq/ikigai-web:latest
     depends_on: [graphql-server]
     network_mode: host
+
+volumes:
+  postgres_data: {}
+  redis_data: {}

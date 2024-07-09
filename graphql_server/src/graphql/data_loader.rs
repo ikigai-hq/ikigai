@@ -405,3 +405,31 @@ impl Loader<FindPageContentByPageId> for IkigaiDataLoader {
         Ok(result)
     }
 }
+
+#[derive(Debug, Clone, Hash, Eq, PartialEq)]
+pub struct FindQuizByPageContent {
+    pub page_content_id: Uuid,
+}
+
+impl Loader<FindQuizByPageContent> for IkigaiDataLoader {
+    type Value = Vec<Quiz>;
+    type Error = IkigaiError;
+
+    async fn load(&self, keys: &[FindQuizByPageContent]) -> Result<HashMap<FindQuizByPageContent, Self::Value>, Self::Error> {
+        let page_content_ids = keys.iter().map(|key| key.page_content_id).collect();
+        let mut conn = get_conn_from_actor().await?;
+        let quizzes = Quiz::find_all_by_page_contents(&mut conn, &page_content_ids)?;
+
+        let mut res: HashMap<FindQuizByPageContent, Self::Value> = HashMap::new();
+        for quiz in quizzes {
+            let key = FindQuizByPageContent { page_content_id: quiz.page_content_id };
+            if let Some(inner_quizzes) = res.get_mut(&key)  {
+                inner_quizzes.push(quiz);
+            } else {
+                res.insert(key, vec![quiz]);
+            }
+        }
+
+        Ok(res)
+    }
+}

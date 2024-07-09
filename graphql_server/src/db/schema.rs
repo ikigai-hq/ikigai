@@ -135,6 +135,31 @@ diesel::table! {
 }
 
 diesel::table! {
+    quiz_blocks (id) {
+        id -> Uuid,
+        page_content_id -> Uuid,
+        creator_id -> Int4,
+        original_quiz_id -> Nullable<Uuid>,
+        quiz_type -> Int4,
+        question_data -> Jsonb,
+        answer_data -> Jsonb,
+        updated_at -> Int8,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
+    quiz_user_answer (quiz_id, user_id) {
+        quiz_id -> Uuid,
+        user_id -> Int4,
+        answer_data -> Jsonb,
+        score -> Float8,
+        updated_at -> Int8,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
     rubric_submissions (submission_id) {
         submission_id -> Int4,
         rubric_id -> Nullable<Uuid>,
@@ -236,6 +261,10 @@ diesel::joinable!(notification_receivers -> users (user_id));
 diesel::joinable!(page_contents -> pages (page_id));
 diesel::joinable!(pages -> documents (document_id));
 diesel::joinable!(pages -> users (created_by_id));
+diesel::joinable!(quiz_blocks -> page_contents (page_content_id));
+diesel::joinable!(quiz_blocks -> users (creator_id));
+diesel::joinable!(quiz_user_answer -> quiz_blocks (quiz_id));
+diesel::joinable!(quiz_user_answer -> users (user_id));
 diesel::joinable!(rubric_submissions -> assignment_submissions (submission_id));
 diesel::joinable!(rubric_submissions -> rubrics (rubric_id));
 diesel::joinable!(rubrics -> users (user_id));
@@ -261,6 +290,8 @@ diesel::allow_tables_to_appear_in_same_query!(
     notifications,
     page_contents,
     pages,
+    quiz_blocks,
+    quiz_user_answer,
     rubric_submissions,
     rubrics,
     space_invite_tokens,

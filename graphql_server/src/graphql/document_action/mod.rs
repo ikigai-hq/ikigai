@@ -114,7 +114,12 @@ impl Page {
 impl PageContent {
     async fn quizzes(&self, ctx: &Context<'_>) -> Result<Vec<Quiz>> {
         let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
-        let quizzes = loader.load_one(FindQuizByPageContent { page_content_id: self.id }).await?.unwrap_or_default();
+        let quizzes = loader
+            .load_one(FindQuizByPageContent {
+                page_content_id: self.id,
+            })
+            .await?
+            .unwrap_or_default();
         Ok(quizzes)
     }
 }

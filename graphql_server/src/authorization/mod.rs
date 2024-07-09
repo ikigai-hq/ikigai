@@ -1,3 +1,4 @@
+pub mod authorize_helper;
 pub mod document_auth;
 pub mod rubric_auth;
 pub mod space_auth;

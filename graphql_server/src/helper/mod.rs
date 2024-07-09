@@ -1,8 +1,7 @@
-pub mod authorize_helper;
 pub mod document_helper;
 pub mod submission_helper;
 
-pub use authorize_helper::*;
+pub use crate::authorization::authorize_helper::*;
 pub use document_helper::*;
 pub use submission_helper::*;
 

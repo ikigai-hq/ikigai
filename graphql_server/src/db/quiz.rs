@@ -4,8 +4,8 @@ use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use serde::Serialize;
 use uuid::Uuid;
 
-use crate::impl_enum_for_db;
 use super::schema::{quiz_blocks, quiz_user_answer};
+use crate::impl_enum_for_db;
 use crate::util::get_now_as_secs;
 
 #[derive(
@@ -35,7 +35,7 @@ impl QuizType {
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
-#[graphql(input_name = "QuizInput")]
+#[graphql(input_name = "QuizInput", complex)]
 #[diesel(table_name = quiz_blocks)]
 pub struct Quiz {
     pub id: Uuid,
@@ -80,6 +80,12 @@ impl Quiz {
         quiz_blocks::table.find(id).first(conn)
     }
 
+    pub fn find_all(conn: &mut PgConnection, ids: &Vec<Uuid>) -> Result<Vec<Self>, Error> {
+        quiz_blocks::table
+            .filter(quiz_blocks::id.eq_any(ids))
+            .get_results(conn)
+    }
+
     pub fn find_all_by_page_contents(
         conn: &mut PgConnection,
         page_content_ids: &Vec<Uuid>,
@@ -91,7 +97,7 @@ impl Quiz {
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
-#[graphql(input_name = "QuizUserAnswerInput")]
+#[graphql(input_name = "QuizUserAnswerInput", complex)]
 #[diesel(table_name = quiz_user_answer)]
 pub struct QuizUserAnswer {
     pub quiz_id: Uuid,
@@ -139,6 +145,15 @@ impl QuizUserAnswer {
             Err(Error::NotFound) => Ok(None),
             Err(e) => Err(e),
         }
+    }
+
+    pub fn find_all_by_quizzes(
+        conn: &mut PgConnection,
+        quiz_ids: &Vec<Uuid>,
+    ) -> Result<Vec<Self>, Error> {
+        quiz_user_answer::table
+            .filter(quiz_user_answer::quiz_id.eq_any(quiz_ids))
+            .get_results(conn)
     }
 }
 

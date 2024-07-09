@@ -283,3 +283,17 @@ pub async fn rubric_is_allowed(
 
     Ok(is_allowed)
 }
+
+pub async fn document_quick_allowed_by_page_content(
+    ctx: &Context<'_>,
+    page_content_id: Uuid,
+    action: DocumentActionPermission,
+) -> Result<()> {
+    let page = {
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let page_content = PageContent::find(&mut conn, page_content_id).format_err()?;
+        Page::find(&mut conn, page_content.page_id).format_err()?
+    };
+
+    document_quick_authorize(ctx, page.document_id, action).await
+}

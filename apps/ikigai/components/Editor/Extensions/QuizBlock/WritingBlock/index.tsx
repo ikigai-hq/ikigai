@@ -1,69 +1,34 @@
-import { mergeAttributes, Node } from "@tiptap/core";
-
-import { ReactNodeViewRenderer } from "@tiptap/react";
 import WritingBlockComponent from "./WritingBlockComponent";
-import { EMPTY_UUID } from "util/FileUtil";
+import createQuizNode from "../QuizNode";
 
-export type WritingBlockOptions = {
-  pageContentId: string;
-};
+export const WRITING_BLOCK_NAME = "writingBlock";
+export const WRITING_BLOCK_TAG = "writing-block";
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
-    writingBlock: {
+    quizBlock: {
       insertWritingBlock: () => ReturnType;
     };
   }
 }
 
-export const WRITING_BLOCK_NAME = "writingBlock";
-
-export default Node.create<WritingBlockOptions>({
-  name: WRITING_BLOCK_NAME,
-  group: "block",
-  atom: true,
-  selectable: true,
-
-  addOptions() {
-    return {
-      pageContentId: EMPTY_UUID,
-    };
+export default createQuizNode(
+  WRITING_BLOCK_NAME,
+  WRITING_BLOCK_TAG,
+  WritingBlockComponent,
+  {
+    addCommands() {
+      return {
+        insertWritingBlock:
+          () =>
+          ({ commands }) => {
+            return commands.insertContent([
+              {
+                type: this.name,
+              },
+            ]);
+          },
+      };
+    },
   },
-
-  addAttributes() {
-    return {
-      quizId: {
-        default: EMPTY_UUID,
-      },
-      originalQuizId: {
-        default: EMPTY_UUID,
-      },
-    };
-  },
-
-  addCommands() {
-    return {
-      insertWritingBlock:
-        () =>
-        ({ commands }) => {
-          return commands.insertContent([
-            {
-              type: this.name,
-            },
-          ]);
-        },
-    };
-  },
-
-  parseHTML() {
-    return [{ tag: "writing-block" }];
-  },
-
-  renderHTML({ HTMLAttributes }) {
-    return ["writing-block", mergeAttributes(HTMLAttributes)];
-  },
-
-  addNodeView() {
-    return ReactNodeViewRenderer(WritingBlockComponent);
-  },
-});
+);

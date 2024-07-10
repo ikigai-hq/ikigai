@@ -13,7 +13,7 @@ import { OrderedList } from "@tiptap/extension-ordered-list";
 import { ListItem } from "@tiptap/extension-list-item";
 import { JSONContent } from "@tiptap/react";
 import { NodeViewProps } from "@tiptap/core";
-import React, { useRef } from "react";
+import React from "react";
 import CharacterCount from "@tiptap/extension-character-count";
 import { Text } from "@radix-ui/themes";
 
@@ -32,7 +32,6 @@ const WritingBlockComponent = (props: NodeViewProps) => {
     pageContentId,
   );
 
-  const innerContent = useRef<JSONContent>();
   const updateContent = (content: JSONContent) => {
     if (isEmptyUuid(quizId)) return;
     debounceAnswerQuiz({ content });
@@ -42,7 +41,6 @@ const WritingBlockComponent = (props: NodeViewProps) => {
     if (isEmptyUuid(quizId)) return;
     cancelDebounceAnswerQuiz();
     debounceAnswerQuiz({ content });
-    innerContent.current = content;
   };
 
   return (

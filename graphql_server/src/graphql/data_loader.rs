@@ -405,3 +405,97 @@ impl Loader<FindPageContentByPageId> for IkigaiDataLoader {
         Ok(result)
     }
 }
+
+#[derive(Debug, Clone, Hash, Eq, PartialEq)]
+pub struct FindQuizByPageContent {
+    pub page_content_id: Uuid,
+}
+
+impl Loader<FindQuizByPageContent> for IkigaiDataLoader {
+    type Value = Vec<Quiz>;
+    type Error = IkigaiError;
+
+    async fn load(
+        &self,
+        keys: &[FindQuizByPageContent],
+    ) -> Result<HashMap<FindQuizByPageContent, Self::Value>, Self::Error> {
+        let page_content_ids = keys
+            .iter()
+            .map(|key| key.page_content_id)
+            .unique()
+            .collect();
+        let mut conn = get_conn_from_actor().await?;
+        let quizzes = Quiz::find_all_by_page_contents(&mut conn, &page_content_ids)?;
+
+        let mut res: HashMap<FindQuizByPageContent, Self::Value> = HashMap::new();
+        for quiz in quizzes {
+            let key = FindQuizByPageContent {
+                page_content_id: quiz.page_content_id,
+            };
+            if let Some(inner_quizzes) = res.get_mut(&key) {
+                inner_quizzes.push(quiz);
+            } else {
+                res.insert(key, vec![quiz]);
+            }
+        }
+
+        Ok(res)
+    }
+}
+
+#[derive(Debug, Clone, Hash, Eq, PartialEq)]
+pub struct FindQuizUserAnswersByQuiz {
+    pub quiz_id: Uuid,
+}
+
+impl Loader<FindQuizUserAnswersByQuiz> for IkigaiDataLoader {
+    type Value = Vec<QuizUserAnswer>;
+    type Error = IkigaiError;
+
+    async fn load(
+        &self,
+        keys: &[FindQuizUserAnswersByQuiz],
+    ) -> std::result::Result<HashMap<FindQuizUserAnswersByQuiz, Self::Value>, Self::Error> {
+        let quiz_ids = keys.iter().map(|key| key.quiz_id).unique().collect();
+        let mut conn = get_conn_from_actor().await?;
+        let answers = QuizUserAnswer::find_all_by_quizzes(&mut conn, &quiz_ids)?;
+
+        let mut res: HashMap<FindQuizUserAnswersByQuiz, Self::Value> = HashMap::new();
+        for answer in answers {
+            let key = FindQuizUserAnswersByQuiz {
+                quiz_id: answer.quiz_id,
+            };
+            if let Some(inner_answers) = res.get_mut(&key) {
+                inner_answers.push(answer);
+            } else {
+                res.insert(key, vec![answer]);
+            }
+        }
+
+        Ok(res)
+    }
+}
+
+#[derive(Debug, Clone, Hash, Eq, PartialEq)]
+pub struct FindQuiz {
+    pub quiz_id: Uuid,
+}
+
+impl Loader<FindQuiz> for IkigaiDataLoader {
+    type Value = Quiz;
+    type Error = IkigaiError;
+
+    async fn load(
+        &self,
+        keys: &[FindQuiz],
+    ) -> std::result::Result<HashMap<FindQuiz, Self::Value>, Self::Error> {
+        let quiz_ids = keys.iter().map(|quiz| quiz.quiz_id).unique().collect();
+        let mut conn = get_conn_from_actor().await?;
+        let quizzes = Quiz::find_all(&mut conn, &quiz_ids)?;
+
+        Ok(quizzes
+            .into_iter()
+            .map(|quiz| (FindQuiz { quiz_id: quiz.id }, quiz))
+            .collect())
+    }
+}

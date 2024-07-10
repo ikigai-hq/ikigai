@@ -4,13 +4,13 @@ pub mod document;
 pub mod file;
 pub mod notification;
 pub mod page;
+pub mod quiz;
 pub mod rubric;
 pub mod schema;
 pub mod space;
 pub mod space_member;
 pub mod submission;
 pub mod user;
-pub mod writing_block;
 
 pub use assignment::*;
 pub use band_score::*;
@@ -18,12 +18,12 @@ pub use document::*;
 pub use file::*;
 pub use notification::*;
 pub use page::*;
+pub use quiz::*;
 pub use rubric::*;
 pub use space::*;
 pub use space_member::*;
 pub use submission::*;
 pub use user::*;
-pub use writing_block::*;
 
 use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
 use diesel::PgConnection;

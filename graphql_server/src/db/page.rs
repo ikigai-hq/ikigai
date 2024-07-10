@@ -101,7 +101,7 @@ impl Page {
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
-#[graphql(input_name = "PageContentInput")]
+#[graphql(input_name = "PageContentInput", complex)]
 #[diesel(table_name = page_contents)]
 pub struct PageContent {
     pub id: Uuid,

@@ -111,6 +111,20 @@ impl Page {
 }
 
 #[ComplexObject]
+impl PageContent {
+    async fn quizzes(&self, ctx: &Context<'_>) -> Result<Vec<Quiz>> {
+        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
+        let quizzes = loader
+            .load_one(FindQuizByPageContent {
+                page_content_id: self.id,
+            })
+            .await?
+            .unwrap_or_default();
+        Ok(quizzes)
+    }
+}
+
+#[ComplexObject]
 impl DocumentAssignedUsers {
     async fn user(&self, ctx: &Context<'_>) -> Result<PublicUser> {
         get_public_user_from_loader(ctx, self.assigned_user_id).await

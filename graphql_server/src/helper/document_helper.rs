@@ -139,16 +139,15 @@ impl PageContent {
         let mut new_page_content = PageContent::upsert(conn, new_content)?;
 
         let mut new_content = new_page_content.get_json_content();
-        let writing_blocks = WritingBlock::find_all_by_page_content(conn, self.id)?;
-        for writing_block in writing_blocks {
-            if let Ok(new_writing_block) =
-                writing_block.deep_clone(conn, &new_page_content, creator_id)
-            {
+
+        let quizzes = Quiz::find_all_by_page_contents(conn, &vec![self.id])?;
+        for quiz in quizzes {
+            if let Ok(new_quiz) = quiz.deep_clone(conn, &new_page_content, creator_id) {
                 new_content.replace_block_id(
-                    "writingBlock",
-                    "writingBlockId",
-                    &serde_json::to_value(writing_block.id).unwrap_or_default(),
-                    &serde_json::to_value(new_writing_block.id).unwrap_or_default(),
+                    new_quiz.quiz_type.block_name(),
+                    new_quiz.quiz_type.id_name(),
+                    &serde_json::to_value(quiz.id).unwrap_or_default(),
+                    &serde_json::to_value(new_quiz.id).unwrap_or_default(),
                 );
             }
         }
@@ -158,18 +157,19 @@ impl PageContent {
     }
 }
 
-impl WritingBlock {
+impl Quiz {
     pub fn deep_clone(
         &self,
         conn: &mut PgConnection,
         new_page_content: &PageContent,
         creator_id: i32,
     ) -> Result<Self, IkigaiError> {
-        let mut new_writing_block = self.clone();
-        new_writing_block.id = Uuid::new_v4();
-        new_writing_block.page_content_id = new_page_content.id;
-        new_writing_block.creator_id = creator_id;
-        Ok(WritingBlock::upsert(conn, new_writing_block)?)
+        let mut new_quiz = self.clone();
+        new_quiz.id = Uuid::new_v4();
+        new_quiz.page_content_id = new_page_content.id;
+        new_quiz.creator_id = creator_id;
+        new_quiz.original_quiz_id = Some(self.id);
+        Ok(Quiz::upsert(conn, new_quiz)?)
     }
 }
 

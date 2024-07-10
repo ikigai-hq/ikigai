@@ -45,28 +45,4 @@ impl DocumentQuery {
             DocumentAssignedUsers::find_all_by_document(&mut conn, document_id).format_err()?;
         Ok(assignees)
     }
-
-    async fn document_get_writing_block(
-        &self,
-        ctx: &Context<'_>,
-        writing_block_id: Uuid,
-    ) -> Result<WritingBlock> {
-        let (writing_block, page) = {
-            let mut conn = get_conn_from_ctx(ctx).await?;
-            let writing_block = WritingBlock::find(&mut conn, writing_block_id).format_err()?;
-            let page_content =
-                PageContent::find(&mut conn, writing_block.page_content_id).format_err()?;
-            let page = Page::find(&mut conn, page_content.page_id).format_err()?;
-            (writing_block, page)
-        };
-
-        document_quick_authorize(
-            ctx,
-            page.document_id,
-            DocumentActionPermission::ViewDocument,
-        )
-        .await?;
-
-        Ok(writing_block)
-    }
 }

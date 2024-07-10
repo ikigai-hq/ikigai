@@ -8,6 +8,7 @@ import {
   DocumentType,
   GetDocument,
   GetDocumentPageContents,
+  GetDocumentQuizzes,
   GetDocuments,
   GetPages,
   GetRubrics,
@@ -32,6 +33,8 @@ import {
 } from "graphql/query/AssignmentQuery";
 import { handleError } from "graphql/ApolloClient";
 import useRubricStore from "store/RubricStore";
+import { GET_DOCUMENT_QUIZZES } from "graphql/query/QuizQuery";
+import useQuizStore from "store/QuizStore";
 
 export const useLoadDocument = (documentId: string) => {
   const [loading, setLoading] = useState(true);
@@ -61,6 +64,7 @@ export const useLoadDocument = (documentId: string) => {
   const setUIConfig = useUIStore((state) => state.setConfig);
   const setRubrics = useRubricStore((state) => state.setRubrics);
   const setSubmissions = useDocumentStore((state) => state.setSubmissions);
+  const setQuizzes = useQuizStore((state) => state.setQuizzes);
 
   const [fetchDocument] = useLazyQuery<GetDocument>(GET_DOCUMENT, {
     fetchPolicy: "network-only",
@@ -88,6 +92,12 @@ export const useLoadDocument = (documentId: string) => {
     {
       onError: handleError,
       fetchPolicy: "network-only",
+    },
+  );
+  const [fetchQuizzes] = useLazyQuery<GetDocumentQuizzes>(
+    GET_DOCUMENT_QUIZZES,
+    {
+      onError: handleError,
     },
   );
 
@@ -163,6 +173,18 @@ export const useLoadDocument = (documentId: string) => {
         (page) => page.pageContents,
       );
       setPageContents(pageContents);
+    }
+
+    const { data: quizzesData } = await fetchQuizzes({
+      variables: {
+        documentId,
+      },
+    });
+    if (quizzesData) {
+      const quizzes = quizzesData.documentGet.pages.flatMap((page) =>
+        page.pageContents.flatMap((pageContent) => pageContent.quizzes),
+      );
+      setQuizzes(quizzes);
     }
 
     const { data: rubricData } = await fetchRubrics();

@@ -25,6 +25,7 @@ import QuizBlockWrapper from "../QuizBlockWrapper";
 import useQuiz from "hook/UseQuiz";
 
 const WritingBlockComponent = (props: NodeViewProps) => {
+  const allow = usePermission();
   const pageContentId = props.extension.options.pageContentId;
   const quizId = props.node.attrs.quizId;
   const { quiz, debounceUpsertQuiz, cancelDebounceUpsertQuiz } = useQuiz(
@@ -43,29 +44,10 @@ const WritingBlockComponent = (props: NodeViewProps) => {
     debounceUpsertQuiz(quiz.quizType, { content }, {});
   };
 
-  return (
-    <QuizBlockWrapper quizType={QuizType.WRITING_BLOCK} nodeViewProps={props}>
-      <WritingEditor
-        body={quiz?.questionData?.content}
-        onUpdate={updateContent}
-        onForceSave={forceSave}
-      />
-    </QuizBlockWrapper>
-  );
-};
-
-type WritingEditorProps = {
-  body: JSONContent;
-  onUpdate: (content: JSONContent) => void;
-  onForceSave: (content: JSONContent) => void;
-};
-
-const WritingEditor = ({ body, onUpdate, onForceSave }: WritingEditorProps) => {
-  const allow = usePermission();
   const editor = useIkigaiEditor({
-    body,
-    onUpdate,
-    onForceSave,
+    body: quiz?.questionData?.content,
+    onUpdate: updateContent,
+    onForceSave: forceSave,
     extensions: [
       StarterKit,
       TaskList,
@@ -104,8 +86,13 @@ const WritingEditor = ({ body, onUpdate, onForceSave }: WritingEditorProps) => {
   });
 
   return (
-    <>
-      <div style={{ minHeight: 200 }}>
+    <QuizBlockWrapper quizType={QuizType.WRITING_BLOCK} nodeViewProps={props}>
+      <div
+        style={{ minHeight: 200 }}
+        onClick={() => {
+          editor.commands.focus("end");
+        }}
+      >
         <BaseEditor editor={editor} />
       </div>
       <div style={{ paddingRight: 5 }}>
@@ -115,7 +102,7 @@ const WritingEditor = ({ body, onUpdate, onForceSave }: WritingEditorProps) => {
           {editor?.storage?.characterCount?.words() || 0} words
         </Text>
       </div>
-    </>
+    </QuizBlockWrapper>
   );
 };
 

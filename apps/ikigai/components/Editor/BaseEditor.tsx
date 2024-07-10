@@ -9,7 +9,7 @@ import { useRef } from "react";
 import { Fragment, Node } from "prosemirror-model";
 
 import useEditorStore from "store/EditorStore";
-import { WRITING_BLOCK_NAME } from "./Extensions/WritingBlock";
+import { WRITING_BLOCK_NAME } from "./Extensions/QuizBlock/WritingBlock";
 import { EMPTY_UUID, isEmptyUuid } from "util/FileUtil";
 
 export const findTransformBlocks = (
@@ -63,7 +63,6 @@ export const useIkigaiEditor = ({
           return false;
         },
       },
-      // This function will handle pasted data.
       transformPasted: (slice) => {
         const writingBlocks = findTransformBlocks(
           slice.content,
@@ -71,16 +70,13 @@ export const useIkigaiEditor = ({
         );
         writingBlocks.forEach((writingBlock) => {
           if (
-            writingBlock.attrs.writingBlockId &&
-            !isEmptyUuid(writingBlock.attrs.writingBlockId)
+            writingBlock.attrs.quizId &&
+            !isEmptyUuid(writingBlock.attrs.quizId)
           ) {
-            // Force change readonly data
             // @ts-ignore
-            writingBlock.attrs.originalBlockId =
-              writingBlock.attrs.writingBlockId;
-            // Force change readonly data
+            writingBlock.attrs.originalQuizId = writingBlock.attrs.quizId;
             // @ts-ignore
-            writingBlock.attrs.writingBlockId = EMPTY_UUID;
+            writingBlock.attrs.quizId = EMPTY_UUID;
           }
         });
 

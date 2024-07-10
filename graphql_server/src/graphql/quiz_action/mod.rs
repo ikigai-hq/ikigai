@@ -9,7 +9,7 @@ use async_graphql::*;
 use itertools::Itertools;
 
 use crate::authorization::DocumentActionPermission;
-use crate::db::{Quiz, QuizUserAnswer};
+use crate::db::{Quiz, QuizUserAnswer, WritingBlockUserAnswer};
 use crate::graphql::data_loader::{FindQuiz, FindQuizUserAnswersByQuiz, IkigaiDataLoader};
 use crate::helper::{document_quick_allowed_by_page_content, get_user_id_from_ctx};
 
@@ -92,5 +92,9 @@ impl QuizUserAnswer {
         .await?;
 
         Ok(self.score)
+    }
+
+    async fn writing_answer_data(&self) -> Option<WritingBlockUserAnswer> {
+        self.parse_answer_data()
     }
 }

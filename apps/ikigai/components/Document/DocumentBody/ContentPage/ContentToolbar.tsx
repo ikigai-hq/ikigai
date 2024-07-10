@@ -27,7 +27,7 @@ import { t, Trans } from "@lingui/macro";
 import { Button, DropdownMenu, Tooltip } from "@radix-ui/themes";
 
 import useEditorStore from "store/EditorStore";
-import { WRITING_BLOCK_NAME } from "components/Editor/Extensions/WritingBlock";
+import { WRITING_BLOCK_NAME } from "components/Editor/Extensions/QuizBlock/WritingBlock";
 import { hasExtension } from "util/ExtensionUtil";
 import { FILE_HANDLER_NAME } from "components/Editor/Extensions/FileHandler";
 

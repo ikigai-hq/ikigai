@@ -1,6 +1,7 @@
 use diesel::result::Error;
 use diesel::sql_types::Integer;
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
+use serde::de::DeserializeOwned;
 use serde::Serialize;
 use uuid::Uuid;
 
@@ -32,6 +33,10 @@ impl QuizType {
             QuizType::MultipleChoice => "multipleChoice",
         }
     }
+
+    pub fn id_name(&self) -> &str {
+        "quizId"
+    }
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
@@ -39,6 +44,7 @@ impl QuizType {
 #[diesel(table_name = quiz_blocks)]
 pub struct Quiz {
     pub id: Uuid,
+    #[graphql(skip_input)]
     pub page_content_id: Uuid,
     #[graphql(skip_input)]
     pub creator_id: i32,
@@ -94,6 +100,14 @@ impl Quiz {
             .filter(quiz_blocks::page_content_id.eq_any(page_content_ids))
             .get_results(conn)
     }
+
+    pub fn parse_question_data<T: DeserializeOwned>(&self) -> Option<T> {
+        serde_json::from_value(self.question_data.clone()).ok()
+    }
+
+    pub fn parse_answer_data<T: DeserializeOwned>(&self) -> Option<T> {
+        serde_json::from_value(self.answer_data.clone()).ok()
+    }
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
@@ -104,7 +118,7 @@ pub struct QuizUserAnswer {
     #[graphql(skip_input)]
     pub user_id: i32,
     pub answer_data: serde_json::Value,
-    #[graphql(skip_output)]
+    #[graphql(skip)]
     pub score: f64,
     #[graphql(skip_input)]
     pub updated_at: i64,
@@ -155,12 +169,13 @@ impl QuizUserAnswer {
             .filter(quiz_user_answer::quiz_id.eq_any(quiz_ids))
             .get_results(conn)
     }
+
+    pub fn parse_answer_data<T: DeserializeOwned>(&self) -> Option<T> {
+        serde_json::from_value(self.answer_data.clone()).ok()
+    }
 }
 
 // Writing Block
-pub type WritingBlockQuestion = serde_json::Value;
-pub type WritingBlockAnswer = serde_json::Value;
-
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 pub struct WritingBlockUserAnswer {
     pub content: serde_json::Value,

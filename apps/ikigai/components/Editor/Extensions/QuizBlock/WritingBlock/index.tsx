@@ -32,10 +32,10 @@ export default Node.create<WritingBlockOptions>({
 
   addAttributes() {
     return {
-      writingBlockId: {
+      quizId: {
         default: EMPTY_UUID,
       },
-      originalBlockId: {
+      originalQuizId: {
         default: EMPTY_UUID,
       },
     };

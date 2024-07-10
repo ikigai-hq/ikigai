@@ -417,61 +417,6 @@ export interface RemoveDocumentAssigneeVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: UpsertWritingBlock
-// ====================================================
-
-export interface UpsertWritingBlock_documentUpsertWritingBlock {
-  id: any;
-  pageContentId: any;
-  creatorId: number;
-  content: any;
-  updatedAt: number;
-  createdAt: number;
-}
-
-export interface UpsertWritingBlock {
-  documentUpsertWritingBlock: UpsertWritingBlock_documentUpsertWritingBlock;
-}
-
-export interface UpsertWritingBlockVariables {
-  pageContentId: any;
-  writingBlock: WritingBlockInput;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL mutation operation: CloneWritingBlock
-// ====================================================
-
-export interface CloneWritingBlock_documentCloneWritingBlock {
-  id: any;
-  pageContentId: any;
-  creatorId: number;
-  content: any;
-  updatedAt: number;
-  createdAt: number;
-}
-
-export interface CloneWritingBlock {
-  documentCloneWritingBlock: CloneWritingBlock_documentCloneWritingBlock;
-}
-
-export interface CloneWritingBlockVariables {
-  writingBlockId: any;
-  newWritingBlockId: any;
-  newPageContentId: any;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL mutation operation: FileCreate
 // ====================================================
 
@@ -520,6 +465,113 @@ export interface FileCheck {
 
 export interface FileCheckVariables {
   fileId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: UpsertQuiz
+// ====================================================
+
+export interface UpsertQuiz_quizUpsert_myAnswer_writingAnswerData {
+  content: any;
+}
+
+export interface UpsertQuiz_quizUpsert_myAnswer {
+  quizId: any;
+  userId: number;
+  score: number;
+  writingAnswerData: UpsertQuiz_quizUpsert_myAnswer_writingAnswerData | null;
+}
+
+export interface UpsertQuiz_quizUpsert {
+  id: any;
+  pageContentId: any;
+  creatorId: number;
+  quizType: QuizType;
+  questionData: any;
+  answerData: any;
+  myAnswer: UpsertQuiz_quizUpsert_myAnswer | null;
+}
+
+export interface UpsertQuiz {
+  quizUpsert: UpsertQuiz_quizUpsert;
+}
+
+export interface UpsertQuizVariables {
+  pageContentId: any;
+  data: QuizInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: CloneQuiz
+// ====================================================
+
+export interface CloneQuiz_quizClone_myAnswer_writingAnswerData {
+  content: any;
+}
+
+export interface CloneQuiz_quizClone_myAnswer {
+  quizId: any;
+  userId: number;
+  score: number;
+  writingAnswerData: CloneQuiz_quizClone_myAnswer_writingAnswerData | null;
+}
+
+export interface CloneQuiz_quizClone {
+  id: any;
+  pageContentId: any;
+  creatorId: number;
+  quizType: QuizType;
+  questionData: any;
+  answerData: any;
+  myAnswer: CloneQuiz_quizClone_myAnswer | null;
+}
+
+export interface CloneQuiz {
+  quizClone: CloneQuiz_quizClone;
+}
+
+export interface CloneQuizVariables {
+  quizId: any;
+  newQuizId: any;
+  newPageContentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: AnswerQuiz
+// ====================================================
+
+export interface AnswerQuiz_quizAnswer_writingAnswerData {
+  content: any;
+}
+
+export interface AnswerQuiz_quizAnswer {
+  quizId: any;
+  userId: number;
+  score: number;
+  writingAnswerData: AnswerQuiz_quizAnswer_writingAnswerData | null;
+}
+
+export interface AnswerQuiz {
+  quizAnswer: AnswerQuiz_quizAnswer;
+}
+
+export interface AnswerQuizVariables {
+  data: QuizUserAnswerInput;
 }
 
 /* tslint:disable */
@@ -1115,32 +1167,6 @@ export interface GetDocumentAssigneesVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetWritingBlock
-// ====================================================
-
-export interface GetWritingBlock_documentGetWritingBlock {
-  id: any;
-  pageContentId: any;
-  creatorId: number;
-  content: any;
-  updatedAt: number;
-  createdAt: number;
-}
-
-export interface GetWritingBlock {
-  documentGetWritingBlock: GetWritingBlock_documentGetWritingBlock;
-}
-
-export interface GetWritingBlockVariables {
-  writingBlockId: any;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL query operation: GetFile
 // ====================================================
 
@@ -1197,6 +1223,59 @@ export interface GetAudioWaveform {
 
 export interface GetAudioWaveformVariables {
   fileId: any;
+  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetDocumentQuizzes
+// ====================================================
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_writingAnswerData {
+  content: any;
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer {
+  quizId: any;
+  userId: number;
+  score: number;
+  writingAnswerData: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_writingAnswerData | null;
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes {
+  id: any;
+  pageContentId: any;
+  creatorId: number;
+  quizType: QuizType;
+  questionData: any;
+  answerData: any;
+  myAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer | null;
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents {
+  id: any;
+  quizzes: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes[];
+}
+
+export interface GetDocumentQuizzes_documentGet_pages {
+  id: any;
+  pageContents: GetDocumentQuizzes_documentGet_pages_pageContents[];
+}
+
+export interface GetDocumentQuizzes_documentGet {
+  id: any;
+  pages: GetDocumentQuizzes_documentGet_pages[];
+}
+
+export interface GetDocumentQuizzes {
+  documentGet: GetDocumentQuizzes_documentGet;
+}
+
+export interface GetDocumentQuizzesVariables {
   documentId: any;
 }
 
@@ -1535,6 +1614,14 @@ export enum PageLayout {
   VERTICAL = "VERTICAL",
 }
 
+export enum QuizType {
+  FILL_IN_BLANK = "FILL_IN_BLANK",
+  MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
+  SELECT_OPTIONS = "SELECT_OPTIONS",
+  SINGLE_CHOICE = "SINGLE_CHOICE",
+  WRITING_BLOCK = "WRITING_BLOCK",
+}
+
 export enum Role {
   STUDENT = "STUDENT",
   TEACHER = "TEACHER",
@@ -1596,6 +1683,18 @@ export interface PageInput {
   index: number;
   title: string;
   layout: PageLayout;
+}
+
+export interface QuizInput {
+  id: any;
+  quizType: QuizType;
+  questionData: any;
+  answerData: any;
+}
+
+export interface QuizUserAnswerInput {
+  quizId: any;
+  answerData: any;
 }
 
 export interface RubricInput {
@@ -1669,11 +1768,6 @@ export interface UpdateUserData {
   firstName: string;
   lastName: string;
   avatarFileId?: any | null;
-}
-
-export interface WritingBlockInput {
-  id: any;
-  content: any;
 }
 
 //==============================================================

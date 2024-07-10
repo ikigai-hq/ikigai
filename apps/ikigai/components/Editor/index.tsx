@@ -16,7 +16,7 @@ import { useDebounceFn } from "ahooks";
 import { IPageContent } from "store/PageContentStore";
 import useAddOrUpdatePageContent from "hook/UseUpsertPageContent";
 import FileHandler from "./Extensions/FileHandler";
-import WritingBlock from "./Extensions/WritingBlock";
+import WritingBlock from "./Extensions/QuizBlock/WritingBlock";
 import BaseEditor, { useIkigaiEditor } from "./BaseEditor";
 
 export type EditorProps = {

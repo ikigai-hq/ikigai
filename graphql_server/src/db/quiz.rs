@@ -177,6 +177,6 @@ impl QuizUserAnswer {
 
 // Writing Block
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
-pub struct WritingBlockUserAnswer {
+pub struct WritingQuestion {
     pub content: serde_json::Value,
 }

@@ -476,7 +476,7 @@ export interface FileCheckVariables {
 // GraphQL mutation operation: UpsertQuiz
 // ====================================================
 
-export interface UpsertQuiz_quizUpsert_myAnswer_writingAnswerData {
+export interface UpsertQuiz_quizUpsert_writingQuestion {
   content: any;
 }
 
@@ -484,7 +484,6 @@ export interface UpsertQuiz_quizUpsert_myAnswer {
   quizId: any;
   userId: number;
   score: number;
-  writingAnswerData: UpsertQuiz_quizUpsert_myAnswer_writingAnswerData | null;
 }
 
 export interface UpsertQuiz_quizUpsert {
@@ -494,6 +493,7 @@ export interface UpsertQuiz_quizUpsert {
   quizType: QuizType;
   questionData: any;
   answerData: any;
+  writingQuestion: UpsertQuiz_quizUpsert_writingQuestion | null;
   myAnswer: UpsertQuiz_quizUpsert_myAnswer | null;
 }
 
@@ -515,7 +515,7 @@ export interface UpsertQuizVariables {
 // GraphQL mutation operation: CloneQuiz
 // ====================================================
 
-export interface CloneQuiz_quizClone_myAnswer_writingAnswerData {
+export interface CloneQuiz_quizClone_writingQuestion {
   content: any;
 }
 
@@ -523,7 +523,6 @@ export interface CloneQuiz_quizClone_myAnswer {
   quizId: any;
   userId: number;
   score: number;
-  writingAnswerData: CloneQuiz_quizClone_myAnswer_writingAnswerData | null;
 }
 
 export interface CloneQuiz_quizClone {
@@ -533,6 +532,7 @@ export interface CloneQuiz_quizClone {
   quizType: QuizType;
   questionData: any;
   answerData: any;
+  writingQuestion: CloneQuiz_quizClone_writingQuestion | null;
   myAnswer: CloneQuiz_quizClone_myAnswer | null;
 }
 
@@ -555,15 +555,10 @@ export interface CloneQuizVariables {
 // GraphQL mutation operation: AnswerQuiz
 // ====================================================
 
-export interface AnswerQuiz_quizAnswer_writingAnswerData {
-  content: any;
-}
-
 export interface AnswerQuiz_quizAnswer {
   quizId: any;
   userId: number;
   score: number;
-  writingAnswerData: AnswerQuiz_quizAnswer_writingAnswerData | null;
 }
 
 export interface AnswerQuiz {
@@ -1235,7 +1230,7 @@ export interface GetAudioWaveformVariables {
 // GraphQL query operation: GetDocumentQuizzes
 // ====================================================
 
-export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_writingAnswerData {
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_writingQuestion {
   content: any;
 }
 
@@ -1243,7 +1238,6 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAns
   quizId: any;
   userId: number;
   score: number;
-  writingAnswerData: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_writingAnswerData | null;
 }
 
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes {
@@ -1253,6 +1247,7 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes {
   quizType: QuizType;
   questionData: any;
   answerData: any;
+  writingQuestion: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_writingQuestion | null;
   myAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer | null;
 }
 

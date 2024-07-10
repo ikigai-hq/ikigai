@@ -89,8 +89,13 @@ const BottomPageList = () => {
               </div>
             }
           >
-            <Button radius="none" disabled={loading} loading={loading}>
-              <PlusIcon /> Page
+            <Button
+              style={{ cursor: "pointer" }}
+              radius="none"
+              disabled={loading}
+              loading={loading}
+            >
+              <PlusIcon /> New Page
             </Button>
           </Dropdown>
         </div>

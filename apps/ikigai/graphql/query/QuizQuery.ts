@@ -15,13 +15,13 @@ export const GET_DOCUMENT_QUIZZES = gql`
             quizType
             questionData
             answerData
+            writingQuestion {
+              content
+            }
             myAnswer {
               quizId
               userId
               score
-              writingAnswerData {
-                content
-              }
             }
           }
         }

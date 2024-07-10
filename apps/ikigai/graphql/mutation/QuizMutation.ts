@@ -9,13 +9,13 @@ export const UPSERT_QUIZ = gql`
       quizType
       questionData
       answerData
+      writingQuestion {
+        content
+      }
       myAnswer {
         quizId
         userId
         score
-        writingAnswerData {
-          content
-        }
       }
     }
   }
@@ -38,13 +38,13 @@ export const CLONE_QUIZ = gql`
       quizType
       questionData
       answerData
+      writingQuestion {
+        content
+      }
       myAnswer {
         quizId
         userId
         score
-        writingAnswerData {
-          content
-        }
       }
     }
   }
@@ -56,9 +56,6 @@ export const ANSWER_QUIZ = gql`
       quizId
       userId
       score
-      writingAnswerData {
-        content
-      }
     }
   }
 `;

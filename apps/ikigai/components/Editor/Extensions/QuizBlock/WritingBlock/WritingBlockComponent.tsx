@@ -27,26 +27,26 @@ import useQuiz from "hook/UseQuiz";
 const WritingBlockComponent = (props: NodeViewProps) => {
   const pageContentId = props.extension.options.pageContentId;
   const quizId = props.node.attrs.quizId;
-  const { quiz, debounceAnswerQuiz, cancelDebounceAnswerQuiz } = useQuiz(
+  const { quiz, debounceUpsertQuiz, cancelDebounceUpsertQuiz } = useQuiz(
     quizId,
     pageContentId,
   );
 
   const updateContent = (content: JSONContent) => {
     if (isEmptyUuid(quizId)) return;
-    debounceAnswerQuiz({ content });
+    debounceUpsertQuiz(quiz.quizType, { content }, {});
   };
 
   const forceSave = (content: JSONContent) => {
     if (isEmptyUuid(quizId)) return;
-    cancelDebounceAnswerQuiz();
-    debounceAnswerQuiz({ content });
+    cancelDebounceUpsertQuiz();
+    debounceUpsertQuiz(quiz.quizType, { content }, {});
   };
 
   return (
     <QuizBlockWrapper quizType={QuizType.WRITING_BLOCK} nodeViewProps={props}>
       <WritingEditor
-        body={quiz?.myAnswer?.writingAnswerData?.content}
+        body={quiz?.questionData?.content}
         onUpdate={updateContent}
         onForceSave={forceSave}
       />

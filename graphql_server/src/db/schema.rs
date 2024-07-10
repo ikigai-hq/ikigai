@@ -235,17 +235,6 @@ diesel::table! {
     }
 }
 
-diesel::table! {
-    writing_blocks (id) {
-        id -> Uuid,
-        page_content_id -> Uuid,
-        creator_id -> Int4,
-        content -> Jsonb,
-        updated_at -> Int8,
-        created_at -> Int8,
-    }
-}
-
 diesel::joinable!(assignment_submissions -> assignments (assignment_id));
 diesel::joinable!(assignment_submissions -> documents (document_id));
 diesel::joinable!(assignment_submissions -> users (user_id));
@@ -276,8 +265,6 @@ diesel::joinable!(spaces -> files (banner_id));
 diesel::joinable!(spaces -> users (creator_id));
 diesel::joinable!(user_activities -> documents (last_document_id));
 diesel::joinable!(user_activities -> users (user_id));
-diesel::joinable!(writing_blocks -> page_contents (page_content_id));
-diesel::joinable!(writing_blocks -> users (creator_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     assignment_submissions,
@@ -299,5 +286,4 @@ diesel::allow_tables_to_appear_in_same_query!(
     spaces,
     user_activities,
     users,
-    writing_blocks,
 );

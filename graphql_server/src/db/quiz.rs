@@ -3,6 +3,7 @@ use diesel::sql_types::Integer;
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
+use serde_json::Value;
 use uuid::Uuid;
 
 use super::schema::{quiz_blocks, quiz_user_answer};
@@ -177,6 +178,55 @@ impl QuizUserAnswer {
 
 // Writing Block
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
-pub struct WritingQuestion {
-    pub content: serde_json::Value,
+pub struct WritingQuestionData {
+    pub content: Value,
+}
+
+// Single Choice, Multiple Choice Block
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+pub struct ChoiceQuestionData {
+    pub question: String,
+    pub options: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+pub struct ChoiceAnswerData {
+    pub expected_choices: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+pub struct ChoiceUserAnswerData {
+    pub choices: Vec<String>,
+}
+
+// Select Options
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+pub struct SelectQuestionData {
+    pub options: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+pub struct SelectAnswerData {
+    pub expected_choices: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+pub struct SelectUserAnswerData {
+    pub choice: String,
+}
+
+// Fill in Blank
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+pub struct FillInBlankQuestionData {
+    pub options: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+pub struct FillInBlankAnswerData {
+    pub expected_choices: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+pub struct FillInBlankUserAnswerData {
+    pub choice: String,
 }

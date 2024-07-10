@@ -9,7 +9,11 @@ use async_graphql::*;
 use itertools::Itertools;
 
 use crate::authorization::DocumentActionPermission;
-use crate::db::{Quiz, QuizUserAnswer, WritingQuestion};
+use crate::db::{
+    ChoiceAnswerData, ChoiceQuestionData, ChoiceUserAnswerData, FillInBlankAnswerData,
+    FillInBlankQuestionData, Quiz, QuizUserAnswer, SelectAnswerData, SelectQuestionData,
+    SelectUserAnswerData, WritingQuestionData,
+};
 use crate::graphql::data_loader::{FindQuiz, FindQuizUserAnswersByQuiz, IkigaiDataLoader};
 use crate::helper::{document_quick_allowed_by_page_content, get_user_id_from_ctx};
 
@@ -73,8 +77,43 @@ impl Quiz {
         )
     }
 
-    async fn writing_question(&self) -> Option<WritingQuestion> {
-        self.parse_question_data()
+    async fn writing_question(&self, ctx: &Context<'_>) -> Option<WritingQuestionData> {
+        serde_json::from_value(self.question_data(ctx).await.ok()?).ok()
+    }
+
+    async fn single_choice_question(&self, ctx: &Context<'_>) -> Option<ChoiceQuestionData> {
+        serde_json::from_value(self.question_data(ctx).await.ok()?).ok()
+    }
+
+    async fn single_choice_expected_answer(&self, ctx: &Context<'_>) -> Option<ChoiceAnswerData> {
+        serde_json::from_value(self.answer_data(ctx).await.ok()?).ok()
+    }
+
+    async fn multiple_choice_question(&self, ctx: &Context<'_>) -> Option<ChoiceQuestionData> {
+        serde_json::from_value(self.question_data(ctx).await.ok()?).ok()
+    }
+
+    async fn multiple_choice_expected_answer(&self, ctx: &Context<'_>) -> Option<ChoiceAnswerData> {
+        serde_json::from_value(self.answer_data(ctx).await.ok()?).ok()
+    }
+
+    async fn select_option_question(&self, ctx: &Context<'_>) -> Option<SelectQuestionData> {
+        serde_json::from_value(self.question_data(ctx).await.ok()?).ok()
+    }
+
+    async fn select_option_expected_answer(&self, ctx: &Context<'_>) -> Option<SelectAnswerData> {
+        serde_json::from_value(self.answer_data(ctx).await.ok()?).ok()
+    }
+
+    async fn fill_in_blank_question(&self, ctx: &Context<'_>) -> Option<FillInBlankQuestionData> {
+        serde_json::from_value(self.question_data(ctx).await.ok()?).ok()
+    }
+
+    async fn fill_in_blank_expected_answer(
+        &self,
+        ctx: &Context<'_>,
+    ) -> Option<FillInBlankAnswerData> {
+        serde_json::from_value(self.answer_data(ctx).await.ok()?).ok()
     }
 }
 
@@ -96,5 +135,21 @@ impl QuizUserAnswer {
         .await?;
 
         Ok(self.score)
+    }
+
+    async fn single_choice_answer(&self) -> Option<ChoiceUserAnswerData> {
+        self.parse_answer_data()
+    }
+
+    async fn multiple_choice_answer(&self) -> Option<ChoiceUserAnswerData> {
+        self.parse_answer_data()
+    }
+
+    async fn select_option_answer(&self) -> Option<SelectUserAnswerData> {
+        self.parse_answer_data()
+    }
+
+    async fn fill_in_blank_answer(&self) -> Option<SelectUserAnswerData> {
+        self.parse_answer_data()
     }
 }

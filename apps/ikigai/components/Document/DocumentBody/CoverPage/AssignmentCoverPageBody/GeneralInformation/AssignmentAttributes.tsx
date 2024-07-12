@@ -81,7 +81,7 @@ const AssignmentAttributes = ({
       </DataList.Item>
       {allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
         <DataList.Item>
-          <DataList.Label minWidth="88px">Assign Students</DataList.Label>
+          <DataList.Label minWidth="88px">Assign</DataList.Label>
           <DataList.Value>
             <AssigneesAttribute />
           </DataList.Value>

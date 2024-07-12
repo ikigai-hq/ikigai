@@ -121,7 +121,7 @@ const AssigneesAttribute = () => {
           disabled={assignLoading}
           style={{ marginLeft: firstTwoAssignees.length > 0 ? 5 : 0 }}
         >
-          <RocketIcon /> Assign
+          <RocketIcon /> Assign Students
         </Button>
       </Modal>
       <Modal

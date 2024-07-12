@@ -8,6 +8,7 @@ import {
   IconBold,
   IconCode,
   IconFileUpload,
+  IconGradienter,
   IconH1,
   IconH2,
   IconH3,
@@ -30,6 +31,7 @@ import useEditorStore from "store/EditorStore";
 import { WRITING_BLOCK_NAME } from "components/Editor/Extensions/QuizBlock/WritingBlock";
 import { hasExtension } from "util/ExtensionUtil";
 import { FILE_HANDLER_NAME } from "components/Editor/Extensions/FileHandler";
+import { SINGLE_CHOICE_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/SingleChoiceBlock";
 
 const ContentToolbar = () => {
   const activeEditor = useEditorStore((state) => state.activeEditor);
@@ -118,13 +120,6 @@ const ContentToolbar = () => {
     activeEditor.chain().focus().toggleBlockquote().run();
     setToolbarOptions({ blockquote: activeEditor.isActive("blockquote") });
   };
-
-  const onChangeWritingBlock = () => {
-    if (!activeEditor || !hasExtension(activeEditor, WRITING_BLOCK_NAME))
-      return;
-    activeEditor.chain().focus().insertWritingBlock().run();
-  };
-
   const onChangeBulletList = () => {
     if (!activeEditor) return;
     activeEditor.chain().focus().toggleBulletList().run();
@@ -146,6 +141,18 @@ const ContentToolbar = () => {
   const onInsertFileHandler = () => {
     if (!activeEditor || !hasExtension(activeEditor, FILE_HANDLER_NAME)) return;
     activeEditor.chain().focus().insertFileHandler().run();
+  };
+
+  const onInsertWritingBlock = () => {
+    if (!activeEditor || !hasExtension(activeEditor, WRITING_BLOCK_NAME))
+      return;
+    activeEditor.chain().focus().insertWritingBlock().run();
+  };
+
+  const onInsertSingleChoice = () => {
+    if (!activeEditor || !hasExtension(activeEditor, SINGLE_CHOICE_BLOCK_NAME))
+      return;
+    activeEditor.chain().focus().insertSingleChoice().run();
   };
 
   return (
@@ -432,7 +439,7 @@ const ContentToolbar = () => {
               <IconBlockquote size={20} stroke={2} />
             </Toolbar.ToggleItem>
           </Tooltip>
-          <Tooltip content={t`Writing Quizz`}>
+          <Tooltip content={t`Writing Quiz`}>
             <Toolbar.ToolbarButton
               className="ToolbarToggleItem"
               value="writingBlock"
@@ -441,9 +448,23 @@ const ContentToolbar = () => {
                 activeEditor?.isActive(WRITING_BLOCK_NAME) ||
                 !hasExtension(activeEditor, WRITING_BLOCK_NAME)
               }
-              onClick={onChangeWritingBlock}
+              onClick={onInsertWritingBlock}
             >
               <IconWriting size={20} stroke={2} />
+            </Toolbar.ToolbarButton>
+          </Tooltip>
+          <Tooltip content={t`Single Choice Quiz`}>
+            <Toolbar.ToolbarButton
+              className="ToolbarToggleItem"
+              value="singleChoice"
+              aria-label="Singel Choice"
+              disabled={
+                activeEditor?.isActive(SINGLE_CHOICE_BLOCK_NAME) ||
+                !hasExtension(activeEditor, SINGLE_CHOICE_BLOCK_NAME)
+              }
+              onClick={onInsertSingleChoice}
+            >
+              <IconGradienter size={20} stroke={2} />
             </Toolbar.ToolbarButton>
           </Tooltip>
           <DropdownMenu.Root>

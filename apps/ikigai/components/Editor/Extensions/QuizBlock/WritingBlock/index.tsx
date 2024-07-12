@@ -6,7 +6,7 @@ export const WRITING_BLOCK_TAG = "writing-block";
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
-    quizBlock: {
+    writingBlock: {
       insertWritingBlock: () => ReturnType;
     };
   }

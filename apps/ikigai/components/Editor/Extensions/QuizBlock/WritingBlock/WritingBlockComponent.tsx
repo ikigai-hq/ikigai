@@ -22,26 +22,31 @@ import { isEmptyUuid } from "util/FileUtil";
 import { DocumentActionPermission, QuizType } from "graphql/types";
 import usePermission from "hook/UsePermission";
 import QuizBlockWrapper from "../QuizBlockWrapper";
-import useQuiz from "hook/UseQuiz";
+import { useWritingQuiz } from "hook/UseQuiz";
 
 const WritingBlockComponent = (props: NodeViewProps) => {
   const allow = usePermission();
   const pageContentId = props.extension.options.pageContentId;
   const quizId = props.node.attrs.quizId;
-  const { quiz, debounceUpsertQuiz, cancelDebounceUpsertQuiz } = useQuiz(
+  const { quiz, debounceUpsertQuiz, cancelDebounceUpsertQuiz } = useWritingQuiz(
     quizId,
     pageContentId,
   );
 
   const updateContent = (content: JSONContent) => {
     if (isEmptyUuid(quizId)) return;
-    debounceUpsertQuiz(quiz.quizType, { content }, {});
+    debounceUpsertQuiz(
+      {
+        content,
+      },
+      {},
+    );
   };
 
   const forceSave = (content: JSONContent) => {
     if (isEmptyUuid(quizId)) return;
     cancelDebounceUpsertQuiz();
-    debounceUpsertQuiz(quiz.quizType, { content }, {});
+    debounceUpsertQuiz({ content }, {});
   };
 
   const editor = useIkigaiEditor({

@@ -18,6 +18,16 @@ export const GET_DOCUMENT_QUIZZES = gql`
             writingQuestion {
               content
             }
+            singleChoiceQuestion {
+              question
+              options {
+                id
+                content
+              }
+            }
+            singleChoiceExpectedAnswer {
+              expectedChoices
+            }
             myAnswer {
               quizId
               userId

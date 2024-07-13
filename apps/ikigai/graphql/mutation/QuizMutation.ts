@@ -12,6 +12,16 @@ export const UPSERT_QUIZ = gql`
       writingQuestion {
         content
       }
+      singleChoiceQuestion {
+        question
+        options {
+          id
+          content
+        }
+      }
+      singleChoiceExpectedAnswer {
+        expectedChoices
+      }
       myAnswer {
         quizId
         userId
@@ -40,6 +50,16 @@ export const CLONE_QUIZ = gql`
       answerData
       writingQuestion {
         content
+      }
+      singleChoiceQuestion {
+        question
+        options {
+          id
+          content
+        }
+      }
+      singleChoiceExpectedAnswer {
+        expectedChoices
       }
       myAnswer {
         quizId

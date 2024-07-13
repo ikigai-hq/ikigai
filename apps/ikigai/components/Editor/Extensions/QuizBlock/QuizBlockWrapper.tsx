@@ -23,7 +23,11 @@ const QuizBlockWrapper = ({
   const quizId = props.node.attrs.quizId;
   const originalQuizId = props.node.attrs.originalQuizId;
 
-  const { cloneQuiz, upsertQuiz } = useQuiz(quizId, pageContentId);
+  const { cloneQuiz, upsertQuiz } = useQuiz<{}, {}>(
+    quizType,
+    quizId,
+    pageContentId,
+  );
   const [initializing, setInitializing] = useState(true);
 
   useEffect(() => {
@@ -55,7 +59,7 @@ const QuizBlockWrapper = ({
   };
 
   const upsertQuizBlock = async () => {
-    const quiz = await upsertQuiz(quizType, {}, {});
+    const quiz = await upsertQuiz({}, {});
 
     if (quiz) {
       props.updateAttributes({ quizId: quiz.id });

@@ -1,8 +1,14 @@
 import { useMutation } from "@apollo/client";
 import { v4 } from "uuid";
 import { cloneDeep } from "lodash";
+import { useDebounceFn } from "ahooks";
 
-import useQuizStore, { IQuiz } from "store/QuizStore";
+import useQuizStore, {
+  IQuiz,
+  IWritingQuestion,
+  QuestionData,
+  QuestionExpectedAnswer,
+} from "store/QuizStore";
 import {
   ANSWER_QUIZ,
   CLONE_QUIZ,
@@ -11,9 +17,15 @@ import {
 import { handleError } from "graphql/ApolloClient";
 import { AnswerQuiz, CloneQuiz, QuizType, UpsertQuiz } from "graphql/types";
 import { isEmptyUuid } from "../util/FileUtil";
-import { useDebounceFn } from "ahooks";
 
-const UseQuiz = (quizId: string, pageContentId: string) => {
+const useQuiz = <
+  Question extends QuestionData,
+  ExpectedAnswer extends QuestionExpectedAnswer,
+>(
+  quizType: QuizType,
+  quizId: string,
+  pageContentId: string,
+) => {
   const quiz = useQuizStore((state) =>
     state.quizzes.find((q) => q.id === quizId),
   );
@@ -38,9 +50,8 @@ const UseQuiz = (quizId: string, pageContentId: string) => {
   );
 
   const upsertQuiz = async (
-    quizType: QuizType,
-    questionData: any,
-    answerData: any,
+    questionData: Question,
+    answerData: ExpectedAnswer,
   ): Promise<IQuiz | undefined> => {
     const newQuizId = isEmptyUuid(quizId) ? v4() : quizId;
     const { data } = await quizUpsert({
@@ -115,4 +126,12 @@ const UseQuiz = (quizId: string, pageContentId: string) => {
   };
 };
 
-export default UseQuiz;
+export const useWritingQuiz = (quizId: string, pageContentId: string) => {
+  return useQuiz<IWritingQuestion, {}>(
+    QuizType.WRITING_BLOCK,
+    quizId,
+    pageContentId,
+  );
+};
+
+export default useQuiz;

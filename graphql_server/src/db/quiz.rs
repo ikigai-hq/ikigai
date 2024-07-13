@@ -101,14 +101,6 @@ impl Quiz {
             .filter(quiz_blocks::page_content_id.eq_any(page_content_ids))
             .get_results(conn)
     }
-
-    pub fn parse_question_data<T: DeserializeOwned>(&self) -> Option<T> {
-        serde_json::from_value(self.question_data.clone()).ok()
-    }
-
-    pub fn parse_answer_data<T: DeserializeOwned>(&self) -> Option<T> {
-        serde_json::from_value(self.answer_data.clone()).ok()
-    }
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
@@ -183,50 +175,57 @@ pub struct WritingQuestionData {
 }
 
 // Single Choice, Multiple Choice Block
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+pub struct ChoiceOption {
+    pub id: Uuid,
+    pub content: String,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 pub struct ChoiceQuestionData {
     pub question: String,
-    pub options: Vec<String>,
+    pub options: Vec<ChoiceOption>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 pub struct ChoiceAnswerData {
-    pub expected_choices: Vec<String>,
+    pub expected_choices: Vec<Uuid>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 pub struct ChoiceUserAnswerData {
-    pub choices: Vec<String>,
+    pub choices: Vec<Uuid>,
 }
 
 // Select Options
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 pub struct SelectQuestionData {
-    pub options: Vec<String>,
+    pub options: Vec<ChoiceOption>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 pub struct SelectAnswerData {
-    pub expected_choices: Vec<String>,
+    pub expected_choices: Vec<Uuid>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 pub struct SelectUserAnswerData {
-    pub choice: String,
+    pub choice: Uuid,
 }
 
 // Fill in Blank
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 pub struct FillInBlankQuestionData {
-    pub options: Vec<String>,
+    pub options: Vec<ChoiceOption>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 pub struct FillInBlankAnswerData {
-    pub expected_choices: String,
+    pub expected_choices: Uuid,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 pub struct FillInBlankUserAnswerData {
-    pub choice: String,
+    pub choice: Uuid,
 }

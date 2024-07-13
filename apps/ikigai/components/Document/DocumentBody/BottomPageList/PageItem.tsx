@@ -60,7 +60,14 @@ const PageItem = ({ page, index }: PageItemProps) => {
         $active={isActive}
         $isExpanded={isExpanded}
       >
-        <div style={{ display: "flex", justifyContent: "center", flex: 1 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flex: 1,
+            maxWidth: isExpanded ? "unset" : "120px",
+          }}
+        >
           {!page && (
             <Text weight="medium">
               <Trans>Information</Trans>

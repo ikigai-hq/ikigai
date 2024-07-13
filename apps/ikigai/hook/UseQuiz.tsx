@@ -1,10 +1,14 @@
 import { useMutation } from "@apollo/client";
 import { v4 } from "uuid";
-import { cloneDeep } from "lodash";
+import { cloneDeep, isEqual } from "lodash";
 import { useDebounceFn } from "ahooks";
 
 import useQuizStore, {
+  identityExpectedAnswer,
+  identityQuestionData,
   IQuiz,
+  ISingleChoiceExpectedAnswer,
+  ISingleChoiceQuestion,
   IWritingQuestion,
   QuestionData,
   QuestionExpectedAnswer,
@@ -16,7 +20,7 @@ import {
 } from "graphql/mutation/QuizMutation";
 import { handleError } from "graphql/ApolloClient";
 import { AnswerQuiz, CloneQuiz, QuizType, UpsertQuiz } from "graphql/types";
-import { isEmptyUuid } from "../util/FileUtil";
+import { isEmptyUuid } from "util/FileUtil";
 
 const useQuiz = <
   Question extends QuestionData,
@@ -112,6 +116,16 @@ const useQuiz = <
     useDebounceFn(answerQuiz, { wait: 200, maxWait: 2000 });
 
   return {
+    questionData: identityQuestionData<Question>(
+      isEmptyQuizData(quiz.questionData)
+        ? getDefaultQuestionData(quizType)
+        : quiz.questionData,
+    ),
+    answerData: identityExpectedAnswer<ExpectedAnswer>(
+      isEmptyQuizData(quiz.answerData)
+        ? getDefaultExpectedAnswer(quizType)
+        : quiz.answerData,
+    ),
     quiz,
     upsertLoading,
     cloneLoading,
@@ -132,6 +146,51 @@ export const useWritingQuiz = (quizId: string, pageContentId: string) => {
     quizId,
     pageContentId,
   );
+};
+
+export const useSingleChoiceQuiz = (quizId: string, pageContentId: string) => {
+  return useQuiz<ISingleChoiceQuestion, ISingleChoiceExpectedAnswer>(
+    QuizType.SINGLE_CHOICE,
+    quizId,
+    pageContentId,
+  );
+};
+
+const isEmptyQuizData = (data: any): boolean => {
+  return data === undefined || data === null || isEqual(data, {});
+};
+
+export const getDefaultQuestionData = (quizType: QuizType): QuestionData => {
+  switch (quizType) {
+    case QuizType.WRITING_BLOCK:
+      return { content: {} };
+    case QuizType.SINGLE_CHOICE:
+      return {
+        question: "",
+        options: [],
+      };
+    case QuizType.MULTIPLE_CHOICE:
+      return {
+        question: "",
+        options: [],
+      };
+    default:
+      return {};
+  }
+};
+
+export const getDefaultExpectedAnswer = (
+  quizType: QuizType,
+): QuestionExpectedAnswer => {
+  switch (quizType) {
+    case QuizType.SINGLE_CHOICE:
+    case QuizType.MULTIPLE_CHOICE:
+      return {
+        expectedChoices: [],
+      };
+    default:
+      return {};
+  }
 };
 
 export default useQuiz;

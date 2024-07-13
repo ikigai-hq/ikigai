@@ -28,19 +28,12 @@ const WritingBlockComponent = (props: NodeViewProps) => {
   const allow = usePermission();
   const pageContentId = props.extension.options.pageContentId;
   const quizId = props.node.attrs.quizId;
-  const { quiz, debounceUpsertQuiz, cancelDebounceUpsertQuiz } = useWritingQuiz(
-    quizId,
-    pageContentId,
-  );
+  const { questionData, debounceUpsertQuiz, cancelDebounceUpsertQuiz } =
+    useWritingQuiz(quizId, pageContentId);
 
   const updateContent = (content: JSONContent) => {
     if (isEmptyUuid(quizId)) return;
-    debounceUpsertQuiz(
-      {
-        content,
-      },
-      {},
-    );
+    debounceUpsertQuiz({ content }, {});
   };
 
   const forceSave = (content: JSONContent) => {
@@ -50,7 +43,7 @@ const WritingBlockComponent = (props: NodeViewProps) => {
   };
 
   const editor = useIkigaiEditor({
-    body: quiz?.questionData?.content,
+    body: questionData.content,
     onUpdate: updateContent,
     onForceSave: forceSave,
     extensions: [

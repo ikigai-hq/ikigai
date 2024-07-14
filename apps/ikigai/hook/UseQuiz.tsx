@@ -117,12 +117,12 @@ const useQuiz = <
 
   return {
     questionData: identityQuestionData<Question>(
-      isEmptyQuizData(quiz.questionData)
+      isEmptyQuizData(quiz?.questionData)
         ? getDefaultQuestionData(quizType)
         : quiz.questionData,
     ),
     answerData: identityExpectedAnswer<ExpectedAnswer>(
-      isEmptyQuizData(quiz.answerData)
+      isEmptyQuizData(quiz?.answerData)
         ? getDefaultExpectedAnswer(quizType)
         : quiz.answerData,
     ),

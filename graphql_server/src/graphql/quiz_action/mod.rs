@@ -38,7 +38,7 @@ impl Quiz {
         )
         .await?;
 
-        Ok(self.question_data.clone())
+        Ok(self.answer_data.clone())
     }
 
     async fn answers(&self, ctx: &Context<'_>) -> Result<Vec<QuizUserAnswer>> {

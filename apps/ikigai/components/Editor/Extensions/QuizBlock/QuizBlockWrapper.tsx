@@ -7,17 +7,24 @@ import { QuizType } from "graphql/types";
 import Loading from "components/Loading";
 import { ExtensionWrapper } from "components/base/ExtensionComponentUtil";
 import useQuiz from "hook/UseQuiz";
+import styled from "styled-components";
+import { IconButton } from "@radix-ui/themes";
+import { SettingIcon } from "components/common/IconSvg";
 
 export type QuizBlockWrapperProps = {
   quizType: QuizType;
   children: React.ReactNode;
   nodeViewProps: NodeViewProps;
+  showSetting: boolean;
+  onClickSetting?: () => void;
 };
 
 const QuizBlockWrapper = ({
   quizType,
   children,
   nodeViewProps: props,
+  showSetting,
+  onClickSetting,
 }: QuizBlockWrapperProps) => {
   const pageContentId = props.extension.options.pageContentId;
   const quizId = props.node.attrs.quizId;
@@ -78,9 +85,30 @@ const QuizBlockWrapper = ({
 
   return (
     <NodeViewWrapper>
-      <ExtensionWrapper selected={props.selected}>{children}</ExtensionWrapper>
+      <ExtensionWrapper selected={props.selected}>
+        {children}
+        <ExtensionMenu $show={showSetting}>
+          <div>
+            <IconButton
+              size="1"
+              variant="soft"
+              color={"gray"}
+              onClick={onClickSetting}
+            >
+              <SettingIcon width="16" height="16" />
+            </IconButton>
+          </div>
+        </ExtensionMenu>
+      </ExtensionWrapper>
     </NodeViewWrapper>
   );
 };
+
+const ExtensionMenu = styled.div<{ $show: boolean }>`
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: ${(props) => (props.$show ? "unset" : "none")};
+`;
 
 export default QuizBlockWrapper;

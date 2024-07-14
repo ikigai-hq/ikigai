@@ -84,7 +84,13 @@ const WritingBlockComponent = (props: NodeViewProps) => {
   });
 
   return (
-    <QuizBlockWrapper quizType={QuizType.WRITING_BLOCK} nodeViewProps={props}>
+    <QuizBlockWrapper
+      quizType={QuizType.WRITING_BLOCK}
+      nodeViewProps={props}
+      showSetting={
+        props.selected && allow(DocumentActionPermission.EDIT_DOCUMENT)
+      }
+    >
       <div
         style={{ minHeight: 200 }}
         onClick={() => {

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React from "react";
 
 export const BlockExtensionWrapper = styled.div<{ $selected: boolean }>`
+  position: relative;
   border: 1px solid
     ${(props) => (props.$selected ? "var(--indigo-9)" : "var(--indigo-4)")};
   &:hover {

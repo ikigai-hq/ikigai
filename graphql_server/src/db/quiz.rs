@@ -173,81 +173,117 @@ pub fn try_get_auto_score(quiz_type: QuizType, expected_answer: Value, answer: V
 }
 
 pub fn get_auto_store(quiz_type: QuizType, expected_answer: Value, answer: Value) -> Option<f64> {
-    let mut res = 0.0;
     match quiz_type {
         QuizType::SingleChoice => {
-            let choice_expected_answer: ChoiceAnswerData = serde_json::from_value(expected_answer).ok()?;
+            let choice_expected_answer: ChoiceAnswerData =
+                serde_json::from_value(expected_answer).ok()?;
             let user_answer: ChoiceUserAnswerData = serde_json::from_value(answer).ok()?;
             if let Some(choice) = user_answer.choices.first() {
                 if choice_expected_answer.expected_choices.contains(choice) {
-                    res = 1.0;
+                    return Some(1.0);
                 }
             }
-        },
+        }
+        QuizType::MultipleChoice => {
+            let choice_expected_answer: ChoiceAnswerData =
+                serde_json::from_value(expected_answer).ok()?;
+            let user_answer: ChoiceUserAnswerData = serde_json::from_value(answer).ok()?;
+
+            let has_incorrect_choice = user_answer
+                .choices
+                .iter()
+                .any(|choice| !choice_expected_answer.expected_choices.contains(choice));
+            if has_incorrect_choice {
+                return Some(0.0);
+            }
+
+            if choice_expected_answer.expected_choices.is_empty() {
+                return Some(0.0);
+            }
+
+            let total_correct_choice = choice_expected_answer
+                .expected_choices
+                .iter()
+                .filter(|expected_choice| user_answer.choices.contains(expected_choice))
+                .count();
+            return Some(
+                total_correct_choice as f64 / choice_expected_answer.expected_choices.len() as f64,
+            );
+        }
         _ => (),
     };
 
-    Some(res)
+    Some(0.0)
 }
 
 // Writing Block
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
 pub struct WritingQuestionData {
     pub content: Value,
 }
 
 // Single Choice, Multiple Choice Block
-
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
 pub struct ChoiceOption {
     pub id: Uuid,
     pub content: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
 pub struct ChoiceQuestionData {
     pub question: String,
     pub options: Vec<ChoiceOption>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
 pub struct ChoiceAnswerData {
     pub expected_choices: Vec<Uuid>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
 pub struct ChoiceUserAnswerData {
     pub choices: Vec<Uuid>,
 }
 
 // Select Options
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
 pub struct SelectQuestionData {
     pub options: Vec<ChoiceOption>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
 pub struct SelectAnswerData {
     pub expected_choices: Vec<Uuid>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
 pub struct SelectUserAnswerData {
     pub choice: Uuid,
 }
 
 // Fill in Blank
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
 pub struct FillInBlankQuestionData {
     pub options: Vec<ChoiceOption>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
 pub struct FillInBlankAnswerData {
     pub expected_choices: Uuid,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
 pub struct FillInBlankUserAnswerData {
     pub choice: Uuid,
 }

@@ -25,7 +25,8 @@ impl Quiz {
             self.page_content_id,
             DocumentActionPermission::ViewDocument,
         )
-        .await.ok()?;
+        .await
+        .ok()?;
 
         Some(self.question_data.clone())
     }
@@ -36,25 +37,35 @@ impl Quiz {
             self.page_content_id,
             DocumentActionPermission::ViewAnswer,
         )
-        .await.ok()?;
+        .await
+        .ok()?;
 
         Some(self.answer_data.clone())
     }
 
     async fn answers(&self, ctx: &Context<'_>) -> Result<Vec<QuizUserAnswer>> {
-        document_quick_allowed_by_page_content(
-            ctx,
-            self.page_content_id,
-            DocumentActionPermission::EditDocument,
-        )
-        .await?;
-
+        let user_id = get_user_id_from_ctx(ctx).await?;
         let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
         let answers = loader
             .load_one(FindQuizUserAnswersByQuiz { quiz_id: self.id })
             .await?
             .unwrap_or_default();
-        Ok(answers)
+
+        if document_quick_allowed_by_page_content(
+            ctx,
+            self.page_content_id,
+            DocumentActionPermission::EditDocument,
+        )
+        .await
+        .is_ok()
+        {
+            Ok(answers)
+        } else {
+            Ok(answers
+                .into_iter()
+                .filter(|answer| answer.user_id == user_id)
+                .collect())
+        }
     }
 
     async fn my_answer(&self, ctx: &Context<'_>) -> Result<Option<QuizUserAnswer>> {
@@ -125,13 +136,15 @@ impl QuizUserAnswer {
             .load_one(FindQuiz {
                 quiz_id: self.quiz_id,
             })
-            .await.ok()??;
+            .await
+            .ok()??;
         document_quick_allowed_by_page_content(
             ctx,
             quiz.page_content_id,
             DocumentActionPermission::ViewAnswer,
         )
-        .await.ok()?;
+        .await
+        .ok()?;
 
         Some(self.score)
     }

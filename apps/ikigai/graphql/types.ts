@@ -506,6 +506,18 @@ export interface UpsertQuiz_quizUpsert_myAnswer {
   singleChoiceAnswer: UpsertQuiz_quizUpsert_myAnswer_singleChoiceAnswer | null;
 }
 
+export interface UpsertQuiz_quizUpsert_answers_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface UpsertQuiz_quizUpsert_answers {
+  quizId: any;
+  userId: number;
+  score: number;
+  answerData: any;
+  singleChoiceAnswer: UpsertQuiz_quizUpsert_answers_singleChoiceAnswer | null;
+}
+
 export interface UpsertQuiz_quizUpsert {
   id: any;
   pageContentId: any;
@@ -517,6 +529,7 @@ export interface UpsertQuiz_quizUpsert {
   singleChoiceQuestion: UpsertQuiz_quizUpsert_singleChoiceQuestion | null;
   singleChoiceExpectedAnswer: UpsertQuiz_quizUpsert_singleChoiceExpectedAnswer | null;
   myAnswer: UpsertQuiz_quizUpsert_myAnswer | null;
+  answers: UpsertQuiz_quizUpsert_answers[];
 }
 
 export interface UpsertQuiz {
@@ -567,6 +580,18 @@ export interface CloneQuiz_quizClone_myAnswer {
   singleChoiceAnswer: CloneQuiz_quizClone_myAnswer_singleChoiceAnswer | null;
 }
 
+export interface CloneQuiz_quizClone_answers_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface CloneQuiz_quizClone_answers {
+  quizId: any;
+  userId: number;
+  score: number;
+  answerData: any;
+  singleChoiceAnswer: CloneQuiz_quizClone_answers_singleChoiceAnswer | null;
+}
+
 export interface CloneQuiz_quizClone {
   id: any;
   pageContentId: any;
@@ -578,6 +603,7 @@ export interface CloneQuiz_quizClone {
   singleChoiceQuestion: CloneQuiz_quizClone_singleChoiceQuestion | null;
   singleChoiceExpectedAnswer: CloneQuiz_quizClone_singleChoiceExpectedAnswer | null;
   myAnswer: CloneQuiz_quizClone_myAnswer | null;
+  answers: CloneQuiz_quizClone_answers[];
 }
 
 export interface CloneQuiz {
@@ -1310,6 +1336,18 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAns
   singleChoiceAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer | null;
 }
 
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers {
+  quizId: any;
+  userId: number;
+  score: number;
+  answerData: any;
+  singleChoiceAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers_singleChoiceAnswer | null;
+}
+
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes {
   id: any;
   pageContentId: any;
@@ -1321,6 +1359,7 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes {
   singleChoiceQuestion: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceQuestion | null;
   singleChoiceExpectedAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceExpectedAnswer | null;
   myAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer | null;
+  answers: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers[];
 }
 
 export interface GetDocumentQuizzes_documentGet_pages_pageContents {

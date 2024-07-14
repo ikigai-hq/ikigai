@@ -1,13 +1,15 @@
 import { NodeViewProps } from "@tiptap/core";
-import { RadioGroup, Separator, Text } from "@radix-ui/themes";
 import { useState } from "react";
 
-import { DocumentActionPermission, QuizType } from "graphql/types";
+import { DocumentActionPermission, QuizType, Role } from "graphql/types";
 import QuizBlockWrapper from "../QuizBlockWrapper";
-import { useSingleChoiceQuiz } from "hook/UseQuiz";
 import usePermission from "hook/UsePermission";
 import { SingleChoiceProps } from "./type";
 import SingleChoiceSetting from "./SingleChoiceSetting";
+import useAuthUserStore from "store/AuthStore";
+import useDocumentStore from "store/DocumentStore";
+import DoingSingleChoice from "./DoingSingleChoice";
+import ReviewSingleChoice from "./ReviewSingleChoice";
 
 const SingleChoiceBlockComponent = (props: NodeViewProps) => {
   const allow = usePermission();
@@ -36,34 +38,23 @@ const SingleChoiceBlockComponent = (props: NodeViewProps) => {
 };
 
 export const SingleChoice = (props: SingleChoiceProps) => {
-  const allow = usePermission();
-  const { questionData, myAnswer, answerQuiz } = useSingleChoiceQuiz(
-    props.quizId,
-    props.parentContentId,
-  );
+  const role = useAuthUserStore((state) => state.role);
+  const document = useDocumentStore((state) => state.activeDocument);
+  const isSubmission = !!document.submission;
+  const isDoingSubmission = isSubmission && !document.submission.submitAt;
+  const isStudent = role === Role.STUDENT;
 
-  const onChange = (choice: string) => {
-    answerQuiz({ choices: [choice] });
-  };
+  if (isStudent && isDoingSubmission) {
+    return <DoingSingleChoice {...props} />;
+  }
 
-  const choice = myAnswer?.choices ? myAnswer.choices[0] : undefined;
-  return (
-    <div style={{ padding: 10 }}>
-      <Text weight="medium">Q.1: {questionData.question}</Text>
-      <Separator style={{ width: "100%", marginTop: 5, marginBottom: 5 }} />
-      <RadioGroup.Root
-        onValueChange={onChange}
-        value={choice}
-        disabled={!allow(DocumentActionPermission.INTERACTIVE_WITH_TOOL)}
-      >
-        {questionData.options.map((option) => (
-          <RadioGroup.Item key={option.id} value={option.id}>
-            {option.content}
-          </RadioGroup.Item>
-        ))}
-      </RadioGroup.Root>
-    </div>
-  );
+  if (isSubmission) {
+    return (
+      <ReviewSingleChoice userId={document.submission.user.id} {...props} />
+    );
+  }
+
+  return <DoingSingleChoice {...props} />;
 };
 
 export default SingleChoiceBlockComponent;

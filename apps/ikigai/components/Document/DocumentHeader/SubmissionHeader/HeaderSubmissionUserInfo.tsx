@@ -1,7 +1,5 @@
-import { t } from "@lingui/macro";
 import { useQuery } from "@apollo/client";
 import { cloneDeep } from "lodash";
-import { Tooltip } from "@radix-ui/themes";
 
 import {
   GetSubmissionsOfAssignment,
@@ -34,24 +32,22 @@ const HeaderSubmissionUserInfo = () => {
 
   return (
     <>
-      <Tooltip content={t`View other students`}>
-        <IkigaiPopover
-          content={
-            <OtherStudentSubmissions
-              currentSubmissionUserId={submission?.user?.id}
-            />
-          }
-          width={"100vw"}
-        >
-          <div>
-            <UserBasicInformation
-              name={submission?.user?.name}
-              avatar={submission?.user?.avatar?.publicUrl}
-              randomColor={submission?.user?.randomColor}
-            />
-          </div>
-        </IkigaiPopover>
-      </Tooltip>
+      <IkigaiPopover
+        content={
+          <OtherStudentSubmissions
+            currentSubmissionUserId={submission?.user?.id}
+          />
+        }
+        width={"100vw"}
+      >
+        <div>
+          <UserBasicInformation
+            name={submission?.user?.name}
+            avatar={submission?.user?.avatar?.publicUrl}
+            randomColor={submission?.user?.randomColor}
+          />
+        </div>
+      </IkigaiPopover>
     </>
   );
 };

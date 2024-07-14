@@ -31,6 +31,15 @@ export const UPSERT_QUIZ = gql`
           choices
         }
       }
+      answers {
+        quizId
+        userId
+        score
+        answerData
+        singleChoiceAnswer {
+          choices
+        }
+      }
     }
   }
 `;
@@ -66,6 +75,15 @@ export const CLONE_QUIZ = gql`
         expectedChoices
       }
       myAnswer {
+        quizId
+        userId
+        score
+        answerData
+        singleChoiceAnswer {
+          choices
+        }
+      }
+      answers {
         quizId
         userId
         score

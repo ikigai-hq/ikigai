@@ -30,7 +30,7 @@ const QuizBlockWrapper = ({
   const quizId = props.node.attrs.quizId;
   const originalQuizId = props.node.attrs.originalQuizId;
 
-  const { cloneQuiz, upsertQuiz } = useQuiz<{}, {}>(
+  const { cloneQuiz, upsertQuiz } = useQuiz<{}, {}, {}>(
     quizType,
     quizId,
     pageContentId,

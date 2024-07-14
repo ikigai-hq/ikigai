@@ -37,6 +37,15 @@ export const GET_DOCUMENT_QUIZZES = gql`
                 choices
               }
             }
+            answers {
+              quizId
+              userId
+              score
+              answerData
+              singleChoiceAnswer {
+                choices
+              }
+            }
           }
         }
       }

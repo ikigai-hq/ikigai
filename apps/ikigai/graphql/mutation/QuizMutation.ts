@@ -26,6 +26,10 @@ export const UPSERT_QUIZ = gql`
         quizId
         userId
         score
+        answerData
+        singleChoiceAnswer {
+          choices
+        }
       }
     }
   }
@@ -65,6 +69,10 @@ export const CLONE_QUIZ = gql`
         quizId
         userId
         score
+        answerData
+        singleChoiceAnswer {
+          choices
+        }
       }
     }
   }
@@ -76,6 +84,10 @@ export const ANSWER_QUIZ = gql`
       quizId
       userId
       score
+      answerData
+      singleChoiceAnswer {
+        choices
+      }
     }
   }
 `;

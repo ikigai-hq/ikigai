@@ -6,12 +6,15 @@ import { useDebounceFn } from "ahooks";
 import useQuizStore, {
   identityExpectedAnswer,
   identityQuestionData,
+  identityUserAnswer,
   IQuiz,
+  ISingleChoiceAnswer,
   ISingleChoiceExpectedAnswer,
   ISingleChoiceQuestion,
   IWritingQuestion,
   QuestionData,
   QuestionExpectedAnswer,
+  QuestionUserAnswer,
 } from "store/QuizStore";
 import {
   ANSWER_QUIZ,
@@ -25,6 +28,7 @@ import { isEmptyUuid } from "util/FileUtil";
 const useQuiz = <
   Question extends QuestionData,
   ExpectedAnswer extends QuestionExpectedAnswer,
+  UserAnswer extends QuestionUserAnswer,
 >(
   quizType: QuizType,
   quizId: string,
@@ -94,7 +98,7 @@ const useQuiz = <
     }
   };
 
-  const answerQuiz = async (answerData: any) => {
+  const answerQuiz = async (answerData: UserAnswer) => {
     const { data } = await quizAnswer({
       variables: {
         data: {
@@ -126,6 +130,11 @@ const useQuiz = <
         ? getDefaultExpectedAnswer(quizType)
         : quiz.answerData,
     ),
+    myAnswer: identityUserAnswer<UserAnswer>(
+      isEmptyQuizData(quiz?.myAnswer?.answerData)
+        ? getDefaultUserAnswer(quizType)
+        : quiz.myAnswer.answerData,
+    ),
     quiz,
     upsertLoading,
     cloneLoading,
@@ -141,7 +150,7 @@ const useQuiz = <
 };
 
 export const useWritingQuiz = (quizId: string, pageContentId: string) => {
-  return useQuiz<IWritingQuestion, {}>(
+  return useQuiz<IWritingQuestion, {}, {}>(
     QuizType.WRITING_BLOCK,
     quizId,
     pageContentId,
@@ -149,11 +158,11 @@ export const useWritingQuiz = (quizId: string, pageContentId: string) => {
 };
 
 export const useSingleChoiceQuiz = (quizId: string, pageContentId: string) => {
-  return useQuiz<ISingleChoiceQuestion, ISingleChoiceExpectedAnswer>(
-    QuizType.SINGLE_CHOICE,
-    quizId,
-    pageContentId,
-  );
+  return useQuiz<
+    ISingleChoiceQuestion,
+    ISingleChoiceExpectedAnswer,
+    ISingleChoiceAnswer
+  >(QuizType.SINGLE_CHOICE, quizId, pageContentId);
 };
 
 const isEmptyQuizData = (data: any): boolean => {
@@ -187,6 +196,20 @@ export const getDefaultExpectedAnswer = (
     case QuizType.MULTIPLE_CHOICE:
       return {
         expectedChoices: [],
+      };
+    default:
+      return {};
+  }
+};
+
+export const getDefaultUserAnswer = (
+  quizType: QuizType,
+): QuestionUserAnswer => {
+  switch (quizType) {
+    case QuizType.SINGLE_CHOICE:
+    case QuizType.MULTIPLE_CHOICE:
+      return {
+        choices: [],
       };
     default:
       return {};

@@ -119,22 +119,21 @@ impl Quiz {
 
 #[ComplexObject]
 impl QuizUserAnswer {
-    async fn score(&self, ctx: &Context<'_>) -> Result<f64> {
+    async fn score(&self, ctx: &Context<'_>) -> Option<f64> {
         let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
         let quiz = loader
             .load_one(FindQuiz {
                 quiz_id: self.quiz_id,
             })
-            .await?
-            .ok_or(format!("Not found quiz {}", self.quiz_id))?;
+            .await.ok()??;
         document_quick_allowed_by_page_content(
             ctx,
             quiz.page_content_id,
             DocumentActionPermission::ViewAnswer,
         )
-        .await?;
+        .await.ok()?;
 
-        Ok(self.score)
+        Some(self.score)
     }
 
     async fn single_choice_answer(&self) -> Option<ChoiceUserAnswerData> {

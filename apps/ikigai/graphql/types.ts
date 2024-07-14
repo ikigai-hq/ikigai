@@ -494,10 +494,16 @@ export interface UpsertQuiz_quizUpsert_singleChoiceExpectedAnswer {
   expectedChoices: any[];
 }
 
+export interface UpsertQuiz_quizUpsert_myAnswer_singleChoiceAnswer {
+  choices: any[];
+}
+
 export interface UpsertQuiz_quizUpsert_myAnswer {
   quizId: any;
   userId: number;
   score: number;
+  answerData: any;
+  singleChoiceAnswer: UpsertQuiz_quizUpsert_myAnswer_singleChoiceAnswer | null;
 }
 
 export interface UpsertQuiz_quizUpsert {
@@ -549,10 +555,16 @@ export interface CloneQuiz_quizClone_singleChoiceExpectedAnswer {
   expectedChoices: any[];
 }
 
+export interface CloneQuiz_quizClone_myAnswer_singleChoiceAnswer {
+  choices: any[];
+}
+
 export interface CloneQuiz_quizClone_myAnswer {
   quizId: any;
   userId: number;
   score: number;
+  answerData: any;
+  singleChoiceAnswer: CloneQuiz_quizClone_myAnswer_singleChoiceAnswer | null;
 }
 
 export interface CloneQuiz_quizClone {
@@ -587,10 +599,16 @@ export interface CloneQuizVariables {
 // GraphQL mutation operation: AnswerQuiz
 // ====================================================
 
+export interface AnswerQuiz_quizAnswer_singleChoiceAnswer {
+  choices: any[];
+}
+
 export interface AnswerQuiz_quizAnswer {
   quizId: any;
   userId: number;
   score: number;
+  answerData: any;
+  singleChoiceAnswer: AnswerQuiz_quizAnswer_singleChoiceAnswer | null;
 }
 
 export interface AnswerQuiz {
@@ -1280,10 +1298,16 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singl
   expectedChoices: any[];
 }
 
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer {
+  choices: any[];
+}
+
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer {
   quizId: any;
   userId: number;
   score: number;
+  answerData: any;
+  singleChoiceAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer | null;
 }
 
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes {

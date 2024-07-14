@@ -104,11 +104,12 @@ impl QuizMutation {
         ctx: &Context<'_>,
         mut data: QuizUserAnswer,
     ) -> Result<QuizUserAnswer> {
-        let page = {
+        let (page, quiz) = {
             let mut conn = get_conn_from_ctx(ctx).await?;
             let quiz = Quiz::find(&mut conn, data.quiz_id).format_err()?;
             let page_content = PageContent::find(&mut conn, quiz.page_content_id).format_err()?;
-            Page::find(&mut conn, page_content.page_id).format_err()?
+            let page = Page::find(&mut conn, page_content.page_id).format_err()?;
+            (page, quiz)
         };
         document_quick_authorize(
             ctx,
@@ -118,6 +119,8 @@ impl QuizMutation {
         .await?;
 
         data.user_id = get_user_id_from_ctx(ctx).await?;
+        data.score = try_get_auto_score(quiz.quiz_type, quiz.answer_data, data.answer_data.clone());
+
         let mut conn = get_conn_from_ctx(ctx).await?;
         let quiz_user_answer = QuizUserAnswer::upsert(&mut conn, data).format_err()?;
         Ok(quiz_user_answer)

@@ -168,6 +168,28 @@ impl QuizUserAnswer {
     }
 }
 
+pub fn try_get_auto_score(quiz_type: QuizType, expected_answer: Value, answer: Value) -> f64 {
+    get_auto_store(quiz_type, expected_answer, answer).unwrap_or_default()
+}
+
+pub fn get_auto_store(quiz_type: QuizType, expected_answer: Value, answer: Value) -> Option<f64> {
+    let mut res = 0.0;
+    match quiz_type {
+        QuizType::SingleChoice => {
+            let choice_expected_answer: ChoiceAnswerData = serde_json::from_value(expected_answer).ok()?;
+            let user_answer: ChoiceUserAnswerData = serde_json::from_value(answer).ok()?;
+            if let Some(choice) = user_answer.choices.first() {
+                if choice_expected_answer.expected_choices.contains(choice) {
+                    res = 1.0;
+                }
+            }
+        },
+        _ => (),
+    };
+
+    Some(res)
+}
+
 // Writing Block
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 pub struct WritingQuestionData {

@@ -19,26 +19,26 @@ use crate::helper::{document_quick_allowed_by_page_content, get_user_id_from_ctx
 
 #[ComplexObject]
 impl Quiz {
-    async fn question_data(&self, ctx: &Context<'_>) -> Result<serde_json::Value> {
+    async fn question_data(&self, ctx: &Context<'_>) -> Option<serde_json::Value> {
         document_quick_allowed_by_page_content(
             ctx,
             self.page_content_id,
             DocumentActionPermission::ViewDocument,
         )
-        .await?;
+        .await.ok()?;
 
-        Ok(self.question_data.clone())
+        Some(self.question_data.clone())
     }
 
-    async fn answer_data(&self, ctx: &Context<'_>) -> Result<serde_json::Value> {
+    async fn answer_data(&self, ctx: &Context<'_>) -> Option<serde_json::Value> {
         document_quick_allowed_by_page_content(
             ctx,
             self.page_content_id,
             DocumentActionPermission::ViewAnswer,
         )
-        .await?;
+        .await.ok()?;
 
-        Ok(self.answer_data.clone())
+        Some(self.answer_data.clone())
     }
 
     async fn answers(&self, ctx: &Context<'_>) -> Result<Vec<QuizUserAnswer>> {
@@ -78,42 +78,42 @@ impl Quiz {
     }
 
     async fn writing_question(&self, ctx: &Context<'_>) -> Option<WritingQuestionData> {
-        serde_json::from_value(self.question_data(ctx).await.ok()?).ok()
+        serde_json::from_value(self.question_data(ctx).await.ok()??).ok()
     }
 
     async fn single_choice_question(&self, ctx: &Context<'_>) -> Option<ChoiceQuestionData> {
-        serde_json::from_value(self.question_data(ctx).await.ok()?).ok()
+        serde_json::from_value(self.question_data(ctx).await.ok()??).ok()
     }
 
     async fn single_choice_expected_answer(&self, ctx: &Context<'_>) -> Option<ChoiceAnswerData> {
-        serde_json::from_value(self.answer_data(ctx).await.ok()?).ok()
+        serde_json::from_value(self.answer_data(ctx).await.ok()??).ok()
     }
 
     async fn multiple_choice_question(&self, ctx: &Context<'_>) -> Option<ChoiceQuestionData> {
-        serde_json::from_value(self.question_data(ctx).await.ok()?).ok()
+        serde_json::from_value(self.question_data(ctx).await.ok()??).ok()
     }
 
     async fn multiple_choice_expected_answer(&self, ctx: &Context<'_>) -> Option<ChoiceAnswerData> {
-        serde_json::from_value(self.answer_data(ctx).await.ok()?).ok()
+        serde_json::from_value(self.answer_data(ctx).await.ok()??).ok()
     }
 
     async fn select_option_question(&self, ctx: &Context<'_>) -> Option<SelectQuestionData> {
-        serde_json::from_value(self.question_data(ctx).await.ok()?).ok()
+        serde_json::from_value(self.question_data(ctx).await.ok()??).ok()
     }
 
     async fn select_option_expected_answer(&self, ctx: &Context<'_>) -> Option<SelectAnswerData> {
-        serde_json::from_value(self.answer_data(ctx).await.ok()?).ok()
+        serde_json::from_value(self.answer_data(ctx).await.ok()??).ok()
     }
 
     async fn fill_in_blank_question(&self, ctx: &Context<'_>) -> Option<FillInBlankQuestionData> {
-        serde_json::from_value(self.question_data(ctx).await.ok()?).ok()
+        serde_json::from_value(self.question_data(ctx).await.ok()??).ok()
     }
 
     async fn fill_in_blank_expected_answer(
         &self,
         ctx: &Context<'_>,
     ) -> Option<FillInBlankAnswerData> {
-        serde_json::from_value(self.answer_data(ctx).await.ok()?).ok()
+        serde_json::from_value(self.answer_data(ctx).await.ok()??).ok()
     }
 }
 

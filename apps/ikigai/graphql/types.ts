@@ -505,8 +505,8 @@ export interface UpsertQuiz_quizUpsert {
   pageContentId: any;
   creatorId: number;
   quizType: QuizType;
-  questionData: any;
-  answerData: any;
+  questionData: any | null;
+  answerData: any | null;
   writingQuestion: UpsertQuiz_quizUpsert_writingQuestion | null;
   singleChoiceQuestion: UpsertQuiz_quizUpsert_singleChoiceQuestion | null;
   singleChoiceExpectedAnswer: UpsertQuiz_quizUpsert_singleChoiceExpectedAnswer | null;
@@ -560,8 +560,8 @@ export interface CloneQuiz_quizClone {
   pageContentId: any;
   creatorId: number;
   quizType: QuizType;
-  questionData: any;
-  answerData: any;
+  questionData: any | null;
+  answerData: any | null;
   writingQuestion: CloneQuiz_quizClone_writingQuestion | null;
   singleChoiceQuestion: CloneQuiz_quizClone_singleChoiceQuestion | null;
   singleChoiceExpectedAnswer: CloneQuiz_quizClone_singleChoiceExpectedAnswer | null;
@@ -1291,8 +1291,8 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes {
   pageContentId: any;
   creatorId: number;
   quizType: QuizType;
-  questionData: any;
-  answerData: any;
+  questionData: any | null;
+  answerData: any | null;
   writingQuestion: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_writingQuestion | null;
   singleChoiceQuestion: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceQuestion | null;
   singleChoiceExpectedAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceExpectedAnswer | null;

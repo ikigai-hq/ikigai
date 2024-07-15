@@ -17,7 +17,7 @@ msgstr ""
 msgid "{0} focus mode"
 msgstr "{0} focus mode"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:94
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:100
 msgid "{0} students"
 msgstr "{0} students"
 
@@ -66,6 +66,10 @@ msgstr "Add criteria"
 msgid "Add level"
 msgstr "Add level"
 
+#: components/Editor/Extensions/QuizBlock/ChoiceBlock/ChoiceSeting.tsx:180
+msgid "Add option"
+msgstr "Add option"
+
 #: components/Document/RightSide/EditContentSidebar/PageTabContent.tsx:98
 #~ msgid "Add page"
 #~ msgstr "Add page"
@@ -74,6 +78,10 @@ msgstr "Add level"
 #: components/Document/DocumentBody/CoverPage/FolderCoverPageBody.tsx:73
 #~ msgid "Add sub content"
 #~ msgstr "Add sub content"
+
+#: components/Editor/Extensions/QuizBlock/ChoiceBlock/ChoiceSeting.tsx:137
+msgid "Answer Options"
+msgstr "Answer Options"
 
 #: components/SpaceSetting/MemberSpaceSetting.tsx:92
 msgid "Are you sure to remove {0}?"
@@ -87,22 +95,23 @@ msgstr "Are you sure to remove this invite token?"
 msgid "Are you sure? This rubric will no longer be accessible."
 msgstr "Are you sure? This rubric will no longer be accessible."
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:90
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:115
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:128
 msgid "Assign"
 msgstr "Assign"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:102
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:248
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:129
+msgid "Assign assignment"
+msgstr "Assign assignment"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:262
 msgid "Assign at"
 msgstr "Assign at"
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:93
-msgid "Assign to students"
-msgstr "Assign to students"
+#~ msgid "Assign to students"
+#~ msgstr "Assign to students"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:65
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:69
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:75
 msgid "Assigned!"
 msgstr "Assigned!"
 
@@ -138,11 +147,11 @@ msgstr "Back to home"
 #~ msgid "Back to space"
 #~ msgstr "Back to space"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:155
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:174
 msgid "Bold"
 msgstr "Bold"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:354
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:373
 msgid "Bullet list"
 msgstr "Bullet list"
 
@@ -162,9 +171,13 @@ msgstr "Cannot get credentials from google. Please try again!"
 msgid "Cannot signin with google."
 msgstr "Cannot signin with google."
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:401
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:420
 msgid "Center"
 msgstr "Center"
+
+#: components/Editor/Extensions/QuizBlock/ChoiceBlock/ChoiceSeting.tsx:141
+msgid "Checked option is correct option"
+msgstr "Checked option is correct option"
 
 #: components/Document/LeftSide/ManageSpace.tsx:124
 msgid "Click item in the list to switch space"
@@ -175,7 +188,7 @@ msgstr "Click item in the list to switch space"
 #~ msgid "Click or drag file to this area to upload"
 #~ msgstr "Click or drag file to this area to upload"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:199
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:218
 msgid "Code"
 msgstr "Code"
 
@@ -225,6 +238,11 @@ msgstr "Created! We're moving you to your new space"
 msgid "Criteria"
 msgstr "Criteria"
 
+#: components/Editor/Extensions/QuizBlock/MultipleChoiceBlock/MultipleChoiceSetting.tsx:25
+#: components/Editor/Extensions/QuizBlock/SingleChoiceBlock/SingleChoiceSetting.tsx:25
+msgid "Declare your question, options, and then choose the correct answer."
+msgstr "Declare your question, options, and then choose the correct answer."
+
 #: components/Document/DocumentHeader/Menubar/index.tsx:167
 msgid "Delete"
 msgstr "Delete"
@@ -233,7 +251,7 @@ msgstr "Delete"
 msgid "Delete {0}!"
 msgstr "Delete {0}!"
 
-#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:103
+#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:110
 msgid "Delete page {innerTitle}!"
 msgstr "Delete page {innerTitle}!"
 
@@ -288,7 +306,7 @@ msgstr "Duplicated!"
 #~ msgid "Edit Cover"
 #~ msgstr "Edit Cover"
 
-#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:78
+#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:85
 msgid "Edit Page"
 msgstr "Edit Page"
 
@@ -344,7 +362,7 @@ msgstr "Feedback at"
 msgid "Feedback successfully!"
 msgstr "Feedback successfully!"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:465
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:515
 msgid "File Upload"
 msgstr "File Upload"
 
@@ -401,19 +419,19 @@ msgstr "Grade Method"
 msgid "Grading"
 msgstr "Grading"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:309
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:328
 msgid "Heading 1"
 msgstr "Heading 1"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:319
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:338
 msgid "Heading 2"
 msgstr "Heading 2"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:329
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:348
 msgid "Heading 3"
 msgstr "Heading 3"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:257
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:276
 msgid "Highlight text"
 msgstr "Highlight text"
 
@@ -427,13 +445,13 @@ msgstr "Highlight text"
 #~ msgid "In manual mode, students will receive their grades and results only after the teacher has provided feedback."
 #~ msgstr "In manual mode, students will receive their grades and results only after the teacher has provided feedback."
 
-#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:66
+#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:73
 msgid "Information"
 msgstr "Information"
 
 #: components/Editor/Extensions/WritingBlock/WritingBlockComponent.tsx:171
-msgid "Initializing..."
-msgstr "Initializing..."
+#~ msgid "Initializing..."
+#~ msgstr "Initializing..."
 
 #: components/IdentityInput/index.tsx:42
 #~ msgid "Invalid email"
@@ -471,7 +489,7 @@ msgstr "Inviting role"
 msgid "It will delete children files if this is folder."
 msgstr "It will delete children files if this is folder."
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:166
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:185
 msgid "Italic"
 msgstr "Italic"
 
@@ -495,7 +513,7 @@ msgstr "Joined! We're moving you to the space!"
 msgid "Last name"
 msgstr "Last name"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:391
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:410
 msgid "Left"
 msgstr "Left"
 
@@ -540,7 +558,7 @@ msgstr "Members"
 msgid "minutes"
 msgstr "minutes"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:456
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:506
 msgid "More Tools"
 msgstr "More Tools"
 
@@ -548,13 +566,20 @@ msgstr "More Tools"
 #~ msgid "Moved to submission space!"
 #~ msgstr "Moved to submission space!"
 
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:471
+msgid "Multiple Choice Quiz"
+msgstr "Multiple Choice Quiz"
+
+#: components/Editor/Extensions/QuizBlock/MultipleChoiceBlock/MultipleChoiceSetting.tsx:24
+msgid "Multiple Choice Setting"
+msgstr "Multiple Choice Setting"
+
 #: components/Document/LeftSide/ManageSpace.tsx:96
 msgid "My Spaces"
 msgstr "My Spaces"
 
-#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:82
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:99
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:245
+#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:89
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:259
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:113
 #: components/SpaceSetting/MemberSpaceSetting.tsx:27
 msgid "Name"
@@ -609,7 +634,7 @@ msgstr "Not set"
 msgid "Not submitted"
 msgstr "Not submitted"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:364
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:383
 msgid "Number list"
 msgstr "Number list"
 
@@ -656,7 +681,11 @@ msgstr "Private folder"
 msgid "Profile"
 msgstr "Profile"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:424
+#: components/Editor/Extensions/QuizBlock/ChoiceBlock/ChoiceSeting.tsx:127
+msgid "Question"
+msgstr "Question"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:488
 msgid "Quote"
 msgstr "Quote"
 
@@ -668,8 +697,7 @@ msgstr "Remove"
 msgid "Remove {0}"
 msgstr "Remove {0}"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:119
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:265
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:279
 msgid "Remove assignee {0}!"
 msgstr "Remove assignee {0}!"
 
@@ -689,8 +717,7 @@ msgstr "Remove member"
 #~ msgid "Remove page"
 #~ msgstr "Remove page"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:79
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:237
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:251
 #: components/SpaceSetting/MemberSpaceSetting.tsx:81
 msgid "Removed!"
 msgstr "Removed!"
@@ -699,7 +726,7 @@ msgstr "Removed!"
 msgid "Review and feedback last submission"
 msgstr "Review and feedback last submission"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:411
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:430
 msgid "Right"
 msgstr "Right"
 
@@ -738,6 +765,7 @@ msgstr ""
 #~ msgid "Rubrics consist of rows and columns. The rows correspond to the criteria. The columns correspond to the level of achievement that describes each criterion."
 #~ msgstr "Rubrics consist of rows and columns. The rows correspond to the criteria. The columns correspond to the level of achievement that describes each criterion."
 
+#: components/Editor/Extensions/QuizBlock/ChoiceBlock/ChoiceSeting.tsx:66
 #: components/Rubric/index.tsx:464
 msgid "Save"
 msgstr "Save"
@@ -745,6 +773,10 @@ msgstr "Save"
 #: components/Document/DocumentHeader/SubmissionHeader/index.tsx:106
 msgid "Save & Exit"
 msgstr "Save & Exit"
+
+#: components/Editor/Extensions/QuizBlock/ChoiceBlock/ChoiceSeting.tsx:48
+msgid "Saved!"
+msgstr "Saved!"
 
 #: components/Document/DocumentHeader/index.tsx:57
 msgid "Saving..."
@@ -761,6 +793,14 @@ msgstr "Sent. Please check your email inbox!"
 #: components/Document/DocumentHeader/Menubar/index.tsx:153
 msgid "Share"
 msgstr "Share"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:457
+msgid "Single Choice Quiz"
+msgstr "Single Choice Quiz"
+
+#: components/Editor/Extensions/QuizBlock/SingleChoiceBlock/SingleChoiceSetting.tsx:24
+msgid "Single Choice Setting"
+msgstr "Single Choice Setting"
 
 #: components/Document/RightSide/EditContentSidebar/PageTabContent.tsx:80
 #~ msgid "Single page"
@@ -809,7 +849,7 @@ msgstr "Start at"
 msgid "Status"
 msgstr "Status"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:188
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:207
 msgid "Strike through"
 msgstr "Strike through"
 
@@ -871,15 +911,25 @@ msgstr "Test duration"
 #~ msgid "Test Duration"
 #~ msgstr "Test Duration"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:211
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:230
 msgid "Text color"
 msgstr "Text color"
+
+#: components/Editor/Extensions/QuizBlock/MultipleChoiceBlock/ReviewMultipleChoice.tsx:56
+#: components/Editor/Extensions/QuizBlock/SingleChoiceBlock/ReviewSingleChoice.tsx:56
+msgid "The answer is correct!"
+msgstr "The answer is correct!"
+
+#: components/Editor/Extensions/QuizBlock/MultipleChoiceBlock/ReviewMultipleChoice.tsx:61
+#: components/Editor/Extensions/QuizBlock/SingleChoiceBlock/ReviewSingleChoice.tsx:61
+msgid "The answer is incorrect! Correct answer is <0>{explainAnswer}</0>"
+msgstr "The answer is incorrect! Correct answer is <0>{explainAnswer}</0>"
 
 #: components/Document/DocumentHeader/SubmissionHeader/index.tsx:143
 msgid "The test duration is complete!"
 msgstr "The test duration is complete!"
 
-#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:104
+#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:111
 msgid "This action cannot revert, do you want to delete this page?"
 msgstr "This action cannot revert, do you want to delete this page?"
 
@@ -888,8 +938,7 @@ msgstr "This action cannot revert, do you want to delete this page?"
 msgid "This action cannot revert!"
 msgstr "This action cannot revert!"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:120
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:266
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:280
 msgid "This action cannot revert. Do you want to remove this assignee?"
 msgstr "This action cannot revert. Do you want to remove this assignee?"
 
@@ -906,7 +955,7 @@ msgstr "times"
 msgid "To point"
 msgstr "To point"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:374
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:393
 msgid "Todo list"
 msgstr "Todo list"
 
@@ -934,12 +983,15 @@ msgstr "Type maximum attempt number..."
 msgid "Type minutes number..."
 msgstr "Type minutes number..."
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/Assignees.tsx:190
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:201
+#: components/Editor/Extensions/QuizBlock/ChoiceBlock/ChoiceSeting.tsx:160
+msgid "Type option"
+msgstr "Type option"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:215
 msgid "Type or paste emails, separate by space or comma"
 msgstr "Type or paste emails, separate by space or comma"
 
-#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:85
+#: components/Document/DocumentBody/BottomPageList/PageItem.tsx:92
 msgid "Type page name"
 msgstr "Type page name"
 
@@ -960,6 +1012,10 @@ msgstr "Type your email!"
 msgid "Type your feedback..."
 msgstr "Type your feedback..."
 
+#: components/Editor/Extensions/QuizBlock/ChoiceBlock/ChoiceSeting.tsx:132
+msgid "Type your question..."
+msgstr "Type your question..."
+
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/index.tsx:62
 msgid "Typing assignment description or guide..."
 msgstr "Typing assignment description or guide..."
@@ -968,7 +1024,7 @@ msgstr "Typing assignment description or guide..."
 #~ msgid "Typing assignment description..."
 #~ msgstr "Typing assignment description..."
 
-#: components/Editor/index.tsx:48
+#: components/Editor/index.tsx:50
 msgid "Typing content here..."
 msgstr "Typing content here..."
 
@@ -984,7 +1040,7 @@ msgstr "Typing level"
 msgid "Typing your description"
 msgstr "Typing your description"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:177
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:196
 msgid "Underline"
 msgstr "Underline"
 
@@ -1055,8 +1111,8 @@ msgstr "View all submissions of {0}"
 #~ msgstr "View and Edit"
 
 #: components/Document/DocumentHeader/SubmissionHeader/HeaderSubmissionUserInfo.tsx:37
-msgid "View other students"
-msgstr "View other students"
+#~ msgid "View other students"
+#~ msgstr "View other students"
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/StudentSubmissionList.tsx:90
 #~ msgid "View submission"
@@ -1066,13 +1122,17 @@ msgstr "View other students"
 msgid "We will move you back to assignment page!"
 msgstr "We will move you back to assignment page!"
 
-#: components/Editor/Extensions/WritingBlock/WritingBlockComponent.tsx:210
+#: components/Editor/Extensions/QuizBlock/WritingBlock/WritingBlockComponent.tsx:56
 msgid "Writing here..."
 msgstr "Writing here..."
 
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:443
+msgid "Writing Quiz"
+msgstr "Writing Quiz"
+
 #: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:435
-msgid "Writing Quizz"
-msgstr "Writing Quizz"
+#~ msgid "Writing Quizz"
+#~ msgstr "Writing Quizz"
 
 #: components/MagicLink/index.tsx:43
 #: components/PreJoinSpace.tsx:31

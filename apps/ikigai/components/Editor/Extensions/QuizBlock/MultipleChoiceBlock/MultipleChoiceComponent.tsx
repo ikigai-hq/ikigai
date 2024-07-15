@@ -4,16 +4,16 @@ import { useState } from "react";
 import { DocumentActionPermission, QuizType, Role } from "graphql/types";
 import QuizBlockWrapper from "../QuizBlockWrapper";
 import usePermission from "hook/UsePermission";
-import { QuizComponentProps } from "../type";
-import SingleChoiceSetting from "./SingleChoiceSetting";
-import useAuthUserStore from "store/AuthStore";
-import useDocumentStore from "store/DocumentStore";
-import DoingSingleChoice from "./DoingSingleChoice";
-import ReviewSingleChoice from "./ReviewSingleChoice";
 import { isEmptyUuid } from "util/FileUtil";
 import { useOrderedQuizzes } from "hook/UseQuiz";
+import { QuizComponentProps } from "../type";
+import useAuthUserStore from "store/AuthStore";
+import useDocumentStore from "store/DocumentStore";
+import DoingMultipleChoice from "./DoingMultipleChoice";
+import MultipleChoiceSetting from "./MultipleChoiceSetting";
+import ReviewMultipleChoice from "./ReviewMultipleChoice";
 
-const SingleChoiceBlockComponent = (props: NodeViewProps) => {
+const MultipleChoiceBlockComponent = (props: NodeViewProps) => {
   const { getQuizIndex } = useOrderedQuizzes();
   const allow = usePermission();
   const pageContentId = props.extension.options.pageContentId;
@@ -23,19 +23,19 @@ const SingleChoiceBlockComponent = (props: NodeViewProps) => {
 
   return (
     <QuizBlockWrapper
-      quizType={QuizType.SINGLE_CHOICE}
+      quizType={QuizType.MULTIPLE_CHOICE}
       nodeViewProps={props}
       showSetting={
         props.selected && allow(DocumentActionPermission.EDIT_DOCUMENT)
       }
       onClickSetting={() => setShowSetting(!showSetting)}
     >
-      <SingleChoice
+      <MultipleChoice
         parentContentId={pageContentId}
         quizId={quizId}
         quizIndex={quizIndex}
       />
-      <SingleChoiceSetting
+      <MultipleChoiceSetting
         parentContentId={pageContentId}
         quizId={quizId}
         showSetting={showSetting}
@@ -45,7 +45,7 @@ const SingleChoiceBlockComponent = (props: NodeViewProps) => {
   );
 };
 
-export const SingleChoice = (props: QuizComponentProps) => {
+export const MultipleChoice = (props: QuizComponentProps) => {
   const role = useAuthUserStore((state) => state.role);
   const document = useDocumentStore((state) => state.activeDocument);
   const isSubmission = !!document.submission;
@@ -53,16 +53,16 @@ export const SingleChoice = (props: QuizComponentProps) => {
   const isStudent = role === Role.STUDENT;
 
   if (isStudent && isDoingSubmission) {
-    return <DoingSingleChoice {...props} />;
+    return <DoingMultipleChoice {...props} />;
   }
 
   if (isSubmission) {
     return (
-      <ReviewSingleChoice userId={document.submission.user.id} {...props} />
+      <ReviewMultipleChoice {...props} userId={document.submission.user.id} />
     );
   }
 
-  return <DoingSingleChoice {...props} />;
+  return <DoingMultipleChoice {...props} />;
 };
 
-export default SingleChoiceBlockComponent;
+export default MultipleChoiceBlockComponent;

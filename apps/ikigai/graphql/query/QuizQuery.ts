@@ -1,6 +1,9 @@
 import { gql } from "@apollo/client";
 
+import { QUIZ_FIELDS } from "../fragment/QuizFragment";
+
 export const GET_DOCUMENT_QUIZZES = gql`
+  ${QUIZ_FIELDS}
   query GetDocumentQuizzes($documentId: UUID!) {
     documentGet(documentId: $documentId) {
       id
@@ -9,43 +12,7 @@ export const GET_DOCUMENT_QUIZZES = gql`
         pageContents {
           id
           quizzes {
-            id
-            pageContentId
-            creatorId
-            quizType
-            questionData
-            answerData
-            writingQuestion {
-              content
-            }
-            singleChoiceQuestion {
-              question
-              options {
-                id
-                content
-              }
-            }
-            singleChoiceExpectedAnswer {
-              expectedChoices
-            }
-            myAnswer {
-              quizId
-              userId
-              score
-              answerData
-              singleChoiceAnswer {
-                choices
-              }
-            }
-            answers {
-              quizId
-              userId
-              score
-              answerData
-              singleChoiceAnswer {
-                choices
-              }
-            }
+            ...CoreQuizFields
           }
         }
       }

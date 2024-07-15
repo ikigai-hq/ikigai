@@ -19,6 +19,7 @@ import FileHandler from "./Extensions/FileHandler";
 import WritingBlock from "./Extensions/QuizBlock/WritingBlock";
 import BaseEditor, { useIkigaiEditor } from "./BaseEditor";
 import SingleChoiceBlock from "./Extensions/QuizBlock/SingleChoiceBlock";
+import MultipleChoiceBlock from "./Extensions/QuizBlock/MultipleChoiceBlock";
 
 export type EditorProps = {
   readOnly: boolean;
@@ -78,6 +79,9 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
         pageContentId: pageContent.id,
       }),
       SingleChoiceBlock.configure({
+        pageContentId: pageContent.id,
+      }),
+      MultipleChoiceBlock.configure({
         pageContentId: pageContent.id,
       }),
     ],

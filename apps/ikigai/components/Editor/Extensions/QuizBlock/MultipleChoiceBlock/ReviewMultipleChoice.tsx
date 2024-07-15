@@ -1,19 +1,19 @@
-import { RadioGroup, Separator, Strong, Text } from "@radix-ui/themes";
+import { CheckboxGroup, Separator, Strong, Text } from "@radix-ui/themes";
 import { Trans } from "@lingui/macro";
 
-import { useSingleChoiceQuiz } from "hook/UseQuiz";
+import { useMultipleChoiceQuiz } from "hook/UseQuiz";
 import { QuizComponentProps } from "../type";
 import usePermission from "hook/UsePermission";
 import { DocumentActionPermission } from "graphql/types";
 import { ChoiceWrapper } from "../ChoiceBlock/ChoiceWrapper";
 
-export type ReviewSingleChoiceProps = QuizComponentProps & {
+export type ReviewMultipleChoiceProps = QuizComponentProps & {
   userId: number;
 };
 
-const ReviewSingleChoice = (props: ReviewSingleChoiceProps) => {
+const ReviewMultipleChoice = (props: ReviewMultipleChoiceProps) => {
   const allow = usePermission();
-  const { questionData, quiz, answerData } = useSingleChoiceQuiz(
+  const { questionData, quiz, answerData } = useMultipleChoiceQuiz(
     props.quizId,
     props.parentContentId,
   );
@@ -21,9 +21,9 @@ const ReviewSingleChoice = (props: ReviewSingleChoiceProps) => {
   const answer = quiz?.answers?.find(
     (answer) => answer.userId === props.userId,
   );
-  const choice = answer?.singleChoiceAnswer
-    ? answer.singleChoiceAnswer.choices[0]
-    : null;
+  const choices = answer?.multipleChoiceAnswer
+    ? answer.multipleChoiceAnswer.choices
+    : [];
 
   const isCorrect = !!answer?.score;
   const color = !allow(DocumentActionPermission.VIEW_ANSWER)
@@ -44,13 +44,13 @@ const ReviewSingleChoice = (props: ReviewSingleChoiceProps) => {
         Q.{props.quizIndex + 1}: {questionData.question}
       </Text>
       <Separator style={{ width: "100%", marginTop: 5, marginBottom: 5 }} />
-      <RadioGroup.Root variant="soft" value={choice} color={color}>
+      <CheckboxGroup.Root variant="soft" value={choices} color={color}>
         {questionData.options.map((option) => (
-          <RadioGroup.Item key={option.id} value={option.id}>
+          <CheckboxGroup.Item key={option.id} value={option.id}>
             {option.content}
-          </RadioGroup.Item>
+          </CheckboxGroup.Item>
         ))}
-      </RadioGroup.Root>
+      </CheckboxGroup.Root>
       {allow(DocumentActionPermission.VIEW_ANSWER) && isCorrect && (
         <Text color="green" size="2">
           <Trans>The answer is correct!</Trans>
@@ -68,4 +68,4 @@ const ReviewSingleChoice = (props: ReviewSingleChoiceProps) => {
   );
 };
 
-export default ReviewSingleChoice;
+export default ReviewMultipleChoice;

@@ -7,6 +7,9 @@ import useQuizStore, {
   identityExpectedAnswer,
   identityQuestionData,
   identityUserAnswer,
+  IMultipleChoiceAnswer,
+  IMultipleChoiceExpectedAnswer,
+  IMultipleChoiceQuestion,
   IQuiz,
   ISingleChoiceAnswer,
   ISingleChoiceExpectedAnswer,
@@ -119,9 +122,9 @@ const useQuiz = <
   };
 
   const { run: debounceUpsertQuiz, cancel: cancelDebounceUpsertQuiz } =
-    useDebounceFn(upsertQuiz, { wait: 200, maxWait: 2000 });
+    useDebounceFn(upsertQuiz, { wait: 100, maxWait: 1000 });
   const { run: debounceAnswerQuiz, cancel: cancelDebounceAnswerQuiz } =
-    useDebounceFn(answerQuiz, { wait: 200, maxWait: 2000 });
+    useDebounceFn(answerQuiz, { wait: 100, maxWait: 1000 });
 
   return {
     questionData: identityQuestionData<Question>(
@@ -167,6 +170,17 @@ export const useSingleChoiceQuiz = (quizId: string, pageContentId: string) => {
     ISingleChoiceExpectedAnswer,
     ISingleChoiceAnswer
   >(QuizType.SINGLE_CHOICE, quizId, pageContentId);
+};
+
+export const useMultipleChoiceQuiz = (
+  quizId: string,
+  pageContentId: string,
+) => {
+  return useQuiz<
+    IMultipleChoiceQuestion,
+    IMultipleChoiceExpectedAnswer,
+    IMultipleChoiceAnswer
+  >(QuizType.MULTIPLE_CHOICE, quizId, pageContentId);
 };
 
 const isEmptyQuizData = (data: any): boolean => {

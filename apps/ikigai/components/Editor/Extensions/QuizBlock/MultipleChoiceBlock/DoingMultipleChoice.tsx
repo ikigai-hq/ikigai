@@ -1,43 +1,43 @@
-import { Code, RadioGroup, Separator, Text } from "@radix-ui/themes";
+import { CheckboxGroup, Code, Separator, Text } from "@radix-ui/themes";
 
 import { DocumentActionPermission } from "graphql/types";
 import { QuizComponentProps } from "../type";
 import usePermission from "hook/UsePermission";
-import { useSingleChoiceQuiz } from "hook/UseQuiz";
+import { useMultipleChoiceQuiz } from "hook/UseQuiz";
 import { ChoiceWrapper } from "../ChoiceBlock/ChoiceWrapper";
 
-const DoingSingleChoice = (props: QuizComponentProps) => {
+const DoingMultipleChoice = (props: QuizComponentProps) => {
   const allow = usePermission();
-  const { questionData, myAnswer, debounceAnswerQuiz } = useSingleChoiceQuiz(
+  const { questionData, myAnswer, debounceAnswerQuiz } = useMultipleChoiceQuiz(
     props.quizId,
     props.parentContentId,
   );
 
-  const onChange = (choice: string) => {
-    debounceAnswerQuiz({ choices: [choice] });
+  const onChange = (choices: string[]) => {
+    debounceAnswerQuiz({ choices });
   };
 
-  const choice = myAnswer?.choices ? myAnswer.choices[0] : undefined;
+  const choices = myAnswer?.choices || [];
   return (
     <ChoiceWrapper>
       <Text weight="medium">
         <Code>Q.{props.quizIndex + 1}</Code> {questionData.question}
       </Text>
       <Separator style={{ width: "100%", marginTop: 5, marginBottom: 5 }} />
-      <RadioGroup.Root
+      <CheckboxGroup.Root
         variant="soft"
         onValueChange={onChange}
-        value={choice}
+        value={choices}
         disabled={!allow(DocumentActionPermission.INTERACTIVE_WITH_TOOL)}
       >
         {questionData.options.map((option) => (
-          <RadioGroup.Item key={option.id} value={option.id}>
+          <CheckboxGroup.Item key={option.id} value={option.id}>
             {option.content}
-          </RadioGroup.Item>
+          </CheckboxGroup.Item>
         ))}
-      </RadioGroup.Root>
+      </CheckboxGroup.Root>
     </ChoiceWrapper>
   );
 };
 
-export default DoingSingleChoice;
+export default DoingMultipleChoice;

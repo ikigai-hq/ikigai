@@ -1,50 +1,18 @@
 import { gql } from "@apollo/client";
 
+import { QUIZ_FIELDS, QUIZ_USER_ANSWER_FIELDS } from "../fragment/QuizFragment";
+
 export const UPSERT_QUIZ = gql`
+  ${QUIZ_FIELDS}
   mutation UpsertQuiz($pageContentId: UUID!, $data: QuizInput!) {
     quizUpsert(pageContentId: $pageContentId, data: $data) {
-      id
-      pageContentId
-      creatorId
-      quizType
-      questionData
-      answerData
-      writingQuestion {
-        content
-      }
-      singleChoiceQuestion {
-        question
-        options {
-          id
-          content
-        }
-      }
-      singleChoiceExpectedAnswer {
-        expectedChoices
-      }
-      myAnswer {
-        quizId
-        userId
-        score
-        answerData
-        singleChoiceAnswer {
-          choices
-        }
-      }
-      answers {
-        quizId
-        userId
-        score
-        answerData
-        singleChoiceAnswer {
-          choices
-        }
-      }
+      ...CoreQuizFields
     }
   }
 `;
 
 export const CLONE_QUIZ = gql`
+  ${QUIZ_FIELDS}
   mutation CloneQuiz(
     $quizId: UUID!
     $newQuizId: UUID!
@@ -55,57 +23,16 @@ export const CLONE_QUIZ = gql`
       newQuizId: $newQuizId
       newPageContentId: $newPageContentId
     ) {
-      id
-      pageContentId
-      creatorId
-      quizType
-      questionData
-      answerData
-      writingQuestion {
-        content
-      }
-      singleChoiceQuestion {
-        question
-        options {
-          id
-          content
-        }
-      }
-      singleChoiceExpectedAnswer {
-        expectedChoices
-      }
-      myAnswer {
-        quizId
-        userId
-        score
-        answerData
-        singleChoiceAnswer {
-          choices
-        }
-      }
-      answers {
-        quizId
-        userId
-        score
-        answerData
-        singleChoiceAnswer {
-          choices
-        }
-      }
+      ...CoreQuizFields
     }
   }
 `;
 
 export const ANSWER_QUIZ = gql`
+  ${QUIZ_USER_ANSWER_FIELDS}
   mutation AnswerQuiz($data: QuizUserAnswerInput!) {
     quizAnswer(data: $data) {
-      quizId
-      userId
-      score
-      answerData
-      singleChoiceAnswer {
-        choices
-      }
+      ...CoreQuizUserAnswerFields
     }
   }
 `;

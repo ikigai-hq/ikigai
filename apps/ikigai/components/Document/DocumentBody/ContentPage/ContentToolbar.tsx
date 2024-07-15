@@ -6,7 +6,9 @@ import {
   IconAlignRight,
   IconBlockquote,
   IconBold,
+  IconBoxMultiple,
   IconCode,
+  IconCopyCheck,
   IconFileUpload,
   IconGradienter,
   IconH1,
@@ -32,6 +34,7 @@ import { WRITING_BLOCK_NAME } from "components/Editor/Extensions/QuizBlock/Writi
 import { hasExtension } from "util/ExtensionUtil";
 import { FILE_HANDLER_NAME } from "components/Editor/Extensions/FileHandler";
 import { SINGLE_CHOICE_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/SingleChoiceBlock";
+import { MULTIPLE_CHOICE_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/MultipleChoiceBlock";
 
 const ContentToolbar = () => {
   const activeEditor = useEditorStore((state) => state.activeEditor);
@@ -153,6 +156,15 @@ const ContentToolbar = () => {
     if (!activeEditor || !hasExtension(activeEditor, SINGLE_CHOICE_BLOCK_NAME))
       return;
     activeEditor.chain().focus().insertSingleChoice().run();
+  };
+
+  const onInsertMultipleChoice = () => {
+    if (
+      !activeEditor ||
+      !hasExtension(activeEditor, MULTIPLE_CHOICE_BLOCK_NAME)
+    )
+      return;
+    activeEditor.chain().focus().insertMultipleChoice().run();
   };
 
   return (
@@ -427,18 +439,7 @@ const ContentToolbar = () => {
           </Tooltip>
         </Toolbar.ToggleGroup>
         <Toolbar.Separator className="ToolbarSeparator" />
-        <Toolbar.ToggleGroup type="multiple" aria-label="Other Blocks">
-          <Tooltip content={t`Quote`}>
-            <Toolbar.ToggleItem
-              className="ToolbarToggleItem"
-              value="blockquote"
-              aria-label="Block Quote"
-              data-state={toolbarOptions?.blockquote ? "on" : "off"}
-              onClick={onChangeBlockquote}
-            >
-              <IconBlockquote size={20} stroke={2} />
-            </Toolbar.ToggleItem>
-          </Tooltip>
+        <Toolbar.ToggleGroup type="multiple" aria-label="Quiz Blocks">
           <Tooltip content={t`Writing Quiz`}>
             <Toolbar.ToolbarButton
               className="ToolbarToggleItem"
@@ -457,7 +458,7 @@ const ContentToolbar = () => {
             <Toolbar.ToolbarButton
               className="ToolbarToggleItem"
               value="singleChoice"
-              aria-label="Singel Choice"
+              aria-label="Single Choice"
               disabled={
                 activeEditor?.isActive(SINGLE_CHOICE_BLOCK_NAME) ||
                 !hasExtension(activeEditor, SINGLE_CHOICE_BLOCK_NAME)
@@ -466,6 +467,34 @@ const ContentToolbar = () => {
             >
               <IconGradienter size={20} stroke={2} />
             </Toolbar.ToolbarButton>
+          </Tooltip>
+          <Tooltip content={t`Multiple Choice Quiz`}>
+            <Toolbar.ToolbarButton
+              className="ToolbarToggleItem"
+              value="multipleChoice"
+              aria-label="Multiple Choice"
+              disabled={
+                activeEditor?.isActive(MULTIPLE_CHOICE_BLOCK_NAME) ||
+                !hasExtension(activeEditor, MULTIPLE_CHOICE_BLOCK_NAME)
+              }
+              onClick={onInsertMultipleChoice}
+            >
+              <IconCopyCheck size={20} stroke={2} />
+            </Toolbar.ToolbarButton>
+          </Tooltip>
+        </Toolbar.ToggleGroup>
+        <Toolbar.Separator className="ToolbarSeparator" />
+        <Toolbar.ToggleGroup type="multiple" aria-label="Other Blocks">
+          <Tooltip content={t`Quote`}>
+            <Toolbar.ToggleItem
+              className="ToolbarToggleItem"
+              value="blockquote"
+              aria-label="Block Quote"
+              data-state={toolbarOptions?.blockquote ? "on" : "off"}
+              onClick={onChangeBlockquote}
+            >
+              <IconBlockquote size={20} stroke={2} />
+            </Toolbar.ToggleItem>
           </Tooltip>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>

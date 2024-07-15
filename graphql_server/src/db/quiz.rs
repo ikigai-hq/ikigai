@@ -200,15 +200,15 @@ pub fn get_auto_store(quiz_type: QuizType, expected_answer: Value, answer: Value
                 serde_json::from_value(expected_answer).ok()?;
             let user_answer: ChoiceUserAnswerData = serde_json::from_value(answer).ok()?;
 
+            if choice_expected_answer.expected_choices.is_empty() {
+                return Some(0.0);
+            }
+
             let has_incorrect_choice = user_answer
                 .choices
                 .iter()
                 .any(|choice| !choice_expected_answer.expected_choices.contains(choice));
             if has_incorrect_choice {
-                return Some(0.0);
-            }
-
-            if choice_expected_answer.expected_choices.is_empty() {
                 return Some(0.0);
             }
 

@@ -2,6 +2,9 @@ import create from "zustand";
 
 import {
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes,
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceExpectedAnswer,
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceQuestion,
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_multipleChoiceAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceExpectedAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceQuestion,
@@ -21,9 +24,26 @@ export type ISingleChoiceExpectedAnswer =
 export type ISingleChoiceAnswer =
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer;
 
-export type QuestionData = IWritingQuestion | ISingleChoiceQuestion | {};
-export type QuestionExpectedAnswer = ISingleChoiceExpectedAnswer | {};
-export type QuestionUserAnswer = ISingleChoiceAnswer | {};
+export type IMultipleChoiceQuestion =
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceQuestion;
+export type IMultipleChoiceExpectedAnswer =
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceExpectedAnswer;
+export type IMultipleChoiceAnswer =
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_multipleChoiceAnswer;
+
+export type QuestionData =
+  | IWritingQuestion
+  | ISingleChoiceQuestion
+  | IMultipleChoiceQuestion
+  | {};
+export type QuestionExpectedAnswer =
+  | ISingleChoiceExpectedAnswer
+  | IMultipleChoiceExpectedAnswer
+  | {};
+export type QuestionUserAnswer =
+  | ISingleChoiceAnswer
+  | IMultipleChoiceAnswer
+  | {};
 
 export type IQuizStore = {
   quizzes: IQuiz[];

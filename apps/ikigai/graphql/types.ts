@@ -494,7 +494,25 @@ export interface UpsertQuiz_quizUpsert_singleChoiceExpectedAnswer {
   expectedChoices: any[];
 }
 
+export interface UpsertQuiz_quizUpsert_multipleChoiceQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface UpsertQuiz_quizUpsert_multipleChoiceQuestion {
+  question: string;
+  options: UpsertQuiz_quizUpsert_multipleChoiceQuestion_options[];
+}
+
+export interface UpsertQuiz_quizUpsert_multipleChoiceExpectedAnswer {
+  expectedChoices: any[];
+}
+
 export interface UpsertQuiz_quizUpsert_myAnswer_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface UpsertQuiz_quizUpsert_myAnswer_multipleChoiceAnswer {
   choices: any[];
 }
 
@@ -504,9 +522,14 @@ export interface UpsertQuiz_quizUpsert_myAnswer {
   score: number;
   answerData: any;
   singleChoiceAnswer: UpsertQuiz_quizUpsert_myAnswer_singleChoiceAnswer | null;
+  multipleChoiceAnswer: UpsertQuiz_quizUpsert_myAnswer_multipleChoiceAnswer | null;
 }
 
 export interface UpsertQuiz_quizUpsert_answers_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface UpsertQuiz_quizUpsert_answers_multipleChoiceAnswer {
   choices: any[];
 }
 
@@ -516,6 +539,7 @@ export interface UpsertQuiz_quizUpsert_answers {
   score: number;
   answerData: any;
   singleChoiceAnswer: UpsertQuiz_quizUpsert_answers_singleChoiceAnswer | null;
+  multipleChoiceAnswer: UpsertQuiz_quizUpsert_answers_multipleChoiceAnswer | null;
 }
 
 export interface UpsertQuiz_quizUpsert {
@@ -528,6 +552,8 @@ export interface UpsertQuiz_quizUpsert {
   writingQuestion: UpsertQuiz_quizUpsert_writingQuestion | null;
   singleChoiceQuestion: UpsertQuiz_quizUpsert_singleChoiceQuestion | null;
   singleChoiceExpectedAnswer: UpsertQuiz_quizUpsert_singleChoiceExpectedAnswer | null;
+  multipleChoiceQuestion: UpsertQuiz_quizUpsert_multipleChoiceQuestion | null;
+  multipleChoiceExpectedAnswer: UpsertQuiz_quizUpsert_multipleChoiceExpectedAnswer | null;
   myAnswer: UpsertQuiz_quizUpsert_myAnswer | null;
   answers: UpsertQuiz_quizUpsert_answers[];
 }
@@ -568,7 +594,25 @@ export interface CloneQuiz_quizClone_singleChoiceExpectedAnswer {
   expectedChoices: any[];
 }
 
+export interface CloneQuiz_quizClone_multipleChoiceQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface CloneQuiz_quizClone_multipleChoiceQuestion {
+  question: string;
+  options: CloneQuiz_quizClone_multipleChoiceQuestion_options[];
+}
+
+export interface CloneQuiz_quizClone_multipleChoiceExpectedAnswer {
+  expectedChoices: any[];
+}
+
 export interface CloneQuiz_quizClone_myAnswer_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface CloneQuiz_quizClone_myAnswer_multipleChoiceAnswer {
   choices: any[];
 }
 
@@ -578,9 +622,14 @@ export interface CloneQuiz_quizClone_myAnswer {
   score: number;
   answerData: any;
   singleChoiceAnswer: CloneQuiz_quizClone_myAnswer_singleChoiceAnswer | null;
+  multipleChoiceAnswer: CloneQuiz_quizClone_myAnswer_multipleChoiceAnswer | null;
 }
 
 export interface CloneQuiz_quizClone_answers_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface CloneQuiz_quizClone_answers_multipleChoiceAnswer {
   choices: any[];
 }
 
@@ -590,6 +639,7 @@ export interface CloneQuiz_quizClone_answers {
   score: number;
   answerData: any;
   singleChoiceAnswer: CloneQuiz_quizClone_answers_singleChoiceAnswer | null;
+  multipleChoiceAnswer: CloneQuiz_quizClone_answers_multipleChoiceAnswer | null;
 }
 
 export interface CloneQuiz_quizClone {
@@ -602,6 +652,8 @@ export interface CloneQuiz_quizClone {
   writingQuestion: CloneQuiz_quizClone_writingQuestion | null;
   singleChoiceQuestion: CloneQuiz_quizClone_singleChoiceQuestion | null;
   singleChoiceExpectedAnswer: CloneQuiz_quizClone_singleChoiceExpectedAnswer | null;
+  multipleChoiceQuestion: CloneQuiz_quizClone_multipleChoiceQuestion | null;
+  multipleChoiceExpectedAnswer: CloneQuiz_quizClone_multipleChoiceExpectedAnswer | null;
   myAnswer: CloneQuiz_quizClone_myAnswer | null;
   answers: CloneQuiz_quizClone_answers[];
 }
@@ -629,12 +681,17 @@ export interface AnswerQuiz_quizAnswer_singleChoiceAnswer {
   choices: any[];
 }
 
+export interface AnswerQuiz_quizAnswer_multipleChoiceAnswer {
+  choices: any[];
+}
+
 export interface AnswerQuiz_quizAnswer {
   quizId: any;
   userId: number;
   score: number;
   answerData: any;
   singleChoiceAnswer: AnswerQuiz_quizAnswer_singleChoiceAnswer | null;
+  multipleChoiceAnswer: AnswerQuiz_quizAnswer_multipleChoiceAnswer | null;
 }
 
 export interface AnswerQuiz {
@@ -1324,7 +1381,25 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singl
   expectedChoices: any[];
 }
 
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceQuestion {
+  question: string;
+  options: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceQuestion_options[];
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceExpectedAnswer {
+  expectedChoices: any[];
+}
+
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_multipleChoiceAnswer {
   choices: any[];
 }
 
@@ -1334,9 +1409,14 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAns
   score: number;
   answerData: any;
   singleChoiceAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer | null;
+  multipleChoiceAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_multipleChoiceAnswer | null;
 }
 
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers_multipleChoiceAnswer {
   choices: any[];
 }
 
@@ -1346,6 +1426,7 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answe
   score: number;
   answerData: any;
   singleChoiceAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers_singleChoiceAnswer | null;
+  multipleChoiceAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers_multipleChoiceAnswer | null;
 }
 
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes {
@@ -1358,6 +1439,8 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes {
   writingQuestion: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_writingQuestion | null;
   singleChoiceQuestion: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceQuestion | null;
   singleChoiceExpectedAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceExpectedAnswer | null;
+  multipleChoiceQuestion: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceQuestion | null;
+  multipleChoiceExpectedAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceExpectedAnswer | null;
   myAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer | null;
   answers: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers[];
 }
@@ -1678,6 +1761,123 @@ export interface SubmissionSubscribe {
 
 export interface SubmissionSubscribeVariables {
   submissionId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL fragment: CoreQuizUserAnswerFields
+// ====================================================
+
+export interface CoreQuizUserAnswerFields_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface CoreQuizUserAnswerFields_multipleChoiceAnswer {
+  choices: any[];
+}
+
+export interface CoreQuizUserAnswerFields {
+  quizId: any;
+  userId: number;
+  score: number;
+  answerData: any;
+  singleChoiceAnswer: CoreQuizUserAnswerFields_singleChoiceAnswer | null;
+  multipleChoiceAnswer: CoreQuizUserAnswerFields_multipleChoiceAnswer | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL fragment: CoreQuizFields
+// ====================================================
+
+export interface CoreQuizFields_writingQuestion {
+  content: any;
+}
+
+export interface CoreQuizFields_singleChoiceQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface CoreQuizFields_singleChoiceQuestion {
+  question: string;
+  options: CoreQuizFields_singleChoiceQuestion_options[];
+}
+
+export interface CoreQuizFields_singleChoiceExpectedAnswer {
+  expectedChoices: any[];
+}
+
+export interface CoreQuizFields_multipleChoiceQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface CoreQuizFields_multipleChoiceQuestion {
+  question: string;
+  options: CoreQuizFields_multipleChoiceQuestion_options[];
+}
+
+export interface CoreQuizFields_multipleChoiceExpectedAnswer {
+  expectedChoices: any[];
+}
+
+export interface CoreQuizFields_myAnswer_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface CoreQuizFields_myAnswer_multipleChoiceAnswer {
+  choices: any[];
+}
+
+export interface CoreQuizFields_myAnswer {
+  quizId: any;
+  userId: number;
+  score: number;
+  answerData: any;
+  singleChoiceAnswer: CoreQuizFields_myAnswer_singleChoiceAnswer | null;
+  multipleChoiceAnswer: CoreQuizFields_myAnswer_multipleChoiceAnswer | null;
+}
+
+export interface CoreQuizFields_answers_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface CoreQuizFields_answers_multipleChoiceAnswer {
+  choices: any[];
+}
+
+export interface CoreQuizFields_answers {
+  quizId: any;
+  userId: number;
+  score: number;
+  answerData: any;
+  singleChoiceAnswer: CoreQuizFields_answers_singleChoiceAnswer | null;
+  multipleChoiceAnswer: CoreQuizFields_answers_multipleChoiceAnswer | null;
+}
+
+export interface CoreQuizFields {
+  id: any;
+  pageContentId: any;
+  creatorId: number;
+  quizType: QuizType;
+  questionData: any | null;
+  answerData: any | null;
+  writingQuestion: CoreQuizFields_writingQuestion | null;
+  singleChoiceQuestion: CoreQuizFields_singleChoiceQuestion | null;
+  singleChoiceExpectedAnswer: CoreQuizFields_singleChoiceExpectedAnswer | null;
+  multipleChoiceQuestion: CoreQuizFields_multipleChoiceQuestion | null;
+  multipleChoiceExpectedAnswer: CoreQuizFields_multipleChoiceExpectedAnswer | null;
+  myAnswer: CoreQuizFields_myAnswer | null;
+  answers: CoreQuizFields_answers[];
 }
 
 /* tslint:disable */

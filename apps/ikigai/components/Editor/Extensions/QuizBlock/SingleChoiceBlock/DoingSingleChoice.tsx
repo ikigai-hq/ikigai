@@ -8,13 +8,13 @@ import { ChoiceWrapper } from "../ChoiceBlock/ChoiceWrapper";
 
 const DoingSingleChoice = (props: QuizComponentProps) => {
   const allow = usePermission();
-  const { questionData, myAnswer, debounceAnswerQuiz } = useSingleChoiceQuiz(
+  const { questionData, myAnswer, answerQuiz } = useSingleChoiceQuiz(
     props.quizId,
     props.parentContentId,
   );
 
   const onChange = (choice: string) => {
-    debounceAnswerQuiz({ choices: [choice] });
+    answerQuiz({ choices: [choice] });
   };
 
   const choice = myAnswer?.choices ? myAnswer.choices[0] : undefined;

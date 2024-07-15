@@ -8,13 +8,13 @@ import { ChoiceWrapper } from "../ChoiceBlock/ChoiceWrapper";
 
 const DoingMultipleChoice = (props: QuizComponentProps) => {
   const allow = usePermission();
-  const { questionData, myAnswer, debounceAnswerQuiz } = useMultipleChoiceQuiz(
+  const { questionData, myAnswer, answerQuiz } = useMultipleChoiceQuiz(
     props.quizId,
     props.parentContentId,
   );
 
   const onChange = (choices: string[]) => {
-    debounceAnswerQuiz({ choices });
+    answerQuiz({ choices });
   };
 
   const choices = myAnswer?.choices || [];

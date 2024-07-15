@@ -18,6 +18,7 @@ import useAddOrUpdatePageContent from "hook/UseUpsertPageContent";
 import FileHandler from "./Extensions/FileHandler";
 import WritingBlock from "./Extensions/QuizBlock/WritingBlock";
 import BaseEditor, { useIkigaiEditor } from "./BaseEditor";
+import SingleChoiceBlock from "./Extensions/QuizBlock/SingleChoiceBlock";
 
 export type EditorProps = {
   readOnly: boolean;
@@ -74,6 +75,9 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
         pageContentId: pageContent.id,
       }),
       WritingBlock.configure({
+        pageContentId: pageContent.id,
+      }),
+      SingleChoiceBlock.configure({
         pageContentId: pageContent.id,
       }),
     ],

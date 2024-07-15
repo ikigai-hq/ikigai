@@ -82,6 +82,7 @@ const useAuthUserStore = create<IStore>((set, get) => ({
       variables: {
         documentId,
       },
+      fetchPolicy: "network-only",
     });
 
     set({

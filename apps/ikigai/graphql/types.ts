@@ -480,10 +480,42 @@ export interface UpsertQuiz_quizUpsert_writingQuestion {
   content: any;
 }
 
+export interface UpsertQuiz_quizUpsert_singleChoiceQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface UpsertQuiz_quizUpsert_singleChoiceQuestion {
+  question: string;
+  options: UpsertQuiz_quizUpsert_singleChoiceQuestion_options[];
+}
+
+export interface UpsertQuiz_quizUpsert_singleChoiceExpectedAnswer {
+  expectedChoices: any[];
+}
+
+export interface UpsertQuiz_quizUpsert_myAnswer_singleChoiceAnswer {
+  choices: any[];
+}
+
 export interface UpsertQuiz_quizUpsert_myAnswer {
   quizId: any;
   userId: number;
   score: number;
+  answerData: any;
+  singleChoiceAnswer: UpsertQuiz_quizUpsert_myAnswer_singleChoiceAnswer | null;
+}
+
+export interface UpsertQuiz_quizUpsert_answers_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface UpsertQuiz_quizUpsert_answers {
+  quizId: any;
+  userId: number;
+  score: number;
+  answerData: any;
+  singleChoiceAnswer: UpsertQuiz_quizUpsert_answers_singleChoiceAnswer | null;
 }
 
 export interface UpsertQuiz_quizUpsert {
@@ -491,10 +523,13 @@ export interface UpsertQuiz_quizUpsert {
   pageContentId: any;
   creatorId: number;
   quizType: QuizType;
-  questionData: any;
-  answerData: any;
+  questionData: any | null;
+  answerData: any | null;
   writingQuestion: UpsertQuiz_quizUpsert_writingQuestion | null;
+  singleChoiceQuestion: UpsertQuiz_quizUpsert_singleChoiceQuestion | null;
+  singleChoiceExpectedAnswer: UpsertQuiz_quizUpsert_singleChoiceExpectedAnswer | null;
   myAnswer: UpsertQuiz_quizUpsert_myAnswer | null;
+  answers: UpsertQuiz_quizUpsert_answers[];
 }
 
 export interface UpsertQuiz {
@@ -519,10 +554,42 @@ export interface CloneQuiz_quizClone_writingQuestion {
   content: any;
 }
 
+export interface CloneQuiz_quizClone_singleChoiceQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface CloneQuiz_quizClone_singleChoiceQuestion {
+  question: string;
+  options: CloneQuiz_quizClone_singleChoiceQuestion_options[];
+}
+
+export interface CloneQuiz_quizClone_singleChoiceExpectedAnswer {
+  expectedChoices: any[];
+}
+
+export interface CloneQuiz_quizClone_myAnswer_singleChoiceAnswer {
+  choices: any[];
+}
+
 export interface CloneQuiz_quizClone_myAnswer {
   quizId: any;
   userId: number;
   score: number;
+  answerData: any;
+  singleChoiceAnswer: CloneQuiz_quizClone_myAnswer_singleChoiceAnswer | null;
+}
+
+export interface CloneQuiz_quizClone_answers_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface CloneQuiz_quizClone_answers {
+  quizId: any;
+  userId: number;
+  score: number;
+  answerData: any;
+  singleChoiceAnswer: CloneQuiz_quizClone_answers_singleChoiceAnswer | null;
 }
 
 export interface CloneQuiz_quizClone {
@@ -530,10 +597,13 @@ export interface CloneQuiz_quizClone {
   pageContentId: any;
   creatorId: number;
   quizType: QuizType;
-  questionData: any;
-  answerData: any;
+  questionData: any | null;
+  answerData: any | null;
   writingQuestion: CloneQuiz_quizClone_writingQuestion | null;
+  singleChoiceQuestion: CloneQuiz_quizClone_singleChoiceQuestion | null;
+  singleChoiceExpectedAnswer: CloneQuiz_quizClone_singleChoiceExpectedAnswer | null;
   myAnswer: CloneQuiz_quizClone_myAnswer | null;
+  answers: CloneQuiz_quizClone_answers[];
 }
 
 export interface CloneQuiz {
@@ -555,10 +625,16 @@ export interface CloneQuizVariables {
 // GraphQL mutation operation: AnswerQuiz
 // ====================================================
 
+export interface AnswerQuiz_quizAnswer_singleChoiceAnswer {
+  choices: any[];
+}
+
 export interface AnswerQuiz_quizAnswer {
   quizId: any;
   userId: number;
   score: number;
+  answerData: any;
+  singleChoiceAnswer: AnswerQuiz_quizAnswer_singleChoiceAnswer | null;
 }
 
 export interface AnswerQuiz {
@@ -1234,10 +1310,42 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_writi
   content: any;
 }
 
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceQuestion {
+  question: string;
+  options: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceQuestion_options[];
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceExpectedAnswer {
+  expectedChoices: any[];
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer {
+  choices: any[];
+}
+
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer {
   quizId: any;
   userId: number;
   score: number;
+  answerData: any;
+  singleChoiceAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer | null;
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers {
+  quizId: any;
+  userId: number;
+  score: number;
+  answerData: any;
+  singleChoiceAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers_singleChoiceAnswer | null;
 }
 
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes {
@@ -1245,10 +1353,13 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes {
   pageContentId: any;
   creatorId: number;
   quizType: QuizType;
-  questionData: any;
-  answerData: any;
+  questionData: any | null;
+  answerData: any | null;
   writingQuestion: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_writingQuestion | null;
+  singleChoiceQuestion: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceQuestion | null;
+  singleChoiceExpectedAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceExpectedAnswer | null;
   myAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer | null;
+  answers: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers[];
 }
 
 export interface GetDocumentQuizzes_documentGet_pages_pageContents {

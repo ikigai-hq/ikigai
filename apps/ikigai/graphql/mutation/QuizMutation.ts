@@ -12,10 +12,33 @@ export const UPSERT_QUIZ = gql`
       writingQuestion {
         content
       }
+      singleChoiceQuestion {
+        question
+        options {
+          id
+          content
+        }
+      }
+      singleChoiceExpectedAnswer {
+        expectedChoices
+      }
       myAnswer {
         quizId
         userId
         score
+        answerData
+        singleChoiceAnswer {
+          choices
+        }
+      }
+      answers {
+        quizId
+        userId
+        score
+        answerData
+        singleChoiceAnswer {
+          choices
+        }
       }
     }
   }
@@ -41,10 +64,33 @@ export const CLONE_QUIZ = gql`
       writingQuestion {
         content
       }
+      singleChoiceQuestion {
+        question
+        options {
+          id
+          content
+        }
+      }
+      singleChoiceExpectedAnswer {
+        expectedChoices
+      }
       myAnswer {
         quizId
         userId
         score
+        answerData
+        singleChoiceAnswer {
+          choices
+        }
+      }
+      answers {
+        quizId
+        userId
+        score
+        answerData
+        singleChoiceAnswer {
+          choices
+        }
       }
     }
   }
@@ -56,6 +102,10 @@ export const ANSWER_QUIZ = gql`
       quizId
       userId
       score
+      answerData
+      singleChoiceAnswer {
+        choices
+      }
     }
   }
 `;

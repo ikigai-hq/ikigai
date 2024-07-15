@@ -45,8 +45,7 @@ allow(actor: UserAuth, "view_answer", doc: DocumentAuth) if
 
 allow(actor: UserAuth, "interactive_with_tool", doc: DocumentAuth) if
 	doc.is_doing_submission and
-	doc.creator_id = actor.id and
-	actor.role = "student";
+	doc.creator_id = actor.id;
 
 allow(actor: UserAuth, "edit_document", doc: DocumentAuth) if
 	has_role(actor, "submission_doer", doc) and

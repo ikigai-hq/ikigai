@@ -3,6 +3,7 @@ use diesel::sql_types::Integer;
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
+use serde_json::Value;
 use uuid::Uuid;
 
 use super::schema::{quiz_blocks, quiz_user_answer};
@@ -100,14 +101,6 @@ impl Quiz {
             .filter(quiz_blocks::page_content_id.eq_any(page_content_ids))
             .get_results(conn)
     }
-
-    pub fn parse_question_data<T: DeserializeOwned>(&self) -> Option<T> {
-        serde_json::from_value(self.question_data.clone()).ok()
-    }
-
-    pub fn parse_answer_data<T: DeserializeOwned>(&self) -> Option<T> {
-        serde_json::from_value(self.answer_data.clone()).ok()
-    }
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
@@ -170,13 +163,138 @@ impl QuizUserAnswer {
             .get_results(conn)
     }
 
+    pub fn find_all_by_quizzes_and_user(
+        conn: &mut PgConnection,
+        quiz_ids: &Vec<Uuid>,
+        user_id: i32,
+    ) -> Result<Vec<Self>, Error> {
+        quiz_user_answer::table
+            .filter(quiz_user_answer::user_id.eq(user_id))
+            .filter(quiz_user_answer::quiz_id.eq_any(quiz_ids))
+            .get_results(conn)
+    }
+
     pub fn parse_answer_data<T: DeserializeOwned>(&self) -> Option<T> {
         serde_json::from_value(self.answer_data.clone()).ok()
     }
 }
 
+pub fn try_get_auto_score(quiz_type: QuizType, expected_answer: Value, answer: Value) -> f64 {
+    get_auto_store(quiz_type, expected_answer, answer).unwrap_or_default()
+}
+
+pub fn get_auto_store(quiz_type: QuizType, expected_answer: Value, answer: Value) -> Option<f64> {
+    match quiz_type {
+        QuizType::SingleChoice => {
+            let choice_expected_answer: ChoiceAnswerData =
+                serde_json::from_value(expected_answer).ok()?;
+            let user_answer: ChoiceUserAnswerData = serde_json::from_value(answer).ok()?;
+            if let Some(choice) = user_answer.choices.first() {
+                if choice_expected_answer.expected_choices.contains(choice) {
+                    return Some(1.0);
+                }
+            }
+        }
+        QuizType::MultipleChoice => {
+            let choice_expected_answer: ChoiceAnswerData =
+                serde_json::from_value(expected_answer).ok()?;
+            let user_answer: ChoiceUserAnswerData = serde_json::from_value(answer).ok()?;
+
+            let has_incorrect_choice = user_answer
+                .choices
+                .iter()
+                .any(|choice| !choice_expected_answer.expected_choices.contains(choice));
+            if has_incorrect_choice {
+                return Some(0.0);
+            }
+
+            if choice_expected_answer.expected_choices.is_empty() {
+                return Some(0.0);
+            }
+
+            let total_correct_choice = choice_expected_answer
+                .expected_choices
+                .iter()
+                .filter(|expected_choice| user_answer.choices.contains(expected_choice))
+                .count();
+            return Some(
+                total_correct_choice as f64 / choice_expected_answer.expected_choices.len() as f64,
+            );
+        }
+        _ => (),
+    };
+
+    Some(0.0)
+}
+
 // Writing Block
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
-pub struct WritingQuestion {
-    pub content: serde_json::Value,
+#[serde(rename_all = "camelCase")]
+pub struct WritingQuestionData {
+    pub content: Value,
+}
+
+// Single Choice, Multiple Choice Block
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
+pub struct ChoiceOption {
+    pub id: Uuid,
+    pub content: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
+pub struct ChoiceQuestionData {
+    pub question: String,
+    pub options: Vec<ChoiceOption>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
+pub struct ChoiceAnswerData {
+    pub expected_choices: Vec<Uuid>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
+pub struct ChoiceUserAnswerData {
+    pub choices: Vec<Uuid>,
+}
+
+// Select Options
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
+pub struct SelectQuestionData {
+    pub options: Vec<ChoiceOption>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
+pub struct SelectAnswerData {
+    pub expected_choices: Vec<Uuid>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
+pub struct SelectUserAnswerData {
+    pub choice: Uuid,
+}
+
+// Fill in Blank
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
+pub struct FillInBlankQuestionData {
+    pub options: Vec<ChoiceOption>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
+pub struct FillInBlankAnswerData {
+    pub expected_choices: Uuid,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
+#[serde(rename_all = "camelCase")]
+pub struct FillInBlankUserAnswerData {
+    pub choice: Uuid,
 }

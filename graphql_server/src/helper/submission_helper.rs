@@ -48,12 +48,23 @@ pub fn try_add_rubric_submission(
     Ok(())
 }
 
-// FIXME: Calculate new method
-// Only count quiz scores and ignore nested, page block, etc
 pub fn auto_grade(
-    _conn: &PgConnection,
-    _document_id: Uuid,
-    _user_id: i32,
+    conn: &mut PgConnection,
+    document_id: Uuid,
+    user_id: i32,
 ) -> Result<f64, IkigaiError> {
-    Ok(0.0)
+    let pages = Page::find_all_by_document_id(conn, document_id)?;
+    let page_ids = pages.iter().map(|page| page.id).collect();
+
+    let page_contents = PageContent::find_all_by_pages(conn, page_ids)?;
+    let page_content_ids = page_contents
+        .iter()
+        .map(|page_content| page_content.id)
+        .collect();
+
+    let quizzes = Quiz::find_all_by_page_contents(conn, &page_content_ids)?;
+    let quiz_ids = quizzes.iter().map(|quiz| quiz.id).collect();
+
+    let user_answers = QuizUserAnswer::find_all_by_quizzes_and_user(conn, &quiz_ids, user_id)?;
+    Ok(user_answers.iter().map(|answer| answer.score).sum())
 }

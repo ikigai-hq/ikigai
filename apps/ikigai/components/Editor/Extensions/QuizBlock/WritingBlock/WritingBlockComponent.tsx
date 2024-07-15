@@ -22,50 +22,30 @@ import { isEmptyUuid } from "util/FileUtil";
 import { DocumentActionPermission, QuizType } from "graphql/types";
 import usePermission from "hook/UsePermission";
 import QuizBlockWrapper from "../QuizBlockWrapper";
-import useQuiz from "hook/UseQuiz";
+import { useWritingQuiz } from "hook/UseQuiz";
 
 const WritingBlockComponent = (props: NodeViewProps) => {
+  const allow = usePermission();
   const pageContentId = props.extension.options.pageContentId;
   const quizId = props.node.attrs.quizId;
-  const { quiz, debounceUpsertQuiz, cancelDebounceUpsertQuiz } = useQuiz(
-    quizId,
-    pageContentId,
-  );
+  const { questionData, debounceUpsertQuiz, cancelDebounceUpsertQuiz } =
+    useWritingQuiz(quizId, pageContentId);
 
   const updateContent = (content: JSONContent) => {
     if (isEmptyUuid(quizId)) return;
-    debounceUpsertQuiz(quiz.quizType, { content }, {});
+    debounceUpsertQuiz({ content }, {});
   };
 
   const forceSave = (content: JSONContent) => {
     if (isEmptyUuid(quizId)) return;
     cancelDebounceUpsertQuiz();
-    debounceUpsertQuiz(quiz.quizType, { content }, {});
+    debounceUpsertQuiz({ content }, {});
   };
 
-  return (
-    <QuizBlockWrapper quizType={QuizType.WRITING_BLOCK} nodeViewProps={props}>
-      <WritingEditor
-        body={quiz?.questionData?.content}
-        onUpdate={updateContent}
-        onForceSave={forceSave}
-      />
-    </QuizBlockWrapper>
-  );
-};
-
-type WritingEditorProps = {
-  body: JSONContent;
-  onUpdate: (content: JSONContent) => void;
-  onForceSave: (content: JSONContent) => void;
-};
-
-const WritingEditor = ({ body, onUpdate, onForceSave }: WritingEditorProps) => {
-  const allow = usePermission();
   const editor = useIkigaiEditor({
-    body,
-    onUpdate,
-    onForceSave,
+    body: questionData.content,
+    onUpdate: updateContent,
+    onForceSave: forceSave,
     extensions: [
       StarterKit,
       TaskList,
@@ -104,8 +84,19 @@ const WritingEditor = ({ body, onUpdate, onForceSave }: WritingEditorProps) => {
   });
 
   return (
-    <>
-      <div style={{ minHeight: 200 }}>
+    <QuizBlockWrapper
+      quizType={QuizType.WRITING_BLOCK}
+      nodeViewProps={props}
+      showSetting={
+        props.selected && allow(DocumentActionPermission.EDIT_DOCUMENT)
+      }
+    >
+      <div
+        style={{ minHeight: 200 }}
+        onClick={() => {
+          editor.commands.focus("end");
+        }}
+      >
         <BaseEditor editor={editor} />
       </div>
       <div style={{ paddingRight: 5 }}>
@@ -115,7 +106,7 @@ const WritingEditor = ({ body, onUpdate, onForceSave }: WritingEditorProps) => {
           {editor?.storage?.characterCount?.words() || 0} words
         </Text>
       </div>
-    </>
+    </QuizBlockWrapper>
   );
 };
 

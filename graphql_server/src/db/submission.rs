@@ -202,8 +202,13 @@ impl Submission {
         submission_id: i32,
         grade: f64,
         final_grade: f64,
-        allow_for_student_view_answer: bool,
+        is_auto_grade: bool,
     ) -> Result<(), Error> {
+        let (feedback_at, feedback) = if is_auto_grade {
+            (Some(get_now_as_secs()), Some("Auto feedback"))
+        } else {
+            (None, None)
+        };
         diesel::update(assignment_submissions::table.find(submission_id))
             .set((
                 assignment_submissions::auto_grade.eq(grade),
@@ -211,8 +216,9 @@ impl Submission {
                 assignment_submissions::submit_at.eq(get_now_as_secs()),
                 assignment_submissions::updated_at.eq(get_now_as_secs()),
                 assignment_submissions::allow_rework.eq(false),
-                assignment_submissions::allow_for_student_view_answer
-                    .eq(allow_for_student_view_answer),
+                assignment_submissions::allow_for_student_view_answer.eq(is_auto_grade),
+                assignment_submissions::feedback_at.eq(feedback_at),
+                assignment_submissions::feedback.eq(feedback),
             ))
             .execute(conn)?;
         Ok(())

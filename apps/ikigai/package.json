@@ -63,6 +63,7 @@
     "@tiptap/react": "^2.3.2",
     "@tiptap/starter-kit": "^2.3.2",
     "ahooks": "^3",
+    "ajv": "^8.17.1",
     "apollo-link": "^1.2.14",
     "axios": "^0.28.0",
     "babel-plugin-styled-components": "^2.1.4",

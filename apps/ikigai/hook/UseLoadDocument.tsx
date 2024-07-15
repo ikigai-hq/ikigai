@@ -98,6 +98,7 @@ export const useLoadDocument = (documentId: string) => {
     GET_DOCUMENT_QUIZZES,
     {
       onError: handleError,
+      fetchPolicy: "network-only",
     },
   );
 

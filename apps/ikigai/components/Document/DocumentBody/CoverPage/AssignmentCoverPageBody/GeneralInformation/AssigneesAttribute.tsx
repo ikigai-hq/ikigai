@@ -37,6 +37,7 @@ import AlertDialog from "components/base/AlertDialog";
 const AssigneesAttribute = () => {
   const documentId = useDocumentStore((state) => state.activeDocumentId);
   const [openAssigneesList, setOpenAssigneesList] = useState(false);
+  const [innerEmail, setInnerEmail] = useState("");
   const [emails, setEmails] = useState([]);
   const { data, refetch } = useQuery<GetDocumentAssignees>(
     GET_DOCUMENT_ASSIGNEE,
@@ -57,10 +58,15 @@ const AssigneesAttribute = () => {
   );
 
   const onConfirmAssign = async () => {
+    const finalEmails = emails;
+    if (validator.isEmail(innerEmail)) {
+      finalEmails.push(innerEmail);
+    }
+
     const { data } = await addAssignees({
       variables: {
         documentId,
-        emails,
+        emails: finalEmails,
       },
     });
 
@@ -110,9 +116,17 @@ const AssigneesAttribute = () => {
       </div>
 
       <Modal
-        content={<AssignModal emails={emails} onChangeEmails={setEmails} />}
+        content={
+          <AssignModal
+            innerEmail={innerEmail}
+            setInnerEmail={setInnerEmail}
+            emails={emails}
+            onChangeEmails={setEmails}
+          />
+        }
         onOk={onConfirmAssign}
         okText={t`Assign`}
+        title={t`Assign assignment`}
       >
         <Button
           size="1"
@@ -121,7 +135,7 @@ const AssigneesAttribute = () => {
           disabled={assignLoading}
           style={{ marginLeft: firstTwoAssignees.length > 0 ? 5 : 0 }}
         >
-          <RocketIcon /> Assign
+          <RocketIcon /> Assign Students
         </Button>
       </Modal>
       <Modal
@@ -146,21 +160,21 @@ const AssigneesAttribute = () => {
 type AssignModalProps = {
   emails: string[];
   onChangeEmails: (emails: string[]) => void;
+  innerEmail: string;
+  setInnerEmail: (email: string) => void;
 };
 
 const AssignModal = (props: AssignModalProps) => {
-  const [innerEmail, setInnerEmail] = useState("");
-
   const onChangeValue = (emailStr: string) => {
     if (emailStr.includes(" ")) {
       handleChangeEmails(emailStr);
       return;
     }
-    setInnerEmail(emailStr);
+    props.setInnerEmail(emailStr);
   };
 
   const handleChangeEmails = (emailStr: string) => {
-    setInnerEmail("");
+    props.setInnerEmail("");
     const emails = emailStr.split(" ");
     const realEmails = emails
       .filter((email) => validator.isEmail(email.trim()))
@@ -181,9 +195,9 @@ const AssignModal = (props: AssignModalProps) => {
           can can access directly to this assignment.
         </Text>
       </div>
-      <div>
+      <div style={{ marginBottom: 5 }}>
         {props.emails.map((email, index) => (
-          <Badge key={email} radius="full" style={{ margin: 2 }}>
+          <Badge size="3" key={email} radius="full" style={{ margin: 2 }}>
             {email}{" "}
             <IconButton
               variant="ghost"
@@ -200,9 +214,9 @@ const AssignModal = (props: AssignModalProps) => {
       <TextField.Root
         placeholder={t`Type or paste emails, separate by space or comma`}
         onChange={(e) => onChangeValue(e.currentTarget.value)}
-        value={innerEmail}
+        value={props.innerEmail}
         onKeyDown={(e) => {
-          if (e.key === "Enter") handleChangeEmails(innerEmail);
+          if (e.key === "Enter") handleChangeEmails(props.innerEmail);
         }}
       />
     </div>

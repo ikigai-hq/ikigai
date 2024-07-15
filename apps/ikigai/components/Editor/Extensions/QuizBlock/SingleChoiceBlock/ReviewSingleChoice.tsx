@@ -36,6 +36,7 @@ const ReviewSingleChoice = (props: ReviewSingleChoiceProps) => {
   const explainAnswer = correctAnswers
     .map((answer) => answer.content)
     .join(", ");
+  console.log(answer, DocumentActionPermission.VIEW_ANSWER, color);
   return (
     <div style={{ padding: 10 }}>
       <Text weight="medium">

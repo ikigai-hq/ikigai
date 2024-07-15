@@ -5,15 +5,11 @@ import {
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceExpectedAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceQuestion,
-  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceQuestion_options,
-  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_writingQuestion,
 } from "graphql/types";
 import { cloneDeep } from "lodash";
 
 export type IQuiz = GetDocumentQuizzes_documentGet_pages_pageContents_quizzes;
-export type IAnswer =
-  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers;
 
 export type IWritingQuestion =
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_writingQuestion;

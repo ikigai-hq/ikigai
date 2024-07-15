@@ -52,6 +52,7 @@ export const SingleChoice = (props: SingleChoiceProps) => {
   const isDoingSubmission = isSubmission && !document.submission.submitAt;
   const isStudent = role === Role.STUDENT;
 
+  console.log("Hello", document, isSubmission, isDoingSubmission);
   if (isStudent && isDoingSubmission) {
     return <DoingSingleChoice {...props} />;
   }

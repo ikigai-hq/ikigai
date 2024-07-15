@@ -163,6 +163,17 @@ impl QuizUserAnswer {
             .get_results(conn)
     }
 
+    pub fn find_all_by_quizzes_and_user(
+        conn: &mut PgConnection,
+        quiz_ids: &Vec<Uuid>,
+        user_id: i32,
+    ) -> Result<Vec<Self>, Error> {
+        quiz_user_answer::table
+            .filter(quiz_user_answer::user_id.eq(user_id))
+            .filter(quiz_user_answer::quiz_id.eq_any(quiz_ids))
+            .get_results(conn)
+    }
+
     pub fn parse_answer_data<T: DeserializeOwned>(&self) -> Option<T> {
         serde_json::from_value(self.answer_data.clone()).ok()
     }

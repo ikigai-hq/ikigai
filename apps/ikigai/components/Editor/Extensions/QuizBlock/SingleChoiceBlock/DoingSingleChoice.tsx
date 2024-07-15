@@ -1,4 +1,4 @@
-import { RadioGroup, Separator, Text } from "@radix-ui/themes";
+import { Code, RadioGroup, Separator, Text } from "@radix-ui/themes";
 
 import { DocumentActionPermission } from "graphql/types";
 import { SingleChoiceProps } from "./type";
@@ -19,7 +19,9 @@ const DoingSingleChoice = (props: SingleChoiceProps) => {
   const choice = myAnswer?.choices ? myAnswer.choices[0] : undefined;
   return (
     <div style={{ padding: 10 }}>
-      <Text weight="medium">Q.1: {questionData.question}</Text>
+      <Text weight="medium">
+        <Code>Q.{props.quizIndex + 1}</Code> {questionData.question}
+      </Text>
       <Separator style={{ width: "100%", marginTop: 5, marginBottom: 5 }} />
       <RadioGroup.Root
         variant="soft"

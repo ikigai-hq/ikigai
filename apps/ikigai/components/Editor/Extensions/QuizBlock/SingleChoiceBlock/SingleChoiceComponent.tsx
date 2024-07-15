@@ -10,11 +10,15 @@ import useAuthUserStore from "store/AuthStore";
 import useDocumentStore from "store/DocumentStore";
 import DoingSingleChoice from "./DoingSingleChoice";
 import ReviewSingleChoice from "./ReviewSingleChoice";
+import { isEmptyUuid } from "util/FileUtil";
+import { useOrderedQuizzes } from "hook/UseQuiz";
 
 const SingleChoiceBlockComponent = (props: NodeViewProps) => {
+  const { getQuizIndex } = useOrderedQuizzes();
   const allow = usePermission();
   const pageContentId = props.extension.options.pageContentId;
   const quizId = props.node.attrs.quizId;
+  const quizIndex = isEmptyUuid(quizId) ? 0 : getQuizIndex(quizId);
   const [showSetting, setShowSetting] = useState(false);
 
   return (
@@ -26,7 +30,11 @@ const SingleChoiceBlockComponent = (props: NodeViewProps) => {
       }
       onClickSetting={() => setShowSetting(!showSetting)}
     >
-      <SingleChoice parentContentId={pageContentId} quizId={quizId} />
+      <SingleChoice
+        parentContentId={pageContentId}
+        quizId={quizId}
+        quizIndex={quizIndex}
+      />
       <SingleChoiceSetting
         parentContentId={pageContentId}
         quizId={quizId}

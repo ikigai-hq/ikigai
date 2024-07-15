@@ -38,7 +38,9 @@ const ReviewSingleChoice = (props: ReviewSingleChoiceProps) => {
     .join(", ");
   return (
     <div style={{ padding: 10 }}>
-      <Text weight="medium">Q.1: {questionData.question}</Text>
+      <Text weight="medium">
+        Q.{props.quizIndex + 1}: {questionData.question}
+      </Text>
       <Separator style={{ width: "100%", marginTop: 5, marginBottom: 5 }} />
       <RadioGroup.Root variant="soft" value={choice} color={color}>
         {questionData.options.map((option) => (
@@ -48,14 +50,14 @@ const ReviewSingleChoice = (props: ReviewSingleChoiceProps) => {
         ))}
       </RadioGroup.Root>
       {allow(DocumentActionPermission.VIEW_ANSWER) && isCorrect && (
-        <Text color="green">
-          <Trans>Your answer is correct!</Trans>
+        <Text color="green" size="2">
+          <Trans>The answer is correct!</Trans>
         </Text>
       )}
       {allow(DocumentActionPermission.VIEW_ANSWER) && !isCorrect && (
-        <Text color="red">
+        <Text color="red" size="2">
           <Trans>
-            Your answer is incorrect! The correct answer is{" "}
+            The answer is incorrect! Correct answer is{" "}
             <Strong>{explainAnswer}</Strong>
           </Trans>
         </Text>

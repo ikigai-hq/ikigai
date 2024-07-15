@@ -24,6 +24,10 @@ import {
 import { handleError } from "graphql/ApolloClient";
 import { AnswerQuiz, CloneQuiz, QuizType, UpsertQuiz } from "graphql/types";
 import { isEmptyUuid } from "util/FileUtil";
+import usePageContentStore from "../store/PageContentStore";
+import usePageStore from "../store/PageStore";
+import useDocumentStore from "../store/DocumentStore";
+import { JSONContent } from "@tiptap/react";
 
 const useQuiz = <
   Question extends QuestionData,
@@ -214,6 +218,108 @@ export const getDefaultUserAnswer = (
     default:
       return {};
   }
+};
+
+export const useOrderedQuizzes = () => {
+  const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
+  const orderedPages = usePageStore((state) =>
+    state.pages
+      .filter((page) => page.documentId === activeDocumentId)
+      .sort((a, b) => a.index - b.index),
+  );
+  const orderedPageIds = orderedPages.map((page) => page.id);
+
+  const orderedPageContents = usePageContentStore((state) =>
+    state.pageContents
+      .filter((pageContent) => orderedPageIds.includes(pageContent.pageId))
+      .sort((pageContent, otherPageContent) => {
+        // Sort by Page Index first
+        const page = orderedPages.find(
+          (page) => page.id === pageContent.pageId,
+        );
+        const otherPage = orderedPages.find(
+          (page) => page.id === otherPageContent.pageId,
+        );
+        const pageDelta = page.index - otherPage.index;
+        if (pageDelta !== 0) return pageDelta;
+
+        // Same Page, Sort by Page Content Index
+        return pageContent.index - otherPageContent.index;
+      }),
+  );
+  const pageContentIds = orderedPageContents.map(
+    (pageContent) => pageContent.id,
+  );
+
+  const quizzes = useQuizStore((state) =>
+    state.quizzes.filter((quiz) => {
+      const page = orderedPageContents.find(
+        (pageContent) => quiz.pageContentId === pageContent.id,
+      );
+      return hasQuizInContent(page.body, quiz.id);
+    }),
+  );
+  const orderedQuizzes = quizzes.sort((quiz, otherQuiz) => {
+    // Sort by Page Content
+    const pageContentIndex = pageContentIds.findIndex(
+      (id) => quiz.pageContentId === id,
+    );
+    const otherPageContentIndex = pageContentIds.findIndex(
+      (id) => otherQuiz.pageContentId === id,
+    );
+    const pageContentIndexDelta = pageContentIndex - otherPageContentIndex;
+    if (pageContentIndexDelta !== 0) return pageContentIndexDelta;
+
+    // Same Page Content, Sort by position of quiz in content of page content
+    const pageContent = orderedPageContents[pageContentIndex];
+    return compareIndexOfQuizInContent(pageContent.body, quiz.id, otherQuiz.id);
+  });
+
+  const getQuizIndex = (quizId: string) => {
+    return orderedQuizzes.findIndex((quiz) => quiz.id === quizId);
+  };
+
+  return {
+    orderedPages,
+    orderedPageContents,
+    orderedQuizzes,
+    getQuizIndex,
+  };
+};
+
+export const compareIndexOfQuizInContent = (
+  content: JSONContent,
+  quizId: string,
+  otherQuizId: string,
+): number => {
+  if (content?.attrs?.quizId === quizId) return -1;
+  if (content?.attrs?.quizId === otherQuizId) return 1;
+
+  if (content.content) {
+    for (const innerContent of content.content) {
+      const compareNumber = compareIndexOfQuizInContent(
+        innerContent,
+        quizId,
+        otherQuizId,
+      );
+      if (compareNumber !== 0) return compareNumber;
+    }
+  }
+
+  return 0;
+};
+
+export const hasQuizInContent = (content: JSONContent, quizId: string) => {
+  if (content?.attrs?.quizId === quizId) return true;
+
+  if (content.content) {
+    for (const innerContent of content.content) {
+      const hasQuiz = hasQuizInContent(innerContent, quizId);
+      if (hasQuiz) return true;
+    }
+  }
+
+  return false;
 };
 
 export default useQuiz;

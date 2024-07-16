@@ -6,7 +6,6 @@ import {
   IconAlignRight,
   IconBlockquote,
   IconBold,
-  IconBoxMultiple,
   IconCode,
   IconCopyCheck,
   IconFileUpload,
@@ -19,6 +18,7 @@ import {
   IconList,
   IconListCheck,
   IconListNumbers,
+  IconSelect,
   IconStrikethrough,
   IconTextColor,
   IconTools,
@@ -500,7 +500,7 @@ const ContentToolbar = () => {
               }
               onClick={onInsertSelectOption}
             >
-              <IconCopyCheck size={20} stroke={2} />
+              <IconSelect size={20} stroke={2} />
             </Toolbar.ToolbarButton>
           </Tooltip>
         </Toolbar.ToggleGroup>

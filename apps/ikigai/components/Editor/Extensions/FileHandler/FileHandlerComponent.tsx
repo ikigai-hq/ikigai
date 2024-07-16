@@ -45,7 +45,7 @@ const FileHandler = (props: NodeViewProps) => {
 
   return (
     <NodeViewWrapper className="file-handler-component">
-      <ExtensionWrapper selected={props.selected}>
+      <ExtensionWrapper selected={props.selected} inline={false}>
         {loading && <Loading />}
         {!data && !loading && (
           <FileUploader onComplete={onUploadComplete}>

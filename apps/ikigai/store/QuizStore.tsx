@@ -4,6 +4,7 @@ import {
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceExpectedAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceQuestion,
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_multipleChoiceAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_selectOptionAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer,
@@ -16,6 +17,8 @@ import {
 import { cloneDeep } from "lodash";
 
 export type IQuiz = GetDocumentQuizzes_documentGet_pages_pageContents_quizzes;
+export type IQuizAnswer =
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer;
 
 export type IWritingQuestion =
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_writingQuestion;

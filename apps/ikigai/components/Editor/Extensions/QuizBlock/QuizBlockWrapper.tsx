@@ -3,13 +3,23 @@ import { NodeViewProps } from "@tiptap/core";
 import React, { useEffect, useState } from "react";
 
 import { EMPTY_UUID, isEmptyUuid } from "util/FileUtil";
-import { QuizType } from "graphql/types";
+import { DocumentActionPermission, QuizType } from "graphql/types";
 import Loading from "components/Loading";
 import { ExtensionWrapper } from "components/base/ExtensionComponentUtil";
 import useQuiz from "hook/UseQuiz";
 import styled from "styled-components";
 import { IconButton } from "@radix-ui/themes";
 import { SettingIcon } from "components/common/IconSvg";
+import {
+  IMultipleChoiceExpectedAnswer,
+  IMultipleChoiceQuestion,
+  IQuizAnswer,
+  ISelectOptionExpectedAnswer,
+  ISelectOptionQuestion,
+  ISingleChoiceExpectedAnswer,
+  ISingleChoiceQuestion,
+} from "store/QuizStore";
+import { allow } from "hook/UsePermission";
 
 export type QuizBlockWrapperProps = {
   quizType: QuizType;
@@ -112,5 +122,40 @@ const ExtensionMenu = styled.div<{ $show: boolean }>`
   top: 10px;
   display: ${(props) => (props.$show ? "unset" : "none")};
 `;
+
+export const processReviewAnswer = (
+  answer: IQuizAnswer,
+  questionData:
+    | ISingleChoiceQuestion
+    | IMultipleChoiceQuestion
+    | ISelectOptionQuestion,
+  answerData:
+    | ISingleChoiceExpectedAnswer
+    | IMultipleChoiceExpectedAnswer
+    | ISelectOptionExpectedAnswer,
+): {
+  isCorrect: boolean;
+  color: "indigo" | "green" | "red";
+  explainAnswer: string;
+} => {
+  const isCorrect = !!answer?.score;
+  const color = !allow(DocumentActionPermission.VIEW_ANSWER)
+    ? "indigo"
+    : isCorrect
+    ? "green"
+    : "red";
+  const correctAnswers = questionData.options.filter((option) =>
+    answerData?.expectedChoices?.includes(option.id),
+  );
+  const explainAnswer = correctAnswers
+    .map((answer) => answer.content)
+    .join(", ");
+
+  return {
+    isCorrect,
+    color,
+    explainAnswer,
+  };
+};
 
 export default QuizBlockWrapper;

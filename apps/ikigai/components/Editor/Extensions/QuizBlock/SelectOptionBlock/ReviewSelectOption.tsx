@@ -6,6 +6,7 @@ import { QuizComponentProps } from "../type";
 import usePermission from "hook/UsePermission";
 import { DocumentActionPermission } from "graphql/types";
 import React from "react";
+import { processReviewAnswer } from "../QuizBlockWrapper";
 
 export type ReviewSelectOptionProps = QuizComponentProps & {
   userId: number;
@@ -25,18 +26,11 @@ const ReviewSelectOption = (props: ReviewSelectOptionProps) => {
     ? answer.selectOptionAnswer.choice
     : null;
 
-  const isCorrect = !!answer?.score;
-  const color = !allow(DocumentActionPermission.VIEW_ANSWER)
-    ? "indigo"
-    : isCorrect
-    ? "green"
-    : "red";
-  const correctAnswers = questionData.options.filter((option) =>
-    answerData?.expectedChoices?.includes(option.id),
+  const { isCorrect, color, explainAnswer } = processReviewAnswer(
+    answer,
+    questionData,
+    answerData,
   );
-  const explainAnswer = correctAnswers
-    .map((answer) => answer.content)
-    .join(", ");
 
   return (
     <div

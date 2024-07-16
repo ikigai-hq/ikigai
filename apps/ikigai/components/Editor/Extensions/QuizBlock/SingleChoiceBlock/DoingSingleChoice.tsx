@@ -1,4 +1,4 @@
-import { Code, RadioGroup, Separator, Text } from "@radix-ui/themes";
+import { Kbd, RadioGroup, Separator, Text } from "@radix-ui/themes";
 
 import { DocumentActionPermission } from "graphql/types";
 import { QuizComponentProps } from "../type";
@@ -10,7 +10,7 @@ const DoingSingleChoice = (props: QuizComponentProps) => {
   const allow = usePermission();
   const { questionData, myAnswer, answerQuiz } = useSingleChoiceQuiz(
     props.quizId,
-    props.parentContentId,
+    props.pageContentId,
   );
 
   const onChange = (choice: string) => {
@@ -21,7 +21,7 @@ const DoingSingleChoice = (props: QuizComponentProps) => {
   return (
     <ChoiceWrapper>
       <Text weight="medium">
-        <Code>Q.{props.quizIndex + 1}</Code> {questionData.question}
+        <Kbd>Q.{props.quizIndex + 1}</Kbd> {questionData.question}
       </Text>
       <Separator style={{ width: "100%", marginTop: 5, marginBottom: 5 }} />
       <RadioGroup.Root

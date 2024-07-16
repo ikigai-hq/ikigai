@@ -1,4 +1,4 @@
-import { RadioGroup, Separator, Strong, Text } from "@radix-ui/themes";
+import { Kbd, RadioGroup, Separator, Strong, Text } from "@radix-ui/themes";
 import { Trans } from "@lingui/macro";
 
 import { useSingleChoiceQuiz } from "hook/UseQuiz";
@@ -15,7 +15,7 @@ const ReviewSingleChoice = (props: ReviewSingleChoiceProps) => {
   const allow = usePermission();
   const { questionData, quiz, answerData } = useSingleChoiceQuiz(
     props.quizId,
-    props.parentContentId,
+    props.pageContentId,
   );
 
   const answer = quiz?.answers?.find(
@@ -41,7 +41,7 @@ const ReviewSingleChoice = (props: ReviewSingleChoiceProps) => {
   return (
     <ChoiceWrapper>
       <Text weight="medium">
-        Q.{props.quizIndex + 1}: {questionData.question}
+        <Kbd>Q.{props.quizIndex + 1}</Kbd> {questionData.question}
       </Text>
       <Separator style={{ width: "100%", marginTop: 5, marginBottom: 5 }} />
       <RadioGroup.Root variant="soft" value={choice} color={color}>
@@ -53,14 +53,13 @@ const ReviewSingleChoice = (props: ReviewSingleChoiceProps) => {
       </RadioGroup.Root>
       {allow(DocumentActionPermission.VIEW_ANSWER) && isCorrect && (
         <Text color="green" size="2">
-          <Trans>The answer is correct!</Trans>
+          <Trans>correct!</Trans>
         </Text>
       )}
       {allow(DocumentActionPermission.VIEW_ANSWER) && !isCorrect && (
         <Text color="red" size="2">
           <Trans>
-            The answer is incorrect! Correct answer is{" "}
-            <Strong>{explainAnswer}</Strong>
+            Incorrect! Correct answer is <Strong>{explainAnswer}</Strong>
           </Trans>
         </Text>
       )}

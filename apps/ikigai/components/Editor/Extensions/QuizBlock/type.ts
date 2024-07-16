@@ -1,5 +1,5 @@
 export type QuizComponentProps = {
-  parentContentId: string;
+  pageContentId: string;
   quizId: string;
   quizIndex?: number;
 };

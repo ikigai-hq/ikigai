@@ -48,6 +48,65 @@ export default function createQuizNode<S = any>(
     addNodeView() {
       return ReactNodeViewRenderer(quizComponent);
     },
+
+    ...config,
+  });
+}
+
+export function createInlineQuiz(
+  name: string,
+  tag: string,
+  quizComponent: (props: NodeViewProps) => React.ReactNode,
+  config?: Partial<NodeConfig<any, any>>,
+) {
+  return Node.create<any>({
+    name,
+    group: "inline",
+    inline: true,
+    selectable: true,
+    atom: true,
+    marks: "",
+
+    addOptions() {
+      return {
+        pageContentId: EMPTY_UUID,
+      };
+    },
+
+    addAttributes() {
+      return {
+        quizId: {
+          default: EMPTY_UUID,
+        },
+        originalQuizId: {
+          default: EMPTY_UUID,
+        },
+      };
+    },
+
+    parseHTML() {
+      return [
+        {
+          tag: `span[data-type="${tag}"]`,
+        },
+      ];
+    },
+
+    renderHTML({ node, HTMLAttributes }) {
+      const mergedOptions = { ...this.options };
+
+      mergedOptions.HTMLAttributes = mergeAttributes(
+        { "data-type": tag },
+        HTMLAttributes,
+      );
+
+      return ["span", mergeAttributes({ "data-type": tag }, HTMLAttributes)];
+    },
+
+    addNodeView() {
+      return ReactNodeViewRenderer(quizComponent);
+    },
+
     ...config,
   });
 }

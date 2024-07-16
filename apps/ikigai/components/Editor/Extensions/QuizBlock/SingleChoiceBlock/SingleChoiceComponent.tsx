@@ -31,12 +31,12 @@ const SingleChoiceBlockComponent = (props: NodeViewProps) => {
       onClickSetting={() => setShowSetting(!showSetting)}
     >
       <SingleChoice
-        parentContentId={pageContentId}
+        pageContentId={pageContentId}
         quizId={quizId}
         quizIndex={quizIndex}
       />
       <SingleChoiceSetting
-        parentContentId={pageContentId}
+        pageContentId={pageContentId}
         quizId={quizId}
         showSetting={showSetting}
         setShowSetting={setShowSetting}

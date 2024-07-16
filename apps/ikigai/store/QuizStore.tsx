@@ -5,7 +5,10 @@ import {
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceExpectedAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceQuestion,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_multipleChoiceAnswer,
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_selectOptionAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer,
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_selectOptionExpectedAnswer,
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_selectOptionQuestion,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceExpectedAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceQuestion,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_writingQuestion,
@@ -31,18 +34,28 @@ export type IMultipleChoiceExpectedAnswer =
 export type IMultipleChoiceAnswer =
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_multipleChoiceAnswer;
 
+export type ISelectOptionQuestion =
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_selectOptionQuestion;
+export type ISelectOptionExpectedAnswer =
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_selectOptionExpectedAnswer;
+export type ISelectOptionAnswer =
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_selectOptionAnswer;
+
 export type QuestionData =
   | IWritingQuestion
   | ISingleChoiceQuestion
   | IMultipleChoiceQuestion
+  | ISelectOptionQuestion
   | {};
 export type QuestionExpectedAnswer =
   | ISingleChoiceExpectedAnswer
   | IMultipleChoiceExpectedAnswer
+  | ISelectOptionExpectedAnswer
   | {};
 export type QuestionUserAnswer =
   | ISingleChoiceAnswer
   | IMultipleChoiceAnswer
+  | ISelectOptionAnswer
   | {};
 
 export type IQuizStore = {

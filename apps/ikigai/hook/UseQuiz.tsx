@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/client";
 import { v4 } from "uuid";
 import { cloneDeep, isEqual } from "lodash";
 import { useDebounceFn } from "ahooks";
+import { JSONContent } from "@tiptap/react";
 
 import useQuizStore, {
   identityExpectedAnswer,
@@ -11,6 +12,9 @@ import useQuizStore, {
   IMultipleChoiceExpectedAnswer,
   IMultipleChoiceQuestion,
   IQuiz,
+  ISelectOptionAnswer,
+  ISelectOptionExpectedAnswer,
+  ISelectOptionQuestion,
   ISingleChoiceAnswer,
   ISingleChoiceExpectedAnswer,
   ISingleChoiceQuestion,
@@ -27,10 +31,9 @@ import {
 import { handleError } from "graphql/ApolloClient";
 import { AnswerQuiz, CloneQuiz, QuizType, UpsertQuiz } from "graphql/types";
 import { isEmptyUuid } from "util/FileUtil";
-import usePageContentStore from "../store/PageContentStore";
-import usePageStore from "../store/PageStore";
-import useDocumentStore from "../store/DocumentStore";
-import { JSONContent } from "@tiptap/react";
+import usePageContentStore from "store/PageContentStore";
+import usePageStore from "store/PageStore";
+import useDocumentStore from "store/DocumentStore";
 
 const useQuiz = <
   Question extends QuestionData,
@@ -183,6 +186,14 @@ export const useMultipleChoiceQuiz = (
   >(QuizType.MULTIPLE_CHOICE, quizId, pageContentId);
 };
 
+export const useSelectOptionQuiz = (quizId: string, pageContentId: string) => {
+  return useQuiz<
+    ISelectOptionQuestion,
+    ISelectOptionExpectedAnswer,
+    ISelectOptionAnswer
+  >(QuizType.SELECT_OPTION, quizId, pageContentId);
+};
+
 const isEmptyQuizData = (data: any): boolean => {
   return data === undefined || data === null || isEqual(data, {});
 };
@@ -201,6 +212,10 @@ export const getDefaultQuestionData = (quizType: QuizType): QuestionData => {
         question: "",
         options: [],
       };
+    case QuizType.SELECT_OPTION:
+      return {
+        options: [],
+      };
     default:
       return {};
   }
@@ -212,6 +227,7 @@ export const getDefaultExpectedAnswer = (
   switch (quizType) {
     case QuizType.SINGLE_CHOICE:
     case QuizType.MULTIPLE_CHOICE:
+    case QuizType.SELECT_OPTION:
       return {
         expectedChoices: [],
       };
@@ -228,6 +244,10 @@ export const getDefaultUserAnswer = (
     case QuizType.MULTIPLE_CHOICE:
       return {
         choices: [],
+      };
+    case QuizType.SELECT_OPTION:
+      return {
+        choice: "",
       };
     default:
       return {};

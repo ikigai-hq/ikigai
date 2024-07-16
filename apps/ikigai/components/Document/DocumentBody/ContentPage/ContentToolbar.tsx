@@ -35,6 +35,7 @@ import { hasExtension } from "util/ExtensionUtil";
 import { FILE_HANDLER_NAME } from "components/Editor/Extensions/FileHandler";
 import { SINGLE_CHOICE_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/SingleChoiceBlock";
 import { MULTIPLE_CHOICE_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/MultipleChoiceBlock";
+import { SELECT_OPTION_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/SelectOptionBlock";
 
 const ContentToolbar = () => {
   const activeEditor = useEditorStore((state) => state.activeEditor);
@@ -165,6 +166,12 @@ const ContentToolbar = () => {
     )
       return;
     activeEditor.chain().focus().insertMultipleChoice().run();
+  };
+
+  const onInsertSelectOption = () => {
+    if (!activeEditor || !hasExtension(activeEditor, SELECT_OPTION_BLOCK_NAME))
+      return;
+    activeEditor.chain().focus().insertSelectOption().run();
   };
 
   return (
@@ -478,6 +485,20 @@ const ContentToolbar = () => {
                 !hasExtension(activeEditor, MULTIPLE_CHOICE_BLOCK_NAME)
               }
               onClick={onInsertMultipleChoice}
+            >
+              <IconCopyCheck size={20} stroke={2} />
+            </Toolbar.ToolbarButton>
+          </Tooltip>
+          <Tooltip content={t`Select Option Quiz`}>
+            <Toolbar.ToolbarButton
+              className="ToolbarToggleItem"
+              value="selectOption"
+              aria-label="select-option"
+              disabled={
+                activeEditor?.isActive(SELECT_OPTION_BLOCK_NAME) ||
+                !hasExtension(activeEditor, SELECT_OPTION_BLOCK_NAME)
+              }
+              onClick={onInsertSelectOption}
             >
               <IconCopyCheck size={20} stroke={2} />
             </Toolbar.ToolbarButton>

@@ -12,6 +12,9 @@ export const QUIZ_USER_ANSWER_FIELDS = gql`
     multipleChoiceAnswer {
       choices
     }
+    selectOptionAnswer {
+      choice
+    }
   }
 `;
 
@@ -45,6 +48,15 @@ export const QUIZ_FIELDS = gql`
       }
     }
     multipleChoiceExpectedAnswer {
+      expectedChoices
+    }
+    selectOptionQuestion {
+      options {
+        id
+        content
+      }
+    }
+    selectOptionExpectedAnswer {
       expectedChoices
     }
     myAnswer {

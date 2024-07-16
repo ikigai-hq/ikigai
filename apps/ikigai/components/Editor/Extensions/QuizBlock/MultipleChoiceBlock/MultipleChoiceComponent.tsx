@@ -31,12 +31,12 @@ const MultipleChoiceBlockComponent = (props: NodeViewProps) => {
       onClickSetting={() => setShowSetting(!showSetting)}
     >
       <MultipleChoice
-        parentContentId={pageContentId}
+        pageContentId={pageContentId}
         quizId={quizId}
         quizIndex={quizIndex}
       />
       <MultipleChoiceSetting
-        parentContentId={pageContentId}
+        pageContentId={pageContentId}
         quizId={quizId}
         showSetting={showSetting}
         setShowSetting={setShowSetting}

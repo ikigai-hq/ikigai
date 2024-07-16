@@ -13,7 +13,7 @@ export type SingleChoiceSettingProps = QuizComponentProps & {
 const SingleChoiceSetting = (props: SingleChoiceSettingProps) => {
   const { questionData, answerData, upsertQuiz } = useSingleChoiceQuiz(
     props.quizId,
-    props.parentContentId,
+    props.pageContentId,
   );
 
   return (

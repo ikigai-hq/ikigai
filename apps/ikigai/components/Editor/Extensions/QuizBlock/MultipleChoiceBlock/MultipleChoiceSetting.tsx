@@ -13,7 +13,7 @@ export type MultipleChoiceSettingProps = QuizComponentProps & {
 const MultipleChoiceSetting = (props: MultipleChoiceSettingProps) => {
   const { questionData, answerData, upsertQuiz } = useMultipleChoiceQuiz(
     props.quizId,
-    props.parentContentId,
+    props.pageContentId,
   );
 
   return (

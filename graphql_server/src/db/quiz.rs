@@ -17,7 +17,7 @@ use crate::util::get_now_as_secs;
 pub enum QuizType {
     WritingBlock,
     FillInBlank,
-    SelectOptions,
+    SelectOption,
     SingleChoice,
     MultipleChoice,
 }
@@ -29,7 +29,7 @@ impl QuizType {
         match self {
             QuizType::WritingBlock => "writingBlock",
             QuizType::FillInBlank => "fillInBlank",
-            QuizType::SelectOptions => "selectOptions",
+            QuizType::SelectOption => "selectOption",
             QuizType::SingleChoice => "singleChoice",
             QuizType::MultipleChoice => "multipleChoice",
         }
@@ -220,6 +220,14 @@ pub fn get_auto_store(quiz_type: QuizType, expected_answer: Value, answer: Value
             return Some(
                 total_correct_choice as f64 / choice_expected_answer.expected_choices.len() as f64,
             );
+        }
+        QuizType::SelectOption => {
+            let choice_expected_answer: SelectAnswerData =
+                serde_json::from_value(expected_answer).ok()?;
+            let user_answer: SelectUserAnswerData = serde_json::from_value(answer).ok()?;
+            if choice_expected_answer.expected_choices.contains(&user_answer.choice) {
+                return Some(1.0);
+            }
         }
         _ => (),
     };

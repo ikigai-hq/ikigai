@@ -508,6 +508,19 @@ export interface UpsertQuiz_quizUpsert_multipleChoiceExpectedAnswer {
   expectedChoices: any[];
 }
 
+export interface UpsertQuiz_quizUpsert_selectOptionQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface UpsertQuiz_quizUpsert_selectOptionQuestion {
+  options: UpsertQuiz_quizUpsert_selectOptionQuestion_options[];
+}
+
+export interface UpsertQuiz_quizUpsert_selectOptionExpectedAnswer {
+  expectedChoices: any[];
+}
+
 export interface UpsertQuiz_quizUpsert_myAnswer_singleChoiceAnswer {
   choices: any[];
 }
@@ -516,13 +529,18 @@ export interface UpsertQuiz_quizUpsert_myAnswer_multipleChoiceAnswer {
   choices: any[];
 }
 
+export interface UpsertQuiz_quizUpsert_myAnswer_selectOptionAnswer {
+  choice: any;
+}
+
 export interface UpsertQuiz_quizUpsert_myAnswer {
   quizId: any;
   userId: number;
-  score: number;
+  score: number | null;
   answerData: any;
   singleChoiceAnswer: UpsertQuiz_quizUpsert_myAnswer_singleChoiceAnswer | null;
   multipleChoiceAnswer: UpsertQuiz_quizUpsert_myAnswer_multipleChoiceAnswer | null;
+  selectOptionAnswer: UpsertQuiz_quizUpsert_myAnswer_selectOptionAnswer | null;
 }
 
 export interface UpsertQuiz_quizUpsert_answers_singleChoiceAnswer {
@@ -533,13 +551,18 @@ export interface UpsertQuiz_quizUpsert_answers_multipleChoiceAnswer {
   choices: any[];
 }
 
+export interface UpsertQuiz_quizUpsert_answers_selectOptionAnswer {
+  choice: any;
+}
+
 export interface UpsertQuiz_quizUpsert_answers {
   quizId: any;
   userId: number;
-  score: number;
+  score: number | null;
   answerData: any;
   singleChoiceAnswer: UpsertQuiz_quizUpsert_answers_singleChoiceAnswer | null;
   multipleChoiceAnswer: UpsertQuiz_quizUpsert_answers_multipleChoiceAnswer | null;
+  selectOptionAnswer: UpsertQuiz_quizUpsert_answers_selectOptionAnswer | null;
 }
 
 export interface UpsertQuiz_quizUpsert {
@@ -554,6 +577,8 @@ export interface UpsertQuiz_quizUpsert {
   singleChoiceExpectedAnswer: UpsertQuiz_quizUpsert_singleChoiceExpectedAnswer | null;
   multipleChoiceQuestion: UpsertQuiz_quizUpsert_multipleChoiceQuestion | null;
   multipleChoiceExpectedAnswer: UpsertQuiz_quizUpsert_multipleChoiceExpectedAnswer | null;
+  selectOptionQuestion: UpsertQuiz_quizUpsert_selectOptionQuestion | null;
+  selectOptionExpectedAnswer: UpsertQuiz_quizUpsert_selectOptionExpectedAnswer | null;
   myAnswer: UpsertQuiz_quizUpsert_myAnswer | null;
   answers: UpsertQuiz_quizUpsert_answers[];
 }
@@ -608,6 +633,19 @@ export interface CloneQuiz_quizClone_multipleChoiceExpectedAnswer {
   expectedChoices: any[];
 }
 
+export interface CloneQuiz_quizClone_selectOptionQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface CloneQuiz_quizClone_selectOptionQuestion {
+  options: CloneQuiz_quizClone_selectOptionQuestion_options[];
+}
+
+export interface CloneQuiz_quizClone_selectOptionExpectedAnswer {
+  expectedChoices: any[];
+}
+
 export interface CloneQuiz_quizClone_myAnswer_singleChoiceAnswer {
   choices: any[];
 }
@@ -616,13 +654,18 @@ export interface CloneQuiz_quizClone_myAnswer_multipleChoiceAnswer {
   choices: any[];
 }
 
+export interface CloneQuiz_quizClone_myAnswer_selectOptionAnswer {
+  choice: any;
+}
+
 export interface CloneQuiz_quizClone_myAnswer {
   quizId: any;
   userId: number;
-  score: number;
+  score: number | null;
   answerData: any;
   singleChoiceAnswer: CloneQuiz_quizClone_myAnswer_singleChoiceAnswer | null;
   multipleChoiceAnswer: CloneQuiz_quizClone_myAnswer_multipleChoiceAnswer | null;
+  selectOptionAnswer: CloneQuiz_quizClone_myAnswer_selectOptionAnswer | null;
 }
 
 export interface CloneQuiz_quizClone_answers_singleChoiceAnswer {
@@ -633,13 +676,18 @@ export interface CloneQuiz_quizClone_answers_multipleChoiceAnswer {
   choices: any[];
 }
 
+export interface CloneQuiz_quizClone_answers_selectOptionAnswer {
+  choice: any;
+}
+
 export interface CloneQuiz_quizClone_answers {
   quizId: any;
   userId: number;
-  score: number;
+  score: number | null;
   answerData: any;
   singleChoiceAnswer: CloneQuiz_quizClone_answers_singleChoiceAnswer | null;
   multipleChoiceAnswer: CloneQuiz_quizClone_answers_multipleChoiceAnswer | null;
+  selectOptionAnswer: CloneQuiz_quizClone_answers_selectOptionAnswer | null;
 }
 
 export interface CloneQuiz_quizClone {
@@ -654,6 +702,8 @@ export interface CloneQuiz_quizClone {
   singleChoiceExpectedAnswer: CloneQuiz_quizClone_singleChoiceExpectedAnswer | null;
   multipleChoiceQuestion: CloneQuiz_quizClone_multipleChoiceQuestion | null;
   multipleChoiceExpectedAnswer: CloneQuiz_quizClone_multipleChoiceExpectedAnswer | null;
+  selectOptionQuestion: CloneQuiz_quizClone_selectOptionQuestion | null;
+  selectOptionExpectedAnswer: CloneQuiz_quizClone_selectOptionExpectedAnswer | null;
   myAnswer: CloneQuiz_quizClone_myAnswer | null;
   answers: CloneQuiz_quizClone_answers[];
 }
@@ -685,13 +735,18 @@ export interface AnswerQuiz_quizAnswer_multipleChoiceAnswer {
   choices: any[];
 }
 
+export interface AnswerQuiz_quizAnswer_selectOptionAnswer {
+  choice: any;
+}
+
 export interface AnswerQuiz_quizAnswer {
   quizId: any;
   userId: number;
-  score: number;
+  score: number | null;
   answerData: any;
   singleChoiceAnswer: AnswerQuiz_quizAnswer_singleChoiceAnswer | null;
   multipleChoiceAnswer: AnswerQuiz_quizAnswer_multipleChoiceAnswer | null;
+  selectOptionAnswer: AnswerQuiz_quizAnswer_selectOptionAnswer | null;
 }
 
 export interface AnswerQuiz {
@@ -1395,6 +1450,19 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multi
   expectedChoices: any[];
 }
 
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_selectOptionQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_selectOptionQuestion {
+  options: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_selectOptionQuestion_options[];
+}
+
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_selectOptionExpectedAnswer {
+  expectedChoices: any[];
+}
+
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer {
   choices: any[];
 }
@@ -1403,13 +1471,18 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAns
   choices: any[];
 }
 
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_selectOptionAnswer {
+  choice: any;
+}
+
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer {
   quizId: any;
   userId: number;
-  score: number;
+  score: number | null;
   answerData: any;
   singleChoiceAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer | null;
   multipleChoiceAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_multipleChoiceAnswer | null;
+  selectOptionAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_selectOptionAnswer | null;
 }
 
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers_singleChoiceAnswer {
@@ -1420,13 +1493,18 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answe
   choices: any[];
 }
 
+export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers_selectOptionAnswer {
+  choice: any;
+}
+
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers {
   quizId: any;
   userId: number;
-  score: number;
+  score: number | null;
   answerData: any;
   singleChoiceAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers_singleChoiceAnswer | null;
   multipleChoiceAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers_multipleChoiceAnswer | null;
+  selectOptionAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers_selectOptionAnswer | null;
 }
 
 export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes {
@@ -1441,6 +1519,8 @@ export interface GetDocumentQuizzes_documentGet_pages_pageContents_quizzes {
   singleChoiceExpectedAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceExpectedAnswer | null;
   multipleChoiceQuestion: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceQuestion | null;
   multipleChoiceExpectedAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceExpectedAnswer | null;
+  selectOptionQuestion: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_selectOptionQuestion | null;
+  selectOptionExpectedAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_selectOptionExpectedAnswer | null;
   myAnswer: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer | null;
   answers: GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_answers[];
 }
@@ -1780,13 +1860,18 @@ export interface CoreQuizUserAnswerFields_multipleChoiceAnswer {
   choices: any[];
 }
 
+export interface CoreQuizUserAnswerFields_selectOptionAnswer {
+  choice: any;
+}
+
 export interface CoreQuizUserAnswerFields {
   quizId: any;
   userId: number;
-  score: number;
+  score: number | null;
   answerData: any;
   singleChoiceAnswer: CoreQuizUserAnswerFields_singleChoiceAnswer | null;
   multipleChoiceAnswer: CoreQuizUserAnswerFields_multipleChoiceAnswer | null;
+  selectOptionAnswer: CoreQuizUserAnswerFields_selectOptionAnswer | null;
 }
 
 /* tslint:disable */
@@ -1830,6 +1915,19 @@ export interface CoreQuizFields_multipleChoiceExpectedAnswer {
   expectedChoices: any[];
 }
 
+export interface CoreQuizFields_selectOptionQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface CoreQuizFields_selectOptionQuestion {
+  options: CoreQuizFields_selectOptionQuestion_options[];
+}
+
+export interface CoreQuizFields_selectOptionExpectedAnswer {
+  expectedChoices: any[];
+}
+
 export interface CoreQuizFields_myAnswer_singleChoiceAnswer {
   choices: any[];
 }
@@ -1838,13 +1936,18 @@ export interface CoreQuizFields_myAnswer_multipleChoiceAnswer {
   choices: any[];
 }
 
+export interface CoreQuizFields_myAnswer_selectOptionAnswer {
+  choice: any;
+}
+
 export interface CoreQuizFields_myAnswer {
   quizId: any;
   userId: number;
-  score: number;
+  score: number | null;
   answerData: any;
   singleChoiceAnswer: CoreQuizFields_myAnswer_singleChoiceAnswer | null;
   multipleChoiceAnswer: CoreQuizFields_myAnswer_multipleChoiceAnswer | null;
+  selectOptionAnswer: CoreQuizFields_myAnswer_selectOptionAnswer | null;
 }
 
 export interface CoreQuizFields_answers_singleChoiceAnswer {
@@ -1855,13 +1958,18 @@ export interface CoreQuizFields_answers_multipleChoiceAnswer {
   choices: any[];
 }
 
+export interface CoreQuizFields_answers_selectOptionAnswer {
+  choice: any;
+}
+
 export interface CoreQuizFields_answers {
   quizId: any;
   userId: number;
-  score: number;
+  score: number | null;
   answerData: any;
   singleChoiceAnswer: CoreQuizFields_answers_singleChoiceAnswer | null;
   multipleChoiceAnswer: CoreQuizFields_answers_multipleChoiceAnswer | null;
+  selectOptionAnswer: CoreQuizFields_answers_selectOptionAnswer | null;
 }
 
 export interface CoreQuizFields {
@@ -1876,6 +1984,8 @@ export interface CoreQuizFields {
   singleChoiceExpectedAnswer: CoreQuizFields_singleChoiceExpectedAnswer | null;
   multipleChoiceQuestion: CoreQuizFields_multipleChoiceQuestion | null;
   multipleChoiceExpectedAnswer: CoreQuizFields_multipleChoiceExpectedAnswer | null;
+  selectOptionQuestion: CoreQuizFields_selectOptionQuestion | null;
+  selectOptionExpectedAnswer: CoreQuizFields_selectOptionExpectedAnswer | null;
   myAnswer: CoreQuizFields_myAnswer | null;
   answers: CoreQuizFields_answers[];
 }
@@ -1923,7 +2033,7 @@ export enum PageLayout {
 export enum QuizType {
   FILL_IN_BLANK = "FILL_IN_BLANK",
   MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
-  SELECT_OPTIONS = "SELECT_OPTIONS",
+  SELECT_OPTION = "SELECT_OPTION",
   SINGLE_CHOICE = "SINGLE_CHOICE",
   WRITING_BLOCK = "WRITING_BLOCK",
 }

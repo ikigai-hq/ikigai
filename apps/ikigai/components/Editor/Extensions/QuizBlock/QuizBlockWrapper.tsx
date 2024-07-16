@@ -17,6 +17,7 @@ export type QuizBlockWrapperProps = {
   nodeViewProps: NodeViewProps;
   showSetting: boolean;
   onClickSetting?: () => void;
+  inline?: boolean;
 };
 
 const QuizBlockWrapper = ({
@@ -25,6 +26,7 @@ const QuizBlockWrapper = ({
   nodeViewProps: props,
   showSetting,
   onClickSetting,
+  inline = false,
 }: QuizBlockWrapperProps) => {
   const pageContentId = props.extension.options.pageContentId;
   const quizId = props.node.attrs.quizId;
@@ -75,8 +77,8 @@ const QuizBlockWrapper = ({
 
   if (initializing) {
     return (
-      <NodeViewWrapper>
-        <ExtensionWrapper selected={props.selected}>
+      <NodeViewWrapper as={inline ? "span" : undefined}>
+        <ExtensionWrapper selected={props.selected} inline={inline}>
           <Loading />
         </ExtensionWrapper>
       </NodeViewWrapper>
@@ -84,10 +86,10 @@ const QuizBlockWrapper = ({
   }
 
   return (
-    <NodeViewWrapper>
-      <ExtensionWrapper selected={props.selected}>
+    <NodeViewWrapper as={inline ? "span" : undefined}>
+      <ExtensionWrapper selected={props.selected} inline={inline}>
         {children}
-        <ExtensionMenu $show={showSetting}>
+        <ExtensionMenu $show={showSetting && !inline}>
           <div>
             <IconButton
               size="1"

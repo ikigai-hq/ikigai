@@ -77,7 +77,7 @@ export const getUIConfig = (document: IDocument, role: Role) => {
 const _getUIConfig = (document: IDocument, role: Role) => {
   const documentType = document.documentType;
   if (documentType === DocumentType.SUBMISSION) {
-    const config = getSubmissionUIConfig(role);
+    const config = cloneDeep(getSubmissionUIConfig(role));
     if (document.submission.submitAt) {
       config.showGrading = true;
     }

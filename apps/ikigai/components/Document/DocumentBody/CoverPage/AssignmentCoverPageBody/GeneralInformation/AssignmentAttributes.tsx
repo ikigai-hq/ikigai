@@ -1,12 +1,13 @@
 import { DataList } from "@radix-ui/themes";
+import { Trans } from "@lingui/macro";
 
 import TestDurationAttribute from "./TestDurationAttribute";
 import { DocumentActionPermission, UpdateAssignmentData } from "graphql/types";
 import AttemptAttribute from "./AttemptAttribute";
 import GradeMethodAttribute from "./GradeMethodAttribute";
-import RubricAttribute from "./RubricAttribute";
 import AssigneesAttribute from "./AssigneesAttribute";
 import usePermission from "hook/UsePermission";
+import { useOrderedQuizzes } from "hook/UseQuiz";
 
 export type AssignmentAttributesProps = {
   data: UpdateAssignmentData;
@@ -20,6 +21,7 @@ const AssignmentAttributes = ({
   canEdit,
 }: AssignmentAttributesProps) => {
   const allow = usePermission();
+  const { orderedQuizzes, orderedPages } = useOrderedQuizzes();
   const onChangeInnerAssignment = (
     updateData: Partial<UpdateAssignmentData>,
   ) => {
@@ -68,15 +70,11 @@ const AssignmentAttributes = ({
         </DataList.Value>
       </DataList.Item>
       <DataList.Item>
-        <DataList.Label minWidth="88px">Grade by Rubric</DataList.Label>
+        <DataList.Label minWidth="88px">Total Quizzes</DataList.Label>
         <DataList.Value>
-          <RubricAttribute
-            rubricId={data.gradeByRubricId}
-            onChangeRubricId={(rubricId) => {
-              onChangeInnerAssignment({ gradeByRubricId: rubricId });
-            }}
-            readOnly={!canEdit}
-          />
+          <Trans>
+            {orderedPages.length} page(s) - {orderedQuizzes.length} quiz(zes)
+          </Trans>
         </DataList.Value>
       </DataList.Item>
       {allow(DocumentActionPermission.MANAGE_DOCUMENT) && (

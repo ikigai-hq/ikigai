@@ -20,6 +20,7 @@ import {
   ISingleChoiceQuestion,
 } from "store/QuizStore";
 import { allow } from "hook/UsePermission";
+import { getQuizColor } from "../../../../util/DocumentUtil";
 
 export type QuizBlockWrapperProps = {
   quizType: QuizType;
@@ -88,7 +89,7 @@ const QuizBlockWrapper = ({
   if (initializing) {
     return (
       <NodeViewWrapper as={inline ? "span" : undefined}>
-        <ExtensionWrapper selected={props.selected} inline={inline}>
+        <ExtensionWrapper selected={props.selected} inline={inline} id={quizId}>
           <Loading />
         </ExtensionWrapper>
       </NodeViewWrapper>
@@ -97,7 +98,7 @@ const QuizBlockWrapper = ({
 
   return (
     <NodeViewWrapper as={inline ? "span" : undefined}>
-      <ExtensionWrapper selected={props.selected} inline={inline}>
+      <ExtensionWrapper selected={props.selected} inline={inline} id={quizId}>
         {children}
         <ExtensionMenu $show={showSetting && !inline}>
           <div>
@@ -139,11 +140,7 @@ export const processReviewAnswer = (
   explainAnswer: string;
 } => {
   const isCorrect = !!answer?.score;
-  const color = !allow(DocumentActionPermission.VIEW_ANSWER)
-    ? "indigo"
-    : isCorrect
-    ? "green"
-    : "red";
+  const color = getQuizColor(answer);
   const correctAnswers = questionData.options.filter((option) =>
     answerData?.expectedChoices?.includes(option.id),
   );

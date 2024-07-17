@@ -34,6 +34,7 @@ import { isEmptyUuid } from "util/FileUtil";
 import usePageContentStore from "store/PageContentStore";
 import usePageStore from "store/PageStore";
 import useDocumentStore from "store/DocumentStore";
+import useAuthUserStore from "store/AuthStore";
 
 const useQuiz = <
   Question extends QuestionData,
@@ -254,7 +255,7 @@ export const getDefaultUserAnswer = (
   }
 };
 
-export const useOrderedQuizzes = () => {
+export const useOrderedQuizzes = (quizId?: string) => {
   const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
   const orderedPages = usePageStore((state) =>
     state.pages
@@ -290,7 +291,7 @@ export const useOrderedQuizzes = () => {
       const page = orderedPageContents.find(
         (pageContent) => quiz.pageContentId === pageContent.id,
       );
-      return hasQuizInContent(page.body, quiz.id);
+      return hasQuizInContent(page?.body, quiz.id);
     }),
   );
   const orderedQuizzes = quizzes.sort((quiz, otherQuiz) => {
@@ -313,11 +314,45 @@ export const useOrderedQuizzes = () => {
     return orderedQuizzes.findIndex((quiz) => quiz.id === quizId);
   };
 
+  const quizIndex = quizId ? getQuizIndex(quizId) : -1;
   return {
     orderedPages,
     orderedPageContents,
     orderedQuizzes,
     getQuizIndex,
+    quizIndex,
+  };
+};
+
+export const usePageOrderedQuizzes = (pageId: number) => {
+  const submissionUserId = useDocumentStore(
+    (state) => state.activeDocument?.submission?.user?.id,
+  );
+  const currentUserId = useAuthUserStore(
+    (state) => state.currentUser?.userMe?.id,
+  );
+  const userId = submissionUserId || currentUserId;
+  const { orderedQuizzes, orderedPageContents } = useOrderedQuizzes();
+
+  const pageContentIds = orderedPageContents
+    .filter((pageContent) => pageContent.pageId === pageId)
+    .map((pageContent) => pageContent.id);
+
+  const pageOrderedQuizzes = orderedQuizzes
+    .map((quiz, index) => {
+      const answer = [...(quiz.answers || []), quiz.myAnswer].find(
+        (answer) => answer?.userId === userId,
+      );
+      return {
+        quiz,
+        index,
+        answer,
+      };
+    })
+    .filter(({ quiz }) => pageContentIds.includes(quiz.pageContentId));
+
+  return {
+    pageOrderedQuizzes,
   };
 };
 
@@ -329,7 +364,7 @@ export const compareIndexOfQuizInContent = (
   if (content?.attrs?.quizId === quizId) return -1;
   if (content?.attrs?.quizId === otherQuizId) return 1;
 
-  if (content.content) {
+  if (content?.content) {
     for (const innerContent of content.content) {
       const compareNumber = compareIndexOfQuizInContent(
         innerContent,
@@ -346,7 +381,7 @@ export const compareIndexOfQuizInContent = (
 export const hasQuizInContent = (content: JSONContent, quizId: string) => {
   if (content?.attrs?.quizId === quizId) return true;
 
-  if (content.content) {
+  if (content?.content) {
     for (const innerContent of content.content) {
       const hasQuiz = hasQuizInContent(innerContent, quizId);
       if (hasQuiz) return true;

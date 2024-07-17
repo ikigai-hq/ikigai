@@ -17,18 +17,20 @@ export const BlockExtensionWrapper = styled.div<{
 `;
 
 export type ExtensionWrapperProps = {
+  id?: string;
   children: React.ReactNode;
   selected: boolean;
   inline: boolean;
 };
 
 export const ExtensionWrapper = ({
+  id,
   children,
   selected,
   inline,
 }: ExtensionWrapperProps) => {
   return (
-    <BlockExtensionWrapper $selected={selected} $inline={inline}>
+    <BlockExtensionWrapper id={id} $selected={selected} $inline={inline}>
       {children}
     </BlockExtensionWrapper>
   );

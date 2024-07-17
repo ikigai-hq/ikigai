@@ -1,6 +1,9 @@
-import { ISubmission } from "store/DocumentStore";
 import { Badge } from "@radix-ui/themes";
-import { DocumentType } from "../graphql/types";
+
+import { DocumentActionPermission, DocumentType } from "graphql/types";
+import { allow } from "hook/UsePermission";
+import { IQuizAnswer } from "store/QuizStore";
+import { ISubmission } from "store/DocumentStore";
 
 export enum SubmissionStatus {
   NotSubmitted = "Not Submitted",
@@ -38,3 +41,20 @@ export const documentIcon = (item?: {
     : item?.documentType === DocumentType.FOLDER
     ? "📁"
     : "📝";
+
+export const getQuizColor = (answer: IQuizAnswer) => {
+  return !allow(DocumentActionPermission.VIEW_ANSWER)
+    ? "indigo"
+    : !answer?.score
+    ? "red"
+    : "green";
+};
+
+export const getQuizAnswerColor = (answer?: IQuizAnswer) => {
+  if (!answer) return "mauve";
+  return !allow(DocumentActionPermission.VIEW_ANSWER)
+    ? "indigo"
+    : !answer?.score
+    ? "red"
+    : "green";
+};

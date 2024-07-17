@@ -225,7 +225,10 @@ pub fn get_auto_store(quiz_type: QuizType, expected_answer: Value, answer: Value
             let choice_expected_answer: SelectAnswerData =
                 serde_json::from_value(expected_answer).ok()?;
             let user_answer: SelectUserAnswerData = serde_json::from_value(answer).ok()?;
-            if choice_expected_answer.expected_choices.contains(&user_answer.choice) {
+            if choice_expected_answer
+                .expected_choices
+                .contains(&user_answer.choice)
+            {
                 return Some(1.0);
             }
         }

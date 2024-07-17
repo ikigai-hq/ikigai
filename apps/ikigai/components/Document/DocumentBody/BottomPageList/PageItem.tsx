@@ -2,7 +2,7 @@ import { IconButton, Text, TextField } from "@radix-ui/themes";
 import styled from "styled-components";
 import { t, Trans } from "@lingui/macro";
 import { useState } from "react";
-import { DotsVerticalIcon, TrashIcon } from "@radix-ui/react-icons";
+import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import { useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
 
@@ -14,6 +14,8 @@ import { REMOVE_PAGE } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
 import usePermission from "hook/UsePermission";
 import { DocumentActionPermission } from "graphql/types";
+import { usePageOrderedQuizzes } from "hook/UseQuiz";
+import QuizzesList from "./QuizzesList";
 
 export type PageItemProps = {
   page?: IPage;
@@ -28,6 +30,7 @@ const PageItem = ({ page, index }: PageItemProps) => {
   const activePage = usePageStore((state) =>
     state.pages.find((page) => page.id === activePageId),
   );
+  const { pageOrderedQuizzes } = usePageOrderedQuizzes(page?.id);
   const { upsert } = useUpdatePage(activePageId);
   const [innerTitle, setInnerTitle] = useState(activePage?.title);
   const [deletePage] = useMutation(REMOVE_PAGE, {
@@ -51,21 +54,25 @@ const PageItem = ({ page, index }: PageItemProps) => {
     }
   };
 
+  const answeredQuiz = pageOrderedQuizzes.filter(
+    ({ answer }) => !!answer,
+  ).length;
   const isActive = activePageId === page?.id;
   const isExpanded = isActive && !!page;
+  console.log("Hello", answeredQuiz, page?.id, pageOrderedQuizzes);
   return (
     <div style={{ display: "flex" }}>
       <PageContainer
         onClick={() => setActivePageId(page?.id)}
         $active={isActive}
-        $isExpanded={isExpanded}
+        $isExpanded={!!page}
       >
         <div
           style={{
             display: "flex",
             justifyContent: "center",
             flex: 1,
-            maxWidth: isExpanded ? "unset" : "120px",
+            gap: 4,
           }}
         >
           {!page && (
@@ -73,10 +80,23 @@ const PageItem = ({ page, index }: PageItemProps) => {
               <Trans>Information</Trans>
             </Text>
           )}
-          {index && (
+          {index && !isExpanded && (
             <Text weight="medium" truncate>
-              {page?.title}
+              {page?.title}{" "}
+              <Text size="1" color="gray">
+                <Trans>
+                  {answeredQuiz} of {pageOrderedQuizzes.length} quizzes
+                </Trans>
+              </Text>
             </Text>
+          )}
+          {isExpanded && (
+            <QuizzesList
+              orderedQuizzes={pageOrderedQuizzes}
+              hasEditTool={
+                isExpanded && allow(DocumentActionPermission.MANAGE_DOCUMENT)
+              }
+            />
           )}
         </div>
         {isExpanded && allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
@@ -103,7 +123,7 @@ const PageItem = ({ page, index }: PageItemProps) => {
                 color="gray"
                 style={{ marginRight: 3 }}
               >
-                <DotsVerticalIcon />
+                <Pencil1Icon />
               </IconButton>
             </Modal>
             <AlertDialog
@@ -134,17 +154,13 @@ const PageContainer = styled.div<{
   width: ${(props) => (props.$isExpanded ? "400px" : "130px")};
   cursor: pointer;
   background-color: ${(props) =>
-    props.$active ? "var(--indigo-5)" : "var(--gray-1)"};
+    props.$active ? "var(--indigo-4)" : "var(--gray-1)"};
   display: flex;
   align-items: center;
   gap: 4px;
   transition: all linear 0.4s;
   padding: 5px;
   justify-content: center;
-
-  &:hover {
-    background-color: var(--indigo-5);
-  }
 `;
 
 export default PageItem;

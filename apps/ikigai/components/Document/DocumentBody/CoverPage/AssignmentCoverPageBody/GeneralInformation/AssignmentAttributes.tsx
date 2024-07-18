@@ -1,5 +1,5 @@
-import { DataList } from "@radix-ui/themes";
-import { Trans } from "@lingui/macro";
+import { DataList, Text } from "@radix-ui/themes";
+import { Trans, t } from "@lingui/macro";
 
 import TestDurationAttribute from "./TestDurationAttribute";
 import { DocumentActionPermission, UpdateAssignmentData } from "graphql/types";
@@ -70,11 +70,18 @@ const AssignmentAttributes = ({
         </DataList.Value>
       </DataList.Item>
       <DataList.Item>
-        <DataList.Label minWidth="88px">Total Quizzes</DataList.Label>
+        <DataList.Label minWidth="88px">
+          <Trans>Quizzes</Trans>
+        </DataList.Label>
         <DataList.Value>
-          <Trans>
-            {orderedPages.length} page(s) - {orderedQuizzes.length} quiz(zes)
-          </Trans>
+          <Text align="center">
+            {orderedQuizzes.length}{" "}
+            {orderedQuizzes.length > 1 ? t`quizzes` : t`quiz`}
+            <Text size="1" color="gray">
+              ({orderedPages.length}{" "}
+              {orderedPages.length > 1 ? t`pages` : t`page`})
+            </Text>
+          </Text>
         </DataList.Value>
       </DataList.Item>
       {allow(DocumentActionPermission.MANAGE_DOCUMENT) && (

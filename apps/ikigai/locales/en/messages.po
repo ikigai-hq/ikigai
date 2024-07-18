@@ -201,6 +201,10 @@ msgstr "Click item in the list to switch space"
 msgid "Code"
 msgstr "Code"
 
+#: components/Document/LeftSide/index.tsx:85
+msgid "Community & Help"
+msgstr "Community & Help"
+
 #: components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList.tsx:45
 msgid "Content"
 msgstr "Content"
@@ -317,6 +321,10 @@ msgstr "Do you want to start new attempt?"
 msgid "Do you want to submit your submission?"
 msgstr "Do you want to submit your submission?"
 
+#: components/Document/LeftSide/index.tsx:74
+msgid "Documentation"
+msgstr "Documentation"
+
 #: components/Document/DocumentHeader/Menubar/index.tsx:83
 msgid "Duplicated!"
 msgstr "Duplicated!"
@@ -329,7 +337,7 @@ msgstr "Duplicated!"
 msgid "Edit Page"
 msgstr "Edit Page"
 
-#: components/Document/LeftSide/index.tsx:74
+#: components/Document/LeftSide/index.tsx:115
 msgid "Edit Profile"
 msgstr "Edit Profile"
 
@@ -551,7 +559,7 @@ msgstr "Last name"
 msgid "Left"
 msgstr "Left"
 
-#: components/Document/LeftSide/index.tsx:70
+#: components/Document/LeftSide/index.tsx:111
 msgid "Log out"
 msgstr "Log out"
 
@@ -1128,7 +1136,7 @@ msgstr "Typing your description"
 msgid "Underline"
 msgstr "Underline"
 
-#: components/Document/LeftSide/index.tsx:21
+#: components/Document/LeftSide/index.tsx:31
 msgid "Unknown"
 msgstr "Unknown"
 

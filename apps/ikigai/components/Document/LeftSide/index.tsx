@@ -1,8 +1,18 @@
 import React, { useState } from "react";
 import { t, Trans } from "@lingui/macro";
 import styled from "styled-components";
-import { Avatar, DropdownMenu, Separator } from "@radix-ui/themes";
-import { FileIcon } from "@radix-ui/react-icons";
+import {
+  Avatar,
+  DropdownMenu,
+  IconButton,
+  Separator,
+  Tooltip,
+} from "@radix-ui/themes";
+import {
+  FileIcon,
+  QuestionMarkCircledIcon,
+  ReaderIcon,
+} from "@radix-ui/react-icons";
 
 import useAuthUserStore from "store/AuthStore";
 import EditProfileModal from "components/UserCredential/EditProfileModal";
@@ -24,6 +34,14 @@ const LeftSide = () => {
     UserStorage.del();
     TokenStorage.del();
     window.location.href = "/";
+  };
+
+  const onClickCommunity = () => {
+    window.open("https://discord.com/invite/XuYWkn6kUS", "_blank");
+  };
+
+  const onClickDocumentation = () => {
+    window.open("https://ikigai.li", "_blank");
   };
 
   const onClickContent = (event) => {
@@ -53,6 +71,29 @@ const LeftSide = () => {
             </IkigaiIconButton>
           </MenuItemWrapper>
         </div>
+        <Tooltip content={t`Documentation`}>
+          <IconButton
+            size="3"
+            variant="ghost"
+            style={{ marginBottom: 10 }}
+            color="gray"
+            onClick={onClickDocumentation}
+          >
+            <ReaderIcon width="20" height="20" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip content={t`Community & Help`}>
+          <IconButton
+            size="3"
+            variant="ghost"
+            style={{ marginBottom: 1 }}
+            color="gray"
+            onClick={onClickCommunity}
+          >
+            <QuestionMarkCircledIcon width="20" height="20" />
+          </IconButton>
+        </Tooltip>
+        <Separator style={{ width: "100%" }} />
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <div style={{ margin: "5px auto", cursor: "pointer" }}>

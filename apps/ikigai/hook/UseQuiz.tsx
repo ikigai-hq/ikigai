@@ -278,7 +278,7 @@ export const getDefaultUserAnswer = (
   }
 };
 
-export const useOrderedQuizzes = (quizId?: string) => {
+export const useOrderedQuizzes = (answerUserId?: number) => {
   const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
   const orderedPages = usePageStore((state) =>
     state.pages
@@ -337,13 +337,14 @@ export const useOrderedQuizzes = (quizId?: string) => {
     return orderedQuizzes.findIndex((quiz) => quiz.id === quizId);
   };
 
-  const quizIndex = quizId ? getQuizIndex(quizId) : -1;
   return {
     orderedPages,
     orderedPageContents,
     orderedQuizzes,
     getQuizIndex,
-    quizIndex,
+    userAnswers: orderedQuizzes.map((quiz) =>
+      answerUserId ? getAnswer(quiz, answerUserId) : undefined,
+    ),
   };
 };
 
@@ -363,9 +364,7 @@ export const usePageOrderedQuizzes = (pageId: number) => {
 
   const pageOrderedQuizzes = orderedQuizzes
     .map((quiz, index) => {
-      const answer = [...(quiz.answers || []), quiz.myAnswer].find(
-        (answer) => answer?.userId === userId,
-      );
+      const answer = getAnswer(quiz, userId);
       return {
         quiz,
         index,
@@ -377,6 +376,12 @@ export const usePageOrderedQuizzes = (pageId: number) => {
   return {
     pageOrderedQuizzes,
   };
+};
+
+const getAnswer = (quiz: IQuiz, userId: number) => {
+  const answers = quiz.answers || [];
+  if (quiz.myAnswer) answers.push(quiz.myAnswer);
+  return answers.find((answer) => answer.userId === userId);
 };
 
 export const compareIndexOfQuizInContent = (

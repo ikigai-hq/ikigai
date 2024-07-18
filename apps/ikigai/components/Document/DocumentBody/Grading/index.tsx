@@ -14,6 +14,8 @@ import { TEACHER_REVIEW_SUBMISSION } from "graphql/mutation/AssignmentMutation";
 import { handleError } from "graphql/ApolloClient";
 import usePermission from "hook/UsePermission";
 import { SpaceActionPermission } from "graphql/types";
+import { useOrderedQuizzes } from "hook/UseQuiz";
+import { QuizItemIndicator } from "../BottomPageList/QuizzesList";
 
 const Grading = () => {
   const allow = usePermission();
@@ -25,6 +27,9 @@ const Grading = () => {
   );
   const [feedback, setFeedback] = useState(submission?.feedback || "");
   const [finalGrade, setFinalGrade] = useState(submission?.finalGrade);
+  const { orderedQuizzes, userAnswers } = useOrderedQuizzes(
+    submission?.user?.id,
+  );
 
   const onFeedback = async () => {
     const { data } = await grade({
@@ -101,6 +106,17 @@ const Grading = () => {
             </DataList.Value>
           </DataList.Item>
         </DataList.Root>
+        <Separator style={{ width: "100%", marginTop: 10, marginBottom: 10 }} />
+        <div style={{ display: "flex", gap: 4, flexFlow: "row wrap" }}>
+          {orderedQuizzes.map((quiz, index) => (
+            <QuizItemIndicator
+              key={quiz.id}
+              index={index}
+              quiz={quiz}
+              answer={userAnswers[index]}
+            />
+          ))}
+        </div>
         <Separator style={{ width: "100%", marginTop: 10, marginBottom: 10 }} />
         <DataList.Root>
           <DataList.Item align="center">

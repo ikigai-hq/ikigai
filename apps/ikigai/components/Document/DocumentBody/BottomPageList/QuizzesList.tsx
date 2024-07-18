@@ -4,9 +4,11 @@ import { Text } from "@radix-ui/themes";
 import { IQuiz, IQuizAnswer } from "store/QuizStore";
 import { getQuizAnswerColor } from "util/DocumentUtil";
 import useDocumentStore from "store/DocumentStore";
+import usePageStore from "../../../../store/PageStore";
+import usePageContentStore from "../../../../store/PageContentStore";
 
 type QuizzesListProps = {
-  orderedQuizzes: BottomQuizItemProps[];
+  orderedQuizzes: QuizItemIndicatorProps[];
   hasEditTool: boolean;
 };
 
@@ -15,27 +17,47 @@ const QuizzesList = ({ orderedQuizzes, hasEditTool }: QuizzesListProps) => {
     <div style={{ flex: 1 }}>
       <QuizzesListWrapper $hasEditTool={hasEditTool}>
         {orderedQuizzes.map((props) => (
-          <BottomQuizItem key={props.quiz.id} {...props} />
+          <QuizItemIndicator key={props.quiz.id} {...props} />
         ))}
       </QuizzesListWrapper>
     </div>
   );
 };
 
-export type BottomQuizItemProps = {
+export type QuizItemIndicatorProps = {
   quiz: IQuiz;
   index: number;
   answer?: IQuizAnswer;
 };
 
-const BottomQuizItem = ({ quiz, index, answer }: BottomQuizItemProps) => {
+export const QuizItemIndicator = ({
+  quiz,
+  index,
+  answer,
+}: QuizItemIndicatorProps) => {
+  const activePageId = usePageStore((state) => state.activePageId);
+  const setActivePageId = usePageStore((state) => state.setActivePageId);
+  const pageContent = usePageContentStore((state) =>
+    state.pageContents.find((c) => c.id === quiz.pageContentId),
+  );
   const isSubmission = useDocumentStore(
     (state) => !!state.activeDocument?.submission,
   );
   const onClick = () => {
+    if (pageContent && pageContent.pageId !== activePageId) {
+      setActivePageId(pageContent.pageId);
+      setTimeout(() => {
+        scrollToQuiz();
+      }, 200);
+    } else {
+      scrollToQuiz();
+    }
+  };
+
+  const scrollToQuiz = () => {
     const e = document.getElementById(quiz.id);
     if (e) {
-      e.scrollIntoView({ behavior: "smooth" });
+      e.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   };
 

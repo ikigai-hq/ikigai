@@ -148,16 +148,12 @@ const IkigaiMenubar = () => {
                 </Menubar.SubContent>
               </Menubar.Portal>
             </Menubar.Sub>
-            <Menubar.Separator className="MenubarSeparator" />
-            <Menubar.Item className="MenubarItem">
-              <Trans>Share</Trans>
-            </Menubar.Item>
-            <Menubar.Item className="MenubarItem" onClick={onCopyLink}>
-              <Trans>Copy Link</Trans>
-            </Menubar.Item>
-            <Menubar.Separator className="MenubarSeparator" />
             <Menubar.Item className="MenubarItem" onClick={onDuplicate}>
               <Trans>Make a copy</Trans>
+            </Menubar.Item>
+            <Menubar.Separator className="MenubarSeparator" />
+            <Menubar.Item className="MenubarItem" onClick={onCopyLink}>
+              <Trans>Copy Link</Trans>
             </Menubar.Item>
             <Menubar.Separator className="MenubarSeparator" />
             <Menubar.Item

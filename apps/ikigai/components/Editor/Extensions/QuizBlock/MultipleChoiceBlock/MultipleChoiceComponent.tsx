@@ -25,9 +25,7 @@ const MultipleChoiceBlockComponent = (props: NodeViewProps) => {
     <QuizBlockWrapper
       quizType={QuizType.MULTIPLE_CHOICE}
       nodeViewProps={props}
-      showSetting={
-        props.selected && allow(DocumentActionPermission.EDIT_DOCUMENT)
-      }
+      showSetting={allow(DocumentActionPermission.EDIT_DOCUMENT)}
       onClickSetting={() => setShowSetting(!showSetting)}
     >
       <MultipleChoice

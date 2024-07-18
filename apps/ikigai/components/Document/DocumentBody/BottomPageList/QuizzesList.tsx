@@ -4,8 +4,8 @@ import { Text } from "@radix-ui/themes";
 import { IQuiz, IQuizAnswer } from "store/QuizStore";
 import { getQuizAnswerColor } from "util/DocumentUtil";
 import useDocumentStore from "store/DocumentStore";
-import usePageStore from "../../../../store/PageStore";
-import usePageContentStore from "../../../../store/PageContentStore";
+import usePageStore from "store/PageStore";
+import usePageContentStore from "store/PageContentStore";
 
 type QuizzesListProps = {
   orderedQuizzes: QuizItemIndicatorProps[];

@@ -25,9 +25,7 @@ const SingleChoiceBlockComponent = (props: NodeViewProps) => {
     <QuizBlockWrapper
       quizType={QuizType.SINGLE_CHOICE}
       nodeViewProps={props}
-      showSetting={
-        props.selected && allow(DocumentActionPermission.EDIT_DOCUMENT)
-      }
+      showSetting={allow(DocumentActionPermission.EDIT_DOCUMENT)}
       onClickSetting={() => setShowSetting(!showSetting)}
     >
       <SingleChoice

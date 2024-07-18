@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:196
+#: components/Document/DocumentHeader/Menubar/index.tsx:192
 msgid "{0} focus mode"
 msgstr "{0} focus mode"
 
@@ -262,11 +262,11 @@ msgstr "Criteria"
 msgid "Declare your question, options, and then choose the correct answer."
 msgstr "Declare your question, options, and then choose the correct answer."
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:167
+#: components/Document/DocumentHeader/Menubar/index.tsx:163
 msgid "Delete"
 msgstr "Delete"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:205
+#: components/Document/DocumentHeader/Menubar/index.tsx:201
 msgid "Delete {0}!"
 msgstr "Delete {0}!"
 
@@ -519,7 +519,7 @@ msgstr "Inviter"
 msgid "Inviting role"
 msgstr "Inviting role"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:206
+#: components/Document/DocumentHeader/Menubar/index.tsx:202
 msgid "It will delete children files if this is folder."
 msgstr "It will delete children files if this is folder."
 
@@ -555,7 +555,7 @@ msgstr "Left"
 msgid "Log out"
 msgstr "Log out"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:160
+#: components/Document/DocumentHeader/Menubar/index.tsx:152
 msgid "Make a copy"
 msgstr "Make a copy"
 
@@ -681,12 +681,12 @@ msgid "Oops! We found an unexpected error..."
 msgstr "Oops! We found an unexpected error..."
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:82
-msgid "page"
-msgstr "page"
+#~ msgid "page"
+#~ msgstr "page"
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:82
-msgid "pages"
-msgstr "pages"
+#~ msgid "pages"
+#~ msgstr "pages"
 
 #: components/Document/RightSide/EditContentSidebar/index.tsx:30
 #: components/Document/RightSide/EditContentSidebar/PageTabContent.tsx:69
@@ -727,15 +727,15 @@ msgstr "Profile"
 msgid "Question"
 msgstr "Question"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:79
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:85
 msgid "quiz"
 msgstr "quiz"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:79
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:85
 msgid "quizzes"
 msgstr "quizzes"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:74
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:81
 msgid "Quizzes"
 msgstr "Quizzes"
 
@@ -862,8 +862,8 @@ msgid "Sent. Please check your email inbox!"
 msgstr "Sent. Please check your email inbox!"
 
 #: components/Document/DocumentHeader/Menubar/index.tsx:153
-msgid "Share"
-msgstr "Share"
+#~ msgid "Share"
+#~ msgstr "Share"
 
 #: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:472
 msgid "Single Choice Quiz"

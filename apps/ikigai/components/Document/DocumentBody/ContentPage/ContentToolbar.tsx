@@ -21,6 +21,7 @@ import {
   IconSelect,
   IconStrikethrough,
   IconTextColor,
+  IconTexture,
   IconTools,
   IconUnderline,
   IconWriting,
@@ -36,6 +37,7 @@ import { FILE_HANDLER_NAME } from "components/Editor/Extensions/FileHandler";
 import { SINGLE_CHOICE_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/SingleChoiceBlock";
 import { MULTIPLE_CHOICE_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/MultipleChoiceBlock";
 import { SELECT_OPTION_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/SelectOptionBlock";
+import { FILL_IN_BLANK_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/FillInBlankBlock";
 
 const ContentToolbar = () => {
   const activeEditor = useEditorStore((state) => state.activeEditor);
@@ -172,6 +174,12 @@ const ContentToolbar = () => {
     if (!activeEditor || !hasExtension(activeEditor, SELECT_OPTION_BLOCK_NAME))
       return;
     activeEditor.chain().focus().insertSelectOption().run();
+  };
+
+  const onInsertFillInBlank = () => {
+    if (!activeEditor || !hasExtension(activeEditor, FILL_IN_BLANK_BLOCK_NAME))
+      return;
+    activeEditor.chain().focus().insertFillInBlank().run();
   };
 
   return (
@@ -501,6 +509,20 @@ const ContentToolbar = () => {
               onClick={onInsertSelectOption}
             >
               <IconSelect size={20} stroke={2} />
+            </Toolbar.ToolbarButton>
+          </Tooltip>
+          <Tooltip content={t`Fill In Blank Quiz`}>
+            <Toolbar.ToolbarButton
+              className="ToolbarToggleItem"
+              value="fillInBlank"
+              aria-label="fill-in-blank"
+              disabled={
+                activeEditor?.isActive(FILL_IN_BLANK_BLOCK_NAME) ||
+                !hasExtension(activeEditor, FILL_IN_BLANK_BLOCK_NAME)
+              }
+              onClick={onInsertFillInBlank}
+            >
+              <IconTexture size={20} stroke={2} />
             </Toolbar.ToolbarButton>
           </Tooltip>
         </Toolbar.ToggleGroup>

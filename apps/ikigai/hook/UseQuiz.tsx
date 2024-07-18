@@ -8,6 +8,9 @@ import useQuizStore, {
   identityExpectedAnswer,
   identityQuestionData,
   identityUserAnswer,
+  IFillInBlankAnswer,
+  IFillInBlankExpectedAnswer,
+  IFillInBlankQuestion,
   IMultipleChoiceAnswer,
   IMultipleChoiceExpectedAnswer,
   IMultipleChoiceQuestion,
@@ -195,6 +198,14 @@ export const useSelectOptionQuiz = (quizId: string, pageContentId: string) => {
   >(QuizType.SELECT_OPTION, quizId, pageContentId);
 };
 
+export const useFillInBlankQuiz = (quizId: string, pageContentId: string) => {
+  return useQuiz<
+    IFillInBlankQuestion,
+    IFillInBlankExpectedAnswer,
+    IFillInBlankAnswer
+  >(QuizType.FILL_IN_BLANK, quizId, pageContentId);
+};
+
 const isEmptyQuizData = (data: any): boolean => {
   return data === undefined || data === null || isEqual(data, {});
 };
@@ -217,6 +228,10 @@ export const getDefaultQuestionData = (quizType: QuizType): QuestionData => {
       return {
         options: [],
       };
+    case QuizType.FILL_IN_BLANK:
+      return {
+        content: "",
+      };
     default:
       return {};
   }
@@ -231,6 +246,10 @@ export const getDefaultExpectedAnswer = (
     case QuizType.SELECT_OPTION:
       return {
         expectedChoices: [],
+      };
+    case QuizType.FILL_IN_BLANK:
+      return {
+        expectedAnswers: [],
       };
     default:
       return {};
@@ -249,6 +268,10 @@ export const getDefaultUserAnswer = (
     case QuizType.SELECT_OPTION:
       return {
         choice: "",
+      };
+    case QuizType.FILL_IN_BLANK:
+      return {
+        answer: "",
       };
     default:
       return {};

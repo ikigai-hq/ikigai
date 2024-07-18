@@ -232,6 +232,18 @@ pub fn get_auto_store(quiz_type: QuizType, expected_answer: Value, answer: Value
                 return Some(1.0);
             }
         }
+        QuizType::FillInBlank => {
+            let fill_in_blank_expected_answer: FillInBlankAnswerData =
+                serde_json::from_value(expected_answer).ok()?;
+            let user_answer: FillInBlankUserAnswerData = serde_json::from_value(answer).ok()?;
+            let has_correct_answer = fill_in_blank_expected_answer.expected_answers.iter().any(|expected_answer| {
+                expected_answer.content.to_lowercase().trim() == user_answer.answer.to_lowercase().trim()
+            });
+
+            if has_correct_answer {
+                return Some(1.0);
+            }
+        }
         _ => (),
     };
 
@@ -295,17 +307,17 @@ pub struct SelectUserAnswerData {
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 #[serde(rename_all = "camelCase")]
 pub struct FillInBlankQuestionData {
-    pub options: Vec<ChoiceOption>,
+    pub content: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 #[serde(rename_all = "camelCase")]
 pub struct FillInBlankAnswerData {
-    pub expected_choices: Uuid,
+    pub expected_answers: Vec<ChoiceOption>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, SimpleObject)]
 #[serde(rename_all = "camelCase")]
 pub struct FillInBlankUserAnswerData {
-    pub choice: Uuid,
+    pub answer: String,
 }

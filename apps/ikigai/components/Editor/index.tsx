@@ -21,6 +21,7 @@ import BaseEditor, { useIkigaiEditor } from "./BaseEditor";
 import SingleChoiceBlock from "./Extensions/QuizBlock/SingleChoiceBlock";
 import MultipleChoiceBlock from "./Extensions/QuizBlock/MultipleChoiceBlock";
 import SelectOptionComponent from "./Extensions/QuizBlock/SelectOptionBlock";
+import FillInBlank from "./Extensions/QuizBlock/FillInBlankBlock";
 
 export type EditorProps = {
   readOnly: boolean;
@@ -86,6 +87,9 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
         pageContentId: pageContent.id,
       }),
       SelectOptionComponent.configure({
+        pageContentId: pageContent.id,
+      }),
+      FillInBlank.configure({
         pageContentId: pageContent.id,
       }),
     ],

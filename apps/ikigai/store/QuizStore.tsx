@@ -2,9 +2,12 @@ import create from "zustand";
 
 import {
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes,
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_fillInBlankExpectedAnswer,
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_fillInBlankQuestion,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceExpectedAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_multipleChoiceQuestion,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer,
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_fillInBlankAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_multipleChoiceAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_selectOptionAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_singleChoiceAnswer,
@@ -44,21 +47,31 @@ export type ISelectOptionExpectedAnswer =
 export type ISelectOptionAnswer =
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_selectOptionAnswer;
 
+export type IFillInBlankQuestion =
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_fillInBlankQuestion;
+export type IFillInBlankExpectedAnswer =
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_fillInBlankExpectedAnswer;
+export type IFillInBlankAnswer =
+  GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_fillInBlankAnswer;
+
 export type QuestionData =
   | IWritingQuestion
   | ISingleChoiceQuestion
   | IMultipleChoiceQuestion
   | ISelectOptionQuestion
+  | IFillInBlankQuestion
   | {};
 export type QuestionExpectedAnswer =
   | ISingleChoiceExpectedAnswer
   | IMultipleChoiceExpectedAnswer
   | ISelectOptionExpectedAnswer
+  | IFillInBlankExpectedAnswer
   | {};
 export type QuestionUserAnswer =
   | ISingleChoiceAnswer
   | IMultipleChoiceAnswer
   | ISelectOptionAnswer
+  | IFillInBlankAnswer
   | {};
 
 export type IQuizStore = {

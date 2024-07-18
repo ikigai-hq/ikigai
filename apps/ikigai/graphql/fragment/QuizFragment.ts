@@ -15,6 +15,9 @@ export const QUIZ_USER_ANSWER_FIELDS = gql`
     selectOptionAnswer {
       choice
     }
+    fillInBlankAnswer {
+      answer
+    }
   }
 `;
 
@@ -58,6 +61,15 @@ export const QUIZ_FIELDS = gql`
     }
     selectOptionExpectedAnswer {
       expectedChoices
+    }
+    fillInBlankQuestion {
+      content
+    }
+    fillInBlankExpectedAnswer {
+      expectedAnswers {
+        id
+        content
+      }
     }
     myAnswer {
       ...CoreQuizUserAnswerFields

@@ -9,11 +9,7 @@ use async_graphql::*;
 use itertools::Itertools;
 
 use crate::authorization::DocumentActionPermission;
-use crate::db::{
-    ChoiceAnswerData, ChoiceQuestionData, ChoiceUserAnswerData, FillInBlankAnswerData,
-    FillInBlankQuestionData, Quiz, QuizUserAnswer, SelectAnswerData, SelectQuestionData,
-    SelectUserAnswerData, WritingQuestionData,
-};
+use crate::db::{ChoiceAnswerData, ChoiceQuestionData, ChoiceUserAnswerData, FillInBlankAnswerData, FillInBlankQuestionData, FillInBlankUserAnswerData, Quiz, QuizUserAnswer, SelectAnswerData, SelectQuestionData, SelectUserAnswerData, WritingQuestionData};
 use crate::graphql::data_loader::{FindQuiz, FindQuizUserAnswersByQuiz, IkigaiDataLoader};
 use crate::helper::{document_quick_allowed_by_page_content, get_user_id_from_ctx};
 
@@ -161,7 +157,7 @@ impl QuizUserAnswer {
         self.parse_answer_data()
     }
 
-    async fn fill_in_blank_answer(&self) -> Option<SelectUserAnswerData> {
+    async fn fill_in_blank_answer(&self) -> Option<FillInBlankUserAnswerData> {
         self.parse_answer_data()
     }
 }

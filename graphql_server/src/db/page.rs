@@ -4,6 +4,8 @@ use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use std::collections::HashMap;
 use uuid::Uuid;
 
+use crate::db::ALL_QUIZ_TYPES;
+
 use super::schema::{page_contents, pages};
 use crate::impl_enum_for_db;
 use crate::util::get_now_as_secs;
@@ -241,5 +243,16 @@ impl JSONContent {
                 .as_ref()
                 .map_or_else(|| false, |attrs| attrs.get("fileId") == Some(&file_value))
         })
+    }
+
+    pub fn find_quiz_blocks(&self) -> Vec<&JSONContent> {
+        let predicate = |content: &JSONContent| {
+            content.content_type.as_ref().map_or(false, |content_type| {
+                ALL_QUIZ_TYPES
+                    .iter()
+                    .any(|quiz| quiz.block_name() == content_type.as_str())
+            })
+        };
+        self.find_blocks(predicate)
     }
 }

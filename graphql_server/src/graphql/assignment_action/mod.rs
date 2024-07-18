@@ -13,7 +13,8 @@ use crate::authorization::DocumentActionPermission;
 use crate::db::*;
 use crate::error::IkigaiErrorExt;
 use crate::graphql::data_loader::{
-    AssignmentById, DocumentById, IkigaiDataLoader, SubmissionByAssignmentId,
+    AssignmentById, DocumentById, FindPageByDocumentId, FindPageContentByPageId, IkigaiDataLoader,
+    SubmissionByAssignmentId,
 };
 use crate::helper::{
     document_quick_authorize, get_conn_from_ctx, get_public_user_from_loader,
@@ -71,6 +72,31 @@ impl Assignment {
         } else {
             Ok(None)
         }
+    }
+
+    async fn total_quiz(&self, ctx: &Context<'_>) -> Result<usize> {
+        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
+        let pages = loader
+            .load_one(FindPageByDocumentId {
+                document_id: self.document_id,
+            })
+            .await?
+            .unwrap_or_default();
+        let keys: Vec<FindPageContentByPageId> = pages
+            .iter()
+            .map(|page| FindPageContentByPageId { page_id: page.id })
+            .collect();
+        let page_contents = loader.load_many(keys).await?;
+        let total_quiz = page_contents
+            .into_values()
+            .flatten()
+            .map(|page_content| {
+                serde_json::from_value::<JSONContent>(page_content.body).unwrap_or_default()
+            })
+            .map(|content| content.find_quiz_blocks().len())
+            .sum();
+
+        Ok(total_quiz)
     }
 }
 

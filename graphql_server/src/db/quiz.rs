@@ -4,6 +4,7 @@ use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::Value;
+use std::clone::Clone;
 use uuid::Uuid;
 
 use super::schema::{quiz_blocks, quiz_user_answer};
@@ -39,6 +40,14 @@ impl QuizType {
         "quizId"
     }
 }
+
+pub const ALL_QUIZ_TYPES: [QuizType; 5] = [
+    QuizType::WritingBlock,
+    QuizType::FillInBlank,
+    QuizType::SelectOption,
+    QuizType::SingleChoice,
+    QuizType::MultipleChoice,
+];
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
 #[graphql(input_name = "QuizInput", complex)]

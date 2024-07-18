@@ -24,6 +24,7 @@ export const GET_DOCUMENT = gql`
         bandScoreId
         gradeMethod
         gradeByRubricId
+        totalQuiz
       }
       submission {
         id

@@ -1,5 +1,5 @@
 import { DataList, Text } from "@radix-ui/themes";
-import { Trans, t } from "@lingui/macro";
+import { t, Trans } from "@lingui/macro";
 
 import TestDurationAttribute from "./TestDurationAttribute";
 import { DocumentActionPermission, UpdateAssignmentData } from "graphql/types";
@@ -8,6 +8,7 @@ import GradeMethodAttribute from "./GradeMethodAttribute";
 import AssigneesAttribute from "./AssigneesAttribute";
 import usePermission from "hook/UsePermission";
 import { useOrderedQuizzes } from "hook/UseQuiz";
+import useDocumentStore from "../../../../../../store/DocumentStore";
 
 export type AssignmentAttributesProps = {
   data: UpdateAssignmentData;
@@ -21,7 +22,10 @@ const AssignmentAttributes = ({
   canEdit,
 }: AssignmentAttributesProps) => {
   const allow = usePermission();
-  const { orderedQuizzes, orderedPages } = useOrderedQuizzes();
+  const { orderedQuizzes } = useOrderedQuizzes();
+  const totalQuizAssignment = useDocumentStore(
+    (state) => state.activeDocument?.assignment?.totalQuiz || 0,
+  );
   const onChangeInnerAssignment = (
     updateData: Partial<UpdateAssignmentData>,
   ) => {
@@ -31,6 +35,9 @@ const AssignmentAttributes = ({
     });
   };
 
+  const totalQuiz = allow(DocumentActionPermission.MANAGE_DOCUMENT)
+    ? orderedQuizzes.length
+    : totalQuizAssignment;
   return (
     <DataList.Root>
       <DataList.Item align="center">
@@ -75,12 +82,7 @@ const AssignmentAttributes = ({
         </DataList.Label>
         <DataList.Value>
           <Text align="center">
-            {orderedQuizzes.length}{" "}
-            {orderedQuizzes.length > 1 ? t`quizzes` : t`quiz`}
-            <Text size="1" color="gray">
-              ({orderedPages.length}{" "}
-              {orderedPages.length > 1 ? t`pages` : t`page`})
-            </Text>
+            {totalQuiz} {totalQuiz > 1 ? t`quizzes` : t`quiz`}
           </Text>
         </DataList.Value>
       </DataList.Item>

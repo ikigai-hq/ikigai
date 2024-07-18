@@ -1243,6 +1243,7 @@ export interface GetDocument_documentGet_assignment {
   bandScoreId: number | null;
   gradeMethod: GradeMethod;
   gradeByRubricId: any | null;
+  totalQuiz: number;
 }
 
 export interface GetDocument_documentGet_submission_user_avatar {

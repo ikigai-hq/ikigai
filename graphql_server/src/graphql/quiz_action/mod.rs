@@ -9,7 +9,11 @@ use async_graphql::*;
 use itertools::Itertools;
 
 use crate::authorization::DocumentActionPermission;
-use crate::db::{ChoiceAnswerData, ChoiceQuestionData, ChoiceUserAnswerData, FillInBlankAnswerData, FillInBlankQuestionData, FillInBlankUserAnswerData, Quiz, QuizUserAnswer, SelectAnswerData, SelectQuestionData, SelectUserAnswerData, WritingQuestionData};
+use crate::db::{
+    ChoiceAnswerData, ChoiceQuestionData, ChoiceUserAnswerData, FillInBlankAnswerData,
+    FillInBlankQuestionData, FillInBlankUserAnswerData, Quiz, QuizUserAnswer, SelectAnswerData,
+    SelectQuestionData, SelectUserAnswerData, WritingQuestionData,
+};
 use crate::graphql::data_loader::{FindQuiz, FindQuizUserAnswersByQuiz, IkigaiDataLoader};
 use crate::helper::{document_quick_allowed_by_page_content, get_user_id_from_ctx};
 

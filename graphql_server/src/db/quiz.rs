@@ -236,9 +236,14 @@ pub fn get_auto_store(quiz_type: QuizType, expected_answer: Value, answer: Value
             let fill_in_blank_expected_answer: FillInBlankAnswerData =
                 serde_json::from_value(expected_answer).ok()?;
             let user_answer: FillInBlankUserAnswerData = serde_json::from_value(answer).ok()?;
-            let has_correct_answer = fill_in_blank_expected_answer.expected_answers.iter().any(|expected_answer| {
-                expected_answer.content.to_lowercase().trim() == user_answer.answer.to_lowercase().trim()
-            });
+            let has_correct_answer =
+                fill_in_blank_expected_answer
+                    .expected_answers
+                    .iter()
+                    .any(|expected_answer| {
+                        expected_answer.content.to_lowercase().trim()
+                            == user_answer.answer.to_lowercase().trim()
+                    });
 
             if has_correct_answer {
                 return Some(1.0);

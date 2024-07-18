@@ -289,10 +289,14 @@ pub async fn document_quick_allowed_by_page_content(
     page_content_id: Uuid,
     action: DocumentActionPermission,
 ) -> Result<()> {
-    let page = {
+    let caching_data = ctx.data::<RequestContextCachingData>()?;
+    let page = if let Some(page) = caching_data.get_page_by_page_content(page_content_id) {
+        page
+    } else {
         let mut conn = get_conn_from_ctx(ctx).await?;
         let page_content = PageContent::find(&mut conn, page_content_id).format_err()?;
-        Page::find(&mut conn, page_content.page_id).format_err()?
+        let page = Page::find(&mut conn, page_content.page_id).format_err()?;
+        caching_data.add_page_with_page_content(page_content_id, page)
     };
 
     document_quick_authorize(ctx, page.document_id, action).await

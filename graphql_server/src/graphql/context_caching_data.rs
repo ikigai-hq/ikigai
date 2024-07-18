@@ -3,7 +3,7 @@ use std::sync::{Arc, RwLock};
 use uuid::Uuid;
 
 use crate::authorization::{DocumentAuth, SpaceAuth, UserAuth};
-use crate::db::User;
+use crate::db::{Page, User};
 
 // Shared Request Context to reuse later in other place in same request
 #[derive(Default)]
@@ -13,6 +13,8 @@ pub struct RequestContextCachingData {
     // (space_id, user_id) - ClassAuth
     space_auth: Arc<RwLock<HashMap<(i32, i32), SpaceAuth>>>,
     user_auth: Arc<RwLock<HashMap<i32, UserAuth>>>,
+    // Page caching
+    page_by_page_content: Arc<RwLock<HashMap<Uuid, Page>>>,
 }
 
 impl RequestContextCachingData {
@@ -84,6 +86,22 @@ impl RequestContextCachingData {
     pub fn get_space_auth(&self, space_id: i32, user_id: i32) -> Option<SpaceAuth> {
         if let Ok(guard_classes) = self.space_auth.try_read() {
             guard_classes.get(&(space_id, user_id)).cloned()
+        } else {
+            None
+        }
+    }
+
+    pub fn add_page_with_page_content(&self, page_content_id: Uuid, page: Page) -> Page {
+        if let Ok(mut guard_pages) = self.page_by_page_content.try_write() {
+            guard_pages.insert(page_content_id, page.clone());
+        }
+
+        page
+    }
+
+    pub fn get_page_by_page_content(&self, page_content_id: Uuid) -> Option<Page> {
+        if let Ok(guard_pages) = self.page_by_page_content.try_read() {
+            guard_pages.get(&page_content_id).cloned()
         } else {
             None
         }

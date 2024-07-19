@@ -29,7 +29,6 @@ export type LearningModuleDndProps = {
   TreeItemComponent: TreeItemComponentType<Record<string, any>, HTMLElement>;
   defaultCollapsed: boolean;
   parentId: string | null;
-  isParentPrivate: boolean;
 };
 
 const debounceUpdatePositions = debounce(
@@ -43,7 +42,6 @@ export const LearningModuleDnd = ({
   TreeItemComponent,
   defaultCollapsed,
   parentId,
-  isParentPrivate,
 }: LearningModuleDndProps) => {
   const allow = usePermission();
   const [cacheFlattenTrees, setCacheFlattenTrees] = useState<
@@ -72,23 +70,13 @@ export const LearningModuleDnd = ({
   ) => {
     setConvertedItems(items);
     setCacheFlattenTrees(flattenTree(items));
-    const oldItems = convertToUpdatePositionData(
-      convertedItems,
-      isParentPrivate,
-      parentId,
-    );
-    const newItems = convertToUpdatePositionData(
-      items,
-      isParentPrivate,
-      parentId,
-    );
+    const oldItems = convertToUpdatePositionData(convertedItems, parentId);
+    const newItems = convertToUpdatePositionData(items, parentId);
     if (
       allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) &&
       !isEqual(oldItems, newItems)
     ) {
-      debounceUpdatePositions(
-        convertToUpdatePositionData(items, isParentPrivate, parentId),
-      );
+      debounceUpdatePositions(convertToUpdatePositionData(items, parentId));
     }
   };
 
@@ -145,32 +133,23 @@ const convertToTreeItems = (
         },
         collapsed,
         canHaveChildren: isFolder,
-        disableSorting: doc.isDefaultFolderPrivate,
-        isPrivateSpace: doc.isDefaultFolderPrivate,
       };
     });
 };
 
 export const convertToUpdatePositionData = (
   items: TreeItems<LearningModuleItemTypeWrapper>,
-  isParentPrivate: boolean,
   parentId?: string,
 ): UpdatePositionData[] => {
   const results: UpdatePositionData[] = [];
   items.forEach((item, index) => {
-    const isFinalPrivate = isParentPrivate || item.data.isDefaultFolderPrivate;
     results.push({
       id: item.data.id,
       parentId,
       index,
-      isPrivate: isFinalPrivate,
     });
     results.push(
-      ...convertToUpdatePositionData(
-        item.children,
-        isFinalPrivate,
-        item.id as string,
-      ),
+      ...convertToUpdatePositionData(item.children, item.id as string),
     );
   });
   return results;

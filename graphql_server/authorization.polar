@@ -40,19 +40,18 @@ allow(actor: UserAuth, action, doc: DocumentAuth) if
     has_permission(actor, action, doc);
 
 allow(actor: UserAuth, "view_answer", doc: DocumentAuth) if
-    (doc.allow_for_student_view_answer and doc.creator_id = actor.id) or
-    has_permission(actor, "view_answer", doc);
+    doc.allow_for_student_view_answer and doc.creator_id = actor.id;
 
 allow(actor: UserAuth, "interactive_with_tool", doc: DocumentAuth) if
 	doc.is_doing_submission and
 	doc.creator_id = actor.id;
 
-allow(actor: UserAuth, "edit_document", doc: DocumentAuth) if
-	has_role(actor, "submission_doer", doc) and
-		not doc.is_structured_submission;
+allow(actor: UserAuth, "view_page_content", doc: DocumentAuth) if
+	doc.is_submission and
+	doc.creator_id = actor.id;
 
 resource DocumentAuth {
-    roles = ["reader", "reviewer", "submission_doer", "writer"];
+    roles = ["reader", "writer"];
     permissions = [
         "view_document",
         "view_page_content",
@@ -64,12 +63,7 @@ resource DocumentAuth {
 
     "view_document" if "reader";
 
-    "reader" if "reviewer";
-    "view_page_content" if "reviewer";
-
-    "reviewer" if "submission_doer";
-
-    "submission_doer" if "writer";
+    "reader" if "writer";
     "edit_document" if "writer";
     "interactive_with_tool" if "writer";
     "view_answer" if "writer";
@@ -77,17 +71,12 @@ resource DocumentAuth {
 }
 
 has_role(user: UserAuth, "reader", doc: DocumentAuth) if
-    doc.space_id = user.space_id and not doc.is_private;
+    doc.space_id = user.space_id and doc.visibility = "public";
 
-has_role(user: UserAuth, "reviewer", doc: DocumentAuth) if
-    doc.space_id = user.space_id and
-     doc.creator_id = user.id and
-     doc.is_submission;
-
-has_role(user: UserAuth, "submission_doer", doc: DocumentAuth) if
-    doc.space_id = user.space_id and
-     doc.creator_id = user.id and
-     doc.is_doing_submission;
+has_role(user: UserAuth, "reader", doc: DocumentAuth) if
+    doc.space_id = user.space_id
+     and doc.visibility = "assignees"
+     and user.id in doc.assignees;
 
 has_role(user: UserAuth, "writer", doc: DocumentAuth) if
     user.space_id = doc.space_id and

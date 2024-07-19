@@ -18,9 +18,6 @@ const SpaceDocumentList = () => {
       (spaceDocument) => spaceDocument.documentType !== DocumentType.SUBMISSION,
     ),
   );
-  const privateFolder = spaceDocuments.find(
-    (doc) => doc.isDefaultFolderPrivate,
-  );
 
   return (
     <div
@@ -46,7 +43,7 @@ const SpaceDocumentList = () => {
           </Heading>
         </div>
         {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
-          <CreateContentButton isPrivate={true} parentId={privateFolder?.id}>
+          <CreateContentButton parentId={null}>
             <IconButton
               style={{ cursor: "pointer" }}
               size="2"
@@ -67,7 +64,6 @@ const SpaceDocumentList = () => {
           TreeItemComponent={LessonItemDnd}
           defaultCollapsed={true}
           parentId={null}
-          isParentPrivate={false}
         />
       </ListModule>
     </div>

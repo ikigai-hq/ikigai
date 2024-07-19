@@ -7,12 +7,13 @@ pub use space_query::*;
 use async_graphql::dataloader::DataLoader;
 use async_graphql::{ComplexObject, Context, Result};
 
-use crate::authorization::SpaceActionPermission;
+use crate::authorization::{DocumentActionPermission, SpaceActionPermission};
 use crate::db::*;
 use crate::error::IkigaiErrorExt;
 use crate::graphql::data_loader::{FileById, IkigaiDataLoader, MembersByClassId, SpaceById};
 use crate::helper::{
-    get_conn_from_ctx, get_public_user_from_loader, get_user_id_from_ctx, space_quick_authorize,
+    document_quick_authorize, get_conn_from_ctx, get_public_user_from_loader, get_user_id_from_ctx,
+    space_quick_authorize,
 };
 
 #[ComplexObject]
@@ -56,18 +57,22 @@ impl Space {
     async fn documents(&self, ctx: &Context<'_>) -> Result<Vec<Document>> {
         space_quick_authorize(ctx, self.id, SpaceActionPermission::ViewSpaceContent).await?;
 
-        let mut conn = get_conn_from_ctx(ctx).await?;
-        let mut documents = Document::find_all_by_space(&mut conn, self.id, false).format_err()?;
+        let documents = {
+            let mut conn = get_conn_from_ctx(ctx).await?;
+            Document::find_all_by_space(&mut conn, self.id).format_err()?
+        };
 
-        if space_quick_authorize(ctx, self.id, SpaceActionPermission::ManageSpaceContent)
-            .await
-            .is_ok()
-        {
-            documents
-                .append(&mut Document::find_all_by_space(&mut conn, self.id, true).format_err()?);
+        let mut res = vec![];
+        for document in documents {
+            if document_quick_authorize(ctx, document.id, DocumentActionPermission::ViewDocument)
+                .await
+                .is_ok()
+            {
+                res.push(document);
+            }
         }
 
-        Ok(documents)
+        Ok(res)
     }
 }
 

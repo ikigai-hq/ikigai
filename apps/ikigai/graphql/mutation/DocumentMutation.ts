@@ -35,8 +35,7 @@ export const ADD_DOCUMENT_STANDALONE = gql`
       submission {
         id
       }
-      isPrivate
-      isDefaultFolderPrivate
+      visibility
     }
   }
 `;

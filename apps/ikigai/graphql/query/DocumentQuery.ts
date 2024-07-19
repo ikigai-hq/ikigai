@@ -14,8 +14,7 @@ export const GET_DOCUMENT = gql`
       iconValue
       documentType
       parentId
-      isPrivate
-      isDefaultFolderPrivate
+      visibility
       assignment {
         id
         maxNumberOfAttempt

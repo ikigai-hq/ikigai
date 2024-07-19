@@ -23,6 +23,7 @@ const UseUpdateDocument = () => {
       coverPhotoId: activeDocument.coverPhotoId,
       iconType: activeDocument.iconType,
       iconValue: activeDocument.iconValue,
+      visibility: activeDocument.visibility,
       ...data,
     };
 

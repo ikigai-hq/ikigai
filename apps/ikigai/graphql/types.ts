@@ -265,8 +265,7 @@ export interface AddDocumentStandalone_documentCreate {
   iconValue: string | null;
   assignment: AddDocumentStandalone_documentCreate_assignment | null;
   submission: AddDocumentStandalone_documentCreate_submission | null;
-  isPrivate: boolean;
-  isDefaultFolderPrivate: boolean;
+  visibility: DocumentVisibility;
 }
 
 export interface AddDocumentStandalone {
@@ -1288,8 +1287,7 @@ export interface GetDocument_documentGet {
   iconValue: string | null;
   documentType: DocumentType;
   parentId: any | null;
-  isPrivate: boolean;
-  isDefaultFolderPrivate: boolean;
+  visibility: DocumentVisibility;
   assignment: GetDocument_documentGet_assignment | null;
   submission: GetDocument_documentGet_submission | null;
 }
@@ -1658,8 +1656,7 @@ export interface GetDocuments_spaceGet_documents {
   iconValue: string | null;
   assignment: GetDocuments_spaceGet_documents_assignment | null;
   submission: GetDocuments_spaceGet_documents_submission | null;
-  isPrivate: boolean;
-  isDefaultFolderPrivate: boolean;
+  visibility: DocumentVisibility;
 }
 
 export interface GetDocuments_spaceGet {
@@ -2125,6 +2122,12 @@ export enum DocumentType {
   SUBMISSION = "SUBMISSION",
 }
 
+export enum DocumentVisibility {
+  ASSIGNEES = "ASSIGNEES",
+  PRIVATE = "PRIVATE",
+  PUBLIC = "PUBLIC",
+}
+
 export enum GradeMethod {
   AUTO = "AUTO",
   MANUAL = "MANUAL",
@@ -2190,7 +2193,6 @@ export interface NewDocument {
   spaceId?: number | null;
   iconType?: IconType | null;
   iconValue?: string | null;
-  isPrivate: boolean;
 }
 
 export interface NewSpace {
@@ -2277,13 +2279,13 @@ export interface UpdateDocumentData {
   coverPhotoId?: any | null;
   iconType?: IconType | null;
   iconValue?: string | null;
+  visibility: DocumentVisibility;
 }
 
 export interface UpdatePositionData {
   id: any;
   parentId?: any | null;
   index: number;
-  isPrivate: boolean;
 }
 
 export interface UpdateSpaceData {

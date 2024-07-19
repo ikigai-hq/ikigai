@@ -6,6 +6,4 @@ export type LearningItemType = ISpaceDocument & {
 
 export type LearningModuleItemTypeWrapper = {
   data?: LearningItemType;
-  disableSorting: boolean;
-  isPrivateSpace: boolean;
 };

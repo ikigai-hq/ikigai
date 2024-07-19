@@ -37,9 +37,6 @@ const FolderCoverPageBody = () => {
   const allow = usePermission();
   const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
   const spaceDocuments = useDocumentStore((state) => state.spaceDocuments);
-  const isPrivate = useDocumentStore(
-    (state) => state.activeDocument?.isPrivate,
-  );
 
   const subDocuments = getChildrenSpaceDocuments(
     spaceDocuments,
@@ -48,7 +45,7 @@ const FolderCoverPageBody = () => {
   return (
     <div>
       {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
-        <CreateContentButton parentId={activeDocumentId} isPrivate={isPrivate}>
+        <CreateContentButton parentId={activeDocumentId}>
           <Button size="1" variant="soft">
             <Pencil2Icon /> <Trans>Add Content</Trans>
           </Button>
@@ -61,7 +58,6 @@ const FolderCoverPageBody = () => {
         TreeItemComponent={LessonItemDnd}
         defaultCollapsed={true}
         parentId={activeDocumentId}
-        isParentPrivate={isPrivate}
       />
     </div>
   );

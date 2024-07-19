@@ -32,15 +32,8 @@ export const StudentStatus = ({ status }: { status: SubmissionStatus }) => {
   return <Badge color="bronze">Not Submitted</Badge>;
 };
 
-export const documentIcon = (item?: {
-  isDefaultFolderPrivate: boolean;
-  documentType: DocumentType;
-}) =>
-  item?.isDefaultFolderPrivate
-    ? "🔏"
-    : item?.documentType === DocumentType.FOLDER
-    ? "📁"
-    : "📝";
+export const documentIcon = (item?: { documentType: DocumentType }) =>
+  item?.documentType === DocumentType.FOLDER ? "📁" : "📝";
 
 export const getQuizColor = (answer: IQuizAnswer) => {
   return !allow(DocumentActionPermission.VIEW_ANSWER)

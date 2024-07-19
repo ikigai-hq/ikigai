@@ -32,6 +32,35 @@ impl Default for IconType {
     }
 }
 
+#[derive(
+    Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
+)]
+#[diesel(sql_type = Integer)]
+pub enum DocumentVisibility {
+    Private,
+    Public,
+    Assignees,
+}
+
+impl_enum_for_db!(DocumentVisibility);
+
+impl Default for DocumentVisibility {
+    fn default() -> Self {
+        Self::Private
+    }
+}
+
+impl DocumentVisibility {
+    pub fn get_name(&self) -> String {
+        match self {
+            DocumentVisibility::Private => "private",
+            DocumentVisibility::Public => "public",
+            DocumentVisibility::Assignees => "assignees",
+        }
+        .into()
+    }
+}
+
 #[derive(Debug, Clone, AsChangeset, InputObject)]
 #[diesel(table_name = documents, treat_none_as_null = true)]
 pub struct UpdateDocumentData {
@@ -45,6 +74,7 @@ pub struct UpdateDocumentData {
     pub last_edited_content_at: i64,
     pub icon_type: Option<IconType>,
     pub icon_value: Option<String>,
+    pub visibility: DocumentVisibility,
 }
 
 #[derive(Debug, Clone, AsChangeset, InputObject)]
@@ -53,7 +83,6 @@ pub struct UpdatePositionData {
     pub id: Uuid,
     pub parent_id: Option<Uuid>,
     pub index: i32,
-    pub is_private: bool,
     #[graphql(skip)]
     pub updated_at: i64,
 }
@@ -82,9 +111,8 @@ pub struct Document {
     pub space_id: Option<i32>,
     pub icon_type: Option<IconType>,
     pub icon_value: Option<String>,
-    pub is_private: bool,
     #[graphql(skip_input)]
-    pub is_default_folder_private: bool,
+    pub visibility: DocumentVisibility,
 }
 
 impl Document {
@@ -98,8 +126,6 @@ impl Document {
         space_id: Option<i32>,
         icon_type: Option<IconType>,
         icon_value: Option<String>,
-        is_private: bool,
-        is_default_folder_private: bool,
     ) -> Self {
         Self {
             id: Uuid::new_v4(),
@@ -116,8 +142,7 @@ impl Document {
             space_id,
             icon_type,
             icon_value,
-            is_private,
-            is_default_folder_private,
+            visibility: DocumentVisibility::Private,
         }
     }
 
@@ -141,20 +166,6 @@ impl Document {
             Ok(starter_doc)
         } else {
             conn.transaction::<_, Error, _>(|conn| {
-                let private_folder = Self::new(
-                    user_id,
-                    "Private".into(),
-                    None,
-                    1,
-                    None,
-                    Some(space_id),
-                    None,
-                    None,
-                    true,
-                    true,
-                );
-                Document::upsert(conn, private_folder)?;
-
                 let first_assignment = Self::new(
                     user_id,
                     "First Assignment".into(),
@@ -164,8 +175,6 @@ impl Document {
                     Some(space_id),
                     None,
                     None,
-                    false,
-                    false,
                 );
                 let first_assignment = Document::upsert(conn, first_assignment)?;
                 let new_assignment = NewAssignment::init(first_assignment.id);
@@ -241,12 +250,10 @@ impl Document {
     pub fn find_all_by_space(
         conn: &mut PgConnection,
         space_id: i32,
-        is_private: bool,
     ) -> Result<Vec<Document>, Error> {
         documents::table
             .filter(documents::space_id.eq(space_id))
             .filter(documents::deleted_at.is_null())
-            .filter(documents::is_private.eq(is_private))
             .get_results(conn)
     }
 

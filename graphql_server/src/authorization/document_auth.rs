@@ -23,9 +23,9 @@ pub struct DocumentAuth {
     #[polar(attribute)]
     pub is_submission: bool,
     #[polar(attribute)]
-    pub is_private: bool,
+    pub visibility: String,
     #[polar(attribute)]
-    pub is_structured_submission: bool,
+    pub assignees: Vec<i32>,
 }
 
 impl DocumentAuth {
@@ -36,6 +36,14 @@ impl DocumentAuth {
         let document = Document::find_by_id(conn, document_id)?;
         let submission = Submission::find_by_document(conn, document_id)?;
         let assignment = Assignment::find_by_document(conn, document_id)?;
+        let assignees = if document.visibility == DocumentVisibility::Assignees {
+            DocumentAssignedUsers::find_all_by_document(conn, document_id)?
+                .iter()
+                .map(|assignee| assignee.assigned_user_id)
+                .collect()
+        } else {
+            vec![]
+        };
 
         if let Some(submission) = &submission {
             allow_for_student_view_answer = submission.allow_for_student_view_answer;
@@ -50,9 +58,8 @@ impl DocumentAuth {
             space_id: document.space_id.unwrap_or(-1),
             is_assignment: assignment.is_some(),
             is_submission: submission.is_some(),
-            is_private: document.is_private || document.is_default_folder_private,
-            // WARN: change by submission attribute to support open assignment.
-            is_structured_submission: true,
+            visibility: document.visibility.get_name(),
+            assignees,
         })
     }
 }

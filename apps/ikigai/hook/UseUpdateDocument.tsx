@@ -14,8 +14,11 @@ const UseUpdateDocument = () => {
     onError: handleError,
   });
   const activeDocument = useDocumentStore((state) => state.activeDocument);
+  const setActiveDocument = useDocumentStore(
+    (state) => state.updateActiveDocument,
+  );
 
-  return (data: Partial<UpdateDocumentData>) => {
+  return (data: Partial<UpdateDocumentData>, updateInStore = false) => {
     if (!allow(DocumentActionPermission.EDIT_DOCUMENT)) return;
 
     const updateDocumentData: UpdateDocumentData = {
@@ -32,6 +35,12 @@ const UseUpdateDocument = () => {
         documentId: activeDocument.id,
         data: updateDocumentData,
       },
+    }).then(() => {
+      if (updateInStore) {
+        // WARN: we may want to update all
+        activeDocument.visibility = updateDocumentData.visibility;
+        setActiveDocument(updateDocumentData);
+      }
     });
   };
 };

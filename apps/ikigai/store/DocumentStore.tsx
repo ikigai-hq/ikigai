@@ -21,7 +21,12 @@ export type IUpdateSpaceDocument = Partial<
 export type IUpdateActiveDocument = Partial<
   Pick<
     IDocument,
-    "title" | "coverPhotoUrl" | "coverPhotoId" | "iconType" | "iconValue"
+    | "title"
+    | "coverPhotoUrl"
+    | "coverPhotoId"
+    | "iconType"
+    | "iconValue"
+    | "visibility"
   >
 >;
 

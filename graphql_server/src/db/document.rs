@@ -37,8 +37,8 @@ impl Default for IconType {
 )]
 #[diesel(sql_type = Integer)]
 pub enum DocumentVisibility {
-    Private,
     Public,
+    Private,
     Assignees,
 }
 

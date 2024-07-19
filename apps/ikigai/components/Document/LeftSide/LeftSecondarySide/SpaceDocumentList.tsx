@@ -49,7 +49,6 @@ const SpaceDocumentList = () => {
               size="2"
               variant="ghost"
               color="gray"
-              onClick={(e) => e.stopPropagation()}
             >
               <Pencil2Icon />
             </IconButton>

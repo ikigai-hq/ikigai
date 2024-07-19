@@ -28,7 +28,6 @@ const ReviewFillInBlank = (props: ReviewFillInBlankProps) => {
     .map((answer) => answer.content)
     .join(",");
 
-  console.log("Hello", quiz.answers, answer);
   return (
     <div
       style={{
@@ -40,6 +39,7 @@ const ReviewFillInBlank = (props: ReviewFillInBlankProps) => {
       <Kbd>Q.{props.quizIndex + 1}</Kbd>
       <TextField.Root
         size="1"
+        variant="soft"
         value={answer?.fillInBlankAnswer?.answer}
         color={color}
         disabled

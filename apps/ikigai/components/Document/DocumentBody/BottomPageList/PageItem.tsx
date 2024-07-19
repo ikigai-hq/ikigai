@@ -59,7 +59,7 @@ const PageItem = ({ page, index }: PageItemProps) => {
   ).length;
   const isActive = activePageId === page?.id;
   const isExpanded = isActive && !!page;
-  console.log("Hello", answeredQuiz, page?.id, pageOrderedQuizzes);
+
   return (
     <div style={{ display: "flex" }}>
       <PageContainer

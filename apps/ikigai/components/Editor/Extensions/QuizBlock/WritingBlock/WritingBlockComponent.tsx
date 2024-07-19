@@ -87,16 +87,9 @@ const WritingBlockComponent = (props: NodeViewProps) => {
     <QuizBlockWrapper
       quizType={QuizType.WRITING_BLOCK}
       nodeViewProps={props}
-      showSetting={
-        props.selected && allow(DocumentActionPermission.EDIT_DOCUMENT)
-      }
+      showSetting={false}
     >
-      <div
-        style={{ minHeight: 200 }}
-        onClick={() => {
-          editor.commands.focus("end");
-        }}
-      >
+      <div style={{ minHeight: 200 }}>
         <BaseEditor editor={editor} />
       </div>
       <div style={{ paddingRight: 5 }}>

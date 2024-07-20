@@ -51,6 +51,7 @@ impl Document {
                 config.clone_to_space,
                 self.icon_type,
                 self.icon_value.clone(),
+                self.visibility,
             );
             Document::upsert(conn, new_doc)?
         };

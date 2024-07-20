@@ -328,6 +328,30 @@
             "deprecationReason": null
           },
           {
+            "name": "spaceOwn",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Space",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "spaceGetInviteTokens",
             "description": null,
             "args": [
@@ -362,6 +386,33 @@
                   }
                 }
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "spaceGetAvailableDocument",
+            "description": null,
+            "args": [
+              {
+                "name": "currentDocumentId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "UUID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Document",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2152,13 +2203,13 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "PRIVATE",
+            "name": "PUBLIC",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "PUBLIC",
+            "name": "PRIVATE",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

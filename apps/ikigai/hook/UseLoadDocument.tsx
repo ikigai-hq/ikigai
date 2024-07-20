@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLazyQuery } from "@apollo/client";
-import toast from "react-hot-toast";
-import { t } from "@lingui/macro";
 
 import {
-  DocumentActionPermission,
   DocumentType,
   GetDocument,
   GetDocumentPageContents,
@@ -48,9 +45,6 @@ export const useLoadDocument = (documentId: string) => {
   const setActivePage = usePageStore((state) => state.setActivePageId);
   const setSpaceDocuments = useDocumentStore(
     (state) => state.setSpaceDocuments,
-  );
-  const fetchDocumentPermissions = useAuthUserStore(
-    (state) => state.fetchDocumentPermissions,
   );
   const fetchSpacePermissions = useAuthUserStore(
     (state) => state.fetchSpacePermissions,
@@ -110,16 +104,6 @@ export const useLoadDocument = (documentId: string) => {
 
   const load = async () => {
     setLoading(true);
-    const permissions = await fetchDocumentPermissions(documentId);
-    if (!permissions.includes(DocumentActionPermission.VIEW_DOCUMENT)) {
-      // Move to sign-in page
-      toast.error(
-        t`You don't have access to this document, redirecting to home page...`,
-      );
-      window.location.replace("/");
-      return;
-    }
-
     const { data, error } = await fetchDocument({
       variables: {
         documentId,

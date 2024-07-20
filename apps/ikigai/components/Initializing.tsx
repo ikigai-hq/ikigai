@@ -8,24 +8,29 @@ import TokenStorage from "storage/TokenStorage";
 import {
   CheckDocument,
   CheckToken,
-  GetMySpaces,
+  DocumentActionPermission,
+  GetAvailableDocument,
+  GetDocumentPermissions,
+  GetMyOwnSpaces,
   MyLastActivity,
   UserMe,
   VerifyMagicLink,
-} from "../graphql/types";
+} from "graphql/types";
 import {
-  CHECK_DOCUMENT,
+  CHECK_DOCUMENT_SPACE,
   CHECK_TOKEN,
+  GET_AVAILABLE_DOCUMENT,
+  GET_DOCUMENT_PERMISSIONS,
   MY_LAST_ACTIVITY,
   USER_ME,
-} from "../graphql/query";
+} from "graphql/query";
 import UserStorage from "storage/UserStorage";
 import useAuthUserStore from "store/AuthStore";
 import { formatDocumentRoute, Routes } from "config/Routes";
 import LayoutManagement from "./UserCredential/AuthLayout";
 import Loading from "./Loading";
 import { VERIFY_MAGIC_LINK } from "graphql/mutation/UserMutation";
-import { GET_MY_SPACES } from "../graphql/query/SpaceQuery";
+import { GET_MY_OWN_SPACES } from "graphql/query/SpaceQuery";
 
 interface Props {
   children: ReactNode;
@@ -37,38 +42,73 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
   const [hasError, setHasError] = useState();
   const setSpaceId = useAuthUserStore((state) => state.setSpaceId);
   const setUserAuth = useAuthUserStore((state) => state.setCurrentUser);
+  const setDocumentPermissions = useAuthUserStore(
+    (state) => state.setDocumentPermissions,
+  );
 
   const [checkToken] = useLazyQuery<CheckToken>(CHECK_TOKEN);
-  const [checkDocument] = useLazyQuery<CheckDocument>(CHECK_DOCUMENT);
+  const [getDocumentPermissions] = useLazyQuery<GetDocumentPermissions>(
+    GET_DOCUMENT_PERMISSIONS,
+  );
+  const [checkDocumentSpaceInServer] =
+    useLazyQuery<CheckDocument>(CHECK_DOCUMENT_SPACE);
   const [getMe] = useLazyQuery<UserMe>(USER_ME, {
     fetchPolicy: "network-only",
   });
-  const [getLastActivity] = useLazyQuery<MyLastActivity>(MY_LAST_ACTIVITY);
   const [checkMagicLink] = useMutation<VerifyMagicLink>(VERIFY_MAGIC_LINK);
-  const [getMySpaces] = useLazyQuery<GetMySpaces>(GET_MY_SPACES);
+  const [getMySpaces] = useLazyQuery<GetMyOwnSpaces>(GET_MY_OWN_SPACES);
+  const [getAvailableDocument] = useLazyQuery<GetAvailableDocument>(
+    GET_AVAILABLE_DOCUMENT,
+  );
+  const [getLastActivity] = useLazyQuery<MyLastActivity>(MY_LAST_ACTIVITY);
 
   useEffect(() => {
-    if (router.isReady) verifyAuth();
+    if (router.isReady) initializing();
   }, [router.isReady]);
 
-  const verifyAuth = async () => {
+  const initializing = async () => {
     try {
-      console.info("Verifying Token");
-      let checkNext = await verifyToken();
-      console.info("Verifying Magic Link", checkNext);
-      if (checkNext) checkNext = await verifyMagicLink();
-      console.info("Verifying Document", checkNext);
-      if (checkNext) checkNext = await verifyDocument();
-      console.info("Verifying User Authentication", checkNext);
-      if (checkNext) checkNext = await verifyUserAuth();
-      console.info("Verifying Possible Document", checkNext);
-      if (checkNext) await verifyPossibleDocument();
+      await _initializing();
     } catch (e) {
-      console.error("Cannot verify user auth", e);
+      console.error("Cannot start application", e);
       setHasError(e.message);
     } finally {
       setCompleteCheck(true);
     }
+  };
+
+  const _initializing = async () => {
+    if (completeCheck) return;
+    console.info("Checking magic token...");
+    await verifyMagicToken();
+    console.info("Checking magic token completed!");
+
+    console.info("Checking token ...");
+    if (!(await verifyToken())) {
+      console.info("Checking token failed!");
+      return;
+    }
+    console.info("Checking token completed!");
+
+    const documentId = router.query.documentId as string;
+    const isDocumentRoute =
+      documentId && router.pathname.includes("/documents");
+    const isDocument = isDocumentRoute && documentId;
+    if (isDocument) {
+      console.info("Checking document page...", documentId);
+      if (!(await verifyDocument(documentId))) {
+        console.info("Checking document failed!");
+        return;
+      }
+      console.info("Checking document page completed!");
+    } else if (needRedirect()) {
+      console.info("Check fallback my space document!", router.pathname);
+      await checkLastActivity();
+    }
+
+    console.info("Checking Auth data...!");
+    await verifyUserAuth();
+    console.info("Checking Auth data completed.");
   };
 
   const verifyToken = async (): Promise<boolean> => {
@@ -88,57 +128,35 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
     return true;
   };
 
-  const verifyDocument = async (): Promise<boolean> => {
-    const documentId = router.query.documentId as string;
-    const isDocumentRoute =
-      documentId && router.pathname.includes("/documents");
-    const token = TokenStorage.get();
-    if (isDocumentRoute && !token) {
-      await router.push(Routes.Home);
-      return false;
-    }
-
-    if (!token || !isDocumentRoute) return true;
-
-    return await checkDocumentSpace(documentId);
-  };
-
-  const verifyPossibleDocument = async (): Promise<boolean> => {
-    const isHome = router.pathname === Routes.Home;
-    const token = TokenStorage.get();
-    if (isHome && token) {
-      const { data } = await getLastActivity();
-      if (data) {
-        // Found Last activity. Recheck auth user
-        await checkDocumentSpace(data.userLastActivity.lastDocumentId);
-        await verifyUserAuth();
-        await router.push(
-          formatDocumentRoute(data.userLastActivity.lastDocumentId),
-        );
-        return false;
+  const verifyDocument = async (documentId: string): Promise<boolean> => {
+    if (!(await verifyDocumentPermissions(documentId))) {
+      const checkMySpace = !(await checkSameSpaceAvailableDocument(documentId));
+      if (checkMySpace) {
+        return await checkMySpaceAvailableDocument();
       }
-    }
-
-    const documentId = router.query.documentId as string;
-    const isDocumentRoute =
-      documentId && router.pathname.includes("/documents");
-    if (isDocumentRoute && token) {
-      await router.push(formatDocumentRoute(documentId));
       return false;
     }
 
-    const { data } = await getMySpaces();
-    if (isHome && data && data.spaceMine.length > 0) {
-      window.location.replace(
-        formatDocumentRoute(data.spaceMine[0].starterDocument.id),
-      );
-      return false;
-    }
-
-    return true;
+    return checkDocumentSpace(documentId);
   };
 
-  const verifyMagicLink = async (): Promise<boolean> => {
+  const verifyDocumentPermissions = async (documentId: string) => {
+    const { data } = await getDocumentPermissions({
+      variables: {
+        documentId,
+      },
+    });
+
+    if (data) {
+      setDocumentPermissions(data.documentMyPermissions);
+      return data.documentMyPermissions.includes(
+        DocumentActionPermission.VIEW_DOCUMENT,
+      );
+    }
+    return false;
+  };
+
+  const verifyMagicToken = async (): Promise<boolean> => {
     const otp = router.query.otp as string;
     const userIdAsStr = router.query.user_id as string;
     const userId = parseInt(userIdAsStr, 10);
@@ -167,19 +185,62 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
     const { data } = await getMe();
     if (data) {
       setUserAuth(data);
+    }
+  };
+
+  const checkDocumentSpace = async (documentId: string): Promise<boolean> => {
+    const { data } = await checkDocumentSpaceInServer({
+      variables: { documentId },
+    });
+
+    if (data) {
+      setSpaceId(data.userCheckDocument);
+      return true;
+    }
+
+    return false;
+  };
+
+  const checkSameSpaceAvailableDocument = async (documentId: string) => {
+    const { data } = await getAvailableDocument({
+      variables: {
+        documentId,
+      },
+    });
+    if (data && data.spaceGetAvailableDocument) {
+      window.location.replace(
+        formatDocumentRoute(data.spaceGetAvailableDocument.id),
+      );
       return true;
     }
     return false;
   };
 
-  const checkDocumentSpace = async (documentId: string): Promise<boolean> => {
-    const { data } = await checkDocument({ variables: { documentId } });
+  const checkLastActivity = async () => {
+    const { data } = await getLastActivity();
     if (data) {
-      setSpaceId(data.userCheckDocument);
+      window.location.replace(
+        formatDocumentRoute(data.userLastActivity.lastDocumentId),
+      );
+    } else {
+      await checkMySpaceAvailableDocument();
+    }
+  };
+
+  const checkMySpaceAvailableDocument = async (): Promise<boolean> => {
+    const { data } = await getMySpaces();
+    if (data && data.spaceOwn.length > 0) {
+      window.location.replace(
+        formatDocumentRoute(data.spaceOwn[0].starterDocument.id),
+      );
       return true;
     }
-    await router.push(Routes.Home);
+
     return false;
+  };
+
+  const needRedirect = () => {
+    return router.pathname === Routes.Home;
   };
 
   const backToHome = () => {

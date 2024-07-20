@@ -122,18 +122,14 @@ async fn init_space_for_user_by_email(
             let (document, space) = if let Some(space_member) = space_members.first() {
                 let space = Space::find_by_id(&mut conn, space_member.space_id).format_err()?;
                 (
-                    Document::get_or_create_starter_doc(
-                        &mut conn,
-                        space.creator_id,
-                        space_member.space_id,
-                    )
-                    .format_err()?,
+                    Document::get_or_create_starter_doc(&mut conn, space_member.space_id)
+                        .format_err()?,
                     space,
                 )
             } else {
                 conn.transaction::<_, IkigaiError, _>(|conn| {
                     let space = create_default_space(conn, user.id)?;
-                    let document = Document::get_or_create_starter_doc(conn, user.id, space.id)?;
+                    let document = Document::get_or_create_starter_doc(conn, space.id)?;
                     Ok((document, space))
                 })
                 .format_err()?
@@ -147,7 +143,7 @@ async fn init_space_for_user_by_email(
                 let user = NewUser::new(email.clone(), default_name, "".into());
                 let user = User::insert(conn, &user)?;
                 let space = create_default_space(conn, user.id)?;
-                let document = Document::get_or_create_starter_doc(conn, user.id, space.id)?;
+                let document = Document::get_or_create_starter_doc(conn, space.id)?;
 
                 Ok((user, document, space))
             })

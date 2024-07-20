@@ -111,7 +111,8 @@ pub async fn space_quick_authorize(
     space_id: i32,
     action: SpaceActionPermission,
 ) -> Result<()> {
-    let user_auth = get_user_auth_from_ctx(ctx).await?;
+    let user_id = get_user_id_from_ctx(ctx).await?;
+    let user_auth = get_user_auth_by_user_id_from_ctx(ctx, user_id, Some(space_id)).await?;
     let is_allowed = space_is_allow(ctx, user_auth, space_id, action).await?;
     if !is_allowed {
         return Err(IkigaiError::new_unauthorized(
@@ -237,9 +238,15 @@ pub async fn get_document_allowed_permissions(
     ctx: &Context<'_>,
     document_id: Uuid,
 ) -> Result<Vec<DocumentActionPermission>> {
-    let user_auth = get_user_auth_from_ctx(ctx).await?;
-    let mut conn = get_conn_from_ctx(ctx).await?;
-    let document_auth = DocumentAuth::try_new(&mut conn, document_id).format_err()?;
+    let (document_auth, document) = {
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let document_auth = DocumentAuth::try_new(&mut conn, document_id).format_err()?;
+        let document = Document::find_by_id(&mut conn, document_id).format_err()?;
+        (document_auth, document)
+    };
+
+    let user_id = get_user_id_from_ctx(ctx).await?;
+    let user_auth = get_user_auth_by_user_id_from_ctx(ctx, user_id, document.space_id).await?;
 
     let oso = ctx.data::<Oso>()?;
     let actions: HashSet<String> = oso.get_allowed_actions(user_auth, document_auth)?;

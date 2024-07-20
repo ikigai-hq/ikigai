@@ -1,10 +1,10 @@
-use crate::db::{Assignment, NewAssignment};
 use diesel::result::Error;
 use diesel::sql_types::Integer;
 use diesel::{AsChangeset, Connection, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use uuid::Uuid;
 
 use super::schema::{document_assigned_users, documents};
+use crate::db::Space;
 use crate::impl_enum_for_db;
 use crate::util::get_now_as_secs;
 
@@ -126,6 +126,7 @@ impl Document {
         space_id: Option<i32>,
         icon_type: Option<IconType>,
         icon_value: Option<String>,
+        visibility: DocumentVisibility,
     ) -> Self {
         Self {
             id: Uuid::new_v4(),
@@ -142,7 +143,7 @@ impl Document {
             space_id,
             icon_type,
             icon_value,
-            visibility: DocumentVisibility::Private,
+            visibility,
         }
     }
 
@@ -159,28 +160,27 @@ impl Document {
 
     pub fn get_or_create_starter_doc(
         conn: &mut PgConnection,
-        user_id: i32,
         space_id: i32,
     ) -> Result<Self, Error> {
         if let Some(starter_doc) = Document::find_starter_of_space(conn, space_id)? {
             Ok(starter_doc)
         } else {
             conn.transaction::<_, Error, _>(|conn| {
-                let first_assignment = Self::new(
-                    user_id,
-                    "First Assignment".into(),
+                let space = Space::find_by_id(conn, space_id)?;
+                let starter_folder = Self::new(
+                    space.creator_id,
+                    "Starter Folder".into(),
                     None,
                     0,
                     None,
                     Some(space_id),
                     None,
                     None,
+                    DocumentVisibility::Public,
                 );
-                let first_assignment = Document::upsert(conn, first_assignment)?;
-                let new_assignment = NewAssignment::init(first_assignment.id);
-                Assignment::insert(conn, new_assignment)?;
+                let starter_folder = Document::upsert(conn, starter_folder)?;
 
-                Ok(first_assignment)
+                Ok(starter_folder)
             })
         }
     }

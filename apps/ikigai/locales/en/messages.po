@@ -112,7 +112,7 @@ msgid "Are you sure? This rubric will no longer be accessible."
 msgstr "Are you sure? This rubric will no longer be accessible."
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:128
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:165
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:164
 msgid "Assign"
 msgstr "Assign"
 
@@ -158,7 +158,7 @@ msgid "Auto"
 msgstr "Auto"
 
 #: components/ErrorBoundary.tsx:54
-#: components/Initializing.tsx:234
+#: components/Initializing.tsx:295
 #: pages/404.tsx:24
 msgid "Back to home"
 msgstr "Back to home"
@@ -693,13 +693,17 @@ msgstr "Not submitted"
 msgid "Number list"
 msgstr "Number list"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:152
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:150
 msgid "Only assignees (listed below) can access this assignment."
 msgstr "Only assignees (listed below) can access this assignment."
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:145
-msgid "Only you and other teachers can access this assignment."
-msgstr "Only you and other teachers can access this assignment."
+#~ msgid "Only you and other teachers can access this assignment."
+#~ msgstr "Only you and other teachers can access this assignment."
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:145
+msgid "Only you can access this assignment."
+msgstr "Only you can access this assignment."
 
 #: components/ErrorBoundary.tsx:45
 #~ msgid "Oops! We found a error."

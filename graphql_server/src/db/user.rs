@@ -3,8 +3,6 @@ use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use oso::PolarClass;
 use uuid::Uuid;
 
-use crate::db::{Document, SpaceMember};
-
 use super::schema::{user_activities, users};
 
 #[derive(Debug, Insertable)]
@@ -184,23 +182,5 @@ impl UserActivity {
 
     pub fn find(conn: &mut PgConnection, user_id: i32) -> Result<Self, Error> {
         user_activities::table.find(user_id).first(conn)
-    }
-
-    pub fn find_or_insert(conn: &mut PgConnection, user_id: i32) -> Result<Self, Error> {
-        if let Ok(activity) = Self::find(conn, user_id) {
-            Ok(activity)
-        } else {
-            // Insert a default
-            let mut space_members = SpaceMember::find_all_by_user(conn, user_id)?;
-            if space_members.is_empty() {
-                return Err(Error::NotFound);
-            }
-
-            let first_member = space_members.remove(0);
-            let document = Document::find_starter_of_space(conn, first_member.space_id)?
-                .ok_or(Error::NotFound)?;
-
-            Self::insert(conn, user_id, document.id)
-        }
     }
 }

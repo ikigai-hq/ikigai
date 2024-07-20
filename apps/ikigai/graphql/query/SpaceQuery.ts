@@ -87,3 +87,15 @@ export const GET_MY_SPACES = gql`
     }
   }
 `;
+
+export const GET_MY_OWN_SPACES = gql`
+  query GetMyOwnSpaces {
+    spaceOwn {
+      id
+      name
+      starterDocument {
+        id
+      }
+    }
+  }
+`;

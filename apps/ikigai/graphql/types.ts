@@ -1787,6 +1787,29 @@ export interface GetMySpaces {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetMyOwnSpaces
+// ====================================================
+
+export interface GetMyOwnSpaces_spaceOwn_starterDocument {
+  id: any;
+}
+
+export interface GetMyOwnSpaces_spaceOwn {
+  id: number;
+  name: string;
+  starterDocument: GetMyOwnSpaces_spaceOwn_starterDocument;
+}
+
+export interface GetMyOwnSpaces {
+  spaceOwn: GetMyOwnSpaces_spaceOwn[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: CheckToken
 // ====================================================
 
@@ -1812,6 +1835,27 @@ export interface CheckDocument {
 }
 
 export interface CheckDocumentVariables {
+  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetAvailableDocument
+// ====================================================
+
+export interface GetAvailableDocument_spaceGetAvailableDocument {
+  id: any;
+}
+
+export interface GetAvailableDocument {
+  spaceGetAvailableDocument: GetAvailableDocument_spaceGetAvailableDocument | null;
+}
+
+export interface GetAvailableDocumentVariables {
   documentId: any;
 }
 

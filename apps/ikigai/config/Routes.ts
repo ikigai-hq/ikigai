@@ -16,3 +16,6 @@ export const formatPreJoinSpaceUrl = (spaceId: number, token: string) => {
   ).replace(":token", token);
   return `${window.location.protocol}//${window.location.host}${path}`;
 };
+
+export const needRedirect = (pathName: string) =>
+  pathName === "/" || pathName.includes("/documents/");

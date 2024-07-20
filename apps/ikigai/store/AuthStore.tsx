@@ -34,6 +34,7 @@ export type IStore = {
   fetchDocumentPermissions: (
     documentId: string,
   ) => Promise<DocumentActionPermission[]>;
+  setDocumentPermissions: (permissions: DocumentActionPermission[]) => void;
   fetchSpacePermissions: (spaceId: number) => Promise<void>;
 };
 
@@ -90,6 +91,9 @@ const useAuthUserStore = create<IStore>((set, get) => ({
     });
 
     return permissions?.documentMyPermissions || [];
+  },
+  setDocumentPermissions: (permissions) => {
+    set({ activeDocumentPermissions: permissions });
   },
   fetchSpacePermissions: async (spaceId: number) => {
     const permissions = await query<GetSpacePermissions>({

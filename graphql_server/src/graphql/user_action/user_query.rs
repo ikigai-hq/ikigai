@@ -43,10 +43,10 @@ impl UserQuery {
                 let activity = conn
                     .transaction::<_, IkigaiError, _>(|conn| {
                         let document = if let Some(space) = spaces.first() {
-                            Document::get_or_create_starter_doc(conn, user_id, space.id)?
+                            Document::get_or_create_starter_doc(conn, space.id)?
                         } else {
                             let space = create_default_space(conn, user_id)?;
-                            Document::get_or_create_starter_doc(conn, user_id, space.id)?
+                            Document::get_or_create_starter_doc(conn, space.id)?
                         };
 
                         let activity = UserActivity::insert(conn, user_id, document.id)?;

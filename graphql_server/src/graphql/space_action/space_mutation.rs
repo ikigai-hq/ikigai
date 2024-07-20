@@ -222,8 +222,7 @@ impl SpaceMutation {
             .format_err()?
         };
         let starter_document =
-            Document::get_or_create_starter_doc(&mut conn, space_member.user_id, space_id)
-                .format_err()?;
+            Document::get_or_create_starter_doc(&mut conn, space_id).format_err()?;
         if authorized_user.is_none() {
             send_space_magic_link(&user, &space, starter_document.id)?;
         }

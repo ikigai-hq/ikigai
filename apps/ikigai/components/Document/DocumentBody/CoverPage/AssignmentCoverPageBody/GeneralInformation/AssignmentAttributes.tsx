@@ -142,9 +142,7 @@ const AssignmentAttributes = ({
                 )}
                 {visibility === DocumentVisibility.PRIVATE && (
                   <Text color="gray">
-                    <Trans>
-                      Only you and other teachers can access this assignment.
-                    </Trans>
+                    <Trans>Only you can access this assignment.</Trans>
                   </Text>
                 )}
                 {visibility === DocumentVisibility.ASSIGNEES && (
@@ -159,16 +157,17 @@ const AssignmentAttributes = ({
           </DataList.Value>
         </DataList.Item>
       )}
-      {allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
-        <DataList.Item>
-          <DataList.Label minWidth="88px">
-            <Trans>Assign</Trans>
-          </DataList.Label>
-          <DataList.Value>
-            <AssigneesAttribute />
-          </DataList.Value>
-        </DataList.Item>
-      )}
+      {allow(DocumentActionPermission.MANAGE_DOCUMENT) &&
+        visibility !== DocumentVisibility.PRIVATE && (
+          <DataList.Item>
+            <DataList.Label minWidth="88px">
+              <Trans>Assign</Trans>
+            </DataList.Label>
+            <DataList.Value>
+              <AssigneesAttribute />
+            </DataList.Value>
+          </DataList.Item>
+        )}
     </DataList.Root>
   );
 };

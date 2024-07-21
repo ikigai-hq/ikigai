@@ -12,7 +12,6 @@ use crate::util::get_now_as_secs;
 #[derive(SimpleObject)]
 pub struct SpaceJoinResponse {
     pub space_id: i32,
-    pub document_id: Uuid,
     pub should_go_to_space: bool,
 }
 
@@ -221,10 +220,8 @@ impl SpaceMutation {
             )
             .format_err()?
         };
-        let starter_document =
-            Document::get_or_create_starter_doc(&mut conn, space_id).format_err()?;
         if authorized_user.is_none() {
-            send_space_magic_link(&user, &space, starter_document.id)?;
+            send_start_space_magic_link(&user, &space)?;
         }
 
         // Notify space owner
@@ -240,7 +237,6 @@ impl SpaceMutation {
 
         Ok(SpaceJoinResponse {
             space_id: space_member.space_id,
-            document_id: starter_document.id,
             should_go_to_space: authorized_user.is_some(),
         })
     }

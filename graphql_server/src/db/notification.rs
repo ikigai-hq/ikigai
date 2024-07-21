@@ -6,7 +6,7 @@ use uuid::Uuid;
 
 use super::schema::{notification_receivers, notifications};
 use crate::db::User;
-use crate::helper::generate_magic_link;
+use crate::helper::generate_document_magic_link;
 use crate::impl_enum_for_db;
 use crate::util::get_now_as_secs;
 use crate::util::url_util::{format_document_url, format_space_url};
@@ -179,7 +179,7 @@ Hello there! You've been assigned to a assignment: {assignment_name}. If you hav
     }
 
     fn get_url_path(&self, receiver: &User) -> String {
-        generate_magic_link(receiver.id, self.assignment_document_id)
+        generate_document_magic_link(receiver.id, self.assignment_document_id)
             .unwrap_or(format_document_url(self.assignment_document_id))
     }
 }

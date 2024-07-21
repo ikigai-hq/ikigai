@@ -46,9 +46,6 @@ export const useLoadDocument = (documentId: string) => {
   const setSpaceDocuments = useDocumentStore(
     (state) => state.setSpaceDocuments,
   );
-  const fetchSpacePermissions = useAuthUserStore(
-    (state) => state.fetchSpacePermissions,
-  );
   const setSpace = useSpaceStore((state) => state.setSpace);
   const fetchSpaceMembers = useSpaceMemberStore(
     (state) => state.fetchMembersOfSpace,
@@ -189,7 +186,6 @@ export const useLoadDocument = (documentId: string) => {
   };
 
   const fetchSpaceInformation = async (spaceId: number) => {
-    await fetchSpacePermissions(spaceId);
     const { data } = await fetchSpaceDocuments({
       variables: {
         spaceId,

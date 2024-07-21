@@ -155,7 +155,8 @@ pub async fn get_space_allowed_permissions(
     ctx: &Context<'_>,
     space_id: i32,
 ) -> Result<Vec<SpaceActionPermission>> {
-    let user_auth = get_user_auth_from_ctx(ctx).await?;
+    let user_id = get_user_id_from_ctx(ctx).await?;
+    let user_auth = get_user_auth_by_user_id_from_ctx(ctx, user_id, Some(space_id)).await?;
     let mut conn = get_conn_from_ctx(ctx).await?;
     let class = Space::find_by_id(&mut conn, space_id).format_err()?;
     let space_auth = SpaceAuth::new(&class);
@@ -176,23 +177,6 @@ pub async fn document_quick_authorize(
 ) -> Result<()> {
     let current_user_id = get_user_id_from_ctx(ctx).await.ok();
     let is_allowed = document_is_allowed(ctx, current_user_id, document_id, action).await?;
-    if !is_allowed {
-        return Err(IkigaiError::new_unauthorized(
-            "You dont' have permission to do this action in document",
-        ))
-        .format_err()?;
-    }
-
-    Ok(())
-}
-
-pub async fn document_authorize(
-    ctx: &Context<'_>,
-    user_id: i32,
-    document_id: Uuid,
-    action: DocumentActionPermission,
-) -> Result<()> {
-    let is_allowed = document_is_allowed(ctx, Some(user_id), document_id, action).await?;
     if !is_allowed {
         return Err(IkigaiError::new_unauthorized(
             "You dont' have permission to do this action in document",

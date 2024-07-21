@@ -2,11 +2,16 @@ export enum Routes {
   Home = "/",
   DocumentDetail = "/documents/:documentId",
   PreJoinSpace = "/spaces/:spaceId/join/:token",
+  EmptySpace = "/spaces/:spaceId/start",
   NotFound = "/404",
 }
 
+export const formatStartSpace = (spaceId: number) => {
+  return Routes.EmptySpace.replace(":spaceId", spaceId.toString());
+};
+
 export const formatDocumentRoute = (documentId: string) => {
-  return Routes.DocumentDetail.replace(":documentId", documentId.toString());
+  return Routes.DocumentDetail.replace(":documentId", documentId);
 };
 
 export const formatPreJoinSpaceUrl = (spaceId: number, token: string) => {

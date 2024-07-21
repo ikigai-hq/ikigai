@@ -26,6 +26,8 @@ pub struct DocumentAuth {
     pub visibility: String,
     #[polar(attribute)]
     pub assignees: Vec<i32>,
+    #[polar(attribute)]
+    pub is_delete: bool,
 }
 
 impl DocumentAuth {
@@ -60,6 +62,7 @@ impl DocumentAuth {
             is_submission: submission.is_some(),
             visibility: document.visibility.get_name(),
             assignees,
+            is_delete: document.deleted_at.is_some(),
         })
     }
 }

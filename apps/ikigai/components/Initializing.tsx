@@ -30,7 +30,7 @@ import {
 } from "graphql/query";
 import UserStorage from "storage/UserStorage";
 import useAuthUserStore from "store/AuthStore";
-import { formatDocumentRoute, Routes } from "config/Routes";
+import { formatDocumentRoute, formatStartSpace, Routes } from "config/Routes";
 import LayoutManagement from "./UserCredential/AuthLayout";
 import Loading from "./Loading";
 import { VERIFY_MAGIC_LINK } from "graphql/mutation/UserMutation";
@@ -48,6 +48,9 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
   const setUserAuth = useAuthUserStore((state) => state.setCurrentUser);
   const setDocumentPermissions = useAuthUserStore(
     (state) => state.setDocumentPermissions,
+  );
+  const fetSpacePermissions = useAuthUserStore(
+    (state) => state.fetchSpacePermissions,
   );
 
   const [checkToken] = useLazyQuery<CheckToken>(CHECK_TOKEN);
@@ -107,6 +110,10 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
       console.info("Check fallback my space document!", router.pathname);
       await checkLastActivity();
     }
+
+    console.info("Fetch space permissions...!");
+    await getSpacePermissions();
+    console.info("Fetch space permission completed");
 
     console.info("Checking Auth data...!");
     await verifyUserAuth();
@@ -210,18 +217,22 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
       },
     });
     if (data && data.spaceGetAvailableDocument) {
-      window.location.replace(
-        formatDocumentRoute(data.spaceGetAvailableDocument.id),
-      );
+      await router.push(formatDocumentRoute(data.spaceGetAvailableDocument.id));
       return true;
     }
+    const spaceId = tryToGetSpaceId();
+    if (spaceId) {
+      await router.push(formatStartSpace(spaceId));
+      return true;
+    }
+
     return false;
   };
 
   const checkLastActivity = async () => {
     const { data } = await getLastActivity();
     if (data) {
-      window.location.replace(
+      await router.push(
         formatDocumentRoute(data.userLastActivity.lastDocumentId),
       );
     } else {
@@ -232,13 +243,31 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
   const checkMySpaceAvailableDocument = async (): Promise<boolean> => {
     const { data } = await getMySpaces();
     if (data && data.spaceOwn.length > 0) {
-      window.location.replace(
-        formatDocumentRoute(data.spaceOwn[0].starterDocument.id),
-      );
+      await router.push(formatStartSpace(data.spaceOwn[0].id));
       return true;
     }
 
     return false;
+  };
+
+  const getSpacePermissions = async () => {
+    const spaceId = tryToGetSpaceId();
+    if (spaceId) {
+      return fetSpacePermissions(spaceId);
+    }
+  };
+
+  const tryToGetSpaceId = () => {
+    try {
+      let spaceId = useAuthUserStore.getState().spaceId;
+      const spaceIdStr = router.query.spaceId as string;
+      if (spaceIdStr) {
+        spaceId = parseInt(spaceIdStr);
+      }
+      return spaceId;
+    } catch (e) {
+      console.error("Cannot get space id", e);
+    }
   };
 
   const needRedirect = () => {

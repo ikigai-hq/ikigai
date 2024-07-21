@@ -81,9 +81,6 @@ export const GET_MY_SPACES = gql`
     spaceMine {
       id
       name
-      starterDocument {
-        id
-      }
     }
   }
 `;
@@ -93,7 +90,15 @@ export const GET_MY_OWN_SPACES = gql`
     spaceOwn {
       id
       name
-      starterDocument {
+    }
+  }
+`;
+
+export const GET_SPACE_AVAILABLE_DOCUMENTS = gql`
+  query GetSpaceAvailableDocuments($spaceId: Int!) {
+    spaceGet(spaceId: $spaceId) {
+      id
+      nonSubmissionDocuments {
         id
       }
     }

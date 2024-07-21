@@ -10,7 +10,7 @@ import { JoinSpaceByInviteToken } from "graphql/types";
 import { JOIN_SPACE_BY_INVITE_TOKEN } from "graphql/mutation/SpaceMutation";
 import { handleError } from "graphql/ApolloClient";
 import useAuthUserStore from "store/AuthStore";
-import { formatDocumentRoute } from "../config/Routes";
+import { formatDocumentRoute, formatStartSpace } from "../config/Routes";
 
 const PreJoinSpace = () => {
   const router = useRouter();
@@ -32,10 +32,11 @@ const PreJoinSpace = () => {
       return;
     }
 
+    const spaceId = parseInt(router.query.spaceId as string, 10);
     const { data } = await joinSpace({
       variables: {
         email,
-        spaceId: parseInt(router.query.spaceId as string, 10),
+        spaceId,
         token: router.query.token,
       },
     });
@@ -44,9 +45,7 @@ const PreJoinSpace = () => {
       setStatus(true);
       if (data.spaceJoinByInviteToken.shouldGoToSpace) {
         toast.success(t`Joined! We're moving you to the space!`);
-        router.push(
-          formatDocumentRoute(data.spaceJoinByInviteToken.documentId),
-        );
+        router.push(formatDocumentRoute(formatStartSpace(spaceId)));
       } else {
         toast.success(t`Joined! Please check your mail inbox`);
       }

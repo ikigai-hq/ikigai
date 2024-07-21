@@ -103,7 +103,10 @@ const useAuthUserStore = create<IStore>((set, get) => ({
       },
     });
 
-    set({ activeSpacePermissions: permissions?.spaceMyPermissions || [] });
+    set({
+      spaceId,
+      activeSpacePermissions: permissions?.spaceMyPermissions || [],
+    });
   },
 }));
 

@@ -16,7 +16,7 @@ import {
 import { GET_MY_SPACES } from "graphql/query/SpaceQuery";
 import { handleError } from "graphql/ApolloClient";
 import { CREATE_SPACE } from "graphql/mutation/SpaceMutation";
-import { formatDocumentRoute } from "config/Routes";
+import { formatStartSpace } from "config/Routes";
 import CreateSpaceInvite from "../../SpaceSetting/CreateSpaceInvite";
 import usePermission from "hook/UsePermission";
 
@@ -37,8 +37,8 @@ const ManageSpace = ({ onClickSpaceSetting }: ManageSpaceProps) => {
 
   const onSwitch = (space: GetMySpaces_spaceMine) => {
     if (space.id === currentSpaceId) return;
-    const documentPath = formatDocumentRoute(space.starterDocument.id);
-    window.location.replace(documentPath);
+    const startSpacePath = formatStartSpace(space.id);
+    window.location.replace(startSpacePath);
   };
 
   const onCreateSpace = async () => {
@@ -52,10 +52,8 @@ const ManageSpace = ({ onClickSpaceSetting }: ManageSpaceProps) => {
 
     if (data) {
       toast.success(t`Created! We're moving you to your new space`);
-      const documentPath = formatDocumentRoute(
-        data.spaceCreate.starterDocument.id,
-      );
-      window.location.replace(documentPath);
+      const startSpacePath = formatStartSpace(data.spaceCreate.id);
+      window.location.replace(startSpacePath);
     }
   };
 

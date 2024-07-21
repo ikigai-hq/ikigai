@@ -56,7 +56,6 @@ export const JOIN_SPACE_BY_INVITE_TOKEN = gql`
     $token: String!
   ) {
     spaceJoinByInviteToken(email: $email, spaceId: $spaceId, token: $token) {
-      documentId
       shouldGoToSpace
     }
   }
@@ -72,9 +71,6 @@ export const CREATE_SPACE = gql`
   mutation CreateSpace($data: NewSpace!) {
     spaceCreate(data: $data) {
       id
-      starterDocument {
-        id
-      }
     }
   }
 `;

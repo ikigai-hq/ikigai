@@ -48,7 +48,6 @@ impl SpaceQuery {
         Ok(vec![conn
             .transaction::<_, IkigaiError, _>(|conn| {
                 let space = create_default_space(conn, user_id)?;
-                Document::get_or_create_starter_doc(conn, space.id)?;
                 Ok(space)
             })
             .format_err()?])
@@ -77,14 +76,9 @@ impl SpaceQuery {
         let space_id = document.space_id.unwrap_or_default();
         space_quick_authorize(ctx, space_id, SpaceActionPermission::ViewSpaceContent).await?;
         let mut conn = get_conn_from_ctx(ctx).await?;
-        let space_documents = Document::find_all_by_space(&mut conn, space_id).format_err()?;
+        let space_documents =
+            Document::find_all_non_submission_in_space(&mut conn, space_id).format_err()?;
         for space_document in space_documents {
-            let submission =
-                Submission::find_by_document(&mut conn, space_document.id).format_err()?;
-            if submission.is_none() {
-                continue;
-            }
-
             let is_ok = document_quick_authorize(
                 ctx,
                 space_document.id,

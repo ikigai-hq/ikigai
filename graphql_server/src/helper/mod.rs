@@ -16,7 +16,7 @@ use crate::graphql::data_loader::{FindPublicUserById, IkigaiDataLoader};
 use crate::mailer::Mailer;
 use crate::service::redis::Redis;
 use crate::service::Storage;
-use crate::util::url_util::format_magic_link;
+use crate::util::url_util::{format_document_magic_link, format_start_space_magic_link};
 use crate::util::{generate_otp, get_now_as_secs};
 
 pub async fn get_public_user_from_loader(ctx: &Context<'_>, user_id: i32) -> Result<PublicUser> {
@@ -111,14 +111,23 @@ pub fn add_space_member(
     Ok(new_member)
 }
 
-pub fn generate_magic_link(user_id: i32, document_id: Uuid) -> Result<String, IkigaiError> {
+pub fn generate_document_magic_link(
+    user_id: i32,
+    document_id: Uuid,
+) -> Result<String, IkigaiError> {
     let otp = generate_otp();
     Redis::init().set_magic_token(user_id, &otp)?;
-    Ok(format_magic_link(document_id, &otp, user_id))
+    Ok(format_document_magic_link(document_id, &otp, user_id))
 }
 
-pub fn send_space_magic_link(user: &User, space: &Space, document_id: Uuid) -> Result<bool> {
-    let magic_link = generate_magic_link(user.id, document_id).format_err()?;
+pub fn generate_start_space_magic_link(user_id: i32, space_id: i32) -> Result<String, IkigaiError> {
+    let otp = generate_otp();
+    Redis::init().set_magic_token(user_id, &otp)?;
+    Ok(format_start_space_magic_link(space_id, &otp, user_id))
+}
+
+pub fn send_start_space_magic_link(user: &User, space: &Space) -> Result<bool> {
+    let magic_link = generate_start_space_magic_link(user.id, space.id).format_err()?;
     if let Err(reason) = Mailer::send_magic_link_email(&user.email, space.name.clone(), magic_link)
     {
         error!("Cannot send magic link to {}: {:?}", user.email, reason);

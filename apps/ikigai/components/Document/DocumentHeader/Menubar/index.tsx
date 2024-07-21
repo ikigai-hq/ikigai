@@ -15,7 +15,7 @@ import {
 } from "graphql/types";
 import useDocumentStore from "store/DocumentStore";
 import useCreateDocument from "hook/UseCreateDocument";
-import { formatDocumentRoute } from "config/Routes";
+import { formatDocumentRoute, formatStartSpace } from "config/Routes";
 import { DUPLICATE_SPACE_DOCUMENT } from "graphql/mutation/SpaceMutation";
 import { handleError } from "graphql/ApolloClient";
 import { SOFT_DELETE_DOCUMENT } from "graphql/mutation/DocumentMutation";
@@ -34,9 +34,6 @@ const IkigaiMenubar = () => {
   const activeDocument = useDocumentStore((state) => state.activeDocument);
   const { onCreate } = useCreateDocument(activeDocument?.parentId);
   const addSpaceDocument = useDocumentStore((state) => state.addSpaceDocument);
-  const removeSpaceDocument = useDocumentStore(
-    (state) => state.removeSpaceDocument,
-  );
   const [duplicateDocument] = useMutation<DuplicateSpaceDocument>(
     DUPLICATE_SPACE_DOCUMENT,
     {
@@ -90,10 +87,7 @@ const IkigaiMenubar = () => {
 
     if (data) {
       toast.success(t`Deleted`);
-      const otherDocumentId = removeSpaceDocument(activeDocument.id);
-      if (otherDocumentId) {
-        router.push(formatDocumentRoute(otherDocumentId));
-      }
+      await router.push(formatStartSpace(activeDocument.spaceId));
     }
   };
 

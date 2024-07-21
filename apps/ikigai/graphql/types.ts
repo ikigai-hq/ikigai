@@ -937,7 +937,6 @@ export interface DeleteSpaceInviteTokenVariables {
 // ====================================================
 
 export interface JoinSpaceByInviteToken_spaceJoinByInviteToken {
-  documentId: any;
   shouldGoToSpace: boolean;
 }
 
@@ -978,13 +977,8 @@ export interface RemoveSpaceMemberVariables {
 // GraphQL mutation operation: CreateSpace
 // ====================================================
 
-export interface CreateSpace_spaceCreate_starterDocument {
-  id: any;
-}
-
 export interface CreateSpace_spaceCreate {
   id: number;
-  starterDocument: CreateSpace_spaceCreate_starterDocument;
 }
 
 export interface CreateSpace {
@@ -1767,14 +1761,9 @@ export interface GetSpaceInviteTokensVariables {
 // GraphQL query operation: GetMySpaces
 // ====================================================
 
-export interface GetMySpaces_spaceMine_starterDocument {
-  id: any;
-}
-
 export interface GetMySpaces_spaceMine {
   id: number;
   name: string;
-  starterDocument: GetMySpaces_spaceMine_starterDocument;
 }
 
 export interface GetMySpaces {
@@ -1790,18 +1779,39 @@ export interface GetMySpaces {
 // GraphQL query operation: GetMyOwnSpaces
 // ====================================================
 
-export interface GetMyOwnSpaces_spaceOwn_starterDocument {
-  id: any;
-}
-
 export interface GetMyOwnSpaces_spaceOwn {
   id: number;
   name: string;
-  starterDocument: GetMyOwnSpaces_spaceOwn_starterDocument;
 }
 
 export interface GetMyOwnSpaces {
   spaceOwn: GetMyOwnSpaces_spaceOwn[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetSpaceAvailableDocuments
+// ====================================================
+
+export interface GetSpaceAvailableDocuments_spaceGet_nonSubmissionDocuments {
+  id: any;
+}
+
+export interface GetSpaceAvailableDocuments_spaceGet {
+  id: number;
+  nonSubmissionDocuments: GetSpaceAvailableDocuments_spaceGet_nonSubmissionDocuments[];
+}
+
+export interface GetSpaceAvailableDocuments {
+  spaceGet: GetSpaceAvailableDocuments_spaceGet;
+}
+
+export interface GetSpaceAvailableDocumentsVariables {
+  spaceId: number;
 }
 
 /* tslint:disable */

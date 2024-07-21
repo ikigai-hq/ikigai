@@ -71,16 +71,25 @@ resource DocumentAuth {
 }
 
 has_role(user: UserAuth, "reader", doc: DocumentAuth) if
-    doc.space_id = user.space_id and doc.visibility = "public";
+    doc.space_id = user.space_id
+    and doc.visibility = "public"
+    and not doc.is_delete;
 
 has_role(user: UserAuth, "reader", doc: DocumentAuth) if
     doc.space_id = user.space_id
      and doc.visibility = "assignees"
-     and user.id in doc.assignees;
+     and user.id in doc.assignees
+     and not doc.is_delete;
+
+has_role(user: UserAuth, "reader", doc: DocumentAuth) if
+    user.space_id = doc.space_id and
+    user.role = "teacher"
+    and doc.is_delete;
 
 has_role(user: UserAuth, "writer", doc: DocumentAuth) if
     user.space_id = doc.space_id and
-    user.role = "teacher";
+    user.role = "teacher"
+    and not doc.is_delete;
 
 
 # RUBRIC AUTH SPACE

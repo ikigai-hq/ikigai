@@ -1,10 +1,10 @@
+use diesel::dsl::{exists, not};
 use diesel::result::Error;
 use diesel::sql_types::Integer;
 use diesel::{AsChangeset, Connection, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use uuid::Uuid;
 
-use super::schema::{document_assigned_users, documents};
-use crate::db::Space;
+use super::schema::{assignment_submissions, document_assigned_users, documents};
 use crate::impl_enum_for_db;
 use crate::util::get_now_as_secs;
 
@@ -158,33 +158,6 @@ impl Document {
             .get_result(conn)
     }
 
-    pub fn get_or_create_starter_doc(
-        conn: &mut PgConnection,
-        space_id: i32,
-    ) -> Result<Self, Error> {
-        if let Some(starter_doc) = Document::find_starter_of_space(conn, space_id)? {
-            Ok(starter_doc)
-        } else {
-            conn.transaction::<_, Error, _>(|conn| {
-                let space = Space::find_by_id(conn, space_id)?;
-                let starter_folder = Self::new(
-                    space.creator_id,
-                    "Starter Folder".into(),
-                    None,
-                    0,
-                    None,
-                    Some(space_id),
-                    None,
-                    None,
-                    DocumentVisibility::Public,
-                );
-                let starter_folder = Document::upsert(conn, starter_folder)?;
-
-                Ok(starter_folder)
-            })
-        }
-    }
-
     pub fn update(
         conn: &mut PgConnection,
         id: Uuid,
@@ -257,20 +230,18 @@ impl Document {
             .get_results(conn)
     }
 
-    pub fn find_starter_of_space(
+    pub fn find_all_non_submission_in_space(
         conn: &mut PgConnection,
         space_id: i32,
-    ) -> Result<Option<Document>, Error> {
-        match documents::table
+    ) -> Result<Vec<Document>, Error> {
+        documents::table
             .filter(documents::space_id.eq(space_id))
-            .filter(documents::parent_id.is_null())
-            .order_by(documents::index.asc())
-            .first(conn)
-        {
-            Ok(document) => Ok(Some(document)),
-            Err(Error::NotFound) => Ok(None),
-            Err(e) => Err(e),
-        }
+            .filter(documents::deleted_at.is_null())
+            .filter(not(exists(
+                assignment_submissions::table
+                    .filter(assignment_submissions::document_id.eq(documents::id)),
+            )))
+            .get_results(conn)
     }
 
     pub fn find_last_index(

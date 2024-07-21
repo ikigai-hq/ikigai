@@ -9,7 +9,7 @@ use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::graphql::validator::Email;
 use crate::helper::{
     create_default_space, get_conn_from_ctx, get_user_from_ctx, get_user_id_from_ctx,
-    rubric_quick_authorize, send_space_magic_link,
+    rubric_quick_authorize, send_start_space_magic_link,
 };
 use crate::service::google::verify_google_id_token;
 use crate::service::redis::Redis;
@@ -31,7 +31,7 @@ impl UserMutation {
         id_token: String,
     ) -> Result<UserToken> {
         let id_token = verify_google_id_token(&id_token).await.format_err()?;
-        let (user, _, _) = init_space_for_user_by_email(id_token.email, id_token.name, ctx).await?;
+        let (user, _) = init_space_for_user_by_email(id_token.email, id_token.name, ctx).await?;
         let access_token = Claims::new(user.id).encode()?;
 
         Ok(UserToken { user, access_token })
@@ -42,9 +42,8 @@ impl UserMutation {
         ctx: &Context<'_>,
         #[graphql(validator(custom = "Email"))] email: String,
     ) -> Result<bool> {
-        let (user, document, space) =
-            init_space_for_user_by_email(email.clone(), email, ctx).await?;
-        send_space_magic_link(&user, &space, document.id)
+        let (user, space) = init_space_for_user_by_email(email.clone(), email, ctx).await?;
+        send_start_space_magic_link(&user, &space)
     }
 
     async fn user_check_magic_link(
@@ -113,29 +112,23 @@ async fn init_space_for_user_by_email(
     email: String,
     default_name: String,
     ctx: &Context<'_>,
-) -> Result<(User, Document, Space)> {
+) -> Result<(User, Space)> {
     let mut conn = get_conn_from_ctx(ctx).await?;
     let user = User::find_by_email_opt(&mut conn, &email).format_err()?;
     let res = match user {
         Some(user) => {
             let space_members = SpaceMember::find_all_by_user(&mut conn, user.id)?;
-            let (document, space) = if let Some(space_member) = space_members.first() {
-                let space = Space::find_by_id(&mut conn, space_member.space_id).format_err()?;
-                (
-                    Document::get_or_create_starter_doc(&mut conn, space_member.space_id)
-                        .format_err()?,
-                    space,
-                )
+            let space = if let Some(space_member) = space_members.first() {
+                Space::find_by_id(&mut conn, space_member.space_id).format_err()?
             } else {
                 conn.transaction::<_, IkigaiError, _>(|conn| {
                     let space = create_default_space(conn, user.id)?;
-                    let document = Document::get_or_create_starter_doc(conn, space.id)?;
-                    Ok((document, space))
+                    Ok(space)
                 })
                 .format_err()?
             };
 
-            (user, document, space)
+            (user, space)
         }
         None => {
             // Create user, org, and space
@@ -143,9 +136,8 @@ async fn init_space_for_user_by_email(
                 let user = NewUser::new(email.clone(), default_name, "".into());
                 let user = User::insert(conn, &user)?;
                 let space = create_default_space(conn, user.id)?;
-                let document = Document::get_or_create_starter_doc(conn, space.id)?;
 
-                Ok((user, document, space))
+                Ok((user, space))
             })
             .format_err()?
         }

@@ -1,3 +1,7 @@
+/*
+This component will ensure the application load data correctly before render application
+https://raw.githubusercontent.com/ikigai-hq/ikigai/master/assets/initializing_flow.png
+ */
 import React, { ReactNode, useEffect, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -52,9 +56,7 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
   );
   const [checkDocumentSpaceInServer] =
     useLazyQuery<CheckDocument>(CHECK_DOCUMENT_SPACE);
-  const [getMe] = useLazyQuery<UserMe>(USER_ME, {
-    fetchPolicy: "network-only",
-  });
+  const [getMe] = useLazyQuery<UserMe>(USER_ME);
   const [checkMagicLink] = useMutation<VerifyMagicLink>(VERIFY_MAGIC_LINK);
   const [getMySpaces] = useLazyQuery<GetMyOwnSpaces>(GET_MY_OWN_SPACES);
   const [getAvailableDocument] = useLazyQuery<GetAvailableDocument>(

@@ -64,6 +64,7 @@ resource DocumentAuth {
     "view_document" if "reader";
 
     "reader" if "writer";
+    "view_page_content" if "writer";
     "edit_document" if "writer";
     "interactive_with_tool" if "writer";
     "view_answer" if "writer";

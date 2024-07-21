@@ -13,24 +13,20 @@ import {
   CheckDocument,
   CheckToken,
   DocumentActionPermission,
-  GetAvailableDocument,
   GetDocumentPermissions,
   GetMyOwnSpaces,
-  MyLastActivity,
   UserMe,
   VerifyMagicLink,
 } from "graphql/types";
 import {
   CHECK_DOCUMENT_SPACE,
   CHECK_TOKEN,
-  GET_AVAILABLE_DOCUMENT,
   GET_DOCUMENT_PERMISSIONS,
-  MY_LAST_ACTIVITY,
   USER_ME,
 } from "graphql/query";
 import UserStorage from "storage/UserStorage";
 import useAuthUserStore from "store/AuthStore";
-import { formatDocumentRoute, formatStartSpace, Routes } from "config/Routes";
+import { formatStartSpace, Routes } from "config/Routes";
 import LayoutManagement from "./UserCredential/AuthLayout";
 import Loading from "./Loading";
 import { VERIFY_MAGIC_LINK } from "graphql/mutation/UserMutation";
@@ -57,15 +53,11 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
   const [getDocumentPermissions] = useLazyQuery<GetDocumentPermissions>(
     GET_DOCUMENT_PERMISSIONS,
   );
-  const [checkDocumentSpaceInServer] =
+  const [getSpaceByDocument] =
     useLazyQuery<CheckDocument>(CHECK_DOCUMENT_SPACE);
   const [getMe] = useLazyQuery<UserMe>(USER_ME);
   const [checkMagicLink] = useMutation<VerifyMagicLink>(VERIFY_MAGIC_LINK);
   const [getMySpaces] = useLazyQuery<GetMyOwnSpaces>(GET_MY_OWN_SPACES);
-  const [getAvailableDocument] = useLazyQuery<GetAvailableDocument>(
-    GET_AVAILABLE_DOCUMENT,
-  );
-  const [getLastActivity] = useLazyQuery<MyLastActivity>(MY_LAST_ACTIVITY);
 
   useEffect(() => {
     if (router.isReady) initializing();
@@ -107,8 +99,8 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
       }
       console.info("Checking document page completed!");
     } else if (needRedirect()) {
-      console.info("Check fallback my space document!", router.pathname);
-      await checkLastActivity();
+      console.info("Check available my space document!", router.pathname);
+      await checkMySpaceAvailableDocument();
     }
 
     console.info("Fetch space permissions...!");
@@ -118,6 +110,28 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
     console.info("Checking Auth data...!");
     await verifyUserAuth();
     console.info("Checking Auth data completed.");
+  };
+
+  const verifyMagicToken = async (): Promise<boolean> => {
+    const otp = router.query.otp as string;
+    const userIdAsStr = router.query.user_id as string;
+    const userId = parseInt(userIdAsStr, 10);
+
+    if (otp && userId) {
+      const { data } = await checkMagicLink({
+        variables: {
+          userId,
+          otp,
+        },
+      });
+
+      if (data) {
+        TokenStorage.set(data.userCheckMagicLink.accessToken);
+        UserStorage.set(data.userCheckMagicLink.user.id);
+      }
+    }
+
+    return true;
   };
 
   const verifyToken = async (): Promise<boolean> => {
@@ -139,7 +153,7 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
 
   const verifyDocument = async (documentId: string): Promise<boolean> => {
     if (!(await verifyDocumentPermissions(documentId))) {
-      const checkMySpace = !(await checkSameSpaceAvailableDocument(documentId));
+      const checkMySpace = !(await findAvailableSpaceByDocument(documentId));
       if (checkMySpace) {
         return await checkMySpaceAvailableDocument();
       }
@@ -165,79 +179,37 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
     return false;
   };
 
-  const verifyMagicToken = async (): Promise<boolean> => {
-    const otp = router.query.otp as string;
-    const userIdAsStr = router.query.user_id as string;
-    const userId = parseInt(userIdAsStr, 10);
-
-    if (otp && userId) {
-      const { data } = await checkMagicLink({
-        variables: {
-          userId,
-          otp,
-        },
-      });
-
-      if (data) {
-        TokenStorage.set(data.userCheckMagicLink.accessToken);
-        UserStorage.set(data.userCheckMagicLink.user.id);
-      }
-    }
-
-    return true;
-  };
-
-  const verifyUserAuth = async (): Promise<boolean> => {
-    const token = TokenStorage.get();
-    if (!token) return true;
-
-    const { data } = await getMe();
-    if (data) {
-      setUserAuth(data);
-    }
-  };
-
   const checkDocumentSpace = async (documentId: string): Promise<boolean> => {
-    const { data } = await checkDocumentSpaceInServer({
+    const { data } = await getSpaceByDocument({
       variables: { documentId },
     });
 
-    if (data) {
-      setSpaceId(data.userCheckDocument);
+    if (data && data.spaceGetSpaceByDocument) {
+      setSpaceId(data.spaceGetSpaceByDocument);
       return true;
     }
 
     return false;
   };
 
-  const checkSameSpaceAvailableDocument = async (documentId: string) => {
-    const { data } = await getAvailableDocument({
+  const findAvailableSpaceByDocument = async (documentId: string) => {
+    const { data } = await getSpaceByDocument({
       variables: {
         documentId,
       },
     });
-    if (data && data.spaceGetAvailableDocument) {
-      await router.push(formatDocumentRoute(data.spaceGetAvailableDocument.id));
-      return true;
+
+    let spaceId = tryToGetSpaceId();
+    if (data && data.spaceGetSpaceByDocument) {
+      spaceId = data.spaceGetSpaceByDocument;
     }
-    const spaceId = tryToGetSpaceId();
+
     if (spaceId) {
       await router.push(formatStartSpace(spaceId));
       return true;
     }
 
     return false;
-  };
-
-  const checkLastActivity = async () => {
-    const { data } = await getLastActivity();
-    if (data) {
-      await router.push(
-        formatDocumentRoute(data.userLastActivity.lastDocumentId),
-      );
-    } else {
-      await checkMySpaceAvailableDocument();
-    }
   };
 
   const checkMySpaceAvailableDocument = async (): Promise<boolean> => {
@@ -267,6 +239,16 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
       return spaceId;
     } catch (e) {
       console.error("Cannot get space id", e);
+    }
+  };
+
+  const verifyUserAuth = async (): Promise<boolean> => {
+    const token = TokenStorage.get();
+    if (!token) return true;
+
+    const { data } = await getMe();
+    if (data) {
+      setUserAuth(data);
     }
   };
 

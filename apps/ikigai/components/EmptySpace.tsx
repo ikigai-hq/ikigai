@@ -13,7 +13,7 @@ import {
 import { ADD_DOCUMENT_STANDALONE } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
 import usePermission from "hook/UsePermission";
-import { formatDocumentRoute, formatStartSpace } from "config/Routes";
+import { formatDocumentRoute, formatStartSpace, Routes } from "config/Routes";
 import {
   GET_MY_SPACES,
   GET_SPACE_AVAILABLE_DOCUMENTS,
@@ -41,6 +41,7 @@ const EmptySpace = ({ spaceId }: EmptySpaceProps) => {
       },
       onError: (e) => {
         console.warn("Cannot check available documents of space", e);
+        window.location.replace(Routes.Home);
       },
     },
   );

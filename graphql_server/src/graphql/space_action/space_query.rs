@@ -2,11 +2,11 @@ use async_graphql::*;
 use diesel::Connection;
 use uuid::Uuid;
 
-use crate::authorization::{DocumentActionPermission, SpaceActionPermission};
+use crate::authorization::{SpaceActionPermission};
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::{
-    create_default_space, document_quick_authorize, get_conn_from_ctx,
+    create_default_space, get_conn_from_ctx,
     get_space_allowed_permissions, get_user_id_from_ctx, space_quick_authorize,
 };
 
@@ -63,35 +63,20 @@ impl SpaceQuery {
         SpaceInviteToken::find_all_by_spaces(&mut conn, space_id).format_err()
     }
 
-    async fn space_get_available_document(
+    async fn space_get_space_by_document(
         &self,
         ctx: &Context<'_>,
         current_document_id: Uuid,
-    ) -> Result<Option<Document>> {
+    ) -> Result<Option<i32>> {
         let document = {
             let mut conn = get_conn_from_ctx(ctx).await?;
             Document::find_by_id(&mut conn, current_document_id).format_err()?
         };
 
-        let space_id = document.space_id.unwrap_or_default();
-        space_quick_authorize(ctx, space_id, SpaceActionPermission::ViewSpaceContent).await?;
-        let mut conn = get_conn_from_ctx(ctx).await?;
-        let space_documents =
-            Document::find_all_non_submission_in_space(&mut conn, space_id).format_err()?;
-        for space_document in space_documents {
-            let is_ok = document_quick_authorize(
-                ctx,
-                space_document.id,
-                DocumentActionPermission::ViewDocument,
-            )
-            .await
-            .is_ok();
-
-            if is_ok {
-                return Ok(Some(space_document));
-            }
+        if let Some(space_id) = document.space_id {
+            space_quick_authorize(ctx, space_id, SpaceActionPermission::ViewSpaceContent).await?;
         }
 
-        Ok(None)
+        Ok(document.space_id)
     }
 }

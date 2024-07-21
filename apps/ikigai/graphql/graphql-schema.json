@@ -391,7 +391,7 @@
             "deprecationReason": null
           },
           {
-            "name": "spaceGetAvailableDocument",
+            "name": "spaceGetSpaceByDocument",
             "description": null,
             "args": [
               {
@@ -410,8 +410,8 @@
               }
             ],
             "type": {
-              "kind": "OBJECT",
-              "name": "Document",
+              "kind": "SCALAR",
+              "name": "Int",
               "ofType": null
             },
             "isDeprecated": false,

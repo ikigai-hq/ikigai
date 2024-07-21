@@ -10,23 +10,7 @@ export const CHECK_TOKEN = gql`
 
 export const CHECK_DOCUMENT_SPACE = gql`
   query CheckDocument($documentId: UUID!) {
-    userCheckDocument(documentId: $documentId)
-  }
-`;
-
-export const GET_AVAILABLE_DOCUMENT = gql`
-  query GetAvailableDocument($documentId: UUID!) {
-    spaceGetAvailableDocument(currentDocumentId: $documentId) {
-      id
-    }
-  }
-`;
-
-export const MY_LAST_ACTIVITY = gql`
-  query MyLastActivity {
-    userLastActivity {
-      lastDocumentId
-    }
+    spaceGetSpaceByDocument(currentDocumentId: $documentId)
   }
 `;
 

@@ -1841,49 +1841,11 @@ export interface CheckToken {
 // ====================================================
 
 export interface CheckDocument {
-  userCheckDocument: number | null;
+  spaceGetSpaceByDocument: number | null;
 }
 
 export interface CheckDocumentVariables {
   documentId: any;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GetAvailableDocument
-// ====================================================
-
-export interface GetAvailableDocument_spaceGetAvailableDocument {
-  id: any;
-}
-
-export interface GetAvailableDocument {
-  spaceGetAvailableDocument: GetAvailableDocument_spaceGetAvailableDocument | null;
-}
-
-export interface GetAvailableDocumentVariables {
-  documentId: any;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: MyLastActivity
-// ====================================================
-
-export interface MyLastActivity_userLastActivity {
-  lastDocumentId: any | null;
-}
-
-export interface MyLastActivity {
-  userLastActivity: MyLastActivity_userLastActivity;
 }
 
 /* tslint:disable */

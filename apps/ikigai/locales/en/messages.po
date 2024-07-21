@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:186
+#: components/Document/DocumentHeader/Menubar/index.tsx:180
 msgid "{0} focus mode"
 msgstr "{0} focus mode"
 
@@ -140,8 +140,8 @@ msgstr "Assigned!"
 msgid "Assignees only"
 msgstr "Assignees only"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:52
-#: components/Document/DocumentHeader/Menubar/index.tsx:134
+#: components/Document/DocumentHeader/Menubar/index.tsx:49
+#: components/Document/DocumentHeader/Menubar/index.tsx:128
 msgid "Assignment"
 msgstr "Assignment"
 
@@ -158,7 +158,7 @@ msgid "Auto"
 msgstr "Auto"
 
 #: components/ErrorBoundary.tsx:54
-#: components/Initializing.tsx:295
+#: components/Initializing.tsx:308
 #: pages/404.tsx:24
 msgid "Back to home"
 msgstr "Back to home"
@@ -201,7 +201,7 @@ msgstr "Center"
 msgid "Checked option is correct option"
 msgstr "Checked option is correct option"
 
-#: components/Document/LeftSide/ManageSpace.tsx:124
+#: components/Document/LeftSide/ManageSpace.tsx:122
 msgid "Click item in the list to switch space"
 msgstr "Click item in the list to switch space"
 
@@ -222,7 +222,7 @@ msgstr "Community & Help"
 msgid "Content"
 msgstr "Content"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:65
+#: components/Document/DocumentHeader/Menubar/index.tsx:62
 msgid "Copied"
 msgstr "Copied"
 
@@ -240,7 +240,7 @@ msgstr "Copied!"
 msgid "Copy invite link"
 msgstr "Copy invite link"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:150
+#: components/Document/DocumentHeader/Menubar/index.tsx:144
 msgid "Copy Link"
 msgstr "Copy Link"
 
@@ -253,6 +253,10 @@ msgstr "correct!"
 #: components/Editor/Extensions/QuizBlock/SelectOptionBlock/ReviewSelectOption.tsx:63
 msgid "Correct!"
 msgstr "Correct!"
+
+#: components/EmptySpace.tsx:114
+msgid "Create assignment"
+msgstr "Create assignment"
 
 #: components/SpaceSetting/CreateSpaceInvite.tsx:80
 msgid "Create Invite Link"
@@ -279,11 +283,11 @@ msgstr "Criteria"
 msgid "Declare your question, options, and then choose the correct answer."
 msgstr "Declare your question, options, and then choose the correct answer."
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:157
+#: components/Document/DocumentHeader/Menubar/index.tsx:151
 msgid "Delete"
 msgstr "Delete"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:195
+#: components/Document/DocumentHeader/Menubar/index.tsx:189
 msgid "Delete {0}!"
 msgstr "Delete {0}!"
 
@@ -291,7 +295,7 @@ msgstr "Delete {0}!"
 msgid "Delete page {innerTitle}!"
 msgstr "Delete page {innerTitle}!"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:92
+#: components/Document/DocumentHeader/Menubar/index.tsx:89
 msgid "Deleted"
 msgstr "Deleted"
 
@@ -338,7 +342,7 @@ msgstr "Do you want to submit your submission?"
 msgid "Documentation"
 msgstr "Documentation"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:78
+#: components/Document/DocumentHeader/Menubar/index.tsx:75
 msgid "Duplicated!"
 msgstr "Duplicated!"
 
@@ -355,7 +359,7 @@ msgid "Edit Profile"
 msgstr "Edit Profile"
 
 #: components/MagicLink/index.tsx:63
-#: components/PreJoinSpace.tsx:66
+#: components/PreJoinSpace.tsx:65
 msgid "Email"
 msgstr "Email"
 
@@ -423,8 +427,8 @@ msgstr "Fill in Blank Setting"
 msgid "First name"
 msgstr "First name"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:50
-#: components/Document/DocumentHeader/Menubar/index.tsx:140
+#: components/Document/DocumentHeader/Menubar/index.tsx:47
+#: components/Document/DocumentHeader/Menubar/index.tsx:134
 msgid "Folder"
 msgstr "Folder"
 
@@ -520,7 +524,7 @@ msgstr "Invite"
 msgid "Invite link"
 msgstr "Invite link"
 
-#: components/Document/LeftSide/ManageSpace.tsx:80
+#: components/Document/LeftSide/ManageSpace.tsx:78
 msgid "Invite People"
 msgstr "Invite People"
 
@@ -540,7 +544,7 @@ msgstr "Inviter"
 msgid "Inviting role"
 msgstr "Inviting role"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:196
+#: components/Document/DocumentHeader/Menubar/index.tsx:190
 msgid "It will delete children files if this is folder."
 msgstr "It will delete children files if this is folder."
 
@@ -548,19 +552,19 @@ msgstr "It will delete children files if this is folder."
 msgid "Italic"
 msgstr "Italic"
 
-#: components/PreJoinSpace.tsx:81
+#: components/PreJoinSpace.tsx:80
 msgid "Join"
 msgstr "Join"
 
-#: components/PreJoinSpace.tsx:88
+#: components/PreJoinSpace.tsx:87
 msgid "Joined!"
 msgstr "Joined!"
 
-#: components/PreJoinSpace.tsx:51
+#: components/PreJoinSpace.tsx:50
 msgid "Joined! Please check your mail inbox"
 msgstr "Joined! Please check your mail inbox"
 
-#: components/PreJoinSpace.tsx:46
+#: components/PreJoinSpace.tsx:47
 msgid "Joined! We're moving you to the space!"
 msgstr "Joined! We're moving you to the space!"
 
@@ -576,7 +580,7 @@ msgstr "Left"
 msgid "Log out"
 msgstr "Log out"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:146
+#: components/Document/DocumentHeader/Menubar/index.tsx:140
 msgid "Make a copy"
 msgstr "Make a copy"
 
@@ -629,7 +633,7 @@ msgstr "Multiple Choice Quiz"
 msgid "Multiple Choice Setting"
 msgstr "Multiple Choice Setting"
 
-#: components/Document/LeftSide/ManageSpace.tsx:96
+#: components/Document/LeftSide/ManageSpace.tsx:94
 msgid "My Spaces"
 msgstr "My Spaces"
 
@@ -644,7 +648,7 @@ msgstr "Name"
 msgid "Never"
 msgstr "Never"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:120
+#: components/Document/DocumentHeader/Menubar/index.tsx:114
 msgid "New"
 msgstr "New"
 
@@ -661,7 +665,7 @@ msgstr "New Attempt"
 msgid "New Attempt!"
 msgstr "New Attempt!"
 
-#: components/Document/LeftSide/ManageSpace.tsx:105
+#: components/Document/LeftSide/ManageSpace.tsx:103
 msgid "New space"
 msgstr "New space"
 
@@ -938,7 +942,7 @@ msgstr "Space name"
 msgid "Space settings"
 msgstr "Space settings"
 
-#: components/Document/LeftSide/ManageSpace.tsx:68
+#: components/Document/LeftSide/ManageSpace.tsx:66
 msgid "Space Settings"
 msgstr "Space Settings"
 
@@ -974,7 +978,7 @@ msgstr "Strike through"
 #~ msgid "Sub Contents"
 #~ msgstr "Sub Contents"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:54
+#: components/Document/DocumentHeader/Menubar/index.tsx:51
 msgid "Submission"
 msgstr "Submission"
 
@@ -1005,6 +1009,10 @@ msgstr "Success"
 #: components/Rubric/index.tsx:133
 msgid "Successfully!"
 msgstr "Successfully!"
+
+#: components/EmptySpace.tsx:145
+msgid "Switch"
+msgstr "Switch"
 
 #: components/SpaceSetting/CreateSpaceInvite.tsx:84
 #~ msgid "Teacher"
@@ -1129,7 +1137,7 @@ msgstr "Type space name..."
 #~ msgstr "Type your email"
 
 #: components/MagicLink/index.tsx:66
-#: components/PreJoinSpace.tsx:69
+#: components/PreJoinSpace.tsx:68
 msgid "Type your email!"
 msgstr "Type your email!"
 
@@ -1280,11 +1288,11 @@ msgstr "You have no class here"
 msgid "You reach max attempt times for this assignment!"
 msgstr "You reach max attempt times for this assignment!"
 
-#: components/PreJoinSpace.tsx:63
+#: components/PreJoinSpace.tsx:62
 msgid "You've been invited to join ikigai"
 msgstr "You've been invited to join ikigai"
 
-#: components/PreJoinSpace.tsx:91
+#: components/PreJoinSpace.tsx:90
 msgid "You've joined. We've sent a magic email to <0>{email}</0>. Open the link in email to access space."
 msgstr "You've joined. We've sent a magic email to <0>{email}</0>. Open the link in email to access space."
 
@@ -1295,3 +1303,7 @@ msgstr "You've joined. We've sent a magic email to <0>{email}</0>. Open the link
 #: components/Document/DocumentHeader/AssignmentHeader.tsx:64
 msgid "Your last submission already has feedback. Please check it!"
 msgstr "Your last submission already has feedback. Please check it!"
+
+#: components/EmptySpace.tsx:102
+msgid "Your space is empty"
+msgstr "Your space is empty"

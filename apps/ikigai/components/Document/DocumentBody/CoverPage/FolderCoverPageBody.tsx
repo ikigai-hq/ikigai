@@ -1,6 +1,6 @@
 import { Trans } from "@lingui/macro";
 import React from "react";
-import { Button } from "@radix-ui/themes";
+import { Button, Separator } from "@radix-ui/themes";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 
 import LessonItemDnd from "components/common/LearningModuleDnd/LessonItemDnd";
@@ -11,7 +11,6 @@ import {
   SpaceActionPermission,
 } from "graphql/types";
 import CreateContentButton from "components/common/LearningModuleDnd/CreateContentButton";
-import Spacer from "components/common/Spacer";
 import usePermission from "hook/UsePermission";
 
 const getChildrenSpaceDocuments = (
@@ -51,7 +50,7 @@ const FolderCoverPageBody = () => {
           </Button>
         </CreateContentButton>
       )}
-      <Spacer />
+      <Separator style={{ width: "100%", marginTop: 15, marginBottom: 15 }} />
       <LearningModuleDnd
         docs={subDocuments}
         keyword={""}

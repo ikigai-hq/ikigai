@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { NodeViewProps } from "@tiptap/core";
 import { IconButton } from "@radix-ui/themes";
+import { GearIcon } from "@radix-ui/react-icons";
 
 import { useOrderedQuizzes } from "hook/UseQuiz";
 import { isEmptyUuid } from "util/FileUtil";
 import { DocumentActionPermission, QuizType, Role } from "graphql/types";
 import QuizBlockWrapper from "../QuizBlockWrapper";
-import { SettingIcon } from "components/common/IconSvg";
 import { QuizComponentProps } from "../type";
 import SelectOptionSetting from "./SelectOptionSetting";
 import DoingSelectOption from "./DoingSelectOption";
@@ -51,7 +51,7 @@ const SelectOptionComponent = (props: NodeViewProps) => {
               color={"gray"}
               onClick={() => setShowSetting(true)}
             >
-              <SettingIcon width="16" height="16" />
+              <GearIcon width="16" height="16" />
             </IconButton>
           </div>
         )}

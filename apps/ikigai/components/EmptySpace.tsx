@@ -20,6 +20,7 @@ import {
 } from "graphql/query/SpaceQuery";
 import TokenStorage from "storage/TokenStorage";
 import Loading from "./Loading";
+import SpaceListItem from "./SpaceListItem";
 
 export type EmptySpaceProps = {
   spaceId: number;
@@ -127,24 +128,12 @@ const EmptySpaceInner = ({ spaceId }: EmptySpaceProps) => {
             </div>
             <div>
               {spaces.map((space) => (
-                <div
+                <SpaceListItem
                   key={space.id}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginTop: 5,
-                  }}
-                >
-                  <Text weight="bold">{space.name}</Text>
-                  <Button
-                    onClick={() => switchSpace(space.id)}
-                    variant="soft"
-                    size="1"
-                  >
-                    <Trans>Switch</Trans>
-                  </Button>
-                </div>
+                  spaceId={space.id}
+                  spaceName={space.name}
+                  onClick={() => switchSpace(space.id)}
+                />
               ))}
             </div>
           </div>

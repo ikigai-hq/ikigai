@@ -3,7 +3,7 @@ import { t, Trans } from "@lingui/macro";
 import toast from "react-hot-toast";
 import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { Avatar, Button, ScrollArea, Separator, Text } from "@radix-ui/themes";
+import { Button, ScrollArea, Separator, Text } from "@radix-ui/themes";
 import { PlusIcon, GearIcon, PersonIcon } from "@radix-ui/react-icons";
 
 import useSpaceStore from "store/SpaceStore";
@@ -19,6 +19,7 @@ import { CREATE_SPACE } from "graphql/mutation/SpaceMutation";
 import { formatStartSpace } from "config/Routes";
 import CreateSpaceInvite from "../../SpaceSetting/CreateSpaceInvite";
 import usePermission from "hook/UsePermission";
+import SpaceListItem from "../../SpaceListItem";
 
 export type ManageSpaceProps = {
   onClickSpaceSetting: () => void;
@@ -105,17 +106,13 @@ const ManageSpace = ({ onClickSpaceSetting }: ManageSpaceProps) => {
       </div>
       <ScrollArea type="auto" scrollbars="vertical" style={{ maxHeight: 180 }}>
         {spaces.map((space) => (
-          <ItemContainer
-            key={space.id}
+          <SpaceListItem
+            isActive={space.id === currentSpaceId}
             onClick={() => onSwitch(space)}
-            $active={space.id === currentSpaceId}
-            style={{ justifyContent: "start" }}
-          >
-            <Avatar fallback={space.name.charAt(0)} size="1" />
-            <Text size="2" truncate>
-              {space.name}
-            </Text>
-          </ItemContainer>
+            key={space.id}
+            spaceId={space.id}
+            spaceName={space.name}
+          />
         ))}
       </ScrollArea>
       <Text size="1" color="gray" weight="light">

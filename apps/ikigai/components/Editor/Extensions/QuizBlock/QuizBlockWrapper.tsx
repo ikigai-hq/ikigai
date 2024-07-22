@@ -3,13 +3,12 @@ import { NodeViewProps } from "@tiptap/core";
 import React, { useEffect, useState } from "react";
 
 import { EMPTY_UUID, isEmptyUuid } from "util/FileUtil";
-import { DocumentActionPermission, QuizType } from "graphql/types";
+import { QuizType } from "graphql/types";
 import Loading from "components/Loading";
 import { ExtensionWrapper } from "components/base/ExtensionComponentUtil";
 import useQuiz from "hook/UseQuiz";
 import styled from "styled-components";
 import { IconButton } from "@radix-ui/themes";
-import { SettingIcon } from "components/common/IconSvg";
 import {
   IMultipleChoiceExpectedAnswer,
   IMultipleChoiceQuestion,
@@ -19,8 +18,8 @@ import {
   ISingleChoiceExpectedAnswer,
   ISingleChoiceQuestion,
 } from "store/QuizStore";
-import { allow } from "hook/UsePermission";
-import { getQuizColor } from "../../../../util/DocumentUtil";
+import { getQuizColor } from "util/DocumentUtil";
+import { GearIcon } from "@radix-ui/react-icons";
 
 export type QuizBlockWrapperProps = {
   quizType: QuizType;
@@ -108,7 +107,7 @@ const QuizBlockWrapper = ({
               color={"gray"}
               onClick={onClickSetting}
             >
-              <SettingIcon width="16" height="16" />
+              <GearIcon width="16" height="16" />
             </IconButton>
           </div>
         </ExtensionMenu>

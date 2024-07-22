@@ -1,5 +1,7 @@
 import { NodeViewProps } from "@tiptap/core";
 import React, { useState } from "react";
+import { IconButton } from "@radix-ui/themes";
+import { GearIcon } from "@radix-ui/react-icons";
 
 import { DocumentActionPermission, QuizType, Role } from "graphql/types";
 import usePermission from "hook/UsePermission";
@@ -11,8 +13,6 @@ import useAuthUserStore from "store/AuthStore";
 import useDocumentStore from "store/DocumentStore";
 import DoingFillInBlank from "./DoingFillInBlank";
 import ReviewFillInBlank from "./ReviewFillInBlank";
-import { IconButton } from "@radix-ui/themes";
-import { SettingIcon } from "../../../../common/IconSvg";
 import FillInBlankSetting from "./FillInBlankSetting";
 
 const FillInBlankComponent = (props: NodeViewProps) => {
@@ -51,7 +51,7 @@ const FillInBlankComponent = (props: NodeViewProps) => {
               color={"gray"}
               onClick={() => setShowSetting(true)}
             >
-              <SettingIcon width="16" height="16" />
+              <GearIcon width="16" height="16" />
             </IconButton>
           </div>
         )}

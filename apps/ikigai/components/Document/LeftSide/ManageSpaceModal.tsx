@@ -15,17 +15,7 @@ const ManageSpaceModal = () => {
   const spaceName = useSpaceStore((state) => state.space?.name);
 
   return (
-    <Modal
-      content={
-        <ManageSpace onClickSpaceSetting={() => setSpaceSettingVisible(true)} />
-      }
-      title={t`${spaceName} Settings`}
-      description={t`Manage, Switch, or Create Space`}
-      open={openModal}
-      onOpenChange={setOpenModal}
-      maxWidth="30vw"
-      minWidth="300px"
-    >
+    <>
       <Tooltip content={t`Space Settings & Switch Space`}>
         <SpaceWrapper onClick={() => setOpenModal(true)}>
           <Avatar
@@ -36,7 +26,22 @@ const ManageSpaceModal = () => {
           />
         </SpaceWrapper>
       </Tooltip>
-    </Modal>
+      <Modal
+        content={
+          <ManageSpace
+            onClickSpaceSetting={() => setSpaceSettingVisible(true)}
+          />
+        }
+        title={t`${spaceName} Settings`}
+        description={t`Manage, Switch, or Create Space`}
+        open={openModal}
+        onOpenChange={setOpenModal}
+        maxWidth="30vw"
+        minWidth="300px"
+      >
+        <></>
+      </Modal>
+    </>
   );
 };
 

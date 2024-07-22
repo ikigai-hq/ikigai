@@ -8,8 +8,8 @@ import { LearningItemType } from "components/common/LearningModuleDnd/types";
 import { formatDocumentRoute } from "config/Routes";
 import useDocumentStore from "store/DocumentStore";
 import { DocumentType } from "graphql/types";
-import { ArrowDocument } from "../IconSvg";
 import { documentIcon } from "util/DocumentUtil";
+import { ChevronDownIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 
 export const DEFAULT_DOCUMENT_TITLE = "Untitled";
 
@@ -41,11 +41,10 @@ const LessonItem = ({
     e.stopPropagation();
     if (onChangeCollapsed && isFolder) onChangeCollapsed();
   };
-  const icon = (
-    <ArrowDocument
-      style={{ transform: `rotate(${collapsed ? 180 : 270}deg)` }}
-      onClick={onClickCollapse}
-    />
+  const icon = !collapsed ? (
+    <ChevronDownIcon onClick={onClickCollapse} />
+  ) : (
+    <ChevronRightIcon onClick={onClickCollapse} />
   );
 
   const active = router.query.documentId === item.id;

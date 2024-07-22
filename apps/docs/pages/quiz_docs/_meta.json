@@ -1,0 +1,8 @@
+{
+  "single_choice": "Single Choice Quiz",
+  "multiple_choice": "Multiple Choice Quiz",
+  "fill_in_blank": "Fill in the Bank Quiz",
+  "select_option": "Select Option Quiz",
+  "speaking_quiz": "Speaking/Recording Quiz",
+  "writing_quiz": "Writing Quiz"
+}

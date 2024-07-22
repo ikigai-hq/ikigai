@@ -1,12 +1,24 @@
 {
   "index": "Introduction",
   "getting-started": "Getting started",
-  "community": "Join our Community",
+  "---example---": {
+    "type": "separator",
+    "title": "Use Case"
+  },
+  "language_training_use_cases": "Language Training",
+  "---docs---": {
+    "type": "separator",
+    "title": "Document & Help"
+  },
+  "concept": "Core concept",
+  "assignment_docs": "Assignment",
+  "quiz_docs": "Quiz",
   "---": {
     "type": "separator"
   },
   "policy": "Privacy Policy",
   "term": "Terms of Service",
+  "community": "Our Community",
   "about": "About Ikigai",
   "ikigai_cloud": {
     "title": "✏\uFE0F Ikigai Cloud",

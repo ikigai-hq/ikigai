@@ -39,6 +39,12 @@ export const useLoadDocument = (documentId: string) => {
 
   const role = useAuthUserStore((state) => state.role);
   const activeDocument = useDocumentStore((state) => state.activeDocument);
+  const fetchDocumentPermissions = useAuthUserStore(
+    (state) => state.fetchDocumentPermissions,
+  );
+  const fetchSpacePermissions = useAuthUserStore(
+    (state) => state.fetchSpacePermissions,
+  );
   const setActiveDocument = useDocumentStore(
     (state) => state.setActiveDocument,
   );
@@ -101,6 +107,7 @@ export const useLoadDocument = (documentId: string) => {
 
   const load = async () => {
     setLoading(true);
+    await fetchDocumentPermissions(documentId);
     const { data, error } = await fetchDocument({
       variables: {
         documentId,
@@ -186,6 +193,7 @@ export const useLoadDocument = (documentId: string) => {
   };
 
   const fetchSpaceInformation = async (spaceId: number) => {
+    await fetchSpacePermissions(spaceId);
     const { data } = await fetchSpaceDocuments({
       variables: {
         spaceId,

@@ -84,7 +84,7 @@ has_role(user: UserAuth, "reader", doc: DocumentAuth) if
 
 has_role(user: UserAuth, "reader", doc: DocumentAuth) if
     doc.space_id = user.space_id
-     and doc.visibility = "private"
+     and doc.is_submission
      and doc.creator_id = user.id
      and not doc.is_delete;
 

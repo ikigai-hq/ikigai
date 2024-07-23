@@ -1,6 +1,6 @@
 {
   "new_assignment": "Create an assignment",
   "setting_and_assign_assignment": "Settings & Assign assignment",
-  "feedback_submission": "Grading and Feedback assignment",
-  "embed_assignment": "Embed assignment into website"
+  "doing_assignment": "Start an submission (do assignment)",
+  "feedback_submission": "Grading and Feedback student's submission"
 }

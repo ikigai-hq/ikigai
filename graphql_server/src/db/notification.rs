@@ -167,7 +167,10 @@ pub struct AssignToAssignmentContext {
 
 impl ContextMessage for AssignToAssignmentContext {
     fn get_title(&self) -> String {
-        "📝 Assigned to New Assignment! 📝".to_string()
+        format!(
+            "📝 Assigned to {assignment_name}! 📝",
+            assignment_name = self.assignment_name
+        )
     }
 
     fn get_message(&self) -> String {

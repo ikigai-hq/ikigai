@@ -2,12 +2,12 @@ use async_graphql::*;
 use diesel::Connection;
 use uuid::Uuid;
 
-use crate::authorization::{SpaceActionPermission};
+use crate::authorization::SpaceActionPermission;
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::{
-    create_default_space, get_conn_from_ctx,
-    get_space_allowed_permissions, get_user_id_from_ctx, space_quick_authorize,
+    create_default_space, get_conn_from_ctx, get_space_allowed_permissions, get_user_id_from_ctx,
+    space_quick_authorize,
 };
 
 #[derive(Default)]

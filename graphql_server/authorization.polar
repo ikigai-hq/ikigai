@@ -83,6 +83,12 @@ has_role(user: UserAuth, "reader", doc: DocumentAuth) if
      and not doc.is_delete;
 
 has_role(user: UserAuth, "reader", doc: DocumentAuth) if
+    doc.space_id = user.space_id
+     and doc.visibility = "private"
+     and doc.creator_id = user.id
+     and not doc.is_delete;
+
+has_role(user: UserAuth, "reader", doc: DocumentAuth) if
     user.space_id = doc.space_id and
     user.role = "teacher"
     and doc.is_delete;

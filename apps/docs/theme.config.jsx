@@ -50,6 +50,7 @@ export default {
       }
       
       return <>{title}</>
-    }
+    },
+    defaultMenuCollapseLevel: 1,
   },
 }

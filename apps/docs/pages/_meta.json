@@ -12,6 +12,8 @@
   },
   "concept": "Core concept",
   "assignment_docs": "Assignment",
+  "space_docs": "Space",
+  "page_docs": "Page",
   "quiz_docs": "Quiz",
   "---": {
     "type": "separator"

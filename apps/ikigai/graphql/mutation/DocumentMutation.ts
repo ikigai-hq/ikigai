@@ -31,6 +31,10 @@ export const ADD_DOCUMENT_STANDALONE = gql`
       iconValue
       assignment {
         id
+        submissions {
+          id
+          userId
+        }
       }
       submission {
         id

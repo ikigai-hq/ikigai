@@ -18,6 +18,10 @@ export const GET_SPACE_INFORMATION = gql`
         iconValue
         assignment {
           id
+          submissions {
+            id
+            userId
+          }
         }
         submission {
           id

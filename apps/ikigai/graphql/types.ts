@@ -245,8 +245,14 @@ export interface SoftDeleteDocumentVariables {
 // GraphQL mutation operation: AddDocumentStandalone
 // ====================================================
 
+export interface AddDocumentStandalone_documentCreate_assignment_submissions {
+  id: number;
+  userId: number;
+}
+
 export interface AddDocumentStandalone_documentCreate_assignment {
   id: number;
+  submissions: AddDocumentStandalone_documentCreate_assignment_submissions[];
 }
 
 export interface AddDocumentStandalone_documentCreate_submission {
@@ -1630,8 +1636,14 @@ export interface GetDocumentQuizzesVariables {
 // GraphQL query operation: GetDocuments
 // ====================================================
 
+export interface GetDocuments_spaceGet_documents_assignment_submissions {
+  id: number;
+  userId: number;
+}
+
 export interface GetDocuments_spaceGet_documents_assignment {
   id: number;
+  submissions: GetDocuments_spaceGet_documents_assignment_submissions[];
 }
 
 export interface GetDocuments_spaceGet_documents_submission {

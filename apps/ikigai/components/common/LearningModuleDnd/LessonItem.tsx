@@ -10,6 +10,7 @@ import useDocumentStore from "store/DocumentStore";
 import { DocumentType } from "graphql/types";
 import { documentIcon } from "util/DocumentUtil";
 import { ChevronDownIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import LessonItemRightInformation from "./LessonItemRightInformation";
 
 export const DEFAULT_DOCUMENT_TITLE = "Untitled";
 
@@ -53,7 +54,7 @@ const LessonItem = ({
       <LessonItemContainer ref={ref} $active={active}>
         <div style={{ marginTop: 5 }}>{isFolder && icon}</div>
         <span style={{ display: "flex" }}>{fileIcon}</span>
-        <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+        <div style={{ display: "flex", alignItems: "center", flex: 1 }}>
           <div style={{ flex: "1", display: "inline-grid" }}>
             {item.parentId ? (
               <Text truncate size="2">
@@ -66,6 +67,7 @@ const LessonItem = ({
             )}
           </div>
         </div>
+        <LessonItemRightInformation item={item} />
       </LessonItemContainer>
     </Link>
   );

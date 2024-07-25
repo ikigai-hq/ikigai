@@ -27,6 +27,11 @@ impl DocumentMutation {
         data.creator_id = user_auth.id;
         data.updated_by = Some(user_auth.id);
         data.space_id = space_id;
+        data.visibility = if is_assignment {
+            DocumentVisibility::Private
+        } else {
+            DocumentVisibility::Public
+        };
         data.updated_at = get_now_as_secs();
         data.created_at = get_now_as_secs();
 

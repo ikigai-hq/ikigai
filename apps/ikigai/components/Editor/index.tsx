@@ -12,6 +12,7 @@ import { ListItem } from "@tiptap/extension-list-item";
 import { OrderedList } from "@tiptap/extension-ordered-list";
 import { t } from "@lingui/macro";
 import { useDebounceFn } from "ahooks";
+import { useEffect } from "react";
 
 import { IPageContent } from "store/PageContentStore";
 import useAddOrUpdatePageContent from "hook/UseUpsertPageContent";
@@ -22,6 +23,7 @@ import SingleChoiceBlock from "./Extensions/QuizBlock/SingleChoiceBlock";
 import MultipleChoiceBlock from "./Extensions/QuizBlock/MultipleChoiceBlock";
 import SelectOptionComponent from "./Extensions/QuizBlock/SelectOptionBlock";
 import FillInBlank from "./Extensions/QuizBlock/FillInBlankBlock";
+import useEditorStore from "store/EditorStore";
 
 export type EditorProps = {
   readOnly: boolean;
@@ -29,11 +31,26 @@ export type EditorProps = {
 };
 
 const Editor = ({ pageContent, readOnly }: EditorProps) => {
+  const addEditor = useEditorStore((state) => state.addEditor);
   const { upsert } = useAddOrUpdatePageContent(
     pageContent.id,
     pageContent.pageId,
   );
   const { run, cancel } = useDebounceFn(upsert, { wait: 300, maxWait: 1000 });
+  const onPaste = (event: ClipboardEvent) => {
+    const pageContentEditor = useEditorStore.getState().editors[pageContent.id];
+    if (
+      pageContentEditor &&
+      pageContentEditor.isFocused &&
+      event.clipboardData.files.length > 0
+    ) {
+      for (const file of event.clipboardData.files) {
+        pageContentEditor.commands.insertFileHandler(file);
+      }
+      return true;
+    }
+    return false;
+  };
 
   const editor = useIkigaiEditor({
     body: pageContent.body,
@@ -94,7 +111,12 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
       }),
     ],
     readOnly,
+    onPaste,
   });
+
+  useEffect(() => {
+    addEditor(pageContent.id, editor);
+  }, [editor]);
 
   return <BaseEditor editor={editor} />;
 };

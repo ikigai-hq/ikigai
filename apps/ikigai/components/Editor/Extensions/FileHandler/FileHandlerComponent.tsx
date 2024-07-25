@@ -9,14 +9,16 @@ import FileUploader from "components/base/FileUploader";
 import { useQuery } from "@apollo/client";
 import { GET_FILE } from "graphql/query";
 import { handleError } from "graphql/ApolloClient";
-
-import { EMPTY_UUID, FileResponse } from "util/FileUtil";
+import { EMPTY_UUID, FileResponse, uploadFile } from "util/FileUtil";
 import { GetFile } from "graphql/types";
 import Loading from "components/Loading";
 import FileHandlerReview from "./FileHandlerReview";
 import styled from "styled-components";
+import toast from "react-hot-toast";
+import { t } from "@lingui/macro";
 
 const FileHandler = (props: NodeViewProps) => {
+  const initialFile = props.node.attrs?.file;
   const pageContentId = props.extension.options.pageContentId;
   const { data, loading } = useQuery<GetFile>(GET_FILE, {
     skip:
@@ -33,15 +35,28 @@ const FileHandler = (props: NodeViewProps) => {
   const onUploadComplete = async (res: FileResponse) => {
     props.updateAttributes({
       fileId: res.fileCreate.file.uuid,
+      file: undefined,
     });
     setDownloadUrl(res.downloadUrl);
   };
 
-  useEffect(() => {
-    const fileId = props.node.attrs.fileId || EMPTY_UUID;
-    if (fileId !== EMPTY_UUID) {
+  const uploadInitialFile = async (file: File) => {
+    const res = await uploadFile({
+      uploadingFile: file,
+    });
+
+    if (typeof res !== "string") {
+      await onUploadComplete(res);
+    } else {
+      toast.error(t`Cannot upload pasted file`);
     }
-  }, [props.node.attrs.fileId]);
+  };
+
+  useEffect(() => {
+    if (initialFile) {
+      uploadInitialFile(initialFile);
+    }
+  }, [initialFile]);
 
   return (
     <NodeViewWrapper className="file-handler-component">

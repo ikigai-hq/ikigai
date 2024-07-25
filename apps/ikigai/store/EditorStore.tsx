@@ -19,13 +19,16 @@ export type ToolbarOptions = {
 
 export type IEditorStore = {
   activeEditor?: Editor;
+  editors: Record<string, Editor | null>;
   toolbarOptions?: ToolbarOptions;
   setActiveEditor: (editor?: Editor) => void;
   setToolbarOptions: (options: Partial<ToolbarOptions>) => void;
+  addEditor: (pageContentId: string, editor: Editor | null) => void;
 };
 
 const useEditorStore = create<IEditorStore>((set, get) => ({
   activeEditor: undefined,
+  editors: {},
   toolbarOptions: undefined,
   setActiveEditor: (editor) => {
     if (editor) {
@@ -70,6 +73,11 @@ const useEditorStore = create<IEditorStore>((set, get) => ({
         },
       });
     }
+  },
+  addEditor: (pageContentId, editor) => {
+    const editors = get().editors;
+    editors[pageContentId] = editor;
+    set({ editors });
   },
 }));
 

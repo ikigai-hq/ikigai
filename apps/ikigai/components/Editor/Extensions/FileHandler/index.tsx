@@ -15,7 +15,7 @@ export type FileHandlerOptions = {
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     customExtension: {
-      insertFileHandler: () => ReturnType;
+      insertFileHandler: (file?: File) => ReturnType;
     };
   }
 }
@@ -39,17 +39,23 @@ export default Node.create<FileHandlerOptions>({
       fileId: {
         default: EMPTY_UUID,
       },
+      file: {
+        default: undefined,
+      },
     };
   },
 
   addCommands(): Partial<RawCommands> {
     return {
       insertFileHandler:
-        () =>
+        (file) =>
         ({ commands }: CommandProps) => {
           return commands.insertContent([
             {
               type: FILE_HANDLER_NAME,
+              attrs: {
+                file,
+              },
             },
           ]);
         },

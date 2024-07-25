@@ -37,6 +37,7 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
     pageContent.pageId,
   );
   const { run, cancel } = useDebounceFn(upsert, { wait: 300, maxWait: 1000 });
+
   const onPaste = (event: ClipboardEvent) => {
     const pageContentEditor = useEditorStore.getState().editors[pageContent.id];
     if (
@@ -45,6 +46,17 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
       event.clipboardData.files.length > 0
     ) {
       for (const file of event.clipboardData.files) {
+        pageContentEditor.commands.insertFileHandler(file);
+      }
+      return true;
+    }
+    return false;
+  };
+
+  const onDrop = (event: DragEvent) => {
+    const pageContentEditor = useEditorStore.getState().editors[pageContent.id];
+    if (pageContentEditor && event.dataTransfer.files.length > 0) {
+      for (const file of event.dataTransfer.files) {
         pageContentEditor.commands.insertFileHandler(file);
       }
       return true;
@@ -112,6 +124,7 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
     ],
     readOnly,
     onPaste,
+    onDrop,
   });
 
   useEffect(() => {

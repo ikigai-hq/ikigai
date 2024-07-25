@@ -33,7 +33,7 @@ const Container = styled.div<{ $hide?: boolean }>`
   left: 53px;
   z-index: 3;
   display: ${(props) => (props.$hide ? "none" : "block")};
-  width: 300px;
+  width: calc(100vw - 50px);
   background: white;
   box-sizing: border-box;
   height: 100%;

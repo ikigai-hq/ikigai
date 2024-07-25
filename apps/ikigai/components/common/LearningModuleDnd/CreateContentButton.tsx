@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { DropdownMenu } from "@radix-ui/themes";
+import { Trans } from "@lingui/macro";
 
 import { DocumentType } from "graphql/types";
 import { formatDocumentRoute } from "config/Routes";
@@ -29,18 +30,18 @@ const CreateContentButton = ({
   return (
     <IkigaiDropdown
       content={
-        <>
+        <div style={{ padding: 5 }}>
           <DropdownMenu.Item
             onClick={() => clickCreateDocument(DocumentType.FOLDER)}
           >
-            Folder
+            📁 <Trans>Folder</Trans>
           </DropdownMenu.Item>
           <DropdownMenu.Item
             onClick={() => clickCreateDocument(DocumentType.ASSIGNMENT)}
           >
-            Assignment
+            📝 <Trans>Assignment</Trans>
           </DropdownMenu.Item>
-        </>
+        </div>
       }
     >
       {children}

@@ -1,15 +1,15 @@
 import React from "react";
 import { Trans } from "@lingui/macro";
 import styled from "styled-components";
+import { Button, Heading, Separator } from "@radix-ui/themes";
 import { Pencil2Icon } from "@radix-ui/react-icons";
-import { IconButton, Heading, Separator } from "@radix-ui/themes";
 
 import LearningModuleDnd from "components/common/LearningModuleDnd";
 import LessonItemDnd from "components/common/LearningModuleDnd/LessonItemDnd";
 import useDocumentStore from "store/DocumentStore";
-import CreateContentButton from "components/common/LearningModuleDnd/CreateContentButton";
 import usePermission from "hook/UsePermission";
 import { DocumentType, SpaceActionPermission } from "graphql/types";
+import CreateContentButton from "components/common/LearningModuleDnd/CreateContentButton";
 
 const SpaceDocumentList = () => {
   const allow = usePermission();
@@ -18,6 +18,7 @@ const SpaceDocumentList = () => {
       (spaceDocument) => spaceDocument.documentType !== DocumentType.SUBMISSION,
     ),
   );
+  const canAddContent = allow(SpaceActionPermission.MANAGE_SPACE_CONTENT);
 
   return (
     <div
@@ -42,16 +43,11 @@ const SpaceDocumentList = () => {
             <Trans>Content</Trans>
           </Heading>
         </div>
-        {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
+        {canAddContent && (
           <CreateContentButton parentId={null}>
-            <IconButton
-              style={{ cursor: "pointer" }}
-              size="2"
-              variant="ghost"
-              color="gray"
-            >
-              <Pencil2Icon />
-            </IconButton>
+            <Button variant="soft">
+              <Pencil2Icon /> <Trans>Add Content</Trans>
+            </Button>
           </CreateContentButton>
         )}
       </div>

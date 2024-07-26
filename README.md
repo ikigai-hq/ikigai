@@ -20,16 +20,60 @@
 
 ikigai is an AI powered Open Assignment Platform for educators that provides seamless access via a single link, embeddable in your website or LMS, featuring rich quiz types and a flexible layout adaptable to your exam format.
 
-## Features:
+https://github.com/ikigai-hq/ikigai/assets/demo.mp4
 
-TBD
+## Sample Use Cases:
+
+- **Entry/Placement test**
+- **Language Training:**
+  - Reading
+  - Writing
+  - Listening
+  - Speaking
+- **Software Engineer Interview**
+- **Corporate training**
+
+## Features:
+#### Assignment System
+
+- **Assignment Setup**
+- [x] High config/customization
+  - [x] Test duration
+  - [x] Max Attempt
+  - [x] Description of assignment
+  - [x] Access ability: Public, Private, and Assignees only
+- [x] Flexible Layout
+  - [x] Single layout
+  - [x] Double layout
+
+- **Rich quiz types supported:**
+  - [x] Single choice
+  - [x] Multiple choice
+  - [x] Select Option
+  - [x] Fill in Blank
+  - [x] Writing Question
+  - [ ] Speaking Q/A Question
+  - [ ] Coding Question
+  - [ ] Free draw Question
+  - Want more? Join our [community](https://discord.gg/XuYWkn6kUS) to suggest us.
+
+#### AI System
+
+- [ ] Generate Quiz by Text Book (Pdf), Youtube, Website, etc.
+- [ ] Personalize test
+- [ ] Feedback assistant
+
+#### Embed and Integration
+
+- [ ] Embed in any website
+- [ ] Survey to do the assignment
+- [ ] Integration:
+  - [ ] Canvas LMS
+  - [ ] Moodle
 
 ## Download & Install
 
-Please use [ikigai cloud](https://cloud.ikigai.li) now. 
-It's free and we're setup the way to run our application, then you can choose your approach later.
-
-TBD
+https://ikigai.li/self-hosted
 
 ## Support Us
 

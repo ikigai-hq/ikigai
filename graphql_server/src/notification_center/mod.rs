@@ -51,6 +51,11 @@ pub fn parse_context(notification: &Notification) -> Option<Box<dyn ContextMessa
                     .ok()?;
             Some(Box::new(value))
         }
+        NotificationType::DoAssignment => {
+            let value =
+                serde_json::from_value::<DoAssignmentContext>(notification.context.clone()).ok()?;
+            Some(Box::new(value))
+        }
     }
 }
 

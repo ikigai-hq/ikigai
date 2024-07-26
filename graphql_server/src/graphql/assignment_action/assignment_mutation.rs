@@ -162,6 +162,16 @@ impl AssignmentMutation {
             AJ::add_job(job);
         }
 
+        let receiver_ids = vec![assignment_document.creator_id];
+        let notification = Notification::new_do_assignment_notification(DoAssignmentContext {
+            student_id: user.id,
+            student_name: user.name(),
+            submission_document_id: submission.document_id,
+            assignment_name: assignment_document.title,
+        });
+        let notification = Notification::insert(&mut conn, notification).format_err()?;
+        send_notification(&mut conn, notification, receiver_ids).format_err()?;
+
         Ok(submission)
     }
 

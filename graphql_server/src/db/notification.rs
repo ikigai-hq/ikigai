@@ -20,6 +20,7 @@ pub enum NotificationType {
     SubmitSubmission,
     FeedbackSubmission,
     AssignToAssignment,
+    DoAssignment,
 }
 
 impl_enum_for_db!(NotificationType);
@@ -63,6 +64,10 @@ impl Notification {
 
     pub fn new_assign_to_assignment_notification(context: AssignToAssignmentContext) -> Self {
         Self::new(NotificationType::AssignToAssignment, context)
+    }
+
+    pub fn new_do_assignment_notification(context: DoAssignmentContext) -> Self {
+        Self::new(NotificationType::DoAssignment, context)
     }
 
     pub fn insert(conn: &mut PgConnection, notification: Self) -> Result<Self, Error> {
@@ -184,6 +189,37 @@ Hello there! You've been assigned to a assignment: {assignment_name}. If you hav
     fn get_url_path(&self, receiver: &User) -> String {
         generate_document_magic_link(receiver.id, self.assignment_document_id)
             .unwrap_or(format_document_url(self.assignment_document_id))
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DoAssignmentContext {
+    pub student_id: i32,
+    pub student_name: String,
+    pub submission_document_id: Uuid,
+    pub assignment_name: String,
+}
+
+impl ContextMessage for DoAssignmentContext {
+    fn get_title(&self) -> String {
+        format!(
+            "📚New {assignment_name} Submission! 📚",
+            assignment_name = self.assignment_name
+        )
+    }
+
+    fn get_message(&self) -> String {
+        format!(
+            r#"
+Attention! A student {student_name} has started their assignment: {assignment_name}"#,
+            student_name = self.student_name,
+            assignment_name = self.assignment_name,
+        )
+    }
+
+    fn get_url_path(&self, receiver: &User) -> String {
+        generate_document_magic_link(receiver.id, self.submission_document_id)
+            .unwrap_or(format_document_url(self.submission_document_id))
     }
 }
 

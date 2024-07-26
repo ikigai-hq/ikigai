@@ -21,6 +21,10 @@ msgstr "{0} focus mode"
 msgid "{0} students"
 msgstr "{0} students"
 
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:73
+msgid "{0} students do assignments"
+msgstr "{0} students do assignments"
+
 #: components/Editor/Extensions/FileHandler/FileHandlerReview.tsx:25
 msgid "{0}KB"
 msgstr "{0}KB"
@@ -37,9 +41,13 @@ msgstr "{answeredQuiz} of {0} quizzes"
 msgid "{contentLength}B"
 msgstr "{contentLength}B"
 
-#: components/Document/LeftSide/ManageSpaceModal.tsx:22
+#: components/Document/LeftSide/ManageSpaceModal.tsx:35
 msgid "{spaceName} Settings"
 msgstr "{spaceName} Settings"
+
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:36
+msgid "{totalAttempt} attempts"
+msgstr "{totalAttempt} attempts"
 
 #: components/Rubric/index.tsx:216
 #~ msgid "% of total grade"
@@ -58,7 +66,8 @@ msgstr "Access visibility"
 #~ msgid "Add content"
 #~ msgstr "Add content"
 
-#: components/Document/DocumentBody/CoverPage/FolderCoverPageBody.tsx:50
+#: components/Document/DocumentBody/CoverPage/FolderCoverPageBody.tsx:49
+#: components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList.tsx:49
 msgid "Add Content"
 msgstr "Add Content"
 
@@ -136,10 +145,12 @@ msgstr "Assigned!"
 #~ msgid "Assignees"
 #~ msgstr "Assignees"
 
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:98
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:130
 msgid "Assignees only"
 msgstr "Assignees only"
 
+#: components/common/LearningModuleDnd/CreateContentButton.tsx:42
 #: components/Document/DocumentHeader/Menubar/index.tsx:49
 #: components/Document/DocumentHeader/Menubar/index.tsx:128
 msgid "Assignment"
@@ -192,6 +203,10 @@ msgstr "Cannot get credentials from google. Please try again!"
 msgid "Cannot signin with google."
 msgstr "Cannot signin with google."
 
+#: components/Editor/Extensions/FileHandler/FileHandlerComponent.tsx:51
+msgid "Cannot upload pasted file"
+msgstr "Cannot upload pasted file"
+
 #: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:435
 msgid "Center"
 msgstr "Center"
@@ -201,7 +216,7 @@ msgstr "Center"
 msgid "Checked option is correct option"
 msgstr "Checked option is correct option"
 
-#: components/Document/LeftSide/ManageSpace.tsx:122
+#: components/Document/LeftSide/ManageSpace.tsx:119
 msgid "Click item in the list to switch space"
 msgstr "Click item in the list to switch space"
 
@@ -218,7 +233,7 @@ msgstr "Code"
 msgid "Community & Help"
 msgstr "Community & Help"
 
-#: components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList.tsx:42
+#: components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList.tsx:43
 msgid "Content"
 msgstr "Content"
 
@@ -254,7 +269,7 @@ msgstr "correct!"
 msgid "Correct!"
 msgstr "Correct!"
 
-#: components/EmptySpace.tsx:114
+#: components/EmptySpace.tsx:115
 msgid "Create assignment"
 msgstr "Create assignment"
 
@@ -270,7 +285,7 @@ msgstr "Create new rubric"
 msgid "Created!"
 msgstr "Created!"
 
-#: components/Document/LeftSide/ManageSpace.tsx:54
+#: components/Document/LeftSide/ManageSpace.tsx:55
 msgid "Created! We're moving you to your new space"
 msgstr "Created! We're moving you to your new space"
 
@@ -427,6 +442,7 @@ msgstr "Fill in Blank Setting"
 msgid "First name"
 msgstr "First name"
 
+#: components/common/LearningModuleDnd/CreateContentButton.tsx:37
 #: components/Document/DocumentHeader/Menubar/index.tsx:47
 #: components/Document/DocumentHeader/Menubar/index.tsx:134
 msgid "Folder"
@@ -524,7 +540,7 @@ msgstr "Invite"
 msgid "Invite link"
 msgstr "Invite link"
 
-#: components/Document/LeftSide/ManageSpace.tsx:78
+#: components/Document/LeftSide/ManageSpace.tsx:79
 msgid "Invite People"
 msgstr "Invite People"
 
@@ -588,7 +604,7 @@ msgstr "Make a copy"
 #~ msgid "Manage Rubric"
 #~ msgstr "Manage Rubric"
 
-#: components/Document/LeftSide/ManageSpaceModal.tsx:23
+#: components/Document/LeftSide/ManageSpaceModal.tsx:36
 msgid "Manage, Switch, or Create Space"
 msgstr "Manage, Switch, or Create Space"
 
@@ -633,7 +649,7 @@ msgstr "Multiple Choice Quiz"
 msgid "Multiple Choice Setting"
 msgstr "Multiple Choice Setting"
 
-#: components/Document/LeftSide/ManageSpace.tsx:94
+#: components/Document/LeftSide/ManageSpace.tsx:95
 msgid "My Spaces"
 msgstr "My Spaces"
 
@@ -665,7 +681,7 @@ msgstr "New Attempt"
 msgid "New Attempt!"
 msgstr "New Attempt!"
 
-#: components/Document/LeftSide/ManageSpace.tsx:103
+#: components/Document/LeftSide/ManageSpace.tsx:104
 msgid "New space"
 msgstr "New space"
 
@@ -684,6 +700,10 @@ msgstr "No grade"
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:70
 #~ msgid "No Grade"
 #~ msgstr "No Grade"
+
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:47
+msgid "Not attempted"
+msgstr "Not attempted"
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/RubricAttribute.tsx:28
 msgid "Not set"
@@ -752,6 +772,7 @@ msgstr "Powered by ikigai"
 msgid "Privacy Policy"
 msgstr "Privacy Policy"
 
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:92
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:127
 msgid "Private"
 msgstr "Private"
@@ -764,6 +785,7 @@ msgstr "Private"
 msgid "Profile"
 msgstr "Profile"
 
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:104
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:124
 msgid "Public"
 msgstr "Public"
@@ -942,11 +964,11 @@ msgstr "Space name"
 msgid "Space settings"
 msgstr "Space settings"
 
-#: components/Document/LeftSide/ManageSpace.tsx:66
+#: components/Document/LeftSide/ManageSpace.tsx:67
 msgid "Space Settings"
 msgstr "Space Settings"
 
-#: components/Document/LeftSide/ManageSpaceModal.tsx:29
+#: components/Document/LeftSide/ManageSpaceModal.tsx:19
 msgid "Space Settings & Switch Space"
 msgstr "Space Settings & Switch Space"
 
@@ -1011,8 +1033,8 @@ msgid "Successfully!"
 msgstr "Successfully!"
 
 #: components/EmptySpace.tsx:145
-msgid "Switch"
-msgstr "Switch"
+#~ msgid "Switch"
+#~ msgstr "Switch"
 
 #: components/SpaceSetting/CreateSpaceInvite.tsx:84
 #~ msgid "Teacher"
@@ -1157,7 +1179,7 @@ msgstr "Typing assignment description or guide..."
 #~ msgid "Typing assignment description..."
 #~ msgstr "Typing assignment description..."
 
-#: components/Editor/index.tsx:52
+#: components/Editor/index.tsx:81
 msgid "Typing content here..."
 msgstr "Typing content here..."
 
@@ -1304,6 +1326,6 @@ msgstr "You've joined. We've sent a magic email to <0>{email}</0>. Open the link
 msgid "Your last submission already has feedback. Please check it!"
 msgstr "Your last submission already has feedback. Please check it!"
 
-#: components/EmptySpace.tsx:102
+#: components/EmptySpace.tsx:103
 msgid "Your space is empty"
 msgstr "Your space is empty"

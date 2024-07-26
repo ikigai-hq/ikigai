@@ -95,7 +95,9 @@ pub struct Document {
     #[graphql(skip_input)]
     pub creator_id: i32,
     pub parent_id: Option<Uuid>,
+    #[graphql(skip_input)]
     pub cover_photo_id: Option<Uuid>,
+    #[graphql(skip_input)]
     pub index: i32,
     pub title: String,
     #[graphql(skip_input)]
@@ -208,6 +210,21 @@ impl Document {
         documents::table
             .filter(documents::id.eq_any(ids))
             .get_results(conn)
+    }
+
+    pub fn find_lowest_index_of_space(
+        conn: &mut PgConnection,
+        space_id: i32,
+    ) -> Result<i32, Error> {
+        match documents::table
+            .filter(documents::space_id.eq(space_id))
+            .order_by(documents::index.asc())
+            .first::<Self>(conn)
+        {
+            Ok(item) => Ok(item.index - 1),
+            Err(Error::NotFound) => Ok(0),
+            Err(e) => Err(e),
+        }
     }
 
     pub fn find_by_parent(

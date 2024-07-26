@@ -2215,8 +2215,6 @@ export interface GradeSubmissionData {
 
 export interface NewDocument {
   parentId?: any | null;
-  coverPhotoId?: any | null;
-  index: number;
   title: string;
   spaceId?: number | null;
   iconType?: IconType | null;

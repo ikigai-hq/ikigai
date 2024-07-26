@@ -32,12 +32,13 @@ impl DocumentMutation {
         } else {
             DocumentVisibility::Public
         };
-        data.updated_at = get_now_as_secs();
-        data.created_at = get_now_as_secs();
 
         let mut conn = get_conn_from_ctx(ctx).await?;
         let doc = conn
             .transaction::<_, IkigaiError, _>(|conn| {
+                if let Some(space_id) = data.space_id {
+                    data.index = Document::find_lowest_index_of_space(conn, space_id)?;
+                }
                 let doc = Document::upsert(conn, data)?;
                 if is_assignment {
                     let new_assignment = NewAssignment::init(doc.id);

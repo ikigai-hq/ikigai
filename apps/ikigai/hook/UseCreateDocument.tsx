@@ -10,23 +10,15 @@ const useCreateDocument = (parentId?: string) => {
     useMutation<AddDocumentStandalone>(ADD_DOCUMENT_STANDALONE, {
       onError: handleError,
     });
-  const documents = useDocumentStore((state) => state.spaceDocuments);
   const addSpaceDocument = useDocumentStore((state) => state.addSpaceDocument);
   const spaceId = useSpaceStore((state) => state.spaceId);
 
   const onCreate = async (docType: DocumentType) => {
-    const indexes = documents
-      .filter((doc) => !doc.deletedAt)
-      .filter((doc) => doc.parentId === parentId)
-      .map((doc) => doc.index);
-    const index = indexes.length ? Math.max(...indexes) + 1 : 1;
-
     const isAssignment = docType === DocumentType.ASSIGNMENT;
     const { data } = await createStandaloneDocument({
       variables: {
         data: {
           title: "",
-          index,
           parentId,
           iconType: IconType.EMOJI,
           iconValue: isAssignment ? "✏️" : "📂",

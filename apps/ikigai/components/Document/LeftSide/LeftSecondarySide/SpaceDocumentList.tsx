@@ -39,7 +39,7 @@ const SpaceDocumentList = () => {
         }}
       >
         <div style={{ flex: 1, paddingLeft: 5 }}>
-          <Heading size="3">
+          <Heading size="5">
             <Trans>Content</Trans>
           </Heading>
         </div>

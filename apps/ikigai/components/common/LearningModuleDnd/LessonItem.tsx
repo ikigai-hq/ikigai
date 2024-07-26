@@ -53,15 +53,15 @@ const LessonItem = ({
     <Link href={formatDocumentRoute(item.id)} passHref>
       <LessonItemContainer ref={ref} $active={active}>
         <div style={{ marginTop: 5 }}>{isFolder && icon}</div>
-        <span style={{ display: "flex" }}>{fileIcon}</span>
+        <span style={{ display: "flex", fontSize: 18 }}>{fileIcon}</span>
         <div style={{ display: "flex", alignItems: "center", flex: 1 }}>
           <div style={{ flex: "1", display: "inline-grid" }}>
             {item.parentId ? (
-              <Text truncate size="2">
+              <Text truncate size="3">
                 {documentTitle || DEFAULT_DOCUMENT_TITLE}
               </Text>
             ) : (
-              <Text truncate size="2">
+              <Text truncate size="3">
                 {documentTitle || DEFAULT_DOCUMENT_TITLE}
               </Text>
             )}
@@ -80,7 +80,7 @@ const LessonItemContainer = styled.div<{
   display: flex;
   align-items: center;
   padding: 0 2px 0 5px;
-  height: 28px;
+  height: 35px;
   gap: 8px;
   cursor: pointer;
   background-color: ${(props) => {

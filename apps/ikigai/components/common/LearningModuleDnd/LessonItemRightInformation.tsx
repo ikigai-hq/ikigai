@@ -31,11 +31,11 @@ const LessonItemRightInformation = (props: LessonItemRightInformationProps) => {
 
   const totalAttempt = props.item?.assignment?.submissions?.length || 0;
   return (
-    <div>
+    <div style={{ paddingRight: 10 }}>
       {totalAttempt > 0 && (
         <Tooltip content={t`${totalAttempt} attempts`}>
           <Badge color="brown">
-            <Text size="1" color="gray">
+            <Text size="2" color="gray">
               {totalAttempt} 📄
             </Text>
           </Badge>
@@ -43,7 +43,7 @@ const LessonItemRightInformation = (props: LessonItemRightInformationProps) => {
       )}
       {totalAttempt === 0 && (
         <Badge color="gray">
-          <Text size="1" color="gray">
+          <Text size="2" color="gray">
             <Trans>Not attempted</Trans>
           </Text>
         </Badge>
@@ -62,10 +62,17 @@ const TeacherLessonItemRightInformation = ({
   );
   const { members } = useGetSpaceMembers(Role.STUDENT);
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 4,
+        paddingRight: 10,
+      }}
+    >
       <Tooltip content={t`${uniqueSubmissions.size} students do assignments`}>
         <Badge color="brown">
-          <Text size="1" color="gray">
+          <Text size="2" color="gray">
             {uniqueSubmissions.size} / {members.length} 📄
           </Text>
         </Badge>
@@ -83,19 +90,19 @@ export const VisibilityIcon = ({ item }: LessonItemRightInformationProps) => {
     case DocumentVisibility.PRIVATE:
       return (
         <Tooltip content={t`Private`}>
-          <LockClosedIcon color="gray" width={14} height={14} />
+          <LockClosedIcon color="gray" width={18} height={18} />
         </Tooltip>
       );
     case DocumentVisibility.ASSIGNEES:
       return (
         <Tooltip content={t`Assignees only`}>
-          <PersonIcon color="gray" width={14} height={14} />
+          <PersonIcon color="gray" width={18} height={18} />
         </Tooltip>
       );
     default:
       return (
         <Tooltip content={t`Public`}>
-          <LockOpen2Icon color="gray" width={14} height={14} />
+          <LockOpen2Icon color="gray" width={18} height={18} />
         </Tooltip>
       );
   }

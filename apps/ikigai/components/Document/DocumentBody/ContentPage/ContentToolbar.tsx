@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Toolbar from "@radix-ui/react-toolbar";
 import {
   IconAlignCenter,
@@ -24,6 +24,7 @@ import {
   IconTexture,
   IconTools,
   IconUnderline,
+  IconWand,
   IconWriting,
 } from "@tabler/icons-react";
 import { TwitterPicker } from "react-color";
@@ -38,11 +39,13 @@ import { SINGLE_CHOICE_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/S
 import { MULTIPLE_CHOICE_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/MultipleChoiceBlock";
 import { SELECT_OPTION_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/SelectOptionBlock";
 import { FILL_IN_BLANK_BLOCK_NAME } from "../../../Editor/Extensions/QuizBlock/FillInBlankBlock";
+import QuizGenerator from "components/QuizGenerator";
 
 const ContentToolbar = () => {
   const activeEditor = useEditorStore((state) => state.activeEditor);
   const toolbarOptions = useEditorStore((state) => state.toolbarOptions);
   const setToolbarOptions = useEditorStore((state) => state.setToolbarOptions);
+  const [openQuizGenerator, setOpenQuizGenerator] = useState(false);
 
   const onToggleBold = () => {
     if (!activeEditor) return;
@@ -559,8 +562,23 @@ const ContentToolbar = () => {
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
+          <Tooltip content={t`Use AI to generate quizzes`}>
+            <Toolbar.ToolbarButton
+              className="ToolbarToggleItem"
+              value="generate-quizzes"
+              aria-label="Generate Quizzes"
+              onClick={() => setOpenQuizGenerator(true)}
+            >
+              <IconWand size={20} stroke={1.7} />{" "}
+              <Trans>Quiz Generator (AI)</Trans>
+            </Toolbar.ToolbarButton>
+          </Tooltip>
         </Toolbar.ToggleGroup>
       </Toolbar.Root>
+      <QuizGenerator
+        open={openQuizGenerator}
+        onOpenChange={setOpenQuizGenerator}
+      />
     </div>
   );
 };

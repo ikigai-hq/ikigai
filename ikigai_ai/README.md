@@ -23,10 +23,10 @@ https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key
 
 ```bash
 # Dev
-fast dev __init__.py
+fastapi dev --port 8001 src/index.py
 
 # Production
-fast run __init__.py
+fastapi run --port 8001 src/index.py
 ```
 
-Now, you can check API docs at https://localhost:8000/docs
+Now, you can check API docs at https://localhost:8001/docs

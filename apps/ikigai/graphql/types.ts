@@ -422,6 +422,37 @@ export interface RemoveDocumentAssigneeVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: GenerateQuizzes
+// ====================================================
+
+export interface GenerateQuizzes_documentGenerateQuizzes_quizzes {
+  question: string;
+  answers: string[];
+  correctAnswer: string | null;
+  correctAnswers: string[] | null;
+}
+
+export interface GenerateQuizzes_documentGenerateQuizzes {
+  subject: string;
+  quizzes: GenerateQuizzes_documentGenerateQuizzes_quizzes[];
+}
+
+export interface GenerateQuizzes {
+  documentGenerateQuizzes: GenerateQuizzes_documentGenerateQuizzes;
+}
+
+export interface GenerateQuizzesVariables {
+  spaceId: number;
+  quizType: QuizType;
+  data: GenerateQuizzesRequestData;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: FileCreate
 // ====================================================
 
@@ -2194,6 +2225,7 @@ export enum SpaceActionPermission {
   MANAGE_SPACE_CONTENT = "MANAGE_SPACE_CONTENT",
   MANAGE_SPACE_MEMBER = "MANAGE_SPACE_MEMBER",
   MANAGE_SPACE_SETTING = "MANAGE_SPACE_SETTING",
+  USE_AI = "USE_AI",
   VIEW_SPACE_CONTENT = "VIEW_SPACE_CONTENT",
 }
 
@@ -2206,6 +2238,12 @@ export interface CreateFileData {
   contentType: string;
   contentLength: number;
   public: boolean;
+}
+
+export interface GenerateQuizzesRequestData {
+  userContext: string;
+  subject: string;
+  totalQuizzes: number;
 }
 
 export interface GradeSubmissionData {

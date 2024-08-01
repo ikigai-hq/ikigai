@@ -8,6 +8,7 @@ use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
 use crate::notification_center::send_notification;
+use crate::service::ikigai_ai::{AIQuizzesResponse, GenerateQuizzesRequestData, IkigaiAI};
 use crate::util::get_now_as_secs;
 
 #[derive(Default)]
@@ -332,5 +333,27 @@ impl DocumentMutation {
         DocumentAssignedUsers::remove(&mut conn, document_id, user_id).format_err()?;
 
         Ok(true)
+    }
+
+    async fn document_generate_quizzes(
+        &self,
+        ctx: &Context<'_>,
+        space_id: i32,
+        quiz_type: QuizType,
+        data: GenerateQuizzesRequestData,
+    ) -> Result<AIQuizzesResponse> {
+        space_quick_authorize(ctx, space_id, SpaceActionPermission::UseAI).await?;
+
+        let res = match quiz_type {
+            QuizType::SingleChoice => {
+                IkigaiAI::generate_single_choice_quizzes(data).await?
+            },
+            QuizType::MultipleChoice => {
+                IkigaiAI::generate_multiple_choice_quizzes(data).await?
+            },
+            _ => return Err(IkigaiError::new_bad_request("We don't support generate this quiz type")).format_err(),
+        };
+
+        Ok(res)
     }
 }

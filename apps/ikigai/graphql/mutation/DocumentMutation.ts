@@ -100,3 +100,25 @@ export const REMOVE_ASSIGNEE = gql`
     documentRemoveAssignee(documentId: $documentId, userId: $userId)
   }
 `;
+
+export const GENERATE_QUIZZES = gql`
+  mutation GenerateQuizzes(
+    $spaceId: Int!
+    $quizType: QuizType!
+    $data: GenerateQuizzesRequestData!
+  ) {
+    documentGenerateQuizzes(
+      spaceId: $spaceId
+      quizType: $quizType
+      data: $data
+    ) {
+      subject
+      quizzes {
+        question
+        answers
+        correctAnswer
+        correctAnswers
+      }
+    }
+  }
+`;

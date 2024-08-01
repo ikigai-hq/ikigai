@@ -27,4 +27,6 @@ pub enum SpaceActionPermission {
     ManageSpaceContent,
     ManageSpaceMember,
     ManageSpaceSetting,
+    #[strum(serialize = "use_ai")]
+    UseAI,
 }

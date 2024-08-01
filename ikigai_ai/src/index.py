@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 from pydantic import BaseModel
-from enum import Enum
 
 load_dotenv()
 

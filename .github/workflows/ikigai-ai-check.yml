@@ -8,11 +8,6 @@ on:
     branches:
       - master
 
-defaults:
-  run:
-    shell: bash
-    working-directory: ./ikigai_ai
-
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -21,5 +16,5 @@ jobs:
       - uses: psf/black@stable
         with:
           options: "--check --verbose"
-          src: "./src"
+          src: "./ikigai_ai/src"
           version: "~= 22.0"

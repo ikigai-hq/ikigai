@@ -1,4 +1,4 @@
-name: Lint ikigai ai
+name: Check ikigai ai
 
 on:
   pull_request:

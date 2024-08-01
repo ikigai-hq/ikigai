@@ -1,10 +1,11 @@
 import createQuizNode from "../QuizNode";
 import MultipleChoiceBlockComponent from "./MultipleChoiceComponent";
+import { EMPTY_UUID } from "util/FileUtil";
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     multipleChoice: {
-      insertMultipleChoice: () => ReturnType;
+      insertMultipleChoice: (initialQuizId?: string) => ReturnType;
     };
   }
 }
@@ -20,11 +21,14 @@ export default createQuizNode(
     addCommands() {
       return {
         insertMultipleChoice:
-          () =>
+          (quizId) =>
           ({ commands }) => {
             return commands.insertContent([
               {
                 type: MULTIPLE_CHOICE_BLOCK_NAME,
+                attrs: {
+                  quizId: quizId || EMPTY_UUID,
+                },
               },
             ]);
           },

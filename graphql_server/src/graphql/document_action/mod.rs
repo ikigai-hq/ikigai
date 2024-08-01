@@ -7,6 +7,7 @@ pub use document_query::*;
 use crate::authorization::DocumentActionPermission;
 use async_graphql::dataloader::DataLoader;
 use async_graphql::*;
+use uuid::Uuid;
 
 use crate::db::*;
 use crate::error::IkigaiErrorExt;
@@ -120,7 +121,12 @@ impl PageContent {
             })
             .await?
             .unwrap_or_default();
-        Ok(quizzes)
+        let json_content = self.get_json_content();
+        let quiz_block_ids: Vec<Uuid> = json_content.find_quiz_block_ids();
+        Ok(quizzes
+            .into_iter()
+            .filter(|quiz| quiz_block_ids.contains(&quiz.id))
+            .collect())
     }
 }
 

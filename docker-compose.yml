@@ -47,6 +47,12 @@ services:
     image: ghcr.io/ikigai-hq/ikigai-web:latest
     depends_on: [graphql-server]
     network_mode: host
+  ikigai-ai:
+    image: ghcr.io/ikigai-hq/ikigai-ai:latest
+    depends_on: []
+    environment:
+      OPENAI_API_KEY: REPLACE_BY_OPENAI_KEY
+    network_mode: host
 
 volumes:
   postgres_data: {}

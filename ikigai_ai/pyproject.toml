@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "ikigai-ai"
+version = "0.1.0"
+description = ""
+authors = ["cptrodgers <cptrodgers@gmail.com>"]
+readme = "README.md"
+license = "AGPL3"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.13"
+python-dotenv = "^1.0.1"
+llama-index = "^0.10.58"
+fastapi = "^0.111.1"
+unstructured = "^0.15.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

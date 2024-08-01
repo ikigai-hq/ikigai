@@ -255,4 +255,14 @@ impl JSONContent {
         };
         self.find_blocks(predicate)
     }
+
+    pub fn find_quiz_block_ids(&self) -> Vec<Uuid> {
+        let quiz_blocks = self.find_quiz_blocks();
+        quiz_blocks
+            .into_iter()
+            .filter_map(|quiz| quiz.attrs.as_ref())
+            .filter_map(|attrs| attrs.get("quizId"))
+            .filter_map(|quiz_id| serde_json::from_value::<Uuid>(quiz_id.clone()).ok())
+            .collect()
+    }
 }

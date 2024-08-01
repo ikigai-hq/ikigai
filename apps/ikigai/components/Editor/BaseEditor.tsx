@@ -36,6 +36,7 @@ export type IkigaiEditorProps = {
   onPaste?: (clipboard: ClipboardEvent) => boolean;
   onDrop?: (dragEvent: DragEvent) => boolean;
   body?: JSONContent;
+  attributes?: { [name: string]: string };
 };
 
 export const useIkigaiEditor = ({
@@ -46,6 +47,7 @@ export const useIkigaiEditor = ({
   onForceSave,
   onPaste,
   onDrop,
+  attributes,
 }: IkigaiEditorProps) => {
   const setActiveEditor = useEditorStore((state) => state.setActiveEditor);
   const innerContent = useRef(body);
@@ -55,6 +57,7 @@ export const useIkigaiEditor = ({
     extensions,
     content: body,
     editorProps: {
+      attributes,
       handlePaste: (view, clipboard) => {
         if (onPaste) return onPaste(clipboard);
         return false;

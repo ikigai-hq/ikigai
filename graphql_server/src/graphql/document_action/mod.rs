@@ -7,6 +7,7 @@ pub use document_query::*;
 use crate::authorization::DocumentActionPermission;
 use async_graphql::dataloader::DataLoader;
 use async_graphql::*;
+use uuid::Uuid;
 
 use crate::db::*;
 use crate::error::IkigaiErrorExt;
@@ -120,7 +121,19 @@ impl PageContent {
             })
             .await?
             .unwrap_or_default();
-        Ok(quizzes)
+        let json_content = self.get_json_content();
+        let quiz_blocks = json_content.find_quiz_blocks();
+        let quiz_block_ids: Vec<Uuid> = quiz_blocks
+            .into_iter()
+            .filter_map(|quiz| quiz.attrs.as_ref())
+            .filter_map(|attrs| attrs.get("quizId"))
+            .filter_map(|quiz_id| serde_json::from_value::<Uuid>(quiz_id.clone()).ok())
+            .collect();
+
+        Ok(quizzes
+            .into_iter()
+            .filter(|quiz| quiz_block_ids.contains(&quiz.id))
+            .collect())
     }
 }
 

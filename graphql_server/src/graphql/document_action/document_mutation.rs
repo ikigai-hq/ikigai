@@ -345,13 +345,14 @@ impl DocumentMutation {
         space_quick_authorize(ctx, space_id, SpaceActionPermission::UseAI).await?;
 
         let res = match quiz_type {
-            QuizType::SingleChoice => {
-                IkigaiAI::generate_single_choice_quizzes(data).await?
-            },
-            QuizType::MultipleChoice => {
-                IkigaiAI::generate_multiple_choice_quizzes(data).await?
-            },
-            _ => return Err(IkigaiError::new_bad_request("We don't support generate this quiz type")).format_err(),
+            QuizType::SingleChoice => IkigaiAI::generate_single_choice_quizzes(data).await?,
+            QuizType::MultipleChoice => IkigaiAI::generate_multiple_choice_quizzes(data).await?,
+            _ => {
+                return Err(IkigaiError::new_bad_request(
+                    "We don't support generate this quiz type",
+                ))
+                .format_err()
+            }
         };
 
         Ok(res)

@@ -57,6 +57,10 @@ msgstr "{totalAttempt} attempts"
 msgid "<0>{0}%</0> of grade"
 msgstr "<0>{0}%</0> of grade"
 
+#: components/QuizGenerator/index.tsx:25
+msgid "🪄Generate Quiz by Ikigai AI🪄"
+msgstr "🪄Generate Quiz by Ikigai AI🪄"
+
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:108
 msgid "Access visibility"
 msgstr "Access visibility"
@@ -179,11 +183,11 @@ msgstr "Back to home"
 #~ msgid "Back to space"
 #~ msgstr "Back to space"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:189
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:192
 msgid "Bold"
 msgstr "Bold"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:388
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:391
 msgid "Bullet list"
 msgstr "Bullet list"
 
@@ -207,7 +211,7 @@ msgstr "Cannot signin with google."
 msgid "Cannot upload pasted file"
 msgstr "Cannot upload pasted file"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:435
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:438
 msgid "Center"
 msgstr "Center"
 
@@ -225,7 +229,12 @@ msgstr "Click item in the list to switch space"
 #~ msgid "Click or drag file to this area to upload"
 #~ msgstr "Click or drag file to this area to upload"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:233
+#: components/QuizGenerator/index.tsx:137
+#: components/QuizGenerator/ReviewGeneratedQuizzes.tsx:180
+msgid "Close"
+msgstr "Close"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:236
 msgid "Code"
 msgstr "Code"
 
@@ -325,9 +334,9 @@ msgstr "Deleted!"
 #~ msgid "Description"
 #~ msgstr "Description"
 
-#: components/SpaceSetting/index.tsx:31
-#~ msgid "Details"
-#~ msgstr "Details"
+#: components/QuizGenerator/index.tsx:94
+msgid "Details"
+msgstr "Details"
 
 #: components/SpaceSetting/InviteSpaceSetting.tsx:143
 #~ msgid "Do you want to delete this invite link"
@@ -421,11 +430,11 @@ msgstr "Feedback at"
 msgid "Feedback successfully!"
 msgstr "Feedback successfully!"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:558
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:561
 msgid "File Upload"
 msgstr "File Upload"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:514
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:517
 msgid "Fill In Blank Quiz"
 msgstr "Fill In Blank Quiz"
 
@@ -465,6 +474,10 @@ msgstr "Generate"
 msgid "Generate Invite Link"
 msgstr "Generate Invite Link"
 
+#: components/QuizGenerator/index.tsx:140
+msgid "Generate Quizzes"
+msgstr "Generate Quizzes"
+
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:36
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:128
 #: components/Document/DocumentBody/Grading/index.tsx:124
@@ -487,19 +500,19 @@ msgstr "Grade Method"
 msgid "Grading"
 msgstr "Grading"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:343
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:346
 msgid "Heading 1"
 msgstr "Heading 1"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:353
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:356
 msgid "Heading 2"
 msgstr "Heading 2"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:363
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:366
 msgid "Heading 3"
 msgstr "Heading 3"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:291
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:294
 msgid "Highlight text"
 msgstr "Highlight text"
 
@@ -527,6 +540,10 @@ msgstr "Information"
 #: components/Editor/Extensions/WritingBlock/WritingBlockComponent.tsx:171
 #~ msgid "Initializing..."
 #~ msgstr "Initializing..."
+
+#: components/QuizGenerator/ReviewGeneratedQuizzes.tsx:187
+msgid "Insert"
+msgstr "Insert"
 
 #: components/IdentityInput/index.tsx:42
 #~ msgid "Invalid email"
@@ -564,7 +581,7 @@ msgstr "Inviting role"
 msgid "It will delete children files if this is folder."
 msgstr "It will delete children files if this is folder."
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:200
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:203
 msgid "Italic"
 msgstr "Italic"
 
@@ -588,7 +605,7 @@ msgstr "Joined! We're moving you to the space!"
 msgid "Last name"
 msgstr "Last name"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:425
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:428
 msgid "Left"
 msgstr "Left"
 
@@ -633,7 +650,7 @@ msgstr "Members"
 msgid "minutes"
 msgstr "minutes"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:549
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:552
 msgid "More Tools"
 msgstr "More Tools"
 
@@ -641,7 +658,11 @@ msgstr "More Tools"
 #~ msgid "Moved to submission space!"
 #~ msgstr "Moved to submission space!"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:486
+#: components/QuizGenerator/index.tsx:116
+msgid "Multiple Choice"
+msgstr "Multiple Choice"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:489
 msgid "Multiple Choice Quiz"
 msgstr "Multiple Choice Quiz"
 
@@ -713,7 +734,7 @@ msgstr "Not set"
 msgid "Not submitted"
 msgstr "Not submitted"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:398
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:401
 msgid "Number list"
 msgstr "Number list"
 
@@ -798,6 +819,10 @@ msgstr "Question"
 msgid "quiz"
 msgstr "quiz"
 
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:573
+msgid "Quiz Generator (AI)"
+msgstr "Quiz Generator (AI)"
+
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:101
 msgid "quizzes"
 msgstr "quizzes"
@@ -806,7 +831,7 @@ msgstr "quizzes"
 msgid "Quizzes"
 msgstr "Quizzes"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:531
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:534
 msgid "Quote"
 msgstr "Quote"
 
@@ -847,7 +872,7 @@ msgstr "Removed!"
 msgid "Review and feedback last submission"
 msgstr "Review and feedback last submission"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:445
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:448
 msgid "Right"
 msgstr "Right"
 
@@ -912,7 +937,7 @@ msgstr "Saving..."
 msgid "Select answer"
 msgstr "Select answer"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:500
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:503
 msgid "Select Option Quiz"
 msgstr "Select Option Quiz"
 
@@ -932,7 +957,11 @@ msgstr "Sent. Please check your email inbox!"
 #~ msgid "Share"
 #~ msgstr "Share"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:472
+#: components/QuizGenerator/index.tsx:113
+msgid "Single choice"
+msgstr "Single choice"
+
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:475
 msgid "Single Choice Quiz"
 msgstr "Single Choice Quiz"
 
@@ -987,7 +1016,7 @@ msgstr "Start at"
 msgid "Status"
 msgstr "Status"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:222
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:225
 msgid "Strike through"
 msgstr "Strike through"
 
@@ -999,6 +1028,14 @@ msgstr "Strike through"
 #: components/Document/DocumentBody/CoverPage/FolderCoverPageBody.tsx:56
 #~ msgid "Sub Contents"
 #~ msgstr "Sub Contents"
+
+#: components/QuizGenerator/index.tsx:83
+msgid "Subject"
+msgstr "Subject"
+
+#: components/QuizGenerator/index.tsx:86
+msgid "Subject, 120 chars max"
+msgstr "Subject, 120 chars max"
 
 #: components/Document/DocumentHeader/Menubar/index.tsx:51
 msgid "Submission"
@@ -1053,7 +1090,7 @@ msgstr "Test duration"
 #~ msgid "Test Duration"
 #~ msgstr "Test Duration"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:245
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:248
 msgid "Text color"
 msgstr "Text color"
 
@@ -1097,7 +1134,7 @@ msgstr "times"
 msgid "To point"
 msgstr "To point"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:408
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:411
 msgid "Todo list"
 msgstr "Todo list"
 
@@ -1108,6 +1145,10 @@ msgstr "Token"
 #: components/Document/RightSide/EditContentSidebar/index.tsx:46
 #~ msgid "Tools"
 #~ msgstr "Tools"
+
+#: components/QuizGenerator/index.tsx:124
+msgid "Total quiz"
+msgstr "Total quiz"
 
 #: components/ErrorBoundary.tsx:51
 msgid "Try to reload!"
@@ -1179,7 +1220,7 @@ msgstr "Typing assignment description or guide..."
 #~ msgid "Typing assignment description..."
 #~ msgstr "Typing assignment description..."
 
-#: components/Editor/index.tsx:81
+#: components/Editor/index.tsx:84
 msgid "Typing content here..."
 msgstr "Typing content here..."
 
@@ -1191,11 +1232,15 @@ msgstr "Typing criteria"
 msgid "Typing level"
 msgstr "Typing level"
 
+#: components/QuizGenerator/index.tsx:97
+msgid "Typing more details"
+msgstr "Typing more details"
+
 #: components/Rubric/index.tsx:395
 msgid "Typing your description"
 msgstr "Typing your description"
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:211
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:214
 msgid "Underline"
 msgstr "Underline"
 
@@ -1245,6 +1290,10 @@ msgstr "Updated!"
 #~ msgid "uploaded successfully."
 #~ msgstr "uploaded successfully."
 
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:565
+msgid "Use AI to generate quizzes"
+msgstr "Use AI to generate quizzes"
+
 #: components/Rubric/RubricManagement.tsx:149
 #~ msgid "Use this rubric"
 #~ msgstr "Use this rubric"
@@ -1273,6 +1322,14 @@ msgstr "View all submissions of {0}"
 #~ msgid "View submission"
 #~ msgstr "View submission"
 
+#: components/QuizGenerator/index.tsx:26
+msgid ""
+"We use AI to generate quizzes to generate quizzes.\n"
+"It can done your task in 1 minute."
+msgstr ""
+"We use AI to generate quizzes to generate quizzes.\n"
+"It can done your task in 1 minute."
+
 #: components/Document/DocumentHeader/SubmissionHeader/index.tsx:144
 msgid "We will move you back to assignment page!"
 msgstr "We will move you back to assignment page!"
@@ -1281,7 +1338,7 @@ msgstr "We will move you back to assignment page!"
 msgid "Writing here..."
 msgstr "Writing here..."
 
-#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:458
+#: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:461
 msgid "Writing Quiz"
 msgstr "Writing Quiz"
 

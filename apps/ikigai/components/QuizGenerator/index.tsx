@@ -22,7 +22,7 @@ const QuizGenerator = ({ open, onOpenChange }: QuizGeneratorProps) => {
       open={open}
       onOpenChange={onOpenChange}
       content={<QuizGeneratorContent onClose={() => onOpenChange(false)} />}
-      title={t`🪄Generate Quiz by AI🪄`}
+      title={t`🪄Generate Quiz by Ikigai AI🪄`}
       description={t`
         We use AI to generate quizzes to generate quizzes.
         It can done your task in 1 minute.

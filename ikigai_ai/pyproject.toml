@@ -12,6 +12,7 @@ python-dotenv = "^1.0.1"
 llama-index = "^0.10.58"
 fastapi = "^0.111.1"
 unstructured = "^0.15.0"
+black = "^24.4.2"
 
 
 [build-system]

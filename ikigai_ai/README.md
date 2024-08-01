@@ -30,3 +30,10 @@ fastapi run --port 8001 src/index.py
 ```
 
 Now, you can check API docs at https://localhost:8001/docs
+
+
+### Code Formatting:
+
+```bash
+black src
+```

@@ -5,7 +5,10 @@ load_dotenv()
 
 
 from fastapi import FastAPI
-from ikigai_ai.src.quiz_generator.llm import generate_single_choice_quizzes, generate_multiple_choice_quizzes
+from ikigai_ai.src.quiz_generator.llm import (
+    generate_single_choice_quizzes,
+  generate_multiple_choice_quizzes,
+)
 
 app = FastAPI()
 

@@ -67,7 +67,13 @@ const QuizGeneratorContent = ({ onClose }: QuizGenerateContentProps) => {
   };
 
   if (data) {
-    return <ReviewGeneratedQuizzes data={data} onClose={onClose} />;
+    return (
+      <ReviewGeneratedQuizzes
+        data={data.documentGenerateQuizzes.quizzes}
+        onClose={onClose}
+        quizType={quizType}
+      />
+    );
   }
 
   return (

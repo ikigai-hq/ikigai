@@ -65,6 +65,9 @@ const Editor = ({ pageContent, readOnly }: EditorProps) => {
   };
 
   const editor = useIkigaiEditor({
+    attributes: {
+      pageContentId: pageContent.id,
+    },
     body: pageContent.body,
     onUpdate: (body) => run({ body }),
     onForceSave: (body) => {

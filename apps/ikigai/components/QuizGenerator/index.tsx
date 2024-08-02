@@ -36,8 +36,8 @@ const QuizGenerator = ({ open, onOpenChange }: QuizGeneratorProps) => {
       }
       title={t`🪄Generate Quiz by Ikigai AI🪄`}
       description={t`
-        We use AI to generate quizzes to generate quizzes.
-        It can done your task in 1 minute.
+        Ikigai AI to generate quizzes for you with your teaching resources such as
+        pdf, docx, web, youtube video, etc.
       `}
       showClose={false}
       maxWidth={maxWidth}

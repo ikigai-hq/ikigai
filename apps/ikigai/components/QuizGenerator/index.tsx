@@ -81,12 +81,22 @@ const QuizGeneratorContent = ({
   );
 
   const onGenerate = async () => {
+    const previousQuizzes = [...availableQuizzes, ...selectedQuizzes]
+      .map((quiz) => quiz.question)
+      .join(", ");
+
+    const userContext = `
+      Previous questions: ${previousQuizzes}.
+      Do not generate same question with previous question.
+      
+      ${context}
+    `;
     const { data } = await generateQuizzes({
       variables: {
         spaceId,
         quizType,
         data: {
-          userContext: context,
+          userContext,
           subject,
           totalQuizzes: totalQuiz,
         },

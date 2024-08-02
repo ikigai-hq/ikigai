@@ -57,7 +57,7 @@ msgstr "{totalAttempt} attempts"
 msgid "<0>{0}%</0> of grade"
 msgstr "<0>{0}%</0> of grade"
 
-#: components/QuizGenerator/index.tsx:25
+#: components/QuizGenerator/index.tsx:37
 msgid "🪄Generate Quiz by Ikigai AI🪄"
 msgstr "🪄Generate Quiz by Ikigai AI🪄"
 
@@ -229,8 +229,8 @@ msgstr "Click item in the list to switch space"
 #~ msgid "Click or drag file to this area to upload"
 #~ msgstr "Click or drag file to this area to upload"
 
-#: components/QuizGenerator/index.tsx:137
-#: components/QuizGenerator/ReviewGeneratedQuizzes.tsx:180
+#: components/QuizGenerator/index.tsx:202
+#: components/QuizGenerator/SelectedGeneratedQuizzes.tsx:145
 msgid "Close"
 msgstr "Close"
 
@@ -334,7 +334,7 @@ msgstr "Deleted!"
 #~ msgid "Description"
 #~ msgstr "Description"
 
-#: components/QuizGenerator/index.tsx:94
+#: components/QuizGenerator/index.tsx:156
 msgid "Details"
 msgstr "Details"
 
@@ -474,7 +474,7 @@ msgstr "Generate"
 msgid "Generate Invite Link"
 msgstr "Generate Invite Link"
 
-#: components/QuizGenerator/index.tsx:140
+#: components/QuizGenerator/index.tsx:206
 msgid "Generate Quizzes"
 msgstr "Generate Quizzes"
 
@@ -542,8 +542,12 @@ msgstr "Information"
 #~ msgstr "Initializing..."
 
 #: components/QuizGenerator/ReviewGeneratedQuizzes.tsx:187
-msgid "Insert"
-msgstr "Insert"
+#~ msgid "Insert"
+#~ msgstr "Insert"
+
+#: components/QuizGenerator/SelectedGeneratedQuizzes.tsx:152
+msgid "Insert & Complete"
+msgstr "Insert & Complete"
 
 #: components/IdentityInput/index.tsx:42
 #~ msgid "Invalid email"
@@ -658,7 +662,7 @@ msgstr "More Tools"
 #~ msgid "Moved to submission space!"
 #~ msgstr "Moved to submission space!"
 
-#: components/QuizGenerator/index.tsx:116
+#: components/QuizGenerator/index.tsx:178
 msgid "Multiple Choice"
 msgstr "Multiple Choice"
 
@@ -733,6 +737,10 @@ msgstr "Not set"
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:56
 msgid "Not submitted"
 msgstr "Not submitted"
+
+#: components/QuizGenerator/GeneratedQuizItem.tsx:35
+msgid "Not supported quiz type"
+msgstr "Not supported quiz type"
 
 #: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:401
 msgid "Number list"
@@ -835,6 +843,10 @@ msgstr "Quizzes"
 msgid "Quote"
 msgstr "Quote"
 
+#: components/QuizGenerator/ReviewGeneratedQuizzes.tsx:37
+msgid "Regenerate"
+msgstr "Regenerate"
+
 #: components/base/AlertDialog.tsx:55
 msgid "Remove"
 msgstr "Remove"
@@ -932,6 +944,10 @@ msgstr "Saved!"
 msgid "Saving..."
 msgstr "Saving..."
 
+#: components/QuizGenerator/ReviewGeneratedQuizzes.tsx:40
+msgid "Select all"
+msgstr "Select all"
+
 #: components/Editor/Extensions/QuizBlock/SelectOptionBlock/DoingSelectOption.tsx:39
 #: components/Editor/Extensions/QuizBlock/SelectOptionBlock/ReviewSelectOption.tsx:47
 msgid "Select answer"
@@ -957,7 +973,7 @@ msgstr "Sent. Please check your email inbox!"
 #~ msgid "Share"
 #~ msgstr "Share"
 
-#: components/QuizGenerator/index.tsx:113
+#: components/QuizGenerator/index.tsx:175
 msgid "Single choice"
 msgstr "Single choice"
 
@@ -1029,11 +1045,11 @@ msgstr "Strike through"
 #~ msgid "Sub Contents"
 #~ msgstr "Sub Contents"
 
-#: components/QuizGenerator/index.tsx:83
+#: components/QuizGenerator/index.tsx:145
 msgid "Subject"
 msgstr "Subject"
 
-#: components/QuizGenerator/index.tsx:86
+#: components/QuizGenerator/index.tsx:148
 msgid "Subject, 120 chars max"
 msgstr "Subject, 120 chars max"
 
@@ -1146,7 +1162,7 @@ msgstr "Token"
 #~ msgid "Tools"
 #~ msgstr "Tools"
 
-#: components/QuizGenerator/index.tsx:124
+#: components/QuizGenerator/index.tsx:188
 msgid "Total quiz"
 msgstr "Total quiz"
 
@@ -1232,7 +1248,7 @@ msgstr "Typing criteria"
 msgid "Typing level"
 msgstr "Typing level"
 
-#: components/QuizGenerator/index.tsx:97
+#: components/QuizGenerator/index.tsx:159
 msgid "Typing more details"
 msgstr "Typing more details"
 
@@ -1322,7 +1338,7 @@ msgstr "View all submissions of {0}"
 #~ msgid "View submission"
 #~ msgstr "View submission"
 
-#: components/QuizGenerator/index.tsx:26
+#: components/QuizGenerator/index.tsx:38
 msgid ""
 "We use AI to generate quizzes to generate quizzes.\n"
 "It can done your task in 1 minute."

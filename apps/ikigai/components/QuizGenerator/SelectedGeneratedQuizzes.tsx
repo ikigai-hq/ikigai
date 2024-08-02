@@ -119,6 +119,8 @@ export const SelectedGeneratedQuizzes = ({
             .run();
         }
       });
+
+    onClose();
     setInsertLoading(false);
   };
 
@@ -145,9 +147,9 @@ export const SelectedGeneratedQuizzes = ({
         <Button
           onClick={onInsert}
           loading={insertLoading}
-          disabled={insertLoading}
+          disabled={insertLoading || quizzes.length === 0}
         >
-          <Trans>Insert</Trans>
+          <Trans>Insert & Complete</Trans>
         </Button>
       </div>
     </div>

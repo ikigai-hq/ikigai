@@ -100,7 +100,7 @@ const QuizzesListWrapper = styled.div<{ $hasEditTool: boolean }>`
   display: flex;
   overflow-x: auto;
   overflow-y: hidden;
-  width: ${(props) => (props.$hasEditTool ? 290 : 350)}px;
+  width: ${(props) => (props.$hasEditTool ? 335 : 350)}px;
 `;
 
 export default QuizzesList;

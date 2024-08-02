@@ -575,10 +575,12 @@ const ContentToolbar = () => {
           </Tooltip>
         </Toolbar.ToggleGroup>
       </Toolbar.Root>
-      <QuizGenerator
-        open={openQuizGenerator}
-        onOpenChange={setOpenQuizGenerator}
-      />
+      {openQuizGenerator && (
+        <QuizGenerator
+          open={openQuizGenerator}
+          onOpenChange={setOpenQuizGenerator}
+        />
+      )}
     </div>
   );
 };

@@ -20,6 +20,8 @@
 
 ikigai is an AI powered Open Assignment Platform for educators that provides seamless access via a single link, embeddable in your website or LMS, featuring rich quiz types and a flexible layout adaptable to your exam format.
 
+[AI Demo](https://youtu.be/m4sphijiCCo)
+
 ## Sample Use Cases:
 
 - **Entry/Placement test**

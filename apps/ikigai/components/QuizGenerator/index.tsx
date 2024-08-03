@@ -22,7 +22,7 @@ export type QuizGeneratorProps = {
 };
 
 const QuizGenerator = ({ open, onOpenChange }: QuizGeneratorProps) => {
-  const [maxWidth, setMaxWidth] = useState("30vw");
+  const [maxWidth, setMaxWidth] = useState("40vw");
 
   return (
     <Modal
@@ -54,7 +54,7 @@ enum GenerateStep {
 
 export type QuizGenerateContentProps = {
   onClose: () => void;
-  setMaxWidth: (maxWidth: "30vw" | "80vw") => void;
+  setMaxWidth: (maxWidth: "40vw" | "80vw") => void;
 };
 
 const QuizGeneratorContent = ({

@@ -1,4 +1,4 @@
-<a href="https://github.com/ikigai-hq/ikigai"><img src="https://raw.githubusercontent.com/ikigai-hq/ikigai/master/assets/demo.png" alt="AI Assignment Open Source" /></a>
+[![Watch the video](https://img.youtube.com/vi/m4sphijiCCo/maxresdefault.jpg)](https://youtu.be/m4sphijiCCo)
 
 <p align="center">
   <a href="https://ikigai.li" target="_blank">
@@ -19,12 +19,6 @@
 # Ikigai
 
 ikigai is an AI powered Open Assignment Platform for educators that provides seamless access via a single link, embeddable in your website or LMS, featuring rich quiz types and a flexible layout adaptable to your exam format.
-
-
-
-https://github.com/user-attachments/assets/ee26bb56-67cc-4206-918b-e23a20cb270d
-
-
 
 ## Sample Use Cases:
 

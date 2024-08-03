@@ -516,6 +516,14 @@ msgstr "Heading 3"
 msgid "Highlight text"
 msgstr "Highlight text"
 
+#: components/QuizGenerator/index.tsx:38
+msgid ""
+"Ikigai AI to generate quizzes for you with your teaching resources such as\n"
+"pdf, docx, web, youtube video, etc."
+msgstr ""
+"Ikigai AI to generate quizzes for you with your teaching resources such as\n"
+"pdf, docx, web, youtube video, etc."
+
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/StudentGradeInformation.tsx:56
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GradeInformation/TeacherGradeInformation.tsx:75
 #~ msgid "In auto mode, students will receive their grades and results immediately after completing their assessments."
@@ -1339,12 +1347,12 @@ msgstr "View all submissions of {0}"
 #~ msgstr "View submission"
 
 #: components/QuizGenerator/index.tsx:38
-msgid ""
-"We use AI to generate quizzes to generate quizzes.\n"
-"It can done your task in 1 minute."
-msgstr ""
-"We use AI to generate quizzes to generate quizzes.\n"
-"It can done your task in 1 minute."
+#~ msgid ""
+#~ "We use AI to generate quizzes to generate quizzes.\n"
+#~ "It can done your task in 1 minute."
+#~ msgstr ""
+#~ "We use AI to generate quizzes to generate quizzes.\n"
+#~ "It can done your task in 1 minute."
 
 #: components/Document/DocumentHeader/SubmissionHeader/index.tsx:144
 msgid "We will move you back to assignment page!"

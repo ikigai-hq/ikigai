@@ -103,15 +103,10 @@ export const REMOVE_ASSIGNEE = gql`
 
 export const GENERATE_QUIZZES = gql`
   mutation GenerateQuizzes(
-    $spaceId: Int!
     $quizType: QuizType!
     $data: GenerateQuizzesRequestData!
   ) {
-    documentGenerateQuizzes(
-      spaceId: $spaceId
-      quizType: $quizType
-      data: $data
-    ) {
+    quizGenerateByAi(quizType: $quizType, data: $data) {
       subject
       quizzes {
         quizType

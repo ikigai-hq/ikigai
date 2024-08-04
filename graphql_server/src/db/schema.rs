@@ -1,6 +1,19 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
+    ai_history_sessions (id) {
+        id -> Uuid,
+        user_id -> Int4,
+        action -> Int4,
+        request_data -> Jsonb,
+        response_data -> Jsonb,
+        user_reaction -> Int4,
+        updated_at -> Int8,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
     assignment_submissions (id) {
         id -> Int4,
         assignment_id -> Int4,
@@ -234,6 +247,7 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(ai_history_sessions -> users (user_id));
 diesel::joinable!(assignment_submissions -> assignments (assignment_id));
 diesel::joinable!(assignment_submissions -> documents (document_id));
 diesel::joinable!(assignment_submissions -> users (user_id));
@@ -266,6 +280,7 @@ diesel::joinable!(user_activities -> documents (last_document_id));
 diesel::joinable!(user_activities -> users (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
+    ai_history_sessions,
     assignment_submissions,
     assignments,
     band_scores,

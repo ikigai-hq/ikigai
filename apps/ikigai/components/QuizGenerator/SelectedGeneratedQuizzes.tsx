@@ -1,5 +1,5 @@
 import {
-  GenerateQuizzes_documentGenerateQuizzes_quizzes as IGeneratedQuiz,
+  GenerateQuizzes_quizGenerateByAi_quizzes as IGeneratedQuiz,
   QuizType,
   UpsertQuiz,
 } from "graphql/types";

@@ -425,31 +425,30 @@ export interface RemoveDocumentAssigneeVariables {
 // GraphQL mutation operation: GenerateQuizzes
 // ====================================================
 
-export interface GenerateQuizzes_documentGenerateQuizzes_quizzes_completionFullData {
+export interface GenerateQuizzes_quizGenerateByAi_quizzes_completionFullData {
   questionData: any;
   answerData: any;
 }
 
-export interface GenerateQuizzes_documentGenerateQuizzes_quizzes {
+export interface GenerateQuizzes_quizGenerateByAi_quizzes {
   quizType: QuizType;
   question: string;
   answers: string[];
   correctAnswer: string | null;
   correctAnswers: string[] | null;
-  completionFullData: GenerateQuizzes_documentGenerateQuizzes_quizzes_completionFullData | null;
+  completionFullData: GenerateQuizzes_quizGenerateByAi_quizzes_completionFullData | null;
 }
 
-export interface GenerateQuizzes_documentGenerateQuizzes {
+export interface GenerateQuizzes_quizGenerateByAi {
   subject: string;
-  quizzes: GenerateQuizzes_documentGenerateQuizzes_quizzes[];
+  quizzes: GenerateQuizzes_quizGenerateByAi_quizzes[];
 }
 
 export interface GenerateQuizzes {
-  documentGenerateQuizzes: GenerateQuizzes_documentGenerateQuizzes;
+  quizGenerateByAi: GenerateQuizzes_quizGenerateByAi;
 }
 
 export interface GenerateQuizzesVariables {
-  spaceId: number;
   quizType: QuizType;
   data: GenerateQuizzesRequestData;
 }

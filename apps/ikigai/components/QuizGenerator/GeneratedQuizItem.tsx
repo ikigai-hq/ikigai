@@ -9,7 +9,7 @@ import styled from "styled-components";
 import { Trans } from "@lingui/macro";
 
 import {
-  GenerateQuizzes_documentGenerateQuizzes_quizzes as IGeneratedQuiz,
+  GenerateQuizzes_quizGenerateByAi_quizzes as IGeneratedQuiz,
   QuizType,
 } from "graphql/types";
 

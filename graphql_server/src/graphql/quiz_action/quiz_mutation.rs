@@ -5,6 +5,7 @@ use crate::authorization::DocumentActionPermission;
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
+use crate::service::ikigai_ai::{AIQuizzesResponse, GenerateQuizzesRequestData, IkigaiAI};
 
 #[derive(Default)]
 pub struct QuizMutation;
@@ -124,5 +125,35 @@ impl QuizMutation {
         let mut conn = get_conn_from_ctx(ctx).await?;
         let quiz_user_answer = QuizUserAnswer::upsert(&mut conn, data).format_err()?;
         Ok(quiz_user_answer)
+    }
+
+    async fn quiz_generate_by_ai(
+        &self,
+        ctx: &Context<'_>,
+        quiz_type: QuizType,
+        data: GenerateQuizzesRequestData,
+    ) -> Result<AIQuizzesResponse> {
+        let user_id = get_user_id_from_ctx(ctx).await?;
+
+        let res = match quiz_type {
+            QuizType::SingleChoice => IkigaiAI::generate_single_choice_quizzes(&data).await?,
+            QuizType::MultipleChoice => IkigaiAI::generate_multiple_choice_quizzes(&data).await?,
+            _ => {
+                return Err(IkigaiError::new_bad_request(
+                    "We don't support generate this quiz type",
+                ))
+                .format_err()
+            }
+        };
+
+        let ai_history = AIHistorySessionBuilder::default()
+            .user_id(user_id)
+            .request_data(serde_json::to_value(&data).unwrap_or_default())
+            .response_data(serde_json::to_value(&res).unwrap_or_default())
+            .build()?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        AIHistorySession::insert(&mut conn, ai_history).format_err()?;
+
+        Ok(res)
     }
 }

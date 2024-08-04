@@ -1,4 +1,4 @@
-import { GenerateQuizzes_documentGenerateQuizzes_quizzes as IGeneratedQuiz } from "graphql/types";
+import { GenerateQuizzes_quizGenerateByAi_quizzes as IGeneratedQuiz } from "graphql/types";
 import { Button, ScrollArea } from "@radix-ui/themes";
 import { Trans } from "@lingui/macro";
 

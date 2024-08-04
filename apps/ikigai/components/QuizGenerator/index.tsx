@@ -4,14 +4,13 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 
 import { handleError } from "graphql/ApolloClient";
-import useSpaceStore from "store/SpaceStore";
 import { ReviewGeneratedQuizzes } from "./ReviewGeneratedQuizzes";
 import { SelectedGeneratedQuizzes } from "./SelectedGeneratedQuizzes";
 import Modal from "../base/Modal";
 import {
   GenerateQuizzes,
   QuizType,
-  GenerateQuizzes_documentGenerateQuizzes_quizzes as IGeneratedQuiz,
+  GenerateQuizzes_quizGenerateByAi_quizzes as IGeneratedQuiz,
 } from "graphql/types";
 import InputNumber from "../base/InputNumber";
 import { GENERATE_QUIZZES } from "graphql/mutation/DocumentMutation";
@@ -61,7 +60,6 @@ const QuizGeneratorContent = ({
   onClose,
   setMaxWidth,
 }: QuizGenerateContentProps) => {
-  const spaceId = useSpaceStore((state) => state.spaceId);
   const [subject, setSubject] = useState("");
   const [context, setContext] = useState("");
   const [quizType, setQuizType] = useState(QuizType.SINGLE_CHOICE);
@@ -85,15 +83,12 @@ const QuizGeneratorContent = ({
       .map((quiz) => quiz.question)
       .join(", ");
 
-    const userContext = `
-      Previous questions: ${previousQuizzes}.
-      Do not generate same question with previous question.
-      
-      ${context}
-    `;
+    let userContext = context;
+    if (previousQuizzes.length > 0) {
+      userContext = `Previous questions: ${previousQuizzes}.\nDo not generate same question with previous question. \n\n ${userContext}`;
+    }
     const { data } = await generateQuizzes({
       variables: {
-        spaceId,
         quizType,
         data: {
           userContext,
@@ -107,7 +102,7 @@ const QuizGeneratorContent = ({
       setMaxWidth("80vw");
       setAlreadyGenerate(true);
       setStep(GenerateStep.PICK);
-      setAvailableQuizzes(data.documentGenerateQuizzes.quizzes);
+      setAvailableQuizzes(data.quizGenerateByAi.quizzes);
     }
   };
 

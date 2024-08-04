@@ -11,7 +11,7 @@ pub struct GenerateQuizzesRequestData {
     pub total_quizzes: i32,
 }
 
-#[derive(Debug, Clone, SimpleObject, Deserialize)]
+#[derive(Debug, Clone, SimpleObject, Deserialize, Serialize)]
 #[graphql(complex)]
 pub struct AIQuizResponse {
     pub question: String,
@@ -20,7 +20,7 @@ pub struct AIQuizResponse {
     pub correct_answers: Option<Vec<String>>,
 }
 
-#[derive(Debug, Clone, SimpleObject, Deserialize)]
+#[derive(Debug, Clone, SimpleObject, Deserialize, Serialize)]
 pub struct AIQuizzesResponse {
     pub subject: String,
     pub quizzes: Vec<AIQuizResponse>,
@@ -32,13 +32,13 @@ impl IkigaiAI {
     }
 
     pub async fn generate_single_choice_quizzes(
-        data: GenerateQuizzesRequestData,
+        data: &GenerateQuizzesRequestData,
     ) -> Result<AIQuizzesResponse, IkigaiError> {
         let base_url = Self::get_url();
         let url = format!("{base_url}/quizzes/generate-single-choice");
         let res = Client::new()
             .post(url)
-            .json(&data)
+            .json(data)
             .send()
             .await?
             .json()
@@ -48,13 +48,13 @@ impl IkigaiAI {
     }
 
     pub async fn generate_multiple_choice_quizzes(
-        data: GenerateQuizzesRequestData,
+        data: &GenerateQuizzesRequestData,
     ) -> Result<AIQuizzesResponse, IkigaiError> {
         let base_url = Self::get_url();
         let url = format!("{base_url}/quizzes/generate-multiple-choice");
         let res = Client::new()
             .post(url)
-            .json(&data)
+            .json(data)
             .send()
             .await?
             .json()

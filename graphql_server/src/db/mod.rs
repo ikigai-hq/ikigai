@@ -1,3 +1,4 @@
+pub mod ai_history;
 pub mod assignment;
 pub mod band_score;
 pub mod document;
@@ -12,6 +13,7 @@ pub mod space_member;
 pub mod submission;
 pub mod user;
 
+pub use ai_history::*;
 pub use assignment::*;
 pub use band_score::*;
 pub use document::*;

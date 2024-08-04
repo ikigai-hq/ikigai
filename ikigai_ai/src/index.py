@@ -3,6 +3,10 @@ from pydantic import BaseModel
 
 load_dotenv()
 
+# Logging & Tracing LLM
+import llama_index.core
+
+llama_index.core.set_global_handler("simple")
 
 from fastapi import FastAPI
 from ikigai_ai.src.quiz_generator.llm import (

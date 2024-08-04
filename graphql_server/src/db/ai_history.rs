@@ -1,6 +1,6 @@
 use diesel::result::Error;
 use diesel::sql_types::Integer;
-use diesel::{PgConnection, RunQueryDsl};
+use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use serde_json::Value;
 use uuid::Uuid;
 
@@ -64,6 +64,20 @@ impl AIHistorySession {
     pub fn insert(conn: &mut PgConnection, item: Self) -> Result<Self, Error> {
         diesel::insert_into(ai_history_sessions::table)
             .values(&item)
+            .get_result(conn)
+    }
+
+    pub fn count_by_time(
+        conn: &mut PgConnection,
+        user_id: i32,
+        from: i64,
+        to: i64,
+    ) -> Result<i64, Error> {
+        ai_history_sessions::table
+            .filter(ai_history_sessions::user_id.eq(user_id))
+            .filter(ai_history_sessions::created_at.ge(from))
+            .filter(ai_history_sessions::created_at.le(to))
+            .count()
             .get_result(conn)
     }
 }

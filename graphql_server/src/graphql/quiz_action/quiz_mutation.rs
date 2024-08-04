@@ -6,6 +6,9 @@ use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
 use crate::service::ikigai_ai::{AIQuizzesResponse, GenerateQuizzesRequestData, IkigaiAI};
+use crate::util::{end_of_today, start_of_today};
+
+const MAX_AI_USAGE_PER_DAY: i64 = 5;
 
 #[derive(Default)]
 pub struct QuizMutation;
@@ -134,6 +137,24 @@ impl QuizMutation {
         data: GenerateQuizzesRequestData,
     ) -> Result<AIQuizzesResponse> {
         let user_id = get_user_id_from_ctx(ctx).await?;
+
+        // TODO: Replace usage logic by
+        let from = start_of_today();
+        let to = end_of_today();
+        let usage_today = {
+            let mut conn = get_conn_from_ctx(ctx).await?;
+            AIHistorySession::count_by_time(&mut conn, user_id, from, to).format_err()?
+        };
+        let max_usage_per_day = std::env::var("IKIGAI_AI_MAX_USAGE_PER_DAY")
+            .map(|usage_str| usage_str.parse::<i64>())
+            .unwrap_or(Ok(MAX_AI_USAGE_PER_DAY))
+            .unwrap_or(MAX_AI_USAGE_PER_DAY);
+        if usage_today >= max_usage_per_day {
+            return Err(IkigaiError::new_bad_request(
+                "You've reached maximum usage of a day. Want more - contact us via rodgers@ikigai.li",
+            ))
+                .format_err();
+        }
 
         let res = match quiz_type {
             QuizType::SingleChoice => IkigaiAI::generate_single_choice_quizzes(&data).await?,

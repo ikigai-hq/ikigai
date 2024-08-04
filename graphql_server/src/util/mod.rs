@@ -32,7 +32,27 @@ pub fn get_date_from_ts(ts: i64) -> DateTime<Utc> {
     DateTime::from_timestamp(ts, 0).unwrap_or_default()
 }
 
-pub fn started_of_day(timestamp: i64) -> i64 {
+pub fn start_of_today() -> i64 {
+    start_of_day(get_now_as_secs())
+}
+
+pub fn end_of_today() -> i64 {
+    end_of_day(get_now_as_secs())
+}
+
+pub fn end_of_day(timestamp: i64) -> i64 {
+    Utc.timestamp_opt(timestamp, 0)
+        .unwrap()
+        .with_hour(23)
+        .unwrap()
+        .with_minute(59)
+        .unwrap()
+        .with_second(59)
+        .unwrap()
+        .timestamp()
+}
+
+pub fn start_of_day(timestamp: i64) -> i64 {
     Utc.timestamp_opt(timestamp, 0)
         .unwrap()
         .with_hour(0)

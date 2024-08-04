@@ -10,7 +10,6 @@ resource SpaceAuth {
 		"manage_space_content",
 		"manage_space_member",
 		"manage_space_setting",
-		"use_ai"
     ];
 
 	"view_space_content" if "student";
@@ -21,7 +20,6 @@ resource SpaceAuth {
 	"teacher" if "creator";
 	"manage_space_member" if "creator";
 	"manage_space_setting" if "creator";
-	"use_ai" if "creator";
 }
 
 has_role(user: UserAuth, "creator", space: SpaceAuth) if

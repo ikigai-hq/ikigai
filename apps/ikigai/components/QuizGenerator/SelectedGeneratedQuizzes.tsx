@@ -14,11 +14,8 @@ import { handleError } from "graphql/ApolloClient";
 import useEditorStore from "store/EditorStore";
 import usePageStore from "store/PageStore";
 import usePageContentStore from "store/PageContentStore";
-import useQuizStore, {
-  ISingleChoiceExpectedAnswer,
-  ISingleChoiceQuestion,
-} from "store/QuizStore";
-import { GeneratedQuizReview, getGeneratedQuizType } from "./GeneratedQuizItem";
+import useQuizStore from "store/QuizStore";
+import { GeneratedQuizReview } from "./GeneratedQuizItem";
 
 export type ReviewGeneratedQuizzesProps = {
   quizzes: IGeneratedQuiz[];
@@ -61,35 +58,15 @@ export const SelectedGeneratedQuizzes = ({
 
     const res = await Promise.all(
       quizzes.map(async (selectedQuiz) => {
-        // Assume Choice question only
         const quizId = v4();
-        const options = selectedQuiz.answers.map((answer) => ({
-          id: v4(),
-          content: answer,
-        }));
-        const expectedChoices = (
-          selectedQuiz.correctAnswers || [selectedQuiz.correctAnswer]
-        )
-          .map((correctAnswer) =>
-            options.find((option) => option.content === correctAnswer),
-          )
-          .map((option) => option.id);
-        const questionData: ISingleChoiceQuestion = {
-          question: selectedQuiz.question,
-          options,
-        };
-        const answerData: ISingleChoiceExpectedAnswer = {
-          expectedChoices,
-        };
-
         const { data } = await quizUpsert({
           variables: {
             pageContentId,
             data: {
               id: quizId,
-              quizType: getGeneratedQuizType(selectedQuiz),
-              questionData,
-              answerData,
+              quizType: selectedQuiz.quizType,
+              questionData: selectedQuiz.completionFullData.questionData,
+              answerData: selectedQuiz.completionFullData.answerData,
             },
           },
         });
@@ -103,21 +80,15 @@ export const SelectedGeneratedQuizzes = ({
       .filter((quiz) => !!quiz)
       .forEach((quiz) => {
         const quizType = quiz.quizUpsert.quizType;
+        let command = editor.chain().enter().focus("end");
+
         if (quizType === QuizType.SINGLE_CHOICE) {
-          editor
-            .chain()
-            .enter()
-            .focus("end")
-            .insertSingleChoice(quiz.quizUpsert.id)
-            .run();
+          command = command.insertSingleChoice(quiz.quizUpsert.id);
         } else if (quizType === QuizType.MULTIPLE_CHOICE) {
-          editor
-            .chain()
-            .enter()
-            .focus("end")
-            .insertMultipleChoice(quiz.quizUpsert.id)
-            .run();
+          command = command.insertMultipleChoice(quiz.quizUpsert.id);
         }
+
+        command.run();
       });
 
     onClose();

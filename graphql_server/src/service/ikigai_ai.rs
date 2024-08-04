@@ -12,6 +12,7 @@ pub struct GenerateQuizzesRequestData {
 }
 
 #[derive(Debug, Clone, SimpleObject, Deserialize)]
+#[graphql(complex)]
 pub struct AIQuizResponse {
     pub question: String,
     pub answers: Vec<String>,

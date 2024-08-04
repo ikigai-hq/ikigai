@@ -21,7 +21,7 @@ export type GeneratedChoiceReviewProps = {
 };
 
 export const GeneratedQuizReview = (props: GeneratedChoiceReviewProps) => {
-  const quizType = getGeneratedQuizType(props.quiz);
+  const quizType = props.quiz.quizType;
   if (quizType === QuizType.SINGLE_CHOICE) {
     return <GeneratedSingleChoiceReview {...props} />;
   }
@@ -91,10 +91,3 @@ const QuizWrapper = styled.div<{ $selected?: boolean }>`
   margin-bottom: 5px;
   cursor: pointer;
 `;
-
-export const getGeneratedQuizType = (
-  quiz: IGeneratedQuiz,
-): QuizType | undefined => {
-  if (quiz.correctAnswer) return QuizType.SINGLE_CHOICE;
-  if (quiz.correctAnswers) return QuizType.MULTIPLE_CHOICE;
-};

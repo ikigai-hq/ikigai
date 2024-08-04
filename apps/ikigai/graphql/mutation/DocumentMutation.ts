@@ -114,10 +114,15 @@ export const GENERATE_QUIZZES = gql`
     ) {
       subject
       quizzes {
+        quizType
         question
         answers
         correctAnswer
         correctAnswers
+        completionFullData {
+          questionData
+          answerData
+        }
       }
     }
   }

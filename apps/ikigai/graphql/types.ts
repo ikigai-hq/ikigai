@@ -425,11 +425,18 @@ export interface RemoveDocumentAssigneeVariables {
 // GraphQL mutation operation: GenerateQuizzes
 // ====================================================
 
+export interface GenerateQuizzes_documentGenerateQuizzes_quizzes_completionFullData {
+  questionData: any;
+  answerData: any;
+}
+
 export interface GenerateQuizzes_documentGenerateQuizzes_quizzes {
+  quizType: QuizType;
   question: string;
   answers: string[];
   correctAnswer: string | null;
   correctAnswers: string[] | null;
+  completionFullData: GenerateQuizzes_documentGenerateQuizzes_quizzes_completionFullData | null;
 }
 
 export interface GenerateQuizzes_documentGenerateQuizzes {

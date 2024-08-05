@@ -57,7 +57,7 @@ msgstr "{totalAttempt} attempts"
 msgid "<0>{0}%</0> of grade"
 msgstr "<0>{0}%</0> of grade"
 
-#: components/QuizGenerator/index.tsx:37
+#: components/QuizGenerator/index.tsx:51
 msgid "🪄Generate Quiz by Ikigai AI🪄"
 msgstr "🪄Generate Quiz by Ikigai AI🪄"
 
@@ -173,7 +173,7 @@ msgid "Auto"
 msgstr "Auto"
 
 #: components/ErrorBoundary.tsx:54
-#: components/Initializing.tsx:308
+#: components/Initializing.tsx:321
 #: pages/404.tsx:24
 msgid "Back to home"
 msgstr "Back to home"
@@ -229,8 +229,8 @@ msgstr "Click item in the list to switch space"
 #~ msgid "Click or drag file to this area to upload"
 #~ msgstr "Click or drag file to this area to upload"
 
-#: components/QuizGenerator/index.tsx:202
-#: components/QuizGenerator/SelectedGeneratedQuizzes.tsx:145
+#: components/QuizGenerator/index.tsx:220
+#: components/QuizGenerator/SelectedGeneratedQuizzes.tsx:115
 msgid "Close"
 msgstr "Close"
 
@@ -334,7 +334,7 @@ msgstr "Deleted!"
 #~ msgid "Description"
 #~ msgstr "Description"
 
-#: components/QuizGenerator/index.tsx:156
+#: components/QuizGenerator/index.tsx:168
 msgid "Details"
 msgstr "Details"
 
@@ -474,7 +474,7 @@ msgstr "Generate"
 msgid "Generate Invite Link"
 msgstr "Generate Invite Link"
 
-#: components/QuizGenerator/index.tsx:206
+#: components/QuizGenerator/index.tsx:224
 msgid "Generate Quizzes"
 msgstr "Generate Quizzes"
 
@@ -516,7 +516,7 @@ msgstr "Heading 3"
 msgid "Highlight text"
 msgstr "Highlight text"
 
-#: components/QuizGenerator/index.tsx:38
+#: components/QuizGenerator/index.tsx:52
 msgid ""
 "Ikigai AI to generate quizzes for you with your teaching resources such as\n"
 "pdf, docx, web, youtube video, etc."
@@ -553,7 +553,7 @@ msgstr "Information"
 #~ msgid "Insert"
 #~ msgstr "Insert"
 
-#: components/QuizGenerator/SelectedGeneratedQuizzes.tsx:152
+#: components/QuizGenerator/SelectedGeneratedQuizzes.tsx:122
 msgid "Insert & Complete"
 msgstr "Insert & Complete"
 
@@ -670,7 +670,7 @@ msgstr "More Tools"
 #~ msgid "Moved to submission space!"
 #~ msgstr "Moved to submission space!"
 
-#: components/QuizGenerator/index.tsx:178
+#: components/QuizGenerator/index.tsx:190
 msgid "Multiple Choice"
 msgstr "Multiple Choice"
 
@@ -981,7 +981,7 @@ msgstr "Sent. Please check your email inbox!"
 #~ msgid "Share"
 #~ msgstr "Share"
 
-#: components/QuizGenerator/index.tsx:175
+#: components/QuizGenerator/index.tsx:187
 msgid "Single choice"
 msgstr "Single choice"
 
@@ -1053,11 +1053,11 @@ msgstr "Strike through"
 #~ msgid "Sub Contents"
 #~ msgstr "Sub Contents"
 
-#: components/QuizGenerator/index.tsx:145
+#: components/QuizGenerator/index.tsx:157
 msgid "Subject"
 msgstr "Subject"
 
-#: components/QuizGenerator/index.tsx:148
+#: components/QuizGenerator/index.tsx:160
 msgid "Subject, 120 chars max"
 msgstr "Subject, 120 chars max"
 
@@ -1170,7 +1170,7 @@ msgstr "Token"
 #~ msgid "Tools"
 #~ msgstr "Tools"
 
-#: components/QuizGenerator/index.tsx:188
+#: components/QuizGenerator/index.tsx:206
 msgid "Total quiz"
 msgstr "Total quiz"
 
@@ -1256,7 +1256,7 @@ msgstr "Typing criteria"
 msgid "Typing level"
 msgstr "Typing level"
 
-#: components/QuizGenerator/index.tsx:159
+#: components/QuizGenerator/index.tsx:171
 msgid "Typing more details"
 msgstr "Typing more details"
 
@@ -1398,6 +1398,10 @@ msgstr "You've been invited to join ikigai"
 #: components/PreJoinSpace.tsx:90
 msgid "You've joined. We've sent a magic email to <0>{email}</0>. Open the link in email to access space."
 msgstr "You've joined. We've sent a magic email to <0>{email}</0>. Open the link in email to access space."
+
+#: components/QuizGenerator/index.tsx:38
+msgid "You've reached maximum usage of Ikigai AI today (max {maxAiUsage} requests per day)."
+msgstr "You've reached maximum usage of Ikigai AI today (max {maxAiUsage} requests per day)."
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/StudentGeneralInformation.tsx:93
 #~ msgid "Your Grade:"

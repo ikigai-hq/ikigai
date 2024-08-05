@@ -2,6 +2,7 @@ use jsonwebtoken::{decode, encode, errors::Error, DecodingKey, EncodingKey, Head
 use serde::{Deserialize, Serialize};
 
 use crate::util::get_now_as_secs;
+use crate::util::var_util::read_str_var_with_default;
 
 #[derive(Debug)]
 pub struct ActiveSpaceId(pub i32);
@@ -32,7 +33,7 @@ impl Claims {
     }
 
     pub fn encode(&self) -> Result<String, Error> {
-        let key = std::env::var("SECRET_KEY").unwrap();
+        let key = read_str_var_with_default("SECRET_KEY", "ikigai");
         encode(
             &Header::default(),
             self,
@@ -41,7 +42,7 @@ impl Claims {
     }
 
     pub fn decode(token: &str) -> Result<Self, Error> {
-        let key = std::env::var("SECRET_KEY").unwrap();
+        let key = read_str_var_with_default("SECRET_KEY", "ikigai");
         decode::<Self>(
             token,
             &DecodingKey::from_secret(key.as_ref()),

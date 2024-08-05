@@ -10,6 +10,8 @@ use rand_core::OsRng;
 pub mod log_util;
 pub mod markdown_util;
 pub mod url_util;
+pub mod var_util;
+
 use crate::constant::{FIRST_MONDAY_TIMESTAMP, TOTAL_SECONDS_OF_A_WEEK};
 
 pub fn get_now_as_secs() -> i64 {

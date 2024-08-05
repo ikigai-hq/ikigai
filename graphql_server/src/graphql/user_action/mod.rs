@@ -12,6 +12,10 @@ use crate::db::*;
 use crate::error::IkigaiErrorExt;
 use crate::graphql::data_loader::{FileById, IkigaiDataLoader};
 use crate::helper::{get_conn_from_ctx, get_user_auth_from_ctx};
+use crate::util::var_util::{
+    read_integer_val_with_default, AI_USAGE_PER_DAY_KEY, MAX_AI_USAGE_PER_DAY,
+};
+use crate::util::{end_of_today, start_of_today};
 
 pub const COLOR_SET: [&str; 12] = [
     "#02677B", "#002366", "#0F52BA", "#FA8072", "#FFDAB9", "#f56a00", "#3C91E6", "#342E37",
@@ -40,6 +44,17 @@ impl User {
         } else {
             None
         })
+    }
+
+    async fn max_ai_usage(&self) -> i32 {
+        read_integer_val_with_default(AI_USAGE_PER_DAY_KEY, MAX_AI_USAGE_PER_DAY)
+    }
+
+    async fn ai_sessions_of_today(&self, ctx: &Context<'_>) -> Result<Vec<AIHistorySession>> {
+        let from = start_of_today();
+        let to = end_of_today();
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        AIHistorySession::find_by_time(&mut conn, self.id, from, to).format_err()
     }
 }
 

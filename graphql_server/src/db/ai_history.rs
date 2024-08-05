@@ -67,6 +67,19 @@ impl AIHistorySession {
             .get_result(conn)
     }
 
+    pub fn find_by_time(
+        conn: &mut PgConnection,
+        user_id: i32,
+        from: i64,
+        to: i64,
+    ) -> Result<Vec<Self>, Error> {
+        ai_history_sessions::table
+            .filter(ai_history_sessions::user_id.eq(user_id))
+            .filter(ai_history_sessions::created_at.ge(from))
+            .filter(ai_history_sessions::created_at.le(to))
+            .get_results(conn)
+    }
+
     pub fn count_by_time(
         conn: &mut PgConnection,
         user_id: i32,

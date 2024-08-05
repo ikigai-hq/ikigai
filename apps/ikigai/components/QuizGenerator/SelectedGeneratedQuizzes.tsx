@@ -80,8 +80,7 @@ export const SelectedGeneratedQuizzes = ({
       .filter((quiz) => !!quiz)
       .forEach((quiz) => {
         const quizType = quiz.quizUpsert.quizType;
-        let command = editor.chain().enter().focus("end");
-
+        let command = editor.chain().focus("end").enter().focus("end");
         if (quizType === QuizType.SINGLE_CHOICE) {
           command = command.insertSingleChoice(quiz.quizUpsert.id);
         } else if (quizType === QuizType.MULTIPLE_CHOICE) {

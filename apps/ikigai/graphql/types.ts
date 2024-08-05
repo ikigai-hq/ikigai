@@ -1970,6 +1970,31 @@ export interface GetSpacePermissionsVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetAIUsage
+// ====================================================
+
+export interface GetAIUsage_userMe_aiSessionsOfToday {
+  id: any;
+  action: Aiaction;
+  createdAt: number;
+}
+
+export interface GetAIUsage_userMe {
+  id: number;
+  maxAiUsage: number;
+  aiSessionsOfToday: GetAIUsage_userMe_aiSessionsOfToday[];
+}
+
+export interface GetAIUsage {
+  userMe: GetAIUsage_userMe;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL subscription operation: SubmissionSubscribe
 // ====================================================
 
@@ -2172,6 +2197,10 @@ export interface CoreQuizFields {
 // START Enums and Input Objects
 //==============================================================
 
+export enum Aiaction {
+  GENERATE_QUIZZES = "GENERATE_QUIZZES",
+}
+
 export enum DocumentActionPermission {
   EDIT_DOCUMENT = "EDIT_DOCUMENT",
   INTERACTIVE_WITH_TOOL = "INTERACTIVE_WITH_TOOL",
@@ -2231,7 +2260,6 @@ export enum SpaceActionPermission {
   MANAGE_SPACE_CONTENT = "MANAGE_SPACE_CONTENT",
   MANAGE_SPACE_MEMBER = "MANAGE_SPACE_MEMBER",
   MANAGE_SPACE_SETTING = "MANAGE_SPACE_SETTING",
-  USE_AI = "USE_AI",
   VIEW_SPACE_CONTENT = "VIEW_SPACE_CONTENT",
 }
 

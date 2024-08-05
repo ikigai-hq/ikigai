@@ -1,6 +1,6 @@
 import { t, Trans } from "@lingui/macro";
 import { Button, Select, Text, TextArea, TextField } from "@radix-ui/themes";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useMutation } from "@apollo/client";
 
 import { handleError } from "graphql/ApolloClient";
@@ -14,6 +14,7 @@ import {
 } from "graphql/types";
 import InputNumber from "../base/InputNumber";
 import { GENERATE_QUIZZES } from "graphql/mutation/DocumentMutation";
+import useAIStore from "store/AIStore";
 
 export type QuizGeneratorProps = {
   open: boolean;
@@ -21,17 +22,31 @@ export type QuizGeneratorProps = {
 };
 
 const QuizGenerator = ({ open, onOpenChange }: QuizGeneratorProps) => {
-  const [maxWidth, setMaxWidth] = useState("40vw");
+  const maxAiUsage = useAIStore((state) => state.maxAIUsagePerDay);
+  const usageOfToday = useRef(useAIStore.getState().usageOfToday);
+  const [maxWidth, setMaxWidth] = useState("45vw");
 
+  const isReachedMaxUsage = usageOfToday.current >= maxAiUsage;
   return (
     <Modal
       open={open}
       onOpenChange={onOpenChange}
       content={
-        <QuizGeneratorContent
-          setMaxWidth={setMaxWidth}
-          onClose={() => onOpenChange(false)}
-        />
+        isReachedMaxUsage ? (
+          <div>
+            <Text>
+              <Trans>
+                You've reached maximum usage of Ikigai AI today (max{" "}
+                {maxAiUsage} requests per day).
+              </Trans>
+            </Text>
+          </div>
+        ) : (
+          <QuizGeneratorContent
+            setMaxWidth={setMaxWidth}
+            onClose={() => onOpenChange(false)}
+          />
+        )
       }
       title={t`🪄Generate Quiz by Ikigai AI🪄`}
       description={t`
@@ -53,13 +68,14 @@ enum GenerateStep {
 
 export type QuizGenerateContentProps = {
   onClose: () => void;
-  setMaxWidth: (maxWidth: "40vw" | "80vw") => void;
+  setMaxWidth: (maxWidth: "45vw" | "80vw") => void;
 };
 
 const QuizGeneratorContent = ({
   onClose,
   setMaxWidth,
 }: QuizGenerateContentProps) => {
+  const increaseUsageToday = useAIStore((state) => state.increaseUsageOfToday);
   const [subject, setSubject] = useState("");
   const [context, setContext] = useState("");
   const [quizType, setQuizType] = useState(QuizType.SINGLE_CHOICE);
@@ -103,6 +119,7 @@ const QuizGeneratorContent = ({
       setAlreadyGenerate(true);
       setStep(GenerateStep.PICK);
       setAvailableQuizzes(data.quizGenerateByAi.quizzes);
+      increaseUsageToday(1);
     }
   };
 
@@ -152,9 +169,9 @@ const QuizGeneratorContent = ({
             </Text>
             <TextArea
               placeholder={t`Typing more details`}
-              resize="vertical"
               value={context}
               onChange={(e) => setContext(e.currentTarget.value)}
+              rows={5}
             />
           </div>
           <div style={{ display: "flex" }}>
@@ -177,7 +194,13 @@ const QuizGeneratorContent = ({
               </Select.Root>
             </div>
             <div
-              style={{ flex: 1, display: "flex", gap: 5, alignItems: "center" }}
+              style={{
+                flex: 1,
+                display: "flex",
+                gap: 5,
+                alignItems: "center",
+                justifyContent: "right",
+              }}
             >
               <Text weight={"medium"} size="2">
                 <Trans>Total quiz</Trans>

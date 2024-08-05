@@ -45,3 +45,17 @@ export const GET_SPACE_PERMISSIONS = gql`
     spaceMyPermissions(spaceId: $spaceId)
   }
 `;
+
+export const GET_AI_USAGE = gql`
+  query GetAIUsage {
+    userMe {
+      id
+      maxAiUsage
+      aiSessionsOfToday {
+        id
+        action
+        createdAt
+      }
+    }
+  }
+`;

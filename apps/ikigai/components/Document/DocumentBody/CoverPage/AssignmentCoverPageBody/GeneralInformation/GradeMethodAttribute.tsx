@@ -4,6 +4,7 @@ import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 
 import Modal from "components/base/Modal";
 import { GradeMethod } from "graphql/types";
+import React from "react";
 
 export type TestDurationAttributeProps = {
   gradeMethod: GradeMethod;
@@ -59,6 +60,22 @@ const GradeMethodAttribute = ({
           </Modal>
         )}
       </Flex>
+      {GradeMethod.AUTO === gradeMethod && (
+        <Text color="gray">
+          <Trans>
+            Students will receive the result and the correct answers immediately
+            after completing their submissions.
+          </Trans>
+        </Text>
+      )}
+      {GradeMethod.MANUAL === gradeMethod && (
+        <Text color="gray">
+          <Trans>
+            Students will receive the result and the correct answers after the
+            teacher's feedback.
+          </Trans>
+        </Text>
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 # Ikigai AI system
 
-An efficient AI (LLM Application) that can generate quiz, and feedback by resources.
+An efficient LLM Application that can generate quiz, and feedback by ikigai document and external resources.
 
 ## Start Server
 

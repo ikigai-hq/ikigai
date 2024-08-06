@@ -34,6 +34,9 @@ export const ADD_DOCUMENT_STANDALONE = gql`
         submissions {
           id
           userId
+          finalGrade
+          grade
+          attemptNumber
         }
       }
       submission {

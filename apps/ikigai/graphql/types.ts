@@ -248,6 +248,9 @@ export interface SoftDeleteDocumentVariables {
 export interface AddDocumentStandalone_documentCreate_assignment_submissions {
   id: number;
   userId: number;
+  finalGrade: number | null;
+  grade: number | null;
+  attemptNumber: number;
 }
 
 export interface AddDocumentStandalone_documentCreate_assignment {

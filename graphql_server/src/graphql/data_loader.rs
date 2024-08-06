@@ -499,3 +499,36 @@ impl Loader<FindQuiz> for IkigaiDataLoader {
             .collect())
     }
 }
+
+#[derive(Debug, Clone, Hash, Eq, PartialEq)]
+pub struct FindDocumentTag {
+    pub document_id: Uuid,
+}
+
+impl Loader<FindDocumentTag> for IkigaiDataLoader {
+    type Value = Vec<DocumentTag>;
+    type Error = IkigaiError;
+
+    async fn load(
+        &self,
+        keys: &[FindDocumentTag],
+    ) -> std::result::Result<HashMap<FindDocumentTag, Self::Value>, Self::Error> {
+        let document_ids = keys.iter().map(|key| key.document_id).unique().collect();
+        let mut conn = get_conn_from_actor().await?;
+        let tags = DocumentTag::find_by_document_ids(&mut conn, &document_ids)?;
+
+        let mut res: HashMap<FindDocumentTag, Self::Value> = HashMap::new();
+        for tag in tags {
+            let key = FindDocumentTag {
+                document_id: tag.document_id,
+            };
+            if let Some(inner_tags) = res.get_mut(&key) {
+                inner_tags.push(tag);
+            } else {
+                res.insert(key, vec![tag]);
+            }
+        }
+
+        Ok(res)
+    }
+}

@@ -68,6 +68,14 @@ diesel::table! {
 }
 
 diesel::table! {
+    document_tags (document_id, tag) {
+        document_id -> Uuid,
+        tag -> Varchar,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
     documents (id) {
         id -> Uuid,
         creator_id -> Int4,
@@ -229,6 +237,13 @@ diesel::table! {
 }
 
 diesel::table! {
+    tags (tag) {
+        tag -> Varchar,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
     user_activities (user_id) {
         user_id -> Int4,
         last_document_id -> Nullable<Uuid>,
@@ -256,6 +271,8 @@ diesel::joinable!(assignments -> documents (document_id));
 diesel::joinable!(assignments -> rubrics (grade_by_rubric_id));
 diesel::joinable!(document_assigned_users -> documents (document_id));
 diesel::joinable!(document_assigned_users -> users (assigned_user_id));
+diesel::joinable!(document_tags -> documents (document_id));
+diesel::joinable!(document_tags -> tags (tag));
 diesel::joinable!(documents -> files (cover_photo_id));
 diesel::joinable!(documents -> spaces (space_id));
 diesel::joinable!(notification_receivers -> notifications (notification_id));
@@ -285,6 +302,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     assignments,
     band_scores,
     document_assigned_users,
+    document_tags,
     documents,
     files,
     notification_receivers,
@@ -298,6 +316,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     space_invite_tokens,
     space_members,
     spaces,
+    tags,
     user_activities,
     users,
 );

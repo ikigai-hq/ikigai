@@ -333,4 +333,32 @@ impl DocumentMutation {
 
         Ok(true)
     }
+
+    async fn document_add_tag(&self, ctx: &Context<'_>, tag: DocumentTag) -> Result<DocumentTag> {
+        document_quick_authorize(
+            ctx,
+            tag.document_id,
+            DocumentActionPermission::ManageDocument,
+        )
+        .await?;
+
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let tag = DocumentTag::upsert(&mut conn, tag).format_err()?;
+
+        Ok(tag)
+    }
+
+    async fn document_remove_tag(&self, ctx: &Context<'_>, tag: DocumentTag) -> Result<bool> {
+        document_quick_authorize(
+            ctx,
+            tag.document_id,
+            DocumentActionPermission::ManageDocument,
+        )
+        .await?;
+
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        DocumentTag::delete(&mut conn, tag.document_id, tag.tag).format_err()?;
+
+        Ok(true)
+    }
 }

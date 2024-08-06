@@ -97,6 +97,16 @@ impl Document {
             Ok(vec![])
         }
     }
+
+    async fn tags(&self, ctx: &Context<'_>) -> Result<Vec<DocumentTag>> {
+        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
+        Ok(loader
+            .load_one(FindDocumentTag {
+                document_id: self.id,
+            })
+            .await?
+            .unwrap_or_default())
+    }
 }
 
 #[ComplexObject]

@@ -12,6 +12,7 @@ import {
   FileIcon,
   QuestionMarkCircledIcon,
   ReaderIcon,
+  TableIcon,
 } from "@radix-ui/react-icons";
 
 import useAuthUserStore from "store/AuthStore";
@@ -22,8 +23,11 @@ import ManageSpaceModal from "./ManageSpaceModal";
 import useUIStore, { LeftSideBarOptions } from "store/UIStore";
 import TokenStorage from "storage/TokenStorage";
 import UserStorage from "storage/UserStorage";
+import usePermission from "hook/UsePermission";
+import { SpaceActionPermission } from "graphql/types";
 
 const LeftSide = () => {
+  const allow = usePermission();
   const me = useAuthUserStore((state) => state.currentUser?.userMe);
   const [openProfile, setOpenProfile] = useState(false);
   const leftSidebar = useUIStore((state) => state.config.leftSidebar);
@@ -44,13 +48,21 @@ const LeftSide = () => {
     window.open("https://ikigai.li", "_blank");
   };
 
-  const onClickContent = (event) => {
-    event.stopPropagation();
+  const onClickContent = () => {
     setUiConfig({
       leftSidebar:
         leftSidebar === LeftSideBarOptions.Content
           ? LeftSideBarOptions.None
           : LeftSideBarOptions.Content,
+    });
+  };
+
+  const onClickGradebook = () => {
+    setUiConfig({
+      leftSidebar:
+        leftSidebar === LeftSideBarOptions.Gradebook
+          ? LeftSideBarOptions.None
+          : LeftSideBarOptions.Gradebook,
     });
   };
 
@@ -70,6 +82,18 @@ const LeftSide = () => {
               <FileIcon width="20" height="20" />
             </IkigaiIconButton>
           </MenuItemWrapper>
+          {allow(SpaceActionPermission.MANAGE_SPACE_CONTENT) && (
+            <MenuItemWrapper>
+              <IkigaiIconButton
+                size="2"
+                variant="ghost"
+                isActive={leftSidebar === LeftSideBarOptions.Gradebook}
+                onClick={onClickGradebook}
+              >
+                <TableIcon width="20" height="20" />
+              </IkigaiIconButton>
+            </MenuItemWrapper>
+          )}
         </div>
         <Tooltip content={t`Documentation`}>
           <IconButton
@@ -139,5 +163,5 @@ const Container = styled.div<{ $hide?: boolean }>`
 `;
 
 const MenuItemWrapper = styled.div`
-  margin-top: 10px;
+  margin-top: 15px;
 `;

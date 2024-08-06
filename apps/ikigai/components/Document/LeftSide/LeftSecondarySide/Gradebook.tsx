@@ -1,6 +1,7 @@
 import React from "react";
 import { Trans } from "@lingui/macro";
-import { Heading, Separator, Table } from "@radix-ui/themes";
+import { Button, Heading, Separator, Table, Text } from "@radix-ui/themes";
+import { CSVLink } from "react-csv";
 
 import useDocumentStore, { ISpaceDocument } from "store/DocumentStore";
 import { DocumentType, Role } from "graphql/types";
@@ -9,8 +10,10 @@ import {
   LeftSideContentWrapper,
   LeftSideHeaderWrapper,
 } from "./shared";
-import { useGetSpaceMembers } from "store/SpaceMembeStore";
+import { ISpaceMember, useGetSpaceMembers } from "store/SpaceMembeStore";
 import UserBasicInformation from "components/UserBasicInformation";
+import useSpaceStore from "../../../../store/SpaceStore";
+import { formatTimestamp, getNowAsSec } from "../../../../util/Time";
 
 const Gradebook = () => {
   const spaceDocuments = useDocumentStore((state) => state.spaceDocuments);
@@ -29,15 +32,25 @@ const Gradebook = () => {
         </div>
       </LeftSideHeaderWrapper>
       <Separator style={{ width: "100%" }} />
-      <LeftSideContentWrapper>
-        <Table.Root>
+      <LeftSideContentWrapper style={{ padding: 20 }}>
+        <div style={{ display: "flex" }}>
+          <div style={{ flex: 1 }} />
+          <div>
+            <DownloadGradeBookCSV members={members} assignments={sortedDocs} />
+          </div>
+        </div>
+        <Table.Root variant="surface">
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeaderCell>Student</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>Final grade</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>
+                <Trans>Student</Trans>
+              </Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell minWidth="120px">
+                <Trans>Final Grade</Trans>
+              </Table.ColumnHeaderCell>
               {sortedDocs.map((document) => (
                 <Table.ColumnHeaderCell key={document.id}>
-                  {document.title}
+                  <Text weight="medium">{document.title}</Text>
                 </Table.ColumnHeaderCell>
               ))}
             </Table.Row>
@@ -68,6 +81,57 @@ const Gradebook = () => {
         </Table.Root>
       </LeftSideContentWrapper>
     </LeftSideContainer>
+  );
+};
+
+export type DownloadGradebookCSVProps = {
+  assignments: ISpaceDocument[];
+  members: ISpaceMember[];
+};
+
+const DownloadGradeBookCSV = ({
+  assignments,
+  members,
+}: DownloadGradebookCSVProps) => {
+  const spaceName = useSpaceStore((state) => state.space?.name);
+  const today = formatTimestamp(getNowAsSec());
+  const csvData = [
+    [
+      "Student",
+      "Email",
+      "Final Grade",
+      ...assignments.map((assignment) => assignment.title),
+    ],
+  ];
+
+  members.forEach((member) => {
+    const row = [
+      member.user.name,
+      member.user.email,
+      getFinalGradeOfStudent(assignments, member.userId).toFixed(2),
+      ...assignments.map((assignment) => {
+        const latestSubmission = getLatestSubmissionByUserId(
+          assignment,
+          member.userId,
+        );
+        if (latestSubmission) return latestSubmission.finalGrade.toFixed(2);
+
+        return "0";
+      }),
+    ];
+    csvData.push(row);
+  });
+
+  return (
+    <CSVLink
+      data={csvData}
+      target={"_blank"}
+      filename={`Gradebook_${spaceName}_${today}`}
+    >
+      <Button>
+        <Trans>Export to CSV</Trans>
+      </Button>
+    </CSVLink>
   );
 };
 

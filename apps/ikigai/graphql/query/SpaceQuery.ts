@@ -21,6 +21,9 @@ export const GET_SPACE_INFORMATION = gql`
           submissions {
             id
             userId
+            finalGrade
+            grade
+            attemptNumber
           }
         }
         submission {

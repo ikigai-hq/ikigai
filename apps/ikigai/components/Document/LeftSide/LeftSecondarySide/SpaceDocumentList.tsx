@@ -10,6 +10,11 @@ import useDocumentStore from "store/DocumentStore";
 import usePermission from "hook/UsePermission";
 import { DocumentType, SpaceActionPermission } from "graphql/types";
 import CreateContentButton from "components/common/LearningModuleDnd/CreateContentButton";
+import {
+  LeftSideContainer,
+  LeftSideContentWrapper,
+  LeftSideHeaderWrapper,
+} from "./shared";
 
 const SpaceDocumentList = () => {
   const allow = usePermission();
@@ -21,23 +26,8 @@ const SpaceDocumentList = () => {
   const canAddContent = allow(SpaceActionPermission.MANAGE_SPACE_CONTENT);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-        overflowY: "auto",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          height: "50px",
-          paddingLeft: 10,
-          paddingRight: 10,
-        }}
-      >
+    <LeftSideContainer>
+      <LeftSideHeaderWrapper>
         <div style={{ flex: 1, paddingLeft: 5 }}>
           <Heading size="5">
             <Trans>Content</Trans>
@@ -50,9 +40,9 @@ const SpaceDocumentList = () => {
             </Button>
           </CreateContentButton>
         )}
-      </div>
+      </LeftSideHeaderWrapper>
       <Separator style={{ width: "100%" }} />
-      <ListModule>
+      <LeftSideContentWrapper>
         <LearningModuleDnd
           docs={spaceDocuments}
           keyword={""}
@@ -60,18 +50,9 @@ const SpaceDocumentList = () => {
           defaultCollapsed={true}
           parentId={null}
         />
-      </ListModule>
-    </div>
+      </LeftSideContentWrapper>
+    </LeftSideContainer>
   );
 };
 
 export default SpaceDocumentList;
-
-const ListModule = styled.div`
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  flex: 1;
-  padding: 5px;
-`;

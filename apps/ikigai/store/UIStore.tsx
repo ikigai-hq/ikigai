@@ -7,6 +7,7 @@ import { cloneDeep } from "lodash";
 export enum LeftSideBarOptions {
   None = "None",
   Content = "Content",
+  Gradebook = "Gradebook",
 }
 
 export type UIConfig = {

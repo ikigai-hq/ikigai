@@ -39,7 +39,7 @@ def generate_multiple_choice_quizzes(
     prompt = f"""
     {user_context}
     
-    Generate {total_question} multiple choice with 2 correct answers question
+    Generate {total_question} multiple choice with at least 2 correct answers question
     """
 
     if subject != "":

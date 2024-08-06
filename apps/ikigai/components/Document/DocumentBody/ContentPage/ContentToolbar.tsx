@@ -569,7 +569,7 @@ const ContentToolbar = () => {
               aria-label="Generate Quizzes"
               onClick={() => setOpenQuizGenerator(true)}
             >
-              <IconWand size={20} stroke={1.7} />{" "}
+              <IconWand size={20} stroke={1.7} color="blue" />{" "}
               <Trans>Quiz Generator (AI)</Trans>
             </Toolbar.ToolbarButton>
           </Tooltip>

@@ -4,6 +4,7 @@ import { useKeyPress } from "ahooks";
 
 import SpaceDocumentList from "components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList";
 import useUIStore, { LeftSideBarOptions } from "store/UIStore";
+import Gradebook from "./Gradebook";
 
 const LeftSecondarySide = () => {
   const ref = useRef<HTMLDivElement>();
@@ -24,6 +25,7 @@ const LeftSecondarySide = () => {
   return (
     <Container ref={ref} $hide={!expanded}>
       {leftSidebar === LeftSideBarOptions.Content && <SpaceDocumentList />}
+      {leftSidebar === LeftSideBarOptions.Gradebook && <Gradebook />}
     </Container>
   );
 };

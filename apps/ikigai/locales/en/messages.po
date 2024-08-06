@@ -71,7 +71,7 @@ msgstr "Access visibility"
 #~ msgstr "Add content"
 
 #: components/Document/DocumentBody/CoverPage/FolderCoverPageBody.tsx:49
-#: components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList.tsx:49
+#: components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList.tsx:39
 msgid "Add Content"
 msgstr "Add Content"
 
@@ -168,7 +168,7 @@ msgstr "Attempt"
 #~ msgid "attempts"
 #~ msgstr "attempts"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/GradeMethodAttribute.tsx:24
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/GradeMethodAttribute.tsx:25
 msgid "Auto"
 msgstr "Auto"
 
@@ -238,11 +238,11 @@ msgstr "Close"
 msgid "Code"
 msgstr "Code"
 
-#: components/Document/LeftSide/index.tsx:85
+#: components/Document/LeftSide/index.tsx:109
 msgid "Community & Help"
 msgstr "Community & Help"
 
-#: components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList.tsx:43
+#: components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList.tsx:33
 msgid "Content"
 msgstr "Content"
 
@@ -362,7 +362,7 @@ msgstr "Do you want to start new attempt?"
 msgid "Do you want to submit your submission?"
 msgstr "Do you want to submit your submission?"
 
-#: components/Document/LeftSide/index.tsx:74
+#: components/Document/LeftSide/index.tsx:98
 msgid "Documentation"
 msgstr "Documentation"
 
@@ -378,7 +378,7 @@ msgstr "Duplicated!"
 msgid "Edit Page"
 msgstr "Edit Page"
 
-#: components/Document/LeftSide/index.tsx:115
+#: components/Document/LeftSide/index.tsx:139
 msgid "Edit Profile"
 msgstr "Edit Profile"
 
@@ -412,6 +412,10 @@ msgstr "Expire at"
 msgid "Expired"
 msgstr "Expired"
 
+#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:132
+msgid "Export to CSV"
+msgstr "Export to CSV"
+
 #: components/MagicLink/index.tsx:55
 msgid "Failed! Please try again."
 msgstr "Failed! Please try again."
@@ -442,9 +446,9 @@ msgstr "Fill In Blank Quiz"
 msgid "Fill in Blank Setting"
 msgstr "Fill in Blank Setting"
 
-#: components/Document/RightSide/GradingSidebar/index.tsx:56
-#~ msgid "Final Grade"
-#~ msgstr "Final Grade"
+#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:49
+msgid "Final Grade"
+msgstr "Final Grade"
 
 #: components/UserCredential/EditProfileModal.tsx:58
 #: components/UserCredential/EditProfileModal.tsx:66
@@ -488,9 +492,13 @@ msgstr "Grade"
 #~ msgid "Grade Information"
 #~ msgstr "Grade Information"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/GradeMethodAttribute.tsx:34
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/GradeMethodAttribute.tsx:35
 msgid "Grade Method"
 msgstr "Grade Method"
+
+#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:30
+msgid "Gradebook"
+msgstr "Gradebook"
 
 #: components/Document/RightSide/GradingSidebar/index.tsx:41
 #~ msgid "Graded!"
@@ -621,7 +629,7 @@ msgstr "Last name"
 msgid "Left"
 msgstr "Left"
 
-#: components/Document/LeftSide/index.tsx:111
+#: components/Document/LeftSide/index.tsx:135
 msgid "Log out"
 msgstr "Log out"
 
@@ -637,7 +645,7 @@ msgstr "Make a copy"
 msgid "Manage, Switch, or Create Space"
 msgstr "Manage, Switch, or Create Space"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/GradeMethodAttribute.tsx:29
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/GradeMethodAttribute.tsx:30
 msgid "Manual"
 msgstr "Manual"
 
@@ -1044,10 +1052,17 @@ msgstr "Status"
 msgid "Strike through"
 msgstr "Strike through"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:60
-#: components/SpaceSetting/CreateSpaceInvite.tsx:81
-#~ msgid "Student"
-#~ msgstr "Student"
+#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:46
+msgid "Student"
+msgstr "Student"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/GradeMethodAttribute.tsx:73
+msgid "Students will receive the result and the correct answers after the teacher's feedback."
+msgstr "Students will receive the result and the correct answers after the teacher's feedback."
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/GradeMethodAttribute.tsx:65
+msgid "Students will receive the result and the correct answers immediately after completing their submissions."
+msgstr "Students will receive the result and the correct answers immediately after completing their submissions."
 
 #: components/Document/DocumentBody/CoverPage/FolderCoverPageBody.tsx:56
 #~ msgid "Sub Contents"
@@ -1268,7 +1283,7 @@ msgstr "Typing your description"
 msgid "Underline"
 msgstr "Underline"
 
-#: components/Document/LeftSide/index.tsx:31
+#: components/Document/LeftSide/index.tsx:35
 msgid "Unknown"
 msgstr "Unknown"
 

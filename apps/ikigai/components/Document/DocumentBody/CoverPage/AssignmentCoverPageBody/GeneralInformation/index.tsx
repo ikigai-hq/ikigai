@@ -64,6 +64,7 @@ const GeneralInformation = () => {
           onChange={onChangeDescription}
           resize="vertical"
           readOnly={!canEdit}
+          rows={6}
         />
       </Flex>
     </div>

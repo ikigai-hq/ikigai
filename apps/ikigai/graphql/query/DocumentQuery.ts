@@ -15,6 +15,9 @@ export const GET_DOCUMENT = gql`
       documentType
       parentId
       visibility
+      tags {
+        tag
+      }
       assignment {
         id
         maxNumberOfAttempt

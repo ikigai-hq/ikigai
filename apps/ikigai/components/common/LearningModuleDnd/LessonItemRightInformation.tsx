@@ -32,6 +32,11 @@ const LessonItemRightInformation = (props: LessonItemRightInformationProps) => {
   const totalAttempt = props.item?.assignment?.submissions?.length || 0;
   return (
     <div style={{ paddingRight: 10 }}>
+      {props.item.tags.map((tag) => (
+        <Badge key={tag.tag} color="gold">
+          {tag.tag}
+        </Badge>
+      ))}
       {totalAttempt > 0 && (
         <Tooltip content={t`${totalAttempt} attempts`}>
           <Badge color="brown">
@@ -70,6 +75,11 @@ const TeacherLessonItemRightInformation = ({
         paddingRight: 10,
       }}
     >
+      {item.tags.map((tag) => (
+        <Badge key={tag.tag} color="gold">
+          {tag.tag}
+        </Badge>
+      ))}
       <Tooltip content={t`${uniqueSubmissions.size} students do assignments`}>
         <Badge color="brown">
           <Text size="2" color="gray">

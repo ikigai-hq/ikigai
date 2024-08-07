@@ -7,6 +7,7 @@ import {
   GetDocuments_spaceGet_documents,
   GetSubmissionsOfAssignment_assignmentGetSubmissions,
   UpdateAssignmentData,
+  GetDocument_documentGet_tags,
 } from "graphql/types";
 
 export type IDocument = GetDocument_documentGet;
@@ -29,6 +30,7 @@ export type IUpdateActiveDocument = Partial<
     | "visibility"
   >
 >;
+export type ITag = GetDocument_documentGet_tags;
 
 type IDocumentStore = {
   isFolder: boolean;
@@ -48,6 +50,9 @@ type IDocumentStore = {
   // Saving
   isSaving: boolean;
   setIsSaving: (isSaving: boolean) => void;
+  // Tags
+  addActiveDocumentTag: (tag: ITag) => void;
+  removeActiveDocumentTag: (tag: ITag) => void;
 };
 
 const useDocumentStore = create<IDocumentStore>((set, get) => ({
@@ -115,6 +120,38 @@ const useDocumentStore = create<IDocumentStore>((set, get) => ({
   setSubmissions: (submissions) => set({ submissions: cloneDeep(submissions) }),
   isSaving: false,
   setIsSaving: (isSaving) => set({ isSaving }),
+  addActiveDocumentTag: (tag) => {
+    const currentDocument = get().activeDocument;
+    const existingTag = currentDocument.tags.find(
+      (innerTag) => tag.tag == innerTag.tag,
+    );
+    const spaceDocuments = get().spaceDocuments;
+    const existingDocument = spaceDocuments.find(
+      (doc) => doc.id === currentDocument.id,
+    );
+    if (!existingTag) {
+      currentDocument.tags.push(tag);
+      if (existingDocument)
+        existingDocument.tags = cloneDeep(currentDocument.tags);
+      set({ activeDocument: currentDocument, spaceDocuments });
+    }
+  },
+  removeActiveDocumentTag: (tag) => {
+    const currentDocument = get().activeDocument;
+    const index = currentDocument.tags.findIndex(
+      (innerTag) => tag.tag == innerTag.tag,
+    );
+    const spaceDocuments = get().spaceDocuments;
+    const existingDocument = spaceDocuments.find(
+      (doc) => doc.id === currentDocument.id,
+    );
+    if (index > -1) {
+      currentDocument.tags.splice(index, 1);
+      currentDocument.tags = [...currentDocument.tags];
+      existingDocument.tags = cloneDeep(currentDocument.tags);
+      set({ activeDocument: currentDocument, spaceDocuments });
+    }
+  },
 }));
 
 type noop = (...args: any[]) => any;

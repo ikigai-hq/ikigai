@@ -513,7 +513,11 @@ impl Loader<FindDocumentTag> for IkigaiDataLoader {
         &self,
         keys: &[FindDocumentTag],
     ) -> std::result::Result<HashMap<FindDocumentTag, Self::Value>, Self::Error> {
+        if keys.is_empty() {
+            return Ok(HashMap::new());
+        }
         let document_ids = keys.iter().map(|key| key.document_id).unique().collect();
+
         let mut conn = get_conn_from_actor().await?;
         let tags = DocumentTag::find_by_document_ids(&mut conn, &document_ids)?;
 

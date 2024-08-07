@@ -16,6 +16,9 @@ export const GET_SPACE_INFORMATION = gql`
         deletedAt
         iconType
         iconValue
+        tags {
+          tag
+        }
         assignment {
           id
           submissions {
@@ -24,6 +27,7 @@ export const GET_SPACE_INFORMATION = gql`
             finalGrade
             grade
             attemptNumber
+            documentId
           }
         }
         submission {

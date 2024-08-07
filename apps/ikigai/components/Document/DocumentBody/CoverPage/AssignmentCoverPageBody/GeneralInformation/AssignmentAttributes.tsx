@@ -1,4 +1,4 @@
-import { DataList, Select, Text } from "@radix-ui/themes";
+import { DataList, Text } from "@radix-ui/themes";
 import { t, Trans } from "@lingui/macro";
 import React from "react";
 
@@ -14,7 +14,9 @@ import AssigneesAttribute from "./AssigneesAttribute";
 import usePermission from "hook/UsePermission";
 import { useOrderedQuizzes } from "hook/UseQuiz";
 import useDocumentStore from "store/DocumentStore";
-import useUpdateDocument from "../../../../../../hook/UseUpdateDocument";
+import useUpdateDocument from "hook/UseUpdateDocument";
+import VisibilityAttribute from "./VisibilityAttribute";
+import TagAttribute from "./TagAttribute";
 
 export type AssignmentAttributesProps = {
   data: UpdateAssignmentData;
@@ -108,52 +110,10 @@ const AssignmentAttributes = ({
             <Trans>Access visibility</Trans>
           </DataList.Label>
           <DataList.Value>
-            <div style={{ display: "flex", gap: 4, flexDirection: "column" }}>
-              <Select.Root
-                value={visibility}
-                onValueChange={onChangeVisibility}
-                size="1"
-              >
-                <Select.Trigger
-                  variant="soft"
-                  style={{ width: "fit-content" }}
-                />
-                <Select.Content>
-                  <Select.Group>
-                    <Select.Item value={DocumentVisibility.PUBLIC}>
-                      <Trans>Public</Trans>
-                    </Select.Item>
-                    <Select.Item value={DocumentVisibility.PRIVATE}>
-                      <Trans>Private</Trans>
-                    </Select.Item>
-                    <Select.Item value={DocumentVisibility.ASSIGNEES}>
-                      <Trans>Assignees only</Trans>
-                    </Select.Item>
-                  </Select.Group>
-                </Select.Content>
-              </Select.Root>
-              <div>
-                {visibility === DocumentVisibility.PUBLIC && (
-                  <Text color="gray">
-                    <Trans>
-                      All students of this space can access this assignment.
-                    </Trans>
-                  </Text>
-                )}
-                {visibility === DocumentVisibility.PRIVATE && (
-                  <Text color="gray">
-                    <Trans>Only you can access this assignment.</Trans>
-                  </Text>
-                )}
-                {visibility === DocumentVisibility.ASSIGNEES && (
-                  <Text color="gray">
-                    <Trans>
-                      Only assignees (listed below) can access this assignment.
-                    </Trans>
-                  </Text>
-                )}
-              </div>
-            </div>
+            <VisibilityAttribute
+              visibility={visibility}
+              onChangeVisibility={onChangeVisibility}
+            />
           </DataList.Value>
         </DataList.Item>
       )}
@@ -168,6 +128,16 @@ const AssignmentAttributes = ({
             </DataList.Value>
           </DataList.Item>
         )}
+      <DataList.Item>
+        <DataList.Label minWidth="88px">
+          <Trans>Tags</Trans>
+        </DataList.Label>
+        <DataList.Value>
+          <TagAttribute
+            readOnly={!allow(DocumentActionPermission.MANAGE_DOCUMENT)}
+          />
+        </DataList.Value>
+      </DataList.Item>
     </DataList.Root>
   );
 };

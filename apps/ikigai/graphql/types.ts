@@ -245,12 +245,17 @@ export interface SoftDeleteDocumentVariables {
 // GraphQL mutation operation: AddDocumentStandalone
 // ====================================================
 
+export interface AddDocumentStandalone_documentCreate_tags {
+  tag: string;
+}
+
 export interface AddDocumentStandalone_documentCreate_assignment_submissions {
   id: number;
   userId: number;
   finalGrade: number | null;
   grade: number | null;
   attemptNumber: number;
+  documentId: any;
 }
 
 export interface AddDocumentStandalone_documentCreate_assignment {
@@ -272,6 +277,7 @@ export interface AddDocumentStandalone_documentCreate {
   deletedAt: number | null;
   iconType: IconType | null;
   iconValue: string | null;
+  tags: AddDocumentStandalone_documentCreate_tags[];
   assignment: AddDocumentStandalone_documentCreate_assignment | null;
   submission: AddDocumentStandalone_documentCreate_submission | null;
   visibility: DocumentVisibility;
@@ -454,6 +460,44 @@ export interface GenerateQuizzes {
 export interface GenerateQuizzesVariables {
   quizType: QuizType;
   data: GenerateQuizzesRequestData;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: AddDocumentTag
+// ====================================================
+
+export interface AddDocumentTag_documentAddTag {
+  tag: string;
+}
+
+export interface AddDocumentTag {
+  documentAddTag: AddDocumentTag_documentAddTag;
+}
+
+export interface AddDocumentTagVariables {
+  tag: DocumentTagInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: RemoveDocumentTag
+// ====================================================
+
+export interface RemoveDocumentTag {
+  documentRemoveTag: boolean;
+}
+
+export interface RemoveDocumentTagVariables {
+  tag: DocumentTagInput;
 }
 
 /* tslint:disable */
@@ -1274,6 +1318,10 @@ export interface GetAssignmentRubricVariables {
 // GraphQL query operation: GetDocument
 // ====================================================
 
+export interface GetDocument_documentGet_tags {
+  tag: string;
+}
+
 export interface GetDocument_documentGet_assignment {
   id: number;
   maxNumberOfAttempt: number | null;
@@ -1328,6 +1376,7 @@ export interface GetDocument_documentGet {
   documentType: DocumentType;
   parentId: any | null;
   visibility: DocumentVisibility;
+  tags: GetDocument_documentGet_tags[];
   assignment: GetDocument_documentGet_assignment | null;
   submission: GetDocument_documentGet_submission | null;
 }
@@ -1676,12 +1725,17 @@ export interface GetDocumentQuizzesVariables {
 // GraphQL query operation: GetDocuments
 // ====================================================
 
+export interface GetDocuments_spaceGet_documents_tags {
+  tag: string;
+}
+
 export interface GetDocuments_spaceGet_documents_assignment_submissions {
   id: number;
   userId: number;
   finalGrade: number | null;
   grade: number | null;
   attemptNumber: number;
+  documentId: any;
 }
 
 export interface GetDocuments_spaceGet_documents_assignment {
@@ -1703,6 +1757,7 @@ export interface GetDocuments_spaceGet_documents {
   deletedAt: number | null;
   iconType: IconType | null;
   iconValue: string | null;
+  tags: GetDocuments_spaceGet_documents_tags[];
   assignment: GetDocuments_spaceGet_documents_assignment | null;
   submission: GetDocuments_spaceGet_documents_submission | null;
   visibility: DocumentVisibility;
@@ -2278,6 +2333,11 @@ export interface CreateFileData {
   contentType: string;
   contentLength: number;
   public: boolean;
+}
+
+export interface DocumentTagInput {
+  documentId: any;
+  tag: string;
 }
 
 export interface GenerateQuizzesRequestData {

@@ -11,6 +11,7 @@ pub mod schema;
 pub mod space;
 pub mod space_member;
 pub mod submission;
+pub mod tag;
 pub mod user;
 
 pub use ai_history::*;
@@ -25,6 +26,7 @@ pub use rubric::*;
 pub use space::*;
 pub use space_member::*;
 pub use submission::*;
+pub use tag::*;
 pub use user::*;
 
 use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};

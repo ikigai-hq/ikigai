@@ -29,6 +29,9 @@ export const ADD_DOCUMENT_STANDALONE = gql`
       deletedAt
       iconType
       iconValue
+      tags {
+        tag
+      }
       assignment {
         id
         submissions {
@@ -37,6 +40,7 @@ export const ADD_DOCUMENT_STANDALONE = gql`
           finalGrade
           grade
           attemptNumber
+          documentId
         }
       }
       submission {
@@ -123,5 +127,19 @@ export const GENERATE_QUIZZES = gql`
         }
       }
     }
+  }
+`;
+
+export const ADD_DOCUMENT_TAG = gql`
+  mutation AddDocumentTag($tag: DocumentTagInput!) {
+    documentAddTag(tag: $tag) {
+      tag
+    }
+  }
+`;
+
+export const REMOVE_DOCUMENT_TAG = gql`
+  mutation RemoveDocumentTag($tag: DocumentTagInput!) {
+    documentRemoveTag(tag: $tag)
   }
 `;

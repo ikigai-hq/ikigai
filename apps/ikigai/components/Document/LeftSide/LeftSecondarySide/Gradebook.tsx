@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Trans } from "@lingui/macro";
-import { Button, Heading, Separator, Table, Text } from "@radix-ui/themes";
+import {
+  Badge,
+  Button,
+  DropdownMenu,
+  Heading,
+  Link,
+  Separator,
+  Table,
+} from "@radix-ui/themes";
 import { CSVLink } from "react-csv";
+import NextLink from "next/link";
 
-import useDocumentStore, { ISpaceDocument } from "store/DocumentStore";
+import useDocumentStore, { ISpaceDocument, ITag } from "store/DocumentStore";
 import { DocumentType, Role } from "graphql/types";
 import {
   LeftSideContainer,
@@ -12,15 +21,49 @@ import {
 } from "./shared";
 import { ISpaceMember, useGetSpaceMembers } from "store/SpaceMembeStore";
 import UserBasicInformation from "components/UserBasicInformation";
-import useSpaceStore from "../../../../store/SpaceStore";
-import { formatTimestamp, getNowAsSec } from "../../../../util/Time";
+import useSpaceStore from "store/SpaceStore";
+import { formatTimestamp, getNowAsSec } from "util/Time";
+import { formatDocumentRoute } from "config/Routes";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 const Gradebook = () => {
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const spaceDocuments = useDocumentStore((state) => state.spaceDocuments);
   const sortedDocs = flatDocuments(spaceDocuments, null).filter(
     (doc) => doc.documentType === DocumentType.ASSIGNMENT,
   );
   const { members } = useGetSpaceMembers(Role.STUDENT);
+  const tags: ITag[] = [];
+
+  sortedDocs.forEach((doc) => {
+    doc.tags.forEach((tag) => {
+      const existingTag = tags.find((innerTag) => innerTag.tag === tag.tag);
+      if (!existingTag) tags.push(tag);
+    });
+  });
+
+  const onChooseTag = (tag: ITag) => {
+    if (!selectedTags.includes(tag.tag)) {
+      setSelectedTags([...selectedTags, tag.tag]);
+    }
+  };
+
+  const onRemoveTag = (tag: string) => {
+    const index = selectedTags.indexOf(tag);
+    if (index > -1) {
+      selectedTags.splice(index, 1);
+      setSelectedTags([...selectedTags]);
+    }
+  };
+
+  const availableTags = tags.filter((tag) => !selectedTags.includes(tag.tag));
+  const availableDocs = sortedDocs.filter(
+    (sortedDoc) =>
+      selectedTags.length === 0 ||
+      sortedDoc.tags
+        .map((tag) => tag.tag)
+        .some((tag) => selectedTags.includes(tag)),
+  );
 
   return (
     <LeftSideContainer>
@@ -34,9 +77,44 @@ const Gradebook = () => {
       <Separator style={{ width: "100%" }} />
       <LeftSideContentWrapper style={{ padding: 20 }}>
         <div style={{ display: "flex" }}>
-          <div style={{ flex: 1 }} />
+          <div style={{ flex: 1 }}>
+            <div>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger disabled={availableTags.length === 0}>
+                  <Button variant="soft">
+                    Filter by Assignment Tags
+                    <DropdownMenu.TriggerIcon />
+                  </Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content style={{ padding: 5 }}>
+                  {availableTags.map((tag) => (
+                    <DropdownMenu.Item
+                      key={tag.tag}
+                      onClick={() => onChooseTag(tag)}
+                    >
+                      {tag.tag}
+                    </DropdownMenu.Item>
+                  ))}
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
+              <div style={{ display: "flex", gap: 4, marginTop: 5 }}>
+                {selectedTags.map((selectedTag) => (
+                  <Badge color="gold" key={selectedTag}>
+                    {selectedTag}
+                    <Cross2Icon
+                      style={{ cursor: "pointer" }}
+                      onClick={() => onRemoveTag(selectedTag)}
+                    />
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
           <div>
-            <DownloadGradeBookCSV members={members} assignments={sortedDocs} />
+            <DownloadGradeBookCSV
+              members={members}
+              assignments={availableDocs}
+            />
           </div>
         </div>
         <Table.Root variant="surface">
@@ -48,9 +126,13 @@ const Gradebook = () => {
               <Table.ColumnHeaderCell minWidth="120px">
                 <Trans>Final Grade</Trans>
               </Table.ColumnHeaderCell>
-              {sortedDocs.map((document) => (
+              {availableDocs.map((document) => (
                 <Table.ColumnHeaderCell key={document.id}>
-                  <Text weight="medium">{document.title}</Text>
+                  <NextLink href={formatDocumentRoute(document.id)} passHref>
+                    <Link weight="medium" target="_blank">
+                      {document.title}
+                    </Link>
+                  </NextLink>
                 </Table.ColumnHeaderCell>
               ))}
             </Table.Row>
@@ -67,14 +149,38 @@ const Gradebook = () => {
                   />
                 </Table.RowHeaderCell>
                 <Table.RowHeaderCell>
-                  {getFinalGradeOfStudent(sortedDocs, member.userId).toFixed(2)}
+                  {getFinalGradeOfStudent(availableDocs, member.userId).toFixed(
+                    2,
+                  )}
                 </Table.RowHeaderCell>
-                {sortedDocs.map((document) => (
-                  <Table.RowHeaderCell key={document.id}>
-                    {getLatestSubmissionByUserId(document, member.userId)
-                      ?.finalGrade || 0}
-                  </Table.RowHeaderCell>
-                ))}
+                {availableDocs.map((document) => {
+                  const latestSubmission = getLatestSubmissionByUserId(
+                    document,
+                    member.userId,
+                  );
+                  if (latestSubmission) {
+                    return (
+                      <Table.RowHeaderCell key={document.id}>
+                        <NextLink
+                          href={formatDocumentRoute(
+                            latestSubmission.documentId,
+                          )}
+                          passHref
+                        >
+                          <Link target={"_blank"}>
+                            {latestSubmission.finalGrade.toFixed(2)}
+                          </Link>
+                        </NextLink>
+                      </Table.RowHeaderCell>
+                    );
+                  }
+
+                  return (
+                    <Table.RowHeaderCell key={document.id}>
+                      0
+                    </Table.RowHeaderCell>
+                  );
+                })}
               </Table.Row>
             ))}
           </Table.Body>

@@ -21,7 +21,7 @@ msgstr "{0} focus mode"
 msgid "{0} students"
 msgstr "{0} students"
 
-#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:73
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:83
 msgid "{0} students do assignments"
 msgstr "{0} students do assignments"
 
@@ -45,7 +45,7 @@ msgstr "{contentLength}B"
 msgid "{spaceName} Settings"
 msgstr "{spaceName} Settings"
 
-#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:36
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:41
 msgid "{totalAttempt} attempts"
 msgstr "{totalAttempt} attempts"
 
@@ -61,7 +61,7 @@ msgstr "<0>{0}%</0> of grade"
 msgid "🪄Generate Quiz by Ikigai AI🪄"
 msgstr "🪄Generate Quiz by Ikigai AI🪄"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:108
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:110
 msgid "Access visibility"
 msgstr "Access visibility"
 
@@ -102,7 +102,7 @@ msgstr "Add option"
 #~ msgid "Add sub content"
 #~ msgstr "Add sub content"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:138
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/VisibilityAttribute.tsx:41
 msgid "All students of this space can access this assignment."
 msgstr "All students of this space can access this assignment."
 
@@ -125,7 +125,7 @@ msgid "Are you sure? This rubric will no longer be accessible."
 msgstr "Are you sure? This rubric will no longer be accessible."
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:128
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:164
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:124
 msgid "Assign"
 msgstr "Assign"
 
@@ -149,8 +149,8 @@ msgstr "Assigned!"
 #~ msgid "Assignees"
 #~ msgstr "Assignees"
 
-#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:98
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:130
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:108
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/VisibilityAttribute.tsx:33
 msgid "Assignees only"
 msgstr "Assignees only"
 
@@ -412,7 +412,7 @@ msgstr "Expire at"
 msgid "Expired"
 msgstr "Expired"
 
-#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:132
+#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:236
 msgid "Export to CSV"
 msgstr "Export to CSV"
 
@@ -446,7 +446,7 @@ msgstr "Fill In Blank Quiz"
 msgid "Fill in Blank Setting"
 msgstr "Fill in Blank Setting"
 
-#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:49
+#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:127
 msgid "Final Grade"
 msgstr "Final Grade"
 
@@ -496,7 +496,7 @@ msgstr "Grade"
 msgid "Grade Method"
 msgstr "Grade Method"
 
-#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:30
+#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:73
 msgid "Gradebook"
 msgstr "Gradebook"
 
@@ -742,7 +742,7 @@ msgstr "No grade"
 #~ msgid "No Grade"
 #~ msgstr "No Grade"
 
-#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:47
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:52
 msgid "Not attempted"
 msgstr "Not attempted"
 
@@ -762,7 +762,7 @@ msgstr "Not supported quiz type"
 msgid "Number list"
 msgstr "Number list"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:150
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/VisibilityAttribute.tsx:53
 msgid "Only assignees (listed below) can access this assignment."
 msgstr "Only assignees (listed below) can access this assignment."
 
@@ -770,7 +770,7 @@ msgstr "Only assignees (listed below) can access this assignment."
 #~ msgid "Only you and other teachers can access this assignment."
 #~ msgstr "Only you and other teachers can access this assignment."
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:145
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/VisibilityAttribute.tsx:48
 msgid "Only you can access this assignment."
 msgstr "Only you can access this assignment."
 
@@ -817,8 +817,8 @@ msgstr "Powered by ikigai"
 msgid "Privacy Policy"
 msgstr "Privacy Policy"
 
-#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:92
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:127
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:102
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/VisibilityAttribute.tsx:30
 msgid "Private"
 msgstr "Private"
 
@@ -830,8 +830,8 @@ msgstr "Private"
 msgid "Profile"
 msgstr "Profile"
 
-#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:104
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:124
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:114
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/VisibilityAttribute.tsx:27
 msgid "Public"
 msgstr "Public"
 
@@ -839,7 +839,7 @@ msgstr "Public"
 msgid "Question"
 msgstr "Question"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:101
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:103
 msgid "quiz"
 msgstr "quiz"
 
@@ -847,11 +847,11 @@ msgstr "quiz"
 msgid "Quiz Generator (AI)"
 msgstr "Quiz Generator (AI)"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:101
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:103
 msgid "quizzes"
 msgstr "quizzes"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:97
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:99
 msgid "Quizzes"
 msgstr "Quizzes"
 
@@ -1052,7 +1052,7 @@ msgstr "Status"
 msgid "Strike through"
 msgstr "Strike through"
 
-#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:46
+#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:124
 msgid "Student"
 msgstr "Student"
 
@@ -1111,6 +1111,10 @@ msgstr "Successfully!"
 #: components/EmptySpace.tsx:145
 #~ msgid "Switch"
 #~ msgstr "Switch"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:133
+msgid "Tags"
+msgstr "Tags"
 
 #: components/SpaceSetting/CreateSpaceInvite.tsx:84
 #~ msgid "Teacher"
@@ -1274,6 +1278,10 @@ msgstr "Typing level"
 #: components/QuizGenerator/index.tsx:171
 msgid "Typing more details"
 msgstr "Typing more details"
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TagAttribute.tsx:58
+msgid "Typing new tag"
+msgstr "Typing new tag"
 
 #: components/Rubric/index.tsx:395
 msgid "Typing your description"

@@ -57,6 +57,7 @@ const DocumentBody = ({ loading }: DocumentBodyProps) => {
             height: "100%",
             width: `calc(100vw - ${bodyReduceWidth}px)`,
             flex: 1,
+            overflowY: !activePageId ? "auto" : "unset",
           }}
         >
           {loading && <Loading />}

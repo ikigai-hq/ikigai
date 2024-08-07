@@ -1,30 +1,9 @@
 use diesel::result::Error;
-use diesel::{Connection, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
+use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use uuid::Uuid;
 
-use super::schema::{document_tags, tags};
+use super::schema::document_tags;
 use crate::util::get_now_as_secs;
-
-#[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
-#[graphql(input_name = "TagInput")]
-#[diesel(table_name = tags)]
-pub struct Tag {
-    pub tag: String,
-    #[graphql(skip_input)]
-    pub created_at: i64,
-}
-
-impl Tag {
-    pub fn upsert(conn: &mut PgConnection, mut tag: Self) -> Result<Self, Error> {
-        tag.created_at = get_now_as_secs();
-        diesel::insert_into(tags::table)
-            .values(&tag)
-            .on_conflict_do_nothing()
-            .execute(conn)?;
-
-        Ok(tag)
-    }
-}
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
 #[graphql(input_name = "DocumentTagInput")]
@@ -38,21 +17,13 @@ pub struct DocumentTag {
 
 impl DocumentTag {
     pub fn upsert(conn: &mut PgConnection, mut item: Self) -> Result<Self, Error> {
-        let tag = Tag {
-            tag: item.tag.clone(),
-            created_at: get_now_as_secs(),
-        };
         item.created_at = get_now_as_secs();
+        diesel::insert_into(document_tags::table)
+            .values(&item)
+            .on_conflict_do_nothing()
+            .execute(conn)?;
 
-        conn.transaction::<_, Error, _>(|conn| {
-            Tag::upsert(conn, tag)?;
-            diesel::insert_into(document_tags::table)
-                .values(&item)
-                .on_conflict_do_nothing()
-                .execute(conn)?;
-
-            Ok(item)
-        })
+        Ok(item)
     }
 
     pub fn find_by_document_ids(

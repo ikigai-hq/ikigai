@@ -237,13 +237,6 @@ diesel::table! {
 }
 
 diesel::table! {
-    tags (tag) {
-        tag -> Varchar,
-        created_at -> Int8,
-    }
-}
-
-diesel::table! {
     user_activities (user_id) {
         user_id -> Int4,
         last_document_id -> Nullable<Uuid>,
@@ -272,7 +265,6 @@ diesel::joinable!(assignments -> rubrics (grade_by_rubric_id));
 diesel::joinable!(document_assigned_users -> documents (document_id));
 diesel::joinable!(document_assigned_users -> users (assigned_user_id));
 diesel::joinable!(document_tags -> documents (document_id));
-diesel::joinable!(document_tags -> tags (tag));
 diesel::joinable!(documents -> files (cover_photo_id));
 diesel::joinable!(documents -> spaces (space_id));
 diesel::joinable!(notification_receivers -> notifications (notification_id));
@@ -316,7 +308,6 @@ diesel::allow_tables_to_appear_in_same_query!(
     space_invite_tokens,
     space_members,
     spaces,
-    tags,
     user_activities,
     users,
 );

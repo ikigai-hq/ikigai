@@ -255,6 +255,7 @@ export interface AddDocumentStandalone_documentCreate_assignment_submissions {
   finalGrade: number | null;
   grade: number | null;
   attemptNumber: number;
+  documentId: any;
 }
 
 export interface AddDocumentStandalone_documentCreate_assignment {
@@ -1734,6 +1735,7 @@ export interface GetDocuments_spaceGet_documents_assignment_submissions {
   finalGrade: number | null;
   grade: number | null;
   attemptNumber: number;
+  documentId: any;
 }
 
 export interface GetDocuments_spaceGet_documents_assignment {

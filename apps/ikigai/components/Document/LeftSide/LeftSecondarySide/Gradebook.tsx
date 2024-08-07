@@ -1,7 +1,8 @@
 import React from "react";
 import { Trans } from "@lingui/macro";
-import { Button, Heading, Separator, Table, Text } from "@radix-ui/themes";
+import { Button, Heading, Link, Separator, Table } from "@radix-ui/themes";
 import { CSVLink } from "react-csv";
+import NextLink from "next/link";
 
 import useDocumentStore, { ISpaceDocument } from "store/DocumentStore";
 import { DocumentType, Role } from "graphql/types";
@@ -12,8 +13,9 @@ import {
 } from "./shared";
 import { ISpaceMember, useGetSpaceMembers } from "store/SpaceMembeStore";
 import UserBasicInformation from "components/UserBasicInformation";
-import useSpaceStore from "../../../../store/SpaceStore";
-import { formatTimestamp, getNowAsSec } from "../../../../util/Time";
+import useSpaceStore from "store/SpaceStore";
+import { formatTimestamp, getNowAsSec } from "util/Time";
+import { formatDocumentRoute } from "config/Routes";
 
 const Gradebook = () => {
   const spaceDocuments = useDocumentStore((state) => state.spaceDocuments);
@@ -50,7 +52,11 @@ const Gradebook = () => {
               </Table.ColumnHeaderCell>
               {sortedDocs.map((document) => (
                 <Table.ColumnHeaderCell key={document.id}>
-                  <Text weight="medium">{document.title}</Text>
+                  <NextLink href={formatDocumentRoute(document.id)} passHref>
+                    <Link weight="medium" target="_blank">
+                      {document.title}
+                    </Link>
+                  </NextLink>
                 </Table.ColumnHeaderCell>
               ))}
             </Table.Row>
@@ -69,12 +75,34 @@ const Gradebook = () => {
                 <Table.RowHeaderCell>
                   {getFinalGradeOfStudent(sortedDocs, member.userId).toFixed(2)}
                 </Table.RowHeaderCell>
-                {sortedDocs.map((document) => (
-                  <Table.RowHeaderCell key={document.id}>
-                    {getLatestSubmissionByUserId(document, member.userId)
-                      ?.finalGrade || 0}
-                  </Table.RowHeaderCell>
-                ))}
+                {sortedDocs.map((document) => {
+                  const latestSubmission = getLatestSubmissionByUserId(
+                    document,
+                    member.userId,
+                  );
+                  if (latestSubmission) {
+                    return (
+                      <Table.RowHeaderCell key={document.id}>
+                        <NextLink
+                          href={formatDocumentRoute(
+                            latestSubmission.documentId,
+                          )}
+                          passHref
+                        >
+                          <Link target={"_blank"}>
+                            {latestSubmission.finalGrade.toFixed(2)}
+                          </Link>
+                        </NextLink>
+                      </Table.RowHeaderCell>
+                    );
+                  }
+
+                  return (
+                    <Table.RowHeaderCell key={document.id}>
+                      0
+                    </Table.RowHeaderCell>
+                  );
+                })}
               </Table.Row>
             ))}
           </Table.Body>

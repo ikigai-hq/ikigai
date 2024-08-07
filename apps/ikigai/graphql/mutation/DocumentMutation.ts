@@ -40,6 +40,7 @@ export const ADD_DOCUMENT_STANDALONE = gql`
           finalGrade
           grade
           attemptNumber
+          documentId
         }
       }
       submission {

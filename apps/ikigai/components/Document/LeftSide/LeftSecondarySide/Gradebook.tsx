@@ -12,7 +12,11 @@ import {
 import { CSVLink } from "react-csv";
 import NextLink from "next/link";
 
-import useDocumentStore, { ISpaceDocument, ITag } from "store/DocumentStore";
+import useDocumentStore, {
+  ISpaceDocument,
+  ITag,
+  useAvailableTags,
+} from "store/DocumentStore";
 import { DocumentType, Role } from "graphql/types";
 import {
   LeftSideContainer,
@@ -33,14 +37,6 @@ const Gradebook = () => {
     (doc) => doc.documentType === DocumentType.ASSIGNMENT,
   );
   const { members } = useGetSpaceMembers(Role.STUDENT);
-  const tags: ITag[] = [];
-
-  sortedDocs.forEach((doc) => {
-    doc.tags.forEach((tag) => {
-      const existingTag = tags.find((innerTag) => innerTag.tag === tag.tag);
-      if (!existingTag) tags.push(tag);
-    });
-  });
 
   const onChooseTag = (tag: ITag) => {
     if (!selectedTags.includes(tag.tag)) {
@@ -56,7 +52,7 @@ const Gradebook = () => {
     }
   };
 
-  const availableTags = tags.filter((tag) => !selectedTags.includes(tag.tag));
+  const availableTags = useAvailableTags();
   const availableDocs = sortedDocs.filter(
     (sortedDoc) =>
       selectedTags.length === 0 ||

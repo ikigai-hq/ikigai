@@ -1,11 +1,11 @@
-import { IconButton, TextField } from "@radix-ui/themes";
+import { Button, DropdownMenu, IconButton, TextField } from "@radix-ui/themes";
 import { PlusIcon } from "@radix-ui/react-icons";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { t } from "@lingui/macro";
+import { Trans, t } from "@lingui/macro";
 
 import { ADD_DOCUMENT_TAG } from "graphql/mutation/DocumentMutation";
-import useDocumentStore from "store/DocumentStore";
+import useDocumentStore, { useAvailableTags } from "store/DocumentStore";
 import { AddDocumentTag } from "graphql/types";
 import DocumentTag from "components/DocumentTag";
 
@@ -15,6 +15,7 @@ export type TagAttributeProps = {
 
 const TagAttribute = ({ readOnly }: TagAttributeProps) => {
   const documentId = useDocumentStore((state) => state.activeDocumentId);
+  const availableTags = useAvailableTags();
   const activeDocumentTags = useDocumentStore(
     (state) => state.activeDocument?.tags,
   );
@@ -25,6 +26,10 @@ const TagAttribute = ({ readOnly }: TagAttributeProps) => {
   const [newTag, setNewTag] = useState("");
 
   const onAddNewTag = async () => {
+    return onAddCurrentTag(newTag);
+  };
+
+  const onAddCurrentTag = async (newTag: string) => {
     const existingTag = activeDocumentTags.find(
       (innerTag) => innerTag.tag === newTag,
     );
@@ -52,23 +57,56 @@ const TagAttribute = ({ readOnly }: TagAttributeProps) => {
       ))}
       {!readOnly && (
         <div style={{ display: "flex", alignItems: "center" }}>
-          <TextField.Root
-            size="1"
-            variant="soft"
-            placeholder={t`Typing new tag`}
-            value={newTag}
-            onChange={(e) => setNewTag(e.currentTarget.value)}
-            style={{ width: 100 }}
-          />
-          <IconButton
-            variant="soft"
-            size="1"
-            style={{ marginLeft: 5 }}
-            onClick={onAddNewTag}
-            loading={loading}
-          >
-            <PlusIcon />
-          </IconButton>
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
+              <Button variant="soft" size="1">
+                <Trans>Add Tag</Trans>
+                <DropdownMenu.TriggerIcon />
+              </Button>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content size="1">
+              <DropdownMenu.Item style={{ background: "white" }}>
+                <div style={{ display: "flex", marginTop: 10 }}>
+                  <TextField.Root
+                    size="1"
+                    variant="soft"
+                    placeholder={t`Typing new tag`}
+                    value={newTag}
+                    onChange={(e) => setNewTag(e.currentTarget.value)}
+                    style={{ width: 150 }}
+                    onClick={(e) => e.stopPropagation()}
+                    onFocus={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => e.stopPropagation()}
+                  />
+                  <IconButton
+                    variant="soft"
+                    size="1"
+                    style={{ marginLeft: 5 }}
+                    onClick={onAddNewTag}
+                    loading={loading}
+                  >
+                    <PlusIcon />
+                  </IconButton>
+                </div>
+              </DropdownMenu.Item>
+              <DropdownMenu.Separator />
+              {availableTags
+                .filter(
+                  (availableTag) =>
+                    !activeDocumentTags.some(
+                      (tag) => tag.tag === availableTag.tag,
+                    ),
+                )
+                .map((availableTag) => (
+                  <DropdownMenu.Item
+                    key={availableTag.tag}
+                    onClick={() => onAddCurrentTag(availableTag.tag)}
+                  >
+                    {availableTag.tag}
+                  </DropdownMenu.Item>
+                ))}
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
         </div>
       )}
     </div>

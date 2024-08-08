@@ -102,6 +102,10 @@ msgstr "Add option"
 #~ msgid "Add sub content"
 #~ msgstr "Add sub content"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TagAttribute.tsx:63
+msgid "Add Tag"
+msgstr "Add Tag"
+
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/VisibilityAttribute.tsx:41
 msgid "All students of this space can access this assignment."
 msgstr "All students of this space can access this assignment."
@@ -412,7 +416,7 @@ msgstr "Expire at"
 msgid "Expired"
 msgstr "Expired"
 
-#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:236
+#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:238
 msgid "Export to CSV"
 msgstr "Export to CSV"
 
@@ -1279,7 +1283,7 @@ msgstr "Typing level"
 msgid "Typing more details"
 msgstr "Typing more details"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TagAttribute.tsx:58
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TagAttribute.tsx:73
 msgid "Typing new tag"
 msgstr "Typing new tag"
 

@@ -185,4 +185,17 @@ const getAllByParentIds = (
   return result;
 };
 
+export const useAvailableTags = () => {
+  const spaceDocuments = useDocumentStore((state) => state.spaceDocuments);
+  const tags: ITag[] = [];
+  spaceDocuments
+    .flatMap((doc) => doc.tags)
+    .forEach((tag) => {
+      const existingTag = tags.find((innerTag) => innerTag.tag === tag.tag);
+      if (!existingTag) tags.push(tag);
+    });
+
+  return tags;
+};
+
 export default useDocumentStore;

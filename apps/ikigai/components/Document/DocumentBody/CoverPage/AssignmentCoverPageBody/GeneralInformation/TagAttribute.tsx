@@ -90,21 +90,24 @@ const TagAttribute = ({ readOnly }: TagAttributeProps) => {
                 </div>
               </DropdownMenu.Item>
               <DropdownMenu.Separator />
-              {availableTags
-                .filter(
-                  (availableTag) =>
-                    !activeDocumentTags.some(
-                      (tag) => tag.tag === availableTag.tag,
-                    ),
-                )
-                .map((availableTag) => (
-                  <DropdownMenu.Item
-                    key={availableTag.tag}
-                    onClick={() => onAddCurrentTag(availableTag.tag)}
-                  >
-                    {availableTag.tag}
-                  </DropdownMenu.Item>
-                ))}
+              <DropdownMenu.Root>
+                <DropdownMenu.Label>Your Tags</DropdownMenu.Label>
+                {availableTags
+                  .filter(
+                    (availableTag) =>
+                      !activeDocumentTags.some(
+                        (tag) => tag.tag === availableTag.tag,
+                      ),
+                  )
+                  .map((availableTag) => (
+                    <DropdownMenu.Item
+                      key={availableTag.tag}
+                      onClick={() => onAddCurrentTag(availableTag.tag)}
+                    >
+                      {availableTag.tag}
+                    </DropdownMenu.Item>
+                  ))}
+              </DropdownMenu.Root>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
         </div>

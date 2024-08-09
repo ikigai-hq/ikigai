@@ -83,14 +83,16 @@ const Gradebook = () => {
                   </Button>
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content style={{ padding: 5 }}>
-                  {availableTags.map((tag) => (
-                    <DropdownMenu.Item
-                      key={tag.tag}
-                      onClick={() => onChooseTag(tag)}
-                    >
-                      {tag.tag}
-                    </DropdownMenu.Item>
-                  ))}
+                  {availableTags
+                    .filter((tag) => !selectedTags.includes(tag.tag))
+                    .map((tag) => (
+                      <DropdownMenu.Item
+                        key={tag.tag}
+                        onClick={() => onChooseTag(tag)}
+                      >
+                        {tag.tag}
+                      </DropdownMenu.Item>
+                    ))}
                 </DropdownMenu.Content>
               </DropdownMenu.Root>
               <div style={{ display: "flex", gap: 4, marginTop: 5 }}>

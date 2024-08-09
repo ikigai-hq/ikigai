@@ -434,23 +434,43 @@ export interface RemoveDocumentAssigneeVariables {
 // GraphQL mutation operation: GenerateQuizzes
 // ====================================================
 
-export interface GenerateQuizzes_quizGenerateByAi_quizzes_completionFullData {
-  questionData: any;
-  answerData: any;
-}
-
-export interface GenerateQuizzes_quizGenerateByAi_quizzes {
-  quizType: QuizType;
+export interface GenerateQuizzes_quizGenerateByAi_singleChoiceData_quizzes {
   question: string;
   answers: string[];
-  correctAnswer: string | null;
-  correctAnswers: string[] | null;
-  completionFullData: GenerateQuizzes_quizGenerateByAi_quizzes_completionFullData | null;
+  correctAnswer: string;
+}
+
+export interface GenerateQuizzes_quizGenerateByAi_singleChoiceData {
+  subject: string;
+  quizzes: GenerateQuizzes_quizGenerateByAi_singleChoiceData_quizzes[];
+}
+
+export interface GenerateQuizzes_quizGenerateByAi_multipleChoiceData_quizzes {
+  question: string;
+  answers: string[];
+  correctAnswers: string[];
+}
+
+export interface GenerateQuizzes_quizGenerateByAi_multipleChoiceData {
+  subject: string;
+  quizzes: GenerateQuizzes_quizGenerateByAi_multipleChoiceData_quizzes[];
+}
+
+export interface GenerateQuizzes_quizGenerateByAi_fillInBlankData_quizzes {
+  position: number;
+  correctAnswer: string;
+}
+
+export interface GenerateQuizzes_quizGenerateByAi_fillInBlankData {
+  content: string;
+  quizzes: GenerateQuizzes_quizGenerateByAi_fillInBlankData_quizzes[];
 }
 
 export interface GenerateQuizzes_quizGenerateByAi {
-  subject: string;
-  quizzes: GenerateQuizzes_quizGenerateByAi_quizzes[];
+  quizType: QuizType;
+  singleChoiceData: GenerateQuizzes_quizGenerateByAi_singleChoiceData | null;
+  multipleChoiceData: GenerateQuizzes_quizGenerateByAi_multipleChoiceData | null;
+  fillInBlankData: GenerateQuizzes_quizGenerateByAi_fillInBlankData | null;
 }
 
 export interface GenerateQuizzes {
@@ -899,6 +919,156 @@ export interface AnswerQuiz {
 
 export interface AnswerQuizVariables {
   data: QuizUserAnswerInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: ConvertAIQuiz
+// ====================================================
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_writingQuestion {
+  content: any;
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_singleChoiceQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_singleChoiceQuestion {
+  question: string;
+  options: ConvertAIQuiz_quizConvertAiQuiz_singleChoiceQuestion_options[];
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_singleChoiceExpectedAnswer {
+  expectedChoices: any[];
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_multipleChoiceQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_multipleChoiceQuestion {
+  question: string;
+  options: ConvertAIQuiz_quizConvertAiQuiz_multipleChoiceQuestion_options[];
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_multipleChoiceExpectedAnswer {
+  expectedChoices: any[];
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_selectOptionQuestion_options {
+  id: any;
+  content: string;
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_selectOptionQuestion {
+  options: ConvertAIQuiz_quizConvertAiQuiz_selectOptionQuestion_options[];
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_selectOptionExpectedAnswer {
+  expectedChoices: any[];
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_fillInBlankQuestion {
+  content: string | null;
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_fillInBlankExpectedAnswer_expectedAnswers {
+  id: any;
+  content: string;
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_fillInBlankExpectedAnswer {
+  expectedAnswers: ConvertAIQuiz_quizConvertAiQuiz_fillInBlankExpectedAnswer_expectedAnswers[];
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_myAnswer_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_myAnswer_multipleChoiceAnswer {
+  choices: any[];
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_myAnswer_selectOptionAnswer {
+  choice: any;
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_myAnswer_fillInBlankAnswer {
+  answer: string;
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_myAnswer {
+  quizId: any;
+  userId: number;
+  score: number | null;
+  answerData: any;
+  singleChoiceAnswer: ConvertAIQuiz_quizConvertAiQuiz_myAnswer_singleChoiceAnswer | null;
+  multipleChoiceAnswer: ConvertAIQuiz_quizConvertAiQuiz_myAnswer_multipleChoiceAnswer | null;
+  selectOptionAnswer: ConvertAIQuiz_quizConvertAiQuiz_myAnswer_selectOptionAnswer | null;
+  fillInBlankAnswer: ConvertAIQuiz_quizConvertAiQuiz_myAnswer_fillInBlankAnswer | null;
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_answers_singleChoiceAnswer {
+  choices: any[];
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_answers_multipleChoiceAnswer {
+  choices: any[];
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_answers_selectOptionAnswer {
+  choice: any;
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_answers_fillInBlankAnswer {
+  answer: string;
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz_answers {
+  quizId: any;
+  userId: number;
+  score: number | null;
+  answerData: any;
+  singleChoiceAnswer: ConvertAIQuiz_quizConvertAiQuiz_answers_singleChoiceAnswer | null;
+  multipleChoiceAnswer: ConvertAIQuiz_quizConvertAiQuiz_answers_multipleChoiceAnswer | null;
+  selectOptionAnswer: ConvertAIQuiz_quizConvertAiQuiz_answers_selectOptionAnswer | null;
+  fillInBlankAnswer: ConvertAIQuiz_quizConvertAiQuiz_answers_fillInBlankAnswer | null;
+}
+
+export interface ConvertAIQuiz_quizConvertAiQuiz {
+  id: any;
+  pageContentId: any;
+  creatorId: number;
+  quizType: QuizType;
+  questionData: any | null;
+  answerData: any | null;
+  writingQuestion: ConvertAIQuiz_quizConvertAiQuiz_writingQuestion | null;
+  singleChoiceQuestion: ConvertAIQuiz_quizConvertAiQuiz_singleChoiceQuestion | null;
+  singleChoiceExpectedAnswer: ConvertAIQuiz_quizConvertAiQuiz_singleChoiceExpectedAnswer | null;
+  multipleChoiceQuestion: ConvertAIQuiz_quizConvertAiQuiz_multipleChoiceQuestion | null;
+  multipleChoiceExpectedAnswer: ConvertAIQuiz_quizConvertAiQuiz_multipleChoiceExpectedAnswer | null;
+  selectOptionQuestion: ConvertAIQuiz_quizConvertAiQuiz_selectOptionQuestion | null;
+  selectOptionExpectedAnswer: ConvertAIQuiz_quizConvertAiQuiz_selectOptionExpectedAnswer | null;
+  fillInBlankQuestion: ConvertAIQuiz_quizConvertAiQuiz_fillInBlankQuestion | null;
+  fillInBlankExpectedAnswer: ConvertAIQuiz_quizConvertAiQuiz_fillInBlankExpectedAnswer | null;
+  myAnswer: ConvertAIQuiz_quizConvertAiQuiz_myAnswer | null;
+  answers: ConvertAIQuiz_quizConvertAiQuiz_answers[];
+}
+
+export interface ConvertAIQuiz {
+  quizConvertAiQuiz: ConvertAIQuiz_quizConvertAiQuiz[];
+}
+
+export interface ConvertAIQuizVariables {
+  pageContentId: any;
+  data: AIGenerateQuizInput;
 }
 
 /* tslint:disable */
@@ -2326,6 +2496,28 @@ export enum SpaceActionPermission {
 
 export enum SubmissionEventType {
   SUBMIT_COMPLETED = "SUBMIT_COMPLETED",
+}
+
+export interface AIFillInBlankQuizInput {
+  correctAnswer: string;
+}
+
+export interface AIGenerateQuizInput {
+  singleChoiceData: AISingleChoiceQuizInput[];
+  multipleChoiceData: AISMultipleChoiceQuizInput[];
+  fillInBlankData: AIFillInBlankQuizInput[];
+}
+
+export interface AISMultipleChoiceQuizInput {
+  question: string;
+  answers: string[];
+  correctAnswers: string[];
+}
+
+export interface AISingleChoiceQuizInput {
+  question: string;
+  answers: string[];
+  correctAnswer: string;
 }
 
 export interface CreateFileData {

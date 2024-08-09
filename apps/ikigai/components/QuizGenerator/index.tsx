@@ -7,14 +7,11 @@ import { handleError } from "graphql/ApolloClient";
 import { ReviewGeneratedQuizzes } from "./ReviewGeneratedQuizzes";
 import { SelectedGeneratedQuizzes } from "./SelectedGeneratedQuizzes";
 import Modal from "../base/Modal";
-import {
-  GenerateQuizzes,
-  QuizType,
-  GenerateQuizzes_quizGenerateByAi_quizzes as IGeneratedQuiz,
-} from "graphql/types";
+import { GenerateQuizzes, QuizType } from "graphql/types";
 import InputNumber from "../base/InputNumber";
 import { GENERATE_QUIZZES } from "graphql/mutation/DocumentMutation";
 import useAIStore from "store/AIStore";
+import { AIGeneratedQuiz } from "store/QuizStore";
 
 export type QuizGeneratorProps = {
   open: boolean;
@@ -81,10 +78,10 @@ const QuizGeneratorContent = ({
   const [quizType, setQuizType] = useState(QuizType.SINGLE_CHOICE);
   const [totalQuiz, setTotalQuiz] = useState(5);
   const [step, setStep] = useState(GenerateStep.GENERATE);
-  const [availableQuizzes, setAvailableQuizzes] = useState<IGeneratedQuiz[]>(
+  const [availableQuizzes, setAvailableQuizzes] = useState<AIGeneratedQuiz[]>(
     [],
   );
-  const [selectedQuizzes, setSelectedQuizzes] = useState<IGeneratedQuiz[]>([]);
+  const [selectedQuizzes, setSelectedQuizzes] = useState<AIGeneratedQuiz[]>([]);
   const [alreadyGenerate, setAlreadyGenerate] = useState(false);
 
   const [generateQuizzes, { loading }] = useMutation<GenerateQuizzes>(
@@ -96,7 +93,11 @@ const QuizGeneratorContent = ({
 
   const onGenerate = async () => {
     const previousQuizzes = [...availableQuizzes, ...selectedQuizzes]
-      .map((quiz) => quiz.question)
+      .map((quiz) => {
+        if ("question" in quiz && quiz.question) return quiz.question;
+        if ("content" in quiz && quiz.content) return quiz.content;
+        return "";
+      })
       .join(", ");
 
     let userContext = context;
@@ -118,7 +119,23 @@ const QuizGeneratorContent = ({
       setMaxWidth("80vw");
       setAlreadyGenerate(true);
       setStep(GenerateStep.PICK);
-      setAvailableQuizzes(data.quizGenerateByAi.quizzes);
+      const quizzes = [];
+      if (data.quizGenerateByAi.fillInBlankData)
+        quizzes.push({
+          ...data.quizGenerateByAi.fillInBlankData,
+          quizType: QuizType.FILL_IN_BLANK,
+        });
+      if (data.quizGenerateByAi.singleChoiceData) {
+        data.quizGenerateByAi.singleChoiceData.quizzes.forEach((quiz) => {
+          quizzes.push({ ...quiz, quizType: QuizType.SINGLE_CHOICE });
+        });
+      }
+      if (data.quizGenerateByAi.multipleChoiceData) {
+        data.quizGenerateByAi.multipleChoiceData.quizzes.forEach((quiz) => {
+          quizzes.push({ ...quiz, quizType: QuizType.MULTIPLE_CHOICE });
+        });
+      }
+      setAvailableQuizzes(quizzes);
       increaseUsageToday(1);
     }
   };
@@ -188,6 +205,9 @@ const QuizGeneratorContent = ({
                     </Select.Item>
                     <Select.Item value={QuizType.MULTIPLE_CHOICE}>
                       <Trans>Multiple Choice</Trans>
+                    </Select.Item>
+                    <Select.Item value={QuizType.FILL_IN_BLANK}>
+                      <Trans>Fill In Blank</Trans>
                     </Select.Item>
                   </Select.Group>
                 </Select.Content>

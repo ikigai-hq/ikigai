@@ -9,25 +9,31 @@ import styled from "styled-components";
 import { Trans } from "@lingui/macro";
 
 import {
-  GenerateQuizzes_quizGenerateByAi_quizzes as IGeneratedQuiz,
-  QuizType,
-} from "graphql/types";
+  AIFillInBlankQuiz,
+  AIGeneratedQuiz,
+  AIMultipleChoiceQuiz,
+  AISingeChoiceQuiz,
+} from "store/QuizStore";
+import { QuizType } from "graphql/types";
 
 export type GeneratedChoiceReviewProps = {
   index: number;
-  quiz: IGeneratedQuiz;
+  quiz: AIGeneratedQuiz;
   selected?: boolean;
   onSelect?: () => void;
 };
 
 export const GeneratedQuizReview = (props: GeneratedChoiceReviewProps) => {
-  const quizType = props.quiz.quizType;
-  if (quizType === QuizType.SINGLE_CHOICE) {
+  if (props.quiz.quizType === QuizType.SINGLE_CHOICE) {
     return <GeneratedSingleChoiceReview {...props} />;
   }
 
-  if (quizType === QuizType.MULTIPLE_CHOICE) {
+  if (props.quiz.quizType === QuizType.MULTIPLE_CHOICE) {
     return <GeneratedMultipleChoiceReview {...props} />;
+  }
+
+  if (props.quiz.quizType === QuizType.FILL_IN_BLANK) {
+    return <GeneratedFillInBlankReview {...props} />;
   }
 
   return (
@@ -43,14 +49,15 @@ export const GeneratedSingleChoiceReview = ({
   selected,
   onSelect,
 }: GeneratedChoiceReviewProps) => {
+  const quizData = quiz as AISingeChoiceQuiz;
   return (
     <QuizWrapper onClick={onSelect} $selected={selected}>
       <Text weight="medium">
-        <Kbd>Q.{index + 1}</Kbd> {quiz.question}
+        <Kbd>Q.{index + 1}</Kbd> {quizData.question}
       </Text>
       <Separator style={{ width: "100%", marginTop: 5, marginBottom: 5 }} />
-      <RadioGroup.Root variant="soft" value={quiz.correctAnswer}>
-        {quiz.answers.map((option) => (
+      <RadioGroup.Root variant="soft" value={quizData.correctAnswer}>
+        {quizData.answers.map((option) => (
           <RadioGroup.Item key={option} value={option}>
             {option}
           </RadioGroup.Item>
@@ -66,19 +73,40 @@ export const GeneratedMultipleChoiceReview = ({
   selected,
   onSelect,
 }: GeneratedChoiceReviewProps) => {
+  const quizData = quiz as AIMultipleChoiceQuiz;
   return (
     <QuizWrapper $selected={selected} onSelect={onSelect}>
       <Text weight="medium">
-        <Kbd>Q.{index + 1}</Kbd> {quiz.question}
+        <Kbd>Q.{index + 1}</Kbd> {quizData.question}
       </Text>
       <Separator style={{ width: "100%", marginTop: 5, marginBottom: 5 }} />
-      <CheckboxGroup.Root variant="soft" value={quiz.correctAnswers}>
-        {quiz.answers.map((option) => (
+      <CheckboxGroup.Root variant="soft" value={quizData.correctAnswers}>
+        {quizData.answers.map((option) => (
           <CheckboxGroup.Item key={option} value={option}>
             {option}
           </CheckboxGroup.Item>
         ))}
       </CheckboxGroup.Root>
+    </QuizWrapper>
+  );
+};
+
+export const GeneratedFillInBlankReview = ({
+  quiz,
+  selected,
+  onSelect,
+}: GeneratedChoiceReviewProps) => {
+  const quizData = quiz as AIFillInBlankQuiz;
+  let content = quizData.content;
+  quizData.quizzes.forEach((quiz) => {
+    content = content.replace(
+      `[Q.${quiz.position}]`,
+      `[Q.${quiz.position} ${quiz.correctAnswer}]`,
+    );
+  });
+  return (
+    <QuizWrapper $selected={selected} onClick={onSelect}>
+      <Text>{content}</Text>
     </QuizWrapper>
   );
 };

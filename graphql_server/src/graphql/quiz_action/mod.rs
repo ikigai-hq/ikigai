@@ -12,13 +12,13 @@ use uuid::Uuid;
 use crate::authorization::DocumentActionPermission;
 use crate::db::{
     ChoiceAnswerData, ChoiceOption, ChoiceQuestionData, ChoiceUserAnswerData,
-    FillInBlankAnswerData, FillInBlankQuestionData, FillInBlankUserAnswerData, Quiz, QuizType,
+    FillInBlankAnswerData, FillInBlankQuestionData, FillInBlankUserAnswerData, Quiz,
     QuizUserAnswer, SelectAnswerData, SelectQuestionData, SelectUserAnswerData,
     WritingQuestionData,
 };
 use crate::graphql::data_loader::{FindQuiz, FindQuizUserAnswersByQuiz, IkigaiDataLoader};
 use crate::helper::{document_quick_allowed_by_page_content, get_user_id_from_ctx};
-use crate::service::ikigai_ai::AIQuizResponse;
+use crate::service::ikigai_ai::{AIFillInBlankQuiz, AIMultipleChoiceQuiz, AISingleChoiceQuiz};
 
 #[ComplexObject]
 impl Quiz {
@@ -169,72 +169,81 @@ impl QuizUserAnswer {
     }
 }
 
-#[derive(Serialize, Deserialize)]
-#[serde(rename = "camelCase", untagged)]
-pub enum CompletionQuestionData {
-    ChoiceQuestion(ChoiceQuestionData),
-}
+impl AISingleChoiceQuiz {
+    pub fn get_quiz_data(self) -> (ChoiceQuestionData, ChoiceAnswerData) {
+        let AISingleChoiceQuiz {
+            question,
+            answers,
+            correct_answer,
+        } = self;
 
-scalar!(CompletionQuestionData);
+        let options: Vec<ChoiceOption> = answers
+            .into_iter()
+            .map(|answer| ChoiceOption {
+                id: Uuid::new_v4(),
+                content: answer,
+            })
+            .collect();
+        let question = ChoiceQuestionData { question, options };
 
-#[derive(Serialize, Deserialize)]
-#[serde(rename = "camelCase", untagged)]
-pub enum CompletionAnswerData {
-    ChoiceQuestion(ChoiceAnswerData),
-}
+        let expected_choices = question
+            .options
+            .iter()
+            .filter(|option| option.content == correct_answer)
+            .map(|option| option.id)
+            .collect();
+        let expected_answer_data = ChoiceAnswerData { expected_choices };
 
-scalar!(CompletionAnswerData);
-
-#[derive(SimpleObject)]
-pub struct CompletionFullQuestionData {
-    question_data: CompletionQuestionData,
-    answer_data: CompletionAnswerData,
-}
-
-#[ComplexObject]
-impl AIQuizResponse {
-    async fn quiz_type(&self) -> QuizType {
-        if self.correct_answer.is_some() {
-            return QuizType::SingleChoice;
-        }
-
-        QuizType::MultipleChoice
+        (question, expected_answer_data)
     }
+}
 
-    async fn completion_full_data(&self, ctx: &Context<'_>) -> Option<CompletionFullQuestionData> {
-        match self.quiz_type(ctx).await {
-            Ok(QuizType::SingleChoice) | Ok(QuizType::MultipleChoice) => {
-                let options = self.answers.clone();
+impl AIMultipleChoiceQuiz {
+    pub fn get_quiz_data(self) -> (ChoiceQuestionData, ChoiceAnswerData) {
+        let AIMultipleChoiceQuiz {
+            question,
+            answers,
+            correct_answers,
+        } = self;
 
-                let question_data = ChoiceQuestionData {
-                    question: self.question.clone(),
-                    options: options
-                        .into_iter()
-                        .map(|option| ChoiceOption {
-                            id: Uuid::new_v4(),
-                            content: option,
-                        })
-                        .collect(),
-                };
+        let options: Vec<ChoiceOption> = answers
+            .into_iter()
+            .map(|answer| ChoiceOption {
+                id: Uuid::new_v4(),
+                content: answer,
+            })
+            .collect();
+        let question = ChoiceQuestionData { question, options };
 
-                let mut answers = self.correct_answers.clone().unwrap_or_default();
-                if let Some(answer) = self.correct_answer.as_ref() {
-                    answers.push(answer.clone());
-                }
-                let expected_choices = question_data
-                    .options
-                    .iter()
-                    .filter(|option| answers.contains(&option.content))
-                    .map(|option| option.id)
-                    .collect();
-                let answer_data = ChoiceAnswerData { expected_choices };
+        let expected_choices = question
+            .options
+            .iter()
+            .filter(|option| correct_answers.contains(&option.content))
+            .map(|option| option.id)
+            .collect();
+        let expected_answer_data = ChoiceAnswerData { expected_choices };
 
-                Some(CompletionFullQuestionData {
-                    question_data: CompletionQuestionData::ChoiceQuestion(question_data),
-                    answer_data: CompletionAnswerData::ChoiceQuestion(answer_data),
-                })
-            }
-            _ => None,
-        }
+        (question, expected_answer_data)
+    }
+}
+
+impl AIFillInBlankQuiz {
+    pub fn get_quiz_data(self) -> (FillInBlankQuestionData, FillInBlankAnswerData) {
+        let AIFillInBlankQuiz {
+            position: _,
+            correct_answer,
+        } = self;
+
+        let question = FillInBlankQuestionData { content: None };
+
+        let expected_answer = ChoiceOption {
+            id: Uuid::new_v4(),
+            content: correct_answer,
+        };
+        let expected_answer_data = FillInBlankAnswerData {
+            expected_answers: vec![expected_answer],
+        };
+
+        (question, expected_answer_data)
     }
 }

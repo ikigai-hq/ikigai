@@ -1,11 +1,15 @@
 use async_graphql::*;
+use serde::Serialize;
 use uuid::Uuid;
 
 use crate::authorization::DocumentActionPermission;
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
-use crate::service::ikigai_ai::{AIQuizzesResponse, GenerateQuizzesRequestData, IkigaiAI};
+use crate::service::ikigai_ai::{
+    AIFillInBlankQuiz, AIGenerateQuizResponse, AIMultipleChoiceQuiz, AISingleChoiceQuiz,
+    GenerateQuizzesRequestData, IkigaiAI,
+};
 use crate::util::var_util::{
     read_integer_val_with_default, AI_USAGE_PER_DAY_KEY, MAX_AI_USAGE_PER_DAY,
 };
@@ -136,7 +140,7 @@ impl QuizMutation {
         ctx: &Context<'_>,
         quiz_type: QuizType,
         data: GenerateQuizzesRequestData,
-    ) -> Result<AIQuizzesResponse> {
+    ) -> Result<AIGenerateQuizResponse> {
         let user_id = get_user_id_from_ctx(ctx).await?;
 
         // TODO: Replace usage logic by
@@ -158,6 +162,7 @@ impl QuizMutation {
         let res = match quiz_type {
             QuizType::SingleChoice => IkigaiAI::generate_single_choice_quizzes(&data).await?,
             QuizType::MultipleChoice => IkigaiAI::generate_multiple_choice_quizzes(&data).await?,
+            QuizType::FillInBlank => IkigaiAI::generate_fill_in_blank(&data).await?,
             _ => {
                 return Err(IkigaiError::new_bad_request(
                     "We don't support generate this quiz type",
@@ -176,4 +181,106 @@ impl QuizMutation {
 
         Ok(res)
     }
+
+    async fn quiz_convert_ai_quiz(
+        &self,
+        ctx: &Context<'_>,
+        page_content_id: Uuid,
+        data: AIGenerateQuizInput,
+    ) -> Result<Vec<Quiz>> {
+        let user_id = get_user_id_from_ctx(ctx).await?;
+        let page = {
+            let mut conn = get_conn_from_ctx(ctx).await?;
+            let page_content = PageContent::find(&mut conn, page_content_id).format_err()?;
+            Page::find(&mut conn, page_content.page_id).format_err()?
+        };
+        document_quick_authorize(
+            ctx,
+            page.document_id,
+            DocumentActionPermission::InteractiveWithTool,
+        )
+        .await?;
+
+        let AIGenerateQuizInput {
+            single_choice_data,
+            multiple_choice_data,
+            fill_in_blank_data,
+        } = data;
+        let mut quizzes: Vec<Quiz> = vec![];
+        quizzes.append(
+            &mut single_choice_data
+                .into_iter()
+                .filter_map(|quiz| {
+                    let (question, answer) = quiz.get_quiz_data();
+                    build_quiz(
+                        user_id,
+                        page_content_id,
+                        QuizType::SingleChoice,
+                        question,
+                        answer,
+                    )
+                })
+                .collect(),
+        );
+
+        quizzes.append(
+            &mut multiple_choice_data
+                .into_iter()
+                .filter_map(|quiz| {
+                    let (question, answer) = quiz.get_quiz_data();
+                    build_quiz(
+                        user_id,
+                        page_content_id,
+                        QuizType::MultipleChoice,
+                        question,
+                        answer,
+                    )
+                })
+                .collect(),
+        );
+        quizzes.append(
+            &mut fill_in_blank_data
+                .into_iter()
+                .filter_map(|quiz| {
+                    let (question, answer) = quiz.get_quiz_data();
+                    build_quiz(
+                        user_id,
+                        page_content_id,
+                        QuizType::FillInBlank,
+                        question,
+                        answer,
+                    )
+                })
+                .collect(),
+        );
+
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let quizzes = Quiz::batch_insert(&mut conn, &quizzes).format_err()?;
+        Ok(quizzes)
+    }
+}
+
+#[derive(Debug, Clone, InputObject)]
+#[graphql(input_name = "AIGenerateQuizInput")]
+pub struct AIGenerateQuizInput {
+    pub single_choice_data: Vec<AISingleChoiceQuiz>,
+    pub multiple_choice_data: Vec<AIMultipleChoiceQuiz>,
+    pub fill_in_blank_data: Vec<AIFillInBlankQuiz>,
+}
+
+fn build_quiz<Q: Serialize, A: Serialize>(
+    creator_id: i32,
+    page_content_id: Uuid,
+    quiz_type: QuizType,
+    question_data: Q,
+    answer_data: A,
+) -> Option<Quiz> {
+    QuizBuilder::default()
+        .creator_id(creator_id)
+        .page_content_id(page_content_id)
+        .quiz_type(quiz_type)
+        .question_data(serde_json::to_value(question_data).unwrap_or_default())
+        .answer_data(serde_json::to_value(answer_data).unwrap_or_default())
+        .build()
+        .ok()
 }

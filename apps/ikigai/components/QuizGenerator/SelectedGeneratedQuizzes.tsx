@@ -1,24 +1,25 @@
-import {
-  GenerateQuizzes_quizGenerateByAi_quizzes as IGeneratedQuiz,
-  QuizType,
-  UpsertQuiz,
-} from "graphql/types";
+import { AIGenerateQuizInput, ConvertAIQuiz, QuizType } from "graphql/types";
 import { Button, ScrollArea } from "@radix-ui/themes";
 import { Trans } from "@lingui/macro";
 import { useState } from "react";
-import { v4 } from "uuid";
 import { useMutation } from "@apollo/client";
 
-import { UPSERT_QUIZ } from "graphql/mutation/QuizMutation";
+import { CONVERT_AI_QUIZ } from "graphql/mutation/QuizMutation";
 import { handleError } from "graphql/ApolloClient";
 import useEditorStore from "store/EditorStore";
 import usePageStore from "store/PageStore";
 import usePageContentStore from "store/PageContentStore";
-import useQuizStore from "store/QuizStore";
+import useQuizStore, {
+  AIFillInBlankQuiz,
+  AIGeneratedQuiz,
+  AIMultipleChoiceQuiz,
+  AISingeChoiceQuiz,
+} from "store/QuizStore";
 import { GeneratedQuizReview } from "./GeneratedQuizItem";
+import { Editor } from "@tiptap/react";
 
 export type ReviewGeneratedQuizzesProps = {
-  quizzes: IGeneratedQuiz[];
+  quizzes: AIGeneratedQuiz[];
   onClose: () => void;
   onDeselectQuiz: (index: number) => void;
 };
@@ -41,7 +42,7 @@ export const SelectedGeneratedQuizzes = ({
       .filter((editor) => !!editor),
   );
   const addOrUpdateQuiz = useQuizStore((state) => state.addOrUpdateQuiz);
-  const [quizUpsert] = useMutation<UpsertQuiz>(UPSERT_QUIZ, {
+  const [quizCovertAI] = useMutation<ConvertAIQuiz>(CONVERT_AI_QUIZ, {
     onError: handleError,
   });
   const [insertLoading, setInsertLoading] = useState(false);
@@ -56,42 +57,119 @@ export const SelectedGeneratedQuizzes = ({
       editor.options.editorProps.attributes["pageContentId"];
     if (!pageContentId) return;
 
-    const res = await Promise.all(
-      quizzes.map(async (selectedQuiz) => {
-        const quizId = v4();
-        const { data } = await quizUpsert({
-          variables: {
-            pageContentId,
-            data: {
-              id: quizId,
-              quizType: selectedQuiz.quizType,
-              questionData: selectedQuiz.completionFullData.questionData,
-              answerData: selectedQuiz.completionFullData.answerData,
-            },
-          },
+    for (const quiz of quizzes) {
+      if (quiz.quizType === QuizType.SINGLE_CHOICE) {
+        const quizData = quiz as AISingeChoiceQuiz;
+        await insertSingleChoice(editor, pageContentId, {
+          question: quizData.question,
+          correctAnswer: quizData.correctAnswer,
+          answers: quizData.answers,
         });
+      }
 
-        if (data) addOrUpdateQuiz(data.quizUpsert);
-        return data;
-      }),
-    );
+      if (quiz.quizType === QuizType.MULTIPLE_CHOICE) {
+        const quizData = quiz as AIMultipleChoiceQuiz;
+        await insertMultipleChoice(editor, pageContentId, {
+          question: quizData.question,
+          correctAnswers: quizData.correctAnswers,
+          answers: quizData.answers,
+        });
+      }
 
-    res
-      .filter((quiz) => !!quiz)
-      .forEach((quiz) => {
-        const quizType = quiz.quizUpsert.quizType;
-        let command = editor.chain().focus("end").enter().focus("end");
-        if (quizType === QuizType.SINGLE_CHOICE) {
-          command = command.insertSingleChoice(quiz.quizUpsert.id);
-        } else if (quizType === QuizType.MULTIPLE_CHOICE) {
-          command = command.insertMultipleChoice(quiz.quizUpsert.id);
-        }
-
-        command.run();
-      });
+      if (quiz.quizType === QuizType.FILL_IN_BLANK) {
+        const quizData = quiz as AIFillInBlankQuiz;
+        await insertFillInBlank(editor, pageContentId, quizData);
+      }
+    }
 
     onClose();
     setInsertLoading(false);
+  };
+
+  const insertSingleChoice = async (
+    editor: Editor,
+    pageContentId: string,
+    quiz: AISingeChoiceQuiz,
+  ) => {
+    const dataInput: AIGenerateQuizInput = {
+      singleChoiceData: [quiz],
+      multipleChoiceData: [],
+      fillInBlankData: [],
+    };
+    const { data } = await quizCovertAI({
+      variables: {
+        pageContentId,
+        data: dataInput,
+      },
+    });
+
+    if (data) {
+      data.quizConvertAiQuiz.forEach((quiz) => {
+        addOrUpdateQuiz(quiz);
+        editor
+          .chain()
+          .focus("end")
+          .enter()
+          .focus("end")
+          .insertSingleChoice(quiz.id)
+          .run();
+      });
+    }
+  };
+
+  const insertMultipleChoice = async (
+    editor: Editor,
+    pageContentId: string,
+    quiz: AIMultipleChoiceQuiz,
+  ) => {
+    const dataInput: AIGenerateQuizInput = {
+      singleChoiceData: [],
+      multipleChoiceData: [quiz],
+      fillInBlankData: [],
+    };
+    const { data } = await quizCovertAI({
+      variables: {
+        pageContentId,
+        data: dataInput,
+      },
+    });
+
+    if (data) {
+      data.quizConvertAiQuiz.forEach((quiz) => {
+        addOrUpdateQuiz(quiz);
+        editor
+          .chain()
+          .focus("end")
+          .enter()
+          .focus("end")
+          .insertMultipleChoice(quiz.id)
+          .run();
+      });
+    }
+  };
+
+  const insertFillInBlank = async (
+    editor: Editor,
+    pageContentId: string,
+    quiz: AIFillInBlankQuiz,
+  ) => {
+    const dataInput: AIGenerateQuizInput = {
+      singleChoiceData: [],
+      multipleChoiceData: [],
+      fillInBlankData: quiz.quizzes,
+    };
+    const { data } = await quizCovertAI({
+      variables: {
+        pageContentId,
+        data: dataInput,
+      },
+    });
+
+    if (data) {
+      data.quizConvertAiQuiz.forEach((quiz) => {
+        addOrUpdateQuiz(quiz);
+      });
+    }
   };
 
   return (

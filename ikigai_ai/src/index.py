@@ -1,6 +1,7 @@
 from typing import Dict, Any
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Logging & Tracing LLM
@@ -13,7 +14,9 @@ from enum import Enum
 from pydantic import BaseModel
 
 from ikigai_ai.src.quiz_generator.single_choice import generate_single_choice_quizzes
-from ikigai_ai.src.quiz_generator.multiple_choice import generate_multiple_choice_quizzes
+from ikigai_ai.src.quiz_generator.multiple_choice import (
+    generate_multiple_choice_quizzes,
+)
 from ikigai_ai.src.quiz_generator.fill_in_blank import generate_fill_in_blank_quizzes
 
 app = FastAPI()
@@ -50,7 +53,9 @@ def gen_single_choice_quizzes(req: GenerateQuizRequest) -> GenerateQuizResponse:
         req.subject,
         req.total_quizzes,
     ).dict()
-    return GenerateQuizResponse(quiz_type=QuizType.SingleChoice, single_choice_data=single_choice_data)
+    return GenerateQuizResponse(
+        quiz_type=QuizType.SingleChoice, single_choice_data=single_choice_data
+    )
 
 
 @app.post("/quizzes/generate-multiple-choice")
@@ -61,7 +66,9 @@ def gen_single_choice_quizzes(req: GenerateQuizRequest):
         req.total_quizzes,
     ).dict()
 
-    return GenerateQuizResponse(quiz_type=QuizType.MultipleChoice, multiple_choice_data=multiple_choice_data)
+    return GenerateQuizResponse(
+        quiz_type=QuizType.MultipleChoice, multiple_choice_data=multiple_choice_data
+    )
 
 
 @app.post("/quizzes/generate-fill-in-blank")
@@ -71,4 +78,6 @@ def gen_single_choice_quizzes(req: GenerateQuizRequest):
         req.subject,
         req.total_quizzes,
     ).dict()
-    return GenerateQuizResponse(quiz_type=QuizType.FillInBlank, fill_in_blank_data=fill_in_blank_data)
+    return GenerateQuizResponse(
+        quiz_type=QuizType.FillInBlank, fill_in_blank_data=fill_in_blank_data
+    )

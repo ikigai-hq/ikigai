@@ -15,7 +15,9 @@ class FillInBlank(BaseModel):
 class FillInBlankList(BaseModel):
     """Data Model for Fill In Blank Question"""
 
-    content: str = Field(..., description="The paragraph content fill in blank questions")
+    content: str = Field(
+        ..., description="The paragraph content fill in blank questions"
+    )
     quizzes: List[FillInBlank] = Field(..., description="Fill in blank questions")
 
 

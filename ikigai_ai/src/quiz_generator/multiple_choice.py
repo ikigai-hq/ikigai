@@ -24,9 +24,9 @@ llm = OpenAI(model="gpt-4o-mini")
 
 
 def generate_multiple_choice_quizzes(
-        user_context: str,
-        subject: str,
-        total_question: int,
+    user_context: str,
+    subject: str,
+    total_question: int,
 ) -> MultipleChoiceList:
     sllm = llm.as_structured_llm(output_cls=MultipleChoiceList)
     prompt = f"""

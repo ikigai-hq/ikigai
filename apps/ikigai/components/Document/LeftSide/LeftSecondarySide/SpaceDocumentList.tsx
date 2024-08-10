@@ -1,6 +1,5 @@
 import React from "react";
 import { Trans } from "@lingui/macro";
-import styled from "styled-components";
 import { Button, Heading, Separator } from "@radix-ui/themes";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 

@@ -30,8 +30,18 @@ const LessonItemRightInformation = (props: LessonItemRightInformationProps) => {
   }
 
   const totalAttempt = props.item?.assignment?.submissions?.length || 0;
+  const lastSubmission = (props.item?.assignment?.submissions || []).sort(
+    (a, b) => b.attemptNumber - a.attemptNumber,
+  )[0];
   return (
-    <div style={{ paddingRight: 10 }}>
+    <div
+      style={{
+        paddingRight: 10,
+        display: "flex",
+        gap: 4,
+        alignItems: "center",
+      }}
+    >
       {props.item.tags.map((tag) => (
         <Badge key={tag.tag} color="gold" style={{ marginRight: 4 }}>
           {tag.tag}
@@ -52,6 +62,15 @@ const LessonItemRightInformation = (props: LessonItemRightInformationProps) => {
             <Trans>Not attempted</Trans>
           </Text>
         </Badge>
+      )}
+      {lastSubmission && (
+        <>
+          <Separator orientation="vertical" />
+          <Text color={"gray"}>
+            <Trans>Score:</Trans>
+          </Text>
+          <Text weight="medium">{lastSubmission.finalGrade?.toFixed(2)}</Text>
+        </>
       )}
     </div>
   );

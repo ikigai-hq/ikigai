@@ -21,7 +21,7 @@ msgstr "{0} focus mode"
 msgid "{0} students"
 msgstr "{0} students"
 
-#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:83
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:102
 msgid "{0} students do assignments"
 msgstr "{0} students do assignments"
 
@@ -45,7 +45,7 @@ msgstr "{contentLength}B"
 msgid "{spaceName} Settings"
 msgstr "{spaceName} Settings"
 
-#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:41
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:51
 msgid "{totalAttempt} attempts"
 msgstr "{totalAttempt} attempts"
 
@@ -61,7 +61,7 @@ msgstr "<0>{0}%</0> of grade"
 msgid "🪄Generate Quiz by Ikigai AI🪄"
 msgstr "🪄Generate Quiz by Ikigai AI🪄"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:110
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:140
 msgid "Access visibility"
 msgstr "Access visibility"
 
@@ -71,7 +71,7 @@ msgstr "Access visibility"
 #~ msgstr "Add content"
 
 #: components/Document/DocumentBody/CoverPage/FolderCoverPageBody.tsx:49
-#: components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList.tsx:39
+#: components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList.tsx:38
 msgid "Add Content"
 msgstr "Add Content"
 
@@ -129,7 +129,7 @@ msgid "Are you sure? This rubric will no longer be accessible."
 msgstr "Are you sure? This rubric will no longer be accessible."
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssigneesAttribute.tsx:128
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:124
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:154
 msgid "Assign"
 msgstr "Assign"
 
@@ -153,7 +153,7 @@ msgstr "Assigned!"
 #~ msgid "Assignees"
 #~ msgstr "Assignees"
 
-#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:108
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:127
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/VisibilityAttribute.tsx:33
 msgid "Assignees only"
 msgstr "Assignees only"
@@ -246,7 +246,7 @@ msgstr "Code"
 msgid "Community & Help"
 msgstr "Community & Help"
 
-#: components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList.tsx:33
+#: components/Document/LeftSide/LeftSecondarySide/SpaceDocumentList.tsx:32
 msgid "Content"
 msgstr "Content"
 
@@ -751,7 +751,7 @@ msgstr "No grade"
 #~ msgid "No Grade"
 #~ msgstr "No Grade"
 
-#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:52
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:62
 msgid "Not attempted"
 msgstr "Not attempted"
 
@@ -826,7 +826,7 @@ msgstr "Powered by ikigai"
 msgid "Privacy Policy"
 msgstr "Privacy Policy"
 
-#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:102
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:121
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/VisibilityAttribute.tsx:30
 msgid "Private"
 msgstr "Private"
@@ -839,7 +839,7 @@ msgstr "Private"
 msgid "Profile"
 msgstr "Profile"
 
-#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:114
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:133
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/VisibilityAttribute.tsx:27
 msgid "Public"
 msgstr "Public"
@@ -848,7 +848,7 @@ msgstr "Public"
 msgid "Question"
 msgstr "Question"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:103
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:133
 msgid "quiz"
 msgstr "quiz"
 
@@ -856,11 +856,11 @@ msgstr "quiz"
 msgid "Quiz Generator (AI)"
 msgstr "Quiz Generator (AI)"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:103
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:133
 msgid "quizzes"
 msgstr "quizzes"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:99
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:129
 msgid "Quizzes"
 msgstr "Quizzes"
 
@@ -968,6 +968,10 @@ msgstr "Saved!"
 #: components/Document/DocumentHeader/index.tsx:57
 msgid "Saving..."
 msgstr "Saving..."
+
+#: components/common/LearningModuleDnd/LessonItemRightInformation.tsx:70
+msgid "Score:"
+msgstr "Score:"
 
 #: components/QuizGenerator/ReviewGeneratedQuizzes.tsx:40
 msgid "Select all"
@@ -1121,7 +1125,7 @@ msgstr "Successfully!"
 #~ msgid "Switch"
 #~ msgstr "Switch"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:133
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:163
 msgid "Tags"
 msgstr "Tags"
 
@@ -1438,6 +1442,10 @@ msgstr "You've joined. We've sent a magic email to <0>{email}</0>. Open the link
 #: components/QuizGenerator/index.tsx:35
 msgid "You've reached maximum usage of Ikigai AI today (max {maxAiUsage} requests per day)."
 msgstr "You've reached maximum usage of Ikigai AI today (max {maxAiUsage} requests per day)."
+
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:77
+msgid "Your Grade"
+msgstr "Your Grade"
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/StudentGeneralInformation.tsx:93
 #~ msgid "Your Grade:"

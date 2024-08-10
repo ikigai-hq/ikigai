@@ -1,11 +1,13 @@
-import { DataList, Text } from "@radix-ui/themes";
+import { DataList, Text, Link } from "@radix-ui/themes";
 import { t, Trans } from "@lingui/macro";
 import React from "react";
+import NextLink from "next/link";
 
 import TestDurationAttribute from "./TestDurationAttribute";
 import {
   DocumentActionPermission,
   DocumentVisibility,
+  Role,
   UpdateAssignmentData,
 } from "graphql/types";
 import AttemptAttribute from "./AttemptAttribute";
@@ -17,6 +19,8 @@ import useDocumentStore from "store/DocumentStore";
 import useUpdateDocument from "hook/UseUpdateDocument";
 import VisibilityAttribute from "./VisibilityAttribute";
 import TagAttribute from "./TagAttribute";
+import useAuthUserStore from "store/AuthStore";
+import { formatDocumentRoute } from "../../../../../../config/Routes";
 
 export type AssignmentAttributesProps = {
   data: UpdateAssignmentData;
@@ -29,6 +33,7 @@ const AssignmentAttributes = ({
   onChange,
   canEdit,
 }: AssignmentAttributesProps) => {
+  const isStudent = useAuthUserStore((state) => state.role === Role.STUDENT);
   const allow = usePermission();
   const { orderedQuizzes } = useOrderedQuizzes();
   const totalQuizAssignment = useDocumentStore(
@@ -37,6 +42,7 @@ const AssignmentAttributes = ({
   const visibility = useDocumentStore(
     (state) => state.activeDocument?.visibility,
   );
+  const submissions = useDocumentStore((state) => state.submissions);
   const updateDocument = useUpdateDocument();
 
   const onChangeInnerAssignment = (
@@ -56,8 +62,32 @@ const AssignmentAttributes = ({
     ? orderedQuizzes.length
     : totalQuizAssignment;
 
+  const lastSubmission = isStudent
+    ? submissions.sort(
+        (submissionA, submissionB) =>
+          submissionB.attemptNumber - submissionA.attemptNumber,
+      )[0]
+    : undefined;
+
   return (
     <DataList.Root>
+      {isStudent && lastSubmission && (
+        <DataList.Item>
+          <DataList.Label minWidth="88px" color="indigo">
+            <Trans>Your Grade</Trans>
+          </DataList.Label>
+          <DataList.Value>
+            <NextLink
+              href={formatDocumentRoute(lastSubmission.documentId)}
+              passHref
+            >
+              <Link weight="bold" color="indigo" target="_blank">
+                {(lastSubmission.finalGrade || 0).toFixed(2)}
+              </Link>
+            </NextLink>
+          </DataList.Value>
+        </DataList.Item>
+      )}
       <DataList.Item align="center">
         <DataList.Label minWidth="88px">Test Duration</DataList.Label>
         <DataList.Value>

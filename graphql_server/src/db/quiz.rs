@@ -12,9 +12,21 @@ use crate::impl_enum_for_db;
 use crate::util::get_now_as_secs;
 
 #[derive(
-    Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
+    Debug,
+    Clone,
+    Copy,
+    Eq,
+    PartialEq,
+    FromPrimitive,
+    ToPrimitive,
+    AsExpression,
+    FromSqlRow,
+    Enum,
+    Serialize,
+    Deserialize,
 )]
 #[diesel(sql_type = Integer)]
+#[serde(rename_all = "snake_case")]
 pub enum QuizType {
     WritingBlock,
     FillInBlank,
@@ -49,25 +61,29 @@ pub const ALL_QUIZ_TYPES: [QuizType; 5] = [
     QuizType::MultipleChoice,
 ];
 
-#[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject)]
+#[derive(Debug, Clone, Insertable, Queryable, SimpleObject, InputObject, Builder)]
 #[graphql(input_name = "QuizInput", complex)]
 #[diesel(table_name = quiz_blocks)]
 pub struct Quiz {
+    #[builder(default = "Uuid::new_v4()")]
     pub id: Uuid,
     #[graphql(skip_input)]
     pub page_content_id: Uuid,
     #[graphql(skip_input)]
     pub creator_id: i32,
     #[graphql(skip_input)]
+    #[builder(default)]
     pub original_quiz_id: Option<Uuid>,
     pub quiz_type: QuizType,
     #[graphql(skip_output)]
-    pub question_data: serde_json::Value,
+    pub question_data: Value,
     #[graphql(skip_output)]
-    pub answer_data: serde_json::Value,
+    pub answer_data: Value,
     #[graphql(skip_input)]
+    #[builder(default = "get_now_as_secs()")]
     pub updated_at: i64,
     #[graphql(skip_input)]
+    #[builder(default = "get_now_as_secs()")]
     pub created_at: i64,
 }
 
@@ -90,6 +106,13 @@ impl Quiz {
                 quiz_blocks::updated_at.eq(&item.updated_at),
             ))
             .get_result(conn)
+    }
+
+    pub fn batch_insert(conn: &mut PgConnection, items: &Vec<Self>) -> Result<Vec<Self>, Error> {
+        diesel::insert_into(quiz_blocks::table)
+            .values(items)
+            .on_conflict_do_nothing()
+            .get_results(conn)
     }
 
     pub fn find(conn: &mut PgConnection, id: Uuid) -> Result<Self, Error> {
@@ -119,7 +142,7 @@ pub struct QuizUserAnswer {
     pub quiz_id: Uuid,
     #[graphql(skip_input)]
     pub user_id: i32,
-    pub answer_data: serde_json::Value,
+    pub answer_data: Value,
     #[graphql(skip)]
     pub score: f64,
     #[graphql(skip_input)]

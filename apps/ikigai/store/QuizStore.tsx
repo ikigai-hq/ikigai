@@ -16,6 +16,10 @@ import {
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceExpectedAnswer,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_singleChoiceQuestion,
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_writingQuestion,
+  GenerateQuizzes_quizGenerateByAi_singleChoiceData_quizzes,
+  GenerateQuizzes_quizGenerateByAi_multipleChoiceData_quizzes,
+  GenerateQuizzes_quizGenerateByAi_fillInBlankData,
+  QuizType,
 } from "graphql/types";
 import { cloneDeep } from "lodash";
 
@@ -53,6 +57,19 @@ export type IFillInBlankExpectedAnswer =
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_fillInBlankExpectedAnswer;
 export type IFillInBlankAnswer =
   GetDocumentQuizzes_documentGet_pages_pageContents_quizzes_myAnswer_fillInBlankAnswer;
+
+export type AISingeChoiceQuiz =
+  GenerateQuizzes_quizGenerateByAi_singleChoiceData_quizzes;
+export type AIMultipleChoiceQuiz =
+  GenerateQuizzes_quizGenerateByAi_multipleChoiceData_quizzes;
+export type AIFillInBlankQuiz =
+  GenerateQuizzes_quizGenerateByAi_fillInBlankData;
+
+export type AIGeneratedQuiz = (
+  | AISingeChoiceQuiz
+  | AIMultipleChoiceQuiz
+  | AIFillInBlankQuiz
+) & { quizType: QuizType };
 
 export type QuestionData =
   | IWritingQuestion

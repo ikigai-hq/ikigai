@@ -1,11 +1,11 @@
-import { GenerateQuizzes_quizGenerateByAi_quizzes as IGeneratedQuiz } from "graphql/types";
 import { Button, ScrollArea } from "@radix-ui/themes";
 import { Trans } from "@lingui/macro";
 
 import { GeneratedQuizReview } from "./GeneratedQuizItem";
+import { AIGeneratedQuiz } from "store/QuizStore";
 
 export type ReviewGeneratedQuizzesProps = {
-  quizzes: IGeneratedQuiz[];
+  quizzes: AIGeneratedQuiz[];
   onSelect: (index: number) => void;
   backToGenerate: () => void;
   selectAll: () => void;

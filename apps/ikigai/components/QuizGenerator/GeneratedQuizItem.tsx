@@ -4,30 +4,38 @@ import {
   RadioGroup,
   Separator,
   Text,
+  TextField,
 } from "@radix-ui/themes";
 import styled from "styled-components";
 import { Trans } from "@lingui/macro";
+import React from "react";
 
 import {
-  GenerateQuizzes_quizGenerateByAi_quizzes as IGeneratedQuiz,
-  QuizType,
-} from "graphql/types";
+  AIFillInBlankQuiz,
+  AIGeneratedQuiz,
+  AIMultipleChoiceQuiz,
+  AISingeChoiceQuiz,
+} from "store/QuizStore";
+import { QuizType } from "graphql/types";
 
 export type GeneratedChoiceReviewProps = {
   index: number;
-  quiz: IGeneratedQuiz;
+  quiz: AIGeneratedQuiz;
   selected?: boolean;
   onSelect?: () => void;
 };
 
 export const GeneratedQuizReview = (props: GeneratedChoiceReviewProps) => {
-  const quizType = props.quiz.quizType;
-  if (quizType === QuizType.SINGLE_CHOICE) {
+  if (props.quiz.quizType === QuizType.SINGLE_CHOICE) {
     return <GeneratedSingleChoiceReview {...props} />;
   }
 
-  if (quizType === QuizType.MULTIPLE_CHOICE) {
+  if (props.quiz.quizType === QuizType.MULTIPLE_CHOICE) {
     return <GeneratedMultipleChoiceReview {...props} />;
+  }
+
+  if (props.quiz.quizType === QuizType.FILL_IN_BLANK) {
+    return <GeneratedFillInBlankReview {...props} />;
   }
 
   return (
@@ -43,14 +51,15 @@ export const GeneratedSingleChoiceReview = ({
   selected,
   onSelect,
 }: GeneratedChoiceReviewProps) => {
+  const quizData = quiz as AISingeChoiceQuiz;
   return (
     <QuizWrapper onClick={onSelect} $selected={selected}>
       <Text weight="medium">
-        <Kbd>Q.{index + 1}</Kbd> {quiz.question}
+        <Kbd>Q.{index + 1}</Kbd> {quizData.question}
       </Text>
       <Separator style={{ width: "100%", marginTop: 5, marginBottom: 5 }} />
-      <RadioGroup.Root variant="soft" value={quiz.correctAnswer}>
-        {quiz.answers.map((option) => (
+      <RadioGroup.Root variant="soft" value={quizData.correctAnswer}>
+        {quizData.answers.map((option) => (
           <RadioGroup.Item key={option} value={option}>
             {option}
           </RadioGroup.Item>
@@ -66,14 +75,15 @@ export const GeneratedMultipleChoiceReview = ({
   selected,
   onSelect,
 }: GeneratedChoiceReviewProps) => {
+  const quizData = quiz as AIMultipleChoiceQuiz;
   return (
     <QuizWrapper $selected={selected} onSelect={onSelect}>
       <Text weight="medium">
-        <Kbd>Q.{index + 1}</Kbd> {quiz.question}
+        <Kbd>Q.{index + 1}</Kbd> {quizData.question}
       </Text>
       <Separator style={{ width: "100%", marginTop: 5, marginBottom: 5 }} />
-      <CheckboxGroup.Root variant="soft" value={quiz.correctAnswers}>
-        {quiz.answers.map((option) => (
+      <CheckboxGroup.Root variant="soft" value={quizData.correctAnswers}>
+        {quizData.answers.map((option) => (
           <CheckboxGroup.Item key={option} value={option}>
             {option}
           </CheckboxGroup.Item>
@@ -81,6 +91,86 @@ export const GeneratedMultipleChoiceReview = ({
       </CheckboxGroup.Root>
     </QuizWrapper>
   );
+};
+
+export const GeneratedFillInBlankReview = ({
+  quiz,
+  selected,
+  onSelect,
+}: GeneratedChoiceReviewProps) => {
+  const quizData = quiz as AIFillInBlankQuiz;
+  const components = parseAIFillInBlankQuiz(quizData);
+  return (
+    <QuizWrapper $selected={selected} onClick={onSelect}>
+      {components.map((component, index) =>
+        component.componentType === "text" ? (
+          <Text key={index}>{component.data.content}</Text>
+        ) : (
+          <GeneratedFillInBlankQuizReview
+            key={index}
+            item={component.data as AIFillInBlankQuizContentComponent}
+          />
+        ),
+      )}
+    </QuizWrapper>
+  );
+};
+
+export const GeneratedFillInBlankQuizReview = ({
+  item,
+}: {
+  item: AIFillInBlankQuizContentComponent;
+}) => {
+  return (
+    <div
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 2,
+      }}
+    >
+      <Kbd>Q.{item.position}</Kbd>
+      <TextField.Root size="1" variant="soft" value={item.content} readOnly />
+    </div>
+  );
+};
+
+export type AIFillInBlankQuizContentComponent = {
+  content: string;
+  position: number;
+};
+
+export type AIFillInBlankQuizComponent = {
+  componentType: "text" | "quiz";
+  data: { content: string } | AIFillInBlankQuizContentComponent;
+};
+
+export const parseAIFillInBlankQuiz = (
+  quiz: AIFillInBlankQuiz,
+): AIFillInBlankQuizComponent[] => {
+  const extractQuizRegex = /(\[Q\.\d*\])/gm;
+
+  const components = quiz.content.split(extractQuizRegex);
+  return components.map((component) => {
+    const index = component.search(extractQuizRegex);
+    if (index > -1) {
+      let quizNumberStr = component.replace("[Q.", "");
+      quizNumberStr = quizNumberStr.replace("]", "");
+      const quizNumber = parseInt(quizNumberStr) || 0;
+      return {
+        componentType: "quiz",
+        data: {
+          content: quiz.quizzes.find((quiz) => quiz.position === quizNumber)
+            ?.correctAnswer,
+          position: quizNumber,
+        },
+      };
+    }
+    return {
+      componentType: "text",
+      data: { content: component },
+    };
+  });
 };
 
 const QuizWrapper = styled.div<{ $selected?: boolean }>`

@@ -36,3 +36,12 @@ export const ANSWER_QUIZ = gql`
     }
   }
 `;
+
+export const CONVERT_AI_QUIZ = gql`
+  ${QUIZ_FIELDS}
+  mutation ConvertAIQuiz($pageContentId: UUID!, $data: AIGenerateQuizInput!) {
+    quizConvertAiQuiz(pageContentId: $pageContentId, data: $data) {
+      ...CoreQuizFields
+    }
+  }
+`;

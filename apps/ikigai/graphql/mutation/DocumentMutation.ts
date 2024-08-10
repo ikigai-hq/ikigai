@@ -114,16 +114,28 @@ export const GENERATE_QUIZZES = gql`
     $data: GenerateQuizzesRequestData!
   ) {
     quizGenerateByAi(quizType: $quizType, data: $data) {
-      subject
-      quizzes {
-        quizType
-        question
-        answers
-        correctAnswer
-        correctAnswers
-        completionFullData {
-          questionData
-          answerData
+      quizType
+      singleChoiceData {
+        subject
+        quizzes {
+          question
+          answers
+          correctAnswer
+        }
+      }
+      multipleChoiceData {
+        subject
+        quizzes {
+          question
+          answers
+          correctAnswers
+        }
+      }
+      fillInBlankData {
+        content
+        quizzes {
+          position
+          correctAnswer
         }
       }
     }

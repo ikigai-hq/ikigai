@@ -1,5 +1,6 @@
 use reqwest::Client;
 
+use crate::db::QuizType;
 use crate::error::IkigaiError;
 
 pub struct IkigaiAI;
@@ -11,19 +12,64 @@ pub struct GenerateQuizzesRequestData {
     pub total_quizzes: i32,
 }
 
-#[derive(Debug, Clone, SimpleObject, Deserialize, Serialize)]
-#[graphql(complex)]
-pub struct AIQuizResponse {
+// Single Choice
+#[derive(Debug, Clone, SimpleObject, InputObject, Deserialize, Serialize)]
+#[graphql(input_name = "AISingleChoiceQuizInput")]
+pub struct AISingleChoiceQuiz {
     pub question: String,
     pub answers: Vec<String>,
-    pub correct_answer: Option<String>,
-    pub correct_answers: Option<Vec<String>>,
+    pub correct_answer: String,
 }
 
-#[derive(Debug, Clone, SimpleObject, Deserialize, Serialize)]
-pub struct AIQuizzesResponse {
+#[derive(Debug, Clone, SimpleObject, InputObject, Deserialize, Serialize)]
+#[graphql(input_name = "AISingleChoiceResponseDataInput")]
+pub struct AISingleChoiceResponseData {
+    #[graphql(skip_input)]
     pub subject: String,
-    pub quizzes: Vec<AIQuizResponse>,
+    pub quizzes: Vec<AISingleChoiceQuiz>,
+}
+
+// Multiple Choice
+#[derive(Debug, Clone, SimpleObject, InputObject, Deserialize, Serialize)]
+#[graphql(input_name = "AISMultipleChoiceQuizInput")]
+pub struct AIMultipleChoiceQuiz {
+    pub question: String,
+    pub answers: Vec<String>,
+    pub correct_answers: Vec<String>,
+}
+
+#[derive(Debug, Clone, SimpleObject, InputObject, Deserialize, Serialize)]
+#[graphql(input_name = "AIMultipleChoiceResponseDataInput")]
+pub struct AIMultipleChoiceResponseData {
+    #[graphql(skip_input)]
+    pub subject: String,
+    pub quizzes: Vec<AIMultipleChoiceQuiz>,
+}
+
+// Fill in Blank
+#[derive(Debug, Clone, SimpleObject, InputObject, Deserialize, Serialize)]
+#[graphql(input_name = "AIFillInBlankQuizInput")]
+pub struct AIFillInBlankQuiz {
+    #[graphql(skip_input)]
+    pub position: i32,
+    pub correct_answer: String,
+}
+
+#[derive(Debug, Clone, SimpleObject, InputObject, Deserialize, Serialize)]
+#[graphql(input_name = "AIGenerateQuizResponseDataInput")]
+pub struct AIFillInBlankResponseData {
+    #[graphql(skip_input)]
+    pub content: String,
+    pub quizzes: Vec<AIFillInBlankQuiz>,
+}
+
+#[derive(Debug, Clone, SimpleObject, InputObject, Deserialize, Serialize)]
+#[graphql(input_name = "AIGenerateQuizResponseInput")]
+pub struct AIGenerateQuizResponse {
+    pub quiz_type: QuizType,
+    pub single_choice_data: Option<AISingleChoiceResponseData>,
+    pub multiple_choice_data: Option<AIMultipleChoiceResponseData>,
+    pub fill_in_blank_data: Option<AIFillInBlankResponseData>,
 }
 
 impl IkigaiAI {
@@ -33,7 +79,7 @@ impl IkigaiAI {
 
     pub async fn generate_single_choice_quizzes(
         data: &GenerateQuizzesRequestData,
-    ) -> Result<AIQuizzesResponse, IkigaiError> {
+    ) -> Result<AIGenerateQuizResponse, IkigaiError> {
         let base_url = Self::get_url();
         let url = format!("{base_url}/quizzes/generate-single-choice");
         let res = Client::new()
@@ -49,9 +95,25 @@ impl IkigaiAI {
 
     pub async fn generate_multiple_choice_quizzes(
         data: &GenerateQuizzesRequestData,
-    ) -> Result<AIQuizzesResponse, IkigaiError> {
+    ) -> Result<AIGenerateQuizResponse, IkigaiError> {
         let base_url = Self::get_url();
         let url = format!("{base_url}/quizzes/generate-multiple-choice");
+        let res = Client::new()
+            .post(url)
+            .json(data)
+            .send()
+            .await?
+            .json()
+            .await?;
+
+        Ok(res)
+    }
+
+    pub async fn generate_fill_in_blank(
+        data: &GenerateQuizzesRequestData,
+    ) -> Result<AIGenerateQuizResponse, IkigaiError> {
+        let base_url = Self::get_url();
+        let url = format!("{base_url}/quizzes/generate-fill-in-blank");
         let res = Client::new()
             .post(url)
             .json(data)

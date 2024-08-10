@@ -4,9 +4,11 @@ import {
   RadioGroup,
   Separator,
   Text,
+  TextField,
 } from "@radix-ui/themes";
 import styled from "styled-components";
 import { Trans } from "@lingui/macro";
+import React from "react";
 
 import {
   AIFillInBlankQuiz,
@@ -97,18 +99,78 @@ export const GeneratedFillInBlankReview = ({
   onSelect,
 }: GeneratedChoiceReviewProps) => {
   const quizData = quiz as AIFillInBlankQuiz;
-  let content = quizData.content;
-  quizData.quizzes.forEach((quiz) => {
-    content = content.replace(
-      `[Q.${quiz.position}]`,
-      `[Q.${quiz.position} ${quiz.correctAnswer}]`,
-    );
-  });
+  const components = parseAIFillInBlankQuiz(quizData);
   return (
     <QuizWrapper $selected={selected} onClick={onSelect}>
-      <Text>{content}</Text>
+      {components.map((component, index) =>
+        component.componentType === "text" ? (
+          <Text key={index}>{component.data.content}</Text>
+        ) : (
+          <GeneratedFillInBlankQuizReview
+            key={index}
+            item={component.data as AIFillInBlankQuizContentComponent}
+          />
+        ),
+      )}
     </QuizWrapper>
   );
+};
+
+export const GeneratedFillInBlankQuizReview = ({
+  item,
+}: {
+  item: AIFillInBlankQuizContentComponent;
+}) => {
+  return (
+    <div
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 2,
+      }}
+    >
+      <Kbd>Q.{item.position}</Kbd>
+      <TextField.Root size="1" variant="soft" value={item.content} readOnly />
+    </div>
+  );
+};
+
+export type AIFillInBlankQuizContentComponent = {
+  content: string;
+  position: number;
+};
+
+export type AIFillInBlankQuizComponent = {
+  componentType: "text" | "quiz";
+  data: { content: string } | AIFillInBlankQuizContentComponent;
+};
+
+export const parseAIFillInBlankQuiz = (
+  quiz: AIFillInBlankQuiz,
+): AIFillInBlankQuizComponent[] => {
+  const extractQuizRegex = /(\[Q\.\d*\])/gm;
+
+  const components = quiz.content.split(extractQuizRegex);
+  return components.map((component) => {
+    const index = component.search(extractQuizRegex);
+    if (index > -1) {
+      let quizNumberStr = component.replace("[Q.", "");
+      quizNumberStr = quizNumberStr.replace("]", "");
+      const quizNumber = parseInt(quizNumberStr) || 0;
+      return {
+        componentType: "quiz",
+        data: {
+          content: quiz.quizzes.find((quiz) => quiz.position === quizNumber)
+            ?.correctAnswer,
+          position: quizNumber,
+        },
+      };
+    }
+    return {
+      componentType: "text",
+      data: { content: component },
+    };
+  });
 };
 
 const QuizWrapper = styled.div<{ $selected?: boolean }>`

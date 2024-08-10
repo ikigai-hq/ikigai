@@ -15,8 +15,12 @@ import useQuizStore, {
   AIMultipleChoiceQuiz,
   AISingeChoiceQuiz,
 } from "store/QuizStore";
-import { GeneratedQuizReview } from "./GeneratedQuizItem";
+import {
+  GeneratedQuizReview,
+  parseAIFillInBlankQuiz,
+} from "./GeneratedQuizItem";
 import { Editor } from "@tiptap/react";
+import { JSONContent } from "@tiptap/core/src/types";
 
 export type ReviewGeneratedQuizzesProps = {
   quizzes: AIGeneratedQuiz[];
@@ -153,23 +157,57 @@ export const SelectedGeneratedQuizzes = ({
     pageContentId: string,
     quiz: AIFillInBlankQuiz,
   ) => {
-    const dataInput: AIGenerateQuizInput = {
-      singleChoiceData: [],
-      multipleChoiceData: [],
-      fillInBlankData: quiz.quizzes,
-    };
-    const { data } = await quizCovertAI({
-      variables: {
-        pageContentId,
-        data: dataInput,
-      },
-    });
+    const components = parseAIFillInBlankQuiz(quiz);
 
-    if (data) {
-      data.quizConvertAiQuiz.forEach((quiz) => {
-        addOrUpdateQuiz(quiz);
-      });
+    const content: JSONContent = {
+      type: "paragraph",
+      content: [],
+    };
+
+    for (const component of components) {
+      if (component.componentType === "text") {
+        content.content.push({
+          type: "text",
+          text: component.data.content,
+        });
+      } else {
+        const dataInput: AIGenerateQuizInput = {
+          singleChoiceData: [],
+          multipleChoiceData: [],
+          fillInBlankData: [
+            {
+              correctAnswer: component.data.content,
+            },
+          ],
+        };
+        const { data } = await quizCovertAI({
+          variables: {
+            pageContentId,
+            data: dataInput,
+          },
+        });
+
+        if (data) {
+          data.quizConvertAiQuiz.forEach((quiz) => {
+            addOrUpdateQuiz(quiz);
+          });
+          content.content.push({
+            type: "fillInBlank",
+            attrs: {
+              quizId: data.quizConvertAiQuiz[0].id,
+            },
+          });
+        }
+      }
     }
+
+    editor
+      .chain()
+      .focus("end")
+      .enter()
+      .focus("end")
+      .insertContent(content)
+      .run();
   };
 
   return (

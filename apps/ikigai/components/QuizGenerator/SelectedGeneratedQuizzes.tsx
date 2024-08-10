@@ -19,8 +19,7 @@ import {
   GeneratedQuizReview,
   parseAIFillInBlankQuiz,
 } from "./GeneratedQuizItem";
-import { Editor } from "@tiptap/react";
-import { JSONContent } from "@tiptap/core/src/types";
+import { Editor, JSONContent } from "@tiptap/react";
 
 export type ReviewGeneratedQuizzesProps = {
   quizzes: AIGeneratedQuiz[];

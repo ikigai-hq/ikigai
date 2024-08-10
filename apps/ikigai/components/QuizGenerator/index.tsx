@@ -240,8 +240,16 @@ const QuizGeneratorContent = ({
                 <Trans>Close</Trans>
               </Button>
             )}
+            {alreadyGenerate && (
+              <Button
+                variant={"outline"}
+                onClick={() => setStep(GenerateStep.PICK)}
+              >
+                <Trans>View Generated quizzes</Trans>
+              </Button>
+            )}
             <Button onClick={onGenerate} loading={loading} disabled={loading}>
-              <Trans>Generate Quizzes</Trans>
+              <Trans>Generate</Trans>
             </Button>
           </div>
         </div>

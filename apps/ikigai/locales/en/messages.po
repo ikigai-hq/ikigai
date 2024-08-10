@@ -57,7 +57,7 @@ msgstr "{totalAttempt} attempts"
 msgid "<0>{0}%</0> of grade"
 msgstr "<0>{0}%</0> of grade"
 
-#: components/QuizGenerator/index.tsx:51
+#: components/QuizGenerator/index.tsx:48
 msgid "🪄Generate Quiz by Ikigai AI🪄"
 msgstr "🪄Generate Quiz by Ikigai AI🪄"
 
@@ -233,8 +233,8 @@ msgstr "Click item in the list to switch space"
 #~ msgid "Click or drag file to this area to upload"
 #~ msgstr "Click or drag file to this area to upload"
 
-#: components/QuizGenerator/index.tsx:220
-#: components/QuizGenerator/SelectedGeneratedQuizzes.tsx:115
+#: components/QuizGenerator/index.tsx:240
+#: components/QuizGenerator/SelectedGeneratedQuizzes.tsx:230
 msgid "Close"
 msgstr "Close"
 
@@ -338,7 +338,7 @@ msgstr "Deleted!"
 #~ msgid "Description"
 #~ msgstr "Description"
 
-#: components/QuizGenerator/index.tsx:168
+#: components/QuizGenerator/index.tsx:185
 msgid "Details"
 msgstr "Details"
 
@@ -416,7 +416,7 @@ msgstr "Expire at"
 msgid "Expired"
 msgstr "Expired"
 
-#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:238
+#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:236
 msgid "Export to CSV"
 msgstr "Export to CSV"
 
@@ -442,6 +442,10 @@ msgstr "Feedback successfully!"
 msgid "File Upload"
 msgstr "File Upload"
 
+#: components/QuizGenerator/index.tsx:210
+msgid "Fill In Blank"
+msgstr "Fill In Blank"
+
 #: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:517
 msgid "Fill In Blank Quiz"
 msgstr "Fill In Blank Quiz"
@@ -450,7 +454,7 @@ msgstr "Fill In Blank Quiz"
 msgid "Fill in Blank Setting"
 msgstr "Fill in Blank Setting"
 
-#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:127
+#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:125
 msgid "Final Grade"
 msgstr "Final Grade"
 
@@ -474,6 +478,7 @@ msgstr "From point"
 msgid "General"
 msgstr "General"
 
+#: components/QuizGenerator/index.tsx:252
 #: components/SpaceSetting/CreateSpaceInvite.tsx:155
 msgid "Generate"
 msgstr "Generate"
@@ -483,8 +488,8 @@ msgid "Generate Invite Link"
 msgstr "Generate Invite Link"
 
 #: components/QuizGenerator/index.tsx:224
-msgid "Generate Quizzes"
-msgstr "Generate Quizzes"
+#~ msgid "Generate Quizzes"
+#~ msgstr "Generate Quizzes"
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/SubmissionsTableOfStudent.tsx:36
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:128
@@ -500,7 +505,7 @@ msgstr "Grade"
 msgid "Grade Method"
 msgstr "Grade Method"
 
-#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:73
+#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:69
 msgid "Gradebook"
 msgstr "Gradebook"
 
@@ -528,7 +533,7 @@ msgstr "Heading 3"
 msgid "Highlight text"
 msgstr "Highlight text"
 
-#: components/QuizGenerator/index.tsx:52
+#: components/QuizGenerator/index.tsx:49
 msgid ""
 "Ikigai AI to generate quizzes for you with your teaching resources such as\n"
 "pdf, docx, web, youtube video, etc."
@@ -565,7 +570,7 @@ msgstr "Information"
 #~ msgid "Insert"
 #~ msgstr "Insert"
 
-#: components/QuizGenerator/SelectedGeneratedQuizzes.tsx:122
+#: components/QuizGenerator/SelectedGeneratedQuizzes.tsx:237
 msgid "Insert & Complete"
 msgstr "Insert & Complete"
 
@@ -682,7 +687,7 @@ msgstr "More Tools"
 #~ msgid "Moved to submission space!"
 #~ msgstr "Moved to submission space!"
 
-#: components/QuizGenerator/index.tsx:190
+#: components/QuizGenerator/index.tsx:207
 msgid "Multiple Choice"
 msgstr "Multiple Choice"
 
@@ -758,7 +763,7 @@ msgstr "Not set"
 msgid "Not submitted"
 msgstr "Not submitted"
 
-#: components/QuizGenerator/GeneratedQuizItem.tsx:35
+#: components/QuizGenerator/GeneratedQuizItem.tsx:43
 msgid "Not supported quiz type"
 msgstr "Not supported quiz type"
 
@@ -993,7 +998,7 @@ msgstr "Sent. Please check your email inbox!"
 #~ msgid "Share"
 #~ msgstr "Share"
 
-#: components/QuizGenerator/index.tsx:187
+#: components/QuizGenerator/index.tsx:204
 msgid "Single choice"
 msgstr "Single choice"
 
@@ -1056,7 +1061,7 @@ msgstr "Status"
 msgid "Strike through"
 msgstr "Strike through"
 
-#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:124
+#: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:122
 msgid "Student"
 msgstr "Student"
 
@@ -1072,11 +1077,11 @@ msgstr "Students will receive the result and the correct answers immediately aft
 #~ msgid "Sub Contents"
 #~ msgstr "Sub Contents"
 
-#: components/QuizGenerator/index.tsx:157
+#: components/QuizGenerator/index.tsx:174
 msgid "Subject"
 msgstr "Subject"
 
-#: components/QuizGenerator/index.tsx:160
+#: components/QuizGenerator/index.tsx:177
 msgid "Subject, 120 chars max"
 msgstr "Subject, 120 chars max"
 
@@ -1193,7 +1198,7 @@ msgstr "Token"
 #~ msgid "Tools"
 #~ msgstr "Tools"
 
-#: components/QuizGenerator/index.tsx:206
+#: components/QuizGenerator/index.tsx:226
 msgid "Total quiz"
 msgstr "Total quiz"
 
@@ -1279,7 +1284,7 @@ msgstr "Typing criteria"
 msgid "Typing level"
 msgstr "Typing level"
 
-#: components/QuizGenerator/index.tsx:171
+#: components/QuizGenerator/index.tsx:188
 msgid "Typing more details"
 msgstr "Typing more details"
 
@@ -1365,6 +1370,10 @@ msgstr "View all submissions of {0}"
 #~ msgid "View and Edit"
 #~ msgstr "View and Edit"
 
+#: components/QuizGenerator/index.tsx:248
+msgid "View Generated quizzes"
+msgstr "View Generated quizzes"
+
 #: components/Document/DocumentHeader/SubmissionHeader/HeaderSubmissionUserInfo.tsx:37
 #~ msgid "View other students"
 #~ msgstr "View other students"
@@ -1426,7 +1435,7 @@ msgstr "You've been invited to join ikigai"
 msgid "You've joined. We've sent a magic email to <0>{email}</0>. Open the link in email to access space."
 msgstr "You've joined. We've sent a magic email to <0>{email}</0>. Open the link in email to access space."
 
-#: components/QuizGenerator/index.tsx:38
+#: components/QuizGenerator/index.tsx:35
 msgid "You've reached maximum usage of Ikigai AI today (max {maxAiUsage} requests per day)."
 msgstr "You've reached maximum usage of Ikigai AI today (max {maxAiUsage} requests per day)."
 

@@ -33,7 +33,7 @@ const LessonItemRightInformation = (props: LessonItemRightInformationProps) => {
   return (
     <div style={{ paddingRight: 10 }}>
       {props.item.tags.map((tag) => (
-        <Badge key={tag.tag} color="gold">
+        <Badge key={tag.tag} color="gold" style={{ marginRight: 4 }}>
           {tag.tag}
         </Badge>
       ))}

@@ -35,7 +35,7 @@ def generate_fill_in_blank_quizzes(
     More detail:\n {user_context}
     Wrap fill in blank quiz in paragraph with [Q.[position]], example: [Q.1], [Q.2] 
     
-    Generate a short paragraph 5-10 sentences with {total_question} Fill in Blank questions. 
+    Generate a short paragraph with {total_question} Fill in Blank questions. 
     """
 
     input_msg = ChatMessage.from_str(prompt)

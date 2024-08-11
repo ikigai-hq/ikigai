@@ -466,11 +466,23 @@ export interface GenerateQuizzes_quizGenerateByAi_fillInBlankData {
   quizzes: GenerateQuizzes_quizGenerateByAi_fillInBlankData_quizzes[];
 }
 
+export interface GenerateQuizzes_quizGenerateByAi_selectOptionsData_quizzes {
+  position: number;
+  answers: string[];
+  correctAnswer: string;
+}
+
+export interface GenerateQuizzes_quizGenerateByAi_selectOptionsData {
+  content: string;
+  quizzes: GenerateQuizzes_quizGenerateByAi_selectOptionsData_quizzes[];
+}
+
 export interface GenerateQuizzes_quizGenerateByAi {
   quizType: QuizType;
   singleChoiceData: GenerateQuizzes_quizGenerateByAi_singleChoiceData | null;
   multipleChoiceData: GenerateQuizzes_quizGenerateByAi_multipleChoiceData | null;
   fillInBlankData: GenerateQuizzes_quizGenerateByAi_fillInBlankData | null;
+  selectOptionsData: GenerateQuizzes_quizGenerateByAi_selectOptionsData | null;
 }
 
 export interface GenerateQuizzes {
@@ -2506,12 +2518,18 @@ export interface AIGenerateQuizInput {
   singleChoiceData: AISingleChoiceQuizInput[];
   multipleChoiceData: AISMultipleChoiceQuizInput[];
   fillInBlankData: AIFillInBlankQuizInput[];
+  selectOptionsData: AISelectOptionInput[];
 }
 
 export interface AISMultipleChoiceQuizInput {
   question: string;
   answers: string[];
   correctAnswers: string[];
+}
+
+export interface AISelectOptionInput {
+  answers: string[];
+  correctAnswer: string;
 }
 
 export interface AISingleChoiceQuizInput {

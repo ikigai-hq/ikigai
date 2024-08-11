@@ -125,6 +125,11 @@ const QuizGeneratorContent = ({
           ...data.quizGenerateByAi.fillInBlankData,
           quizType: QuizType.FILL_IN_BLANK,
         });
+      if (data.quizGenerateByAi.selectOptionsData)
+        quizzes.push({
+          ...data.quizGenerateByAi.selectOptionsData,
+          quizType: QuizType.SELECT_OPTION,
+        });
       if (data.quizGenerateByAi.singleChoiceData) {
         data.quizGenerateByAi.singleChoiceData.quizzes.forEach((quiz) => {
           quizzes.push({ ...quiz, quizType: QuizType.SINGLE_CHOICE });
@@ -208,6 +213,9 @@ const QuizGeneratorContent = ({
                     </Select.Item>
                     <Select.Item value={QuizType.FILL_IN_BLANK}>
                       <Trans>Fill In Blank</Trans>
+                    </Select.Item>
+                    <Select.Item value={QuizType.SELECT_OPTION}>
+                      <Trans>Select Option</Trans>
                     </Select.Item>
                   </Select.Group>
                 </Select.Content>

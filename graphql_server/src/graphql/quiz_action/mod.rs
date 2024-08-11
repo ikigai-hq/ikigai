@@ -18,7 +18,9 @@ use crate::db::{
 };
 use crate::graphql::data_loader::{FindQuiz, FindQuizUserAnswersByQuiz, IkigaiDataLoader};
 use crate::helper::{document_quick_allowed_by_page_content, get_user_id_from_ctx};
-use crate::service::ikigai_ai::{AIFillInBlankQuiz, AIMultipleChoiceQuiz, AISingleChoiceQuiz};
+use crate::service::ikigai_ai::{
+    AIFillInBlankQuiz, AIMultipleChoiceQuiz, AISelectOptionQuiz, AISingleChoiceQuiz,
+};
 
 #[ComplexObject]
 impl Quiz {
@@ -242,6 +244,36 @@ impl AIFillInBlankQuiz {
         };
         let expected_answer_data = FillInBlankAnswerData {
             expected_answers: vec![expected_answer],
+        };
+
+        (question, expected_answer_data)
+    }
+}
+
+impl AISelectOptionQuiz {
+    pub fn get_quiz_data(self) -> (SelectQuestionData, SelectAnswerData) {
+        let AISelectOptionQuiz {
+            position: _,
+            correct_answer,
+            answers,
+        } = self;
+
+        let options: Vec<ChoiceOption> = answers
+            .into_iter()
+            .map(|answer| ChoiceOption {
+                id: Uuid::new_v4(),
+                content: answer,
+            })
+            .collect();
+        let question = SelectQuestionData { options };
+
+        let expected_answer_data = SelectAnswerData {
+            expected_choices: question
+                .options
+                .iter()
+                .filter(|option| option.content == correct_answer)
+                .map(|option| option.id)
+                .collect(),
         };
 
         (question, expected_answer_data)

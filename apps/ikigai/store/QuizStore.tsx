@@ -20,6 +20,7 @@ import {
   GenerateQuizzes_quizGenerateByAi_multipleChoiceData_quizzes,
   GenerateQuizzes_quizGenerateByAi_fillInBlankData,
   QuizType,
+  GenerateQuizzes_quizGenerateByAi_selectOptionsData,
 } from "graphql/types";
 import { cloneDeep } from "lodash";
 
@@ -64,11 +65,14 @@ export type AIMultipleChoiceQuiz =
   GenerateQuizzes_quizGenerateByAi_multipleChoiceData_quizzes;
 export type AIFillInBlankQuiz =
   GenerateQuizzes_quizGenerateByAi_fillInBlankData;
+export type AISelectOptionQuiz =
+  GenerateQuizzes_quizGenerateByAi_selectOptionsData;
 
 export type AIGeneratedQuiz = (
   | AISingeChoiceQuiz
   | AIMultipleChoiceQuiz
   | AIFillInBlankQuiz
+  | AISelectOptionQuiz
 ) & { quizType: QuizType };
 
 export type QuestionData =

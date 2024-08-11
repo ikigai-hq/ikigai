@@ -138,6 +138,14 @@ export const GENERATE_QUIZZES = gql`
           correctAnswer
         }
       }
+      selectOptionsData {
+        content
+        quizzes {
+          position
+          answers
+          correctAnswer
+        }
+      }
     }
   }
 `;

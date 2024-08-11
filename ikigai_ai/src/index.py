@@ -18,6 +18,7 @@ from ikigai_ai.src.quiz_generator.multiple_choice import (
     generate_multiple_choice_quizzes,
 )
 from ikigai_ai.src.quiz_generator.fill_in_blank import generate_fill_in_blank_quizzes
+from ikigai_ai.src.quiz_generator.select_option import generate_select_options_quizzes
 
 app = FastAPI()
 
@@ -44,6 +45,7 @@ class GenerateQuizResponse(BaseModel):
     single_choice_data: Dict[str, Any] | None = None
     multiple_choice_data: Dict[str, Any] | None = None
     fill_in_blank_data: Dict[str, Any] | None = None
+    select_options_data: Dict[str, Any] | None = None
 
 
 @app.post("/quizzes/generate-single-choice")
@@ -80,4 +82,16 @@ def gen_single_choice_quizzes(req: GenerateQuizRequest):
     ).dict()
     return GenerateQuizResponse(
         quiz_type=QuizType.FillInBlank, fill_in_blank_data=fill_in_blank_data
+    )
+
+
+@app.post("/quizzes/generate-select-options")
+def gen_single_choice_quizzes(req: GenerateQuizRequest):
+    select_options_data = generate_select_options_quizzes(
+        req.user_context,
+        req.subject,
+        req.total_quizzes,
+    ).dict()
+    return GenerateQuizResponse(
+        quiz_type=QuizType.FillInBlank, select_options_data=select_options_data
     )

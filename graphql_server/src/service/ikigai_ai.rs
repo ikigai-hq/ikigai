@@ -63,6 +63,24 @@ pub struct AIFillInBlankResponseData {
     pub quizzes: Vec<AIFillInBlankQuiz>,
 }
 
+// Select Option
+#[derive(Debug, Clone, SimpleObject, InputObject, Deserialize, Serialize)]
+#[graphql(input_name = "AISelectOptionInput")]
+pub struct AISelectOptionQuiz {
+    #[graphql(skip_input)]
+    pub position: i32,
+    pub answers: Vec<String>,
+    pub correct_answer: String,
+}
+
+#[derive(Debug, Clone, SimpleObject, InputObject, Deserialize, Serialize)]
+#[graphql(input_name = "AIGenerateQuizResponseDataInput")]
+pub struct AISelectOptionsResponseData {
+    #[graphql(skip_input)]
+    pub content: String,
+    pub quizzes: Vec<AISelectOptionQuiz>,
+}
+
 #[derive(Debug, Clone, SimpleObject, InputObject, Deserialize, Serialize)]
 #[graphql(input_name = "AIGenerateQuizResponseInput")]
 pub struct AIGenerateQuizResponse {
@@ -70,6 +88,7 @@ pub struct AIGenerateQuizResponse {
     pub single_choice_data: Option<AISingleChoiceResponseData>,
     pub multiple_choice_data: Option<AIMultipleChoiceResponseData>,
     pub fill_in_blank_data: Option<AIFillInBlankResponseData>,
+    pub select_options_data: Option<AISelectOptionsResponseData>,
 }
 
 impl IkigaiAI {
@@ -114,6 +133,22 @@ impl IkigaiAI {
     ) -> Result<AIGenerateQuizResponse, IkigaiError> {
         let base_url = Self::get_url();
         let url = format!("{base_url}/quizzes/generate-fill-in-blank");
+        let res = Client::new()
+            .post(url)
+            .json(data)
+            .send()
+            .await?
+            .json()
+            .await?;
+
+        Ok(res)
+    }
+
+    pub async fn generate_select_options(
+        data: &GenerateQuizzesRequestData,
+    ) -> Result<AIGenerateQuizResponse, IkigaiError> {
+        let base_url = Self::get_url();
+        let url = format!("{base_url}/quizzes/generate-select-options");
         let res = Client::new()
             .post(url)
             .json(data)

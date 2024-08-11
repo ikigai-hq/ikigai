@@ -11,12 +11,12 @@ import Modal from "components/base/Modal";
 import { QuizComponentProps } from "../type";
 import { IFillInBlankExpectedAnswer } from "store/QuizStore";
 
-export type SelectOptionSettingProps = QuizComponentProps & {
+export type FillInBlankSettingProps = QuizComponentProps & {
   showSetting: boolean;
   setShowSetting: (setting: boolean) => void;
 };
 
-const FillInBlankSetting = (props: SelectOptionSettingProps) => {
+const FillInBlankSetting = (props: FillInBlankSettingProps) => {
   const { upsertQuiz, answerData } = useFillInBlankQuiz(
     props.quizId,
     props.pageContentId,

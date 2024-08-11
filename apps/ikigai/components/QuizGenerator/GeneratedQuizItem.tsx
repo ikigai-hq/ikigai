@@ -2,18 +2,20 @@ import {
   CheckboxGroup,
   Kbd,
   RadioGroup,
+  Select,
   Separator,
   Text,
   TextField,
 } from "@radix-ui/themes";
 import styled from "styled-components";
-import { Trans } from "@lingui/macro";
+import { t, Trans } from "@lingui/macro";
 import React from "react";
 
 import {
   AIFillInBlankQuiz,
   AIGeneratedQuiz,
   AIMultipleChoiceQuiz,
+  AISelectOptionQuiz,
   AISingeChoiceQuiz,
 } from "store/QuizStore";
 import { QuizType } from "graphql/types";
@@ -36,6 +38,10 @@ export const GeneratedQuizReview = (props: GeneratedChoiceReviewProps) => {
 
   if (props.quiz.quizType === QuizType.FILL_IN_BLANK) {
     return <GeneratedFillInBlankReview {...props} />;
+  }
+
+  if (props.quiz.quizType === QuizType.SELECT_OPTION) {
+    return <GeneratedSelectOptionReview {...props} />;
   }
 
   return (
@@ -163,6 +169,109 @@ export const parseAIFillInBlankQuiz = (
           content: quiz.quizzes.find((quiz) => quiz.position === quizNumber)
             ?.correctAnswer,
           position: quizNumber,
+        },
+      };
+    }
+    return {
+      componentType: "text",
+      data: { content: component },
+    };
+  });
+};
+
+export const GeneratedSelectOptionReview = ({
+  quiz,
+  selected,
+  onSelect,
+}: GeneratedChoiceReviewProps) => {
+  const quizData = quiz as AISelectOptionQuiz;
+  const components = parseAISelectOptionQuiz(quizData);
+  return (
+    <QuizWrapper $selected={selected} onClick={onSelect}>
+      {components.map((component, index) =>
+        component.componentType === "text" ? (
+          <Text key={index}>{component.data.content}</Text>
+        ) : (
+          <GeneratedSelectOptionQuizReview
+            key={index}
+            item={component.data as AISelectOptionQuizContentComponent}
+          />
+        ),
+      )}
+    </QuizWrapper>
+  );
+};
+
+export const GeneratedSelectOptionQuizReview = ({
+  item,
+}: {
+  item: AISelectOptionQuizContentComponent;
+}) => {
+  return (
+    <div
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 2,
+      }}
+    >
+      <Kbd>Q.{item.position}</Kbd>
+      <Select.Root size="1" value={item.correctAnswer}>
+        <Select.Trigger
+          variant="soft"
+          placeholder={t`Select answer`}
+          radius="none"
+          onClick={(e) => e.stopPropagation()}
+        />
+        <Select.Content position="popper">
+          <Select.Group>
+            {item.answers.map((answer) => (
+              <Select.Item key={answer} value={answer}>
+                {answer}
+              </Select.Item>
+            ))}
+          </Select.Group>
+        </Select.Content>
+      </Select.Root>
+    </div>
+  );
+};
+
+export type AISelectOptionQuizContentComponent = {
+  content: string;
+  position: number;
+  answers: string[];
+  correctAnswer: string;
+};
+
+export type AISelectOptionQuizComponent = {
+  componentType: "text" | "quiz";
+  data: { content: string } | AIFillInBlankQuizContentComponent;
+};
+
+export const parseAISelectOptionQuiz = (
+  quiz: AISelectOptionQuiz,
+): AISelectOptionQuizComponent[] => {
+  const extractQuizRegex = /(\[Q\.\d*\])/gm;
+
+  const components = quiz.content.split(extractQuizRegex);
+  return components.map((component) => {
+    const index = component.search(extractQuizRegex);
+    if (index > -1) {
+      let quizNumberStr = component.replace("[Q.", "");
+      quizNumberStr = quizNumberStr.replace("]", "");
+      const quizNumber = parseInt(quizNumberStr) || 0;
+      return {
+        componentType: "quiz",
+        data: {
+          content: quiz.quizzes.find((quiz) => quiz.position === quizNumber)
+            ?.correctAnswer,
+          position: quizNumber,
+          correctAnswer: quiz.quizzes.find(
+            (quiz) => quiz.position === quizNumber,
+          )?.correctAnswer,
+          answers: quiz.quizzes.find((quiz) => quiz.position === quizNumber)
+            ?.answers,
         },
       };
     }

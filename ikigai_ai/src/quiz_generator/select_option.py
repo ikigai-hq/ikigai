@@ -37,9 +37,8 @@ def generate_select_options_quizzes(
     Subject:\n {subject}
     More detail:\n {user_context}
     Wrap select option quiz in paragraph with [Q.[position]], example: [Q.1], [Q.2]. 
-    Should not content ____ in content
     
-    Generate a short paragraph 5-15 sentences with {total_question} Select Option questions. 
+    Generate a short paragraph with maximum {total_question} Select Option questions. 
     """
 
     input_msg = ChatMessage.from_str(prompt)

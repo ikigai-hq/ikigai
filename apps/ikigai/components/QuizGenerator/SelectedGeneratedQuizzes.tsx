@@ -13,13 +13,18 @@ import useQuizStore, {
   AIFillInBlankQuiz,
   AIGeneratedQuiz,
   AIMultipleChoiceQuiz,
+  AISelectOptionQuiz,
   AISingeChoiceQuiz,
 } from "store/QuizStore";
 import {
+  AISelectOptionQuizContentComponent,
   GeneratedQuizReview,
   parseAIFillInBlankQuiz,
+  parseAISelectOptionQuiz,
 } from "./GeneratedQuizItem";
 import { Editor, JSONContent } from "@tiptap/react";
+import { SELECT_OPTION_BLOCK_NAME } from "../Editor/Extensions/QuizBlock/SelectOptionBlock";
+import { FILL_IN_BLANK_BLOCK_NAME } from "../Editor/Extensions/QuizBlock/FillInBlankBlock";
 
 export type ReviewGeneratedQuizzesProps = {
   quizzes: AIGeneratedQuiz[];
@@ -83,6 +88,11 @@ export const SelectedGeneratedQuizzes = ({
         const quizData = quiz as AIFillInBlankQuiz;
         await insertFillInBlank(editor, pageContentId, quizData);
       }
+
+      if (quiz.quizType === QuizType.SELECT_OPTION) {
+        const quizData = quiz as AISelectOptionQuiz;
+        await insertSelectOption(editor, pageContentId, quizData);
+      }
     }
 
     onClose();
@@ -98,6 +108,7 @@ export const SelectedGeneratedQuizzes = ({
       singleChoiceData: [quiz],
       multipleChoiceData: [],
       fillInBlankData: [],
+      selectOptionsData: [],
     };
     const { data } = await quizCovertAI({
       variables: {
@@ -129,6 +140,7 @@ export const SelectedGeneratedQuizzes = ({
       singleChoiceData: [],
       multipleChoiceData: [quiz],
       fillInBlankData: [],
+      selectOptionsData: [],
     };
     const { data } = await quizCovertAI({
       variables: {
@@ -178,6 +190,7 @@ export const SelectedGeneratedQuizzes = ({
               correctAnswer: component.data.content,
             },
           ],
+          selectOptionsData: [],
         };
         const { data } = await quizCovertAI({
           variables: {
@@ -191,7 +204,68 @@ export const SelectedGeneratedQuizzes = ({
             addOrUpdateQuiz(quiz);
           });
           content.content.push({
-            type: "fillInBlank",
+            type: FILL_IN_BLANK_BLOCK_NAME,
+            attrs: {
+              quizId: data.quizConvertAiQuiz[0].id,
+            },
+          });
+        }
+      }
+    }
+
+    editor
+      .chain()
+      .focus("end")
+      .enter()
+      .focus("end")
+      .insertContent(content)
+      .run();
+  };
+
+  const insertSelectOption = async (
+    editor: Editor,
+    pageContentId: string,
+    quiz: AISelectOptionQuiz,
+  ) => {
+    const components = parseAISelectOptionQuiz(quiz);
+
+    const content: JSONContent = {
+      type: "paragraph",
+      content: [],
+    };
+
+    for (const component of components) {
+      if (component.componentType === "text") {
+        content.content.push({
+          type: "text",
+          text: component.data.content,
+        });
+      } else {
+        const castedData = component.data as AISelectOptionQuizContentComponent;
+        const dataInput: AIGenerateQuizInput = {
+          singleChoiceData: [],
+          multipleChoiceData: [],
+          fillInBlankData: [],
+          selectOptionsData: [
+            {
+              answers: castedData.answers,
+              correctAnswer: castedData.correctAnswer,
+            },
+          ],
+        };
+        const { data } = await quizCovertAI({
+          variables: {
+            pageContentId,
+            data: dataInput,
+          },
+        });
+
+        if (data) {
+          data.quizConvertAiQuiz.forEach((quiz) => {
+            addOrUpdateQuiz(quiz);
+          });
+          content.content.push({
+            type: SELECT_OPTION_BLOCK_NAME,
             attrs: {
               quizId: data.quizConvertAiQuiz[0].id,
             },

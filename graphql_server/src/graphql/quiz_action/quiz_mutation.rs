@@ -7,8 +7,8 @@ use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
 use crate::service::ikigai_ai::{
-    AIFillInBlankQuiz, AIGenerateQuizResponse, AIMultipleChoiceQuiz, AISingleChoiceQuiz,
-    GenerateQuizzesRequestData, IkigaiAI,
+    AIFillInBlankQuiz, AIGenerateQuizResponse, AIMultipleChoiceQuiz, AISelectOptionQuiz,
+    AISingleChoiceQuiz, GenerateQuizzesRequestData, IkigaiAI,
 };
 use crate::util::var_util::{
     read_integer_val_with_default, AI_USAGE_PER_DAY_KEY, MAX_AI_USAGE_PER_DAY,
@@ -163,6 +163,7 @@ impl QuizMutation {
             QuizType::SingleChoice => IkigaiAI::generate_single_choice_quizzes(&data).await?,
             QuizType::MultipleChoice => IkigaiAI::generate_multiple_choice_quizzes(&data).await?,
             QuizType::FillInBlank => IkigaiAI::generate_fill_in_blank(&data).await?,
+            QuizType::SelectOption => IkigaiAI::generate_select_options(&data).await?,
             _ => {
                 return Err(IkigaiError::new_bad_request(
                     "We don't support generate this quiz type",
@@ -205,6 +206,7 @@ impl QuizMutation {
             single_choice_data,
             multiple_choice_data,
             fill_in_blank_data,
+            select_options_data,
         } = data;
         let mut quizzes: Vec<Quiz> = vec![];
         quizzes.append(
@@ -253,6 +255,21 @@ impl QuizMutation {
                 })
                 .collect(),
         );
+        quizzes.append(
+            &mut select_options_data
+                .into_iter()
+                .filter_map(|quiz| {
+                    let (question, answer) = quiz.get_quiz_data();
+                    build_quiz(
+                        user_id,
+                        page_content_id,
+                        QuizType::SelectOption,
+                        question,
+                        answer,
+                    )
+                })
+                .collect(),
+        );
 
         let mut conn = get_conn_from_ctx(ctx).await?;
         let quizzes = Quiz::batch_insert(&mut conn, &quizzes).format_err()?;
@@ -266,6 +283,7 @@ pub struct AIGenerateQuizInput {
     pub single_choice_data: Vec<AISingleChoiceQuiz>,
     pub multiple_choice_data: Vec<AIMultipleChoiceQuiz>,
     pub fill_in_blank_data: Vec<AIFillInBlankQuiz>,
+    pub select_options_data: Vec<AISelectOptionQuiz>,
 }
 
 fn build_quiz<Q: Serialize, A: Serialize>(

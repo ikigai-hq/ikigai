@@ -172,14 +172,23 @@ const QuizGeneratorContent = ({
             gap: 10,
             flex: 1,
             paddingRight: 10,
+            marginTop: 10,
           }}
         >
           <div>
             <Text size="3" weight="bold">
               <Trans>Subject</Trans>
             </Text>
+            <br />
+            <Text size="1" color="gray">
+              <Trans>
+                Subject is the main focus area that Ikigai AI can concentrate
+                on. For example: Vietnam, History, General Knowledge, Grammar,
+                etc. Maximum 120 characters.
+              </Trans>
+            </Text>
             <TextField.Root
-              placeholder={t`Subject, 120 chars max`}
+              placeholder={t`Typing subject of quiz`}
               maxLength={120}
               value={subject}
               onChange={(e) => setSubject(e.currentTarget.value)}
@@ -189,11 +198,20 @@ const QuizGeneratorContent = ({
             <Text size="3" weight="bold">
               <Trans>Details</Trans>
             </Text>
+            <br />
+            <Text size="1" color="gray">
+              <Trans>
+                You can tailor your explanation to the subject, such as using
+                only German or focusing specifically on the simple present tense
+                in Grammar, etc. Maximum 1000 characters (200 words)
+              </Trans>
+            </Text>
             <TextArea
-              placeholder={t`Typing more details`}
+              placeholder={t`Expand your subject`}
               value={context}
               onChange={(e) => setContext(e.currentTarget.value)}
               rows={5}
+              maxLength={1000}
             />
           </div>
           <div style={{ display: "flex" }}>
@@ -231,7 +249,7 @@ const QuizGeneratorContent = ({
               }}
             >
               <Text weight={"medium"} size="2">
-                <Trans>Total quiz</Trans>
+                <Trans>Max quiz</Trans>
               </Text>
               <div style={{ width: 200 }}>
                 <InputNumber

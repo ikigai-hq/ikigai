@@ -233,7 +233,7 @@ msgstr "Click item in the list to switch space"
 #~ msgid "Click or drag file to this area to upload"
 #~ msgstr "Click or drag file to this area to upload"
 
-#: components/QuizGenerator/index.tsx:248
+#: components/QuizGenerator/index.tsx:266
 #: components/QuizGenerator/SelectedGeneratedQuizzes.tsx:304
 msgid "Close"
 msgstr "Close"
@@ -338,7 +338,7 @@ msgstr "Deleted!"
 #~ msgid "Description"
 #~ msgstr "Description"
 
-#: components/QuizGenerator/index.tsx:190
+#: components/QuizGenerator/index.tsx:199
 msgid "Details"
 msgstr "Details"
 
@@ -400,6 +400,10 @@ msgstr "Email"
 msgid "Exit"
 msgstr "Exit"
 
+#: components/QuizGenerator/index.tsx:210
+msgid "Expand your subject"
+msgstr "Expand your subject"
+
 #: components/SpaceSetting/InviteSpaceSetting.tsx:89
 #~ msgid "Expire"
 #~ msgstr "Expire"
@@ -442,7 +446,7 @@ msgstr "Feedback successfully!"
 msgid "File Upload"
 msgstr "File Upload"
 
-#: components/QuizGenerator/index.tsx:215
+#: components/QuizGenerator/index.tsx:233
 msgid "Fill In Blank"
 msgstr "Fill In Blank"
 
@@ -478,7 +482,7 @@ msgstr "From point"
 msgid "General"
 msgstr "General"
 
-#: components/QuizGenerator/index.tsx:260
+#: components/QuizGenerator/index.tsx:278
 #: components/SpaceSetting/CreateSpaceInvite.tsx:155
 msgid "Generate"
 msgstr "Generate"
@@ -667,6 +671,10 @@ msgstr "Max Attempt"
 #~ msgid "Max Attempts"
 #~ msgstr "Max Attempts"
 
+#: components/QuizGenerator/index.tsx:252
+msgid "Max quiz"
+msgstr "Max quiz"
+
 #: components/SpaceSetting/MemberSpaceSetting.tsx:33
 msgid "Member since"
 msgstr "Member since"
@@ -687,7 +695,7 @@ msgstr "More Tools"
 #~ msgid "Moved to submission space!"
 #~ msgstr "Moved to submission space!"
 
-#: components/QuizGenerator/index.tsx:212
+#: components/QuizGenerator/index.tsx:230
 msgid "Multiple Choice"
 msgstr "Multiple Choice"
 
@@ -983,7 +991,7 @@ msgstr "Select all"
 msgid "Select answer"
 msgstr "Select answer"
 
-#: components/QuizGenerator/index.tsx:218
+#: components/QuizGenerator/index.tsx:236
 msgid "Select Option"
 msgstr "Select Option"
 
@@ -1007,7 +1015,7 @@ msgstr "Sent. Please check your email inbox!"
 #~ msgid "Share"
 #~ msgstr "Share"
 
-#: components/QuizGenerator/index.tsx:209
+#: components/QuizGenerator/index.tsx:227
 msgid "Single choice"
 msgstr "Single choice"
 
@@ -1086,13 +1094,17 @@ msgstr "Students will receive the result and the correct answers immediately aft
 #~ msgid "Sub Contents"
 #~ msgstr "Sub Contents"
 
-#: components/QuizGenerator/index.tsx:179
+#: components/QuizGenerator/index.tsx:180
 msgid "Subject"
 msgstr "Subject"
 
-#: components/QuizGenerator/index.tsx:182
-msgid "Subject, 120 chars max"
-msgstr "Subject, 120 chars max"
+#: components/QuizGenerator/index.tsx:184
+msgid "Subject is the main focus area that Ikigai AI can concentrate on. For example: Vietnam, History, General Knowledge, Grammar, etc. Maximum 120 characters."
+msgstr "Subject is the main focus area that Ikigai AI can concentrate on. For example: Vietnam, History, General Knowledge, Grammar, etc. Maximum 120 characters."
+
+#: components/QuizGenerator/index.tsx:191
+#~ msgid "Subject, 120 chars max"
+#~ msgstr "Subject, 120 chars max"
 
 #: components/Document/DocumentHeader/Menubar/index.tsx:51
 msgid "Submission"
@@ -1207,9 +1219,9 @@ msgstr "Token"
 #~ msgid "Tools"
 #~ msgstr "Tools"
 
-#: components/QuizGenerator/index.tsx:234
-msgid "Total quiz"
-msgstr "Total quiz"
+#: components/QuizGenerator/index.tsx:252
+#~ msgid "Total quiz"
+#~ msgstr "Total quiz"
 
 #: components/ErrorBoundary.tsx:51
 msgid "Try to reload!"
@@ -1293,13 +1305,17 @@ msgstr "Typing criteria"
 msgid "Typing level"
 msgstr "Typing level"
 
-#: components/QuizGenerator/index.tsx:193
-msgid "Typing more details"
-msgstr "Typing more details"
+#: components/QuizGenerator/index.tsx:210
+#~ msgid "Typing more details"
+#~ msgstr "Typing more details"
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TagAttribute.tsx:73
 msgid "Typing new tag"
 msgstr "Typing new tag"
+
+#: components/QuizGenerator/index.tsx:191
+msgid "Typing subject of quiz"
+msgstr "Typing subject of quiz"
 
 #: components/Rubric/index.tsx:395
 msgid "Typing your description"
@@ -1379,7 +1395,7 @@ msgstr "View all submissions of {0}"
 #~ msgid "View and Edit"
 #~ msgstr "View and Edit"
 
-#: components/QuizGenerator/index.tsx:256
+#: components/QuizGenerator/index.tsx:274
 msgid "View Generated quizzes"
 msgstr "View Generated quizzes"
 
@@ -1419,6 +1435,10 @@ msgstr "Writing Quiz"
 #: components/PreJoinSpace.tsx:31
 msgid "Wrong email format!"
 msgstr "Wrong email format!"
+
+#: components/QuizGenerator/index.tsx:203
+msgid "You can tailor your explanation to the subject, such as using only German or focusing specifically on the simple present tense in Grammar, etc. Maximum 1000 characters (200 words)"
+msgstr "You can tailor your explanation to the subject, such as using only German or focusing specifically on the simple present tense in Grammar, etc. Maximum 1000 characters (200 words)"
 
 #: components/Document/DocumentHeader/SubmissionHeader/index.tsx:110
 msgid "You cannot continue edit your submission after you submit."

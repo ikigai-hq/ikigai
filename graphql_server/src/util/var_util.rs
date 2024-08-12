@@ -13,6 +13,3 @@ pub fn read_integer_val(key: &str) -> Option<i32> {
 pub fn read_integer_val_with_default(key: &str, default_val: i32) -> i32 {
     read_integer_val(key).unwrap_or(default_val)
 }
-
-pub const MAX_AI_USAGE_PER_DAY: i32 = 5;
-pub const AI_USAGE_PER_DAY_KEY: &str = "IKIGAI_AI_MAX_USAGE_PER_DAY";

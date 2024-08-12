@@ -10,9 +10,6 @@ use crate::service::ikigai_ai::{
     AIFillInBlankQuiz, AIGenerateQuizResponse, AIMultipleChoiceQuiz, AISelectOptionQuiz,
     AISingleChoiceQuiz, GenerateQuizzesRequestData, IkigaiAI,
 };
-use crate::util::var_util::{
-    read_integer_val_with_default, AI_USAGE_PER_DAY_KEY, MAX_AI_USAGE_PER_DAY,
-};
 use crate::util::{end_of_today, start_of_today};
 
 #[derive(Default)]
@@ -141,7 +138,8 @@ impl QuizMutation {
         quiz_type: QuizType,
         data: GenerateQuizzesRequestData,
     ) -> Result<AIGenerateQuizResponse> {
-        let user_id = get_user_id_from_ctx(ctx).await?;
+        let user = get_user_from_ctx(ctx).await?;
+        let user_id = user.id;
 
         // TODO: Replace usage logic by
         let from = start_of_today();
@@ -150,13 +148,14 @@ impl QuizMutation {
             let mut conn = get_conn_from_ctx(ctx).await?;
             AIHistorySession::count_by_time(&mut conn, user_id, from, to).format_err()?
         };
-        let max_usage_per_day =
-            read_integer_val_with_default(AI_USAGE_PER_DAY_KEY, MAX_AI_USAGE_PER_DAY);
-        if usage_today >= max_usage_per_day as i64 {
-            return Err(IkigaiError::new_bad_request(
-                "You've reached maximum usage of a day. Want more - contact us via rodgers@ikigai.li",
-            ))
-                .format_err();
+        let user_config = user.config();
+        if let Some(max_usage_per_day) = user_config.max_ai_usage_per_day {
+            if usage_today >= max_usage_per_day {
+                return Err(IkigaiError::new_bad_request(
+                    "You've reached maximum usage of a day. Want more - contact us via rodgers@ikigai.li",
+                ))
+                    .format_err();
+            }
         }
 
         let res = match quiz_type {

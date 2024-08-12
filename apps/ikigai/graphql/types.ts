@@ -2157,6 +2157,11 @@ export interface UserMe_userMe_activeUserAuth {
   role: Role;
 }
 
+export interface UserMe_userMe_userConfig {
+  maxOwnedSpace: number | null;
+  maxAiUsagePerDay: number | null;
+}
+
 export interface UserMe_userMe {
   id: number;
   email: string;
@@ -2167,6 +2172,7 @@ export interface UserMe_userMe {
   avatarFileId: any | null;
   avatar: UserMe_userMe_avatar | null;
   activeUserAuth: UserMe_userMe_activeUserAuth | null;
+  userConfig: UserMe_userMe_userConfig;
 }
 
 export interface UserMe {
@@ -2205,31 +2211,6 @@ export interface GetSpacePermissions {
 
 export interface GetSpacePermissionsVariables {
   spaceId: number;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GetAIUsage
-// ====================================================
-
-export interface GetAIUsage_userMe_aiSessionsOfToday {
-  id: any;
-  action: Aiaction;
-  createdAt: number;
-}
-
-export interface GetAIUsage_userMe {
-  id: number;
-  maxAiUsage: number;
-  aiSessionsOfToday: GetAIUsage_userMe_aiSessionsOfToday[];
-}
-
-export interface GetAIUsage {
-  userMe: GetAIUsage_userMe;
 }
 
 /* tslint:disable */
@@ -2439,10 +2420,6 @@ export interface CoreQuizFields {
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
-
-export enum Aiaction {
-  GENERATE_QUIZZES = "GENERATE_QUIZZES",
-}
 
 export enum DocumentActionPermission {
   EDIT_DOCUMENT = "EDIT_DOCUMENT",

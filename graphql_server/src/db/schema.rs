@@ -252,6 +252,7 @@ diesel::table! {
         updated_at -> Int8,
         created_at -> Int8,
         avatar_file_id -> Nullable<Uuid>,
+        account_type -> Int4,
     }
 }
 

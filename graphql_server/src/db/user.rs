@@ -1,9 +1,29 @@
 use diesel::result::Error;
+use diesel::sql_types::Integer;
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
 use oso::PolarClass;
 use uuid::Uuid;
 
 use super::schema::{user_activities, users};
+use crate::impl_enum_for_db;
+
+#[derive(
+    Debug, Clone, Copy, Eq, PartialEq, FromPrimitive, ToPrimitive, AsExpression, FromSqlRow, Enum,
+)]
+#[diesel(sql_type = Integer)]
+pub enum AccountType {
+    Normal,
+    Premium,
+    SuperAdmin,
+}
+
+impl_enum_for_db!(AccountType);
+
+impl Default for AccountType {
+    fn default() -> Self {
+        Self::Normal
+    }
+}
 
 #[derive(Debug, Insertable)]
 #[diesel(table_name = users)]
@@ -89,6 +109,7 @@ pub struct User {
     pub updated_at: i64,
     pub created_at: i64,
     pub avatar_file_id: Option<Uuid>,
+    pub account_type: AccountType,
 }
 
 impl User {
@@ -157,6 +178,10 @@ impl User {
             format!("{} {}", self.first_name, self.last_name)
         }
     }
+
+    pub fn config(&self) -> UserConfig {
+        UserConfig::init_from_account_type(self.account_type)
+    }
 }
 
 #[derive(Debug, Clone, Insertable, Queryable, SimpleObject)]
@@ -182,5 +207,32 @@ impl UserActivity {
 
     pub fn find(conn: &mut PgConnection, user_id: i32) -> Result<Self, Error> {
         user_activities::table.find(user_id).first(conn)
+    }
+}
+
+#[derive(Debug, Clone, SimpleObject)]
+pub struct UserConfig {
+    // None = unlimited
+    pub max_owned_space: Option<i64>,
+    // None = unlimited
+    pub max_ai_usage_per_day: Option<i64>,
+}
+
+impl UserConfig {
+    pub fn init_from_account_type(account_type: AccountType) -> Self {
+        match account_type {
+            AccountType::Normal => UserConfig {
+                max_owned_space: Some(5),
+                max_ai_usage_per_day: Some(5),
+            },
+            AccountType::Premium => UserConfig {
+                max_owned_space: None,
+                max_ai_usage_per_day: Some(20),
+            },
+            AccountType::SuperAdmin => UserConfig {
+                max_owned_space: None,
+                max_ai_usage_per_day: None,
+            },
+        }
     }
 }

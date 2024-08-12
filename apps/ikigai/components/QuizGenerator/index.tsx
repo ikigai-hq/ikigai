@@ -10,7 +10,7 @@ import Modal from "../base/Modal";
 import { GenerateQuizzes, QuizType } from "graphql/types";
 import InputNumber from "../base/InputNumber";
 import { GENERATE_QUIZZES } from "graphql/mutation/DocumentMutation";
-import useAIStore from "store/AIStore";
+import useUsageConfigStore, { isUsageValid } from "store/UsageConfigStore";
 import { AIGeneratedQuiz } from "store/QuizStore";
 
 export type QuizGeneratorProps = {
@@ -19,11 +19,16 @@ export type QuizGeneratorProps = {
 };
 
 const QuizGenerator = ({ open, onOpenChange }: QuizGeneratorProps) => {
-  const maxAiUsage = useAIStore((state) => state.maxAIUsagePerDay);
-  const usageOfToday = useRef(useAIStore.getState().usageOfToday);
+  const maxAiUsagePerDay = useUsageConfigStore(
+    (state) => state.config?.maxAiUsagePerDay,
+  );
+  const usageOfToday = useRef(useUsageConfigStore.getState().usageOfToday);
   const [maxWidth, setMaxWidth] = useState("45vw");
+  const isReachedMaxUsage = isUsageValid(
+    "maxAiUsagePerDay",
+    usageOfToday.current,
+  );
 
-  const isReachedMaxUsage = usageOfToday.current >= maxAiUsage;
   return (
     <Modal
       open={open}
@@ -34,7 +39,7 @@ const QuizGenerator = ({ open, onOpenChange }: QuizGeneratorProps) => {
             <Text>
               <Trans>
                 You've reached maximum usage of Ikigai AI today (max{" "}
-                {maxAiUsage} requests per day).
+                {maxAiUsagePerDay} requests per day).
               </Trans>
             </Text>
           </div>
@@ -72,7 +77,9 @@ const QuizGeneratorContent = ({
   onClose,
   setMaxWidth,
 }: QuizGenerateContentProps) => {
-  const increaseUsageToday = useAIStore((state) => state.increaseUsageOfToday);
+  const increaseUsageToday = useUsageConfigStore(
+    (state) => state.increaseUsageOfToday,
+  );
   const [subject, setSubject] = useState("");
   const [context, setContext] = useState("");
   const [quizType, setQuizType] = useState(QuizType.SINGLE_CHOICE);

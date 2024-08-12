@@ -24,6 +24,15 @@ impl SpaceMutation {
         let user = get_user_from_ctx(ctx).await?;
         data.creator_id = user.id;
         let mut conn = get_conn_from_ctx(ctx).await?;
+        let owned_spaces = Space::find_all_by_owner(&mut conn, user.id).format_err()?;
+        if let Some(max_owned_space) = user.config().max_owned_space {
+            if owned_spaces.len() as i64 >= max_owned_space {
+                return Err(IkigaiError::new_bad_request(
+                    "You've reached maximum owned space",
+                ))
+                .format_err();
+            }
+        }
         create_default_space(&mut conn, user.id).format_err()
     }
 

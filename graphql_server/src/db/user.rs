@@ -223,7 +223,7 @@ impl UserConfig {
         match account_type {
             AccountType::Normal => UserConfig {
                 max_owned_space: Some(5),
-                max_ai_usage_per_day: Some(10),
+                max_ai_usage_per_day: Some(5),
             },
             AccountType::Premium => UserConfig {
                 max_owned_space: None,
@@ -231,7 +231,7 @@ impl UserConfig {
             },
             AccountType::SuperAdmin => UserConfig {
                 max_owned_space: None,
-                max_ai_usage_per_day: Some(20),
+                max_ai_usage_per_day: None,
             },
         }
     }

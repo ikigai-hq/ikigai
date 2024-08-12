@@ -13,7 +13,6 @@ import {
   CheckDocument,
   CheckToken,
   DocumentActionPermission,
-  GetAIUsage,
   GetDocumentPermissions,
   GetMyOwnSpaces,
   UserMe,
@@ -22,7 +21,6 @@ import {
 import {
   CHECK_DOCUMENT_SPACE,
   CHECK_TOKEN,
-  GET_AI_USAGE,
   GET_DOCUMENT_PERMISSIONS,
   USER_ME,
 } from "graphql/query";
@@ -33,7 +31,7 @@ import LayoutManagement from "./UserCredential/AuthLayout";
 import Loading from "./Loading";
 import { VERIFY_MAGIC_LINK } from "graphql/mutation/UserMutation";
 import { GET_MY_OWN_SPACES } from "graphql/query/SpaceQuery";
-import useAIStore from "../store/AIStore";
+import useUsageConfigStore from "../store/UsageConfigStore";
 
 interface Props {
   children: ReactNode;
@@ -51,8 +49,7 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
   const fetSpacePermissions = useAuthUserStore(
     (state) => state.fetchSpacePermissions,
   );
-  const setMaxAIUsage = useAIStore((state) => state.setMaxAIUsagePerDay);
-  const setAISessions = useAIStore((state) => state.setSessions);
+  const setUserConfig = useUsageConfigStore((state) => state.setUserConfig);
 
   const [checkToken] = useLazyQuery<CheckToken>(CHECK_TOKEN);
   const [getDocumentPermissions] = useLazyQuery<GetDocumentPermissions>(
@@ -61,7 +58,6 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
   const [getSpaceByDocument] =
     useLazyQuery<CheckDocument>(CHECK_DOCUMENT_SPACE);
   const [getMe] = useLazyQuery<UserMe>(USER_ME);
-  const [getAIUsage] = useLazyQuery<GetAIUsage>(GET_AI_USAGE);
   const [checkMagicLink] = useMutation<VerifyMagicLink>(VERIFY_MAGIC_LINK);
   const [getMySpaces] = useLazyQuery<GetMyOwnSpaces>(GET_MY_OWN_SPACES);
 
@@ -255,14 +251,8 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
     const { data } = await getMe();
     if (data) {
       setUserAuth(data);
+      setUserConfig(data.userMe.userConfig);
     }
-
-    getAIUsage().then(({ data }) => {
-      if (data) {
-        setAISessions(data.userMe.aiSessionsOfToday);
-        setMaxAIUsage(data.userMe.maxAiUsage);
-      }
-    });
   };
 
   const needRedirect = () => {

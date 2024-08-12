@@ -30,6 +30,10 @@ export const USER_ME = gql`
       activeUserAuth {
         role
       }
+      userConfig {
+        maxOwnedSpace
+        maxAiUsagePerDay
+      }
     }
   }
 `;
@@ -43,19 +47,5 @@ export const GET_DOCUMENT_PERMISSIONS = gql`
 export const GET_SPACE_PERMISSIONS = gql`
   query GetSpacePermissions($spaceId: Int!) {
     spaceMyPermissions(spaceId: $spaceId)
-  }
-`;
-
-export const GET_AI_USAGE = gql`
-  query GetAIUsage {
-    userMe {
-      id
-      maxAiUsage
-      aiSessionsOfToday {
-        id
-        action
-        createdAt
-      }
-    }
   }
 `;

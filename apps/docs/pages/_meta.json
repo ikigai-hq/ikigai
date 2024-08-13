@@ -1,6 +1,6 @@
 {
-  "index": "Introduction",
-  "self-hosted": "Self hosted",
+  "index": "Getting started",
+  "self-hosted": "Installation & Self hosted",
   "---example---": {
     "type": "separator",
     "title": "Use Case"

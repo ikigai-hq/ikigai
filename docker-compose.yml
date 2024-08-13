@@ -34,7 +34,7 @@ services:
   graphql-server:
     image: ghcr.io/ikigai-hq/ikigai:latest
     env_file:
-      - "./graphql_server/.env"
+      - ".env"
     depends_on:
       postgres:
         condition: service_healthy
@@ -51,7 +51,7 @@ services:
     image: ghcr.io/ikigai-hq/ikigai-ai:latest
     depends_on: []
     environment:
-      OPENAI_API_KEY: REPLACE_BY_OPENAI_KEY
+      OPENAI_API_KEY: YOUR_OPENAI_API_KEY
     network_mode: host
 
 volumes:

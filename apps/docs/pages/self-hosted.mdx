@@ -1,11 +1,144 @@
-
-
 ## Self-Hosting
 
-### Docker (Ubuntu, Linux, etc)
+We expect you have experience with Docker to setup and install Ikigai System. If you need our advice, reachout us at community (https://discord.gg/XuYWkn6kUS).
 
-TBD
+### Ubuntu (Linux OS)
+You can install ikigai using Docker. It’s recommended for testing environments or organizations with fewer than 500 students.
 
-### ikigai-cli
+Note: If you need a scalable solution, consider using Kubernetes to set up ikigai instead of Docker.
 
-TBD
+#### Step 1: Install Docker
+
+Follow the official documentation at https://docs.docker.com/engine/install/ to install the Docker Engine on your system.
+
+#### Step 2: Install `docker-compose`
+
+Install Docker Compose by following the documentation at https://docs.docker.com/compose/install/.
+
+#### Step 3: Setup `docker-compose.yml` and Environment
+
+Create a docker-compose.yml file with the following content,
+and you *should* change the value `OPENAI_API_KEY` by your Open AI API KEY (https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key).
+
+```yaml
+services:
+  postgres:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ikigai
+      POSTGRES_USER: ikigai
+      POSTGRES_DB: ikigai
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  redis:
+    image: redis
+    restart: always
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+  migration:
+    image: ghcr.io/ikigai-hq/ikigai-migration:latest
+    build:
+      dockerfile: Migration.Dockerfile
+    environment:
+      DATABASE_URL: postgres://ikigai:ikigai@postgres:5432/ikigai
+    depends_on:
+      postgres:
+        condition: service_healthy
+  graphql-server:
+    image: ghcr.io/ikigai-hq/ikigai:latest
+    env_file:
+      - ".env"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      migration:
+        condition: service_completed_successfully
+    network_mode: host
+  ikigai-web-client:
+    image: ghcr.io/ikigai-hq/ikigai-web:latest
+    depends_on: [graphql-server]
+    network_mode: host
+  ikigai-ai:
+    image: ghcr.io/ikigai-hq/ikigai-ai:latest
+    depends_on: []
+    environment:
+      OPENAI_API_KEY: [REPLACE_BY_OPENAI_KEY] # WARNING: Replace by your OPENAI API KEY
+    network_mode: host
+
+volumes:
+  postgres_data: {}
+  redis_data: {}
+```
+
+Next, you need to create `.env` file by following contents:
+
+```dotenv
+# APP Information
+PORT=8000
+SECRET_KEY=ikigai
+APP_URL=[YOUR_DOMAIN]
+APP_ENV=production
+
+# DATABASE
+DATABASE_URL=postgresql://ikigai:ikigai@localhost:5432/ikigai
+DATABASE_CONNECTION_POOL_SIZE=10
+REDIS_URL=redis://localhost:6379
+
+# Storage Configuration
+S3_ENDPOINT=
+S3_BUCKET=
+AWS_REGION=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+
+# SMTP
+SMTP_ENDPOINT=
+SMTP_PORT=
+SMTP_USERNAME=
+SMTP_PASSWORD=
+SMTP_SENDER=
+
+# Ikigai AI
+IKIGAI_AI_URL=http://localhost:8001
+```
+
+Then, you need to replace VALUE in ENV.
+
+- APP_URL: This is your domain of Ikigai Application.
+- Storage Config: We use S3 as storage solution. It's a reliable system.
+
+```
+S3_ENDPOINT=
+S3_BUCKET=
+AWS_REGION=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+```
+
+- SMTP Config: You can use any STMP server like Gmail, etc.
+
+```
+SMTP_ENDPOINT=
+SMTP_PORT=
+SMTP_USERNAME=
+SMTP_PASSWORD=
+SMTP_SENDER=
+```
+
+#### Step 4: Start Ikigai
+
+Run `docker-compose up -d`
+
+Done!

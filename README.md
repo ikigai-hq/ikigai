@@ -13,14 +13,15 @@
 &nbsp;
 > Our project is currently in development, which means our code will be evolving frequently. We appreciate your patience during this process. 
 > If you ever need assistance or have any questions, please don't hesitate to reach out to us within our [community](https://discord.gg/XuYWkn6kUS). We're here to help!
-> 
+
+![Demo](https://raw.githubusercontent.com/ikigai-hq/ikigai/master/assets/ai_demo.gif)
+
 # Ikigai - AI-powered Open Assignment System.
 
 Ikigai is an AI-powered Open Assignment System that allows you to generate an assignment in 5 minutes and draft feedback using AI.
 It provides seamless access via a single link and is embeddable in your website or LMS.
 The system features rich quiz types and a flexible layout adaptable to your exam format.
 
-[Demo](https://www.loom.com/share/1dc4404d3b5a41ef9c9f49341956a5b7?sid=2d5f4f2c-8e55-4659-9592-4357cd824aa8)
 
 ## Download & Install
 

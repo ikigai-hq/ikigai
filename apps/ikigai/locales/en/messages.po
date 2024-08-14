@@ -57,7 +57,7 @@ msgstr "{totalAttempt} attempts"
 msgid "<0>{0}%</0> of grade"
 msgstr "<0>{0}%</0> of grade"
 
-#: components/QuizGenerator/index.tsx:48
+#: components/QuizGenerator/index.tsx:49
 msgid "🪄Generate Quiz by Ikigai AI🪄"
 msgstr "🪄Generate Quiz by Ikigai AI🪄"
 
@@ -177,7 +177,7 @@ msgid "Auto"
 msgstr "Auto"
 
 #: components/ErrorBoundary.tsx:54
-#: components/Initializing.tsx:321
+#: components/Initializing.tsx:311
 #: pages/404.tsx:24
 msgid "Back to home"
 msgstr "Back to home"
@@ -233,7 +233,7 @@ msgstr "Click item in the list to switch space"
 #~ msgid "Click or drag file to this area to upload"
 #~ msgstr "Click or drag file to this area to upload"
 
-#: components/QuizGenerator/index.tsx:266
+#: components/QuizGenerator/index.tsx:269
 #: components/QuizGenerator/SelectedGeneratedQuizzes.tsx:304
 msgid "Close"
 msgstr "Close"
@@ -282,7 +282,7 @@ msgstr "correct!"
 msgid "Correct!"
 msgstr "Correct!"
 
-#: components/EmptySpace.tsx:115
+#: components/EmptySpace.tsx:114
 msgid "Create assignment"
 msgstr "Create assignment"
 
@@ -338,7 +338,7 @@ msgstr "Deleted!"
 #~ msgid "Description"
 #~ msgstr "Description"
 
-#: components/QuizGenerator/index.tsx:199
+#: components/QuizGenerator/index.tsx:202
 msgid "Details"
 msgstr "Details"
 
@@ -400,7 +400,7 @@ msgstr "Email"
 msgid "Exit"
 msgstr "Exit"
 
-#: components/QuizGenerator/index.tsx:210
+#: components/QuizGenerator/index.tsx:213
 msgid "Expand your subject"
 msgstr "Expand your subject"
 
@@ -446,7 +446,7 @@ msgstr "Feedback successfully!"
 msgid "File Upload"
 msgstr "File Upload"
 
-#: components/QuizGenerator/index.tsx:233
+#: components/QuizGenerator/index.tsx:236
 msgid "Fill In Blank"
 msgstr "Fill In Blank"
 
@@ -482,7 +482,7 @@ msgstr "From point"
 msgid "General"
 msgstr "General"
 
-#: components/QuizGenerator/index.tsx:278
+#: components/QuizGenerator/index.tsx:281
 #: components/SpaceSetting/CreateSpaceInvite.tsx:155
 msgid "Generate"
 msgstr "Generate"
@@ -537,7 +537,7 @@ msgstr "Heading 3"
 msgid "Highlight text"
 msgstr "Highlight text"
 
-#: components/QuizGenerator/index.tsx:49
+#: components/QuizGenerator/index.tsx:50
 msgid ""
 "Ikigai AI to generate quizzes for you with your teaching resources such as\n"
 "pdf, docx, web, youtube video, etc."
@@ -671,7 +671,7 @@ msgstr "Max Attempt"
 #~ msgid "Max Attempts"
 #~ msgstr "Max Attempts"
 
-#: components/QuizGenerator/index.tsx:252
+#: components/QuizGenerator/index.tsx:255
 msgid "Max quiz"
 msgstr "Max quiz"
 
@@ -695,7 +695,7 @@ msgstr "More Tools"
 #~ msgid "Moved to submission space!"
 #~ msgstr "Moved to submission space!"
 
-#: components/QuizGenerator/index.tsx:230
+#: components/QuizGenerator/index.tsx:233
 msgid "Multiple Choice"
 msgstr "Multiple Choice"
 
@@ -991,7 +991,7 @@ msgstr "Select all"
 msgid "Select answer"
 msgstr "Select answer"
 
-#: components/QuizGenerator/index.tsx:236
+#: components/QuizGenerator/index.tsx:239
 msgid "Select Option"
 msgstr "Select Option"
 
@@ -1015,7 +1015,7 @@ msgstr "Sent. Please check your email inbox!"
 #~ msgid "Share"
 #~ msgstr "Share"
 
-#: components/QuizGenerator/index.tsx:227
+#: components/QuizGenerator/index.tsx:230
 msgid "Single choice"
 msgstr "Single choice"
 
@@ -1094,11 +1094,11 @@ msgstr "Students will receive the result and the correct answers immediately aft
 #~ msgid "Sub Contents"
 #~ msgstr "Sub Contents"
 
-#: components/QuizGenerator/index.tsx:180
+#: components/QuizGenerator/index.tsx:183
 msgid "Subject"
 msgstr "Subject"
 
-#: components/QuizGenerator/index.tsx:184
+#: components/QuizGenerator/index.tsx:187
 msgid "Subject is the main focus area that Ikigai AI can concentrate on. For example: Vietnam, History, General Knowledge, Grammar, etc. Maximum 120 characters."
 msgstr "Subject is the main focus area that Ikigai AI can concentrate on. For example: Vietnam, History, General Knowledge, Grammar, etc. Maximum 120 characters."
 
@@ -1313,7 +1313,7 @@ msgstr "Typing level"
 msgid "Typing new tag"
 msgstr "Typing new tag"
 
-#: components/QuizGenerator/index.tsx:191
+#: components/QuizGenerator/index.tsx:194
 msgid "Typing subject of quiz"
 msgstr "Typing subject of quiz"
 
@@ -1395,7 +1395,7 @@ msgstr "View all submissions of {0}"
 #~ msgid "View and Edit"
 #~ msgstr "View and Edit"
 
-#: components/QuizGenerator/index.tsx:274
+#: components/QuizGenerator/index.tsx:277
 msgid "View Generated quizzes"
 msgstr "View Generated quizzes"
 
@@ -1436,7 +1436,7 @@ msgstr "Writing Quiz"
 msgid "Wrong email format!"
 msgstr "Wrong email format!"
 
-#: components/QuizGenerator/index.tsx:203
+#: components/QuizGenerator/index.tsx:206
 msgid "You can tailor your explanation to the subject, such as using only German or focusing specifically on the simple present tense in Grammar, etc. Maximum 1000 characters (200 words)"
 msgstr "You can tailor your explanation to the subject, such as using only German or focusing specifically on the simple present tense in Grammar, etc. Maximum 1000 characters (200 words)"
 
@@ -1465,8 +1465,16 @@ msgid "You've joined. We've sent a magic email to <0>{email}</0>. Open the link 
 msgstr "You've joined. We've sent a magic email to <0>{email}</0>. Open the link in email to access space."
 
 #: components/QuizGenerator/index.tsx:35
-msgid "You've reached maximum usage of Ikigai AI today (max {maxAiUsage} requests per day)."
-msgstr "You've reached maximum usage of Ikigai AI today (max {maxAiUsage} requests per day)."
+#~ msgid "You've reached maximum usage of Ikigai AI today (max {maxAiUsage} requests per day)."
+#~ msgstr "You've reached maximum usage of Ikigai AI today (max {maxAiUsage} requests per day)."
+
+#: components/QuizGenerator/index.tsx:40
+#~ msgid "You've reached maximum usage of Ikigai AI today (max {maxAiUsagePerDay} requests per day)."
+#~ msgstr "You've reached maximum usage of Ikigai AI today (max {maxAiUsagePerDay} requests per day)."
+
+#: components/QuizGenerator/index.tsx:37
+msgid "You've reached maximum usage of Ikigai AI today."
+msgstr "You've reached maximum usage of Ikigai AI today."
 
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/AssignmentAttributes.tsx:77
 msgid "Your Grade"
@@ -1480,6 +1488,6 @@ msgstr "Your Grade"
 msgid "Your last submission already has feedback. Please check it!"
 msgstr "Your last submission already has feedback. Please check it!"
 
-#: components/EmptySpace.tsx:103
+#: components/EmptySpace.tsx:102
 msgid "Your space is empty"
 msgstr "Your space is empty"

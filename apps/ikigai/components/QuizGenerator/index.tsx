@@ -19,12 +19,9 @@ export type QuizGeneratorProps = {
 };
 
 const QuizGenerator = ({ open, onOpenChange }: QuizGeneratorProps) => {
-  const maxAiUsagePerDay = useUsageConfigStore(
-    (state) => state.config?.maxAiUsagePerDay,
-  );
   const usageOfToday = useRef(useUsageConfigStore.getState().usageOfToday);
   const [maxWidth, setMaxWidth] = useState("45vw");
-  const isReachedMaxUsage = isUsageValid(
+  const isReachedMaxUsage = !isUsageValid(
     "maxAiUsagePerDay",
     usageOfToday.current,
   );
@@ -37,10 +34,7 @@ const QuizGenerator = ({ open, onOpenChange }: QuizGeneratorProps) => {
         isReachedMaxUsage ? (
           <div>
             <Text>
-              <Trans>
-                You've reached maximum usage of Ikigai AI today (max{" "}
-                {maxAiUsagePerDay} requests per day).
-              </Trans>
+              <Trans>You've reached maximum usage of Ikigai AI today.</Trans>
             </Text>
           </div>
         ) : (

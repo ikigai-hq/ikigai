@@ -23,15 +23,18 @@ const useUsageConfigStore = create<IAIStore>((set, get) => ({
 export const isUsageValid = (key: keyof UserConfig, value: number) => {
   const config = useUsageConfigStore.getState().config;
   const maxValue = config[key];
-  if (typeof maxValue !== "number") return true;
-  return value >= maxValue;
+  return _isUsageValid(value, maxValue);
 };
 
 export const useUsageValid = (key: keyof UserConfig, value: number) => {
   const config = useUsageConfigStore((state) => state.config);
   const maxValue = config[key];
+  return _isUsageValid(value, maxValue);
+};
+
+export const _isUsageValid = (value: number, maxValue?: number) => {
   if (typeof maxValue !== "number") return true;
-  return value >= maxValue;
+  return maxValue > value;
 };
 
 export default useUsageConfigStore;

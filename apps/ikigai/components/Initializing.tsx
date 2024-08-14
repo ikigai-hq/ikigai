@@ -217,7 +217,7 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
   const checkMySpaceAvailableDocument = async (): Promise<boolean> => {
     const { data } = await getMySpaces();
     if (data && data.spaceOwn.length > 0) {
-      await router.push(formatStartSpace(data.spaceOwn[0].id));
+      window.location.replace(formatStartSpace(data.spaceOwn[0].id));
       return true;
     }
 

@@ -74,7 +74,6 @@ const EmptySpaceInner = ({ spaceId }: EmptySpaceProps) => {
       variables: {
         data: {
           title: "New Assignment",
-          index: 0,
           parentId: null,
           iconType: IconType.EMOJI,
           iconValue: "✏️",

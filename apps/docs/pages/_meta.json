@@ -5,7 +5,8 @@
     "type": "separator",
     "title": "Use Case"
   },
-  "language_training_use_cases": "Language Training",
+  "use-case-online-test": "Online Test",
+  "use-case-entry-test": "Entry Test / Placement Test",
   "---docs---": {
     "type": "separator",
     "title": "Docs"

@@ -39,9 +39,14 @@ impl Redis {
         Ok(())
     }
 
-    pub fn set_magic_token(&self, user_id: i32, otp: &str) -> RedisResult<()> {
+    pub fn set_magic_token(
+        &self,
+        user_id: i32,
+        otp: &str,
+        ttl_seconds: Option<i64>,
+    ) -> RedisResult<()> {
         let key = format_magic_token(user_id);
-        self.set_value(&key, otp, Some(600))?;
+        self.set_value(&key, otp, ttl_seconds)?;
         Ok(())
     }
 

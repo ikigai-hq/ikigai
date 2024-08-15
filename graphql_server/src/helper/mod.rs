@@ -111,18 +111,21 @@ pub fn add_space_member(
     Ok(new_member)
 }
 
+pub const ONE_MONTH_SECONDS: i64 = 2_592_000;
+
 pub fn generate_document_magic_link(
     user_id: i32,
     document_id: Uuid,
+    ttl_seconds: Option<i64>,
 ) -> Result<String, IkigaiError> {
     let otp = generate_otp();
-    Redis::init().set_magic_token(user_id, &otp)?;
+    Redis::init().set_magic_token(user_id, &otp, ttl_seconds)?;
     Ok(format_document_magic_link(document_id, &otp, user_id))
 }
 
 pub fn generate_start_space_magic_link(user_id: i32, space_id: i32) -> Result<String, IkigaiError> {
     let otp = generate_otp();
-    Redis::init().set_magic_token(user_id, &otp)?;
+    Redis::init().set_magic_token(user_id, &otp, Some(600))?;
     Ok(format_start_space_magic_link(space_id, &otp, user_id))
 }
 

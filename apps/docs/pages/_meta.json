@@ -5,8 +5,8 @@
     "type": "separator",
     "title": "Use Case"
   },
-  "use-case-online-test": "Online Test",
-  "use-case-entry-test": "Entry Test / Placement Test",
+  "use-case-online-test": "Online Assignment",
+  "use-case-generate-quizzes": "Generate quizzes (from your resources)",
   "---docs---": {
     "type": "separator",
     "title": "Docs"

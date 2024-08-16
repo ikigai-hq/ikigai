@@ -22,6 +22,15 @@ Ikigai is an AI-powered Open Assignment System that allows you to generate an as
 It provides seamless access via a single link and is embeddable in your website or LMS.
 The system features rich quiz types and a flexible layout adaptable to your exam format.
 
+## Use Cases:
+
+- **[Online Test](https://ikigai.li/use-case-online-test)**
+- **Generated Quizzes:**
+    - [Generate by Subject](https://ikigai.li/use-case-generate-quizzes#generate-quizzes-by-your-subject)
+    - [Generate by provided Text](https://ikigai.li/use-case-generate-quizzes#generate-quizzes-by-your-provided-text)
+    - [Generate by Text Book (Pdf, docx)](https://ikigai.li/use-case-generate-quizzes#generate-quizzes-from-your-files): Coming soon
+    - [Generate by Web](https://ikigai.li/use-case-generate-quizzes#generate-quizzes-from-web-link): Coming soon
+    - [Generate by Youtube](https://ikigai.li/use-case-generate-quizzes#generate-quizzes-from-youtube): Coming soon
 
 ## Download & Install
 

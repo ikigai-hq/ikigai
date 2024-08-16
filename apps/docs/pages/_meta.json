@@ -5,7 +5,8 @@
     "type": "separator",
     "title": "Use Case"
   },
-  "language_training_use_cases": "Language Training",
+  "use-case-online-test": "Online Assignment",
+  "use-case-generate-quizzes": "Generate quizzes (from your resources)",
   "---docs---": {
     "type": "separator",
     "title": "Docs"

@@ -96,6 +96,28 @@ diesel::table! {
 }
 
 diesel::table! {
+    embedded_form_responses (id) {
+        id -> Uuid,
+        session_id -> Uuid,
+        submission_id -> Nullable<Int4>,
+        response_user_id -> Int4,
+        response_data -> Jsonb,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
+    embedded_sessions (session_id) {
+        session_id -> Uuid,
+        document_id -> Uuid,
+        embedded_type -> Int4,
+        is_active -> Bool,
+        updated_at -> Int8,
+        created_at -> Int8,
+    }
+}
+
+diesel::table! {
     files (uuid) {
         uuid -> Uuid,
         user_id -> Int4,
@@ -268,6 +290,10 @@ diesel::joinable!(document_assigned_users -> users (assigned_user_id));
 diesel::joinable!(document_tags -> documents (document_id));
 diesel::joinable!(documents -> files (cover_photo_id));
 diesel::joinable!(documents -> spaces (space_id));
+diesel::joinable!(embedded_form_responses -> assignment_submissions (submission_id));
+diesel::joinable!(embedded_form_responses -> embedded_sessions (session_id));
+diesel::joinable!(embedded_form_responses -> users (response_user_id));
+diesel::joinable!(embedded_sessions -> documents (document_id));
 diesel::joinable!(notification_receivers -> notifications (notification_id));
 diesel::joinable!(notification_receivers -> users (user_id));
 diesel::joinable!(page_contents -> pages (page_id));
@@ -297,6 +323,8 @@ diesel::allow_tables_to_appear_in_same_query!(
     document_assigned_users,
     document_tags,
     documents,
+    embedded_form_responses,
+    embedded_sessions,
     files,
     notification_receivers,
     notifications,

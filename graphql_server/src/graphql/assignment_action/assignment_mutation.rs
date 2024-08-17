@@ -1,15 +1,11 @@
-use aj::AJ;
-use aj::{JobBuilder, JobType};
 use async_graphql::*;
 use diesel::Connection;
 
 use crate::authorization::DocumentActionPermission;
-use crate::background_job::submission_job::CompleteSubmission;
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
 use crate::notification_center::send_notification;
-use crate::util::{get_date_from_ts, get_now_as_secs};
 
 #[derive(Default)]
 pub struct AssignmentMutation;
@@ -120,57 +116,14 @@ impl AssignmentMutation {
         let assignment_document =
             Document::find_by_id(&mut conn, assignment.document_id).format_err()?;
 
-        let submission = conn
-            .transaction::<_, IkigaiError, _>(|conn| {
-                let config = DocumentCloneConfigBuilder::default()
-                    .prefix_title(format!("[{}] ", user.name()))
-                    .creator_id(user_id)
-                    .clone_to_space(assignment_document.space_id)
-                    .clone_children(false)
-                    .keep_document_type(false)
-                    .build()
-                    .unwrap();
-                let document = assignment_document.deep_clone(conn, config)?;
-
-                let new_submission = NewSubmission::new(
-                    user_id,
-                    assignment_id,
-                    document.id,
-                    last_submission.map_or_else(|| 1, |s| s.attempt_number + 1),
-                    assignment.test_duration.is_none(),
-                    assignment.test_duration,
-                );
-                let submission = Submission::insert(conn, new_submission)?;
-
-                try_add_rubric_submission(conn, &assignment, &submission)?;
-
-                Ok(submission)
-            })
-            .format_err()?;
-
-        if let Some(close_in) = submission.test_duration {
-            let message = CompleteSubmission {
-                attempt_number: submission.attempt_number,
-                submission_id: submission.id,
-            };
-            let job = JobBuilder::default()
-                .message(message)
-                .job_type(JobType::ScheduledAt(get_date_from_ts(
-                    get_now_as_secs() + close_in as i64,
-                )))
-                .build()?;
-            AJ::add_job(job);
-        }
-
-        let receiver_ids = vec![assignment_document.creator_id];
-        let notification = Notification::new_do_assignment_notification(DoAssignmentContext {
-            student_id: user.id,
-            student_name: user.name(),
-            submission_document_id: submission.document_id,
-            assignment_name: assignment_document.title,
-        });
-        let notification = Notification::insert(&mut conn, notification).format_err()?;
-        send_notification(&mut conn, notification, receiver_ids).format_err()?;
+        let submission = start_submission(
+            &mut conn,
+            &user,
+            &assignment,
+            &assignment_document,
+            &last_submission,
+        )
+        .format_err()?;
 
         Ok(submission)
     }

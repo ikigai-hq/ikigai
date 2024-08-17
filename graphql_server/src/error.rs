@@ -1,3 +1,4 @@
+use aj::JobBuilderError;
 use async_graphql::ErrorExtensions;
 use aws_sdk_s3::types::SdkError;
 use diesel::result::Error as DBError;
@@ -191,6 +192,13 @@ impl From<r2d2::Error> for IkigaiError {
 impl From<std::io::Error> for IkigaiError {
     fn from(e: std::io::Error) -> Self {
         error!("IO Error: {:?}", e);
+        Self::InternalServerError
+    }
+}
+
+impl From<JobBuilderError> for IkigaiError {
+    fn from(e: JobBuilderError) -> Self {
+        error!("Builder Error: {:?}", e);
         Self::InternalServerError
     }
 }

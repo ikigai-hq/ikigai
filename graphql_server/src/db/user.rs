@@ -43,6 +43,11 @@ impl NewUser {
             avatar_file_id: None,
         }
     }
+
+    pub fn new_temp(temp_id: Uuid, first_name: String, last_name: String) -> NewUser {
+        let temp_email = format!("user_{temp_id}@ikigai.li");
+        NewUser::new(temp_email, first_name, last_name)
+    }
 }
 
 #[derive(Debug, Clone, InputObject, AsChangeset)]

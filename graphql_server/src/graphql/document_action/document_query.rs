@@ -45,4 +45,17 @@ impl DocumentQuery {
             DocumentAssignedUsers::find_all_by_document(&mut conn, document_id).format_err()?;
         Ok(assignees)
     }
+
+    async fn document_get_embedded_sessions(
+        &self,
+        ctx: &Context<'_>,
+        document_id: Uuid,
+    ) -> Result<Vec<EmbeddedSession>> {
+        document_quick_authorize(ctx, document_id, DocumentActionPermission::ManageDocument)
+            .await?;
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let sessions =
+            EmbeddedSession::find_all_by_document_id(&mut conn, document_id).format_err()?;
+        Ok(sessions)
+    }
 }

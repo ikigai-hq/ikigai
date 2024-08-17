@@ -146,3 +146,17 @@ impl DocumentAssignedUsers {
         get_public_user_from_loader(ctx, self.assigned_user_id).await
     }
 }
+
+#[ComplexObject]
+impl EmbeddedSession {
+    async fn responses(&self, ctx: &Context<'_>) -> Result<Vec<EmbeddedSessionResponse>> {
+        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
+        let responses = loader
+            .load_one(FindEmbeddedSessionResponses {
+                embedded_session_id: self.session_id,
+            })
+            .await?
+            .unwrap_or_default();
+        Ok(responses)
+    }
+}

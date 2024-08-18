@@ -372,7 +372,7 @@ impl DocumentMutation {
     async fn document_upsert_embedded_session(
         &self,
         ctx: &Context<'_>,
-        session: EmbeddedSession,
+        mut session: EmbeddedSession,
     ) -> Result<EmbeddedSession> {
         document_quick_authorize(
             ctx,
@@ -382,6 +382,13 @@ impl DocumentMutation {
         .await?;
 
         let mut conn = get_conn_from_ctx(ctx).await?;
+        let existing_session =
+            EmbeddedSession::find_by_document(&mut conn, session.document_id).format_err()?;
+        if let Some(existing_session) = existing_session {
+            session.session_id = existing_session.session_id;
+        } else {
+            session.session_id = Uuid::new_v4();
+        }
         let session = EmbeddedSession::upsert(&mut conn, session).format_err()?;
 
         Ok(session)

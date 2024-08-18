@@ -30,6 +30,7 @@ impl Default for EmbeddedType {
 #[graphql(input_name = "EmbeddedSessionInput", complex)]
 #[diesel(table_name = embedded_sessions)]
 pub struct EmbeddedSession {
+    #[graphql(skip_input)]
     pub session_id: Uuid,
     pub document_id: Uuid,
     pub embedded_type: EmbeddedType,
@@ -58,6 +59,20 @@ impl EmbeddedSession {
 
     pub fn find(conn: &mut PgConnection, session_id: Uuid) -> Result<Self, Error> {
         embedded_sessions::table.find(session_id).first(conn)
+    }
+
+    pub fn find_by_document(
+        conn: &mut PgConnection,
+        document_id: Uuid,
+    ) -> Result<Option<Self>, Error> {
+        match embedded_sessions::table
+            .filter(embedded_sessions::document_id.eq(document_id))
+            .first(conn)
+        {
+            Ok(item) => Ok(Some(item)),
+            Err(Error::NotFound) => Ok(None),
+            Err(e) => Err(e),
+        }
     }
 
     pub fn find_all_by_document_id(

@@ -103,3 +103,13 @@ export const GET_DOCUMENT_ASSIGNEE = gql`
     }
   }
 `;
+
+export const GET_DOCUMENT_EMBED_SESSION = gql`
+  query GetDocumentEmbedSession($documentId: UUID!) {
+    documentGetEmbeddedSession(documentId: $documentId) {
+      sessionId
+      documentId
+      isActive
+    }
+  }
+`;

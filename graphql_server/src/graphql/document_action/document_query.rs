@@ -46,7 +46,7 @@ impl DocumentQuery {
         Ok(assignees)
     }
 
-    async fn document_get_embedded_sessions(
+    async fn document_get_embedded_session(
         &self,
         ctx: &Context<'_>,
         document_id: Uuid,

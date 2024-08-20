@@ -538,6 +538,29 @@ export interface RemoveDocumentTagVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: UpsertDocumentEmbedSession
+// ====================================================
+
+export interface UpsertDocumentEmbedSession_documentUpsertEmbeddedSession {
+  sessionId: any;
+  documentId: any;
+  isActive: boolean;
+}
+
+export interface UpsertDocumentEmbedSession {
+  documentUpsertEmbeddedSession: UpsertDocumentEmbedSession_documentUpsertEmbeddedSession;
+}
+
+export interface UpsertDocumentEmbedSessionVariables {
+  session: EmbeddedSessionInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: FileCreate
 // ====================================================
 
@@ -1675,6 +1698,29 @@ export interface GetDocumentAssigneesVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetDocumentEmbedSession
+// ====================================================
+
+export interface GetDocumentEmbedSession_documentGetEmbeddedSession {
+  sessionId: any;
+  documentId: any;
+  isActive: boolean;
+}
+
+export interface GetDocumentEmbedSession {
+  documentGetEmbeddedSession: GetDocumentEmbedSession_documentGetEmbeddedSession | null;
+}
+
+export interface GetDocumentEmbedSessionVariables {
+  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetFile
 // ====================================================
 
@@ -2442,6 +2488,11 @@ export enum DocumentVisibility {
   PUBLIC = "PUBLIC",
 }
 
+export enum EmbeddedType {
+  FORM = "FORM",
+  NORMAL = "NORMAL",
+}
+
 export enum GradeMethod {
   AUTO = "AUTO",
   MANUAL = "MANUAL",
@@ -2525,6 +2576,12 @@ export interface CreateFileData {
 export interface DocumentTagInput {
   documentId: any;
   tag: string;
+}
+
+export interface EmbeddedSessionInput {
+  documentId: any;
+  embeddedType: EmbeddedType;
+  isActive: boolean;
 }
 
 export interface GenerateQuizzesRequestData {

@@ -4,13 +4,18 @@ import { Box, Tabs } from "@radix-ui/themes";
 
 import GeneralInformation from "./GeneralInformation";
 import SubmissionList from "./SubmissionList";
+import ShareAssignment from "./ShareAssignment";
+import usePermission from "hook/UsePermission";
+import { DocumentActionPermission } from "graphql/types";
 
 export enum AssignmentCoverPageTabs {
   General = "general",
   Submissions = "submissions",
+  Share = "share",
 }
 
 const AssignmentCoverPageBody = () => {
+  const allow = usePermission();
   return (
     <Tabs.Root defaultValue={AssignmentCoverPageTabs.General}>
       <Tabs.List>
@@ -20,6 +25,11 @@ const AssignmentCoverPageBody = () => {
         <Tabs.Trigger value={AssignmentCoverPageTabs.Submissions}>
           <Trans>Submissions</Trans>
         </Tabs.Trigger>
+        {allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
+          <Tabs.Trigger value={AssignmentCoverPageTabs.Share}>
+            <Trans>Share & Embed</Trans>
+          </Tabs.Trigger>
+        )}
       </Tabs.List>
 
       <Box pt="3">
@@ -30,6 +40,12 @@ const AssignmentCoverPageBody = () => {
         <Tabs.Content value={AssignmentCoverPageTabs.Submissions}>
           <SubmissionList />
         </Tabs.Content>
+
+        {allow(DocumentActionPermission.MANAGE_DOCUMENT) && (
+          <Tabs.Content value={AssignmentCoverPageTabs.Share}>
+            <ShareAssignment />
+          </Tabs.Content>
+        )}
       </Box>
     </Tabs.Root>
   );

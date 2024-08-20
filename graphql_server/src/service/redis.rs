@@ -1,7 +1,7 @@
 use redis::{Client, Commands, RedisResult};
 
-fn format_magic_token(otp: &str) -> String {
-    format!("users:magic_token:{otp}")
+fn format_magic_token(user_id: i32, otp: &str) -> String {
+    format!("users:magic_token:{user_id}:{otp}")
 }
 
 #[derive(Debug, Clone)]
@@ -45,18 +45,18 @@ impl Redis {
         otp: &str,
         ttl_seconds: Option<i64>,
     ) -> RedisResult<()> {
-        let key = format_magic_token(otp);
+        let key = format_magic_token(user_id, otp);
         self.set_value(&key, user_id.to_string().as_str(), ttl_seconds)?;
         Ok(())
     }
 
-    pub fn get_magic_token(&self, otp: &str) -> RedisResult<String> {
-        let key = format_magic_token(otp);
+    pub fn get_magic_token(&self, user_id: i32, otp: &str) -> RedisResult<String> {
+        let key = format_magic_token(user_id, otp);
         self.get_value(&key)
     }
 
-    pub fn del_magic_token(&self, otp: &str) -> RedisResult<()> {
-        let key = format_magic_token(otp);
+    pub fn del_magic_token(&self, user_id: i32, otp: &str) -> RedisResult<()> {
+        let key = format_magic_token(user_id, otp);
         self.del_value(&key)
     }
 }

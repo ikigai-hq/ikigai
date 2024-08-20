@@ -57,7 +57,7 @@ msgstr "{totalAttempt} attempts"
 msgid "<0>{0}%</0> of grade"
 msgstr "<0>{0}%</0> of grade"
 
-#: components/QuizGenerator/index.tsx:49
+#: components/QuizGenerator/index.tsx:47
 msgid "🪄Generate Quiz by Ikigai AI🪄"
 msgstr "🪄Generate Quiz by Ikigai AI🪄"
 
@@ -116,6 +116,10 @@ msgstr "All students of this space can access this assignment."
 msgid "Answer Options"
 msgstr "Answer Options"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:136
+msgid "Anyone with link can <0>do the assignment</0> by fill a<1> Form with email, phone number, first name, and last name.</1>"
+msgstr "Anyone with link can <0>do the assignment</0> by fill a<1> Form with email, phone number, first name, and last name.</1>"
+
 #: components/SpaceSetting/MemberSpaceSetting.tsx:92
 msgid "Are you sure to remove {0}?"
 msgstr "Are you sure to remove {0}?"
@@ -164,6 +168,10 @@ msgstr "Assignees only"
 msgid "Assignment"
 msgstr "Assignment"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:119
+msgid "Assignment is <0>not sharing</0> with other people"
+msgstr "Assignment is <0>not sharing</0> with other people"
+
 #: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/SubmissionList/TeacherSubmissionListTable.tsx:131
 msgid "Attempt"
 msgstr "Attempt"
@@ -177,7 +185,7 @@ msgid "Auto"
 msgstr "Auto"
 
 #: components/ErrorBoundary.tsx:54
-#: components/Initializing.tsx:311
+#: components/Initializing.tsx:321
 #: pages/404.tsx:24
 msgid "Back to home"
 msgstr "Back to home"
@@ -233,7 +241,7 @@ msgstr "Click item in the list to switch space"
 #~ msgid "Click or drag file to this area to upload"
 #~ msgstr "Click or drag file to this area to upload"
 
-#: components/QuizGenerator/index.tsx:269
+#: components/QuizGenerator/index.tsx:267
 #: components/QuizGenerator/SelectedGeneratedQuizzes.tsx:304
 msgid "Close"
 msgstr "Close"
@@ -254,6 +262,7 @@ msgstr "Content"
 msgid "Copied"
 msgstr "Copied"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:99
 #: components/SpaceSetting/CreateSpaceInvite.tsx:138
 #: components/SpaceSetting/InviteSpaceSetting.tsx:156
 msgid "Copied!"
@@ -263,11 +272,16 @@ msgstr "Copied!"
 #~ msgid "Copy"
 #~ msgstr "Copy"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:148
+msgid "Copy code below and paste into your website"
+msgstr "Copy code below and paste into your website"
+
 #: components/SpaceSetting/CreateSpaceInvite.tsx:127
 #: components/SpaceSetting/InviteSpaceSetting.tsx:150
 msgid "Copy invite link"
 msgstr "Copy invite link"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:130
 #: components/Document/DocumentHeader/Menubar/index.tsx:144
 msgid "Copy Link"
 msgstr "Copy Link"
@@ -338,7 +352,7 @@ msgstr "Deleted!"
 #~ msgid "Description"
 #~ msgstr "Description"
 
-#: components/QuizGenerator/index.tsx:202
+#: components/QuizGenerator/index.tsx:200
 msgid "Details"
 msgstr "Details"
 
@@ -391,6 +405,10 @@ msgstr "Edit Profile"
 msgid "Email"
 msgstr "Email"
 
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:145
+msgid "Embed into website"
+msgstr "Embed into website"
+
 #: components/Document/DocumentBody/ContentPage/ContentToolbar.tsx:426
 #~ msgid "Essay Block"
 #~ msgstr "Essay Block"
@@ -400,7 +418,7 @@ msgstr "Email"
 msgid "Exit"
 msgstr "Exit"
 
-#: components/QuizGenerator/index.tsx:213
+#: components/QuizGenerator/index.tsx:211
 msgid "Expand your subject"
 msgstr "Expand your subject"
 
@@ -446,7 +464,7 @@ msgstr "Feedback successfully!"
 msgid "File Upload"
 msgstr "File Upload"
 
-#: components/QuizGenerator/index.tsx:236
+#: components/QuizGenerator/index.tsx:234
 msgid "Fill In Blank"
 msgstr "Fill In Blank"
 
@@ -477,12 +495,12 @@ msgstr "Folder"
 msgid "From point"
 msgstr "From point"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/index.tsx:18
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/index.tsx:23
 #: components/SpaceSetting/index.tsx:37
 msgid "General"
 msgstr "General"
 
-#: components/QuizGenerator/index.tsx:281
+#: components/QuizGenerator/index.tsx:279
 #: components/SpaceSetting/CreateSpaceInvite.tsx:155
 msgid "Generate"
 msgstr "Generate"
@@ -537,7 +555,7 @@ msgstr "Heading 3"
 msgid "Highlight text"
 msgstr "Highlight text"
 
-#: components/QuizGenerator/index.tsx:50
+#: components/QuizGenerator/index.tsx:48
 msgid ""
 "Ikigai AI to generate quizzes for you with your teaching resources such as\n"
 "pdf, docx, web, youtube video, etc."
@@ -671,7 +689,7 @@ msgstr "Max Attempt"
 #~ msgid "Max Attempts"
 #~ msgstr "Max Attempts"
 
-#: components/QuizGenerator/index.tsx:255
+#: components/QuizGenerator/index.tsx:253
 msgid "Max quiz"
 msgstr "Max quiz"
 
@@ -695,7 +713,7 @@ msgstr "More Tools"
 #~ msgid "Moved to submission space!"
 #~ msgstr "Moved to submission space!"
 
-#: components/QuizGenerator/index.tsx:233
+#: components/QuizGenerator/index.tsx:231
 msgid "Multiple Choice"
 msgstr "Multiple Choice"
 
@@ -991,7 +1009,7 @@ msgstr "Select all"
 msgid "Select answer"
 msgstr "Select answer"
 
-#: components/QuizGenerator/index.tsx:239
+#: components/QuizGenerator/index.tsx:237
 msgid "Select Option"
 msgstr "Select Option"
 
@@ -1011,11 +1029,15 @@ msgstr "Send me a magic link!"
 msgid "Sent. Please check your email inbox!"
 msgstr "Sent. Please check your email inbox!"
 
-#: components/Document/DocumentHeader/Menubar/index.tsx:153
-#~ msgid "Share"
-#~ msgstr "Share"
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:111
+msgid "Share"
+msgstr "Share"
 
-#: components/QuizGenerator/index.tsx:230
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/index.tsx:30
+msgid "Share & Embed"
+msgstr "Share & Embed"
+
+#: components/QuizGenerator/index.tsx:228
 msgid "Single choice"
 msgstr "Single choice"
 
@@ -1094,11 +1116,11 @@ msgstr "Students will receive the result and the correct answers immediately aft
 #~ msgid "Sub Contents"
 #~ msgstr "Sub Contents"
 
-#: components/QuizGenerator/index.tsx:183
+#: components/QuizGenerator/index.tsx:181
 msgid "Subject"
 msgstr "Subject"
 
-#: components/QuizGenerator/index.tsx:187
+#: components/QuizGenerator/index.tsx:185
 msgid "Subject is the main focus area that Ikigai AI can concentrate on. For example: Vietnam, History, General Knowledge, Grammar, etc. Maximum 120 characters."
 msgstr "Subject is the main focus area that Ikigai AI can concentrate on. For example: Vietnam, History, General Knowledge, Grammar, etc. Maximum 120 characters."
 
@@ -1110,7 +1132,7 @@ msgstr "Subject is the main focus area that Ikigai AI can concentrate on. For ex
 msgid "Submission"
 msgstr "Submission"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/index.tsx:21
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/index.tsx:26
 msgid "Submissions"
 msgstr "Submissions"
 
@@ -1313,7 +1335,7 @@ msgstr "Typing level"
 msgid "Typing new tag"
 msgstr "Typing new tag"
 
-#: components/QuizGenerator/index.tsx:194
+#: components/QuizGenerator/index.tsx:192
 msgid "Typing subject of quiz"
 msgstr "Typing subject of quiz"
 
@@ -1395,7 +1417,7 @@ msgstr "View all submissions of {0}"
 #~ msgid "View and Edit"
 #~ msgstr "View and Edit"
 
-#: components/QuizGenerator/index.tsx:277
+#: components/QuizGenerator/index.tsx:275
 msgid "View Generated quizzes"
 msgstr "View Generated quizzes"
 
@@ -1436,7 +1458,7 @@ msgstr "Writing Quiz"
 msgid "Wrong email format!"
 msgstr "Wrong email format!"
 
-#: components/QuizGenerator/index.tsx:206
+#: components/QuizGenerator/index.tsx:204
 msgid "You can tailor your explanation to the subject, such as using only German or focusing specifically on the simple present tense in Grammar, etc. Maximum 1000 characters (200 words)"
 msgstr "You can tailor your explanation to the subject, such as using only German or focusing specifically on the simple present tense in Grammar, etc. Maximum 1000 characters (200 words)"
 

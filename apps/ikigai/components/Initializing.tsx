@@ -26,7 +26,7 @@ import {
 } from "graphql/query";
 import UserStorage from "storage/UserStorage";
 import useAuthUserStore from "store/AuthStore";
-import { formatStartSpace, Routes } from "config/Routes";
+import { formatStartSpace, isSecurePath, Routes } from "config/Routes";
 import LayoutManagement from "./UserCredential/AuthLayout";
 import Loading from "./Loading";
 import { VERIFY_MAGIC_LINK } from "graphql/mutation/UserMutation";
@@ -85,6 +85,9 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
     console.info("Checking token ...");
     if (!(await verifyToken())) {
       console.info("Checking token failed!");
+      if (isSecurePath(router.pathname)) {
+        window.location.href = "/";
+      }
       return;
     }
     console.info("Checking token completed!");
@@ -138,7 +141,14 @@ export const Initializing: React.FC<Props> = ({ children }: Props) => {
 
   const verifyToken = async (): Promise<boolean> => {
     const token = TokenStorage.get();
-    if (!token) return true;
+    if (!token) {
+      if (isSecurePath(router.pathname)) {
+        TokenStorage.del();
+        UserStorage.del();
+        await router.push(Routes.Home);
+      }
+      return true;
+    }
 
     const { error } = await checkToken();
     if (error && error.graphQLErrors.length > 0) {

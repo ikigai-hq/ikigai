@@ -24,3 +24,6 @@ export const formatPreJoinSpaceUrl = (spaceId: number, token: string) => {
 
 export const needRedirect = (pathName: string) =>
   pathName === "/" || pathName.includes("/documents/");
+
+export const isSecurePath = (pathName: string) =>
+  pathName.includes("/documents/");

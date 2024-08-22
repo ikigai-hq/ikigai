@@ -27,20 +27,21 @@ const ShareDocument = ({
   documentId,
   readOnly,
 }: ShareDocumentProps) => {
-  const [hasError, setHasError] = useState("");
+  const [error, setError] = useState("");
   const { data, loading } = useQuery<GetSharedDocument>(GET_SHARED_DOCUMENT, {
     skip: !sessionId || !documentId || readOnly,
     variables: {
       documentId,
       sessionId,
     },
-    onError: (error) => setHasError(error.message),
+    onError: (error) => setError(error.message),
   });
 
   if (loading) {
     return <Loading />;
   }
 
+  const shouldShowError = readOnly === undefined || !readOnly;
   const totalQuiz = data?.documentGetSharedInfoBySession?.assignment?.totalQuiz;
   const testDuration =
     data?.documentGetSharedInfoBySession?.assignment?.testDuration || 0;
@@ -126,11 +127,11 @@ const ShareDocument = ({
           </Button>
         </div>
       </div>
-      {hasError && (
+      {error && shouldShowError && (
         <Modal
-          content={<Text color="red">{hasError}</Text>}
+          content={<Text color="red">{error}</Text>}
           title={t`Cannot load embedded assignment!`}
-          open={!!hasError}
+          open={!!error}
           showClose={false}
           okText={t`Back to Home`}
           onOk={() => {

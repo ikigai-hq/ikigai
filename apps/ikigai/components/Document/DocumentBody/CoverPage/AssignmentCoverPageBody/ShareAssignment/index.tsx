@@ -10,6 +10,8 @@ import {
 import { t, Trans } from "@lingui/macro";
 import { Link1Icon } from "@radix-ui/react-icons";
 import { useMutation, useQuery } from "@apollo/client";
+import copy from "copy-to-clipboard";
+import toast from "react-hot-toast";
 
 import { GET_DOCUMENT_EMBED_SESSION } from "graphql/query/DocumentQuery";
 import { useEffect, useState } from "react";
@@ -23,10 +25,10 @@ import { formatShareDocument } from "config/Routes";
 import useDocumentStore from "store/DocumentStore";
 import { UPSERT_DOCUMENT_EMBED } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
-import copy from "copy-to-clipboard";
-import toast from "react-hot-toast";
+import Modal from "components/base/Modal";
 
 const ShareAssignment = () => {
+  const [showPreview, setShowPreview] = useState(false);
   const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
   const { data, loading } = useQuery<GetDocumentEmbedSession>(
     GET_DOCUMENT_EMBED_SESSION,
@@ -105,54 +107,124 @@ const ShareAssignment = () => {
 
   const url = formatShareDocument(activeDocumentId, sessionId);
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+    <div>
       <div>
-        <Heading size="5">
-          <Trans>Share</Trans>{" "}
+        <Text weight="bold">Enable Share & Embed feature</Text>
+        <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+          <Text color={"gray"} size="2">
+            <Trans>
+              Your student will fill a form before they can start the
+              assignment.
+            </Trans>
+          </Text>
+          <Button
+            size="2"
+            onClick={() => setShowPreview(true)}
+            variant="ghost"
+            style={{ marginLeft: 5 }}
+          >
+            Review Form
+          </Button>
+        </div>
+        <div style={{ marginTop: 5 }}>
           <Switch
             checked={isActive}
             onCheckedChange={onChangeActive}
             disabled={upsertLoading}
           />
-        </Heading>
-        <Text color={"gray"} size="1">
-          <Trans>
-            Assignment is <b>not sharing</b> with other people
-          </Trans>
-        </Text>
-      </div>
-      <div>
-        <div style={{ maxWidth: 500 }}>
-          <TextField.Root value={url} style={{ flex: 1 }} size="2" readOnly>
-            <TextField.Slot side="right">
-              <Button variant="soft" size="1" onClick={onCopyShareUrl}>
-                <Link1Icon height="16" width="16" />
-                <Trans>Copy Link</Trans>
-              </Button>
-            </TextField.Slot>
-          </TextField.Root>
         </div>
-        <Text color={"gray"} size="2">
-          <Trans>
-            Anyone with link can <b>do the assignment</b> by fill a
-            <b> Form with email, phone number, first name, and last name.</b>
-          </Trans>
-        </Text>
       </div>
-      <Separator style={{ width: "100%" }} />
-      <div>
-        <Heading size="5">
-          <Trans>Embed into website</Trans>
-        </Heading>
-        <Text color={"gray"} size="2">
-          <Trans>Copy code below and paste into your website</Trans>
-        </Text>
-        <TextArea
-          value={`<iframe src="${url}" width: 100%; height: 100%;"></iframe>`}
-          readOnly
+      <Separator style={{ width: "100%", marginTop: 15, marginBottom: 15 }} />
+      <div style={{ display: "flex", gap: 15 }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: 10, flex: 1 }}
+        >
+          <div>
+            <Heading size="3">
+              <Trans>Share link</Trans>{" "}
+            </Heading>
+          </div>
+          <div>
+            <div style={{ maxWidth: 500 }}>
+              <TextField.Root value={url} style={{ flex: 1 }} size="2" readOnly>
+                <TextField.Slot side="right">
+                  <Button variant="soft" size="1" onClick={onCopyShareUrl}>
+                    <Link1Icon height="16" width="16" />
+                    <Trans>Copy Link</Trans>
+                  </Button>
+                </TextField.Slot>
+              </TextField.Root>
+            </div>
+            <Text color={"gray"} size="2">
+              <Trans>
+                Anyone with link can <b>do the assignment</b> by fill a form
+                with email, phone number, first name, and last name.
+              </Trans>
+            </Text>
+          </div>
+        </div>
+        <div style={{ flex: 1 }}>
+          <Heading size="3">
+            <Trans>Embed into website</Trans>
+          </Heading>
+          <Text color={"gray"} size="2">
+            <Trans>
+              Copy code below and paste into your website to embedded this
+              assignment into your website.
+            </Trans>
+          </Text>
+          <TextArea
+            value={`<iframe src="${url}"
+            title="Ikigia Embedded"
+            width="100%"
+            height="100%"
+          ></iframe>`}
+            readOnly
+            rows={6}
+          />
+        </div>
+      </div>
+      {showPreview && (
+        <ReviewEmbeddedForm
+          open={showPreview}
+          onChangeOpen={setShowPreview}
+          url={isActive ? url : `${url}?readOnly=true`}
         />
-      </div>
+      )}
     </div>
+  );
+};
+
+type ReviewEmbeddedFormProps = {
+  open: boolean;
+  onChangeOpen: (open: boolean) => void;
+  url: string;
+};
+
+const ReviewEmbeddedForm = ({
+  open,
+  onChangeOpen,
+  url,
+}: ReviewEmbeddedFormProps) => {
+  return (
+    <Modal
+      content={
+        <div style={{ height: "80vh" }}>
+          <iframe
+            src={url}
+            title="Ikigia Embedded"
+            width="100%"
+            height="100%"
+          ></iframe>
+        </div>
+      }
+      minWidth={"90vw"}
+      maxWidth={"90vw"}
+      open={open}
+      onOpenChange={onChangeOpen}
+    >
+      <></>
+    </Modal>
   );
 };
 

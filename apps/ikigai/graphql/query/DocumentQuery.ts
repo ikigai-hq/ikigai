@@ -113,3 +113,22 @@ export const GET_DOCUMENT_EMBED_SESSION = gql`
     }
   }
 `;
+
+export const GET_SHARED_DOCUMENT = gql`
+  query GetSharedDocument($documentId: UUID!, $sessionId: UUID!) {
+    documentGetSharedInfoBySession(
+      documentId: $documentId
+      sessionId: $sessionId
+    ) {
+      document {
+        id
+        title
+      }
+      assignment {
+        totalQuiz
+        testDuration
+        maxNumberOfAttempt
+      }
+    }
+  }
+`;

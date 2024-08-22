@@ -35,4 +35,4 @@ export const needRedirect = (pathName: string) =>
   pathName === "/" || pathName.includes("/documents/");
 
 export const isSecurePath = (pathName: string) =>
-  pathName.includes("/documents/") && !pathName.includes("/shares/");
+  pathName.includes("/documents/") && !pathName.includes("/share/");

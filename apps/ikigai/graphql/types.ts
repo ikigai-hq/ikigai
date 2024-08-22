@@ -1721,6 +1721,40 @@ export interface GetDocumentEmbedSessionVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetSharedDocument
+// ====================================================
+
+export interface GetSharedDocument_documentGetSharedInfoBySession_document {
+  id: any;
+  title: string;
+}
+
+export interface GetSharedDocument_documentGetSharedInfoBySession_assignment {
+  totalQuiz: number;
+  testDuration: number | null;
+  maxNumberOfAttempt: number | null;
+}
+
+export interface GetSharedDocument_documentGetSharedInfoBySession {
+  document: GetSharedDocument_documentGetSharedInfoBySession_document;
+  assignment: GetSharedDocument_documentGetSharedInfoBySession_assignment;
+}
+
+export interface GetSharedDocument {
+  documentGetSharedInfoBySession: GetSharedDocument_documentGetSharedInfoBySession;
+}
+
+export interface GetSharedDocumentVariables {
+  documentId: any;
+  sessionId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetFile
 // ====================================================
 

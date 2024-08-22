@@ -1,10 +1,17 @@
-use crate::authorization::DocumentActionPermission;
 use async_graphql::*;
 use uuid::Uuid;
 
 use crate::db::*;
-use crate::error::IkigaiErrorExt;
+use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
+use crate::authorization::DocumentActionPermission;
+
+#[derive(SimpleObject)]
+pub struct SharedDocument {
+    pub document: Document,
+    pub assignment: Assignment,
+}
+
 
 #[derive(Default)]
 pub struct DocumentQuery;
@@ -56,5 +63,29 @@ impl DocumentQuery {
         let mut conn = get_conn_from_ctx(ctx).await?;
         let session = EmbeddedSession::find_by_document(&mut conn, document_id).format_err()?;
         Ok(session)
+    }
+
+    async fn document_get_shared_info_by_session(
+        &self,
+        ctx: &Context<'_>,
+        document_id: Uuid,
+        session_id: Uuid,
+    ) -> Result<SharedDocument> {
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let session = EmbeddedSession::find(&mut conn, session_id).format_err()?;
+        if session.document_id != document_id || !session.is_active {
+            return Err(IkigaiError::new_bad_request("Inactive Session")).format_err();
+        }
+
+        let assignment = Assignment::find_by_document(&mut conn, document_id).format_err()?;
+        if assignment.is_none() {
+            return Err(IkigaiError::new_bad_request("Document is not an assignment")).format_err();
+        }
+        let document = Document::find_by_id(&mut conn, document_id).format_err()?;
+
+        Ok(SharedDocument {
+            document,
+            assignment: assignment.unwrap(),
+        })
     }
 }

@@ -26,11 +26,13 @@ import useDocumentStore from "store/DocumentStore";
 import { UPSERT_DOCUMENT_EMBED } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
 import Modal from "components/base/Modal";
-import FormResponses from "./FormResponses";
 
 const ShareAssignment = () => {
   const [showPreview, setShowPreview] = useState(false);
   const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
+  const activeDocumentTitle = useDocumentStore(
+    (state) => state.activeDocument?.title,
+  );
   const { data, loading } = useQuery<GetDocumentEmbedSession>(
     GET_DOCUMENT_EMBED_SESSION,
     {
@@ -115,7 +117,8 @@ const ShareAssignment = () => {
           <Text color={"gray"} size="2">
             <Trans>
               Your students will need to fill out a form before they can start
-              the assignment.
+              the assignment. The responses of students will be stored in the
+              Share Responses tab.
             </Trans>
           </Text>
         </div>
@@ -128,9 +131,14 @@ const ShareAssignment = () => {
         </div>
       </div>
       <Separator style={{ width: "100%", marginTop: 15, marginBottom: 15 }} />
-      <div style={{ display: "flex", gap: 15 }}>
+      <div style={{ display: "flex", gap: 15, height: 600 }}>
         <div
-          style={{ display: "flex", flexDirection: "column", gap: 10, flex: 1 }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+            flex: 1,
+          }}
         >
           <div>
             <Heading size="3">
@@ -147,14 +155,6 @@ const ShareAssignment = () => {
                   </Button>
                 </TextField.Slot>
               </TextField.Root>
-              <Button
-                size="2"
-                onClick={() => setShowPreview(true)}
-                variant="outline"
-                style={{ marginLeft: 5 }}
-              >
-                Review Form
-              </Button>
             </div>
             <Text color={"gray"} size="2">
               <Trans>
@@ -163,27 +163,36 @@ const ShareAssignment = () => {
               </Trans>
             </Text>
           </div>
+          <Separator style={{ width: "100%" }} />
+          <div style={{ flex: 1 }}>
+            <Heading size="3">
+              <Trans>Embed code</Trans>
+            </Heading>
+            <Text color={"gray"} size="2">
+              <Trans>
+                Copy the code below and paste it into your website to embed this
+                assignment.
+              </Trans>
+            </Text>
+            <TextArea
+              value={`<iframe src="${url}?embedded=true" title="${activeDocumentTitle}" width="100%" height="100%" frameborder="0"></iframe>`}
+              readOnly
+              rows={6}
+            />
+          </div>
         </div>
         <div style={{ flex: 1 }}>
           <Heading size="3">
-            <Trans>Embed code</Trans>
+            <Trans>Form Preview</Trans>
           </Heading>
-          <Text color={"gray"} size="2">
-            <Trans>
-              Copy the code below and paste it into your website to embed this
-              assignment.
-            </Trans>
-          </Text>
-          <TextArea
-            value={`<iframe src="${url}?embedded=true" title="Ikigia Embedded" width="100%" height="100%" frameborder="0"></iframe>`}
-            readOnly
-            rows={6}
-          />
+          <iframe
+            src={url}
+            title="Ikigia Embedded"
+            width="100%"
+            height="100%"
+            frameBorder={0}
+          ></iframe>
         </div>
-      </div>
-      <Separator style={{ width: "100%", marginTop: 15, marginBottom: 15 }} />
-      <div>
-        <FormResponses />
       </div>
       {showPreview && (
         <ReviewEmbeddedForm

@@ -29,7 +29,6 @@ const FormContainer = styled.div`
   z-index: 2;
 
   ${BreakPoints.tablet} {
-    text-align: center;
     align-items: center;
     padding: 36px 20px 24px 20px;
   }

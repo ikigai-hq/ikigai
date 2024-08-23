@@ -1,6 +1,6 @@
 import useDocumentStore from "store/DocumentStore";
 import { useQuery } from "@apollo/client";
-import { Button, Heading, Table } from "@radix-ui/themes";
+import { Button, Heading, Table, Text } from "@radix-ui/themes";
 import { Trans } from "@lingui/macro";
 
 import { GET_EMBEDDED_RESPONSES } from "graphql/query/DocumentQuery";
@@ -27,9 +27,17 @@ const FormResponses = () => {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <Heading size="3">
-          <Trans>Form Responses</Trans>
-        </Heading>
+        <div>
+          <Heading>
+            <Trans>Form Responses</Trans>
+          </Heading>
+          <Text color="gray" size="2">
+            <Trans>
+              The response after a student fills out the form before doing the
+              assignment via the Share & Embed feature.
+            </Trans>
+          </Text>
+        </div>
         <ExportResponses title={title} responses={responses} />
       </div>
       <Table.Root>

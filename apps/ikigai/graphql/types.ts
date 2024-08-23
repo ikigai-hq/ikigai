@@ -561,6 +561,33 @@ export interface UpsertDocumentEmbedSessionVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: ResponseEmbeddedForm
+// ====================================================
+
+export interface ResponseEmbeddedForm_documentResponseEmbeddedForm_submission {
+  id: number;
+  documentId: any;
+}
+
+export interface ResponseEmbeddedForm_documentResponseEmbeddedForm {
+  accessToken: string | null;
+  submission: ResponseEmbeddedForm_documentResponseEmbeddedForm_submission | null;
+}
+
+export interface ResponseEmbeddedForm {
+  documentResponseEmbeddedForm: ResponseEmbeddedForm_documentResponseEmbeddedForm;
+}
+
+export interface ResponseEmbeddedFormVariables {
+  response: EmbeddedFormResponseInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: FileCreate
 // ====================================================
 
@@ -1755,6 +1782,43 @@ export interface GetSharedDocumentVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetEmbeddedResponses
+// ====================================================
+
+export interface GetEmbeddedResponses_documentGetEmbeddedSession_responses_responseData {
+  email: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface GetEmbeddedResponses_documentGetEmbeddedSession_responses {
+  submissionId: number | null;
+  responseUserId: number;
+  responseData: GetEmbeddedResponses_documentGetEmbeddedSession_responses_responseData;
+  createdAt: number;
+}
+
+export interface GetEmbeddedResponses_documentGetEmbeddedSession {
+  sessionId: any;
+  documentId: any;
+  responses: GetEmbeddedResponses_documentGetEmbeddedSession_responses[];
+}
+
+export interface GetEmbeddedResponses {
+  documentGetEmbeddedSession: GetEmbeddedResponses_documentGetEmbeddedSession | null;
+}
+
+export interface GetEmbeddedResponsesVariables {
+  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetFile
 // ====================================================
 
@@ -2610,6 +2674,19 @@ export interface CreateFileData {
 export interface DocumentTagInput {
   documentId: any;
   tag: string;
+}
+
+export interface EmbeddedFormResponseInput {
+  sessionId: any;
+  responseData: EmbeddedResponseDataInput;
+}
+
+export interface EmbeddedResponseDataInput {
+  email: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  additionalData: any;
 }
 
 export interface EmbeddedSessionInput {

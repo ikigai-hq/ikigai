@@ -20,11 +20,13 @@ export type UIConfig = {
 };
 
 type IUIStore = {
+  isEmbed: boolean;
   config: UIConfig;
   setConfig: (config: Partial<UIConfig>) => void;
 };
 
 const useUIStore = create<IUIStore>((set, get) => ({
+  isEmbed: false,
   config: {
     leftSidebar: LeftSideBarOptions.None,
     hideLeftSide: false,

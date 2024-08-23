@@ -173,3 +173,15 @@ export const UPSERT_DOCUMENT_EMBED = gql`
     }
   }
 `;
+
+export const RESPONSE_EMBEDDED_FORM = gql`
+  mutation ResponseEmbeddedForm($response: EmbeddedFormResponseInput!) {
+    documentResponseEmbeddedForm(response: $response) {
+      accessToken
+      submission {
+        id
+        documentId
+      }
+    }
+  }
+`;

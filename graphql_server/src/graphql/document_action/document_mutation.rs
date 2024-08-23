@@ -401,6 +401,11 @@ impl DocumentMutation {
     ) -> Result<AccessTokenWithSubmission> {
         let mut conn = get_conn_from_ctx(ctx).await?;
         let session = EmbeddedSession::find(&mut conn, response.session_id).format_err()?;
+        let assignment_document = Document::find_by_id(&mut conn, session.document_id).format_err()?;
+
+        if assignment_document.space_id.is_none() {
+            return Err(IkigaiError::new_bad_request("Assignment is not linked to any space")).format_err();
+        }
 
         let (_response, submission, temp_user) = conn
             .transaction::<_, IkigaiError, _>(|conn| {
@@ -411,6 +416,10 @@ impl DocumentMutation {
                     response.response_data.last_name.clone(),
                 );
                 let temp_user = User::insert(conn, &temp_user)?;
+
+                let space_member = SpaceMember::new(assignment_document.space_id.unwrap(), temp_user.id, None, Role::Student);
+                SpaceMember::upsert(conn, space_member)?;
+
                 response.response_user_id = temp_user.id;
 
                 // Allow user start a submission
@@ -418,7 +427,6 @@ impl DocumentMutation {
                 if session.embedded_type == EmbeddedType::Form {
                     // Start Submission from assignment
                     let assignment = Assignment::find_by_document(conn, session.document_id)?;
-                    let assignment_document = Document::find_by_id(conn, session.document_id)?;
                     if let Some(assignment) = assignment {
                         submission = Some(start_submission(
                             conn,

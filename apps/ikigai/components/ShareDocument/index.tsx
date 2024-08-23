@@ -7,18 +7,24 @@ import {
   TextField,
 } from "@radix-ui/themes";
 import { t, Trans } from "@lingui/macro";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import { useState } from "react";
+import validator from "validator";
+import toast from "react-hot-toast";
 
 import { GET_SHARED_DOCUMENT } from "graphql/query/DocumentQuery";
 import Loading from "../Loading";
-import { GetSharedDocument } from "graphql/types";
+import { GetSharedDocument, ResponseEmbeddedForm } from "graphql/types";
 import TestDurationAttribute from "../Document/DocumentBody/CoverPage/AssignmentCoverPageBody/GeneralInformation/TestDurationAttribute";
-import { useState } from "react";
-import Modal from "../base/Modal";
+import Modal from "components/base/Modal";
+import { RESPONSE_EMBEDDED_FORM } from "graphql/mutation/DocumentMutation";
+import { handleError } from "graphql/ApolloClient";
+import { formatDocumentRoute } from "config/Routes";
+import TokenStorage from "storage/TokenStorage";
 
 export type ShareDocumentProps = {
-  sessionId?: string;
-  documentId?: string;
+  sessionId: string;
+  documentId: string;
   readOnly?: boolean;
 };
 
@@ -27,9 +33,16 @@ const ShareDocument = ({
   documentId,
   readOnly,
 }: ShareDocumentProps) => {
+  const [responseForm, { loading: responseLoading }] =
+    useMutation<ResponseEmbeddedForm>(RESPONSE_EMBEDDED_FORM, {
+      onError: handleError,
+    });
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [name, setName] = useState("");
   const [error, setError] = useState("");
   const { data, loading } = useQuery<GetSharedDocument>(GET_SHARED_DOCUMENT, {
-    skip: !sessionId || !documentId || readOnly,
+    skip: !sessionId || !documentId,
     variables: {
       documentId,
       sessionId,
@@ -41,10 +54,63 @@ const ShareDocument = ({
     return <Loading />;
   }
 
+  const onChangeEmail = (email: string) => {
+    if (readOnly) return;
+    setEmail(email);
+  };
+
+  const onChangePhoneNumber = (phoneNumber: string) => {
+    if (readOnly) return;
+    setPhoneNumber(phoneNumber);
+  };
+
+  const onChangeName = (name: string) => {
+    if (readOnly) return;
+    setName(name);
+  };
+
+  const onDoAssignment = async () => {
+    if (readOnly) return;
+
+    if (!validator.isEmail(email)) {
+      toast.error(t`Wrong email format!`);
+      return;
+    }
+
+    if (!validator.isMobilePhone(phoneNumber)) {
+      toast.error(t`Wrong phone number format!`);
+      return;
+    }
+
+    const { data } = await responseForm({
+      variables: {
+        response: {
+          sessionId,
+          responseData: {
+            email,
+            phoneNumber,
+            firstName: name,
+            lastName: "",
+            additionalData: {},
+          },
+        },
+      },
+    });
+
+    if (data && data.documentResponseEmbeddedForm.submission) {
+      TokenStorage.set(data.documentResponseEmbeddedForm.accessToken);
+      window.location.replace(
+        formatDocumentRoute(
+          data.documentResponseEmbeddedForm.submission.documentId,
+        ),
+      );
+    }
+  };
+
   const shouldShowError = readOnly === undefined || !readOnly;
   const totalQuiz = data?.documentGetSharedInfoBySession?.assignment?.totalQuiz;
   const testDuration =
-    data?.documentGetSharedInfoBySession?.assignment?.testDuration || 0;
+    data?.documentGetSharedInfoBySession?.assignment?.testDuration;
   const maxAttempt =
     data?.documentGetSharedInfoBySession?.assignment?.maxNumberOfAttempt || 1;
   const title =
@@ -82,7 +148,7 @@ const ShareDocument = ({
       <Separator style={{ width: "100%" }} />
       <Text color="gray" size="2">
         <Trans>
-          Fill all the information and click do the assignment to start.
+          Fill in all the information and click 'Do the Assignment' to start.
         </Trans>
       </Text>
       <div>
@@ -90,7 +156,8 @@ const ShareDocument = ({
           <Text weight="bold">Email</Text>
           <TextField.Root
             placeholder={t`Typing your email`}
-            readOnly={readOnly}
+            value={email}
+            onChange={(e) => onChangeEmail(e.currentTarget.value)}
           />
         </div>
         <div
@@ -104,7 +171,8 @@ const ShareDocument = ({
           <Text weight="bold">Phone Number</Text>
           <TextField.Root
             placeholder={t`Typing your phone number`}
-            readOnly={readOnly}
+            value={phoneNumber}
+            onChange={(e) => onChangePhoneNumber(e.currentTarget.value)}
           />
         </div>
         <div
@@ -118,19 +186,27 @@ const ShareDocument = ({
           <Text weight="bold">Your Name</Text>
           <TextField.Root
             placeholder={t`Typing your name`}
-            readOnly={readOnly}
+            value={name}
+            onChange={(e) => onChangeName(e.currentTarget.value)}
           />
         </div>
         <div style={{ marginTop: 10 }}>
-          <Button size="2" style={{ width: "100%" }} disabled={readOnly}>
-            Do the assignment
+          <Button
+            size="2"
+            style={{ width: "100%" }}
+            onClick={onDoAssignment}
+            disabled={responseLoading}
+            loading={responseLoading}
+          >
+            <Trans>Do the Assignment</Trans>
           </Button>
         </div>
       </div>
       {error && shouldShowError && (
         <Modal
           content={<Text color="red">{error}</Text>}
-          title={t`Cannot load embedded assignment!`}
+          title={t`Failed to load embedded assignment!`}
+          description={t`We've encountered an error while loading the assignment.`}
           open={!!error}
           showClose={false}
           okText={t`Back to Home`}

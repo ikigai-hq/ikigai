@@ -26,6 +26,7 @@ import useDocumentStore from "store/DocumentStore";
 import { UPSERT_DOCUMENT_EMBED } from "graphql/mutation/DocumentMutation";
 import { handleError } from "graphql/ApolloClient";
 import Modal from "components/base/Modal";
+import FormResponses from "./FormResponses";
 
 const ShareAssignment = () => {
   const [showPreview, setShowPreview] = useState(false);
@@ -113,18 +114,10 @@ const ShareAssignment = () => {
         <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
           <Text color={"gray"} size="2">
             <Trans>
-              Your student will fill a form before they can start the
-              assignment.
+              Your students will need to fill out a form before they can start
+              the assignment.
             </Trans>
           </Text>
-          <Button
-            size="2"
-            onClick={() => setShowPreview(true)}
-            variant="ghost"
-            style={{ marginLeft: 5 }}
-          >
-            Review Form
-          </Button>
         </div>
         <div style={{ marginTop: 5 }}>
           <Switch
@@ -145,7 +138,7 @@ const ShareAssignment = () => {
             </Heading>
           </div>
           <div>
-            <div style={{ maxWidth: 500 }}>
+            <div style={{ display: "flex" }}>
               <TextField.Root value={url} style={{ flex: 1 }} size="2" readOnly>
                 <TextField.Slot side="right">
                   <Button variant="soft" size="1" onClick={onCopyShareUrl}>
@@ -154,41 +147,49 @@ const ShareAssignment = () => {
                   </Button>
                 </TextField.Slot>
               </TextField.Root>
+              <Button
+                size="2"
+                onClick={() => setShowPreview(true)}
+                variant="outline"
+                style={{ marginLeft: 5 }}
+              >
+                Review Form
+              </Button>
             </div>
             <Text color={"gray"} size="2">
               <Trans>
-                Anyone with link can <b>do the assignment</b> by fill a form
-                with email, phone number, first name, and last name.
+                Anyone with the link can <b>do the assignment</b> by filling out
+                a form with their email, phone number, and name.
               </Trans>
             </Text>
           </div>
         </div>
         <div style={{ flex: 1 }}>
           <Heading size="3">
-            <Trans>Embed into website</Trans>
+            <Trans>Embed code</Trans>
           </Heading>
           <Text color={"gray"} size="2">
             <Trans>
-              Copy code below and paste into your website to embedded this
-              assignment into your website.
+              Copy the code below and paste it into your website to embed this
+              assignment.
             </Trans>
           </Text>
           <TextArea
-            value={`<iframe src="${url}"
-            title="Ikigia Embedded"
-            width="100%"
-            height="100%"
-          ></iframe>`}
+            value={`<iframe src="${url}?embedded=true" title="Ikigia Embedded" width="100%" height="100%" frameborder="0"></iframe>`}
             readOnly
             rows={6}
           />
         </div>
       </div>
+      <Separator style={{ width: "100%", marginTop: 15, marginBottom: 15 }} />
+      <div>
+        <FormResponses />
+      </div>
       {showPreview && (
         <ReviewEmbeddedForm
           open={showPreview}
           onChangeOpen={setShowPreview}
-          url={isActive ? url : `${url}?readOnly=true`}
+          url={`${url}?readOnly=true`}
         />
       )}
     </div>
@@ -215,6 +216,7 @@ const ReviewEmbeddedForm = ({
             title="Ikigia Embedded"
             width="100%"
             height="100%"
+            frameBorder={0}
           ></iframe>
         </div>
       }

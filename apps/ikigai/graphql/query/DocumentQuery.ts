@@ -132,3 +132,23 @@ export const GET_SHARED_DOCUMENT = gql`
     }
   }
 `;
+
+export const GET_EMBEDDED_RESPONSES = gql`
+  query GetEmbeddedResponses($documentId: UUID!) {
+    documentGetEmbeddedSession(documentId: $documentId) {
+      sessionId
+      documentId
+      responses {
+        submissionId
+        responseUserId
+        responseData {
+          email
+          phoneNumber
+          firstName
+          lastName
+        }
+        createdAt
+      }
+    }
+  }
+`;

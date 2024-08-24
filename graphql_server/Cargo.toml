@@ -14,7 +14,7 @@ actix-web-actors = "4.3.0"
 dotenv = "0.15.0"
 async-graphql = { version = "7.0.3", features = ["log", "uuid", "dataloader", "apollo_tracing"] }
 async-graphql-actix-web = "7.0.3"
-diesel = { version = "2.1.5", features = ["postgres", "chrono", "uuid", "serde_json", "r2d2"] }
+diesel = { version = "2.2.3", features = ["postgres", "chrono", "uuid", "serde_json", "r2d2"] }
 chrono = "0.4"
 pbkdf2 = { version = "0.7", features = ["simple"] }
 log = "0.4"

@@ -11,6 +11,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
 import validator from "validator";
 import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 import { GET_SHARED_DOCUMENT } from "graphql/query/DocumentQuery";
 import Loading from "../Loading";
@@ -33,6 +34,7 @@ const ShareDocument = ({
   documentId,
   readOnly,
 }: ShareDocumentProps) => {
+  const router = useRouter();
   const [responseForm, { loading: responseLoading }] =
     useMutation<ResponseEmbeddedForm>(RESPONSE_EMBEDDED_FORM, {
       onError: handleError,
@@ -99,11 +101,10 @@ const ShareDocument = ({
 
     if (data && data.documentResponseEmbeddedForm.submission) {
       TokenStorage.set(data.documentResponseEmbeddedForm.accessToken);
-      window.location.replace(
-        formatDocumentRoute(
-          data.documentResponseEmbeddedForm.submission.documentId,
-        ),
+      const baseUrl = formatDocumentRoute(
+        data.documentResponseEmbeddedForm.submission.documentId,
       );
+      router.push(baseUrl);
     }
   };
 

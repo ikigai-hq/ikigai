@@ -4,7 +4,6 @@ import { NextPageWithLayout } from "pages/_app";
 import LayoutManagement from "components/UserCredential/AuthLayout";
 import ShareDocument from "components/ShareDocument";
 import { useRouter } from "next/router";
-import useUIStore from "store/UIStore";
 import Loading from "components/Loading";
 
 const SharePage: NextPageWithLayout = () => {
@@ -12,8 +11,6 @@ const SharePage: NextPageWithLayout = () => {
   const sessionId = router.query.sessionId as string;
   const documentId = router.query.documentId as string;
   const readOnly = (router.query.readOnly as string) === "true";
-  const isEmbed = (router.query.embedded as string) === "true";
-  useUIStore.setState({ isEmbed });
 
   if (!sessionId || !documentId) return <Loading />;
 

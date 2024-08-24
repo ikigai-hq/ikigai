@@ -141,4 +141,18 @@ impl EmbeddedSessionResponse {
             .order_by(embedded_form_responses::created_at.desc())
             .get_results(conn)
     }
+
+    pub fn find_by_submission_id(
+        conn: &mut PgConnection,
+        submission_id: i32,
+    ) -> Result<Option<Self>, Error> {
+        match embedded_form_responses::table
+            .filter(embedded_form_responses::submission_id.eq(submission_id))
+            .first(conn)
+        {
+            Ok(item) => Ok(Some(item)),
+            Err(Error::NotFound) => Ok(None),
+            Err(e) => Err(e),
+        }
+    }
 }

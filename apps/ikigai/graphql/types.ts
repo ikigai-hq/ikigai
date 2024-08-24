@@ -1591,6 +1591,7 @@ export interface GetDocument_documentGet_submission {
   finalGrade: number | null;
   testDuration: number | null;
   attemptNumber: number;
+  isSharedSubmission: boolean;
   user: GetDocument_documentGet_submission_user;
   assignment: GetDocument_documentGet_submission_assignment;
 }

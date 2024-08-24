@@ -72,6 +72,9 @@ export const StudentDoingSubmissionHeader = () => {
   const assignmentDocumentId = useDocumentStore(
     (state) => state.activeDocument?.submission?.assignment?.documentId,
   );
+  const isSharedSubmission = useDocumentStore(
+    (state) => state.activeDocument?.submission?.isSharedSubmission,
+  );
   const [submitSubmission] = useMutation<StudentSubmitSubmission>(
     STUDENT_SUBMIT_SUBMISSION,
     {
@@ -87,7 +90,11 @@ export const StudentDoingSubmissionHeader = () => {
     });
     if (data) {
       toast.success(t`Success`);
-      await router.push(formatDocumentRoute(assignmentDocumentId));
+      if (!isSharedSubmission) {
+        await router.push(formatDocumentRoute(assignmentDocumentId));
+      } else {
+        window.location.reload();
+      }
     }
   };
 
@@ -98,13 +105,15 @@ export const StudentDoingSubmissionHeader = () => {
   return (
     <HeaderSubmissionWrapper>
       <HeaderSubmissionUserInfo />
-      <Button
-        variant="outline"
-        onClick={onClickSaveAndExit}
-        style={{ marginLeft: 5 }}
-      >
-        <Trans>Save & Exit</Trans>
-      </Button>
+      {!isSharedSubmission && (
+        <Button
+          variant="outline"
+          onClick={onClickSaveAndExit}
+          style={{ marginLeft: 5 }}
+        >
+          <Trans>Save & Exit</Trans>
+        </Button>
+      )}
       <Modal
         title={t`Do you want to submit your submission?`}
         description={t`You cannot continue edit your submission after you submit.`}
@@ -165,12 +174,15 @@ const StudentNonDoingSubmissionHeader = () => {
   const backToAssignment = () => {
     router.push(formatDocumentRoute(submission.assignment.documentId));
   };
+
   return (
     <HeaderSubmissionWrapper>
       <HeaderSubmissionUserInfo />
-      <Button variant="soft" onClick={backToAssignment}>
-        <ExitIcon /> <Trans>Exit</Trans>
-      </Button>
+      {!submission?.isSharedSubmission && (
+        <Button variant="soft" onClick={backToAssignment}>
+          <ExitIcon /> <Trans>Exit</Trans>
+        </Button>
+      )}
     </HeaderSubmissionWrapper>
   );
 };

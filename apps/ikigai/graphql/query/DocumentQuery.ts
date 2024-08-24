@@ -38,6 +38,7 @@ export const GET_DOCUMENT = gql`
         finalGrade
         testDuration
         attemptNumber
+        isSharedSubmission
         user {
           id
           name

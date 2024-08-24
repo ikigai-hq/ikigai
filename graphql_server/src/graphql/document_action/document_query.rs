@@ -1,17 +1,16 @@
 use async_graphql::*;
 use uuid::Uuid;
 
+use crate::authorization::DocumentActionPermission;
 use crate::db::*;
 use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
-use crate::authorization::DocumentActionPermission;
 
 #[derive(SimpleObject)]
 pub struct SharedDocument {
     pub document: Document,
     pub assignment: Assignment,
 }
-
 
 #[derive(Default)]
 pub struct DocumentQuery;
@@ -79,7 +78,10 @@ impl DocumentQuery {
 
         let assignment = Assignment::find_by_document(&mut conn, document_id).format_err()?;
         if assignment.is_none() {
-            return Err(IkigaiError::new_bad_request("Document is not an assignment")).format_err();
+            return Err(IkigaiError::new_bad_request(
+                "Document is not an assignment",
+            ))
+            .format_err();
         }
         let document = Document::find_by_id(&mut conn, document_id).format_err()?;
 

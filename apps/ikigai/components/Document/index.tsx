@@ -16,7 +16,6 @@ const Document = () => {
   const documentId = router.query.documentId as string;
   const config = useUIStore((state) => state.config);
   const setUiConfig = useUIStore((state) => state.setConfig);
-  const isEmbed = useUIStore((state) => state.isEmbed);
 
   const onClickExitFocusMode = () => {
     setUiConfig({ hideLeftSide: false, hideHeader: false });
@@ -26,7 +25,7 @@ const Document = () => {
 
   return (
     <Container>
-      {!config.hideLeftSide && !isEmbed && <LeftSide />}
+      {!config.hideLeftSide && <LeftSide />}
       <DocumentBodyContainer>
         {!config.hideHeader && <DocumentHeader />}
         <DocumentBody loading={loading} />

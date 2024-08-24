@@ -160,3 +160,16 @@ impl EmbeddedSession {
         Ok(responses)
     }
 }
+
+#[ComplexObject]
+impl EmbeddedSessionResponse {
+    async fn submission(&self, ctx: &Context<'_>) -> Result<Option<Submission>> {
+        if let Some(submission_id) = self.submission_id {
+            let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
+            let submission = loader.load_one(SubmissionById(submission_id)).await?;
+            Ok(submission)
+        } else {
+            Ok(None)
+        }
+    }
+}

@@ -2,6 +2,9 @@ import useDocumentStore from "store/DocumentStore";
 import { useQuery } from "@apollo/client";
 import { Button, Heading, Table, Text } from "@radix-ui/themes";
 import { Trans } from "@lingui/macro";
+import { CSVLink } from "react-csv";
+import React from "react";
+import Link from "next/link";
 
 import { GET_EMBEDDED_RESPONSES } from "graphql/query/DocumentQuery";
 import { handleError } from "graphql/ApolloClient";
@@ -10,8 +13,7 @@ import {
   GetEmbeddedResponses_documentGetEmbeddedSession_responses,
 } from "graphql/types";
 import { formatTimestamp, FormatType, getNowAsSec } from "util/Time";
-import { CSVLink } from "react-csv";
-import React from "react";
+import { formatDocumentRoute } from "config/Routes";
 
 const FormResponses = () => {
   const title = useDocumentStore((state) => state.activeDocument?.title);
@@ -55,6 +57,7 @@ const FormResponses = () => {
             <Table.ColumnHeaderCell>
               <Trans>Response at</Trans>
             </Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell />
           </Table.Row>
         </Table.Header>
 
@@ -69,6 +72,19 @@ const FormResponses = () => {
               <Table.Cell>{response.responseData.phoneNumber}</Table.Cell>
               <Table.Cell>
                 {formatTimestamp(response.createdAt, FormatType.DateTimeFormat)}
+              </Table.Cell>
+              <Table.Cell>
+                {response.submission && (
+                  <Link
+                    href={formatDocumentRoute(response.submission?.documentId)}
+                    target="_blank"
+                    passHref
+                  >
+                    <a target="_blank">
+                      <Button variant="soft">View submission</Button>
+                    </a>
+                  </Link>
+                )}
               </Table.Cell>
             </Table.Row>
           ))}

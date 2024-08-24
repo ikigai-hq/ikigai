@@ -149,6 +149,10 @@ export const GET_EMBEDDED_RESPONSES = gql`
           lastName
         }
         createdAt
+        submission {
+          id
+          documentId
+        }
       }
     }
   }

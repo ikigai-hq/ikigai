@@ -1793,11 +1793,17 @@ export interface GetEmbeddedResponses_documentGetEmbeddedSession_responses_respo
   lastName: string;
 }
 
+export interface GetEmbeddedResponses_documentGetEmbeddedSession_responses_submission {
+  id: number;
+  documentId: any;
+}
+
 export interface GetEmbeddedResponses_documentGetEmbeddedSession_responses {
   submissionId: number | null;
   responseUserId: number;
   responseData: GetEmbeddedResponses_documentGetEmbeddedSession_responses_responseData;
   createdAt: number;
+  submission: GetEmbeddedResponses_documentGetEmbeddedSession_responses_submission | null;
 }
 
 export interface GetEmbeddedResponses_documentGetEmbeddedSession {

@@ -28,7 +28,6 @@ import { handleError } from "graphql/ApolloClient";
 import Modal from "components/base/Modal";
 
 const ShareAssignment = () => {
-  const [showPreview, setShowPreview] = useState(false);
   const activeDocumentId = useDocumentStore((state) => state.activeDocumentId);
   const activeDocumentTitle = useDocumentStore(
     (state) => state.activeDocument?.title,
@@ -175,7 +174,7 @@ const ShareAssignment = () => {
               </Trans>
             </Text>
             <TextArea
-              value={`<iframe src="${url}?embedded=true" title="${activeDocumentTitle}" width="100%" height="100%" frameborder="0"></iframe>`}
+              value={`<iframe src="${url}" title="${activeDocumentTitle}" width="100%" height="100%" frameborder="0"></iframe>`}
               readOnly
               rows={6}
             />
@@ -186,7 +185,7 @@ const ShareAssignment = () => {
             <Trans>Form Preview</Trans>
           </Heading>
           <iframe
-            src={url}
+            src={`${url}?readOnly=true`}
             title="Ikigia Embedded"
             width="100%"
             height="100%"
@@ -194,48 +193,7 @@ const ShareAssignment = () => {
           ></iframe>
         </div>
       </div>
-      {showPreview && (
-        <ReviewEmbeddedForm
-          open={showPreview}
-          onChangeOpen={setShowPreview}
-          url={`${url}?readOnly=true`}
-        />
-      )}
     </div>
-  );
-};
-
-type ReviewEmbeddedFormProps = {
-  open: boolean;
-  onChangeOpen: (open: boolean) => void;
-  url: string;
-};
-
-const ReviewEmbeddedForm = ({
-  open,
-  onChangeOpen,
-  url,
-}: ReviewEmbeddedFormProps) => {
-  return (
-    <Modal
-      content={
-        <div style={{ height: "80vh" }}>
-          <iframe
-            src={url}
-            title="Ikigia Embedded"
-            width="100%"
-            height="100%"
-            frameBorder={0}
-          ></iframe>
-        </div>
-      }
-      minWidth={"90vw"}
-      maxWidth={"90vw"}
-      open={open}
-      onOpenChange={onChangeOpen}
-    >
-      <></>
-    </Modal>
   );
 };
 

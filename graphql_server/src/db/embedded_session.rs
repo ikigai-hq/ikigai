@@ -109,7 +109,7 @@ pub struct EmbeddedResponse {
 impl_jsonb_for_db!(EmbeddedResponse);
 
 #[derive(Debug, Clone, SimpleObject, InputObject, Insertable, Queryable)]
-#[graphql(input_name = "EmbeddedFormResponseInput")]
+#[graphql(input_name = "EmbeddedFormResponseInput", complex)]
 #[diesel(table_name = embedded_form_responses)]
 pub struct EmbeddedSessionResponse {
     #[graphql(skip_input)]

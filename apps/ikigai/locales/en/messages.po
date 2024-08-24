@@ -120,7 +120,7 @@ msgstr "Answer Options"
 #~ msgid "Anyone with link can <0>do the assignment</0> by fill a<1> Form with email, phone number, first name, and last name.</1>"
 #~ msgstr "Anyone with link can <0>do the assignment</0> by fill a<1> Form with email, phone number, first name, and last name.</1>"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:160
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:159
 msgid "Anyone with the link can <0>do the assignment</0> by filling out a form with their email, phone number, and name."
 msgstr "Anyone with the link can <0>do the assignment</0> by filling out a form with their email, phone number, and name."
 
@@ -270,7 +270,7 @@ msgstr "Content"
 msgid "Copied"
 msgstr "Copied"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:104
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:103
 #: components/SpaceSetting/CreateSpaceInvite.tsx:138
 #: components/SpaceSetting/InviteSpaceSetting.tsx:156
 msgid "Copied!"
@@ -289,12 +289,12 @@ msgstr "Copied!"
 msgid "Copy invite link"
 msgstr "Copy invite link"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:154
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:153
 #: components/Document/DocumentHeader/Menubar/index.tsx:144
 msgid "Copy Link"
 msgstr "Copy Link"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:172
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:171
 msgid "Copy the code below and paste it into your website to embed this assignment."
 msgstr "Copy the code below and paste it into your website to embed this assignment."
 
@@ -416,13 +416,13 @@ msgstr "Edit Page"
 msgid "Edit Profile"
 msgstr "Edit Profile"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:50
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:52
 #: components/MagicLink/index.tsx:63
 #: components/PreJoinSpace.tsx:65
 msgid "Email"
 msgstr "Email"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:169
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:168
 msgid "Embed code"
 msgstr "Embed code"
 
@@ -439,7 +439,7 @@ msgstr "Embed code"
 msgid "Exit"
 msgstr "Exit"
 
-#: components/Document/index.tsx:37
+#: components/Document/index.tsx:36
 msgid "Exit focus mode"
 msgstr "Exit focus mode"
 
@@ -463,7 +463,7 @@ msgstr "Expire at"
 msgid "Expired"
 msgstr "Expired"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:106
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:122
 #: components/Document/LeftSide/LeftSecondarySide/Gradebook.tsx:236
 msgid "Export to CSV"
 msgstr "Export to CSV"
@@ -525,11 +525,11 @@ msgstr "First name"
 msgid "Folder"
 msgstr "Folder"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:186
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:185
 msgid "Form Preview"
 msgstr "Form Preview"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:32
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:34
 msgid "Form Responses"
 msgstr "Form Responses"
 
@@ -537,7 +537,7 @@ msgstr "Form Responses"
 msgid "From point"
 msgstr "From point"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:47
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:49
 msgid "Full name"
 msgstr "Full name"
 
@@ -884,7 +884,7 @@ msgstr "Oops! We found an unexpected error..."
 #~ msgid "Pages & Edit tools"
 #~ msgstr "Pages & Edit tools"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:53
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:55
 msgid "Phone number"
 msgstr "Phone number"
 
@@ -985,7 +985,7 @@ msgstr "Remove member"
 msgid "Removed!"
 msgstr "Removed!"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:56
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:58
 msgid "Response at"
 msgstr "Response at"
 
@@ -1095,7 +1095,7 @@ msgstr "Sent. Please check your email inbox!"
 msgid "Share & Embed"
 msgstr "Share & Embed"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:145
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:144
 msgid "Share link"
 msgstr "Share link"
 
@@ -1266,7 +1266,7 @@ msgstr "Text color"
 #~ msgid "The answer is incorrect! Correct answer is <0>{explainAnswer}</0>"
 #~ msgstr "The answer is incorrect! Correct answer is <0>{explainAnswer}</0>"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:35
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/FormResponses.tsx:37
 msgid "The response after a student fills out the form before doing the assignment via the Share & Embed feature."
 msgstr "The response after a student fills out the form before doing the assignment via the Share & Embed feature."
 
@@ -1606,6 +1606,6 @@ msgstr "Your last submission already has feedback. Please check it!"
 msgid "Your space is empty"
 msgstr "Your space is empty"
 
-#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:118
+#: components/Document/DocumentBody/CoverPage/AssignmentCoverPageBody/ShareAssignment/index.tsx:117
 msgid "Your students will need to fill out a form before they can start the assignment. The responses of students will be stored in the Share Responses tab."
 msgstr "Your students will need to fill out a form before they can start the assignment. The responses of students will be stored in the Share Responses tab."

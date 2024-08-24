@@ -43,6 +43,21 @@ impl NewUser {
             avatar_file_id: None,
         }
     }
+
+    pub fn new_temp(original_email: String, first_name: String, last_name: String) -> NewUser {
+        let components: Vec<&str> = original_email.split('@').collect();
+        let uuid = Uuid::new_v4();
+        let temp_email = if components.len() == 2 {
+            format!(
+                "{first_part}+{uuid}@{second_part}",
+                first_part = components[0],
+                second_part = components[1]
+            )
+        } else {
+            format!("user_{uuid}@ikigai.li")
+        };
+        NewUser::new(temp_email, first_name, last_name)
+    }
 }
 
 #[derive(Debug, Clone, InputObject, AsChangeset)]

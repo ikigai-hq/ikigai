@@ -159,8 +159,13 @@ Great news! Your teacher has provided feedback on your submission in {submission
         )
     }
 
-    fn get_url_path(&self, _: &User) -> String {
-        format_document_url(self.document_submission_id)
+    fn get_url_path(&self, receiver: &User) -> String {
+        generate_document_magic_link(
+            receiver.id,
+            self.document_submission_id,
+            Some(ONE_MONTH_SECONDS),
+        )
+        .unwrap_or(format_document_url(self.document_submission_id))
     }
 }
 

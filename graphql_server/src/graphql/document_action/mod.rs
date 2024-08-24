@@ -146,3 +146,30 @@ impl DocumentAssignedUsers {
         get_public_user_from_loader(ctx, self.assigned_user_id).await
     }
 }
+
+#[ComplexObject]
+impl EmbeddedSession {
+    async fn responses(&self, ctx: &Context<'_>) -> Result<Vec<EmbeddedSessionResponse>> {
+        let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
+        let responses = loader
+            .load_one(FindEmbeddedSessionResponses {
+                embedded_session_id: self.session_id,
+            })
+            .await?
+            .unwrap_or_default();
+        Ok(responses)
+    }
+}
+
+#[ComplexObject]
+impl EmbeddedSessionResponse {
+    async fn submission(&self, ctx: &Context<'_>) -> Result<Option<Submission>> {
+        if let Some(submission_id) = self.submission_id {
+            let loader = ctx.data_unchecked::<DataLoader<IkigaiDataLoader>>();
+            let submission = loader.load_one(SubmissionById(submission_id)).await?;
+            Ok(submission)
+        } else {
+            Ok(None)
+        }
+    }
+}

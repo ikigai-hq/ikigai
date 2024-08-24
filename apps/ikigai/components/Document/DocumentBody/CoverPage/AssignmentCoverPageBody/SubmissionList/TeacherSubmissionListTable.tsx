@@ -1,7 +1,7 @@
 import { t, Trans } from "@lingui/macro";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { IconButton, Table, Text, Tooltip } from "@radix-ui/themes";
+import { Heading, IconButton, Table, Text, Tooltip } from "@radix-ui/themes";
 import { Pencil1Icon, RowsIcon } from "@radix-ui/react-icons";
 
 import { formatDocumentRoute } from "config/Routes";
@@ -106,6 +106,12 @@ const TeacherSubmissionListTable = ({
 
   return (
     <div>
+      <Heading>
+        <Trans>Submissions</Trans>
+      </Heading>
+      <Text color="gray" size="2">
+        <Trans>List of submissions by students</Trans>
+      </Text>
       <Table.Root>
         <Table.Header>
           <Table.Row>

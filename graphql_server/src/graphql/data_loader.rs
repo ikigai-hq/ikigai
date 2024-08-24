@@ -536,3 +536,39 @@ impl Loader<FindDocumentTag> for IkigaiDataLoader {
         Ok(res)
     }
 }
+
+#[derive(Debug, Clone, Hash, Eq, PartialEq)]
+pub struct FindEmbeddedSessionResponses {
+    pub embedded_session_id: Uuid,
+}
+
+impl Loader<FindEmbeddedSessionResponses> for IkigaiDataLoader {
+    type Value = Vec<EmbeddedSessionResponse>;
+    type Error = IkigaiError;
+
+    async fn load(
+        &self,
+        keys: &[FindEmbeddedSessionResponses],
+    ) -> std::result::Result<HashMap<FindEmbeddedSessionResponses, Self::Value>, Self::Error> {
+        if keys.is_empty() {
+            return Ok(HashMap::new());
+        }
+        let session_ids = keys.iter().map(|key| key.embedded_session_id).collect();
+        let mut conn = get_conn_from_actor().await?;
+        let responses = EmbeddedSessionResponse::find_all_by_sessions(&mut conn, session_ids)?;
+
+        let mut res: HashMap<FindEmbeddedSessionResponses, Self::Value> = HashMap::new();
+        for response in responses {
+            let key = FindEmbeddedSessionResponses {
+                embedded_session_id: response.session_id,
+            };
+            if let Some(inner_responses) = res.get_mut(&key) {
+                inner_responses.push(response);
+            } else {
+                res.insert(key, vec![response]);
+            }
+        }
+
+        Ok(res)
+    }
+}

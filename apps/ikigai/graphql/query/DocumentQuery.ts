@@ -38,6 +38,7 @@ export const GET_DOCUMENT = gql`
         finalGrade
         testDuration
         attemptNumber
+        isSharedSubmission
         user {
           id
           name
@@ -98,6 +99,59 @@ export const GET_DOCUMENT_ASSIGNEE = gql`
         name
         avatar {
           publicUrl
+        }
+      }
+    }
+  }
+`;
+
+export const GET_DOCUMENT_EMBED_SESSION = gql`
+  query GetDocumentEmbedSession($documentId: UUID!) {
+    documentGetEmbeddedSession(documentId: $documentId) {
+      sessionId
+      documentId
+      isActive
+    }
+  }
+`;
+
+export const GET_SHARED_DOCUMENT = gql`
+  query GetSharedDocument($documentId: UUID!, $sessionId: UUID!) {
+    documentGetSharedInfoBySession(
+      documentId: $documentId
+      sessionId: $sessionId
+    ) {
+      document {
+        id
+        title
+      }
+      assignment {
+        totalQuiz
+        testDuration
+        maxNumberOfAttempt
+      }
+    }
+  }
+`;
+
+export const GET_EMBEDDED_RESPONSES = gql`
+  query GetEmbeddedResponses($documentId: UUID!) {
+    documentGetEmbeddedSession(documentId: $documentId) {
+      sessionId
+      documentId
+      responses {
+        submissionId
+        responseUserId
+        responseData {
+          email
+          phoneNumber
+          firstName
+          lastName
+        }
+        createdAt
+        submission {
+          id
+          documentId
         }
       }
     }

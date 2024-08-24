@@ -8,7 +8,7 @@ import InputNumber from "components/base/InputNumber";
 
 export type TestDurationAttributeProps = {
   testDuration: number | undefined;
-  onChangeTestDuration: (testDuration: number | undefined) => void;
+  onChangeTestDuration?: (testDuration: number | undefined) => void;
   readOnly: boolean;
 };
 
@@ -18,6 +18,8 @@ const TestDurationAttribute = ({
   readOnly,
 }: TestDurationAttributeProps) => {
   const onChangeTestDurationOption = (value: string) => {
+    if (!onChangeTestDuration) return;
+
     if (value === "true") {
       onChangeTestDuration(1800);
     } else {

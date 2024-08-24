@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { Trans } from "@lingui/macro";
 import { Button } from "@radix-ui/themes";
 
 import { BreakPoints } from "styles/mediaQuery";
@@ -32,7 +33,7 @@ const Document = () => {
       {config.hideHeader && (
         <div style={{ position: "fixed", right: 10, top: 10 }}>
           <Button size="1" variant="soft" onClick={onClickExitFocusMode}>
-            Exit focus mode
+            <Trans>Exit focus mode</Trans>
           </Button>
         </div>
       )}

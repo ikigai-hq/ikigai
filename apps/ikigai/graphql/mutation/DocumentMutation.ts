@@ -163,3 +163,25 @@ export const REMOVE_DOCUMENT_TAG = gql`
     documentRemoveTag(tag: $tag)
   }
 `;
+
+export const UPSERT_DOCUMENT_EMBED = gql`
+  mutation UpsertDocumentEmbedSession($session: EmbeddedSessionInput!) {
+    documentUpsertEmbeddedSession(session: $session) {
+      sessionId
+      documentId
+      isActive
+    }
+  }
+`;
+
+export const RESPONSE_EMBEDDED_FORM = gql`
+  mutation ResponseEmbeddedForm($response: EmbeddedFormResponseInput!) {
+    documentResponseEmbeddedForm(response: $response) {
+      accessToken
+      submission {
+        id
+        documentId
+      }
+    }
+  }
+`;

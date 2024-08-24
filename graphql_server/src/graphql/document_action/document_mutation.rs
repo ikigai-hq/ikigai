@@ -1,3 +1,4 @@
+use crate::authentication_token::Claims;
 use async_graphql::*;
 use diesel::Connection;
 use itertools::Itertools;
@@ -9,6 +10,12 @@ use crate::error::{IkigaiError, IkigaiErrorExt};
 use crate::helper::*;
 use crate::notification_center::send_notification;
 use crate::util::get_now_as_secs;
+
+#[derive(SimpleObject)]
+pub struct AccessTokenWithSubmission {
+    pub access_token: Option<String>,
+    pub submission: Option<Submission>,
+}
 
 #[derive(Default)]
 pub struct DocumentMutation;
@@ -360,5 +367,104 @@ impl DocumentMutation {
         DocumentTag::delete(&mut conn, tag.document_id, tag.tag).format_err()?;
 
         Ok(true)
+    }
+
+    async fn document_upsert_embedded_session(
+        &self,
+        ctx: &Context<'_>,
+        mut session: EmbeddedSession,
+    ) -> Result<EmbeddedSession> {
+        document_quick_authorize(
+            ctx,
+            session.document_id,
+            DocumentActionPermission::ManageDocument,
+        )
+        .await?;
+
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let existing_session =
+            EmbeddedSession::find_by_document(&mut conn, session.document_id).format_err()?;
+        if let Some(existing_session) = existing_session {
+            session.session_id = existing_session.session_id;
+        } else {
+            session.session_id = Uuid::new_v4();
+        }
+        let session = EmbeddedSession::upsert(&mut conn, session).format_err()?;
+
+        Ok(session)
+    }
+
+    async fn document_response_embedded_form(
+        &self,
+        ctx: &Context<'_>,
+        mut response: EmbeddedSessionResponse,
+    ) -> Result<AccessTokenWithSubmission> {
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let session = EmbeddedSession::find(&mut conn, response.session_id).format_err()?;
+        let assignment_document =
+            Document::find_by_id(&mut conn, session.document_id).format_err()?;
+
+        if assignment_document.space_id.is_none() {
+            return Err(IkigaiError::new_bad_request(
+                "Assignment is not linked to any space",
+            ))
+            .format_err();
+        }
+
+        let (_response, submission, temp_user) = conn
+            .transaction::<_, IkigaiError, _>(|conn| {
+                response.id = Uuid::new_v4();
+                let temp_user = NewUser::new_temp(
+                    response.response_data.email.clone(),
+                    response.response_data.first_name.clone(),
+                    response.response_data.last_name.clone(),
+                );
+                let temp_user = User::insert(conn, &temp_user)?;
+
+                let space_member = SpaceMember::new(
+                    assignment_document.space_id.unwrap(),
+                    temp_user.id,
+                    None,
+                    Role::Student,
+                );
+                SpaceMember::upsert(conn, space_member)?;
+
+                response.response_user_id = temp_user.id;
+
+                // Allow user start a submission
+                let mut submission: Option<Submission> = None;
+                if session.embedded_type == EmbeddedType::Form {
+                    // Start Submission from assignment
+                    let assignment = Assignment::find_by_document(conn, session.document_id)?;
+                    if let Some(assignment) = assignment {
+                        submission = Some(start_submission(
+                            conn,
+                            &temp_user,
+                            &assignment,
+                            &assignment_document,
+                            &None,
+                        )?);
+                        response.submission_id = submission.as_ref().map(|s| s.id);
+                    }
+                }
+
+                // Insert response
+                let response = EmbeddedSessionResponse::upsert(conn, response)?;
+                Ok((response, submission, temp_user))
+            })
+            .format_err()?;
+
+        if let Some(submission) = submission {
+            let access_token = Claims::new(temp_user.id).encode()?;
+            Ok(AccessTokenWithSubmission {
+                access_token: Some(access_token),
+                submission: Some(submission),
+            })
+        } else {
+            Ok(AccessTokenWithSubmission {
+                submission: None,
+                access_token: None,
+            })
+        }
     }
 }

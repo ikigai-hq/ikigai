@@ -1,7 +1,7 @@
 import { Trans, t } from "@lingui/macro";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { TextField, Text, Separator, Button } from "@radix-ui/themes";
+import { TextField, Text } from "@radix-ui/themes";
 import { useMutation } from "@apollo/client";
 
 import useAuthUserStore from "store/AuthStore";
@@ -58,7 +58,7 @@ const EditProfileModal = ({
               <Trans>First name</Trans>
             </Text>
             <br />
-            <Text>{me.email}</Text>
+            <Text>{me?.email}</Text>
           </div>
           <div>
             <label>

@@ -538,6 +538,56 @@ export interface RemoveDocumentTagVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: UpsertDocumentEmbedSession
+// ====================================================
+
+export interface UpsertDocumentEmbedSession_documentUpsertEmbeddedSession {
+  sessionId: any;
+  documentId: any;
+  isActive: boolean;
+}
+
+export interface UpsertDocumentEmbedSession {
+  documentUpsertEmbeddedSession: UpsertDocumentEmbedSession_documentUpsertEmbeddedSession;
+}
+
+export interface UpsertDocumentEmbedSessionVariables {
+  session: EmbeddedSessionInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: ResponseEmbeddedForm
+// ====================================================
+
+export interface ResponseEmbeddedForm_documentResponseEmbeddedForm_submission {
+  id: number;
+  documentId: any;
+}
+
+export interface ResponseEmbeddedForm_documentResponseEmbeddedForm {
+  accessToken: string | null;
+  submission: ResponseEmbeddedForm_documentResponseEmbeddedForm_submission | null;
+}
+
+export interface ResponseEmbeddedForm {
+  documentResponseEmbeddedForm: ResponseEmbeddedForm_documentResponseEmbeddedForm;
+}
+
+export interface ResponseEmbeddedFormVariables {
+  response: EmbeddedFormResponseInput;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: FileCreate
 // ====================================================
 
@@ -1541,6 +1591,7 @@ export interface GetDocument_documentGet_submission {
   finalGrade: number | null;
   testDuration: number | null;
   attemptNumber: number;
+  isSharedSubmission: boolean;
   user: GetDocument_documentGet_submission_user;
   assignment: GetDocument_documentGet_submission_assignment;
 }
@@ -1666,6 +1717,106 @@ export interface GetDocumentAssignees {
 }
 
 export interface GetDocumentAssigneesVariables {
+  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetDocumentEmbedSession
+// ====================================================
+
+export interface GetDocumentEmbedSession_documentGetEmbeddedSession {
+  sessionId: any;
+  documentId: any;
+  isActive: boolean;
+}
+
+export interface GetDocumentEmbedSession {
+  documentGetEmbeddedSession: GetDocumentEmbedSession_documentGetEmbeddedSession | null;
+}
+
+export interface GetDocumentEmbedSessionVariables {
+  documentId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetSharedDocument
+// ====================================================
+
+export interface GetSharedDocument_documentGetSharedInfoBySession_document {
+  id: any;
+  title: string;
+}
+
+export interface GetSharedDocument_documentGetSharedInfoBySession_assignment {
+  totalQuiz: number;
+  testDuration: number | null;
+  maxNumberOfAttempt: number | null;
+}
+
+export interface GetSharedDocument_documentGetSharedInfoBySession {
+  document: GetSharedDocument_documentGetSharedInfoBySession_document;
+  assignment: GetSharedDocument_documentGetSharedInfoBySession_assignment;
+}
+
+export interface GetSharedDocument {
+  documentGetSharedInfoBySession: GetSharedDocument_documentGetSharedInfoBySession;
+}
+
+export interface GetSharedDocumentVariables {
+  documentId: any;
+  sessionId: any;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetEmbeddedResponses
+// ====================================================
+
+export interface GetEmbeddedResponses_documentGetEmbeddedSession_responses_responseData {
+  email: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface GetEmbeddedResponses_documentGetEmbeddedSession_responses_submission {
+  id: number;
+  documentId: any;
+}
+
+export interface GetEmbeddedResponses_documentGetEmbeddedSession_responses {
+  submissionId: number | null;
+  responseUserId: number;
+  responseData: GetEmbeddedResponses_documentGetEmbeddedSession_responses_responseData;
+  createdAt: number;
+  submission: GetEmbeddedResponses_documentGetEmbeddedSession_responses_submission | null;
+}
+
+export interface GetEmbeddedResponses_documentGetEmbeddedSession {
+  sessionId: any;
+  documentId: any;
+  responses: GetEmbeddedResponses_documentGetEmbeddedSession_responses[];
+}
+
+export interface GetEmbeddedResponses {
+  documentGetEmbeddedSession: GetEmbeddedResponses_documentGetEmbeddedSession | null;
+}
+
+export interface GetEmbeddedResponsesVariables {
   documentId: any;
 }
 
@@ -2442,6 +2593,11 @@ export enum DocumentVisibility {
   PUBLIC = "PUBLIC",
 }
 
+export enum EmbeddedType {
+  FORM = "FORM",
+  NORMAL = "NORMAL",
+}
+
 export enum GradeMethod {
   AUTO = "AUTO",
   MANUAL = "MANUAL",
@@ -2525,6 +2681,25 @@ export interface CreateFileData {
 export interface DocumentTagInput {
   documentId: any;
   tag: string;
+}
+
+export interface EmbeddedFormResponseInput {
+  sessionId: any;
+  responseData: EmbeddedResponseDataInput;
+}
+
+export interface EmbeddedResponseDataInput {
+  email: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  additionalData: any;
+}
+
+export interface EmbeddedSessionInput {
+  documentId: any;
+  embeddedType: EmbeddedType;
+  isActive: boolean;
 }
 
 export interface GenerateQuizzesRequestData {

@@ -1,6 +1,7 @@
 export enum Routes {
   Home = "/",
   DocumentDetail = "/documents/:documentId",
+  ShareDocument = "/documents/:documentId/share/:sessionId",
   PreJoinSpace = "/spaces/:spaceId/join/:token",
   EmptySpace = "/spaces/:spaceId/start",
   NotFound = "/404",
@@ -22,5 +23,16 @@ export const formatPreJoinSpaceUrl = (spaceId: number, token: string) => {
   return `${window.location.protocol}//${window.location.host}${path}`;
 };
 
+export const formatShareDocument = (documentId: string, sessionId: string) => {
+  const path = Routes.ShareDocument.replace(":documentId", documentId).replace(
+    ":sessionId",
+    sessionId,
+  );
+  return `${window.location.protocol}//${window.location.host}${path}`;
+};
+
 export const needRedirect = (pathName: string) =>
   pathName === "/" || pathName.includes("/documents/");
+
+export const isSecurePath = (pathName: string) =>
+  pathName.includes("/documents/") && !pathName.includes("/share/");

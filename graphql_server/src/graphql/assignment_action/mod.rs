@@ -157,6 +157,13 @@ impl Submission {
             None
         }
     }
+
+    async fn is_shared_submission(&self, ctx: &Context<'_>) -> Result<bool> {
+        let mut conn = get_conn_from_ctx(ctx).await?;
+        let response =
+            EmbeddedSessionResponse::find_by_submission_id(&mut conn, self.id).format_err()?;
+        Ok(response.is_some())
+    }
 }
 
 #[ComplexObject]

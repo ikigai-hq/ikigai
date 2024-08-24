@@ -33,13 +33,13 @@ const UserBasicInformation = (props: UserNameProps) => {
           alignItems: "flex-start",
         }}
       >
-        <Text size="1" style={{ color: "black" }} weight="medium" truncate>
+        <Text size="1" weight="medium" truncate>
           {props.name}
         </Text>
         {props.email && (
           <>
             <br />
-            <Text size="1" color="gray" truncate>
+            <Text size="1" color="gray" truncate style={{ maxWidth: 160 }}>
               {props.email}
             </Text>
           </>

@@ -1,8 +1,8 @@
 from typing import List
 
-from pydantic.v1 import BaseModel
+from pydantic import BaseModel
 from llama_index.llms.openai import OpenAI
-from llama_index.core.llms import ChatMessage
+from llama_index.program.openai import OpenAIPydanticProgram
 
 
 class MultipleChoice(BaseModel):
@@ -28,7 +28,6 @@ def generate_multiple_choice_quizzes(
     subject: str,
     total_question: int,
 ) -> MultipleChoiceList:
-    sllm = llm.as_structured_llm(output_cls=MultipleChoiceList)
     prompt = f"""
     Subject:\n {subject}
     More detail:\n {user_context}
@@ -43,6 +42,13 @@ def generate_multiple_choice_quizzes(
         Generate {total_question} multiple choice with 2 correct answers question about {subject}
         """
 
-    input_msg = ChatMessage.from_str(prompt)
-    output = sllm.chat([input_msg])
-    return output.raw
+    program = OpenAIPydanticProgram.from_defaults(
+        output_cls=MultipleChoiceList, prompt_template_str=prompt, verbose=True
+    )
+
+    output = program(
+        subject=subject,
+        user_context=user_context,
+        total_question=total_question,
+    )
+    return output

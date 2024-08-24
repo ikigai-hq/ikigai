@@ -1,5 +1,3 @@
-from typing import Dict, Any
-
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,12 +11,13 @@ from fastapi import FastAPI
 from enum import Enum
 from pydantic import BaseModel
 
-from ikigai_ai.src.quiz_generator.single_choice import generate_single_choice_quizzes
+from ikigai_ai.src.quiz_generator.single_choice import generate_single_choice_quizzes, SingleChoiceList
 from ikigai_ai.src.quiz_generator.multiple_choice import (
     generate_multiple_choice_quizzes,
+MultipleChoiceList,
 )
-from ikigai_ai.src.quiz_generator.fill_in_blank import generate_fill_in_blank_quizzes
-from ikigai_ai.src.quiz_generator.select_option import generate_select_options_quizzes
+from ikigai_ai.src.quiz_generator.fill_in_blank import generate_fill_in_blank_quizzes, FillInBlankList
+from ikigai_ai.src.quiz_generator.select_option import generate_select_options_quizzes, SelectOptionList
 
 app = FastAPI()
 
@@ -42,10 +41,10 @@ class QuizType(str, Enum):
 
 class GenerateQuizResponse(BaseModel):
     quiz_type: QuizType
-    single_choice_data: Dict[str, Any] | None = None
-    multiple_choice_data: Dict[str, Any] | None = None
-    fill_in_blank_data: Dict[str, Any] | None = None
-    select_options_data: Dict[str, Any] | None = None
+    single_choice_data: SingleChoiceList | None = None
+    multiple_choice_data: MultipleChoiceList | None = None
+    fill_in_blank_data: FillInBlankList | None = None
+    select_options_data: SelectOptionList | None = None
 
 
 @app.post("/quizzes/generate-single-choice")
@@ -54,7 +53,7 @@ def gen_single_choice_quizzes(req: GenerateQuizRequest) -> GenerateQuizResponse:
         req.user_context,
         req.subject,
         req.total_quizzes,
-    ).dict()
+    )
     return GenerateQuizResponse(
         quiz_type=QuizType.SingleChoice, single_choice_data=single_choice_data
     )
@@ -66,7 +65,7 @@ def gen_single_choice_quizzes(req: GenerateQuizRequest):
         req.user_context,
         req.subject,
         req.total_quizzes,
-    ).dict()
+    )
 
     return GenerateQuizResponse(
         quiz_type=QuizType.MultipleChoice, multiple_choice_data=multiple_choice_data
@@ -79,7 +78,7 @@ def gen_single_choice_quizzes(req: GenerateQuizRequest):
         req.user_context,
         req.subject,
         req.total_quizzes,
-    ).dict()
+    )
     return GenerateQuizResponse(
         quiz_type=QuizType.FillInBlank, fill_in_blank_data=fill_in_blank_data
     )
@@ -91,7 +90,7 @@ def gen_single_choice_quizzes(req: GenerateQuizRequest):
         req.user_context,
         req.subject,
         req.total_quizzes,
-    ).dict()
+    )
     return GenerateQuizResponse(
         quiz_type=QuizType.FillInBlank, select_options_data=select_options_data
     )

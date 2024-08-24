@@ -1,8 +1,8 @@
 from typing import List
 
-from pydantic.v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 from llama_index.llms.openai import OpenAI
-from llama_index.core.llms import ChatMessage
+from llama_index.program.openai import OpenAIPydanticProgram
 
 
 class FillInBlank(BaseModel):
@@ -29,7 +29,6 @@ def generate_fill_in_blank_quizzes(
     subject: str,
     total_question: int,
 ) -> FillInBlankList:
-    sllm = llm.as_structured_llm(output_cls=FillInBlankList)
     prompt = f"""
     Subject:\n {subject}
     More detail:\n {user_context}
@@ -38,6 +37,13 @@ def generate_fill_in_blank_quizzes(
     Generate a short paragraph with {total_question} Fill in Blank questions. 
     """
 
-    input_msg = ChatMessage.from_str(prompt)
-    output = sllm.chat([input_msg])
-    return output.raw
+    program = OpenAIPydanticProgram.from_defaults(
+        output_cls=FillInBlankList, prompt_template_str=prompt, verbose=True
+    )
+
+    output = program(
+        subject=subject,
+        user_context=user_context,
+        total_question=total_question,
+    )
+    return output

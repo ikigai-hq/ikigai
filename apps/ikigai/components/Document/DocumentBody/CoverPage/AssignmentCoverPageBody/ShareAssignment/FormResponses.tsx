@@ -63,7 +63,7 @@ const FormResponses = () => {
 
         <Table.Body>
           {responses.map((response) => (
-            <Table.Row key={response.submissionId}>
+            <Table.Row key={response.submissionId} align="center">
               <Table.RowHeaderCell>
                 {response.responseData.firstName}{" "}
                 {response.responseData.lastName}

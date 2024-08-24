@@ -415,7 +415,7 @@ impl DocumentMutation {
             .transaction::<_, IkigaiError, _>(|conn| {
                 response.id = Uuid::new_v4();
                 let temp_user = NewUser::new_temp(
-                    response.id,
+                    response.response_data.email.clone(),
                     response.response_data.first_name.clone(),
                     response.response_data.last_name.clone(),
                 );

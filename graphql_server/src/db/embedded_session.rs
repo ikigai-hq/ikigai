@@ -5,6 +5,7 @@ use std::collections::HashMap;
 use uuid::Uuid;
 
 use super::schema::{embedded_form_responses, embedded_sessions};
+use crate::graphql::validator::id::Email;
 use crate::impl_enum_for_db;
 use crate::impl_jsonb_for_db;
 use crate::util::get_now_as_secs;
@@ -99,6 +100,7 @@ impl EmbeddedSession {
 #[diesel(sql_type = Jsonb)]
 #[graphql(input_name = "EmbeddedResponseDataInput")]
 pub struct EmbeddedResponse {
+    #[graphql(validator(custom = "Email"))]
     pub email: String,
     pub phone_number: String,
     pub first_name: String,
